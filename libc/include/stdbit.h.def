@@ -11,6 +11,10 @@
 
 #include "__llvm-libc-common.h"
 
+// glibc's <stdbit.h> makes the <stdint.h> types visible and portable code
+// written against it, gnulib among others, relies on that.
+#include <stdint.h>
+
 %%public_api()
 
 #include "llvm-libc-macros/stdbit-macros.h"
