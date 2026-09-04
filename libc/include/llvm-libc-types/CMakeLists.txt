@@ -355,6 +355,14 @@ add_header(
     .fsfilcnt_t
 )
 add_header(fsid_t HDR fsid_t.h)
+add_header(struct_fanotify_event_metadata HDR struct_fanotify_event_metadata.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_fanotify_event_info_header HDR struct_fanotify_event_info_header.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_fanotify_event_info_fid HDR struct_fanotify_event_info_fid.h DEPENDS .fsid_t .struct_fanotify_event_info_header)
+add_header(struct_fanotify_event_info_pidfd HDR struct_fanotify_event_info_pidfd.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_fanotify_event_info_header)
+add_header(struct_fanotify_event_info_error HDR struct_fanotify_event_info_error.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_fanotify_event_info_header)
+add_header(struct_fanotify_event_info_range HDR struct_fanotify_event_info_range.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_fanotify_event_info_header)
+add_header(struct_fanotify_event_info_mnt HDR struct_fanotify_event_info_mnt.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_fanotify_event_info_header)
+add_header(struct_fanotify_response HDR struct_fanotify_response.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(
   struct_statfs
   HDR
