@@ -724,6 +724,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_mntent",
+    hdrs = ["struct_mntent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_mntent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_statfs",
     hdrs = ["struct_statfs.h"],
     deps = select({
