@@ -589,6 +589,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  stdio_ext
+  ../libc/include/stdio_ext.yaml
+  stdio_ext.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.FILE
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   sys_unistd
   ../libc/include/sys/unistd.yaml
   sys/unistd.h
