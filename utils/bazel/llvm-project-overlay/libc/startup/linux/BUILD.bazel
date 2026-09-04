@@ -76,6 +76,8 @@ libc_startup_library(
         "//libc:program_invocation_short_name",
         "//libc:types_struct_link_map",
         "//libc:types_struct_r_debug",
+        "//libc:__support_elf_module",
+        "//libc:__support_elf_passive_abi",
     ] + selects.with_or({
         PLATFORM_CPU_X86_64: [
             "//libc/startup/linux/x86_64:irelative",
