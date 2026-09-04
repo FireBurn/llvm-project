@@ -1,0 +1,114 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "msgctl",
+    srcs = ["linux/msgctl.cpp"],
+    hdrs = ["msgctl.h"],
+    deps = [
+        ":sys_msg_msgctl",
+        "//libc/hdr/types:struct_msqid_ds",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:msgctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "msgget",
+    srcs = ["linux/msgget.cpp"],
+    hdrs = ["msgget.h"],
+    deps = [
+        ":sys_msg_msgget",
+        "//libc/hdr/types:key_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:msgget",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "msgrcv",
+    srcs = ["linux/msgrcv.cpp"],
+    hdrs = ["msgrcv.h"],
+    deps = [
+        ":sys_msg_msgrcv",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:msgrcv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "msgsnd",
+    srcs = ["linux/msgsnd.cpp"],
+    hdrs = ["msgsnd.h"],
+    deps = [
+        ":sys_msg_msgsnd",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:msgsnd",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_msg_msgctl",
+    hdrs = ["msgctl.h"],
+    deps = [
+        "//libc/hdr/types:struct_msqid_ds",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_msg_msgget",
+    hdrs = ["msgget.h"],
+    deps = [
+        "//libc/hdr/types:key_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_msg_msgrcv",
+    hdrs = ["msgrcv.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_msg_msgsnd",
+    hdrs = ["msgsnd.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+    ],
+)

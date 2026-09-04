@@ -535,3 +535,6 @@ add_proxy_header_library(
 
 add_subdirectory(types)
 add_subdirectory(func)
+  sys_msg_macros
+    sys_msg_macros.h
+    libc.include.llvm-libc-macros.sys_msg_macros

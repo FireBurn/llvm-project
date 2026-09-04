@@ -385,6 +385,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/capability.h entrypoints
     libc.src.sys.capability.capget
     libc.src.sys.capability.capset
+    libc.src.sys.msg.msgctl
+    libc.src.sys.msg.msgget
+    libc.src.sys.msg.msgrcv
+    libc.src.sys.msg.msgsnd
 
     # sys/epoll.h entrypoints
     libc.src.sys.epoll.epoll_create

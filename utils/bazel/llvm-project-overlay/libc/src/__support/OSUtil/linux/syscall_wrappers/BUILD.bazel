@@ -2283,6 +2283,54 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "msgctl",
+    hdrs = ["msgctl.h"],
+    deps = [
+        "//libc/hdr/types:struct_msqid_ds",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "msgget",
+    hdrs = ["msgget.h"],
+    deps = [
+        "//libc/hdr/types:key_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "msgrcv",
+    hdrs = ["msgrcv.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "msgsnd",
+    hdrs = ["msgsnd.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
