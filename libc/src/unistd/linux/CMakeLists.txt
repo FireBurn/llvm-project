@@ -943,3 +943,25 @@ add_entrypoint_object(
     libc.hdr.limits_macros
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  execl
+  SRCS
+    execl.cpp
+  HDRS
+    ../execl.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.unistd.execv
+)
+
+add_entrypoint_object(
+  execlp
+  SRCS
+    execlp.cpp
+  HDRS
+    ../execlp.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.unistd.execvp
+)

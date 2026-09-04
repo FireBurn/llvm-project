@@ -164,3 +164,36 @@ add_integration_test(
   ENV
     EXECV_TEST=PASS
 )
+
+add_integration_test(
+  execlp_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execlp_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execlp
+    libc.src.unistd.fork
+  ENV
+    EXECV_TEST=PASS
+)
+
+add_integration_test(
+  execl_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execl_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execl
+    libc.src.unistd.fork
+  ENV
+    EXECV_TEST=PASS
+)
