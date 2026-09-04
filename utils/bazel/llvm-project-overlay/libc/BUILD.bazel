@@ -24100,3 +24100,165 @@ libc_support_library(
         ":types_size_t",
     ],
 )
+
+libc_function(
+    name = "getnameinfo",
+    srcs = ["src/netdb/getnameinfo.cpp"],
+    hdrs = ["src/netdb/getnameinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_net_if_macros",
+        ":hdr_netdb_macros",
+        ":inet_ntop",
+        ":net_if_if_indextoname",
+        ":netdb_resolv_lookup",
+        ":ntohs",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_socklen_t",
+        ":types_struct_sockaddr",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_netdb_macros",
+    hdrs = ["include/llvm-libc-macros/linux/netdb-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_netdb_macros",
+    hdrs = ["include/llvm-libc-macros/netdb-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_netdb_macros",
+    hdrs = ["hdr/netdb_macros.h"],
+    deps = [
+        ":llvm_libc_macros_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "net_if_if_nametoindex",
+    hdrs = ["src/net/if/if_nametoindex.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_uapi_compat_macros",
+    hdrs = ["include/llvm-libc-macros/linux/uapi-compat-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_net_if_macros",
+    hdrs = ["include/llvm-libc-macros/linux/net-if-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_uapi_compat_macros",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_net_if_macros",
+    hdrs = ["include/llvm-libc-macros/net-if-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_net_if_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_net_if_macros",
+    hdrs = ["hdr/net_if_macros.h"],
+    deps = [
+        ":llvm_libc_macros_net_if_macros",
+    ],
+)
+
+libc_support_library(
+    name = "net_if_if_indextoname",
+    hdrs = ["src/net/if/if_indextoname.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_resolv_conf",
+    srcs = ["src/netdb/resolv/resolv_conf.cpp"],
+    hdrs = ["src/netdb/resolv/resolv_conf.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_str_to_integer",
+        ":hdr_fcntl_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_socket_macros",
+        ":inet_pton",
+        ":net_if_if_nametoindex",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_ppoll",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/ppoll.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_signal_macros",
+        ":types_nfds_t",
+        ":types_sigset_t",
+        ":types_struct_pollfd",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_lookup",
+    srcs = ["src/netdb/resolv/lookup.cpp"],
+    hdrs = ["src/netdb/resolv/lookup.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":__support_osutil_linux_syscall_wrappers_ppoll",
+        ":__support_osutil_linux_syscall_wrappers_recvfrom",
+        ":__support_osutil_linux_syscall_wrappers_sendto",
+        ":__support_osutil_linux_syscall_wrappers_socket",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_netdb_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_socket_macros",
+        ":inet_pton",
+        ":llvm_libc_macros_poll_macros",
+        ":net_if_if_nametoindex",
+        ":netdb_resolv_resolv_conf",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_size_t",
+        ":types_struct_pollfd",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+        ":types_struct_timespec",
+        ":types_time_t",
+    ],
+)
