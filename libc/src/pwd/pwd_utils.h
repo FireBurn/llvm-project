@@ -102,6 +102,10 @@ namespace passwd {
 // Overrides the default password file path for testing purposes.
 void TESTONLY_set_passwd_path(const char *path);
 
+// Which file the lookups read. The reentrant ones open it for themselves
+// rather than sharing the handle the iteration uses.
+const char *path();
+
 // Opens or rewinds the password file.
 ErrorOr<void> open();
 
