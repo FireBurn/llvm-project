@@ -1399,6 +1399,7 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # sys/select.h entrypoints
     libc.src.sys.select.select
+    libc.src.sys.select.pselect
 
     # link.h entrypoints
     libc.src.link._r_debug
