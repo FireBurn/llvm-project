@@ -24325,6 +24325,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_linux_termios_macros",
+    hdrs = ["include/llvm-libc-macros/linux/termios-macros.h"],
+)
+
+libc_support_library(
     name = "__support_time_units",
     hdrs = ["src/__support/time/units.h"],
     deps = [
