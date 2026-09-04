@@ -483,7 +483,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.dup
     libc.src.unistd.dup2
     libc.src.unistd.dup3
+    libc.src.unistd.execl
     libc.src.unistd.execle
+    libc.src.unistd.execlp
     libc.src.unistd.execve
     libc.src.unistd.faccessat
     libc.src.unistd.fchdir
@@ -1670,7 +1672,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.unistd._exit
     libc.src.unistd.confstr
     libc.src.unistd.environ
-    libc.src.unistd.execl
     libc.src.unistd.execv
     libc.src.unistd.execvp
     libc.src.unistd.fork
