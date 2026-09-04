@@ -558,3 +558,63 @@ libc_function(
         "//libc/src/errno",
     ],
 )
+
+libc_function(
+    name = "mkdtemp",
+    srcs = ["linux/mkdtemp.cpp"],
+    hdrs = ["mkdtemp.h"],
+    deps = [
+        ":linux_mktemp_util",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdir",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "mktemp",
+    srcs = ["linux/mktemp.cpp"],
+    hdrs = ["mktemp.h"],
+    deps = [
+        ":linux_mktemp_util",
+        ":stdlib_mktemp",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
+        "//libc/src/__support/OSUtil:linux_stat_kernel_statx_types",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mktemp",
+    hdrs = ["mktemp.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_mktemp_util",
+    hdrs = ["linux/mktemp_util.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)

@@ -129,6 +129,22 @@ libc_test_library(
 )
 
 libc_test(
+    name = "mktemp_test",
+    srcs = ["mktemp_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdlib:mkdtemp",
+        "//libc/src/stdlib:mktemp",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/stat:sys_stat_stat",
+        "//libc/src/unistd:rmdir",
+    ],
+)
+
+libc_test(
     name = "quick_sort_test",
     srcs = ["quick_sort_test.cpp"],
     deps = [

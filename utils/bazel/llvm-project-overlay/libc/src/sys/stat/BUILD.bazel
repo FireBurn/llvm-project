@@ -46,9 +46,34 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "stat",
+    srcs = ["linux/stat.cpp"],
+    hdrs = ["stat.h"],
+    deps = [
+        ":sys_stat_stat",
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_support_library(
     name = "sys_stat_fstat",
     hdrs = ["fstat.h"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_stat_stat",
+    hdrs = ["stat.h"],
     deps = [
         "//libc/hdr/types:struct_stat",
         "//libc/src/__support/macros:config",
