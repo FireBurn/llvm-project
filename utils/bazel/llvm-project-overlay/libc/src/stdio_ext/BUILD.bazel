@@ -126,3 +126,31 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "__freadahead",
+    srcs = ["generic/__freadahead.cpp"],
+    hdrs = ["__freadahead.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__fseterr",
+    srcs = ["generic/__fseterr.cpp"],
+    hdrs = ["__fseterr.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
