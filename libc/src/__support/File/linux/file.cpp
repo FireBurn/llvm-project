@@ -64,7 +64,11 @@ int linux_file_close(File *f) {
   } else {
     retval = EBADF;
   }
-  delete lf;
+  // The standard streams have static storage, so only a stream that was
+  // allocated may be handed back to the deallocator. fclose(stdout) is
+  // legal C and must not free a static object.
+  if (!lf->has_static_storage())
+    delete lf;
   return retval;
 }
 
