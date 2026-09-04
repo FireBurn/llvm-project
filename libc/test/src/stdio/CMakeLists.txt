@@ -692,3 +692,26 @@ add_libc_test(
     libc.src.stdio.fputc
     libc.src.stdio.putc
 )
+
+add_libc_test(
+  fgetpos_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    fgetpos_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.fpos_t
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.stdio.feof
+    libc.src.stdio.fgetpos
+    libc.src.stdio.fopen
+    libc.src.stdio.fread
+    libc.src.stdio.fsetpos
+    libc.src.stdio.ftell
+    libc.src.stdio.fwrite
+    libc.src.stdio.remove
+    libc.test.UnitTest.ErrnoCheckingTest
+)
