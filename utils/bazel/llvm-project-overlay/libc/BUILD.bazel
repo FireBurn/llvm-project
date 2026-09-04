@@ -165,6 +165,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("monetary"),
     libc_header_info("printf"),
     libc_header_info("stdio_ext"),
+    libc_header_info("utime"),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -24214,6 +24215,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_utimensat",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/utimensat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
     name = "__support_time_units",
     hdrs = ["src/__support/time/units.h"],
     deps = [
@@ -24477,6 +24490,20 @@ libc_support_library(
     hdrs = ["hdr/types/struct_statfs.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_statfs"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_utimbuf",
+    hdrs = ["include/llvm-libc-types/struct_utimbuf.h"],
+)
+
+libc_support_library(
+    name = "types_struct_utimbuf",
+    hdrs = ["hdr/types/struct_utimbuf.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_utimbuf"],
         "//conditions:default": [],
     }),
 )
@@ -26676,6 +26703,22 @@ libc_function(
         ":__support_osutil_syscall",
         ":errno",
         ":hdr_unistd_macros",
+    ],
+)
+
+libc_function(
+    name = "utime",
+    srcs = ["src/utime/linux/utime.cpp"],
+    hdrs = ["src/utime/utime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_utimensat",
+        ":errno",
+        ":hdr_fcntl_macros",
+        ":types_struct_timespec",
+        ":types_struct_utimbuf",
     ],
 )
 

@@ -1418,6 +1418,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_utimbuf
+  HDRS
+    struct_utimbuf.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_utimbuf
+)
+
+add_proxy_header_library(
   union_sigval
   HDRS
     union_sigval.h
