@@ -91,3 +91,15 @@ add_libc_test(
     libc.src.errno.errno
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  versionsort_test
+  SUITE
+    libc-dirent-tests
+  SRCS
+    versionsort_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_dirent
+    libc.src.dirent.versionsort
+    libc.src.string.strcpy
+)
