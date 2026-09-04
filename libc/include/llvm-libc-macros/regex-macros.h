@@ -14,10 +14,11 @@
 #ifndef LLVM_LIBC_MACROS_REGEX_MACROS_H
 #define LLVM_LIBC_MACROS_REGEX_MACROS_H
 
-// regcomp cflags
-// POSIX requires at least 255 repetitions to be accepted in a bound.
-#define RE_DUP_MAX 255
+// RE_DUP_MAX, the largest repetition count a bound may ask for, is a
+// <limits.h> value.
+#include "limits-macros.h"
 
+// regcomp cflags
 #define REG_EXTENDED 1
 #define REG_ICASE 2
 #define REG_NOSUB 4
