@@ -22180,6 +22180,19 @@ libc_function(
 )
 
 libc_function(
+    name = "wcswidth",
+    srcs = ["src/wchar/wcswidth.cpp"],
+    hdrs = ["src/wchar/wcswidth.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wcwidth",
+    ],
+)
+
+libc_function(
     name = "wctob",
     srcs = ["src/wchar/wctob.cpp"],
     hdrs = ["src/wchar/wctob.h"],
@@ -22189,6 +22202,19 @@ libc_function(
         ":__support_macros_null_check",
         ":hdr_stdio_macros",
         ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "wcwidth",
+    srcs = ["src/wchar/wcwidth.cpp"],
+    hdrs = ["src/wchar/wcwidth.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_wchar_t",
+        ":wchar_wcwidth_table",
     ],
 )
 
@@ -22602,6 +22628,17 @@ libc_support_library(
     name = "stdlib_random_util",
     srcs = ["src/stdlib/random_util.cpp"],
     hdrs = ["src/stdlib/random_util.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_wcwidth_table",
+    hdrs = ["src/wchar/wcwidth_table.h"],
     deps = [
         ":__support_macros_attributes",
         ":__support_macros_config",
