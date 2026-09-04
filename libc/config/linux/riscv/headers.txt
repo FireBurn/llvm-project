@@ -90,6 +90,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.time
     libc.include.uchar
     libc.include.unistd
+    libc.include.glob
     libc.include.mntent
     libc.include.utime
     libc.include.wchar
@@ -98,7 +99,6 @@ set(TARGET_PUBLIC_HEADERS
 
 if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
   list(APPEND TARGET_PUBLIC_HEADERS
-    libc.include.glob
     libc.include.regex
     libc.include.sys_ptrace
   )

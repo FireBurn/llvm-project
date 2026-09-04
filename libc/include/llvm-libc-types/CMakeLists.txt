@@ -231,6 +231,7 @@ add_header(struct_tm HDR struct_tm.h)
 add_header(struct_passwd HDR struct_passwd.h DEPENDS .uid_t .gid_t)
 add_header(struct_group HDR struct_group.h DEPENDS .gid_t)
 add_header(struct_mntent HDR struct_mntent.h)
+add_header(glob_t HDR glob_t.h DEPENDS .size_t)
 add_type_header(
   struct_sysinfo
   HDR
@@ -312,7 +313,6 @@ add_header(ACTION HDR ACTION.h)
 add_header(ENTRY HDR ENTRY.h)
 add_header(VISIT HDR VISIT.h)
 add_header(struct_hsearch_data HDR struct_hsearch_data.h)
-add_header(glob_t HDR glob_t.h DEPENDS .size_t)
 add_header(regex_t HDR regex_t.h DEPENDS .size_t)
 add_header(regoff_t HDR regoff_t.h)
 add_header(regmatch_t HDR regmatch_t.h DEPENDS .regoff_t)
