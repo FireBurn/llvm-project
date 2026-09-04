@@ -81,6 +81,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  math_relational_test
+  SUITE
+    libc-include-tests
+  SRCS
+    math_relational_test.cpp
+  DEPENDS
+    libc.include.math
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
