@@ -147,6 +147,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.string.strspn
     libc.src.string.strstr
     libc.src.string.strtok
+    libc.src.string.strverscmp
     libc.src.string.strtok_r
     libc.src.string.strxfrm
 
@@ -1368,7 +1369,10 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.closedir
     libc.src.dirent.dirfd
     libc.src.dirent.opendir
+    libc.src.dirent.alphasort
     libc.src.dirent.readdir
+    libc.src.dirent.scandir
+    libc.src.dirent.versionsort
     libc.src.dirent.rewinddir
     libc.src.dirent.seekdir
     libc.src.dirent.telldir
