@@ -24,3 +24,5 @@ add_subdirectory(sem)
 add_subdirectory(sysmacros)
 add_subdirectory(sysinfo)
 add_subdirectory(xattr)
+
+add_subdirectory(io)
