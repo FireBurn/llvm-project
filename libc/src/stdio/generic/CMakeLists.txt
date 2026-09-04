@@ -561,6 +561,36 @@ add_generic_entrypoint_object(
 )
 
 add_generic_entrypoint_object(
+  getdelim
+  SRCS
+    getdelim.cpp
+  HDRS
+    ../getdelim.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.errno.errno
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.hdr.func.realloc
+)
+
+add_generic_entrypoint_object(
+  getline
+  SRCS
+    getline.cpp
+  HDRS
+    ../getline.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.stdio.getdelim
+)
+
+add_generic_entrypoint_object(
   ungetc
   SRCS
     ungetc.cpp
