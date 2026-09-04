@@ -159,6 +159,13 @@ functions:
     arguments:
       - type: const char *
       - type: __exec_argv_t
+  - name: execvp
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: char *const *
   - name: execve
     standards:
       - posix
