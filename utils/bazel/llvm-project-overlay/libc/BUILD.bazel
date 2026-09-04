@@ -177,6 +177,7 @@ LLVM_LIBC_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("sys/kd"),
+    libc_header_info("sys/swap"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
     libc_header_info("utime"),
@@ -20150,6 +20151,34 @@ libc_function(
 )
 
 libc_function(
+    name = "swapoff",
+    srcs = ["src/sys/swap/linux/swapoff.cpp"],
+    hdrs = ["src/sys/swap/swapoff.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_swapoff",
+        ":errno",
+        ":sys_swap_swapoff",
+    ],
+)
+
+libc_function(
+    name = "swapon",
+    srcs = ["src/sys/swap/linux/swapon.cpp"],
+    hdrs = ["src/sys/swap/swapon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_swapon",
+        ":errno",
+        ":sys_swap_swapon",
+    ],
+)
+
+libc_function(
     name = "waitpid",
     srcs = ["src/sys/wait/linux/waitpid.cpp"],
     hdrs = ["src/sys/wait/waitpid.h"],
@@ -24820,6 +24849,44 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_swapoff",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/swapoff.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_swapon",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/swapon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_swap_swapoff",
+    hdrs = ["src/sys/swap/swapoff.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_swap_swapon",
+    hdrs = ["src/sys/swap/swapon.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -28756,6 +28823,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_regex_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_swap_macros",
+    hdrs = ["include/llvm-libc-macros/sys-swap-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_swap_macros",
+    hdrs = ["hdr/sys_swap_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_sys_swap_macros",
         ],
         "//conditions:default": [],
     }),
