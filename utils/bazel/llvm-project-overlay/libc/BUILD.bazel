@@ -27024,6 +27024,11 @@ libc_function(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_fnmatch_macros",
+    hdrs = ["include/llvm-libc-macros/fnmatch-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_langinfo_macros",
     hdrs = ["include/llvm-libc-macros/langinfo-macros.h"],
 )
