@@ -9,3 +9,15 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "settimeofday_test",
+    srcs = ["settimeofday_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr/types:struct_timezone",
+        "//libc/hdr:errno_macros",
+        "//libc/src/sys/time:gettimeofday",
+        "//libc/src/sys/time:settimeofday",
+    ],
+)
