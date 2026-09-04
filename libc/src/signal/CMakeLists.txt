@@ -99,3 +99,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sigsuspend
 )
+
+add_entrypoint_object(
+  killpg
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.killpg
+)
