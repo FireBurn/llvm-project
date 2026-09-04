@@ -356,3 +356,17 @@ add_entrypoint_object(
   DEPENDS
     .generic.fsetpos
 )
+
+add_entrypoint_object(
+  dprintf
+  ALIAS
+  DEPENDS
+    .generic.dprintf
+)
+
+add_entrypoint_object(
+  vdprintf
+  ALIAS
+  DEPENDS
+    .generic.vdprintf
+)
