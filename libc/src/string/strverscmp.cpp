@@ -72,7 +72,9 @@ LIBC_INLINE int step(unsigned char c) {
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(int, strverscmp, (const char *lhs, const char *rhs)) {
+namespace internal {
+
+int strverscmp_impl(const char *lhs, const char *rhs) {
   const unsigned char *left = reinterpret_cast<const unsigned char *>(lhs);
   const unsigned char *right = reinterpret_cast<const unsigned char *>(rhs);
   if (left == right)
@@ -108,6 +110,12 @@ LLVM_LIBC_FUNCTION(int, strverscmp, (const char *lhs, const char *rhs)) {
   default:
     return state;
   }
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, strverscmp, (const char *lhs, const char *rhs)) {
+  return internal::strverscmp_impl(lhs, rhs);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
