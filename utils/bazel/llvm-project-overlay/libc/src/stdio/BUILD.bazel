@@ -632,3 +632,46 @@ libc_function(
         "//libc/src/string/memory_utils:memory_utils",
     ],
 )
+
+libc_function(
+    name = "fputc",
+    srcs = ["generic/fputc.cpp"],
+    hdrs = ["fputc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "putc",
+    srcs = ["generic/putc.cpp"],
+    hdrs = ["putc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "putchar",
+    srcs = ["generic/putchar.cpp"],
+    hdrs = ["putchar.h"],
+    deps = [
+        ":stdout",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
