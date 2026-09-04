@@ -1,50 +1,69 @@
-//===----------------------------------------------------------------------===//
+//===-- Implementation of regcomp -----------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-///
-/// \file
-/// Implementation of regcomp (stub).
-///
-//===----------------------------------------------------------------------===//
 
 #include "src/regex/regcomp.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/malloc.h"
 #include "hdr/regex_macros.h"
-#include "src/__support/CPP/new.h"
-#include "src/__support/CPP/string_view.h"
-#include "src/__support/alloc-checker.h"
+#include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/string/memory_utils/inline_memcpy.h"
+#include "src/regex/regex_engine.h"
+#include "src/regex/regex_parser.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, regcomp,
                    (regex_t *__restrict preg, const char *__restrict pattern,
                     int cflags)) {
-  // Silencing unused parameter warning for the stub.
-  (void)cflags;
+  if (preg == nullptr || pattern == nullptr)
+    return REG_BADPAT;
+  preg->__internal = nullptr;
+  preg->re_nsub = 0;
 
-  // Note: POSIX requires callers to call regfree() before reusing a preg
-  // object.  We therefore do not attempt to free any previous __internal here
-  // — preg is uninitialized on first use and the pointer would be garbage.
+  // Parse once with no storage to learn how much is needed, then again to
+  // build it. Counting first keeps the whole compiled form in one allocation.
+  regex::Parser counter(pattern, cflags, nullptr, 0xffffffu, nullptr,
+                        0xffffffu);
+  int error = 0;
+  counter.parse(error);
+  if (error != 0)
+    return error;
 
-  cpp::string_view pattern_view(pattern);
-  size_t len = pattern_view.size();
-  AllocChecker ac;
-  char *copy = new (ac) char[len + 1];
-  if (!ac)
+  const uint32_t nodes = counter.node_count();
+  const uint32_t classes = counter.class_count();
+  const size_t bytes = sizeof(regex::Compiled) + nodes * sizeof(regex::Node) +
+                       classes * sizeof(regex::CharClass);
+  void *block = ::malloc(bytes);
+  if (block == nullptr)
     return REG_ESPACE;
 
-  inline_memcpy(copy, pattern, len + 1);
+  auto *compiled = static_cast<regex::Compiled *>(block);
+  *compiled = regex::Compiled();
+  compiled->nodes = reinterpret_cast<regex::Node *>(static_cast<char *>(block) +
+                                                    sizeof(regex::Compiled));
+  compiled->classes = reinterpret_cast<regex::CharClass *>(
+      reinterpret_cast<char *>(compiled->nodes) + nodes * sizeof(regex::Node));
+  compiled->cflags = cflags;
 
-  // TODO: This is a stub. re_nsub is always 0 because parenthesised
-  // subexpressions are not yet parsed. REG_NOSUB is effectively always active.
-  preg->re_nsub = 0;
-  preg->__internal = copy;
+  regex::Parser builder(pattern, cflags, compiled->nodes, nodes,
+                        compiled->classes, classes);
+  compiled->root = builder.parse(error);
+  if (error != 0) {
+    ::free(block);
+    return error;
+  }
+  compiled->node_count = builder.node_count();
+  compiled->class_count = builder.class_count();
+  compiled->group_count = builder.group_count();
+
+  preg->re_nsub = compiled->group_count;
+  preg->__internal = block;
   return 0;
 }
 
