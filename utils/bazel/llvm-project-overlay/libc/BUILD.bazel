@@ -18262,6 +18262,23 @@ libc_function(
 )
 
 libc_function(
+    name = "killpg",
+    srcs = ["src/signal/linux/killpg.cpp"],
+    hdrs = ["src/signal/killpg.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_kill",
+        ":errno",
+        ":hdr_errno_macros",
+        ":signal_killpg",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
     name = "sigaction",
     srcs = ["src/signal/linux/sigaction.cpp"],
     hdrs = ["src/signal/sigaction.h"],
@@ -20807,5 +20824,26 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "signal_killpg",
+    hdrs = ["src/signal/killpg.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_kill",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/kill.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
     ],
 )
