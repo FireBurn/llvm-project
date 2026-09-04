@@ -66,14 +66,17 @@
 #define _PC_SYNC_IO 19
 
 // TODO: Move these limit macros to a separate file
-#define _POSIX_CHOWN_RESTRICTED 1
-#define _POSIX_PIPE_BUF 512
-#define _POSIX_NO_TRUNC 1
-#define _POSIX_VDISABLE '\0'
-
+// The edition of POSIX these interfaces follow. This is what a program reads
+// to find out it is on a POSIX system at all, and without it configure
+// scripts fall back to pre-POSIX interfaces which are not here.
 #define _POSIX_VERSION 202405L
+#define _POSIX2_VERSION 202405L
+#define _XOPEN_VERSION 800
 
-// POSIX threads features.
+// The options which are supported. Leaving one undefined means it has to be
+// asked about at run time with sysconf; a value of -1 would mean it is not
+// available at all.
+#define _POSIX_CHOWN_RESTRICTED 1
 #define _POSIX_THREADS _POSIX_VERSION
 #define _POSIX_THREAD_SAFE_FUNCTIONS _POSIX_VERSION
 #define _POSIX_THREAD_ATTR_STACKADDR _POSIX_VERSION
@@ -86,6 +89,23 @@
 #define _POSIX_THREAD_ROBUST_PRIO_INHERIT -1
 #define _POSIX_THREAD_ROBUST_PRIO_PROTECT -1
 #define _POSIX_THREAD_SPORADIC_SERVER -1
+#define _POSIX_JOB_CONTROL 1
+#define _POSIX_SAVED_IDS 1
+#define _POSIX_MAPPED_FILES 202405L
+#define _POSIX_MEMORY_PROTECTION 202405L
+#define _POSIX_FSYNC 202405L
+#define _POSIX_SYNCHRONIZED_IO 202405L
+#define _POSIX_TIMERS 202405L
+#define _POSIX_MONOTONIC_CLOCK 202405L
+#define _POSIX_CLOCK_SELECTION 202405L
+#define _POSIX_SEMAPHORES 202405L
+// sem_timedwait, pthread_mutex_timedlock, the rwlock pair and
+// mq_timedsend are all here, which is the whole of this option.
+#define _POSIX_TIMEOUTS 202405L
+#define _POSIX_SHELL 1
+#define _POSIX_PIPE_BUF 512
+#define _POSIX_NO_TRUNC 1
+#define _POSIX_VDISABLE '\0'
 
 // Macro to set up the call to the __llvm_libc_syscall function
 // This is to prevent the call from having fewer than 6 arguments, since six
