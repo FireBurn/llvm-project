@@ -53,7 +53,10 @@ void _r_debug_state() { // NOLINT
 }
 
 namespace LIBC_NAMESPACE_DECL {
+#ifndef LIBC_COPT_SHARED_LIBRARY
+// In a shared build this lives in libc.so instead; see startup/linux/app.cpp.
 AppProperties app;
+#endif
 
 static struct link_map main_map;
 
@@ -112,6 +115,9 @@ static TLSDescriptor tls;
   unsigned long hwcap = 0;
   unsigned long hwcap2 = 0;
   const char *execfn = nullptr;
+  // Non-zero when the program was started through an interpreter, which then
+  // owns thread local storage for the whole process.
+  unsigned long interpreter_base = 0;
   auxv::Vector::initialize_unsafe(
       reinterpret_cast<const auxv::Entry *>(env_end_marker + 1));
   auxv::Vector auxvec;
@@ -134,6 +140,9 @@ static TLSDescriptor tls;
       break;
     case AT_EXECFN:
       execfn = reinterpret_cast<const char *>(aux_entry.val);
+      break;
+    case AT_BASE:
+      interpreter_base = aux_entry.val;
       break;
     default:
       break; // TODO: Read other useful entries from the aux vector.
@@ -183,16 +192,27 @@ static TLSDescriptor tls;
       reinterpret_cast<uintptr_t>(__rela_iplt_end))
     apply_irelative_relocs(base, hwcap, hwcap2);
 
-  app.tls.address = tls_phdr->p_vaddr + base;
-  app.tls.size = tls_phdr->p_memsz;
-  app.tls.init_size = tls_phdr->p_filesz;
-  app.tls.align = tls_phdr->p_align;
+  // A dynamically linked executable often has no thread local storage of its
+  // own, because what it uses lives in libc.so instead. There is then no
+  // PT_TLS here to describe.
+  if (tls_phdr != nullptr) {
+    app.tls.address = tls_phdr->p_vaddr + base;
+    app.tls.size = tls_phdr->p_memsz;
+    app.tls.init_size = tls_phdr->p_filesz;
+    app.tls.align = tls_phdr->p_align;
+  }
 
-  // This descriptor has to be static since its cleanup function cannot
-  // capture the context.
-  init_tls(tls);
-  if (tls.size != 0 && !set_thread_ptr(tls.tp))
-    syscall_impl<long>(SYS_exit, 1);
+  // Thread local storage has to be sized across every loaded module, which
+  // only the interpreter can see. When there is one it has already set the
+  // thread pointer, and setting it again here would replace a block sized for
+  // the whole process with one sized for the executable alone.
+  if (interpreter_base == 0) {
+    // This descriptor has to be static since its cleanup function cannot
+    // capture the context.
+    init_tls(tls);
+    if (tls.size != 0 && !set_thread_ptr(tls.tp))
+      syscall_impl<long>(SYS_exit, 1);
+  }
 
   internal::self.attrib = &main_thread_attrib;
   main_thread_attrib.atexit_callback_mgr =
