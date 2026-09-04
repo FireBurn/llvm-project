@@ -11,8 +11,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_PWD_FIELD_TOKENIZER_H
-#define LLVM_LIBC_SRC_PWD_FIELD_TOKENIZER_H
+#ifndef LLVM_LIBC_SRC___SUPPORT_FIELD_TOKENIZER_H
+#define LLVM_LIBC_SRC___SUPPORT_FIELD_TOKENIZER_H
 
 #include "src/__support/CPP/optional.h"
 #include "src/__support/CPP/span.h"
@@ -21,7 +21,7 @@
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
-namespace pwd {
+namespace internal {
 
 // In-place field tokenizer for delimited database records.
 class FieldTokenizer {
@@ -63,7 +63,7 @@ public:
   }
 };
 
-} // namespace pwd
+} // namespace internal
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_PWD_FIELD_TOKENIZER_H
+#endif // LLVM_LIBC_SRC___SUPPORT_FIELD_TOKENIZER_H
