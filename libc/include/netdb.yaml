@@ -61,10 +61,24 @@ macros:
   - macro_name: NO_ADDRESS
     macro_header: netdb-macros.h
 types:
+  - type_name: struct_sockaddr
+  - type_name: socklen_t
   - type_name: struct_addrinfo
 enums: []
 objects: []
 functions:
+  - name: getnameinfo
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const struct sockaddr *__restrict
+      - type: socklen_t
+      - type: char *__restrict
+      - type: socklen_t
+      - type: char *__restrict
+      - type: socklen_t
+      - type: int
   - name: gai_strerror
     standards:
       - posix
