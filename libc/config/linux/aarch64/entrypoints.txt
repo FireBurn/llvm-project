@@ -46,6 +46,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.posix_fadvise64
     libc.src.fcntl.posix_fallocate
 
+    # iconv.h entrypoints
+    libc.src.iconv.iconv
+    libc.src.iconv.iconv_close
+    libc.src.iconv.iconv_open
+
     # grp.h entrypoints
     libc.src.grp.endgrent
     libc.src.grp.getgrent

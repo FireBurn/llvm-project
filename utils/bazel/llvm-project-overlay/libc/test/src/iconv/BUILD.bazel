@@ -1,0 +1,28 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc iconv.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "iconv_test",
+    srcs = ["iconv_test.cpp"],
+    deps = [
+        "//libc:__support_common",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_locale_macros",
+        "//libc:iconv",
+        "//libc:iconv_close",
+        "//libc:iconv_open",
+        "//libc:setlocale",
+        "//libc:string_utils",
+        "//libc:types_iconv_t",
+        "//libc:types_ssize_t",
+    ],
+)

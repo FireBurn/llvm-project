@@ -1516,3 +1516,6 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.union_sigval
 )
+  iconv_t
+    iconv_t.h
+    libc.include.llvm-libc-types.iconv_t
