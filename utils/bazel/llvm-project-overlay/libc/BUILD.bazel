@@ -17811,6 +17811,19 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "strverscmp",
+    srcs = ["src/string/strverscmp.cpp"],
+    hdrs = ["src/string/strverscmp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":string_strverscmp",
+    ],
+)
+
 ################################ fcntl targets #################################
 
 libc_function(
@@ -21646,5 +21659,17 @@ libc_support_library(
         ":__support_macros_config",
         ":hdr_stdint_proxy",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "string_strverscmp",
+    srcs = ["src/string/strverscmp.cpp"],
+    hdrs = ["src/string/strverscmp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
     ],
 )
