@@ -4,17 +4,19 @@ add_entrypoint_object(
     regcomp.cpp
   HDRS
     regcomp.h
+    regex_engine.h
+    regex_parser.h
   DEPENDS
-    libc.hdr.regex_macros
+    libc.hdr.func.malloc
+    libc.hdr.func.free
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.optional
+    libc.src.__support.ctype_utils
     libc.hdr.types.regex_t
-    libc.src.__support.alloc_checker
-    libc.src.__support.CPP.new
-    libc.src.__support.CPP.scope
-    libc.src.__support.CPP.string_view
-    libc.src.__support.error_or
+    libc.hdr.regex_macros
+    libc.src.__support.common
     libc.src.__support.macros.null_check
-    libc.src.__support.regex.regex_internal
-    libc.src.__support.regex.regex_parser
 )
 
 add_entrypoint_object(
@@ -23,16 +25,19 @@ add_entrypoint_object(
     regexec.cpp
   HDRS
     regexec.h
+    regex_engine.h
+    regex_matcher.h
   DEPENDS
-    libc.hdr.regex_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.ctype_utils
+    libc.src.string.string_utils
     libc.hdr.types.regex_t
     libc.hdr.types.regmatch_t
     libc.hdr.types.size_t
-    libc.src.__support.CPP.mutex
-    libc.src.__support.CPP.string_view
+    libc.hdr.regex_macros
+    libc.src.__support.common
     libc.src.__support.macros.null_check
-    libc.src.__support.regex.regex_internal
-    libc.src.__support.regex.regex_matcher
 )
 
 add_entrypoint_object(
@@ -57,8 +62,8 @@ add_entrypoint_object(
   HDRS
     regfree.h
   DEPENDS
+    libc.hdr.func.free
     libc.hdr.types.regex_t
-    libc.src.__support.CPP.new
+    libc.src.__support.common
     libc.src.__support.macros.null_check
-    libc.src.__support.regex.regex_internal
 )
