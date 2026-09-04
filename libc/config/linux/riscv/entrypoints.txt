@@ -79,6 +79,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.poll.ppoll
 
     # grp.h entrypoints
+    libc.src.grp.initgroups
     libc.src.grp.setgroups
 
     # mntent.h entrypoints
