@@ -513,3 +513,18 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_load_layout",
+    hdrs = ["elf/load_layout.h"],
+    deps = [
+        ":elf_elf_types",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
