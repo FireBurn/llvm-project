@@ -20500,6 +20500,37 @@ libc_function(
 )
 
 libc_function(
+    name = "ttyname",
+    srcs = ["src/unistd/linux/ttyname.cpp"],
+    hdrs = ["src/unistd/ttyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_limits_macros",
+        ":ttyname_r",
+    ],
+)
+
+libc_function(
+    name = "ttyname_r",
+    srcs = ["src/unistd/linux/ttyname_r.cpp"],
+    hdrs = ["src/unistd/ttyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_readlink",
+        ":errno",
+        ":hdr_errno_macros",
+        ":sys_ioctl_macros",
+        ":termios_linux_kernel_termios",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "unlink",
     srcs = ["src/unistd/linux/unlink.cpp"],
     hdrs = ["src/unistd/unlink.h"],
