@@ -1002,3 +1002,18 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.brk
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  lchown
+  SRCS
+    lchown.cpp
+  HDRS
+    ../lchown.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.gid_t
+    libc.hdr.types.uid_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
