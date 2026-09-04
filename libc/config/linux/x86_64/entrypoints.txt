@@ -110,6 +110,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sched.sched_setparam
     libc.src.sched.sched_setscheduler
     libc.src.sched.sched_yield
+    libc.src.sched.setns
+    libc.src.sched.unshare
 
     # string.h entrypoints
     libc.src.string.memccpy
@@ -554,6 +556,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.faccessat
     libc.src.unistd.fchdir
     libc.src.unistd.fchown
+    libc.src.unistd.fchownat
     libc.src.unistd.lchown
     libc.src.unistd.fpathconf
     libc.src.unistd.fsync
