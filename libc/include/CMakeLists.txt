@@ -993,6 +993,10 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_swap
+  ../libc/include/sys/swap.yaml
+  sys/swap.h
+    .llvm-libc-macros.sys_swap_macros
   sys_resource
   ../libc/include/sys/resource.yaml
   sys/resource.h
