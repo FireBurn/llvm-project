@@ -80,6 +80,19 @@ libc_test(
 )
 
 libc_test(
+    name = "getopt_long_test",
+    srcs = ["getopt_long_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_array",
+        "//libc:getopt",
+        "//libc:getopt_long",
+        "//libc:getopt_long_only",
+        "//libc:hdr_getopt_macros",
+        "//libc:strcmp",
+    ],
+)
+
+libc_test(
     name = "getpagesize_test",
     srcs = ["getpagesize_test.cpp"],
     deps = [
@@ -220,5 +233,16 @@ libc_test(
     srcs = ["getegid_test.cpp"],
     deps = [
         "//libc:getegid",
+    ],
+)
+
+libc_test(
+    name = "getopt_test",
+    srcs = ["getopt_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_array",
+        "//libc:fflush",
+        "//libc:fopencookie",
+        "//libc:getopt",
     ],
 )
