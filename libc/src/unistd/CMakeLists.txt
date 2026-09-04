@@ -747,6 +747,20 @@ add_entrypoint_object(
   DEPENDS
 )
   DEPENDS
+
+add_entrypoint_object(
+  brk
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.brk
+)
+
+add_entrypoint_object(
+  sbrk
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sbrk
+)
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.pwd.pwd_utils
     libc.src.stdlib.environ_internal
