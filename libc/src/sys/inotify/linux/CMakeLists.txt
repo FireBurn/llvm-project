@@ -1,0 +1,51 @@
+add_entrypoint_object(
+  inotify_init
+  SRCS
+    inotify_init.cpp
+  HDRS
+    ../inotify_init.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  inotify_init1
+  SRCS
+    inotify_init1.cpp
+  HDRS
+    ../inotify_init1.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  inotify_add_watch
+  SRCS
+    inotify_add_watch.cpp
+  HDRS
+    ../inotify_add_watch.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  inotify_rm_watch
+  SRCS
+    inotify_rm_watch.cpp
+  HDRS
+    ../inotify_rm_watch.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

@@ -1,0 +1,41 @@
+add_entrypoint_object(
+  timerfd_create
+  SRCS
+    timerfd_create.cpp
+  HDRS
+    ../timerfd_create.h
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_itimerspec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  timerfd_settime
+  SRCS
+    timerfd_settime.cpp
+  HDRS
+    ../timerfd_settime.h
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_itimerspec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  timerfd_gettime
+  SRCS
+    timerfd_gettime.cpp
+  HDRS
+    ../timerfd_gettime.h
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_itimerspec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

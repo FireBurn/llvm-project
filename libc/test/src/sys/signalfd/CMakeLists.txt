@@ -1,0 +1,24 @@
+add_custom_target(libc_sys_signalfd_unittests)
+
+add_libc_test(
+  signalfd_test
+  SUITE
+    libc_sys_signalfd_unittests
+  SRCS
+    signalfd_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.include.sys_signalfd
+    libc.src.signal.kill
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigprocmask
+    libc.src.sys.signalfd.signalfd
+    libc.src.unistd.close
+    libc.src.unistd.getpid
+    libc.src.unistd.read
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
