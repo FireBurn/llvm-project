@@ -919,3 +919,61 @@ add_entrypoint_object(
     libc.src.__support.macros.null_check
     libc.src.errno.errno
 )
+
+add_object_library(
+  random_util
+  HDRS
+    random_util.h
+  SRCS
+    random_util.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  random
+  SRCS
+    random.cpp
+  HDRS
+    random.h
+  DEPENDS
+    .random_util
+)
+
+add_entrypoint_object(
+  srandom
+  SRCS
+    srandom.cpp
+  HDRS
+    srandom.h
+  DEPENDS
+    .random_util
+)
+
+add_entrypoint_object(
+  initstate
+  SRCS
+    initstate.cpp
+  HDRS
+    initstate.h
+  DEPENDS
+    .random_util
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  setstate
+  SRCS
+    setstate.cpp
+  HDRS
+    setstate.h
+  DEPENDS
+    .random_util
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+)
