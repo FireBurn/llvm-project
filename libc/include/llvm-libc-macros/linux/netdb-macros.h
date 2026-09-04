@@ -33,4 +33,26 @@
 #define EAI_SYSTEM -11
 #define EAI_OVERFLOW -12
 
+// Two the GNU library added, which code written against it uses.
+#define EAI_NODATA -5
+#define EAI_ADDRFAMILY -9
+
+// Flags for getnameinfo.
+#define NI_NUMERICHOST 1
+#define NI_NUMERICSERV 2
+#define NI_NOFQDN 4
+#define NI_NAMEREQD 8
+#define NI_DGRAM 16
+
+// How much room getnameinfo may need for what it writes.
+#define NI_MAXHOST 1025
+#define NI_MAXSERV 32
+
+// The values gethostbyname reports failures with, through h_errno.
+#define HOST_NOT_FOUND 1
+#define TRY_AGAIN 2
+#define NO_RECOVERY 3
+#define NO_DATA 4
+#define NO_ADDRESS NO_DATA
+
 #endif // LLVM_LIBC_MACROS_LINUX_NETDB_MACROS_H
