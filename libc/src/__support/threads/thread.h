@@ -164,7 +164,7 @@ namespace internal {
 // but before running the thread function, platform implementations should
 // set the "atexit_callback_mgr" field of the thread's attributes to the value
 // returned by this function.
-ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr();
+LIBC_SHARED_INTERNAL ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr();
 
 // Call the currently registered thread specific atexit callbacks. Useful for
 // implementing the thread_exit function.
