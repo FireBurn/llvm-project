@@ -55,3 +55,20 @@ add_libc_test(
     libc.src.errno.errno
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  scandir_test
+  SUITE
+    libc_dirent_unittests
+  SRCS
+    scandir_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.src.__support.CPP.string_view
+    libc.src.dirent.alphasort
+    libc.src.dirent.scandir
+    libc.src.dirent.versionsort
+    libc.src.errno.errno
+    libc.test.UnitTest.ErrnoCheckingTest
+)
