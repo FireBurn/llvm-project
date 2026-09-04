@@ -48,6 +48,10 @@ public:
   static void lock_list();
   static void unlock_list();
 
+  // Flushes every stream which has buffered data waiting. This is what exit
+  // owes a program which wrote to a stream and never closed it.
+  static void flush_all();
+
   static File *list_all;
   static Mutex list_lock;
 
