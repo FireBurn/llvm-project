@@ -422,6 +422,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/inotify.h entrypoints
     libc.src.sys.inotify.inotify_add_watch
+    libc.src.sys.fanotify.fanotify_init
+    libc.src.sys.fanotify.fanotify_mark
     libc.src.sys.inotify.inotify_init
     libc.src.sys.inotify.inotify_init1
     libc.src.sys.inotify.inotify_rm_watch

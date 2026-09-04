@@ -604,6 +604,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_fanotify_macros
+  HDR
+    sys-fanotify-macros.h
+)
+
+add_macro_header(
   sys_inotify_macros
   HDR
     sys-inotify-macros.h
