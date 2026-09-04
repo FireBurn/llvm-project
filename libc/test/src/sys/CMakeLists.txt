@@ -1,6 +1,8 @@
 add_subdirectory(file)
 add_subdirectory(mount)
 add_subdirectory(msg)
+add_subdirectory(inotify)
+add_subdirectory(eventfd)
 add_subdirectory(shm)
 add_subdirectory(swap)
 add_subdirectory(mman)
