@@ -1180,4 +1180,42 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  HDRS
+  DEPENDS
+)
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  SRCS
+  HDRS
+  DEPENDS
+    libc.src.errno.errno
+)
+  SRCS
+  HDRS
+  DEPENDS
     libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
