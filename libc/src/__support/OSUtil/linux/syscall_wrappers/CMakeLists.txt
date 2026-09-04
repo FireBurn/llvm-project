@@ -3273,3 +3273,27 @@ add_header_library(
     libc.hdr.types.mode_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  setns
+  HDRS
+    setns.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  unshare
+  HDRS
+    unshare.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
