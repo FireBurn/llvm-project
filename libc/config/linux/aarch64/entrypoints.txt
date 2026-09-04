@@ -477,6 +477,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.tcgetpgrp
     libc.src.unistd.tcsetpgrp
     libc.src.unistd.truncate
+    libc.src.unistd.ttyname
+    libc.src.unistd.ttyname_r
     libc.src.unistd.unlink
     libc.src.unistd.unlinkat
     libc.src.unistd.usleep
