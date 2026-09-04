@@ -84,6 +84,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.poll.poll
     libc.src.poll.ppoll
 
+    # mntent.h entrypoints
+    libc.src.mntent.addmntent
+    libc.src.mntent.endmntent
+    libc.src.mntent.getmntent
+    libc.src.mntent.getmntent_r
+    libc.src.mntent.hasmntopt
+    libc.src.mntent.setmntent
+
     # iconv.h entrypoints
     libc.src.iconv.iconv
     libc.src.iconv.iconv_close
