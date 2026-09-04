@@ -403,6 +403,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/file.h entrypoints
     libc.src.sys.file.flock
+    libc.src.sys.io.ioperm
+    libc.src.sys.io.iopl
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl
