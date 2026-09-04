@@ -360,3 +360,40 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "wcswidth",
+    srcs = ["wcswidth.cpp"],
+    hdrs = ["wcswidth.h"],
+    deps = [
+        ":wcwidth",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "wcwidth",
+    srcs = ["wcwidth.cpp"],
+    hdrs = ["wcwidth.h"],
+    deps = [
+        ":wcwidth_table",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "wcwidth_table",
+    hdrs = ["wcwidth_table.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
