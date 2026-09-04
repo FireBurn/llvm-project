@@ -119,6 +119,12 @@ functions:
     arguments:
       - type: int
       - type: sighandler_t
+  - name: sigsuspend
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const sigset_t *
   - name: sigprocmask
     standards:
       - posix
