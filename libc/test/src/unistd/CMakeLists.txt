@@ -1004,7 +1004,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
-
 add_libc_test(
   confstr_test
   SUITE
@@ -1160,3 +1159,8 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
+  sbrk_test
+    sbrk_test.cpp
+    libc.hdr.stdint_proxy
+    libc.src.unistd.brk
+    libc.src.unistd.sbrk

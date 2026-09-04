@@ -1180,4 +1180,23 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
     libc.src.errno.errno
 )
+add_header_library(
+  brk_utils
+    brk_utils.h
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+  brk
+    brk.cpp
+    ../brk.h
+    .brk_utils
+    libc.hdr.errno_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.brk
+  sbrk
+    sbrk.cpp
+    ../sbrk.h
+    .brk
+    .brk_utils
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.src.__support.OSUtil.linux.syscall_wrappers.brk
     libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
