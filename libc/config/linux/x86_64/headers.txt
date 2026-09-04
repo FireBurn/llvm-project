@@ -97,6 +97,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.ucontext
     libc.include.unistd
     libc.include.glob
+    libc.include.iconv
     libc.include.mntent
     libc.include.utime
     libc.include.wchar
