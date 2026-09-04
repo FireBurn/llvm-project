@@ -12,6 +12,7 @@
 #include "hdr/time_macros.h"
 #include "hdr/types/struct_timespec.h"
 #include "hdr/types/struct_timeval.h"
+#include "hdr/types/struct_timezone.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
@@ -21,7 +22,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, settimeofday,
-                   (const struct timeval *tv, const void *tz)) {
+                   (const struct timeval *tv, const struct timezone *tz)) {
   // The timezone argument has been unused since the kernel stopped keeping
   // one, and passing anything but a null pointer is an error.
   if (tz != nullptr) {
