@@ -182,3 +182,11 @@ foreach(target IN LISTS startup_components)
     COMPONENT libc)
 endforeach()
 
+add_object_library(
+  passive_abi
+  SRCS
+    passive_abi.cpp
+  DEPENDS
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.config
+)
