@@ -547,7 +547,7 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_unistd_macros",
     hdrs = [
-        "include/llvm-libc-macros/linux/unistd-macros.h",
+                "include/llvm-libc-macros/linux/unistd-macros.h",
         "include/llvm-libc-macros/unistd-macros.h",
     ],
 )
@@ -25952,6 +25952,21 @@ libc_function(
         ":exit",
         ":hdr_stdint_proxy",
         ":setcontext",
+    ],
+)
+
+libc_function(
+    name = "confstr",
+    srcs = ["src/unistd/confstr.cpp"],
+    hdrs = ["src/unistd/confstr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_unistd_macros",
+        ":types_size_t",
     ],
 )
 
