@@ -1004,6 +1004,8 @@ add_header_macro(
     .llvm-libc-types.pid_t
     .llvm-libc-types.size_t
     .llvm-libc-types.time_t
+    .llvm-libc-types.struct_shminfo
+    .llvm-libc-types.struct_shm_info
 )
 
 add_header_macro(
@@ -1020,6 +1022,7 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
     .llvm-libc-types.time_t
+    .llvm-libc-types.struct_msginfo
 )
 
 add_header_macro(
