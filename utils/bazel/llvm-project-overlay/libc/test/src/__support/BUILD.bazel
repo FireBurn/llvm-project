@@ -124,6 +124,11 @@ libc_test(
 )
 
 libc_test(
+    name = "shared_internal_test",
+    srcs = ["shared_internal_test.cpp"],
+)
+
+libc_test(
     name = "printf_parser_test",
     srcs = ["printf_core/parser_test.cpp"],
     deps = [

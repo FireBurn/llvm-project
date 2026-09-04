@@ -266,6 +266,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  shared_internal_test
+  SUITE
+    libc-support-tests
+  SRCS
+    shared_internal_test.cpp
+  DEPENDS
+    libc.src.__support.macros.config
+)
+
+add_libc_test(
   fixedvector_test
   SUITE
     libc-support-tests
