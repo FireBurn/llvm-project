@@ -58,13 +58,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.posix_fallocate
 
     # grp.h entrypoints
-    libc.src.grp.endgrent
-    libc.src.grp.getgrent
-    libc.src.grp.getgrgid
     libc.src.grp.getgrgid_r
-    libc.src.grp.getgrnam
     libc.src.grp.getgrnam_r
-    libc.src.grp.setgrent
 
     # net/if.h entrypoints
     libc.src.net.if_indextoname
@@ -79,6 +74,12 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.poll.ppoll
 
     # grp.h entrypoints
+    libc.src.grp.endgrent
+    libc.src.grp.getgrent
+    libc.src.grp.getgrgid
+    libc.src.grp.getgrnam
+    libc.src.grp.initgroups
+    libc.src.grp.setgrent
     libc.src.grp.setgroups
 
     # mntent.h entrypoints
