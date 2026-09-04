@@ -1,0 +1,24 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/swap.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "swap_test",
+    srcs = ["swap_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_sys_swap_macros",
+        "//libc:swapoff",
+        "//libc:swapon",
+        "//libc:sys_swap_swapoff",
+        "//libc:sys_swap_swapon",
+    ],
+)
