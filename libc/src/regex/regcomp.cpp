@@ -1,28 +1,21 @@
-//===----------------------------------------------------------------------===//
+//===-- Implementation of regcomp -----------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-///
-/// \file
-/// Implementation of regcomp.
-///
-//===----------------------------------------------------------------------===//
 
 #include "src/regex/regcomp.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/malloc.h"
 #include "hdr/regex_macros.h"
-#include "src/__support/CPP/new.h"
-#include "src/__support/CPP/string_view.h"
-#include "src/__support/alloc-checker.h"
 #include "src/__support/common.h"
-#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
-#include "src/__support/regex/regex_ast.h"
-#include "src/__support/regex/regex_internal.h"
+#include "src/regex/regex_engine.h"
+#include "src/regex/regex_parser.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -31,48 +24,47 @@ LLVM_LIBC_FUNCTION(int, regcomp,
                     int cflags)) {
   LIBC_CRASH_ON_NULLPTR(preg);
   LIBC_CRASH_ON_NULLPTR(pattern);
-
-  // Note: POSIX requires callers to call regfree() before reusing a preg
-  // object.  We therefore do not attempt to free any previous __internal here
-  // as preg is uninitialised on first use and the pointer would be garbage.
-  // However, we clear __internal and re_nsub immediately so calling regfree()
-  // after a failed regcomp() is guaranteed to be a safe no-op.
   preg->__internal = nullptr;
   preg->re_nsub = 0;
 
-  // TODO: Once cpp::unique_ptr and AllocChecker-backed cpp::make_unique are
-  // available in src/__support/CPP/, manage RegexInternal via unique_ptr so
-  // error paths do not require manual delete.
-  AllocChecker ac;
-  regex::RegexInternal *internal = new (ac) regex::RegexInternal();
-  if (!ac)
+  // Parse once with no storage to learn how much is needed, then again to
+  // build it. Counting first keeps the whole compiled form in one allocation.
+  regex::Parser counter(pattern, cflags, nullptr, 0xffffffu, nullptr,
+                        0xffffffu);
+  int error = 0;
+  counter.parse(error);
+  if (error != 0)
+    return error;
+
+  const uint32_t nodes = counter.node_count();
+  const uint32_t classes = counter.class_count();
+  const size_t bytes = sizeof(regex::Compiled) + nodes * sizeof(regex::Node) +
+                       classes * sizeof(regex::CharClass);
+  void *block = ::malloc(bytes);
+  if (block == nullptr)
     return REG_ESPACE;
 
-  ErrorOr<regex::ExprId> cur = internal->pool.empty_str();
-  if (!cur.has_value()) {
-    delete internal;
-    return cur.error();
-  }
+  auto *compiled = static_cast<regex::Compiled *>(block);
+  *compiled = regex::Compiled();
+  compiled->nodes = reinterpret_cast<regex::Node *>(static_cast<char *>(block) +
+                                                    sizeof(regex::Compiled));
+  compiled->classes = reinterpret_cast<regex::CharClass *>(
+      reinterpret_cast<char *>(compiled->nodes) + nodes * sizeof(regex::Node));
+  compiled->cflags = cflags;
 
-  // TODO: Replace direct literal concatenation with the ERE/BRE parser as
-  // regular expression syntax support is wired up.
-  cpp::string_view pattern_view(pattern);
-  for (char c : pattern_view) {
-    ErrorOr<regex::ExprId> lit = internal->pool.make_lit(c);
-    if (!lit.has_value()) {
-      delete internal;
-      return lit.error();
-    }
-    cur = internal->pool.make_concat(*cur, *lit);
-    if (!cur.has_value()) {
-      delete internal;
-      return cur.error();
-    }
+  regex::Parser builder(pattern, cflags, compiled->nodes, nodes,
+                        compiled->classes, classes);
+  compiled->root = builder.parse(error);
+  if (error != 0) {
+    ::free(block);
+    return error;
   }
+  compiled->node_count = builder.node_count();
+  compiled->class_count = builder.class_count();
+  compiled->group_count = builder.group_count();
 
-  internal->root = *cur;
-  internal->cflags = cflags;
-  preg->__internal = internal;
+  preg->re_nsub = compiled->group_count;
+  preg->__internal = block;
   return 0;
 }
 
