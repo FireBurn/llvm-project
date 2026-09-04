@@ -8,6 +8,7 @@
 
 #include "file.h"
 #include "file_flags.h"
+#include "hdr/fcntl_macros.h"
 #include "hdr/stdio_macros.h"
 #include "hdr/sys_stat_macros.h" // For S_IS*, S_IF*, and S_IR* flags.
 #include "hdr/types/off_t.h"
@@ -98,6 +99,11 @@ static int map_c_mode_flags_to_linux_open_flags(const FileMode &file_mode) {
 
   if (file_mode.is_close_on_exec())
     open_flags |= LinuxFileFlags::CLOSE_ON_EXEC;
+
+  if (file_mode.is_exclusive_create())
+    open_flags |= O_EXCL;
+  if (file_mode.is_close_on_exec())
+    open_flags |= O_CLOEXEC;
 
   return open_flags;
 }
