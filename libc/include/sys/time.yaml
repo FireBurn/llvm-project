@@ -11,6 +11,7 @@ macros:
   - macro_name: timeradd
     macro_header: sys-time-macros.h
 types:
+  - type_name: struct_timespec
   - type_name: struct_timeval
   - type_name: struct_itimerval
 enums: []
