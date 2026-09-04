@@ -417,9 +417,9 @@ add_entrypoint_object(
   HDRS
     mkstemp.h
   DEPENDS
+    .temp_template
     libc.hdr.errno_macros
     libc.hdr.fcntl_macros
-    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.__support.common
     libc.src.__support.libc_errno
@@ -873,5 +873,49 @@ add_entrypoint_object(
     libc.hdr.errno_macros
     libc.hdr.func.realloc
     libc.hdr.types.size_t
+    libc.src.errno.errno
+)
+
+add_header_library(
+  temp_template
+  HDRS
+    temp_template.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.error_or
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  mktemp
+  SRCS
+    mktemp.cpp
+  HDRS
+    mktemp.h
+  DEPENDS
+    .temp_template
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.OSUtil.linux.stat.kernel_statx_types
+    libc.src.__support.OSUtil.linux.syscall_wrappers.statx
+    libc.src.__support.macros.null_check
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mkdtemp
+  SRCS
+    mkdtemp.cpp
+  HDRS
+    mkdtemp.h
+  DEPENDS
+    .temp_template
+    libc.hdr.errno_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mkdir
+    libc.src.__support.macros.null_check
     libc.src.errno.errno
 )
