@@ -63,8 +63,18 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.grp.getgrgid
     libc.src.grp.getgrgid_r
     libc.src.grp.getgrnam
+    libc.src.grp.initgroups
     libc.src.grp.getgrnam_r
     libc.src.grp.setgrent
+    libc.src.grp.setgroups
+
+    # mntent.h entrypoints
+    libc.src.mntent.addmntent
+    libc.src.mntent.endmntent
+    libc.src.mntent.getmntent
+    libc.src.mntent.getmntent_r
+    libc.src.mntent.hasmntopt
+    libc.src.mntent.setmntent
 
     # net/if.h entrypoints
     libc.src.net.if_indextoname
@@ -77,17 +87,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # poll.h entrypoints
     libc.src.poll.poll
     libc.src.poll.ppoll
-
-    # grp.h entrypoints
-    libc.src.grp.setgroups
-
-    # mntent.h entrypoints
-    libc.src.mntent.addmntent
-    libc.src.mntent.endmntent
-    libc.src.mntent.getmntent
-    libc.src.mntent.getmntent_r
-    libc.src.mntent.hasmntopt
-    libc.src.mntent.setmntent
 
     # pwd.h entrypoints
     libc.src.pwd.endpwent
