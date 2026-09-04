@@ -84,6 +84,10 @@ macros:
     macro_header: limits-macros.h
   - macro_name: _POSIX_NGROUPS_MAX
     macro_header: limits-macros.h
+  - macro_name: _POSIX_ATEXIT_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX2_LINE_MAX
+    macro_header: limits-macros.h
   - macro_name: NGROUPS_MAX
     macro_header: limits-macros.h
   - macro_name: _POSIX_AIO_LISTIO_MAX
