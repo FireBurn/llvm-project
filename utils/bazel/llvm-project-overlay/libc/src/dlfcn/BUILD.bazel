@@ -1,0 +1,90 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "dl_internal",
+    srcs = ["dl_internal.cpp"],
+    hdrs = ["dl_internal.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)
+
+libc_support_library(
+    name = "dlopen",
+    srcs = ["dlopen.cpp"],
+    hdrs = ["dlopen.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_bind",
+        "//libc/src/__support:elf_load_module",
+        "//libc/src/__support:elf_passive_abi",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_support_library(
+    name = "dlclose",
+    srcs = ["dlclose.cpp"],
+    hdrs = ["dlclose.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_map_segments",
+        "//libc/src/__support:elf_passive_abi",
+        "//libc/src/stdlib:exit_handler",
+    ],
+)
+
+libc_support_library(
+    name = "dlerror",
+    srcs = ["dlerror.cpp"],
+    hdrs = ["dlerror.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "dlsym",
+    srcs = ["dlsym.cpp"],
+    hdrs = ["dlsym.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_bind",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)

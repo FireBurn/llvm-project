@@ -573,6 +573,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "elf_passive_abi",
+    hdrs = ["elf/passive_abi.h"],
+    deps = [
+        ":elf_map_segments",
+        ":elf_module",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_bind",
     hdrs = ["elf/bind.h"],
     deps = [
