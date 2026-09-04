@@ -2,6 +2,58 @@ header: termios.h
 standards:
   - posix
 macros:
+  - macro_name: ECHOCTL
+    macro_header: termios-macros.h
+  - macro_name: ECHOPRT
+    macro_header: termios-macros.h
+  - macro_name: ECHOKE
+    macro_header: termios-macros.h
+  - macro_name: FLUSHO
+    macro_header: termios-macros.h
+  - macro_name: PENDIN
+    macro_header: termios-macros.h
+  - macro_name: IEXTEN
+    macro_header: termios-macros.h
+  - macro_name: XCASE
+    macro_header: termios-macros.h
+  - macro_name: CBAUDEX
+    macro_header: termios-macros.h
+  - macro_name: CINTR
+    macro_header: termios-macros.h
+  - macro_name: CQUIT
+    macro_header: termios-macros.h
+  - macro_name: CERASE
+    macro_header: termios-macros.h
+  - macro_name: CKILL
+    macro_header: termios-macros.h
+  - macro_name: CEOF
+    macro_header: termios-macros.h
+  - macro_name: CTIME
+    macro_header: termios-macros.h
+  - macro_name: CMIN
+    macro_header: termios-macros.h
+  - macro_name: CSTART
+    macro_header: termios-macros.h
+  - macro_name: CSTOP
+    macro_header: termios-macros.h
+  - macro_name: CSUSP
+    macro_header: termios-macros.h
+  - macro_name: CEOL
+    macro_header: termios-macros.h
+  - macro_name: CREPRINT
+    macro_header: termios-macros.h
+  - macro_name: CDISCARD
+    macro_header: termios-macros.h
+  - macro_name: CWERASE
+    macro_header: termios-macros.h
+  - macro_name: CLNEXT
+    macro_header: termios-macros.h
+  - macro_name: CEOL2
+    macro_header: termios-macros.h
+  - macro_name: EXTA
+    macro_header: termios-macros.h
+  - macro_name: EXTB
+    macro_header: termios-macros.h
   - macro_name: NCCS
     macro_header: termios-macros.h
 types:
