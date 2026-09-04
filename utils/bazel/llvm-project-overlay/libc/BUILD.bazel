@@ -22735,6 +22735,34 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_regex_t",
+    hdrs = ["include/llvm-libc-types/regex_t.h"],
+)
+
+libc_support_library(
+    name = "types_regex_t",
+    hdrs = ["hdr/types/regex_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_regex_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_regmatch_t",
+    hdrs = ["include/llvm-libc-types/regmatch_t.h"],
+)
+
+libc_support_library(
+    name = "types_regmatch_t",
+    hdrs = ["hdr/types/regmatch_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_regmatch_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["include/llvm-libc-types/struct_dl_phdr_info.h"],
 )
@@ -23372,6 +23400,61 @@ libc_function(
 )
 
 libc_function(
+    name = "regcomp",
+    srcs = ["src/regex/regcomp.cpp"],
+    hdrs = ["src/regex/regcomp.h", "src/regex/regex_engine.h", "src/regex/regex_parser.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_optional",
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_regex_macros",
+        ":hdr_stdint_proxy",
+        ":types_regex_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "regexec",
+    srcs = ["src/regex/regexec.cpp"],
+    hdrs = ["src/regex/regex_engine.h", "src/regex/regex_matcher.h", "src/regex/regexec.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_optional",
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_limits_macros",
+        ":hdr_regex_macros",
+        ":hdr_stdint_proxy",
+        ":regcomp",
+        ":string_utils",
+        ":types_regex_t",
+        ":types_regmatch_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "regfree",
+    srcs = ["src/regex/regfree.cpp"],
+    hdrs = ["src/regex/regfree.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":func_free",
+        ":types_regex_t",
+    ],
+)
+
+libc_function(
     name = "raise",
     srcs = ["src/signal/linux/raise.cpp"],
     hdrs = ["src/signal/raise.h"],
@@ -23839,6 +23922,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_printf_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_regex_macros",
+    hdrs = ["include/llvm-libc-macros/regex-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_regex_macros",
+    hdrs = ["hdr/regex_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_regex_macros",
         ],
         "//conditions:default": [],
     }),
