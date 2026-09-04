@@ -79,6 +79,7 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.mknod
 )
 
+
 add_entrypoint_object(
   mknodat
   ALIAS
