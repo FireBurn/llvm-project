@@ -20,12 +20,14 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, setlocale, (int category, const char *locale_name)) {
-  if (category > LC_ALL)
+  if (category < 0 || category > LC_ALL)
     return nullptr;
 
   if (locale_name != nullptr) {
     cpp::string_view name(locale_name);
-    if (!name.empty() && name != "C")
+    // The empty string means the locale named by the environment, which here is
+    // the only one there is.
+    if (!name.empty() && name != "C" && name != "POSIX")
       return nullptr;
   }
 
