@@ -139,6 +139,16 @@ libc_test(
 )
 
 libc_test(
+    name = "sbrk_test",
+    srcs = ["sbrk_test.cpp"],
+    deps = [
+        "//libc:brk",
+        "//libc:hdr_errno_macros",
+        "//libc:sbrk",
+    ],
+)
+
+libc_test(
     name = "swab_test",
     srcs = ["swab_test.cpp"],
     deps = [
