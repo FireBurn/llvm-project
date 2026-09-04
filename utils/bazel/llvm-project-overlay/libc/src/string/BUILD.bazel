@@ -473,3 +473,15 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "strverscmp",
+    srcs = ["strverscmp.cpp"],
+    hdrs = ["strverscmp.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+    ],
+)
