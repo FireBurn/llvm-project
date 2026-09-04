@@ -18291,6 +18291,22 @@ libc_function(
 )
 
 libc_function(
+    name = "sigsuspend",
+    srcs = ["src/signal/linux/sigsuspend.cpp"],
+    hdrs = ["src/signal/sigsuspend.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigsuspend",
+        ":errno",
+        ":hdr_errno_macros",
+        ":signal_sigsuspend",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "waitpid",
     srcs = ["src/sys/wait/linux/waitpid.cpp"],
     hdrs = ["src/sys/wait/waitpid.h"],
@@ -20770,5 +20786,26 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "signal_sigsuspend",
+    hdrs = ["src/signal/sigsuspend.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigsuspend",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigsuspend.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_sigset_t",
     ],
 )
