@@ -401,6 +401,20 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/xattr.h entrypoints
+    libc.src.sys.xattr.fgetxattr
+    libc.src.sys.xattr.flistxattr
+    libc.src.sys.xattr.fremovexattr
+    libc.src.sys.xattr.fsetxattr
+    libc.src.sys.xattr.getxattr
+    libc.src.sys.xattr.lgetxattr
+    libc.src.sys.xattr.listxattr
+    libc.src.sys.xattr.llistxattr
+    libc.src.sys.xattr.lremovexattr
+    libc.src.sys.xattr.lsetxattr
+    libc.src.sys.xattr.removexattr
+    libc.src.sys.xattr.setxattr
+
     # sys/shm.h entrypoints
     libc.src.sys.shm.shmat
     libc.src.sys.shm.shmctl

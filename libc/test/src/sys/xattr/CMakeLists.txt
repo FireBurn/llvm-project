@@ -1,0 +1,32 @@
+add_custom_target(libc_sys_xattr_unittests)
+
+add_libc_test(
+  xattr_test
+  SUITE
+    libc_sys_xattr_unittests
+  SRCS
+    xattr_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.string.memcmp
+    libc.src.sys.xattr.fgetxattr
+    libc.src.sys.xattr.flistxattr
+    libc.src.sys.xattr.fremovexattr
+    libc.src.sys.xattr.fsetxattr
+    libc.src.sys.xattr.getxattr
+    libc.src.sys.xattr.lgetxattr
+    libc.src.sys.xattr.listxattr
+    libc.src.sys.xattr.llistxattr
+    libc.src.sys.xattr.lremovexattr
+    libc.src.sys.xattr.lsetxattr
+    libc.src.sys.xattr.removexattr
+    libc.src.sys.xattr.setxattr
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
