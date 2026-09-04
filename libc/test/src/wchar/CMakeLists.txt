@@ -732,3 +732,15 @@ add_libc_test(
     libc.src.wchar.swprintf
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  wcwidth_test
+  SUITE
+    libc_wchar_unittests
+  SRCS
+    wcwidth_test.cpp
+  DEPENDS
+    libc.hdr.types.wchar_t
+    libc.src.wchar.wcswidth
+    libc.src.wchar.wcwidth
+)
