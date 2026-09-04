@@ -46,6 +46,13 @@ types:
 enums: []
 objects: []
 functions:
+  - name: sigismember
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const sigset_t *
+      - type: int
   - name: kill
     standards:
       - posix
