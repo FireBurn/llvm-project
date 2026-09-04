@@ -361,6 +361,16 @@
 #define _POSIX_ARG_MAX 4096
 #endif
 
+#ifndef _POSIX_ATEXIT_MAX
+#define _POSIX_ATEXIT_MAX 32
+#endif
+
+/// The POSIX minimum for the utilities, which is a separate set from the
+/// values above.
+#ifndef _POSIX2_LINE_MAX
+#define _POSIX2_LINE_MAX 2048
+#endif
+
 /// The POSIX minimum values. An implementation must support at least these,
 /// so portable code sizes its buffers from them rather than from the values
 /// this implementation happens to offer.
