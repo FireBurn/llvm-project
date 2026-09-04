@@ -121,6 +121,11 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: ttyname
+    return_type: char *
+  - name: ttyname_r
+      - type: char *
+      - type: size_t
   - name: syscall
     return_type: long
       - type: long
