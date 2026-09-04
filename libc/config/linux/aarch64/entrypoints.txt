@@ -281,6 +281,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.reallocarray
 
     # stdio.h entrypoints
+    libc.src.stdio.dprintf
     libc.src.stdio.fprintf
     libc.src.stdio.fscanf
     libc.src.stdio.vfscanf
@@ -300,6 +301,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.tmpfile
     libc.src.stdio.tmpnam
     libc.src.stdio.vsscanf
+    libc.src.stdio.vdprintf
     libc.src.stdio.vfprintf
     libc.src.stdio.vprintf
     libc.src.stdio.vsnprintf
