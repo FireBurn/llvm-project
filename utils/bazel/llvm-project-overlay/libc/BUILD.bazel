@@ -18588,6 +18588,18 @@ libc_function(
 )
 
 libc_function(
+    name = "strverscmp",
+    srcs = ["src/string/strverscmp.cpp"],
+    hdrs = ["src/string/strverscmp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
     name = "open",
     srcs = ["src/fcntl/linux/open.cpp"],
     hdrs = ["src/fcntl/open.h"],
