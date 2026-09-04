@@ -13,18 +13,14 @@
 
 #include "src/regex/regcomp.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/malloc.h"
 #include "hdr/regex_macros.h"
-#include "src/__support/CPP/new.h"
-#include "src/__support/CPP/scope.h"
-#include "src/__support/CPP/string_view.h"
-#include "src/__support/alloc-checker.h"
 #include "src/__support/common.h"
-#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
-#include "src/__support/regex/regex_ast.h"
-#include "src/__support/regex/regex_internal.h"
-#include "src/__support/regex/regex_parser.h"
+#include "src/regex/regex_engine.h"
+#include "src/regex/regex_parser.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -33,41 +29,47 @@ LLVM_LIBC_FUNCTION(int, regcomp,
                     int cflags)) {
   LIBC_CRASH_ON_NULLPTR(preg);
   LIBC_CRASH_ON_NULLPTR(pattern);
-
-  // Note: POSIX requires callers to call regfree() before reusing a preg
-  // object.  We therefore do not attempt to free any previous __internal here
-  // as preg is uninitialised on first use and the pointer would be garbage.
-  // However, we clear __internal and re_nsub immediately so calling regfree()
-  // after a failed regcomp() is guaranteed to be a safe no-op.
   preg->__internal = nullptr;
   preg->re_nsub = 0;
 
-  // TODO: Enable BRE (!(cflags & REG_EXTENDED)), REG_ICASE, and REG_NOSPEC as
-  // each feature is implemented in subsequent patches.
-  if (!(cflags & REG_EXTENDED) ||
-      (cflags & ~(REG_EXTENDED | REG_NOSUB | REG_NEWLINE)) != 0)
-    return REG_BADPAT;
+  // Parse once with no storage to learn how much is needed, then again to
+  // build it. Counting first keeps the whole compiled form in one allocation.
+  regex::Parser counter(pattern, cflags, nullptr, 0xffffffu, nullptr,
+                        0xffffffu);
+  int error = 0;
+  counter.parse(error);
+  if (error != 0)
+    return error;
 
-  // TODO: Once cpp::unique_ptr and AllocChecker-backed cpp::make_unique are
-  // available in src/__support/CPP/, manage RegexInternal via unique_ptr so
-  // error paths do not require a scope guard.
-  AllocChecker ac;
-  regex::RegexInternal *internal = new (ac) regex::RegexInternal();
-  if (!ac)
+  const uint32_t nodes = counter.node_count();
+  const uint32_t classes = counter.class_count();
+  const size_t bytes = sizeof(regex::Compiled) + nodes * sizeof(regex::Node) +
+                       classes * sizeof(regex::CharClass);
+  void *block = ::malloc(bytes);
+  if (block == nullptr)
     return REG_ESPACE;
-  cpp::scope_exit internal_guard([internal] { delete internal; });
 
-  size_t re_nsub = 0;
-  ErrorOr<regex::ExprId> root = regex::parse_ere(
-      cpp::string_view(pattern), cflags, internal->pool, &re_nsub);
-  if (!root.has_value())
-    return root.error();
+  auto *compiled = static_cast<regex::Compiled *>(block);
+  *compiled = regex::Compiled();
+  compiled->nodes = reinterpret_cast<regex::Node *>(static_cast<char *>(block) +
+                                                    sizeof(regex::Compiled));
+  compiled->classes = reinterpret_cast<regex::CharClass *>(
+      reinterpret_cast<char *>(compiled->nodes) + nodes * sizeof(regex::Node));
+  compiled->cflags = cflags;
 
-  internal_guard.release();
-  internal->root = *root;
-  internal->cflags = cflags;
-  preg->__internal = internal;
-  preg->re_nsub = re_nsub;
+  regex::Parser builder(pattern, cflags, compiled->nodes, nodes,
+                        compiled->classes, classes);
+  compiled->root = builder.parse(error);
+  if (error != 0) {
+    ::free(block);
+    return error;
+  }
+  compiled->node_count = builder.node_count();
+  compiled->class_count = builder.class_count();
+  compiled->group_count = builder.group_count();
+
+  preg->re_nsub = compiled->group_count;
+  preg->__internal = block;
   return 0;
 }
 
