@@ -64,3 +64,14 @@ TEST(LlvmLibcLimitsMacrosTest, FillInThePosixLimitsHValues) {
   EXPECT_EQ(static_cast<long long>(_POSIX_TTY_NAME_MAX), 9LL);
   EXPECT_EQ(static_cast<long long>(_POSIX_TZNAME_MAX), 6LL);
 }
+
+TEST(LlvmLibcLimitsMacrosTest, Posix2UtilityLimits) {
+  EXPECT_EQ(static_cast<long long>(_POSIX2_BC_BASE_MAX), 99LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_BC_DIM_MAX), 2048LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_BC_SCALE_MAX), 99LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_BC_STRING_MAX), 1000LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_CHARCLASS_NAME_MAX), 14LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_COLL_WEIGHTS_MAX), 2LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_EXPR_NEST_MAX), 32LL);
+  EXPECT_EQ(static_cast<long long>(_POSIX2_RE_DUP_MAX), 255LL);
+}
