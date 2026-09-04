@@ -1,0 +1,22 @@
+add_custom_target(libc_sys_shm_unittests)
+
+add_libc_test(
+  shm_test
+  SUITE
+    libc_sys_shm_unittests
+  SRCS
+    shm_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_ipc_macros
+    libc.hdr.sys_shm_macros
+    libc.hdr.types.struct_shmid_ds
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.sys.shm.shmat
+    libc.src.sys.shm.shmctl
+    libc.src.sys.shm.shmdt
+    libc.src.sys.shm.shmget
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
