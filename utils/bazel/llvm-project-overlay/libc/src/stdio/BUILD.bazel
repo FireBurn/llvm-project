@@ -560,6 +560,22 @@ libc_function(
 )
 
 libc_function(
+    name = "dprintf",
+    srcs = ["generic/dprintf.cpp"],
+    hdrs = ["dprintf.h"],
+    deps = [
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_error_mapper",
+        "//libc/src/__support/printf_core:vdprintf_internal",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "fgetc",
     srcs = ["generic/fgetc.cpp"],
     hdrs = ["fgetc.h"],
@@ -630,6 +646,22 @@ libc_function(
         "//libc/src/__support:error_or",
         "//libc/src/__support:libc_errno",
         "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "vdprintf",
+    srcs = ["generic/vdprintf.cpp"],
+    hdrs = ["vdprintf.h"],
+    deps = [
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_error_mapper",
+        "//libc/src/__support/printf_core:vdprintf_internal",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
 

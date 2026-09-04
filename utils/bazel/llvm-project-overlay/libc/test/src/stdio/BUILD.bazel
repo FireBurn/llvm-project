@@ -213,6 +213,23 @@ libc_test(
 )
 
 libc_test(
+    name = "dprintf_test",
+    srcs = ["dprintf_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:dprintf",
+        "//libc/src/stdio:remove",
+        "//libc/src/stdio:vdprintf",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:read",
+    ],
+)
+
+libc_test(
     name = "fclose_stdstream_test",
     srcs = ["fclose_stdstream_test.cpp"],
     deps = [
