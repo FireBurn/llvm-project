@@ -8,6 +8,8 @@ add_subdirectory(errno)
 add_subdirectory(fenv)
 add_subdirectory(fnmatch)
 add_subdirectory(glob)
+
+add_subdirectory(iconv)
 add_subdirectory(inttypes)
 add_subdirectory(libgen)
 add_subdirectory(link)
