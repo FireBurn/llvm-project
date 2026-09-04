@@ -19018,6 +19018,22 @@ libc_function(
 )
 
 libc_function(
+    name = "brk",
+    srcs = ["src/unistd/linux/brk.cpp"],
+    hdrs = ["src/unistd/brk.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_brk",
+        ":errno",
+        ":hdr_errno_macros",
+        ":unistd_brk",
+        ":unistd_linux_brk_utils",
+    ],
+)
+
+libc_function(
     name = "chdir",
     srcs = ["src/unistd/linux/chdir.cpp"],
     hdrs = ["src/unistd/chdir.h"],
@@ -20193,6 +20209,23 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_setsid",
         ":errno",
         ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "sbrk",
+    srcs = ["src/unistd/linux/sbrk.cpp"],
+    hdrs = ["src/unistd/sbrk.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_brk",
+        ":brk",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":unistd_linux_brk_utils",
     ],
 )
 
@@ -23785,6 +23818,33 @@ libc_support_library(
         ":__support_macros_config",
         ":hdr_getopt_macros",
         ":unistd_getopt_common",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_brk",
+    hdrs = ["src/unistd/brk.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_linux_brk_utils",
+    hdrs = ["src/unistd/linux/brk_utils.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_brk",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/brk.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
