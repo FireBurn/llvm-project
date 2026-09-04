@@ -4,14 +4,18 @@ add_entrypoint_object(
     regcomp.cpp
   HDRS
     regcomp.h
+    regex_engine.h
+    regex_parser.h
   DEPENDS
+    libc.hdr.func.malloc
+    libc.hdr.func.free
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.optional
+    libc.src.__support.ctype_utils
     libc.hdr.types.regex_t
     libc.hdr.regex_macros
     libc.src.__support.common
-    libc.src.__support.CPP.new
-    libc.src.__support.CPP.string_view
-    libc.src.__support.alloc_checker
-    libc.src.string.memory_utils.inline_memcpy
 )
 
 add_entrypoint_object(
@@ -20,13 +24,18 @@ add_entrypoint_object(
     regexec.cpp
   HDRS
     regexec.h
+    regex_engine.h
+    regex_matcher.h
   DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.ctype_utils
+    libc.src.string.string_utils
     libc.hdr.types.regex_t
     libc.hdr.types.regmatch_t
     libc.hdr.types.size_t
     libc.hdr.regex_macros
     libc.src.__support.common
-    libc.src.string.memory_utils.inline_strstr
 )
 
 add_entrypoint_object(
@@ -40,8 +49,6 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.regex_macros
     libc.src.__support.common
-    libc.src.__support.CPP.string_view
-    libc.src.string.memory_utils.inline_memcpy
 )
 
 add_entrypoint_object(
@@ -51,7 +58,7 @@ add_entrypoint_object(
   HDRS
     regfree.h
   DEPENDS
+    libc.hdr.func.free
     libc.hdr.types.regex_t
     libc.src.__support.common
-    libc.src.__support.CPP.new
 )
