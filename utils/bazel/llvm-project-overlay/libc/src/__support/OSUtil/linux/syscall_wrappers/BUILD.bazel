@@ -2430,6 +2430,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "fanotify_init",
+    hdrs = ["fanotify_init.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fanotify_mark",
+    hdrs = ["fanotify_mark.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [

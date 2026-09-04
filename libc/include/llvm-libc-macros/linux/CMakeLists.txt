@@ -218,3 +218,9 @@ add_header(
     .fcntl_macros
 )
 
+add_header(
+  sys_fanotify_macros
+  HDR
+    sys-fanotify-macros.h
+)
+
