@@ -19,10 +19,14 @@ constexpr ElfW(Addr) LOAD_BIAS = 0x400000;
 
 // Aggregate initialised at namespace scope so there is no guard variable.
 const ElfW(Dyn) SAMPLE[] = {
-    {DT_NEEDED, {1}},      {DT_SONAME, {17}},
-    {DT_STRTAB, {0x1000}}, {DT_SYMTAB, {0x2000}},
-    {DT_NEEDED, {33}},     {DT_RELASZ, {0x180}},
-    {DT_NEEDED, {49}},     {DT_NULL, {0}},
+    {DT_NEEDED, {1}},
+    {DT_SONAME, {17}},
+    {DT_STRTAB, {0x1000}},
+    {DT_SYMTAB, {0x2000}},
+    {DT_NEEDED, {33}},
+    {DT_RELASZ, {0x180}},
+    {DT_NEEDED, {49}},
+    {DT_NULL, {0}},
     // Anything past DT_NULL must not be seen.
     {DT_RPATH, {99}},
 };
@@ -66,7 +70,7 @@ TEST(LlvmLibcElfDynamicTest, IteratesEveryMatch) {
 
   ElfW(Xword) total = 0;
   table.for_each(DT_NEEDED,
-                 [&total](const ElfW(Dyn) & e) { total += e.d_un.d_val; });
+                 [&total](const ElfW(Dyn) &e) { total += e.d_un.d_val; });
   EXPECT_EQ(total, ElfW(Xword)(1 + 33 + 49));
 }
 
