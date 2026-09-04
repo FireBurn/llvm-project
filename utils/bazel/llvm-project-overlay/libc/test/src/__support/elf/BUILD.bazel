@@ -26,3 +26,11 @@ libc_test(
         "//libc/src/__support:elf_hash",
     ],
 )
+
+libc_test(
+    name = "symbol_test",
+    srcs = ["symbol_test.cpp"],
+    deps = [
+        "//libc/src/__support:elf_symbol",
+    ],
+)
