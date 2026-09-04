@@ -879,6 +879,14 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_errno
+  ../libc/include/sys/errno.yaml
+  sys/errno.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header_macro(
   sys_resource
   ../libc/include/sys/resource.yaml
   sys/resource.h
@@ -1018,6 +1026,7 @@ add_header_macro(
     .llvm-libc-macros.sys_time_macros
     .llvm-libc-types.struct_itimerval
     .llvm-libc-types.struct_timeval
+    .llvm-libc-types.struct_timespec
 )
 
 add_header_macro(
