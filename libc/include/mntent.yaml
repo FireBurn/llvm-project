@@ -1,0 +1,75 @@
+header: mntent.h
+standards:
+  - gnu
+macros:
+  - macro_name: MNTTAB
+    macro_header: mntent-macros.h
+  - macro_name: MOUNTED
+    macro_header: mntent-macros.h
+  - macro_name: MNTTYPE_IGNORE
+    macro_header: mntent-macros.h
+  - macro_name: MNTTYPE_NFS
+    macro_header: mntent-macros.h
+  - macro_name: MNTTYPE_SWAP
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_DEFAULTS
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_RO
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_RW
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_SUID
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_NOSUID
+    macro_header: mntent-macros.h
+  - macro_name: MNTOPT_NOAUTO
+    macro_header: mntent-macros.h
+types:
+  - type_name: struct_mntent
+  - type_name: FILE
+  - type_name: size_t
+enums: []
+objects: []
+functions:
+  - name: addmntent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *__restrict
+      - type: const struct mntent *__restrict
+  - name: endmntent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+  - name: getmntent
+    standards:
+      - gnu
+    return_type: struct mntent *
+    arguments:
+      - type: FILE *
+  - name: getmntent_r
+    standards:
+      - gnu
+    return_type: struct mntent *
+    arguments:
+      - type: FILE *__restrict
+      - type: struct mntent *__restrict
+      - type: char *__restrict
+      - type: int
+  - name: hasmntopt
+    standards:
+      - gnu
+    return_type: char *
+    arguments:
+      - type: const struct mntent *
+      - type: const char *
+  - name: setmntent
+    standards:
+      - gnu
+    return_type: FILE *
+    arguments:
+      - type: const char *
+      - type: const char *
