@@ -19192,6 +19192,34 @@ libc_function(
 )
 
 libc_function(
+    name = "swapoff",
+    srcs = ["src/sys/swap/linux/swapoff.cpp"],
+    hdrs = ["src/sys/swap/swapoff.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_swapoff",
+        ":errno",
+        ":sys_swap_swapoff",
+    ],
+)
+
+libc_function(
+    name = "swapon",
+    srcs = ["src/sys/swap/linux/swapon.cpp"],
+    hdrs = ["src/sys/swap/swapon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_swapon",
+        ":errno",
+        ":sys_swap_swapon",
+    ],
+)
+
+libc_function(
     name = "waitpid",
     srcs = ["src/sys/wait/linux/waitpid.cpp"],
     hdrs = ["src/sys/wait/waitpid.h"],
@@ -24260,5 +24288,43 @@ libc_support_library(
         ":types_struct_sockaddr_in6",
         ":types_struct_timespec",
         ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_swapoff",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/swapoff.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_swapon",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/swapon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_swap_swapoff",
+    hdrs = ["src/sys/swap/swapoff.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_swap_swapon",
+    hdrs = ["src/sys/swap/swapon.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
