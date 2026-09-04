@@ -35,6 +35,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("execinfo"),
+    libc_header_info("iconv"),
     libc_header_info(
         "link",
     ),
@@ -735,6 +736,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_iconv_t",
+    hdrs = ["llvm-libc-types/iconv_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_id_t",
     hdrs = ["llvm-libc-types/id_t.h"],
 )
@@ -747,6 +753,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_mbstate_t",
     hdrs = ["llvm-libc-types/mbstate_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_nl_item",
+    hdrs = ["llvm-libc-types/nl_item.h"],
 )
 
 libc_support_library(
@@ -780,6 +791,11 @@ libc_support_library(
     deps = [
         ":llvm_libc_types_locale_t",
     ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_langinfo_macros",
+    hdrs = ["llvm-libc-macros/langinfo-macros.h"],
 )
 
 libc_support_library(
