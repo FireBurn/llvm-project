@@ -85,3 +85,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.mknodat
 )
+
+add_entrypoint_object(
+  fstatat
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.fstatat
+)
