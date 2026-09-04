@@ -53,6 +53,8 @@ static struct group group_entry;
 
 void TESTONLY_set_group_path(const char *path) { db.set_path(path); }
 
+const char *path() { return db.path(); }
+
 ErrorOr<void> open() { return db.setdb(); }
 
 ErrorOr<void> close() { return db.enddb(); }
