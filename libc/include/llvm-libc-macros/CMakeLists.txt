@@ -656,3 +656,9 @@ add_macro_header(
   HDR
     mntent-macros.h
 )
+
+add_macro_header(
+  sys_swap_macros
+  HDR
+    sys-swap-macros.h
+)
