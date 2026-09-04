@@ -1,0 +1,128 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "__fbufsize",
+    srcs = ["generic/__fbufsize.cpp"],
+    hdrs = ["__fbufsize.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__freading",
+    srcs = ["generic/__freading.cpp"],
+    hdrs = ["__freading.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__fwriting",
+    srcs = ["generic/__fwriting.cpp"],
+    hdrs = ["__fwriting.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__freadable",
+    srcs = ["generic/__freadable.cpp"],
+    hdrs = ["__freadable.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__fwritable",
+    srcs = ["generic/__fwritable.cpp"],
+    hdrs = ["__fwritable.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__flbf",
+    srcs = ["generic/__flbf.cpp"],
+    hdrs = ["__flbf.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__fpurge",
+    srcs = ["generic/__fpurge.cpp"],
+    hdrs = ["__fpurge.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__fpending",
+    srcs = ["generic/__fpending.cpp"],
+    hdrs = ["__fpending.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)

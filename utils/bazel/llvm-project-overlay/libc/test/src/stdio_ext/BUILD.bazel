@@ -1,0 +1,34 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc stdio_ext.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "stdio_ext_test",
+    srcs = ["stdio_ext_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fgetc",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:remove",
+        "//libc/src/stdio_ext:__fbufsize",
+        "//libc/src/stdio_ext:__flbf",
+        "//libc/src/stdio_ext:__fpending",
+        "//libc/src/stdio_ext:__fpurge",
+        "//libc/src/stdio_ext:__freadable",
+        "//libc/src/stdio_ext:__freading",
+        "//libc/src/stdio_ext:__fwritable",
+        "//libc/src/stdio_ext:__fwriting",
+    ],
+)
