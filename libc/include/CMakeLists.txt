@@ -879,6 +879,22 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_msg
+  ../libc/include/sys/msg.yaml
+  sys/msg.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_msg_macros
+    .llvm-libc-types.struct_msqid_ds
+    .llvm-libc-types.struct_msgbuf
+    .llvm-libc-types.key_t
+    .llvm-libc-types.pid_t
+    .llvm-libc-types.size_t
+    .llvm-libc-types.ssize_t
+    .llvm-libc-types.time_t
+)
+
+add_header_macro(
   sys_mount
   ../libc/include/sys/mount.yaml
   sys/mount.h
