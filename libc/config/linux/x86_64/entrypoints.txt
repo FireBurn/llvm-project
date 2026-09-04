@@ -520,6 +520,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.termios.tcsetattr
     libc.src.termios.tcsetwinsize
 
+    # utime.h entrypoints
+    libc.src.utime.utime
+
     # unistd.h entrypoints
     libc.src.unistd.acct
     libc.src.unistd.alarm
