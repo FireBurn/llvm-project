@@ -34,6 +34,48 @@ macros:
     macro_header: unistd-macros.h
   - macro_name: _POSIX_SHELL
     macro_header: unistd-macros.h
+  - macro_name: _SC_CHILD_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_NGROUPS_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_STREAM_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_TZNAME_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_JOB_CONTROL
+    macro_header: unistd-macros.h
+  - macro_name: _SC_SAVED_IDS
+    macro_header: unistd-macros.h
+  - macro_name: _SC_VERSION
+    macro_header: unistd-macros.h
+  - macro_name: _SC_LINE_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_RE_DUP_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_IOV_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_GETGR_R_SIZE_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_GETPW_R_SIZE_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_LOGIN_NAME_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_TTY_NAME_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_THREAD_STACK_MIN
+    macro_header: unistd-macros.h
+  - macro_name: _SC_THREAD_THREADS_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_THREAD_KEYS_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_ATEXIT_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_SYMLOOP_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_HOST_NAME_MAX
+    macro_header: unistd-macros.h
+  - macro_name: _SC_AVPHYS_PAGES
+    macro_header: unistd-macros.h
   - macro_name: SEEK_SET
     macro_header: file-seek-macros.h
   - macro_name: SEEK_CUR
