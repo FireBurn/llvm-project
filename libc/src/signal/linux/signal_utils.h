@@ -90,6 +90,18 @@ LIBC_INLINE constexpr bool add_signal(sigset_t &set, int signal) {
   return true;
 }
 
+// Whether the bit corresponding to |signal| is set in |set|. Returns false
+// for a signal number outside the valid range, which the caller reports as
+// an error rather than as absence.
+LIBC_INLINE constexpr bool has_signal(const sigset_t &set, int signal) {
+  if (signal >= NSIG || signal <= 0)
+    return false;
+  size_t n = size_t(signal) - 1;
+  size_t word = n / BITS_PER_SIGWORD;
+  size_t bit = n % BITS_PER_SIGWORD;
+  return (set.__signals[word] & (1UL << bit)) != 0;
+}
+
 // Reset the bit corresponding to |signal| in |set|. Return true on success
 // and false on failure. |signal| must be less than NSIG and be positive.
 LIBC_INLINE constexpr bool delete_signal(sigset_t &set, int signal) {
