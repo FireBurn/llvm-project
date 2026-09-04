@@ -1287,3 +1287,16 @@ add_header_library(
     libc.src.__support.macros.config
     libc.src.__support.OSUtil.osutil
 )
+
+add_header_library(
+  rt_sigsuspend
+  HDRS
+    rt_sigsuspend.h
+  DEPENDS
+    libc.hdr.types.sigset_t
+    libc.include.sys_syscall
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.__support.OSUtil.osutil
+)
