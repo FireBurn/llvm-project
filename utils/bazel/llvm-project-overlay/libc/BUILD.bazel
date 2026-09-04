@@ -15749,6 +15749,7 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_sysinfo",
         ":__support_osutil_linux_sysinfo",
         ":errno",
+        ":hdr_limits_macros",
         ":hdr_sys_auxv_macros",
         ":hdr_sys_resource_macros",
         ":hdr_unistd_macros",
