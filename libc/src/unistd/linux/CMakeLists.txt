@@ -141,6 +141,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  fchownat
+  SRCS
+    fchownat.cpp
+  HDRS
+    ../fchownat.h
+  DEPENDS
+    libc.hdr.types.uid_t
+    libc.hdr.types.gid_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   fork
   SRCS
     fork.cpp
