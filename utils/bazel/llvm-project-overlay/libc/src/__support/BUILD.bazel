@@ -614,3 +614,20 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_registry",
+    hdrs = ["elf/registry.h"],
+    deps = [
+        ":elf_bind",
+        ":elf_load_module",
+        ":elf_module",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
