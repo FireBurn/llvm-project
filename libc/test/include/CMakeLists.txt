@@ -283,6 +283,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  stdbit_stdint_test
+  SUITE
+    libc-include-tests
+  SRCS
+    stdbit_stdint_test.cpp
+  DEPENDS
+    libc.include.stdbit
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
