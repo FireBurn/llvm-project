@@ -25607,6 +25607,30 @@ libc_function(
 )
 
 libc_support_library(
+    name = "fnmatch_fnmatch_matcher",
+    hdrs = ["src/fnmatch/fnmatch_matcher.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_fnmatch_macros",
+    ],
+)
+
+libc_function(
+    name = "fnmatch",
+    srcs = ["src/fnmatch/fnmatch.cpp"],
+    hdrs = ["src/fnmatch/fnmatch.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":fnmatch_fnmatch_matcher",
+        ":hdr_fnmatch_macros",
+    ],
+)
+
+libc_support_library(
     name = "iconv_sequences",
     hdrs = ["src/iconv/sequences.h"],
     deps = [
@@ -27373,6 +27397,17 @@ libc_function(
 libc_support_library(
     name = "llvm_libc_macros_fnmatch_macros",
     hdrs = ["include/llvm-libc-macros/fnmatch-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_fnmatch_macros",
+    hdrs = ["hdr/fnmatch_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_fnmatch_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
