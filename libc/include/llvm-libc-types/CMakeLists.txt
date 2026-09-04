@@ -326,6 +326,7 @@ add_type_header(
   HDR
     struct_ifreq.h
 )
+add_header(struct_ifconf HDR struct_ifconf.h DEPENDS .struct_ifreq)
 add_header(struct_if_nameindex HDR struct_if_nameindex.h)
 add_header(struct_ifaddrs HDR struct_ifaddrs.h DEPENDS .struct_sockaddr)
 add_header(struct_iovec HDR struct_iovec.h DEPENDS .size_t)
