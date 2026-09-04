@@ -1,0 +1,29 @@
+add_custom_target(libc_mntent_unittests)
+
+add_libc_test(
+  mntent_test
+  SUITE
+    libc_mntent_unittests
+  SRCS
+    mntent_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.include.mntent
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.mntent.addmntent
+    libc.src.mntent.endmntent
+    libc.src.mntent.getmntent
+    libc.src.mntent.getmntent_r
+    libc.src.mntent.hasmntopt
+    libc.src.mntent.setmntent
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
