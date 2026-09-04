@@ -339,3 +339,9 @@ libc_test(
         "//libc:string_utils",
     ],
 )
+
+libc_test(
+    name = "strverscmp_test",
+    srcs = ["strverscmp_test.cpp"],
+    deps = ["//libc:strverscmp"],
+)
