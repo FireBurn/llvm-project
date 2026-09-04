@@ -22779,6 +22779,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_mbstate_t",
+    hdrs = ["include/llvm-libc-types/mbstate_t.h"],
+)
+
+libc_support_library(
+    name = "types_mbstate_t",
+    hdrs = ["hdr/types/mbstate_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_mbstate_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_pthread_attr_t",
     hdrs = ["include/llvm-libc-types/pthread_attr_t.h"],
 )
@@ -23817,6 +23831,42 @@ libc_function(
         ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "mbrtoc32",
+    srcs = ["src/uchar/mbrtoc32.cpp"],
+    hdrs = ["src/uchar/mbrtoc32.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":errno",
+        ":types_char32_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "c32rtomb",
+    srcs = ["src/uchar/c32rtomb.cpp"],
+    hdrs = ["src/uchar/c32rtomb.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcrtomb",
+        ":errno",
+        ":types_char32_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
     ],
 )
 
