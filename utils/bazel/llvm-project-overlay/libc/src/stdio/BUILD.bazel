@@ -558,3 +558,63 @@ libc_function(
         "//libc/src/errno",
     ],
 )
+
+libc_function(
+    name = "getdelim",
+    srcs = [
+        "generic/getdelim.cpp",
+        "generic/getdelim_impl.h",
+    ],
+    hdrs = ["getdelim.h"],
+    deps = [
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "getline",
+    srcs = [
+        "generic/getdelim_impl.h",
+        "generic/getline.cpp",
+    ],
+    hdrs = ["getline.h"],
+    deps = [
+        ":getdelim",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)

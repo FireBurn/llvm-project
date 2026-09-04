@@ -685,6 +685,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_cc_t",
+    hdrs = ["llvm-libc-types/cc_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_tcflag_t",
+    hdrs = ["llvm-libc-types/tcflag_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_Elf64_Sxword",
     hdrs = ["llvm-libc-types/Elf64_Sxword.h"],
 )
