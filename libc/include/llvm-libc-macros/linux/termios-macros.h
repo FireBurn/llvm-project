@@ -87,6 +87,8 @@
 // Baud rate related definitions
 #define CBAUD 000000010017  // Baud speed mask
 #define CBAUDX 000000010000 // Extra baud speed mask
+// The name the rest of the world uses for the same mask.
+#define CBAUDEX CBAUDX
 #define CIBAUD 002003600000
 #define CMSPAR 010000000000
 #define CRTSCTS 020000000000
@@ -147,6 +149,36 @@
 #define ECHONL 0000100 // Echo NL
 #define NOFLSH 0000200 // Disable flush after interrupt or quit
 #define TOSTOP 0000400 // Send SIGTTOU for background output
+#define ECHOCTL 0001000 // Echo a control character as ^ and a letter
+#define ECHOPRT 0002000 // Show the characters being erased as they go
+#define ECHOKE 0004000  // Erase the whole line when KILL is typed
+#define FLUSHO 0010000  // Output is being discarded
+#define PENDIN 0040000  // Reprint the pending input at the next read
+#define IEXTEN 0100000  // Enable the extended input processing
+#define XCASE 0000004   // Canonical upper and lower case presentation
+
+// The characters a terminal has for each of the V indices before anything
+// has changed them.
+#define CINTR 003    // The interrupt character, ^C
+#define CQUIT 034    // The quit character, ^backslash
+#define CERASE 0177  // The erase character, delete
+#define CKILL 025    // The kill character, ^U
+#define CEOF 004     // The end of file character, ^D
+#define CTIME 0      // No timeout between characters
+#define CMIN 1       // One character is enough to satisfy a read
+#define CSTART 021   // The start character, ^Q
+#define CSTOP 023    // The stop character, ^S
+#define CSUSP 032    // The suspend character, ^Z
+#define CEOL 0       // No second end of line character
+#define CREPRINT 022 // The reprint character, ^R
+#define CDISCARD 017 // The discard character, ^O
+#define CWERASE 027  // The word erase character, ^W
+#define CLNEXT 026   // The literal next character, ^V
+#define CEOL2 CEOL
+
+// The two speeds the older interface named rather than numbered.
+#define EXTA B19200
+#define EXTB B38400
 
 // Attribute selection
 #define TCSANOW 0   // Change attributes immediately
@@ -154,9 +186,11 @@
 #define TCSAFLUSH 2 // Same as TCSADRAIN and flush pending Output
 
 // Symbolic constants for use with tcflush function.
+// These are passed straight to the TCFLSH ioctl, so they are the numbers
+// the kernel gives them.
 #define TCIFLUSH 0  // Flush pending input
-#define TCIOFLUSH 1 // Flush pending input and unstransmitted output
-#define TCOFLUSH 2  // Flush unstransmitted output
+#define TCOFLUSH 1  // Flush untransmitted output
+#define TCIOFLUSH 2 // Flush pending input and untransmitted output
 
 // Symbolic constantf for use with tcflow function.
 #define TCOOFF 0 // Transmit a STOP character, intended to suspend input data
