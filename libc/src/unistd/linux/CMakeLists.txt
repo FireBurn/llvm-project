@@ -965,3 +965,40 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.src.unistd.execvp
 )
+
+add_header_library(
+  brk_utils
+  HDRS
+    brk_utils.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  brk
+  SRCS
+    brk.cpp
+  HDRS
+    ../brk.h
+  DEPENDS
+    .brk_utils
+    libc.hdr.errno_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.brk
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  sbrk
+  SRCS
+    sbrk.cpp
+  HDRS
+    ../sbrk.h
+  DEPENDS
+    .brk
+    .brk_utils
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.src.__support.OSUtil.linux.syscall_wrappers.brk
+    libc.src.errno.errno
+)
