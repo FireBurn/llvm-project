@@ -1,0 +1,22 @@
+add_custom_target(libc_sys_msg_unittests)
+
+add_libc_test(
+  msg_test
+  SUITE
+    libc_sys_msg_unittests
+  SRCS
+    msg_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_ipc_macros
+    libc.hdr.sys_msg_macros
+    libc.hdr.types.struct_msqid_ds
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.sys.msg.msgctl
+    libc.src.sys.msg.msgget
+    libc.src.sys.msg.msgrcv
+    libc.src.sys.msg.msgsnd
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
