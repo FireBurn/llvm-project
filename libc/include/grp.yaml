@@ -7,4 +7,11 @@ types:
   - type_name: size_t
 enums: []
 objects: []
-functions: []
+functions:
+  - name: setgroups
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: size_t
+      - type: const gid_t *
