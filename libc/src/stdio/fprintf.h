@@ -16,6 +16,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int fprintf(::FILE *__restrict stream, const char *__restrict format, ...);
 
+namespace internal {
+int fprintf_impl(::FILE *__restrict stream, const char *__restrict format, ...);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_FPRINTF_H
