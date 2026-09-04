@@ -67,6 +67,22 @@ functions:
     arguments:
       - type: int
       - type: gid_t *
+  - name: getresuid
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: uid_t *
+      - type: uid_t *
+      - type: uid_t *
+  - name: getresgid
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: gid_t *
+      - type: gid_t *
+      - type: gid_t *
   - name: setresuid
     standards:
       - gnu

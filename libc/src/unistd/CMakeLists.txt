@@ -610,3 +610,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.getgroups
 )
+
+add_entrypoint_object(
+  getresuid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getresuid
+)
+
+add_entrypoint_object(
+  getresgid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getresgid
+)
