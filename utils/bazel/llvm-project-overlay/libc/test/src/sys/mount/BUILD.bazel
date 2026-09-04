@@ -1,0 +1,29 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/mount.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "mount_test",
+    srcs = ["mount_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/mount:mount",
+        "//libc/src/sys/mount:sys_mount_mount",
+        "//libc/src/sys/mount:sys_mount_umount",
+        "//libc/src/sys/mount:sys_mount_umount2",
+        "//libc/src/sys/mount:umount",
+        "//libc/src/sys/mount:umount2",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:rmdir",
+    ],
+)

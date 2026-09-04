@@ -71,6 +71,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/prctl",
         has_def_template = True,
     ),
+    libc_header_info("sys/swap"),
     libc_header_info(
         "sys/syscall",
         has_def_template = True,
@@ -949,4 +950,14 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_regex_macros",
     hdrs = ["llvm-libc-macros/regex-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_swap_macros",
+    hdrs = ["llvm-libc-macros/sys-swap-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_mount_macros",
+    hdrs = ["llvm-libc-macros/sys-mount-macros.h"],
 )
