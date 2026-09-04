@@ -1,0 +1,24 @@
+add_entrypoint_object(
+  fanotify_init
+  SRCS
+    fanotify_init.cpp
+  HDRS
+    fanotify_init.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fanotify_mark
+  SRCS
+    fanotify_mark.cpp
+  HDRS
+    fanotify_mark.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
