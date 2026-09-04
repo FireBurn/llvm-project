@@ -71,3 +71,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.umask
 )
+
+add_entrypoint_object(
+  mknod
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mknod
+)
+
+add_entrypoint_object(
+  mknodat
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mknodat
+)
