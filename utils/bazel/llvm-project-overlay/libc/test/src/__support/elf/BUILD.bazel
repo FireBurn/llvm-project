@@ -34,3 +34,12 @@ libc_test(
         "//libc/src/__support:elf_symbol",
     ],
 )
+
+libc_test(
+    name = "relocation_test",
+    srcs = ["relocation_test.cpp"],
+    deps = [
+        "//libc/src/__support:elf_elf_types",
+        "//libc/src/__support:elf_relocation",
+    ],
+)

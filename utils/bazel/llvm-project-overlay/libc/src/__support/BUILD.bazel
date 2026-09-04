@@ -466,3 +466,19 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_relocation",
+    hdrs = ["elf/relocation.h"],
+    deps = [
+        ":elf_elf_types",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
