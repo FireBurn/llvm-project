@@ -1,5 +1,6 @@
 add_subdirectory(file)
 add_subdirectory(mount)
+add_subdirectory(msg)
 add_subdirectory(swap)
 add_subdirectory(mman)
 add_subdirectory(personality)
