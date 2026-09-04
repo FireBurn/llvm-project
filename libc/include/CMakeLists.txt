@@ -557,17 +557,6 @@ add_header_macro(
 )
 
 add_header_macro(
-  glob
-  ../libc/include/glob.yaml
-  glob.h
-  DEPENDS
-    .llvm_libc_common_h
-    .llvm-libc-macros.glob_macros
-    .llvm-libc-types.glob_t
-    .llvm-libc-types.size_t
-)
-
-add_header_macro(
   mntent
   ../libc/include/mntent.yaml
   mntent.h
@@ -802,6 +791,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  paths
+  ../libc/include/paths.yaml
+  paths.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.paths_macros
+)
+
+add_header_macro(
   sys_ioctl
   ../libc/include/sys/ioctl.yaml
   sys/ioctl.h
@@ -916,15 +914,6 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_swap_macros
-)
-
-add_header_macro(
-  sys_file
-  ../libc/include/sys/file.yaml
-  sys/file.h
-  DEPENDS
-    .llvm_libc_common_h
-    .llvm-libc-macros.sys_file_macros
 )
 
 add_header_macro(

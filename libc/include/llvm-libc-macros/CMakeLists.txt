@@ -550,18 +550,6 @@ add_macro_header(
 )
 
 add_macro_header(
-  glob_macros
-  HDR
-    glob-macros.h
-)
-
-add_macro_header(
-  sys_file_macros
-  HDR
-    sys-file-macros.h
-)
-
-add_macro_header(
   sys_swap_macros
   HDR
     sys-swap-macros.h
@@ -571,4 +559,10 @@ add_macro_header(
   sys_mount_macros
   HDR
     sys-mount-macros.h
+)
+
+add_macro_header(
+  paths_macros
+  HDR
+    paths-macros.h
 )

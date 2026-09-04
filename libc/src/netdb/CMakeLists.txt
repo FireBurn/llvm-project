@@ -38,16 +38,6 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
-  gai_strerror
-  SRCS
-    gai_strerror.cpp
-  HDRS
-    gai_strerror.h
-  DEPENDS
-    libc.hdr.netdb_macros
-)
-
-add_entrypoint_object(
   getnameinfo
   SRCS
     getnameinfo.cpp

@@ -988,17 +988,6 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
-  execl
-  SRCS
-    execl.cpp
-  HDRS
-    ../execl.h
-  DEPENDS
-    libc.hdr.types.size_t
-    libc.src.unistd.execv
-)
-
-add_entrypoint_object(
   execlp
   SRCS
     execlp.cpp

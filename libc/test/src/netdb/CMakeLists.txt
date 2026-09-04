@@ -31,18 +31,6 @@ add_libc_test(
 )
 
 add_libc_test(
-  gai_strerror_test
-  SUITE
-    libc-netdb-tests
-  SRCS
-    gai_strerror_test.cpp
-  DEPENDS
-    libc.include.netdb
-    libc.src.netdb.gai_strerror
-    libc.src.string.strlen
-)
-
-add_libc_test(
   getnameinfo_test
   SUITE
     libc_netdb_unittests
