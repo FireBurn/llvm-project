@@ -638,3 +638,34 @@ add_generic_entrypoint_object(
     libc.src.stdio.stderr
 )
 
+
+add_entrypoint_object(
+  fgetpos
+  SRCS
+    fgetpos.cpp
+  HDRS
+    ../fgetpos.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.fpos_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fsetpos
+  SRCS
+    fsetpos.cpp
+  HDRS
+    ../fsetpos.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.fpos_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.errno.errno
+)
