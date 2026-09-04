@@ -623,3 +623,22 @@ add_libc_test(
     libc.src.stdlib.reallocarray
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  mktemp_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mktemp_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_stat
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.stdlib.mkdtemp
+    libc.src.stdlib.mktemp
+    libc.src.sys.stat.stat
+    libc.src.unistd.rmdir
+    libc.test.UnitTest.ErrnoCheckingTest
+)
