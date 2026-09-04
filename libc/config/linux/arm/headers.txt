@@ -21,6 +21,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.string
     libc.include.strings
     libc.include.syslog
+    libc.include.paths
     libc.include.pwd
     libc.include.uchar
     libc.include.unistd
