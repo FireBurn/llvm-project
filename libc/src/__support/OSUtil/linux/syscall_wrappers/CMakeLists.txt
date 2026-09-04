@@ -2276,3 +2276,55 @@ add_header_library(
     libc.src.__support.macros.config
     libc.include.sys_syscall
 )
+
+add_header_library(
+  msgctl
+  HDRS
+    msgctl.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_msqid_ds
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  msgget
+  HDRS
+    msgget.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.key_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  msgrcv
+  HDRS
+    msgrcv.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  msgsnd
+  HDRS
+    msgsnd.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
