@@ -7,6 +7,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/errno_macros.h"
+#include "hdr/func/free.h"
 #include "src/__support/CPP/scope.h"
 #include "src/__support/libc_errno.h"
 #include "src/stdio/fclose.h"
@@ -14,7 +15,6 @@
 #include "src/stdio/fwrite.h"
 #include "src/stdio/getdelim.h"
 #include "src/stdio/getline.h"
-#include "hdr/func/free.h"
 #include "src/string/strcmp.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"

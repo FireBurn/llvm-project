@@ -28,9 +28,10 @@
 // LIBC_NAMESPACE_DECL gives every declaration hidden visibility. The public C
 // symbols are controlled independently here, and must be given default
 // visibility to be exported from a shared object.
+//
 // Both are spelled the GNU way rather than as C++ attributes: they expand in
-// positions where a `[[...]]` attribute would appertain to the type rather
-// than to the declaration.
+// positions where a [[...]] attribute would appertain to the type rather than
+// to the declaration.
 #ifndef LLVM_LIBC_FUNCTION_ATTR
 #ifdef LIBC_COPT_SHARED_LIBRARY
 #define LLVM_LIBC_FUNCTION_ATTR __attribute__((visibility("default")))
@@ -96,7 +97,7 @@
 // clang-format on
 #endif // LIBC_TARGET_USES_LEADING_UNDERSCORE
 
-#else  // LIBC_COPT_PUBLIC_PACKAGING
+#else // LIBC_COPT_PUBLIC_PACKAGING
 #define LLVM_LIBC_FUNCTION_IMPL_4(type, name, arglist, c_alias)                \
   type name arglist
 
