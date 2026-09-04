@@ -385,10 +385,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/capability.h entrypoints
     libc.src.sys.capability.capget
     libc.src.sys.capability.capset
-    libc.src.sys.msg.msgctl
-    libc.src.sys.msg.msgget
-    libc.src.sys.msg.msgrcv
-    libc.src.sys.msg.msgsnd
 
     # sys/epoll.h entrypoints
     libc.src.sys.epoll.epoll_create
@@ -537,6 +533,12 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.timerfd.timerfd_create
     libc.src.sys.timerfd.timerfd_gettime
     libc.src.sys.timerfd.timerfd_settime
+    libc.src.sys.fanotify.fanotify_init
+    libc.src.sys.fanotify.fanotify_mark
+    libc.src.sys.msg.msgctl
+    libc.src.sys.msg.msgget
+    libc.src.sys.msg.msgrcv
+    libc.src.sys.msg.msgsnd
 
     # sys/sysinfo.h entrypoints
     libc.src.sys.sysinfo.sysinfo
