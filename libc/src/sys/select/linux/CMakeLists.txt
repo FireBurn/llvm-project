@@ -1,3 +1,17 @@
+add_header_library(
+  select_utils
+  HDRS
+    select_utils.h
+  DEPENDS
+    libc.hdr.types.fd_set
+    libc.hdr.types.sigset_t
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   select
   SRCS
@@ -5,13 +19,25 @@ add_entrypoint_object(
   HDRS
     ../select.h
   DEPENDS
+    .select_utils
     libc.hdr.types.fd_set
     libc.hdr.types.sigset_t
-    libc.hdr.types.size_t
     libc.hdr.types.struct_timespec
     libc.hdr.types.struct_timeval
-    libc.include.sys_syscall
     libc.src.__support.CPP.limits
-    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pselect
+  SRCS
+    pselect.cpp
+  HDRS
+    ../pselect.h
+  DEPENDS
+    .select_utils
+    libc.hdr.types.fd_set
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_timespec
     libc.src.errno.errno
 )
