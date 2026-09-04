@@ -21543,6 +21543,25 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_bind",
+    hdrs = ["src/__support/elf/bind.h"],
+    deps = [
+        ":__support_cpp_optional",
+        ":__support_elf_elf_types",
+        ":__support_elf_module",
+        ":__support_elf_relocation",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_load_module",
     hdrs = ["src/__support/elf/load_module.h"],
     deps = [
