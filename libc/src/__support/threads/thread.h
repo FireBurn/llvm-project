@@ -170,7 +170,17 @@ LIBC_SHARED_INTERNAL ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr();
 // implementing the thread_exit function.
 void call_atexit_callbacks(ThreadAttributes *attrib);
 
+// An inline variable gets a separate copy in every object that uses it, and
+// the static linker then satisfies the executable from its own copy rather
+// than from libc.so. The startup code would set the attributes on one copy
+// while libc.so read another, and exit would follow a null pointer. When
+// there is a shared object in the picture the variable is therefore declared
+// here and defined once, so the whole process shares it.
+#ifdef LIBC_COPT_SHARED_LIBRARY
+extern LIBC_SHARED_INTERNAL LIBC_THREAD_LOCAL Thread self;
+#else
 LIBC_INLINE_VAR LIBC_THREAD_LOCAL Thread self;
+#endif
 
 } // namespace internal
 
