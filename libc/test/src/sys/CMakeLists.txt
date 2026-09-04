@@ -1,5 +1,6 @@
 add_subdirectory(mount)
 add_subdirectory(msg)
+add_subdirectory(eventfd)
 add_subdirectory(shm)
 add_subdirectory(swap)
 add_subdirectory(mman)
@@ -28,4 +29,6 @@ add_subdirectory(sysmacros)
 add_subdirectory(sysinfo)
 add_subdirectory(xattr)
 
+add_subdirectory(timerfd)
+add_subdirectory(signalfd)
 add_subdirectory(io)

@@ -179,3 +179,28 @@ add_header(
   HDR
     termios-macros.h
 )
+
+add_header(
+  sys_eventfd_macros
+  HDR
+    sys-eventfd-macros.h
+  DEPENDS
+    .fcntl_macros
+)
+
+add_header(
+  sys_signalfd_macros
+  HDR
+    sys-signalfd-macros.h
+  DEPENDS
+    .fcntl_macros
+)
+
+add_header(
+  sys_timerfd_macros
+  HDR
+    sys-timerfd-macros.h
+  DEPENDS
+    .fcntl_macros
+)
+
