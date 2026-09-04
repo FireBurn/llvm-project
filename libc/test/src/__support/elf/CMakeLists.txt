@@ -1,5 +1,8 @@
 add_libc_testsuite(libc-elf-tests)
 
+# map_segments_test writes a backing file to map.
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/testdata)
+
 add_libc_test(
   dynamic_test
   SUITE
@@ -97,4 +100,22 @@ if(LIBC_ENABLE_SHARED)
     DEPENDS
       libc.src.__support.elf.load_module
   )
+endif()
+
+if(LIBC_ENABLE_SHARED)
+  add_libc_test(
+    bind_test
+    SUITE
+      libc-support-tests
+    SRCS
+      bind_test.cpp
+    COMPILE_OPTIONS
+      -DLIBC_TEST_SHARED_OBJECT="$<TARGET_FILE:libc-shared>"
+      -DLIBM_TEST_SHARED_OBJECT="$<TARGET_FILE:libm-shared>"
+    DEPENDS
+      libc.src.__support.elf.bind
+      libc.src.__support.elf.load_module
+  )
+  add_dependencies(libc.test.src.__support.elf.bind_test.__build__
+    libc-shared libm-shared)
 endif()
