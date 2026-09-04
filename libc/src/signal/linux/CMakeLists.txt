@@ -208,3 +208,18 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigsuspend
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  killpg
+  SRCS
+    killpg.cpp
+  HDRS
+    ../killpg.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.pid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.kill
+    libc.src.__support.error_or
+    libc.src.errno.errno
+)
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
