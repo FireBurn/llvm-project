@@ -23707,6 +23707,57 @@ libc_support_library(
 )
 
 libc_function(
+    name = "newlocale",
+    srcs = ["src/locale/newlocale.cpp"],
+    hdrs = ["src/locale/newlocale.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "setlocale",
+    srcs = ["src/locale/setlocale.cpp"],
+    hdrs = ["src/locale/setlocale.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "uselocale",
+    srcs = ["src/locale/uselocale.cpp"],
+    hdrs = ["src/locale/uselocale.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "freelocale",
+    srcs = ["src/locale/freelocale.cpp"],
+    hdrs = ["src/locale/freelocale.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
     name = "parse_printf_format",
     srcs = ["src/printf/parse_printf_format.cpp"],
     hdrs = ["src/printf/parse_printf_format.h"],
