@@ -71,3 +71,28 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  rewinddir_test
+  SUITE
+    libc-dirent-tests
+  SRCS
+    rewinddir_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.libc_errno
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.dirent.readdir
+    libc.src.dirent.rewinddir
+    libc.src.dirent.seekdir
+    libc.src.dirent.telldir
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)

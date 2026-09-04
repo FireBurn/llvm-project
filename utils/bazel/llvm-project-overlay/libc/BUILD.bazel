@@ -872,6 +872,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "hdr_dirent_overlay",
+    hdrs = ["hdr/dirent_overlay.h"],
+    target_compatible_with = select({
+        ":full_build": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "hdr_fcntl_overlay",
     hdrs = ["hdr/fcntl_overlay.h"],
     target_compatible_with = select({
@@ -2150,6 +2159,21 @@ libc_support_library(
         ":__support_macros_properties_types",
         ":hdr_stdint_proxy",
         ":llvm_libc_macros_stdfix_macros",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_unique_ptr",
+    hdrs = ["src/__support/CPP/unique_ptr.h"],
+    deps = [
+        ":__support_cpp_new",
+        ":__support_cpp_nullptr_t",
+        ":__support_cpp_type_traits",
+        ":__support_cpp_utility",
+        ":__support_libc_assert",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_size_t",
     ],
 )
 
@@ -24218,6 +24242,20 @@ libc_function(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_DIR",
+    hdrs = ["include/llvm-libc-types/DIR.h"],
+)
+
+libc_support_library(
+    name = "types_DIR",
+    hdrs = ["hdr/types/DIR.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_DIR"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_Elf64_Sxword",
     hdrs = ["include/llvm-libc-types/Elf64_Sxword.h"],
 )
@@ -24405,6 +24443,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_dirent",
+    hdrs = ["include/llvm-libc-types/struct_dirent.h"],
+)
+
+libc_support_library(
+    name = "types_struct_dirent",
+    hdrs = ["hdr/types/struct_dirent.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_dirent"],
+        "//conditions:default": [":hdr_dirent_overlay"],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["include/llvm-libc-types/struct_dl_phdr_info.h"],
 )
@@ -24430,6 +24482,73 @@ libc_support_library(
         ":full_build": [":llvm_libc_types_struct_statfs"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "__support_file_dir_scan_impl",
+    hdrs = ["src/__support/File/dir_scan_impl.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_cpp_limits",
+        ":__support_cpp_new",
+        ":__support_cpp_unique_ptr",
+        ":__support_cpp_utility",
+        ":__support_error_or",
+        ":__support_file_dir_scan_result",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":qsort_util",
+        ":string_memory_utils",
+        ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
+    name = "__support_file_dir",
+    srcs = [
+        "src/__support/File/dir.cpp",
+        "src/__support/File/linux/dir.cpp",
+    ],
+    hdrs = ["src/__support/File/dir.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_cpp_new",
+        ":__support_cpp_span",
+        ":__support_error_or",
+        ":__support_file_dir_scan_impl",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_kernel_statx_types",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_fcntl",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_statx",
+        ":__support_osutil_syscall",
+        ":__support_threads_mutex",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_stdio_macros",
+        ":hdr_sys_stat_macros",
+        ":types_off_t",
+        ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
+    name = "dirent_readdir",
+    srcs = ["src/dirent/readdir.cpp"],
+    hdrs = ["src/dirent/readdir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+    ],
 )
 
 libc_support_library(
@@ -25380,6 +25499,68 @@ libc_support_library(
         ":__support_uint128",
         ":types_size_t",
         ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "opendir",
+    srcs = ["src/dirent/opendir.cpp"],
+    hdrs = ["src/dirent/opendir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+    ],
+)
+
+libc_function(
+    name = "closedir",
+    srcs = ["src/dirent/closedir.cpp"],
+    hdrs = ["src/dirent/closedir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+    ],
+)
+
+libc_function(
+    name = "rewinddir",
+    srcs = ["src/dirent/rewinddir.cpp"],
+    hdrs = ["src/dirent/rewinddir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_macros_config",
+        ":types_DIR",
+    ],
+)
+
+libc_function(
+    name = "seekdir",
+    srcs = ["src/dirent/seekdir.cpp"],
+    hdrs = ["src/dirent/seekdir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_macros_config",
+        ":types_DIR",
+    ],
+)
+
+libc_function(
+    name = "telldir",
+    srcs = ["src/dirent/telldir.cpp"],
+    hdrs = ["src/dirent/telldir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_macros_config",
+        ":types_DIR",
     ],
 )
 
