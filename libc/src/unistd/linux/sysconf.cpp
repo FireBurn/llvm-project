@@ -15,6 +15,7 @@
 
 #include "src/__support/common.h"
 
+#include "hdr/limits_macros.h"
 #include "hdr/sys_auxv_macros.h"
 #include "hdr/sys_resource_macros.h"
 #include "hdr/types/struct_rlimit.h"
@@ -121,6 +122,45 @@ long get_phys_pages() {
   return static_cast<long>(num);
 }
 
+// The most children a single user may have at once, which the kernel keeps
+// as a resource limit rather than as a constant.
+long get_child_max() {
+  struct rlimit64 limits;
+  ErrorOr<int> ret = linux_syscalls::prlimit(
+      0, RLIMIT_NPROC, nullptr, reinterpret_cast<struct rlimit *>(&limits));
+  if (!ret) {
+    libc_errno = -ret.error();
+    return -1;
+  }
+  // No limit is spelled as no answer, which a caller reads as unbounded.
+  if (limits.rlim_cur == ~0ULL)
+    return -1;
+  return static_cast<long>(limits.rlim_cur);
+}
+
+long get_avphys_pages() {
+  struct ::sysinfo info;
+  ErrorOr<int> ret = linux_syscalls::sysinfo(&info);
+  if (!ret) {
+    libc_errno = -ret.error();
+    return -1;
+  }
+  cpp::optional<unsigned long> page_size = auxv::get(AT_PAGESZ);
+  if (!page_size) {
+    libc_errno = ENOSYS;
+    return -1;
+  }
+  unsigned long ps = *page_size;
+  unsigned long mem_unit = info.mem_unit;
+  unsigned long num = info.freeram;
+  if (mem_unit >= ps) {
+    num *= (mem_unit / ps);
+  } else {
+    num /= (ps / mem_unit);
+  }
+  return static_cast<long>(num);
+}
+
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
@@ -144,6 +184,58 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
     return get_open_max();
   case _SC_PHYS_PAGES:
     return get_phys_pages();
+
+  // The limits which do not change while the system is running are the
+  // <limits.h> values, and answering from there keeps the two agreeing.
+  case _SC_CHILD_MAX:
+    return get_child_max();
+  case _SC_NGROUPS_MAX:
+    return NGROUPS_MAX;
+  case _SC_STREAM_MAX:
+    return _POSIX_STREAM_MAX;
+  case _SC_TZNAME_MAX:
+    return _POSIX_TZNAME_MAX;
+  case _SC_LINE_MAX:
+    return _POSIX2_LINE_MAX;
+  case _SC_RE_DUP_MAX:
+    return RE_DUP_MAX;
+  case _SC_IOV_MAX:
+    return IOV_MAX;
+  case _SC_HOST_NAME_MAX:
+    return HOST_NAME_MAX;
+  case _SC_LOGIN_NAME_MAX:
+    return LOGIN_NAME_MAX;
+  case _SC_TTY_NAME_MAX:
+    return TTY_NAME_MAX;
+  case _SC_SYMLOOP_MAX:
+    return _POSIX_SYMLOOP_MAX;
+  case _SC_THREAD_STACK_MIN:
+    return PTHREAD_STACK_MIN;
+  case _SC_THREAD_KEYS_MAX:
+    return PTHREAD_KEYS_MAX;
+  case _SC_THREAD_THREADS_MAX:
+    return _POSIX_THREAD_THREADS_MAX;
+  case _SC_ATEXIT_MAX:
+    return _POSIX_ATEXIT_MAX;
+
+  // The size of buffer the reentrant password and group lookups want. The
+  // line buffer those use is what decides it.
+  case _SC_GETPW_R_SIZE_MAX:
+  case _SC_GETGR_R_SIZE_MAX:
+    return 1024;
+
+  // The options which are supported, reported as the version of the edition
+  // they come from, the same as the macros in <unistd.h> say.
+  case _SC_VERSION:
+    return _POSIX_VERSION;
+  case _SC_JOB_CONTROL:
+    return _POSIX_JOB_CONTROL;
+  case _SC_SAVED_IDS:
+    return _POSIX_SAVED_IDS;
+
+  case _SC_AVPHYS_PAGES:
+    return get_avphys_pages();
+
   default:
     // TODO: Complete the rest of the sysconf options.
     libc_errno = EINVAL;
