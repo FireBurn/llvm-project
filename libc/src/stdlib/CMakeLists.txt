@@ -923,3 +923,11 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  mktemp
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mktemp
+)
+
