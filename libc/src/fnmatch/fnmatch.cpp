@@ -15,15 +15,16 @@
 #include "hdr/fnmatch_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/fnmatch/fnmatch_matcher.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, fnmatch,
-                   ([[maybe_unused]] const char *pattern,
-                    [[maybe_unused]] const char *string,
-                    [[maybe_unused]] int flags)) {
-  // Always return FNM_NOMATCH for now.
-  return FNM_NOMATCH;
+                   (const char *pattern, const char *string, int flags)) {
+  if (pattern == nullptr || string == nullptr)
+    return FNM_NOMATCH;
+  fnmatch_internal::Matcher matcher(pattern, string, flags);
+  return matcher.run() ? 0 : FNM_NOMATCH;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
