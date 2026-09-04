@@ -8,6 +8,7 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/types/struct_timeval.h"
+#include "hdr/types/struct_timezone.h"
 #include "src/sys/time/gettimeofday.h"
 #include "src/sys/time/settimeofday.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
@@ -20,7 +21,7 @@ using LlvmLibcSetTimeOfDayTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 TEST_F(LlvmLibcSetTimeOfDayTest, ATimezoneIsRejected) {
   struct timeval tv;
   ASSERT_THAT(LIBC_NAMESPACE::gettimeofday(&tv, nullptr), Succeeds(0));
-  int tz = 0;
+  struct timezone tz = {0, 0};
   // The kernel stopped keeping a timezone, so anything but a null pointer
   // is an error rather than something quietly ignored.
   EXPECT_THAT(LIBC_NAMESPACE::settimeofday(&tv, &tz), Fails(EINVAL, -1));

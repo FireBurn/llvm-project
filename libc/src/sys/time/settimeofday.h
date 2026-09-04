@@ -10,11 +10,12 @@
 #define LLVM_LIBC_SRC_SYS_TIME_SETTIMEOFDAY_H
 
 #include "hdr/types/struct_timeval.h"
+#include "hdr/types/struct_timezone.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-int settimeofday(const struct timeval *tv, const void *tz);
+int settimeofday(const struct timeval *tv, const struct timezone *tz);
 
 } // namespace LIBC_NAMESPACE_DECL
 
