@@ -489,6 +489,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # wchar.h entrypoints
     libc.src.wchar.wcslen
+    libc.src.wchar.wcswidth
+    libc.src.wchar.wcwidth
     libc.src.wchar.wctob
 
     # wctype.h entrypoints
