@@ -339,3 +339,31 @@ add_subdirectory(wctype)
 if(LLVM_LIBC_FULL_BUILD)
   add_subdirectory(regex)
 endif()
+
+add_libc_test(
+  field_tokenizer_test
+  SUITE
+    libc-support-tests
+  SRCS
+    field_tokenizer_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.span
+    libc.src.__support.field_tokenizer
+)
+
+add_libc_test(
+  flat_file_db_test
+  SUITE
+    libc-support-tests
+  SRCS
+    flat_file_db_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.span
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.field_tokenizer
+    libc.src.__support.flat_file_db
+    libc.src.stdio.remove
+    libc.src.string.string_utils
+)
