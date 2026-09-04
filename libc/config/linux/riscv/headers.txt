@@ -68,6 +68,11 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_mount
     libc.include.sys_msg
     libc.include.sys_shm
+    libc.include.sys_eventfd
+    libc.include.sys_signalfd
+    libc.include.sys_timerfd
+    libc.include.sys_inotify
+    libc.include.sys_xattr
     libc.include.sys_swap
     libc.include.sys_resource
     libc.include.sys_select
