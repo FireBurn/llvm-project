@@ -78,6 +78,12 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
   // below it; variant 1 puts it at the bottom with the modules above.
   const uintptr_t tp = TLS_VARIANT_2 ? base + (total - TLS_TCB_SIZE) : base;
 
+  // The ABI requires the first word of the thread control block to point at
+  // the thread pointer itself. Compiler generated thread local accesses read
+  // it to find their own base, so leaving it zero makes every one of them
+  // dereference an offset from address zero.
+  *reinterpret_cast<uintptr_t *>(tp) = tp;
+
   TlsLayout again;
   for (size_t i = 0; i < count; ++i) {
     const ElfW(Phdr) *tls = modules[i].tls();
