@@ -69,3 +69,17 @@ libc_test(
         "//libc/src/__support:elf_load_layout",
     ],
 )
+
+libc_test(
+    name = "map_segments_test",
+    srcs = ["map_segments_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
+        "//libc/src/__support:c_string",
+        "//libc/src/__support:elf_elf_types",
+        "//libc/src/__support:elf_map_segments",
+    ],
+)
