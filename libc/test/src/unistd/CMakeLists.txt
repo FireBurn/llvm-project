@@ -912,3 +912,35 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
+
+add_libc_test(
+  setresuid_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    setresuid_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.src.unistd.geteuid
+    libc.src.unistd.getuid
+    libc.src.unistd.setresuid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  setresgid_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    setresgid_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.src.unistd.getegid
+    libc.src.unistd.getgid
+    libc.src.unistd.setresgid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)

@@ -473,6 +473,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.setpgid
     libc.src.unistd.setregid
     libc.src.unistd.setreuid
+    libc.src.unistd.setresgid
+    libc.src.unistd.setresuid
     libc.src.unistd.setsid
     libc.src.unistd.setuid
     libc.src.unistd.sleep
