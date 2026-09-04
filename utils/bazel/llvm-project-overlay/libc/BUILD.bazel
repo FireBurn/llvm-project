@@ -20238,6 +20238,34 @@ libc_function(
 )
 
 libc_function(
+    name = "capget",
+    srcs = ["src/sys/capability/capget.cpp"],
+    hdrs = ["src/sys/capability/capget.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_capget",
+        ":errno",
+        ":sys_capability_cap_types",
+    ],
+)
+
+libc_function(
+    name = "capset",
+    srcs = ["src/sys/capability/capset.cpp"],
+    hdrs = ["src/sys/capability/capset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_capset",
+        ":errno",
+        ":sys_capability_cap_types",
+    ],
+)
+
+libc_function(
     name = "fanotify_init",
     srcs = ["src/sys/fanotify/fanotify_init.cpp"],
     hdrs = ["src/sys/fanotify/fanotify_init.h"],
@@ -26296,6 +26324,39 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":types_size_t",
         ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_capability_cap_types",
+    hdrs = ["src/sys/capability/cap_types.h"],
+    deps = [
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_capget",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/capget.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":sys_capability_cap_types",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_capset",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/capset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":sys_capability_cap_types",
     ],
 )
 
