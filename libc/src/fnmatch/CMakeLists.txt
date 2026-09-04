@@ -1,3 +1,15 @@
+add_header_library(
+  fnmatch_matcher
+  HDRS
+    fnmatch_matcher.h
+  DEPENDS
+    libc.hdr.fnmatch_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   fnmatch
   SRCS
@@ -5,6 +17,7 @@ add_entrypoint_object(
   HDRS
     fnmatch.h
   DEPENDS
+    .fnmatch_matcher
     libc.hdr.fnmatch_macros
     libc.src.__support.common
     libc.src.__support.macros.config
