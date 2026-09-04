@@ -370,6 +370,12 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/shm.h entrypoints
+    libc.src.sys.shm.shmat
+    libc.src.sys.shm.shmctl
+    libc.src.sys.shm.shmdt
+    libc.src.sys.shm.shmget
+
     # sys/msg.h entrypoints
     libc.src.sys.msg.msgctl
     libc.src.sys.msg.msgget
