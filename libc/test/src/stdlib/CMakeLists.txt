@@ -601,3 +601,18 @@ if((LIBC_TARGET_OS_IS_BAREMETAL OR LIBC_TARGET_OS_IS_GPU) AND
       libc.src.stdlib.free
   )
 endif()
+
+add_libc_test(
+  reallocarray_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    reallocarray_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.src.stdlib.reallocarray
+    libc.test.UnitTest.ErrnoCheckingTest
+)
