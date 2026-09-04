@@ -37,4 +37,11 @@
 #define MS_STRICTATIME (1 << 24)
 #define MS_LAZYTIME (1 << 25)
 
+// The flags umount2 takes: whether to give up on a filesystem still in use,
+// to detach it and clean up later, or to refuse to follow a symbolic link.
+#define MNT_FORCE 1
+#define MNT_DETACH 2
+#define MNT_EXPIRE 4
+#define UMOUNT_NOFOLLOW 8
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_MOUNT_MACROS_H
