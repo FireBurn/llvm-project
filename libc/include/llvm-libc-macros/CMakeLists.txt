@@ -578,3 +578,9 @@ add_macro_header(
   HDR
     sys-shm-macros.h
 )
+
+add_macro_header(
+  sys_xattr_macros
+  HDR
+    sys-xattr-macros.h
+)
