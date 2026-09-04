@@ -8,3 +8,98 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.setgroups
 )
+
+add_object_library(
+  grp_utils
+  HDRS
+    grp_utils.h
+  SRCS
+    grp_utils.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.gid_t
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_group
+    libc.src.string.string_utils
+    libc.src.__support.CPP.optional
+    libc.src.__support.CPP.span
+    libc.src.__support.CPP.string_view
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.ctype_utils
+    libc.src.__support.error_or
+    libc.src.__support.field_tokenizer
+    libc.src.__support.flat_file_db
+    libc.src.__support.str_to_integer
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  getgrnam
+  SRCS
+    getgrnam.cpp
+  HDRS
+    getgrnam.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.struct_group
+    libc.src.errno.errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  getgrgid
+  SRCS
+    getgrgid.cpp
+  HDRS
+    getgrgid.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.gid_t
+    libc.hdr.types.struct_group
+    libc.src.errno.errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  getgrent
+  SRCS
+    getgrent.cpp
+  HDRS
+    getgrent.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.struct_group
+    libc.src.errno.errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  setgrent
+  SRCS
+    setgrent.cpp
+  HDRS
+    setgrent.h
+  DEPENDS
+    .grp_utils
+    libc.src.errno.errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  endgrent
+  SRCS
+    endgrent.cpp
+  HDRS
+    endgrent.h
+  DEPENDS
+    .grp_utils
+    libc.src.errno.errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
