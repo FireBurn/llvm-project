@@ -584,6 +584,7 @@ add_header_macro(
     .llvm-libc-types.uid_t
     .llvm-libc-types.useconds_t
     .llvm-libc-types.__getoptargv_t
+    .llvm-libc-types.intptr_t
 )
 
 add_header_macro(
