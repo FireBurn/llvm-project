@@ -577,6 +577,16 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.wchar_t
     .llvm_libc_common_h
+)
+
+add_header_macro(
+  iconv
+  ../libc/include/iconv.yaml
+  iconv.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.iconv_t
+    .llvm-libc-types.size_t
     .alloca
 )
 
