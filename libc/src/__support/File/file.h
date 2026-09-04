@@ -103,6 +103,10 @@ private:
   // free-ed when close method is called on the stream.
   bool own_buf;
 
+  // True when the File object itself has static storage, as the standard
+  // streams do. Closing one must not hand it to the deallocator.
+  bool static_storage;
+
   // Used to handle the File's mode
   FileMode mode;
 
@@ -149,16 +153,20 @@ public:
   // the set_buffer method and allocate a buffer.
   constexpr File(WriteFunc *wf, ReadFunc *rf, SeekFunc *sf, CloseFunc *cf,
                  uint8_t *buffer, size_t buffer_size, int buffer_mode,
-                 bool owned, FileMode mode)
+                 bool owned, FileMode mode, bool static_stream = false)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
         platform_close(cf), mutex(/*timed=*/false, /*recursive=*/false,
                                   /*robust=*/false, /*pshared=*/false),
         ungetc_buf{}, buf(buffer), bufsize(buffer_size), bufmode(buffer_mode),
-        own_buf(owned), mode(mode), pos(0), prev_op(FileOp::NONE),
-        read_limit(0), eof(false), err(false),
+        own_buf(owned), static_storage(static_stream), mode(mode), pos(0),
+        prev_op(FileOp::NONE), read_limit(0), eof(false), err(false),
         orientation(Orientation::UNORIENTED), mbstate(), prev(nullptr),
         next(nullptr) {
     adjust_buf();
+  }
+
+  LIBC_INLINE constexpr bool has_static_storage() const {
+    return static_storage;
   }
 
   // Buffered write of |len| bytes from |data| without the file lock.
