@@ -1,6 +1,21 @@
 header: spawn.h
 standards:
   - posix
+macros:
+  - macro_name: POSIX_SPAWN_RESETIDS
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETPGROUP
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETSIGDEF
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETSIGMASK
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETSCHEDPARAM
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETSCHEDULER
+    macro_header: spawn-macros.h
+  - macro_name: POSIX_SPAWN_SETSID
+    macro_header: spawn-macros.h
 types:
   - type_name: posix_spawn_file_actions_t
   - type_name: posix_spawnattr_t
