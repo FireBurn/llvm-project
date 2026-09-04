@@ -1,4 +1,5 @@
 add_subdirectory(file)
+add_subdirectory(swap)
 add_subdirectory(auxv)
 add_subdirectory(epoll)
 add_subdirectory(ipc)

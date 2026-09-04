@@ -879,6 +879,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_swap
+  ../libc/include/sys/swap.yaml
+  sys/swap.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_swap_macros
+)
+
+add_header_macro(
   sys_file
   ../libc/include/sys/file.yaml
   sys/file.h
