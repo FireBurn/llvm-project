@@ -911,8 +911,23 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_msginfo",
+    hdrs = ["llvm-libc-types/struct_msginfo.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_sgrp",
     hdrs = ["llvm-libc-types/struct_sgrp.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_shm_info",
+    hdrs = ["llvm-libc-types/struct_shm_info.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_shminfo",
+    hdrs = ["llvm-libc-types/struct_shminfo.h"],
 )
 
 libc_support_library(
