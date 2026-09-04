@@ -22,4 +22,17 @@
 #define IPC_STAT 2
 #define IPC_INFO 3
 
+// The two fields of struct ipc_perm that the standard reserves to the
+// implementation. Code written for the GNU library reaches them by their
+// short names, and glibc and musl both offer them this way, so a program
+// asking for the GNU set finds them here as well.
+#if defined(_GNU_SOURCE) || defined(_DEFAULT_SOURCE)
+#ifndef key
+#define key __key
+#endif
+#ifndef seq
+#define seq __seq
+#endif
+#endif
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_IPC_MACROS_H
