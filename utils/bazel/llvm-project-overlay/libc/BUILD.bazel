@@ -23214,3 +23214,65 @@ libc_function(
         ":types_struct_timespec",
     ],
 )
+
+libc_support_library(
+    name = "llvm_libc_types_file",
+    hdrs = ["include/llvm-libc-types/FILE.h"],
+)
+
+libc_support_library(
+    name = "types_file",
+    hdrs = ["hdr/types/FILE.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_types_file",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_function(
+    name = "fputc",
+    srcs = ["src/stdio/generic/fputc.cpp"],
+    hdrs = ["src/stdio/fputc.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "putc",
+    srcs = ["src/stdio/generic/putc.cpp"],
+    hdrs = ["src/stdio/putc.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "putchar",
+    srcs = ["src/stdio/generic/putchar.cpp"],
+    hdrs = ["src/stdio/putchar.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":stdout",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
