@@ -9,3 +9,18 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "namespace_test",
+    srcs = ["namespace_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:open",
+        "//libc:sched_setns",
+        "//libc:sched_unshare",
+        "//libc:setns",
+        "//libc:unshare",
+    ],
+)
