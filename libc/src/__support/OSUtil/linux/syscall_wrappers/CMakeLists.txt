@@ -2884,3 +2884,14 @@ add_header_library(
     libc.src.__support.macros.config
     libc.include.sys_syscall
 )
+
+add_header_library(
+  brk
+  HDRS
+    brk.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.OSUtil.osutil
+)
