@@ -67,6 +67,7 @@ macros:
   - macro_name: _POSIX_THREADS
     macro_header: unistd-macros.h
 types:
+  - type_name: intptr_t
   - type_name: uid_t
   - type_name: gid_t
   - type_name: ssize_t
@@ -174,6 +175,18 @@ functions:
     arguments:
       - type: const char *
       - type: int
+  - name: brk
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void *
+  - name: sbrk
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: intptr_t
   - name: chdir
     standards:
       - posix

@@ -46,6 +46,7 @@ add_header(
 )
 add_header(reclen_t HDR reclen_t.h)
 add_header(ssize_t HDR ssize_t.h)
+add_header(intptr_t HDR intptr_t.h)
 add_header(__atfork_callback_t HDR __atfork_callback_t.h)
 add_header(__search_compare_t HDR __search_compare_t.h)
 add_header(__call_once_func_t HDR __call_once_func_t.h)

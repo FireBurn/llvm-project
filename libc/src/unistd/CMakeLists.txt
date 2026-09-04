@@ -652,3 +652,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.execlp
 )
+
+add_entrypoint_object(
+  brk
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.brk
+)
+
+add_entrypoint_object(
+  sbrk
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sbrk
+)
