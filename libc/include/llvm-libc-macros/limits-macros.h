@@ -285,10 +285,187 @@
 #define NGROUPS_MAX 65536
 #endif // NGROUPS_MAX
 
+#ifndef MAX_CANON
+#define MAX_CANON 255
+#endif // MAX_CANON
+
+#ifndef MAX_INPUT
+#define MAX_INPUT 255
+#endif // MAX_INPUT
+
+/// The most a write to a pipe can transfer without being interleaved with
+/// another writer's.
+#ifndef PIPE_BUF
+#define PIPE_BUF 4096
+#endif // PIPE_BUF
+
+#ifndef LOGIN_NAME_MAX
+#define LOGIN_NAME_MAX 256
+#endif // LOGIN_NAME_MAX
+
+#ifndef TTY_NAME_MAX
+#define TTY_NAME_MAX 32
+#endif // TTY_NAME_MAX
+
+#ifndef MQ_PRIO_MAX
+#define MQ_PRIO_MAX 32768
+#endif // MQ_PRIO_MAX
+
+#ifndef RTSIG_MAX
+#define RTSIG_MAX 32
+#endif // RTSIG_MAX
+
+#ifndef DELAYTIMER_MAX
+#define DELAYTIMER_MAX 2147483647
+#endif // DELAYTIMER_MAX
+
+#ifndef AIO_PRIO_DELTA_MAX
+#define AIO_PRIO_DELTA_MAX 20
+#endif // AIO_PRIO_DELTA_MAX
+
+#ifndef PTHREAD_KEYS_MAX
+#define PTHREAD_KEYS_MAX 1024
+#endif // PTHREAD_KEYS_MAX
+
+#ifndef PTHREAD_STACK_MIN
+#define PTHREAD_STACK_MIN 16384
+#endif // PTHREAD_STACK_MIN
+
+/// The extended attribute limits the kernel enforces.
+#ifndef XATTR_NAME_MAX
+#define XATTR_NAME_MAX 255
+#endif // XATTR_NAME_MAX
+
+#ifndef XATTR_SIZE_MAX
+#define XATTR_SIZE_MAX 65536
+#endif // XATTR_SIZE_MAX
+
+#ifndef XATTR_LIST_MAX
+#define XATTR_LIST_MAX 65536
+#endif // XATTR_LIST_MAX
+
+#ifndef CHARCLASS_NAME_MAX
+#define CHARCLASS_NAME_MAX 2048
+#endif // CHARCLASS_NAME_MAX
+
+/// The largest repetition count a regular expression bound may ask for. This
+/// is what the regex implementation here accepts, which is the minimum POSIX
+/// requires rather than the larger value some other implementations offer.
+#ifndef RE_DUP_MAX
+#define RE_DUP_MAX 255
+#endif // RE_DUP_MAX
+
 #endif // __linux__
 
 #ifndef _POSIX_ARG_MAX
 #define _POSIX_ARG_MAX 4096
+#endif
+
+/// The POSIX minimum values. An implementation must support at least these,
+/// so portable code sizes its buffers from them rather than from the values
+/// this implementation happens to offer.
+#ifndef _POSIX_AIO_LISTIO_MAX
+#define _POSIX_AIO_LISTIO_MAX 2
+#endif
+
+#ifndef _POSIX_AIO_MAX
+#define _POSIX_AIO_MAX 1
+#endif
+
+#ifndef _POSIX_CHILD_MAX
+#define _POSIX_CHILD_MAX 25
+#endif
+
+#ifndef _POSIX_CLOCKRES_MIN
+#define _POSIX_CLOCKRES_MIN 20000000
+#endif
+
+#ifndef _POSIX_DELAYTIMER_MAX
+#define _POSIX_DELAYTIMER_MAX 32
+#endif
+
+#ifndef _POSIX_LINK_MAX
+#define _POSIX_LINK_MAX 8
+#endif
+
+#ifndef _POSIX_LOGIN_NAME_MAX
+#define _POSIX_LOGIN_NAME_MAX 9
+#endif
+
+#ifndef _POSIX_MAX_CANON
+#define _POSIX_MAX_CANON 255
+#endif
+
+#ifndef _POSIX_MQ_OPEN_MAX
+#define _POSIX_MQ_OPEN_MAX 8
+#endif
+
+#ifndef _POSIX_MQ_PRIO_MAX
+#define _POSIX_MQ_PRIO_MAX 32
+#endif
+
+#ifndef _POSIX_OPEN_MAX
+#define _POSIX_OPEN_MAX 20
+#endif
+
+#ifndef _POSIX_PIPE_BUF
+#define _POSIX_PIPE_BUF 512
+#endif
+
+#ifndef _POSIX_RE_DUP_MAX
+#define _POSIX_RE_DUP_MAX 255
+#endif
+
+#ifndef _POSIX_RTSIG_MAX
+#define _POSIX_RTSIG_MAX 8
+#endif
+
+#ifndef _POSIX_SEM_NSEMS_MAX
+#define _POSIX_SEM_NSEMS_MAX 256
+#endif
+
+#ifndef _POSIX_SEM_VALUE_MAX
+#define _POSIX_SEM_VALUE_MAX 32767
+#endif
+
+#ifndef _POSIX_SIGQUEUE_MAX
+#define _POSIX_SIGQUEUE_MAX 32
+#endif
+
+#ifndef _POSIX_SSIZE_MAX
+#define _POSIX_SSIZE_MAX 32767
+#endif
+
+#ifndef _POSIX_STREAM_MAX
+#define _POSIX_STREAM_MAX 8
+#endif
+
+#ifndef _POSIX_SYMLINK_MAX
+#define _POSIX_SYMLINK_MAX 255
+#endif
+
+#ifndef _POSIX_SYMLOOP_MAX
+#define _POSIX_SYMLOOP_MAX 8
+#endif
+
+#ifndef _POSIX_THREAD_KEYS_MAX
+#define _POSIX_THREAD_KEYS_MAX 128
+#endif
+
+#ifndef _POSIX_THREAD_THREADS_MAX
+#define _POSIX_THREAD_THREADS_MAX 64
+#endif
+
+#ifndef _POSIX_TIMER_MAX
+#define _POSIX_TIMER_MAX 32
+#endif
+
+#ifndef _POSIX_TTY_NAME_MAX
+#define _POSIX_TTY_NAME_MAX 9
+#endif
+
+#ifndef _POSIX_TZNAME_MAX
+#define _POSIX_TZNAME_MAX 6
 #endif
 
 #ifndef IOV_MAX
