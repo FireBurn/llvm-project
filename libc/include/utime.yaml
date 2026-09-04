@@ -1,0 +1,16 @@
+header: utime.h
+standards:
+  - posix
+types:
+  - type_name: struct_utimbuf
+  - type_name: time_t
+enums: []
+objects: []
+functions:
+  - name: utime
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const struct utimbuf *
