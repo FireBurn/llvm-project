@@ -1,0 +1,31 @@
+add_entrypoint_object(
+  mbrtoc32
+  SRCS
+    mbrtoc32.cpp
+  HDRS
+    mbrtoc32.h
+  DEPENDS
+    libc.hdr.types.char32_t
+    libc.hdr.types.mbstate_t
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.wchar.mbrtowc
+    libc.src.__support.wchar.mbstate
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  c32rtomb
+  SRCS
+    c32rtomb.cpp
+  HDRS
+    c32rtomb.h
+  DEPENDS
+    libc.hdr.types.char32_t
+    libc.hdr.types.mbstate_t
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.wchar.mbstate
+    libc.src.__support.wchar.wcrtomb
+    libc.src.errno.errno
+)
