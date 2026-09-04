@@ -19361,6 +19361,34 @@ libc_function(
 )
 
 libc_function(
+    name = "setns",
+    srcs = ["src/sched/linux/setns.cpp"],
+    hdrs = ["src/sched/setns.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setns",
+        ":errno",
+        ":sched_setns",
+    ],
+)
+
+libc_function(
+    name = "unshare",
+    srcs = ["src/sched/linux/unshare.cpp"],
+    hdrs = ["src/sched/unshare.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_unshare",
+        ":errno",
+        ":sched_unshare",
+    ],
+)
+
+libc_function(
     name = "fsync",
     srcs = ["src/unistd/linux/fsync.cpp"],
     hdrs = ["src/unistd/fsync.h"],
@@ -24204,6 +24232,44 @@ libc_support_library(
 libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_acct",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/acct.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sched_setns",
+    hdrs = ["src/sched/setns.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sched_unshare",
+    hdrs = ["src/sched/unshare.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setns",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setns.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_unshare",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/unshare.h"],
     deps = [
         ":__support_common",
         ":__support_error_or",
