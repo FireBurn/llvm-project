@@ -362,6 +362,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.socket.sendmmsg
     libc.src.sys.socket.sendmsg
 
+    # sys/file.h entrypoints
+    libc.src.sys.file.flock
+
     # sys/stat.h entrypoints
     libc.src.sys.stat.chmod
     libc.src.sys.stat.fchmod
