@@ -25866,6 +25866,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_msginfo",
+    hdrs = ["include/llvm-libc-types/struct_msginfo.h"],
+)
+
+libc_support_library(
+    name = "types_struct_msginfo",
+    hdrs = ["hdr/types/struct_msginfo.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_msginfo"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_sgrp",
     hdrs = ["include/llvm-libc-types/struct_sgrp.h"],
 )
@@ -25875,6 +25889,34 @@ libc_support_library(
     hdrs = ["hdr/types/struct_sgrp.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_sgrp"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_shm_info",
+    hdrs = ["include/llvm-libc-types/struct_shm_info.h"],
+)
+
+libc_support_library(
+    name = "types_struct_shm_info",
+    hdrs = ["hdr/types/struct_shm_info.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_shm_info"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_shminfo",
+    hdrs = ["include/llvm-libc-types/struct_shminfo.h"],
+)
+
+libc_support_library(
+    name = "types_struct_shminfo",
+    hdrs = ["hdr/types/struct_shminfo.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_shminfo"],
         "//conditions:default": [],
     }),
 )

@@ -200,6 +200,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_msg_ipc_info_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_msg_ipc_info_test.cpp
+  DEPENDS
+    libc.include.sys_msg
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
