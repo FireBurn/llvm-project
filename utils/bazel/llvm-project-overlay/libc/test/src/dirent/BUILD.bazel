@@ -9,3 +9,23 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "rewinddir_test",
+    srcs = ["rewinddir_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/dirent:closedir",
+        "//libc/src/dirent:opendir",
+        "//libc/src/dirent:readdir",
+        "//libc/src/dirent:rewinddir",
+        "//libc/src/dirent:seekdir",
+        "//libc/src/dirent:telldir",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:rmdir",
+        "//libc/src/unistd:unlink",
+    ],
+)

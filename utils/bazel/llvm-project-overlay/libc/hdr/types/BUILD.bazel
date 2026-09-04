@@ -580,6 +580,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "DIR",
+    hdrs = ["DIR.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_DIR"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "char16_t",
     hdrs = ["char16_t.h"],
     deps = select({
@@ -693,6 +702,15 @@ libc_support_library(
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_regmatch_t"],
         "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_dirent",
+    hdrs = ["struct_dirent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_dirent"],
+        "//conditions:default": ["//libc/hdr:dirent_overlay"],
     }),
 )
 

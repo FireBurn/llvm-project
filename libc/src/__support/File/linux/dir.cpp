@@ -13,11 +13,13 @@
 
 #include "src/__support/File/dir.h"
 #include "hdr/fcntl_macros.h"    // For open flags
+#include "hdr/stdio_macros.h"    // For SEEK_SET
 #include "hdr/sys_stat_macros.h" // For S_ISDIR
 #include "src/__support/OSUtil/linux/stat/kernel_statx_types.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/fcntl.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getdents64.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/lseek.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/statx.h"
 #include "src/__support/error_or.h"
@@ -63,6 +65,15 @@ int platform_check_dir(int fd) {
   return 0;
 }
 
+int platform_seekdir(int fd, off_t offset) {
+  auto ret = linux_syscalls::lseek(fd, offset, SEEK_SET);
+  if (!ret)
+    return ret.error();
+  return 0;
+}
+
 size_t platform_dir_reclen(struct dirent *d) { return d->d_reclen; }
+
+off_t platform_dir_offset(struct dirent *d) { return d->d_off; }
 
 } // namespace LIBC_NAMESPACE_DECL
