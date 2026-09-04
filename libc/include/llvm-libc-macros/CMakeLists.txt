@@ -79,6 +79,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  getopt_macros
+  HDR
+    getopt-macros.h
+)
+
+add_macro_header(
   fcntl_macros
   HDR
     fcntl-macros.h
