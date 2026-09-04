@@ -386,6 +386,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "netdb_macros",
+    hdrs = ["netdb_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "net_if_macros",
+    hdrs = ["net_if_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_net_if_macros",
+    ],
+)
+
+libc_support_library(
     name = "termios_macros",
     hdrs = ["termios_macros.h"],
     deps = [
