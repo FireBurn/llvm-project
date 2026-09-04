@@ -1627,6 +1627,10 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.time.timer_gettime
     libc.src.time.timer_settime
 
+    # langinfo.h entrypoints
+    libc.src.langinfo.nl_langinfo
+    libc.src.langinfo.nl_langinfo_l
+
     # locale.h entrypoints
     libc.src.locale.localeconv
     libc.src.locale.duplocale
