@@ -230,6 +230,7 @@ add_header(struct_tm HDR struct_tm.h)
 add_header(struct_passwd HDR struct_passwd.h DEPENDS .uid_t .gid_t)
 add_header(struct_group HDR struct_group.h DEPENDS .gid_t)
 add_header(struct_mntent HDR struct_mntent.h)
+add_header(glob_t HDR glob_t.h DEPENDS .size_t)
 add_type_header(
   struct_sysinfo
   HDR

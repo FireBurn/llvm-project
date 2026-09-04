@@ -1,0 +1,24 @@
+add_custom_target(libc_glob_unittests)
+
+add_libc_test(
+  glob_test
+  SUITE
+    libc_glob_unittests
+  SRCS
+    glob_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.glob_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.glob_t
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.glob.glob
+    libc.src.glob.globfree
+    libc.src.stdio.remove
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.test.UnitTest.ErrnoCheckingTest
+)
