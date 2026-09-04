@@ -1083,6 +1083,7 @@ add_header_macro(
     .llvm-libc-types.struct_itimerval
     .llvm-libc-types.struct_timeval
     .llvm-libc-types.struct_timespec
+    .llvm-libc-types.struct_timezone
 )
 
 add_header_macro(
