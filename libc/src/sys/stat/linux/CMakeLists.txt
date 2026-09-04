@@ -106,6 +106,7 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
+
 add_entrypoint_object(
   mknodat
   SRCS
