@@ -483,6 +483,7 @@ add_libc_test(
     libc.src.stdio.fwrite
     libc.src.stdio.fclose
     libc.src.stdio.fopen
+    libc.src.stdio.remove
 )
 
 add_libc_test(
