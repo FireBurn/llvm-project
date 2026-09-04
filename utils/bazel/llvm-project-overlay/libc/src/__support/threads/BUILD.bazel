@@ -366,6 +366,7 @@ libc_support_library(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:munmap",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:elf_passive_abi",
         "//libc/src/__support:elf_tls_block",
         "//libc/src/string/memory_utils",
     ],
