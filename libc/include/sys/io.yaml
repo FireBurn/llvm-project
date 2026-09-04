@@ -1,0 +1,23 @@
+header: sys/io.h
+header_template: io.h.def
+standards:
+  - linux
+macros: []
+types: []
+enums: []
+objects: []
+functions:
+  - name: ioperm
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: unsigned long
+      - type: unsigned long
+      - type: int
+  - name: iopl
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
