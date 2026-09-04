@@ -21,6 +21,21 @@ libc_test(
 )
 
 libc_test(
+    name = "getdelim_test",
+    srcs = ["getdelim_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_scope",
+        "//libc:fclose",
+        "//libc:fopen",
+        "//libc:fwrite",
+        "//libc:getdelim",
+        "//libc:getline",
+        "//libc:hdr_errno_macros",
+        "//libc:strcmp",
+    ],
+)
+
+libc_test(
     name = "sprintf_test",
     srcs = ["sprintf_test.cpp"],
     deps = [
