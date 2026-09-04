@@ -32,4 +32,33 @@
 #define ELF64_R_TYPE(i) ((i) & 0xffffffffL)
 #define ELF64_R_INFO(s, t) (((s) << 32) + ((t) & 0xffffffffL))
 
+// Per architecture relocation types.
+//
+// Only the types the startup code and the dynamic loader apply are listed.
+// RELATIVE adds the load bias to the addend; IRELATIVE additionally calls the
+// resolver at that address and stores what it returns.
+
+// x86_64
+#define R_X86_64_RELATIVE 8
+#define R_X86_64_GLOB_DAT 6
+#define R_X86_64_JUMP_SLOT 7
+#define R_X86_64_IRELATIVE 37
+
+// aarch64
+#define R_AARCH64_RELATIVE 1027
+#define R_AARCH64_GLOB_DAT 1025
+#define R_AARCH64_JUMP_SLOT 1026
+#define R_AARCH64_IRELATIVE 1032
+
+// arm
+#define R_ARM_RELATIVE 23
+#define R_ARM_GLOB_DAT 21
+#define R_ARM_JUMP_SLOT 22
+#define R_ARM_IRELATIVE 160
+
+// riscv
+#define R_RISCV_RELATIVE 3
+#define R_RISCV_JUMP_SLOT 5
+#define R_RISCV_IRELATIVE 58
+
 #endif // LLVM_LIBC_MACROS_ELF_MACROS_H
