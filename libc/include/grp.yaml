@@ -20,6 +20,26 @@ functions:
     return_type: struct group *
     arguments:
       - type: void
+  - name: getgrgid_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: gid_t
+      - type: struct group *
+      - type: char *
+      - type: size_t
+      - type: struct group **
+  - name: getgrnam_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct group *
+      - type: char *
+      - type: size_t
+      - type: struct group **
   - name: getgrgid
     standards:
       - posix
