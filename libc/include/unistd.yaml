@@ -4,6 +4,36 @@ standards:
 macros:
   - macro_name: _CS_PATH
     macro_header: unistd-macros.h
+  - macro_name: _POSIX_VERSION
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX2_VERSION
+    macro_header: unistd-macros.h
+  - macro_name: _XOPEN_VERSION
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_JOB_CONTROL
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_SAVED_IDS
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_THREAD_SAFE_FUNCTIONS
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_MAPPED_FILES
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_MEMORY_PROTECTION
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_FSYNC
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_SYNCHRONIZED_IO
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_TIMERS
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_MONOTONIC_CLOCK
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_CLOCK_SELECTION
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_SEMAPHORES
+    macro_header: unistd-macros.h
+  - macro_name: _POSIX_SHELL
+    macro_header: unistd-macros.h
   - macro_name: SEEK_SET
     macro_header: file-seek-macros.h
   - macro_name: SEEK_CUR
