@@ -35,6 +35,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("execinfo"),
+    libc_header_info("getopt"),
     libc_header_info("iconv"),
     libc_header_info(
         "link",
@@ -719,6 +720,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_timezone",
     hdrs = ["llvm-libc-types/struct_timezone.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_getopt_macros",
+    hdrs = ["llvm-libc-macros/getopt-macros.h"],
 )
 
 libc_support_library(

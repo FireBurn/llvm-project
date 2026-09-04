@@ -23,3 +23,17 @@ libc_test(
         "//libc/src/time:time_clock_nanosleep",
     ],
 )
+
+libc_test(
+    name = "timegm_test",
+    srcs = ["timegm_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/time:gmtime_r",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+        "//libc/src/time:timegm",
+    ],
+)
