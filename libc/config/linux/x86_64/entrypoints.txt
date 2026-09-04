@@ -623,6 +623,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.setitimer
     libc.src.sys.time.getitimer
     libc.src.sys.time.gettimeofday
+    libc.src.sys.time.settimeofday
 )
 
 if(LLVM_LIBC_INCLUDE_SCUDO)
