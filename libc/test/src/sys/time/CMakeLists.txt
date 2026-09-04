@@ -75,6 +75,7 @@ add_libc_test(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.struct_timeval
+    libc.hdr.types.struct_timezone
     libc.src.errno.errno
     libc.src.sys.time.gettimeofday
     libc.src.sys.time.settimeofday
