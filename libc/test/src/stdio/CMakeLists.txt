@@ -171,6 +171,18 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
     libc.test.UnitTest.MemoryMatcher
+
+    libc.hdr.types.size_t
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.stdio.feof
+    libc.src.stdio.fflush
+    libc.src.stdio.fmemopen
+    libc.src.stdio.fread
+    libc.src.stdio.fseek
+    libc.src.stdio.ftell
+    libc.src.stdio.fwrite
+    libc.test.UnitTest.ErrnoCheckingTest
 )
 
 add_libc_test(
