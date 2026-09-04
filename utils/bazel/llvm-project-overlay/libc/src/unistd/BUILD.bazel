@@ -845,6 +845,21 @@ libc_support_library(
 )
 
 libc_function(
+    name = "confstr",
+    srcs = ["confstr.cpp"],
+    hdrs = ["confstr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "fdatasync",
     srcs = ["linux/fdatasync.cpp"],
     hdrs = ["fdatasync.h"],

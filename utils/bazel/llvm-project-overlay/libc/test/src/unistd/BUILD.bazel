@@ -237,6 +237,17 @@ libc_test(
 )
 
 libc_test(
+    name = "confstr_test",
+    srcs = ["confstr_test.cpp"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/unistd:confstr",
+    ],
+)
+
+libc_test(
     name = "getopt_test",
     srcs = ["getopt_test.cpp"],
     deps = [
