@@ -189,6 +189,30 @@ libc_test(
 )
 
 libc_test(
+    name = "fputc_test",
+    srcs = ["fputc_test.cpp"],
+    deps = [
+        "//libc/src/__support/File:file",
+        "//libc/src/stdio:fputc",
+        "//libc/src/stdio:putchar",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdio:stdout",
+    ],
+)
+
+libc_test(
+    name = "putc_test",
+    srcs = ["putc_test.cpp"],
+    deps = [
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:putc",
+    ],
+)
+
+libc_test(
     name = "fclose_stdstream_test",
     srcs = ["fclose_stdstream_test.cpp"],
     deps = [
