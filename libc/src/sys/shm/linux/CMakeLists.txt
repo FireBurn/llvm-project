@@ -42,3 +42,15 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  shmctl
+  SRCS
+    shmctl.cpp
+  HDRS
+    ../shmctl.h
+  DEPENDS
+    libc.hdr.types.struct_shmid_ds
+    libc.src.__support.OSUtil.linux.syscall_wrappers.shmctl
+    libc.src.errno.errno
+)
