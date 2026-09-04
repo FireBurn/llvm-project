@@ -176,6 +176,10 @@ LLVM_LIBC_HEADERS = [
         "sys/errno",
         has_def_template = True,
     ),
+    libc_header_info(
+        "sys/io",
+        has_def_template = True,
+    ),
     libc_header_info("sys/kd"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/ttydefaults"),
@@ -20148,6 +20152,34 @@ libc_function(
 )
 
 libc_function(
+    name = "ioperm",
+    srcs = ["src/sys/io/linux/ioperm.cpp"],
+    hdrs = ["src/sys/io/ioperm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_ioperm",
+        ":errno",
+        ":sys_io_ioperm",
+    ],
+)
+
+libc_function(
+    name = "iopl",
+    srcs = ["src/sys/io/linux/iopl.cpp"],
+    hdrs = ["src/sys/io/iopl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_iopl",
+        ":errno",
+        ":sys_io_iopl",
+    ],
+)
+
+libc_function(
     name = "lremovexattr",
     srcs = ["src/sys/xattr/linux/lremovexattr.cpp"],
     hdrs = ["src/sys/xattr/lremovexattr.h"],
@@ -25080,6 +25112,44 @@ libc_support_library(
         ":__support_macros_config",
         ":types_size_t",
         ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_ioperm",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/ioperm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_iopl",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/iopl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_io_ioperm",
+    hdrs = ["src/sys/io/ioperm.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_io_iopl",
+    hdrs = ["src/sys/io/iopl.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
 
