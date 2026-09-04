@@ -18,6 +18,11 @@ namespace LIBC_NAMESPACE_DECL {
 int vfprintf(::FILE *__restrict stream, const char *__restrict format,
              va_list vlist);
 
+namespace internal {
+int vfprintf_impl(::FILE *__restrict stream, const char *__restrict format,
+                  va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_VFPRINTF_H
