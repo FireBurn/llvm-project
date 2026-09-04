@@ -53,6 +53,15 @@ void File::remove_file(File *f) {
 }
 
 File *File::get_first_file() { return File::list_all; }
+
+void File::flush_all() {
+  // The list lock is not the per file lock the flush itself takes, so
+  // holding it here does not stand in the way.
+  File::lock_list();
+  for (File *f = File::list_all; f != nullptr; f = f->next)
+    f->flush();
+  File::unlock_list();
+}
 void File::lock_list() { File::list_lock.lock(); }
 void File::unlock_list() { File::list_lock.unlock(); }
 
