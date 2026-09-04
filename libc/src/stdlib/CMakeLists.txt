@@ -920,3 +920,11 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.system
 )
+
+add_entrypoint_object(
+  mktemp
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mktemp
+)
+
