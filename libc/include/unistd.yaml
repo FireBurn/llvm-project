@@ -193,6 +193,14 @@ functions:
     return_type: int
     arguments:
       - type: const char *
+  - name: lchown
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: uid_t
+      - type: gid_t
   - name: chown
     standards:
       - posix

@@ -1014,3 +1014,25 @@ add_libc_test(
     libc.src.unistd.sbrk
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  lchown_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    lchown_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.sys.stat.lstat
+    libc.src.unistd.close
+    libc.src.unistd.getegid
+    libc.src.unistd.geteuid
+    libc.src.unistd.lchown
+    libc.src.unistd.symlink
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
