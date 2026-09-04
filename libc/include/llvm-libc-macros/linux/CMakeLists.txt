@@ -205,6 +205,12 @@ add_header(
 )
 
 add_header(
+  sys_fanotify_macros
+  HDR
+    sys-fanotify-macros.h
+)
+
+add_header(
   HDR
   DEPENDS
     .fcntl_macros
