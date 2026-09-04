@@ -36,6 +36,9 @@ KEYWORDS = [
 ]
 NONIDENTIFIER = re.compile("[^a-zA-Z0-9_]+")
 
+# These introduce a tag name, so the word after one belongs with it.
+TAG_KEYWORDS = ["struct", "union", "enum"]
+
 
 class Function(Symbol):
     def __init__(
@@ -53,20 +56,33 @@ class Function(Symbol):
         self.attributes = attributes or []
 
     def signature_types(self):
-        def collapse(type_string):
+        def names_in(type_string):
+            # Split into words at nonidentifier characters (`*`, `[`, etc.)
+            # and filter out keywords and numbers. What is left is one type
+            # name per word, except that a tag keyword belongs with the word
+            # after it.
+            #
+            # A single type string can name more than one type, since an
+            # argument may be a pointer to a function which takes types of
+            # its own, so this yields each of them rather than running them
+            # together into one name.
             assert type_string
-            # Split into words at nonidentifier characters (`*`, `[`, etc.),
-            # filter out keywords and numbers, and then rejoin with "_".
-            return "_".join(
+            words = [
                 word
                 for word in NONIDENTIFIER.split(type_string)
                 if word and not word.isdecimal() and word not in KEYWORDS
-            )
+            ]
+            index = 0
+            while index < len(words):
+                if words[index] in TAG_KEYWORDS and index + 1 < len(words):
+                    yield words[index] + "_" + words[index + 1]
+                    index += 2
+                else:
+                    yield words[index]
+                    index += 1
 
         all_types = [self.return_type] + self.arguments
-        return {
-            Type(string) for string in filter(None, (collapse(t) for t in all_types))
-        }
+        return {Type(name) for t in all_types for name in names_in(t)}
 
     def __str__(self):
         attrs_str = "".join(f"{attr} " for attr in self.attributes)
