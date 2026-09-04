@@ -155,6 +155,26 @@ add_libc_test(
 )
 
 add_libc_test(
+  mknod_test
+  SUITE
+    libc_sys_stat_unittests
+  SRCS
+    mknod_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_stat
+    libc.src.errno.errno
+    libc.src.stdio.remove
+    libc.src.sys.stat.mknod
+    libc.src.sys.stat.mknodat
+    libc.src.sys.stat.stat
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   umask_test
   SUITE
     libc_sys_stat_unittests
