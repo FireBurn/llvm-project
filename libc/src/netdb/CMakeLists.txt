@@ -24,3 +24,13 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  gai_strerror
+  SRCS
+    gai_strerror.cpp
+  HDRS
+    gai_strerror.h
+  DEPENDS
+    libc.hdr.netdb_macros
+)
