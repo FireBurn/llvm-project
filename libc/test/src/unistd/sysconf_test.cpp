@@ -93,3 +93,44 @@ TEST_F(LlvmLibcSysconfTest, InvalidNameTest) {
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(100000), Fails(EINVAL, -1L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(0x7fffffff), Fails(EINVAL, -1L));
 }
+
+TEST_F(LlvmLibcSysconfTest, LimitsAgreeWithLimitsHeader) {
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_NGROUPS_MAX),
+              Succeeds<long>(NGROUPS_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_IOV_MAX), Succeeds<long>(IOV_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_HOST_NAME_MAX),
+              Succeeds<long>(HOST_NAME_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_LOGIN_NAME_MAX),
+              Succeeds<long>(LOGIN_NAME_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_TTY_NAME_MAX),
+              Succeeds<long>(TTY_NAME_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_RE_DUP_MAX),
+              Succeeds<long>(RE_DUP_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_LINE_MAX),
+              Succeeds<long>(_POSIX2_LINE_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_ATEXIT_MAX),
+              Succeeds<long>(_POSIX_ATEXIT_MAX));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_STACK_MIN),
+              Succeeds<long>(PTHREAD_STACK_MIN));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_KEYS_MAX),
+              Succeeds<long>(PTHREAD_KEYS_MAX));
+}
+
+TEST_F(LlvmLibcSysconfTest, OptionsAreReported) {
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_JOB_CONTROL),
+              Succeeds<long>(_POSIX_JOB_CONTROL));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_SAVED_IDS),
+              Succeeds<long>(_POSIX_SAVED_IDS));
+}
+
+TEST_F(LlvmLibcSysconfTest, ChildMaxFollowsTheProcessLimit) {
+  long child_max = LIBC_NAMESPACE::sysconf(_SC_CHILD_MAX);
+  // -1 spells no limit, and leaves errno alone.
+  if (child_max != -1)
+    ASSERT_GT(child_max, 0L);
+}
+
+TEST_F(LlvmLibcSysconfTest, AvailablePagesAreReported) {
+  long pages = LIBC_NAMESPACE::sysconf(_SC_AVPHYS_PAGES);
+  ASSERT_GE(pages, 0L);
+}
