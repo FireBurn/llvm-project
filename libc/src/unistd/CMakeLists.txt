@@ -589,3 +589,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.getentropy
 )
+
+add_entrypoint_object(
+  setresuid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setresuid
+)
+
+add_entrypoint_object(
+  setresgid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setresgid
+)
