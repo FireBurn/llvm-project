@@ -2034,6 +2034,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       # net/if.h entrypoints
       libc.src.net.if.if_freenameindex
       libc.src.net.if.if_nameindex
+    libc.src.netdb.getnameinfo
 
       # netdb.h entrypoints
       libc.src.netdb.freeaddrinfo
