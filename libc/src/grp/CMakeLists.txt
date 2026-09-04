@@ -138,3 +138,14 @@ add_object_library(
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
 )
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
+endif()
+
+add_entrypoint_object(
+  setgroups
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setgroups
+)
