@@ -149,3 +149,19 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.setgroups
 )
+
+add_entrypoint_object(
+  initgroups
+  SRCS
+    initgroups.cpp
+  HDRS
+    initgroups.h
+  DEPENDS
+    .grp_utils
+    .setgroups
+    libc.hdr.errno_macros
+    libc.hdr.limits_macros
+    libc.hdr.types.gid_t
+    libc.src.errno.errno
+    libc.src.string.string_utils
+)
