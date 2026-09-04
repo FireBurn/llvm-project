@@ -1458,3 +1458,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.idtype_t
 )
+
+add_proxy_header_library(
+  struct_utimbuf
+  HDRS
+    struct_utimbuf.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_utimbuf
+)
