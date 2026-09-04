@@ -15,8 +15,11 @@ macros:
     macro_header: sys-msg-macros.h
   - macro_name: MSG_STAT_ANY
     macro_header: sys-msg-macros.h
+  - macro_name: msg_cbytes
+    macro_header: sys-msg-macros.h
 types:
   - type_name: struct_msqid_ds
+  - type_name: struct_msginfo
   - type_name: struct_msgbuf
   - type_name: key_t
   - type_name: pid_t
