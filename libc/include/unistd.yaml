@@ -121,6 +121,12 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: getlogin
+    return_type: char *
+      - type: void
+  - name: getlogin_r
+      - type: char *
+      - type: size_t
   - name: ttyname
     return_type: char *
   - name: ttyname_r
