@@ -1450,6 +1450,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_msqid_ds
+  HDRS
+    struct_msqid_ds.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_msqid_ds
+)
+
+add_proxy_header_library(
   struct_sgrp
   HDRS
     struct_sgrp.h
