@@ -911,6 +911,23 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_fanotify
+  ../libc/include/sys/fanotify.yaml
+  sys/fanotify.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_fanotify_macros
+    .llvm-libc-types.struct_fanotify_event_metadata
+    .llvm-libc-types.struct_fanotify_event_info_header
+    .llvm-libc-types.struct_fanotify_event_info_fid
+    .llvm-libc-types.struct_fanotify_event_info_pidfd
+    .llvm-libc-types.struct_fanotify_event_info_error
+    .llvm-libc-types.struct_fanotify_event_info_range
+    .llvm-libc-types.struct_fanotify_event_info_mnt
+    .llvm-libc-types.struct_fanotify_response
+)
+
+add_header_macro(
   sys_inotify
   ../libc/include/sys/inotify.yaml
   sys/inotify.h
