@@ -670,3 +670,76 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
+add_libc_test(
+  rand48_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand48_test.cpp
+  DEPENDS
+    libc.src.stdlib.drand48
+    libc.src.stdlib.erand48
+    libc.src.stdlib.jrand48
+    libc.src.stdlib.lcong48
+    libc.src.stdlib.lrand48
+    libc.src.stdlib.mrand48
+    libc.src.stdlib.nrand48
+    libc.src.stdlib.seed48
+    libc.src.stdlib.srand48
+)
+
+add_libc_test(
+  getsubopt_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    getsubopt_test.cpp
+  DEPENDS
+    libc.src.stdlib.getsubopt
+)
+
+add_libc_test(
+  rand_r_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand_r_test.cpp
+  DEPENDS
+    libc.hdr.stdlib_macros
+    libc.src.stdlib.rand_r
+)
+
+add_libc_test(
+  mkstemps_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mkstemps_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.unistd_macros
+    libc.src.stdlib.mkostemps
+    libc.src.stdlib.mkstemps
+    libc.src.string.strdup
+    libc.src.string.strlen
+    libc.src.unistd.access
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
+  reallocarray_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    reallocarray_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.src.stdlib.reallocarray
+    libc.test.UnitTest.ErrnoCheckingTest
+)
