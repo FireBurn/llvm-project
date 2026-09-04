@@ -1,0 +1,20 @@
+add_custom_target(libc_sys_eventfd_unittests)
+
+add_libc_test(
+  eventfd_test
+  SUITE
+    libc_sys_eventfd_unittests
+  SRCS
+    eventfd_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_eventfd_macros
+    libc.hdr.types.eventfd_t
+    libc.src.errno.errno
+    libc.src.sys.eventfd.eventfd
+    libc.src.sys.eventfd.eventfd_read
+    libc.src.sys.eventfd.eventfd_write
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
