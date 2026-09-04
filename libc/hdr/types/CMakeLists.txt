@@ -1424,3 +1424,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.union_sigval
 )
+
+add_proxy_header_library(
+  nl_item
+  HDRS
+    nl_item.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.nl_item
+)
