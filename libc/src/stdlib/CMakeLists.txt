@@ -853,3 +853,16 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.system
 )
+
+add_entrypoint_object(
+  reallocarray
+  SRCS
+    reallocarray.cpp
+  HDRS
+    reallocarray.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.realloc
+    libc.hdr.types.size_t
+    libc.src.errno.errno
+)
