@@ -19725,6 +19725,26 @@ libc_function(
 )
 
 libc_function(
+    name = "settimeofday",
+    srcs = ["src/sys/time/linux/settimeofday.cpp"],
+    hdrs = ["src/sys/time/settimeofday.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_time_clock_settime",
+        ":__support_time_units",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_time_macros",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+        ":types_struct_timezone",
+    ],
+)
+
+libc_function(
     name = "stat",
     srcs = ["src/sys/stat/linux/stat.cpp"],
     hdrs = ["src/sys/stat/stat.h"],
@@ -23567,11 +23587,35 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_timezone",
+    hdrs = ["include/llvm-libc-types/struct_timezone.h"],
+)
+
+libc_support_library(
+    name = "types_struct_timezone",
+    hdrs = ["hdr/types/struct_timezone.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_timezone"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
         ":__support_macros_config",
         ":types_FILE",
+    ],
+)
+
+libc_support_library(
+    name = "__support_time_units",
+    hdrs = ["src/__support/time/units.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_time_t",
     ],
 )
 
@@ -25491,6 +25535,23 @@ libc_function(
         ":types_fd_set",
         ":types_sigset_t",
         ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "gettimeofday",
+    srcs = ["src/sys/time/linux/gettimeofday.cpp"],
+    hdrs = ["src/sys/time/gettimeofday.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":__support_time_units",
+        ":errno",
+        ":hdr_time_macros",
+        ":types_struct_timeval",
+        ":types_suseconds_t",
     ],
 )
 
