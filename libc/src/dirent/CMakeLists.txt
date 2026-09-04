@@ -127,3 +127,15 @@ add_entrypoint_object(
     libc.src.__support.File.dir
     libc.src.__support.File.platform_dir
 )
+
+add_entrypoint_object(
+  versionsort
+  SRCS
+    versionsort.cpp
+  HDRS
+    versionsort.h
+  DEPENDS
+    libc.include.dirent
+    libc.hdr.types.struct_dirent
+    libc.src.string.strverscmp
+)
