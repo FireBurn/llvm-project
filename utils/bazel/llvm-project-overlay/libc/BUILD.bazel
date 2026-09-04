@@ -160,6 +160,7 @@ py_binary(
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("execinfo"),
+    libc_header_info("stdio_ext"),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -19875,6 +19876,20 @@ libc_function(
 )
 
 libc_function(
+    name = "fgetc",
+    srcs = ["src/stdio/generic/fgetc.cpp"],
+    hdrs = ["src/stdio/fgetc.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "fopen",
     srcs = ["src/stdio/generic/fopen.cpp"],
     hdrs = ["src/stdio/fopen.h"],
@@ -22798,6 +22813,118 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_raise",
         ":errno",
+    ],
+)
+
+libc_function(
+    name = "__fbufsize",
+    srcs = ["src/stdio_ext/generic/__fbufsize.cpp"],
+    hdrs = ["src/stdio_ext/__fbufsize.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__freading",
+    srcs = ["src/stdio_ext/generic/__freading.cpp"],
+    hdrs = ["src/stdio_ext/__freading.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__fwriting",
+    srcs = ["src/stdio_ext/generic/__fwriting.cpp"],
+    hdrs = ["src/stdio_ext/__fwriting.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__freadable",
+    srcs = ["src/stdio_ext/generic/__freadable.cpp"],
+    hdrs = ["src/stdio_ext/__freadable.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__fwritable",
+    srcs = ["src/stdio_ext/generic/__fwritable.cpp"],
+    hdrs = ["src/stdio_ext/__fwritable.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__flbf",
+    srcs = ["src/stdio_ext/generic/__flbf.cpp"],
+    hdrs = ["src/stdio_ext/__flbf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__fpurge",
+    srcs = ["src/stdio_ext/generic/__fpurge.cpp"],
+    hdrs = ["src/stdio_ext/__fpurge.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__fpending",
+    srcs = ["src/stdio_ext/generic/__fpending.cpp"],
+    hdrs = ["src/stdio_ext/__fpending.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_size_t",
     ],
 )
 
