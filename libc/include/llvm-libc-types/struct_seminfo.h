@@ -9,19 +9,19 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_SEMINFO_H
 #define LLVM_LIBC_TYPES_STRUCT_SEMINFO_H
 
-#ifdef __linux__
+// The limits semctl reports for IPC_INFO, and, with the members standing for
+// something else, the counts it reports for SEM_INFO.
 struct seminfo {
-  int semmap;
-  int semmni;
-  int semmns;
-  int semmnu;
-  int semmsl;
-  int semopm;
-  int semume;
-  int semusz;
-  int semvmx;
-  int semaem;
+  int semmap; // Entries in the semaphore map.
+  int semmni; // How many semaphore sets there may be at once.
+  int semmns; // How many semaphores in all.
+  int semmnu; // How many undo structures.
+  int semmsl; // How many semaphores one set may hold.
+  int semopm; // How many operations one semop call may make.
+  int semume; // How many undo entries one process may have.
+  int semusz; // The size of an undo structure.
+  int semvmx; // The largest value a semaphore may take.
+  int semaem; // The largest an undo entry may record.
 };
-#endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_SEMINFO_H

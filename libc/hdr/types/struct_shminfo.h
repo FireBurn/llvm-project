@@ -7,20 +7,20 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Proxy for struct seminfo.
+/// Proxy for struct shminfo.
 ///
 //===----------------------------------------------------------------------===//
-#ifndef LLVM_LIBC_HDR_TYPES_STRUCT_SEMINFO_H
-#define LLVM_LIBC_HDR_TYPES_STRUCT_SEMINFO_H
+#ifndef LLVM_LIBC_HDR_TYPES_STRUCT_SHMINFO_H
+#define LLVM_LIBC_HDR_TYPES_STRUCT_SHMINFO_H
 
 #ifdef LIBC_FULL_BUILD
 
-#include "include/llvm-libc-types/struct_seminfo.h"
+#include "include/llvm-libc-types/struct_shminfo.h"
 
 #else
 
-#include <sys/sem.h>
+#include <sys/shm.h>
 
 #endif // LIBC_FULL_BUILD
 
-#endif // LLVM_LIBC_HDR_TYPES_STRUCT_SEMINFO_H
+#endif // LLVM_LIBC_HDR_TYPES_STRUCT_SHMINFO_H

@@ -37,6 +37,8 @@ macros:
     macro_header: sys-shm-macros.h
 types:
   - type_name: struct_shmid_ds
+  - type_name: struct_shminfo
+  - type_name: struct_shm_info
   - type_name: key_t
   - type_name: pid_t
   - type_name: size_t

@@ -19,4 +19,9 @@
 #define MSG_INFO 12
 #define MSG_STAT_ANY 13
 
+// The member which says how many bytes are on the queue is private, since
+// nothing standard names it, but code which does reaches for it under this
+// name.
+#define msg_cbytes __msg_cbytes
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_MSG_MACROS_H
