@@ -180,6 +180,7 @@ LLVM_LIBC_HEADERS = [
         "sys/errno",
         has_def_template = True,
     ),
+    libc_header_info("sys/fanotify"),
     libc_header_info(
         "sys/io",
         has_def_template = True,
@@ -20146,6 +20147,33 @@ libc_function(
 )
 
 libc_function(
+    name = "fanotify_init",
+    srcs = ["src/sys/fanotify/fanotify_init.cpp"],
+    hdrs = ["src/sys/fanotify/fanotify_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fanotify_init",
+        ":errno",
+    ],
+)
+
+libc_function(
+    name = "fanotify_mark",
+    srcs = ["src/sys/fanotify/fanotify_mark.cpp"],
+    hdrs = ["src/sys/fanotify/fanotify_mark.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fanotify_mark",
+        ":errno",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
     name = "fremovexattr",
     srcs = ["src/sys/xattr/linux/fremovexattr.cpp"],
     hdrs = ["src/sys/xattr/fremovexattr.h"],
@@ -25629,6 +25657,30 @@ libc_support_library(
         ":__support_macros_config",
         ":types_clockid_t",
         ":types_struct_itimerspec",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fanotify_init",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fanotify_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fanotify_mark",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fanotify_mark.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
     ],
 )
 
