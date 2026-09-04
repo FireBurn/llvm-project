@@ -5620,6 +5620,7 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        ":__support_elf_tls_block",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_exit",
         ":__support_osutil_linux_syscall_wrappers_getrandom",
@@ -21538,6 +21539,29 @@ libc_support_library(
         ":hdr_link_macros",
         ":hdr_stdint_proxy",
         ":hdr_sys_mman_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_elf_tls_block",
+    hdrs = ["src/__support/elf/tls_block.h"],
+    deps = [
+        ":__support_elf_module",
+        ":__support_elf_tls_layout",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":__support_osutil_linux_syscall_wrappers_mmap",
+        ":__support_osutil_linux_syscall_wrappers_munmap",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_errno_macros",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_mman_macros",
+        ":string_memory_utils",
         ":types_size_t",
     ],
 )
