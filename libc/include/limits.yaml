@@ -86,6 +86,90 @@ macros:
     macro_header: limits-macros.h
   - macro_name: NGROUPS_MAX
     macro_header: limits-macros.h
+  - macro_name: _POSIX_AIO_LISTIO_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_AIO_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_CHILD_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_CLOCKRES_MIN
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_DELAYTIMER_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_LINK_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_LOGIN_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_MAX_CANON
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_MQ_OPEN_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_MQ_PRIO_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_OPEN_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_PIPE_BUF
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_RE_DUP_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_RTSIG_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SEM_NSEMS_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SEM_VALUE_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SIGQUEUE_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SSIZE_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_STREAM_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SYMLINK_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_SYMLOOP_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_THREAD_KEYS_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_THREAD_THREADS_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_TIMER_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_TTY_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: _POSIX_TZNAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: MAX_CANON
+    macro_header: limits-macros.h
+  - macro_name: MAX_INPUT
+    macro_header: limits-macros.h
+  - macro_name: PIPE_BUF
+    macro_header: limits-macros.h
+  - macro_name: LOGIN_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: TTY_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: MQ_PRIO_MAX
+    macro_header: limits-macros.h
+  - macro_name: RTSIG_MAX
+    macro_header: limits-macros.h
+  - macro_name: DELAYTIMER_MAX
+    macro_header: limits-macros.h
+  - macro_name: AIO_PRIO_DELTA_MAX
+    macro_header: limits-macros.h
+  - macro_name: PTHREAD_KEYS_MAX
+    macro_header: limits-macros.h
+  - macro_name: PTHREAD_STACK_MIN
+    macro_header: limits-macros.h
+  - macro_name: XATTR_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: XATTR_SIZE_MAX
+    macro_header: limits-macros.h
+  - macro_name: XATTR_LIST_MAX
+    macro_header: limits-macros.h
+  - macro_name: CHARCLASS_NAME_MAX
+    macro_header: limits-macros.h
+  - macro_name: RE_DUP_MAX
+    macro_header: limits-macros.h
   - macro_name: _POSIX_THREAD_DESTRUCTOR_ITERATIONS
     macro_header: limits-macros.h
   - macro_name: PTHREAD_DESTRUCTOR_ITERATIONS
