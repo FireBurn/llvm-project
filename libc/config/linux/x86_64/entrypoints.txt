@@ -405,6 +405,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/io.h entrypoints
+    libc.src.sys.io.ioperm
+    libc.src.sys.io.iopl
+
     # sys/mount.h entrypoints
     libc.src.sys.mount.mount
     libc.src.sys.mount.umount
