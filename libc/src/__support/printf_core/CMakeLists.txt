@@ -214,3 +214,18 @@ add_header_library(
     libc.src.__support.printf_core.writer
     ${use_system_file}
 )
+
+add_header_library(
+  vdprintf_internal
+  HDRS
+    vdprintf_internal.h
+  DEPENDS
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
+    libc.src.__support.arg_list
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.__support.printf_core.core_structs
+    libc.src.__support.printf_core.printf_main
+    libc.src.__support.printf_core.writer
+)

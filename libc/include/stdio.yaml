@@ -272,6 +272,22 @@ functions:
       - type: FILE *
       - type: off_t
       - type: int
+  - name: dprintf
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *__restrict
+      - type: ...
+  - name: vdprintf
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *__restrict
+      - type: va_list
   - name: fgetpos
     standards:
       - stdc
