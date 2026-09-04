@@ -10,6 +10,13 @@ add_entrypoint_object(
     libc.src.__support.macros.config
 )
 
+# The lock that dl_iterate_phdr takes belongs to dlfcn, which only exists
+# where there is a loader to take it against.
+set(dl_iterate_phdr_lock)
+if(TARGET libc.src.dlfcn.dl_internal)
+  set(dl_iterate_phdr_lock libc.src.dlfcn.dl_internal)
+endif()
+
 add_entrypoint_object(
   dl_iterate_phdr
   SRCS
