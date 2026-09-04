@@ -409,6 +409,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.timerfd.timerfd_gettime
     libc.src.sys.timerfd.timerfd_settime
 
+    # sys/fanotify.h entrypoints
+    libc.src.sys.fanotify.fanotify_init
+    libc.src.sys.fanotify.fanotify_mark
+
     # sys/msg.h entrypoints
     libc.src.sys.msg.msgctl
     libc.src.sys.msg.msgget
