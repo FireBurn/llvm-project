@@ -51,8 +51,15 @@ cmake -S runtimes -B build -DLLVM_ENABLE_RUNTIMES="libc;compiler-rt" \
 ```
 
 Note that a dynamically linked program needs a dynamic loader, which LLVM-libc
-does not yet provide. The shared objects are usable by a loader supplied
-elsewhere, and are a prerequisite for adding one.
+does not yet provide. Linking one against `libc.so` succeeds and reaches
+`main`, but faults on the way out: `libc.so` carries a `PT_TLS` segment of its
+own, while `crt1.o` sizes the thread local block from the main executable's
+`PT_TLS` alone and then installs its own thread pointer. Accesses to
+`libc.so`'s thread local storage land outside that block.
+
+Sizing thread local storage across every loaded module is the loader's job, so
+these shared objects are a prerequisite for adding one rather than something
+usable without one.
 
 ### 3. Bootstrap Build
 
