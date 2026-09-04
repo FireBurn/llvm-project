@@ -424,3 +424,11 @@ add_proxy_header_library(
 
 add_subdirectory(types)
 add_subdirectory(func)
+
+add_proxy_header_library(
+  sys_file_macros
+  HDRS
+    sys_file_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.sys_file_macros
+)
