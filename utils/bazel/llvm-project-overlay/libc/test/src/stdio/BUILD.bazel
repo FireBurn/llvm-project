@@ -210,3 +210,27 @@ libc_test(
         "//conditions:default": [],
     }),
 )
+
+libc_test(
+    name = "fputc_test",
+    srcs = ["fputc_test.cpp"],
+    deps = [
+        "//libc:__support_file_file",
+        "//libc:fputc",
+        "//libc:putchar",
+        "//libc:stderr",
+        "//libc:stdout",
+    ],
+)
+
+libc_test(
+    name = "putc_test",
+    srcs = ["putc_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:ferror",
+        "//libc:fopen",
+        "//libc:fread",
+        "//libc:putc",
+    ],
+)
