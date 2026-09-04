@@ -480,6 +480,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.getpagesize
     libc.src.unistd.getpgid
     libc.src.unistd.getpgrp
+    libc.src.unistd.getresgid
+    libc.src.unistd.getresuid
     libc.src.unistd.getpid
     libc.src.unistd.getppid
     libc.src.unistd.getsid
