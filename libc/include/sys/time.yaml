@@ -33,6 +33,13 @@ functions:
     arguments:
       - type: int
       - type: struct itimerval *
+  - name: settimeofday
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const struct timeval *
+      - type: const void *
   - name: gettimeofday
     return_type: int
     arguments:
