@@ -873,6 +873,21 @@ add_libc_test(
 )
 
 add_libc_test(
+  getopt_long_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getopt_long_test.cpp
+  DEPENDS
+    libc.hdr.getopt_macros
+    libc.src.__support.CPP.array
+    libc.src.string.strcmp
+    libc.src.unistd.getopt
+    libc.src.unistd.getopt_long
+    libc.src.unistd.getopt_long_only
+)
+
+add_libc_test(
   getentropy_test
   SUITE
     libc_unistd_unittests
