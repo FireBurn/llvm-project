@@ -223,6 +223,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.setitimer
     libc.src.sys.time.getitimer
 
+    # utime.h entrypoints
+    libc.src.utime.utime
+
     # unistd.h entrypoints
     libc.src.unistd.alarm
     libc.src.unistd.access

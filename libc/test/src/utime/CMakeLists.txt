@@ -1,0 +1,23 @@
+add_custom_target(libc_utime_unittests)
+
+add_libc_test(
+  utime_test
+  SUITE
+    libc_utime_unittests
+  SRCS
+    utime_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_stat
+    libc.hdr.types.struct_utimbuf
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.sys.stat.stat
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.src.utime.utime
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
