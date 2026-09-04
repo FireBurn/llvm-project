@@ -1,6 +1,7 @@
 add_subdirectory(io)
 add_subdirectory(mount)
 add_subdirectory(msg)
+add_subdirectory(shm)
 add_subdirectory(swap)
 add_subdirectory(auxv)
 add_subdirectory(epoll)
