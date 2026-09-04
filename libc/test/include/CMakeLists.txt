@@ -190,6 +190,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  paths_test
+  SUITE
+    libc-include-tests
+  SRCS
+    paths_test.cpp
+  DEPENDS
+    libc.include.paths
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
