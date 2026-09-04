@@ -826,6 +826,33 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getlogin_r
+  SRCS
+    getlogin_r.cpp
+  HDRS
+    getlogin_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.pwd.pwd_utils
+    libc.src.stdlib.environ_internal
+    libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  getlogin
+  SRCS
+    getlogin.cpp
+  HDRS
+    getlogin.h
+  DEPENDS
+    .getlogin_r
+    libc.hdr.limits_macros
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   sethostname
   ALIAS
   DEPENDS
@@ -845,6 +872,3 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.close_range
 )
-    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
-    libc.src.pwd.pwd_utils
-    libc.src.stdlib.environ_internal
