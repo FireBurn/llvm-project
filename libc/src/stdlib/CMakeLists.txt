@@ -808,6 +808,15 @@ if(NOT LIBC_TARGET_OS_IS_BAREMETAL)
 endif()
 
 set(exit_compile_options "")
+# A program which writes to a stream and never closes it still expects what
+# it wrote to be there, so exit flushes whatever is still buffered.
+if(TARGET libc.src.__support.File.file)
+  list(APPEND exit_deps
+    libc.src.__support.File.file
+  )
+  libc_add_definition(exit_compile_options "LIBC_COPT_EXIT_FLUSHES_STREAMS")
+endif()
+
 # TODO: Revisit this when/if LIBC_CONF_THREAD_MODE controls more than the
 # mutex implementation.
 if(TARGET libc.src.__support.threads.thread)
