@@ -56,3 +56,28 @@ add_libc_test(
     libc.src.string.string_utils
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  getpwnam_r_test
+  SUITE
+    libc_pwd_unittests
+  SRCS
+    getpwnam_r_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_passwd
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.pwd.getpwent
+    libc.src.pwd.getpwnam_r
+    libc.src.pwd.getpwuid_r
+    libc.src.pwd.pwd_utils
+    libc.src.pwd.setpwent
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)

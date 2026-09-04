@@ -99,6 +99,9 @@ public:
   LIBC_INLINE constexpr explicit FlatFileDatabase(const char *path)
       : file_path(path) {}
 
+  // Which file the database reads.
+  LIBC_INLINE const char *path() const { return file_path; }
+
   // Sets or overrides the file path for database operations.
   LIBC_INLINE void set_path(const char *path) {
     if (!path)
@@ -134,6 +137,27 @@ public:
         return Error(result);
     }
     return {};
+  }
+
+  // Reads the next line into |buffer|, without parsing it. Returns how many
+  // bytes it holds, or zero at the end of the file. This is for a caller
+  // which parses with something of its own, such as one which has to be
+  // reentrant and cannot use a parse which writes anywhere shared.
+  LIBC_INLINE ErrorOr<size_t> getline(cpp::span<char> buffer) {
+    if (!file) {
+      auto res = setdb();
+      if (!res.has_value())
+        return Error(res.error());
+    }
+
+    auto result = read_line(file, buffer);
+    if (!result.has_value())
+      return Error(result.error());
+
+    ReadLineResult res = result.value();
+    if (res.truncated)
+      return Error(ERANGE);
+    return res.bytes_read;
   }
 
   // Reads and parses the next record from the database. Returns true if an
