@@ -19594,6 +19594,20 @@ libc_function(
 )
 
 libc_function(
+    name = "getlogin",
+    srcs = ["src/unistd/getlogin.cpp"],
+    hdrs = ["src/unistd/getlogin.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_limits_macros",
+        ":getlogin_r",
+    ],
+)
+
+libc_function(
     name = "getopt",
     srcs = ["src/unistd/getopt.cpp"],
     hdrs = ["src/unistd/getopt.h"],
@@ -19667,6 +19681,22 @@ libc_function(
         ":__support_osutil_syscall",
         ":hdr_fcntl_macros",
         ":unistd_gethostid",
+    ],
+)
+
+libc_function(
+    name = "getlogin_r",
+    srcs = ["src/unistd/getlogin_r.cpp"],
+    hdrs = ["src/unistd/getlogin_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getuid",
+        ":hdr_errno_macros",
+        ":pwd_pwd_utils",
+        ":stdlib_environ_internal",
+        ":string_utils",
+        ":types_size_t",
     ],
 )
 
@@ -24462,6 +24492,207 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_passwd",
+    hdrs = ["include/llvm-libc-types/struct_passwd.h"],
+)
+
+libc_support_library(
+    name = "types_struct_passwd",
+    hdrs = ["hdr/types/struct_passwd.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_passwd"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_integral_constant",
+    hdrs = ["src/__support/CPP/type_traits/integral_constant.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_bool_constant",
+    hdrs = ["src/__support/CPP/type_traits/bool_constant.h"],
+    deps = [
+        ":__support_cpp_type_traits_integral_constant",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_false_type",
+    hdrs = ["src/__support/CPP/type_traits/false_type.h"],
+    deps = [
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_true_type",
+    hdrs = ["src/__support/CPP/type_traits/true_type.h"],
+    deps = [
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_is_const",
+    hdrs = ["src/__support/CPP/type_traits/is_const.h"],
+    deps = [
+        ":__support_cpp_type_traits_false_type",
+        ":__support_cpp_type_traits_true_type",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_is_reference",
+    hdrs = ["src/__support/CPP/type_traits/is_reference.h"],
+    deps = [
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_cpp_type_traits_false_type",
+        ":__support_cpp_type_traits_true_type",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_is_function",
+    hdrs = ["src/__support/CPP/type_traits/is_function.h"],
+    deps = [
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_cpp_type_traits_is_const",
+        ":__support_cpp_type_traits_is_reference",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_type_identity",
+    hdrs = ["src/__support/CPP/type_traits/type_identity.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_remove_all_extents",
+    hdrs = ["src/__support/CPP/type_traits/remove_all_extents.h"],
+    deps = [
+        ":__support_cpp_type_traits_type_identity",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_is_destructible",
+    hdrs = ["src/__support/CPP/type_traits/is_destructible.h"],
+    deps = [
+        ":__support_cpp_type_traits",
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_cpp_type_traits_false_type",
+        ":__support_cpp_type_traits_is_function",
+        ":__support_cpp_type_traits_is_reference",
+        ":__support_cpp_type_traits_remove_all_extents",
+        ":__support_cpp_type_traits_true_type",
+        ":__support_cpp_type_traits_type_identity",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_type_traits_is_trivially_destructible",
+    hdrs = ["src/__support/CPP/type_traits/is_trivially_destructible.h"],
+    deps = [
+        ":__support_cpp_type_traits_bool_constant",
+        ":__support_cpp_type_traits_is_destructible",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_pwd_field_tokenizer",
+    hdrs = ["src/__support/pwd/field_tokenizer.h"],
+    deps = [
+        ":__support_cpp_optional",
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "pwd_pwd_utils",
+    srcs = ["src/pwd/pwd_utils.cpp"],
+    hdrs = ["src/pwd/pwd_utils.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_dynamic_buffer",
+        ":__support_pwd_field_tokenizer",
+        ":__support_pwd_flat_file_db",
+        ":__support_str_to_integer",
+        ":hdr_errno_macros",
+        ":string_utils",
+        ":types_gid_t",
+        ":types_size_t",
+        ":types_struct_passwd",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_pwd_dynamic_buffer",
+    hdrs = ["src/__support/pwd/dynamic_buffer.h"],
+    deps = [
+        ":__support_cpp_limits",
+        ":__support_cpp_span",
+        ":__support_cpp_type_traits",
+        ":__support_cpp_type_traits_is_trivially_destructible",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":func_free",
+        ":func_realloc",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_pwd_flat_file_db",
+    hdrs = ["src/__support/pwd/flat_file_db.h"],
+    deps = [
+        ":__support_cpp_functional",
+        ":__support_cpp_limits",
+        ":__support_cpp_optional",
+        ":__support_cpp_span",
+        ":__support_error_or",
+        ":__support_file_file",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_dynamic_buffer",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
+        ":types_size_t",
     ],
 )
 
