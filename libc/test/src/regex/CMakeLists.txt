@@ -26,4 +26,19 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.regex.regexec
       libc.src.regex.regfree
   )
+
+  add_libc_test(
+    regex_test
+    SUITE
+      libc-regex-tests
+    SRCS
+      regex_test.cpp
+    DEPENDS
+      libc.hdr.regex_macros
+      libc.hdr.types.regex_t
+      libc.hdr.types.regmatch_t
+      libc.src.regex.regcomp
+      libc.src.regex.regexec
+      libc.src.regex.regfree
+  )
 endif()
