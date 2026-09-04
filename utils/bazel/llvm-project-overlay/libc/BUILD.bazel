@@ -20132,6 +20132,20 @@ libc_function(
 )
 
 libc_function(
+    name = "mount",
+    srcs = ["src/sys/mount/linux/mount.cpp"],
+    hdrs = ["src/sys/mount/mount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_mount",
+        ":errno",
+        ":sys_mount_mount",
+    ],
+)
+
+libc_function(
     name = "stat",
     srcs = ["src/sys/stat/linux/stat.cpp"],
     hdrs = ["src/sys/stat/stat.h"],
@@ -20172,6 +20186,35 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_swapon",
         ":errno",
         ":sys_swap_swapon",
+    ],
+)
+
+libc_function(
+    name = "umount",
+    srcs = ["src/sys/mount/linux/umount.cpp"],
+    hdrs = ["src/sys/mount/umount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_umount2",
+        ":errno",
+        ":sys_mount_umount",
+    ],
+)
+
+libc_function(
+    name = "umount2",
+    srcs = ["src/sys/mount/linux/umount2.cpp"],
+    hdrs = ["src/sys/mount/umount2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_umount2",
+        ":errno",
+        ":sys_mount_umount2",
     ],
 )
 
@@ -24884,6 +24927,52 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_mount",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/mount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_umount2",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/umount2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_mount",
+    hdrs = ["src/sys/mount/mount.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_umount",
+    hdrs = ["src/sys/mount/umount.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_umount2",
+    hdrs = ["src/sys/mount/umount2.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -28836,6 +28925,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_sys_swap_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_mount_macros",
+    hdrs = ["include/llvm-libc-macros/sys-mount-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_mount_macros",
+    hdrs = ["hdr/sys_mount_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_sys_mount_macros",
         ],
         "//conditions:default": [],
     }),
