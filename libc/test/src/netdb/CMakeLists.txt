@@ -28,3 +28,20 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  getnameinfo_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    getnameinfo_test.cpp
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.hdr.types.struct_sockaddr
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.include.sys_socket
+    libc.src.__support.CPP.string_view
+    libc.src.arpa.inet.htons
+    libc.src.netdb.getnameinfo
+)
