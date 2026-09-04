@@ -186,6 +186,14 @@ functions:
       - type: const char *__restrict
       - type: const char *__restrict
       - type: FILE *__restrict
+  - name: fmemopen
+    standards:
+      - posix
+    return_type: FILE *
+    arguments:
+      - type: void *
+      - type: size_t
+      - type: const char *
   - name: fopencookie
     standards:
       - gnu
