@@ -154,3 +154,16 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.mknodat
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  fstatat
+  SRCS
+    fstatat.cpp
+  HDRS
+    ../fstatat.h
+  DEPENDS
+    libc.hdr.types.struct_stat
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.src.__support.error_or
+    libc.src.errno.errno
+)
