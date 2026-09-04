@@ -58,6 +58,22 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: setresuid
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: uid_t
+      - type: uid_t
+      - type: uid_t
+  - name: setresgid
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: gid_t
+      - type: gid_t
+      - type: gid_t
   - name: __llvm_libc_syscall
     standards:
       - posix
