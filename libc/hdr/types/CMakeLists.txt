@@ -1516,6 +1516,19 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.union_sigval
 )
+
+add_proxy_header_library(
   iconv_t
+  HDRS
     iconv_t.h
+  FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.iconv_t
+)
+
+add_proxy_header_library(
+  struct_timezone
+  HDRS
+    struct_timezone.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_timezone
+)
