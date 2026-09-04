@@ -104,6 +104,64 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dir_scan_impl",
+    hdrs = ["dir_scan_impl.h"],
+    deps = [
+        ":dir_scan_result",
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:struct_dirent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/CPP:utility",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:error_or",
+        "//libc/src/stdlib:qsort_util",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "dir",
+    srcs = [
+        "dir.cpp",
+        "linux/dir.cpp",
+    ],
+    hdrs = ["dir.h"],
+    deps = [
+        ":dir_scan_impl",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:struct_dirent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fcntl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getdents64",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
+        "//libc/src/__support/OSUtil:linux_stat_kernel_statx_types",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "linux_file",
     srcs = ["linux/file.cpp"],
     hdrs = ["linux/file.h"],

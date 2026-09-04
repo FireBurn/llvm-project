@@ -361,6 +361,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dirent_overlay",
+    hdrs = ["dirent_overlay.h"],
+    target_compatible_with = select({
+        "//libc:full_build": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "stdio_ext_macros",
     hdrs = ["stdio_ext_macros.h"],
     deps = [

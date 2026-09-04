@@ -105,6 +105,7 @@ add_object_library(
     libc.src.__support.CPP.span
     libc.src.__support.threads.mutex
     libc.src.__support.error_or
+    libc.hdr.types.off_t
     libc.hdr.errno_macros
     libc.hdr.types.struct_dirent
 )
