@@ -600,3 +600,9 @@ add_macro_header(
   HDR
     syslog-macros.h
 )
+
+add_macro_header(
+  mntent_macros
+  HDR
+    mntent-macros.h
+)
