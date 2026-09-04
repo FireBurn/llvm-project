@@ -1,0 +1,21 @@
+add_custom_target(libc_sys_timerfd_unittests)
+
+add_libc_test(
+  timerfd_test
+  SUITE
+    libc_sys_timerfd_unittests
+  SRCS
+    timerfd_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_itimerspec
+    libc.include.sys_timerfd
+    libc.src.sys.timerfd.timerfd_create
+    libc.src.sys.timerfd.timerfd_gettime
+    libc.src.sys.timerfd.timerfd_settime
+    libc.src.unistd.close
+    libc.src.unistd.read
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
