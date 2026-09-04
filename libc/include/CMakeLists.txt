@@ -839,15 +839,6 @@ add_header_macro(
 )
 
 add_header_macro(
-  sys_mount
-  ../libc/include/sys/mount.yaml
-  sys/mount.h
-  DEPENDS
-    .llvm_libc_common_h
-    .llvm-libc-macros.sys_mount_macros
-)
-
-add_header_macro(
   sys_param
   ../libc/include/sys/param.yaml
   sys/param.h
@@ -899,6 +890,15 @@ add_header_macro(
     .llvm-libc-macros.sys_random_macros
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
+)
+
+add_header_macro(
+  sys_mount
+  ../libc/include/sys/mount.yaml
+  sys/mount.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_mount_macros
 )
 
 add_header_macro(
