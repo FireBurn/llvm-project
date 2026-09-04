@@ -598,6 +598,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "mbstate_t",
+    hdrs = ["mbstate_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_mbstate_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "pthread_attr_t",
     hdrs = ["pthread_attr_t.h"],
     deps = select({
