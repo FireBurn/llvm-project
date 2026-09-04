@@ -829,6 +829,20 @@ libc_function(
 )
 
 libc_function(
+    name = "getlogin",
+    srcs = ["getlogin.cpp"],
+    hdrs = ["getlogin.h"],
+    deps = [
+        ":getlogin_r",
+        "//libc/hdr:limits_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "getopt",
     srcs = ["getopt.cpp"],
     hdrs = ["getopt.h"],
@@ -902,6 +916,23 @@ libc_function(
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getlogin_r",
+    srcs = ["getlogin_r.cpp"],
+    hdrs = ["getlogin_r.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdlib:environ_internal",
+        "//libc/src/string:utils",
     ],
 )
 

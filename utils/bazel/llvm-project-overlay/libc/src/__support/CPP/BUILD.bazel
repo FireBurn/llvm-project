@@ -316,3 +316,119 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "type_traits_integral_constant",
+    hdrs = ["type_traits/integral_constant.h"],
+    deps = [
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_bool_constant",
+    hdrs = ["type_traits/bool_constant.h"],
+    deps = [
+        ":type_traits_integral_constant",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_false_type",
+    hdrs = ["type_traits/false_type.h"],
+    deps = [
+        ":type_traits_bool_constant",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_true_type",
+    hdrs = ["type_traits/true_type.h"],
+    deps = [
+        ":type_traits_bool_constant",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_is_const",
+    hdrs = ["type_traits/is_const.h"],
+    deps = [
+        ":type_traits_false_type",
+        ":type_traits_true_type",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_is_reference",
+    hdrs = ["type_traits/is_reference.h"],
+    deps = [
+        ":type_traits_bool_constant",
+        ":type_traits_false_type",
+        ":type_traits_true_type",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_is_function",
+    hdrs = ["type_traits/is_function.h"],
+    deps = [
+        ":type_traits_bool_constant",
+        ":type_traits_is_const",
+        ":type_traits_is_reference",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_type_identity",
+    hdrs = ["type_traits/type_identity.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_remove_all_extents",
+    hdrs = ["type_traits/remove_all_extents.h"],
+    deps = [
+        ":type_traits_type_identity",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_is_destructible",
+    hdrs = ["type_traits/is_destructible.h"],
+    deps = [
+        ":type_traits",
+        ":type_traits_bool_constant",
+        ":type_traits_false_type",
+        ":type_traits_is_function",
+        ":type_traits_is_reference",
+        ":type_traits_remove_all_extents",
+        ":type_traits_true_type",
+        ":type_traits_type_identity",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "type_traits_is_trivially_destructible",
+    hdrs = ["type_traits/is_trivially_destructible.h"],
+    deps = [
+        ":type_traits_bool_constant",
+        ":type_traits_is_destructible",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)

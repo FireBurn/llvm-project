@@ -656,6 +656,54 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pwd_field_tokenizer",
+    hdrs = ["pwd/field_tokenizer.h"],
+    deps = [
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "dynamic_buffer",
+    hdrs = ["dynamic_buffer.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/CPP:type_traits_is_trivially_destructible",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "pwd_flat_file_db",
+    hdrs = ["pwd/flat_file_db.h"],
+    deps = [
+        ":dynamic_buffer",
+        ":error_or",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:functional",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_bind",
     hdrs = ["elf/bind.h"],
     deps = [

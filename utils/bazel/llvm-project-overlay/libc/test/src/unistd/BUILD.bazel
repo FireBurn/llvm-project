@@ -116,6 +116,19 @@ libc_test(
 )
 
 libc_test(
+    name = "getlogin_test",
+    srcs = ["getlogin_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdlib:setenv",
+        "//libc/src/stdlib:unsetenv",
+        "//libc/src/unistd:getlogin",
+        "//libc/src/unistd:getlogin_r",
+    ],
+)
+
+libc_test(
     name = "getopt_long_test",
     srcs = ["getopt_long_test.cpp"],
     deps = [
