@@ -83,6 +83,12 @@ add_header(
 )
 
 add_header(
+  sys_msg_macros
+  HDR
+    sys-msg-macros.h
+)
+
+add_header(
   sys_personality_macros
   HDR
     sys-personality-macros.h

@@ -72,6 +72,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("sys/kd"),
+    libc_header_info("sys/msg"),
     libc_header_info(
         "sys/prctl",
         has_def_template = True,
@@ -782,6 +783,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_msqid_ds",
+    hdrs = ["llvm-libc-types/struct_msqid_ds.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
@@ -970,4 +976,9 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_sys_mount_macros",
     hdrs = ["llvm-libc-macros/sys-mount-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_msg_macros",
+    hdrs = ["llvm-libc-macros/sys-msg-macros.h"],
 )

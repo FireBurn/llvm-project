@@ -1,0 +1,31 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/msg.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "msg_test",
+    srcs = ["msg_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_msqid_ds",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_msg_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/sys/msg:msgctl",
+        "//libc/src/sys/msg:msgget",
+        "//libc/src/sys/msg:msgrcv",
+        "//libc/src/sys/msg:msgsnd",
+        "//libc/src/sys/msg:sys_msg_msgctl",
+        "//libc/src/sys/msg:sys_msg_msgget",
+        "//libc/src/sys/msg:sys_msg_msgrcv",
+        "//libc/src/sys/msg:sys_msg_msgsnd",
+    ],
+)

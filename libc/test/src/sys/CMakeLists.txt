@@ -1,3 +1,4 @@
+add_subdirectory(msg)
 add_subdirectory(mman)
 add_subdirectory(mount)
 add_subdirectory(personality)

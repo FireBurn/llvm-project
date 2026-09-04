@@ -471,3 +471,14 @@ libc_support_library(
         "//conditions:default": [],
     }),
 )
+
+libc_support_library(
+    name = "sys_msg_macros",
+    hdrs = ["sys_msg_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_sys_msg_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
