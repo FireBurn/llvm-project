@@ -352,6 +352,8 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # dirent.h entrypoints
     libc.src.dirent.alphasort
+    libc.src.dirent.scandir
+    libc.src.dirent.versionsort
     libc.src.dirent.closedir
     libc.src.dirent.dirfd
     libc.src.dirent.opendir
