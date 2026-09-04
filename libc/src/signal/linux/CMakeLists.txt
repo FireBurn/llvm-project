@@ -177,3 +177,16 @@ add_entrypoint_object(
     libc.hdr.types.sigset_t
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  sigsuspend
+  SRCS
+    sigsuspend.cpp
+  HDRS
+    ../sigsuspend.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.sigset_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigsuspend
+    libc.src.errno.errno
+)
