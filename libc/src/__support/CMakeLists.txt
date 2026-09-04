@@ -514,3 +514,30 @@ endif()
 if(LLVM_LIBC_FULL_BUILD)
   add_subdirectory(regex)
 endif()
+
+add_header_library(
+  field_tokenizer
+  HDRS
+    field_tokenizer.h
+  DEPENDS
+    libc.src.__support.CPP.optional
+    libc.src.__support.CPP.span
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_header_library(
+  flat_file_db
+  HDRS
+    flat_file_db.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.optional
+    libc.src.__support.CPP.span
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.error_or
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.string.string_utils
+)

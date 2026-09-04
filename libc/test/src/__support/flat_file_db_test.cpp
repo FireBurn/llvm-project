@@ -14,8 +14,8 @@
 #include "hdr/errno_macros.h"
 #include "src/__support/CPP/span.h"
 #include "src/__support/File/file.h"
-#include "src/pwd/field_tokenizer.h"
-#include "src/pwd/flat_file_db.h"
+#include "src/__support/field_tokenizer.h"
+#include "src/__support/flat_file_db.h"
 #include "src/stdio/remove.h"
 #include "src/string/string_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
@@ -56,7 +56,7 @@ class LlvmLibcFlatFileDbTest
 } // namespace
 
 namespace LIBC_NAMESPACE_DECL {
-namespace pwd {
+namespace internal {
 
 template <>
 inline bool parse_line<SimpleTestEntry>(cpp::span<char> line,
@@ -77,7 +77,7 @@ inline bool parse_line<SimpleTestEntry>(cpp::span<char> line,
   return true;
 }
 
-} // namespace pwd
+} // namespace internal
 } // namespace LIBC_NAMESPACE_DECL
 
 TEST_F(LlvmLibcFlatFileDbTest, GetNextAndLookup) {
@@ -85,7 +85,7 @@ TEST_F(LlvmLibcFlatFileDbTest, GetNextAndLookup) {
   HermeticFile test_file(libc_make_test_file_path("flat_db_test.test"),
                          content);
 
-  LIBC_NAMESPACE::pwd::FlatFileDatabase<SimpleTestEntry> db(
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
       test_file.get_path());
   char buffer[128];
   SimpleTestEntry entry;
@@ -128,7 +128,7 @@ TEST_F(LlvmLibcFlatFileDbTest, LookupNotFound) {
   HermeticFile test_file(libc_make_test_file_path("flat_db_not_found.test"),
                          content);
 
-  LIBC_NAMESPACE::pwd::FlatFileDatabase<SimpleTestEntry> db(
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
       test_file.get_path());
   char buffer[128];
   SimpleTestEntry entry;
@@ -148,7 +148,7 @@ TEST_F(LlvmLibcFlatFileDbTest, TruncatedLineReturnsErange) {
   HermeticFile test_file(libc_make_test_file_path("flat_db_trunc.test"),
                          content);
 
-  LIBC_NAMESPACE::pwd::FlatFileDatabase<SimpleTestEntry> db(
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
       test_file.get_path());
   char small_buffer[8];
   SimpleTestEntry entry;
@@ -165,7 +165,7 @@ TEST_F(LlvmLibcFlatFileDbTest, MalformedLineReturnsEinval) {
   HermeticFile test_file(libc_make_test_file_path("flat_db_malformed.test"),
                          content);
 
-  LIBC_NAMESPACE::pwd::FlatFileDatabase<SimpleTestEntry> db(
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
       test_file.get_path());
   char buffer[128];
   SimpleTestEntry entry;
