@@ -8,6 +8,36 @@ types:
 enums: []
 objects: []
 functions:
+  - name: endgrent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
+  - name: getgrent
+    standards:
+      - posix
+    return_type: struct group *
+    arguments:
+      - type: void
+  - name: getgrgid
+    standards:
+      - posix
+    return_type: struct group *
+    arguments:
+      - type: gid_t
+  - name: getgrnam
+    standards:
+      - posix
+    return_type: struct group *
+    arguments:
+      - type: const char *
+  - name: setgrent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
   - name: setgroups
     standards:
       - gnu
