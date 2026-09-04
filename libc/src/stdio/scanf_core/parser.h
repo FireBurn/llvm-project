@@ -165,8 +165,13 @@ public:
           ++cur_pos;
           section.scan_set = scan_set;
         } else {
-          // if the end of the string was encountered, this is not a valid set.
+          // The end of the string came before the set was closed, so there is
+          // no conversion here to carry out. An empty section ends the scan
+          // where the broken specifier is, rather than going on to match the
+          // rest of the format as though it were text.
           section.has_conv = false;
+          section.raw_string = cpp::string_view();
+          return section;
         }
       }
     } else {
