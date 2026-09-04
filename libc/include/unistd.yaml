@@ -189,6 +189,40 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: getlogin
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: void
+  - name: getlogin_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: char *
+      - type: size_t
+  - name: getgroups
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: gid_t *
+  - name: ttyname
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: int
+  - name: ttyname_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: char *
+      - type: size_t
   - name: syscall
     standards:
       - posix
@@ -486,13 +520,6 @@ functions:
     return_type: uid_t
     arguments:
       - type: void
-  - name: getgroups
-    standards:
-      - posix
-    return_type: int
-    arguments:
-      - type: int
-      - type: gid_t *
   - name: getdomainname
     standards:
       - gnu
