@@ -1,0 +1,21 @@
+add_entrypoint_object(
+  ioperm
+  SRCS
+    ioperm.cpp
+  HDRS
+    ../ioperm.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioperm
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  iopl
+  SRCS
+    iopl.cpp
+  HDRS
+    ../iopl.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.iopl
+    libc.src.errno.errno
+)
