@@ -34,6 +34,22 @@ functions:
     arguments:
       - type: const struct dirent **
       - type: const struct dirent **
+  - name: versionsort
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct dirent **
+      - type: const struct dirent **
+  - name: scandir
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct dirent ***
+      - type: int (*)(const struct dirent *)
+      - type: int (*)(const struct dirent **, const struct dirent **)
   - name: closedir
     standards:
       - posix
