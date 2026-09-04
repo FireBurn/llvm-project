@@ -230,6 +230,22 @@ public:
   LIBC_INLINE bool is_writable() const { return write_allowed(); }
   LIBC_INLINE bool is_line_buffered() const { return bufmode == _IOLBF; }
 
+  // Bytes already read into the buffer that the caller has not consumed yet.
+  // Code that mixes buffered reads with the underlying descriptor needs it to
+  // know how far the file position has really advanced.
+  LIBC_INLINE size_t unread_buffered_bytes() {
+    FileLock lock(this);
+    return prev_op == FileOp::READ && read_limit > pos ? read_limit - pos : 0;
+  }
+
+  // Sets the error indicator. There is no standard way to do this, and code
+  // that wraps a stream needs it to report a failure of its own through the
+  // stream the caller is holding.
+  LIBC_INLINE void set_error() {
+    FileLock lock(this);
+    err = true;
+  }
+
   // Throws away whatever is buffered without writing it out, which is the
   // point: callers use it to abandon output rather than flush it.
   LIBC_INLINE void discard_buffer() {
