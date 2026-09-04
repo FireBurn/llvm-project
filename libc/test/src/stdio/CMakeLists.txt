@@ -678,3 +678,17 @@ endif()
 
 add_subdirectory(scanf_core)
 add_subdirectory(testdata)
+
+add_libc_test(
+  putc_return_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    putc_return_test.cpp
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fputc
+    libc.src.stdio.putc
+)
