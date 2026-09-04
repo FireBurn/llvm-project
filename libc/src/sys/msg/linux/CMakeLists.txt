@@ -1,0 +1,52 @@
+add_entrypoint_object(
+  msgget
+  SRCS
+    msgget.cpp
+  HDRS
+    ../msgget.h
+  DEPENDS
+    libc.hdr.types.key_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  msgctl
+  SRCS
+    msgctl.cpp
+  HDRS
+    ../msgctl.h
+  DEPENDS
+    libc.hdr.types.struct_msqid_ds
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  msgsnd
+  SRCS
+    msgsnd.cpp
+  HDRS
+    ../msgsnd.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  msgrcv
+  SRCS
+    msgrcv.cpp
+  HDRS
+    ../msgrcv.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
