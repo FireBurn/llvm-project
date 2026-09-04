@@ -1,0 +1,31 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/shm.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "shm_test",
+    srcs = ["linux/shm_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_sys_ipc_macros",
+        "//libc:hdr_sys_shm_macros",
+        "//libc:shmat",
+        "//libc:shmctl",
+        "//libc:shmdt",
+        "//libc:shmget",
+        "//libc:sys_shm_shmat",
+        "//libc:sys_shm_shmctl",
+        "//libc:sys_shm_shmdt",
+        "//libc:sys_shm_shmget",
+        "//libc:types_struct_shmid_ds",
+    ],
+)
