@@ -21459,3 +21459,19 @@ libc_support_library(
         ":hdr_stdint_proxy",
     ],
 )
+
+libc_support_library(
+    name = "__support_elf_relocation",
+    hdrs = ["src/__support/elf/relocation.h"],
+    deps = [
+        ":__support_elf_elf_types",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
