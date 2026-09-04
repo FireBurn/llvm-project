@@ -637,6 +637,45 @@ add_entrypoint_object(
     libc.src.__support.File.file
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
+    libc.src.stdlib.environ_internal
+)
+
+add_entrypoint_object(
+  getopt_long
+  SRCS
+    getopt_long.cpp
+  HDRS
+    getopt_long.h
+    getopt_long_impl.h
+    getopt_common.h
+  DEPENDS
+    libc.hdr.getopt_macros
+    libc.include.llvm-libc-types.struct_option
+    libc.src.__support.CPP.optional
+    libc.src.__support.CPP.string_view
+    libc.src.stdio.fprintf
+    libc.src.stdio.stderr
+    libc.src.stdlib.environ_internal
+    libc.src.unistd.getopt
+)
+
+add_entrypoint_object(
+  getopt_long_only
+  SRCS
+    getopt_long_only.cpp
+  HDRS
+    getopt_long_only.h
+    getopt_long_impl.h
+    getopt_common.h
+  DEPENDS
+    libc.hdr.getopt_macros
+    libc.include.llvm-libc-types.struct_option
+    libc.src.__support.CPP.optional
+    libc.src.__support.CPP.string_view
+    libc.src.stdio.fprintf
+    libc.src.stdio.stderr
+    libc.src.stdlib.environ_internal
+    libc.src.unistd.getopt
 )
 
 add_entrypoint_object(
@@ -686,3 +725,6 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.getentropy
 )
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.pwd.pwd_utils
+    libc.src.stdlib.environ_internal
