@@ -14,6 +14,18 @@ functions:
     return_type: size_t
     arguments:
       - type: FILE *
+  - name: __freadahead
+    standards:
+      - gnu
+    return_type: size_t
+    arguments:
+      - type: FILE *
+  - name: __fseterr
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: FILE *
   - name: __fpending
     standards:
       - gnu
