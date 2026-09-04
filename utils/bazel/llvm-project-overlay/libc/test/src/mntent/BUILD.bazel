@@ -1,0 +1,34 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc mntent.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "mntent_test",
+    srcs = ["mntent_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:addmntent",
+        "//libc:close",
+        "//libc:endmntent",
+        "//libc:getmntent",
+        "//libc:getmntent_r",
+        "//libc:hasmntopt",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:remove",
+        "//libc:setmntent",
+        "//libc:types_FILE",
+        "//libc:types_struct_mntent",
+        "//libc:write",
+    ],
+)
