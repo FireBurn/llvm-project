@@ -442,3 +442,13 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_hash",
+    hdrs = ["elf/hash.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)

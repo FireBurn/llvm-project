@@ -18,3 +18,11 @@ libc_test(
         "//libc/src/__support:elf_elf_types",
     ],
 )
+
+libc_test(
+    name = "hash_test",
+    srcs = ["hash_test.cpp"],
+    deps = [
+        "//libc/src/__support:elf_hash",
+    ],
+)
