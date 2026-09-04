@@ -1571,6 +1571,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.unistd.execvp
     libc.src.unistd.fork
     libc.src.unistd.getopt
+    libc.src.unistd.getopt_long
+    libc.src.unistd.getopt_long_only
     libc.src.unistd.optarg
     libc.src.unistd.opterr
     libc.src.unistd.optind
