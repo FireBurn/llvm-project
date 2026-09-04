@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_support_library")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -14,6 +14,37 @@ package(
 )
 
 licenses(["notice"])
+
+libc_function(
+    name = "nl_langinfo_l",
+    srcs = ["nl_langinfo_l.cpp"],
+    hdrs = ["nl_langinfo_l.h"],
+    deps = [
+        ":langinfo_utils",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:nl_item",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+    ],
+)
+
+libc_function(
+    name = "nl_langinfo",
+    srcs = ["nl_langinfo.cpp"],
+    hdrs = ["nl_langinfo.h"],
+    deps = [
+        ":langinfo_utils",
+        ":nl_langinfo_l",
+        "//libc/hdr/types:nl_item",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+    ],
+)
 
 libc_support_library(
     name = "langinfo_utils",

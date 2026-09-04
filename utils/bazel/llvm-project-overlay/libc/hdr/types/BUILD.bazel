@@ -598,6 +598,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "iconv_t",
+    hdrs = ["iconv_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_iconv_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "id_t",
     hdrs = ["id_t.h"],
     deps = select({
@@ -620,6 +629,15 @@ libc_support_library(
     hdrs = ["mbstate_t.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_mbstate_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "nl_item",
+    hdrs = ["nl_item.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_nl_item"],
         "//conditions:default": [],
     }),
 )
