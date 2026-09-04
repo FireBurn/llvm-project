@@ -1,0 +1,103 @@
+add_entrypoint_object(
+  __fbufsize
+  SRCS
+    __fbufsize.cpp
+  HDRS
+    ../__fbufsize.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __freading
+  SRCS
+    __freading.cpp
+  HDRS
+    ../__freading.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __fwriting
+  SRCS
+    __fwriting.cpp
+  HDRS
+    ../__fwriting.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __freadable
+  SRCS
+    __freadable.cpp
+  HDRS
+    ../__freadable.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __fwritable
+  SRCS
+    __fwritable.cpp
+  HDRS
+    ../__fwritable.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __flbf
+  SRCS
+    __flbf.cpp
+  HDRS
+    ../__flbf.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __fpurge
+  SRCS
+    __fpurge.cpp
+  HDRS
+    ../__fpurge.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __fpending
+  SRCS
+    __fpending.cpp
+  HDRS
+    ../__fpending.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
