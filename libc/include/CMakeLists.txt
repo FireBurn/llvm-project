@@ -879,14 +879,6 @@ add_header_macro(
 )
 
 add_header_macro(
-  sys_errno
-  ../libc/include/sys/errno.yaml
-  sys/errno.h
-  DEPENDS
-    .llvm_libc_common_h
-)
-
-add_header_macro(
   sys_resource
   ../libc/include/sys/resource.yaml
   sys/resource.h
