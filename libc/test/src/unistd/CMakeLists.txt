@@ -1160,3 +1160,71 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
+
+add_libc_test(
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+)
+  SUITE
+    libc-unistd-tests
+  SRCS
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
