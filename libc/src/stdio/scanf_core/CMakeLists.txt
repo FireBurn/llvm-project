@@ -59,6 +59,7 @@ add_header_library(
   HDRS
     scanf_main.h
   DEPENDS
+    libc.hdr.stdio_macros
     .parser
     .reader
     .converter
@@ -72,6 +73,7 @@ add_header_library(
   HDRS
     reader.h
   DEPENDS
+    libc.src.__support.ctype_utils
     libc.src.__support.macros.attributes
 )
 
