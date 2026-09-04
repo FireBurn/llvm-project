@@ -45,6 +45,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     # poll.h entrypoints
     libc.src.poll.poll
 
+    # iconv.h entrypoints
+    libc.src.iconv.iconv
+    libc.src.iconv.iconv_close
+    libc.src.iconv.iconv_open
+
     # glob.h entrypoints
     libc.src.glob.glob
     libc.src.glob.globfree
