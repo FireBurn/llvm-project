@@ -560,3 +560,9 @@ add_macro_header(
   HDR
     glob-macros.h
 )
+
+add_macro_header(
+  sys_file_macros
+  HDR
+    sys-file-macros.h
+)
