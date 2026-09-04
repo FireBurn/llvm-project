@@ -28,7 +28,10 @@ LLVM_LIBC_FUNCTION(int, fputc, (int c, ::FILE *stream)) {
     // The stream should be in an error state in this case.
     return EOF;
   }
-  return 0;
+  // C requires the character written, taken as an unsigned char, not a
+  // success code. Returning zero made every caller that compares the result
+  // against the character it passed conclude the write had failed.
+  return static_cast<int>(uc);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
