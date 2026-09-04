@@ -1,0 +1,19 @@
+add_custom_target(libc_sys_fanotify_unittests)
+
+add_libc_test(
+  fanotify_test
+  SUITE
+    libc_sys_fanotify_unittests
+  SRCS
+    fanotify_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.include.sys_fanotify
+    libc.src.__support.libc_errno
+    libc.src.sys.fanotify.fanotify_init
+    libc.src.sys.fanotify.fanotify_mark
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
