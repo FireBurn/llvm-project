@@ -207,6 +207,38 @@ public:
     return static_storage;
   }
 
+  // Bytes written to the stream but not yet handed to the system. The buffer
+  // position only counts as pending output when the last operation was a
+  // write; after a read it is a position within buffered input instead.
+  LIBC_INLINE size_t pending_write_bytes() {
+    FileLock lock(this);
+    return prev_op == FileOp::WRITE ? pos : 0;
+  }
+
+  // The accessors <stdio_ext.h> exposes. They exist so that code which would
+  // otherwise reach into FILE, gnulib above all, can ask instead.
+  LIBC_INLINE size_t buffer_size() const { return bufsize; }
+  LIBC_INLINE bool last_op_was_read() {
+    FileLock lock(this);
+    return prev_op == FileOp::READ;
+  }
+  LIBC_INLINE bool last_op_was_write() {
+    FileLock lock(this);
+    return prev_op == FileOp::WRITE;
+  }
+  LIBC_INLINE bool is_readable() const { return read_allowed(); }
+  LIBC_INLINE bool is_writable() const { return write_allowed(); }
+  LIBC_INLINE bool is_line_buffered() const { return bufmode == _IOLBF; }
+
+  // Throws away whatever is buffered without writing it out, which is the
+  // point: callers use it to abandon output rather than flush it.
+  LIBC_INLINE void discard_buffer() {
+    FileLock lock(this);
+    pos = 0;
+    read_limit = 0;
+    prev_op = FileOp::NONE;
+  }
+
   // Buffered write of |len| bytes from |data| without the file lock.
   FileIOResult write_unlocked(const void *data, size_t len);
 
