@@ -156,6 +156,18 @@ libc_test(
 )
 
 libc_test(
+    name = "random_test",
+    srcs = ["random_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:initstate",
+        "//libc:random",
+        "//libc:setstate",
+        "//libc:srandom",
+    ],
+)
+
+libc_test(
     name = "realpath_test",
     srcs = ["realpath_test.cpp"],
     deps = [

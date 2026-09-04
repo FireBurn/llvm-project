@@ -233,6 +233,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.bsearch
     libc.src.stdlib.div
     libc.src.stdlib.getloadavg
+    libc.src.stdlib.initstate
     libc.src.stdlib.labs
     libc.src.stdlib.ldiv
     libc.src.stdlib.llabs
@@ -245,8 +246,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.qsort
     libc.src.stdlib.qsort_r
     libc.src.stdlib.rand
+    libc.src.stdlib.random
     libc.src.stdlib.realpath
+    libc.src.stdlib.setstate
     libc.src.stdlib.srand
+    libc.src.stdlib.srandom
     libc.src.stdlib.strfromd
     libc.src.stdlib.strfromf
     # TODO: long double support is buggy with clang-11. Re-enable when buildbots are upgraded.
