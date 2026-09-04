@@ -410,6 +410,12 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.io.ioperm
     libc.src.sys.io.iopl
 
+    # sys/msg.h entrypoints
+    libc.src.sys.msg.msgctl
+    libc.src.sys.msg.msgget
+    libc.src.sys.msg.msgrcv
+    libc.src.sys.msg.msgsnd
+
     # sys/mount.h entrypoints
     libc.src.sys.mount.mount
     libc.src.sys.mount.umount
