@@ -960,3 +960,23 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  getresuid_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getresuid_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.src.unistd.getegid
+    libc.src.unistd.geteuid
+    libc.src.unistd.getgid
+    libc.src.unistd.getresgid
+    libc.src.unistd.getresuid
+    libc.src.unistd.getuid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
