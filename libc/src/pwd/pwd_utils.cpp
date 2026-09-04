@@ -15,8 +15,8 @@
 #include "hdr/errno_macros.h"
 #include "hdr/types/struct_passwd.h"
 #include "src/__support/CPP/span.h"
+#include "src/__support/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
-#include "src/pwd/flat_file_db.h"
 #include "src/string/string_utils.h"
 
 #ifndef LIBC_COPT_PWD_FILE_PATH
@@ -32,7 +32,7 @@ ErrorOr<struct passwd> parse_passwd_line(char *line) {
 
   struct passwd pwd;
   size_t len = internal::string_length(line);
-  if (!parse_line(cpp::span<char>(line, len + 1), &pwd))
+  if (!internal::parse_line(cpp::span<char>(line, len + 1), &pwd))
     return Error(EINVAL);
 
   return pwd;
@@ -42,7 +42,7 @@ ErrorOr<struct passwd> parse_passwd_line(char *line) {
 
 namespace passwd {
 
-static LIBC_CONSTINIT pwd::FlatFileDatabase<struct passwd>
+static LIBC_CONSTINIT internal::FlatFileDatabase<struct passwd>
     db(LIBC_COPT_PWD_FILE_PATH);
 // Note: These static buffers are process-global and NOT protected by a mutex
 // at this stage. POSIX getpwent is non-reentrant.
