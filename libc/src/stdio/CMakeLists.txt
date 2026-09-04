@@ -394,3 +394,17 @@ add_stdio_entrypoint_object(vprintf)
 add_stdio_entrypoint_object(vfprintf)
 add_stdio_entrypoint_object(vscanf)
 add_stdio_entrypoint_object(vfscanf)
+
+add_entrypoint_object(
+  dprintf
+  ALIAS
+  DEPENDS
+    .generic.dprintf
+)
+
+add_entrypoint_object(
+  vdprintf
+  ALIAS
+  DEPENDS
+    .generic.vdprintf
+)
