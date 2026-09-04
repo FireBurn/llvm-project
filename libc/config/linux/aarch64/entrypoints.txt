@@ -317,7 +317,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # libc.src.sys.epoll.epoll_pwait2
 
     # sys/file.h entrypoints
-    libc.src.sys.file.flock
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl
@@ -378,6 +377,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.socket.recvmsg
     libc.src.sys.socket.sendmmsg
     libc.src.sys.socket.sendmsg
+
+    # sys/file.h entrypoints
+    libc.src.sys.file.flock
 
     # sys/stat.h entrypoints
     libc.src.sys.stat.chmod
