@@ -1,0 +1,36 @@
+add_entrypoint_object(
+  glob
+  SRCS
+    glob.cpp
+  HDRS
+    glob.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fnmatch_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.func.realloc
+    libc.hdr.glob_macros
+    libc.hdr.limits_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.glob_t
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.dirent.readdir
+    libc.src.fnmatch.fnmatch
+    libc.src.string.string_utils
+    libc.src.sys.stat.stat
+)
+
+add_entrypoint_object(
+  globfree
+  SRCS
+    globfree.cpp
+  HDRS
+    globfree.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.types.glob_t
+)
