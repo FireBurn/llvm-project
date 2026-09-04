@@ -244,6 +244,10 @@
 #define _POSIX_PATH_MAX 256
 #endif
 
+#ifndef _POSIX_NGROUPS_MAX
+#define _POSIX_NGROUPS_MAX 8
+#endif
+
 #ifndef _POSIX_THREAD_DESTRUCTOR_ITERATIONS
 #define _POSIX_THREAD_DESTRUCTOR_ITERATIONS 4
 #endif
@@ -274,6 +278,12 @@
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 64
 #endif // HOST_NAME_MAX
+
+/// The number of supplementary group IDs a process may have. Linux caps this
+/// at the value of /proc/sys/kernel/ngroups_max, which cannot exceed this.
+#ifndef NGROUPS_MAX
+#define NGROUPS_MAX 65536
+#endif // NGROUPS_MAX
 
 #endif // __linux__
 

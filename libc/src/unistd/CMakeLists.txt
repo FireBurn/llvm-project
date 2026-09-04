@@ -603,3 +603,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.setresgid
 )
+
+add_entrypoint_object(
+  getgroups
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getgroups
+)
