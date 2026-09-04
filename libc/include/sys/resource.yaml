@@ -2,6 +2,12 @@ header: sys/resource.h
 standards:
   - posix
 macros:
+  - macro_name: RLIM_INFINITY
+    macro_header: sys-resource-macros.h
+  - macro_name: RLIM_SAVED_CUR
+    macro_header: sys-resource-macros.h
+  - macro_name: RLIM_SAVED_MAX
+    macro_header: sys-resource-macros.h
   - macro_name: RLIMIT_CPU
     macro_header: sys-resource-macros.h
   - macro_name: RUSAGE_SELF
