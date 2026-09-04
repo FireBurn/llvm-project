@@ -98,3 +98,44 @@ add_entrypoint_object(
     libc.src.__support.File.dir
     libc.src.__support.File.platform_dir
 )
+
+add_entrypoint_object(
+  alphasort
+  SRCS
+    alphasort.cpp
+  HDRS
+    alphasort.h
+  DEPENDS
+    libc.include.dirent
+    libc.hdr.types.struct_dirent
+)
+
+add_entrypoint_object(
+  versionsort
+  SRCS
+    versionsort.cpp
+  HDRS
+    versionsort.h
+  DEPENDS
+    libc.include.dirent
+    libc.hdr.types.struct_dirent
+    libc.src.string.strverscmp
+)
+
+add_entrypoint_object(
+  scandir
+  SRCS
+    scandir.cpp
+  HDRS
+    scandir.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.func.realloc
+    libc.hdr.types.struct_dirent
+    libc.include.dirent
+    libc.src.__support.File.dir
+    libc.src.__support.File.platform_dir
+    libc.src.errno.errno
+)
