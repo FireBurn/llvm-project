@@ -534,6 +534,18 @@ add_header_macro(
 )
 
 add_header_macro(
+  mntent
+  ../libc/include/mntent.yaml
+  mntent.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.mntent_macros
+    .llvm-libc-types.struct_mntent
+    .llvm-libc-types.FILE
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   utime
   ../libc/include/utime.yaml
   utime.h
