@@ -2411,3 +2411,13 @@ alias(
     name = "wmemset",
     actual = "//libc/src/wchar:wmemset",
 )
+
+libc_support_library(
+    name = "__support_elf_hash",
+    hdrs = ["src/__support/elf/hash.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
