@@ -199,6 +199,23 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  execvp
+  SRCS
+    execvp.cpp
+  HDRS
+    ../execvp.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.limits_macros
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+    libc.src.stdlib.getenv
+    libc.src.string.string_utils
+    libc.src.unistd.environ
+)
+
+add_entrypoint_object(
   execve
   SRCS
     execve.cpp
