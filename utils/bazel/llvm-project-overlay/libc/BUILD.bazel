@@ -17651,6 +17651,40 @@ libc_support_library(
 )
 
 libc_function(
+    name = "mkdtemp",
+    srcs = ["src/stdlib/linux/mkdtemp.cpp"],
+    hdrs = ["src/stdlib/mkdtemp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_mkdir",
+        ":hdr_sys_stat_macros",
+        ":stdlib_linux_mktemp_util",
+    ],
+)
+
+libc_function(
+    name = "mktemp",
+    srcs = ["src/stdlib/linux/mktemp.cpp"],
+    hdrs = ["src/stdlib/mktemp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_stat_kernel_statx_types",
+        ":__support_osutil_linux_syscall_wrappers_statx",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":stdlib_linux_mktemp_util",
+        ":stdlib_mktemp",
+    ],
+)
+
+libc_function(
     name = "qsort",
     srcs = ["src/stdlib/qsort.cpp"],
     hdrs = ["src/stdlib/qsort.h"],
@@ -19342,6 +19376,22 @@ libc_function(
         ":hdr_errno_macros",
         ":types_siginfo_t",
         ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "stat",
+    srcs = ["src/sys/stat/linux/stat.cpp"],
+    hdrs = ["src/sys/stat/stat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":hdr_fcntl_macros",
+        ":sys_stat_stat",
+        ":types_struct_stat",
     ],
 )
 
@@ -22431,6 +22481,32 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "stdlib_mktemp",
+    hdrs = ["src/stdlib/mktemp.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_linux_mktemp_util",
+    hdrs = ["src/stdlib/linux/mktemp_util.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_array",
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_locale_t",
     hdrs = ["include/llvm-libc-types/locale_t.h"],
 )
@@ -22620,6 +22696,15 @@ libc_support_library(
 libc_support_library(
     name = "sys_stat_fstat",
     hdrs = ["src/sys/stat/fstat.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "sys_stat_stat",
+    hdrs = ["src/sys/stat/stat.h"],
     deps = [
         ":__support_macros_config",
         ":types_struct_stat",
