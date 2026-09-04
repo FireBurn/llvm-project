@@ -637,3 +637,4 @@ add_generic_entrypoint_object(
     libc.src.__support.File.file
     libc.src.stdio.stderr
 )
+
