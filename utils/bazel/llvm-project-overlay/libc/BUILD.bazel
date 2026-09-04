@@ -25725,6 +25725,18 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "versionsort",
+    srcs = ["src/dirent/versionsort.cpp"],
+    hdrs = ["src/dirent/versionsort.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":strverscmp",
+        ":types_struct_dirent",
+    ],
+)
+
 libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_rt_sigsuspend",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigsuspend.h"],
