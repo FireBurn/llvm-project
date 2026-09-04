@@ -11,6 +11,16 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "versionsort_test",
+    srcs = ["versionsort_test.cpp"],
+    deps = [
+        "//libc:strcpy",
+        "//libc:types_struct_dirent",
+        "//libc:versionsort",
+    ],
+)
+
+libc_test(
     name = "rewinddir_test",
     srcs = ["rewinddir_test.cpp"],
     deps = [
