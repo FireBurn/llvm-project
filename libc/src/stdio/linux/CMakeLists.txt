@@ -82,3 +82,53 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
 )
+
+add_object_library(
+  popen_registry
+  SRCS
+    popen_registry.cpp
+  HDRS
+    popen_registry.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.pid_t
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.mutex
+    libc.src.__support.threads.mutex
+)
+
+add_entrypoint_object(
+  popen
+  SRCS
+    popen.cpp
+  HDRS
+    ../popen.h
+  DEPENDS
+    .popen_registry
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.stdio.fdopen
+    libc.src.unistd._exit
+    libc.src.unistd.close
+    libc.src.unistd.dup2
+    libc.src.unistd.execv
+    libc.src.unistd.fork
+    libc.src.unistd.pipe
+)
+
+add_entrypoint_object(
+  pclose
+  SRCS
+    pclose.cpp
+  HDRS
+    ../pclose.h
+  DEPENDS
+    .popen_registry
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.sys.wait.waitpid
+)
