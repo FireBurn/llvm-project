@@ -1,0 +1,107 @@
+add_object_library(
+  mntent_utils
+  HDRS
+    mntent_utils.h
+  SRCS
+    mntent_utils.cpp
+  DEPENDS
+    libc.hdr.types.struct_mntent
+    libc.src.__support.File.file
+    libc.src.__support.ctype_utils
+    libc.src.__support.str_to_integer
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  setmntent
+  SRCS
+    setmntent.cpp
+  HDRS
+    setmntent.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  endmntent
+  SRCS
+    endmntent.cpp
+  HDRS
+    endmntent.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  getmntent_r
+  SRCS
+    getmntent_r.cpp
+  HDRS
+    getmntent_r.h
+  DEPENDS
+    .mntent_utils
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getmntent
+  SRCS
+    getmntent.cpp
+  HDRS
+    getmntent.h
+  DEPENDS
+    .getmntent_r
+    .mntent_utils
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  addmntent
+  SRCS
+    addmntent.cpp
+  HDRS
+    addmntent.h
+  DEPENDS
+    .mntent_utils
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_mntent
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  hasmntopt
+  SRCS
+    hasmntopt.cpp
+  HDRS
+    hasmntopt.h
+  DEPENDS
+    libc.hdr.types.struct_mntent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.string.string_utils
+)
