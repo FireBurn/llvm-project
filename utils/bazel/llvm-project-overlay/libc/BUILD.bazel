@@ -21541,3 +21541,27 @@ libc_support_library(
         ":types_size_t",
     ],
 )
+
+libc_support_library(
+    name = "__support_elf_load_module",
+    hdrs = ["src/__support/elf/load_module.h"],
+    deps = [
+        ":__support_elf_map_segments",
+        ":__support_elf_module",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":types_size_t",
+    ],
+)
