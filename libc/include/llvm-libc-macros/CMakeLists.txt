@@ -566,3 +566,9 @@ add_macro_header(
   HDR
     sys-mount-macros.h
 )
+
+add_macro_header(
+  paths_macros
+  HDR
+    paths-macros.h
+)
