@@ -1466,6 +1466,30 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_shminfo
+  HDRS
+    struct_shminfo.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_shminfo
+)
+
+add_proxy_header_library(
+  struct_shm_info
+  HDRS
+    struct_shm_info.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_shm_info
+)
+
+add_proxy_header_library(
+  struct_msginfo
+  HDRS
+    struct_msginfo.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_msginfo
+)
+
+add_proxy_header_library(
   struct_sgrp
   HDRS
     struct_sgrp.h
