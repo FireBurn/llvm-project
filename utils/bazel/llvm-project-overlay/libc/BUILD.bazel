@@ -24705,6 +24705,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_linux_netdb_macros",
+    hdrs = ["include/llvm-libc-macros/linux/netdb-macros.h"],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
