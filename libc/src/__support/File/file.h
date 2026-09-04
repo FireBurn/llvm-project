@@ -52,6 +52,12 @@ public:
   // owes a program which wrote to a stream and never closed it.
   static void flush_all();
 
+  // The conversion state, which fgetpos records alongside the offset and
+  // fsetpos puts back, since an offset alone does not say where a wide
+  // oriented stream was.
+  internal::mbstate get_mbstate() const { return mbstate; }
+  void set_mbstate(const internal::mbstate &state) { mbstate = state; }
+
   static File *list_all;
   static Mutex list_lock;
 
