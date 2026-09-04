@@ -9,3 +9,29 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "regex_basic_test",
+    srcs = ["regex_basic_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_scope",
+        "//libc:hdr_regex_macros",
+        "//libc:regcomp",
+        "//libc:regexec",
+        "//libc:regfree",
+        "//libc:types_regex_t",
+    ],
+)
+
+libc_test(
+    name = "regex_test",
+    srcs = ["regex_test.cpp"],
+    deps = [
+        "//libc:hdr_regex_macros",
+        "//libc:regcomp",
+        "//libc:regexec",
+        "//libc:regfree",
+        "//libc:types_regex_t",
+        "//libc:types_regmatch_t",
+    ],
+)
