@@ -305,6 +305,13 @@ functions:
     arguments:
       - type: const char *
       - type: const char *
+  - name: strverscmp
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
   - name: strtok
     standards:
       - stdc
