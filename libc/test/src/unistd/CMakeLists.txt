@@ -1179,3 +1179,19 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
+
+add_libc_test(
+  getgroups_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    getgroups_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.limits_macros
+    libc.hdr.types.gid_t
+    libc.src.errno.errno
+    libc.src.unistd.getgroups
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
