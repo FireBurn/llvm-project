@@ -12,6 +12,7 @@
 #include "src/stdio/fopen.h"
 #include "src/stdio/fread.h"
 #include "src/stdio/fwrite.h"
+#include "src/stdio/remove.h"
 
 #include "test/UnitTest/Test.h"
 
@@ -41,4 +42,35 @@ TEST(LlvmLibcFOpenTest, PrintToFile) {
     data[sizeof(STRING) - 1] = '\0';
     ASSERT_STREQ(data, STRING);
   }
+}
+
+TEST(LlvmLibcFOpenTest, ModeStringExtensions) {
+  // 'e' asks for the descriptor to be closed on exec. It may appear
+  // anywhere after the first character.
+  FILE *file = LIBC_NAMESPACE::fopen("testdata/mode_ext.txt", "we");
+  ASSERT_TRUE(file != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(file), 0);
+
+  file = LIBC_NAMESPACE::fopen("testdata/mode_ext.txt", "re");
+  ASSERT_TRUE(file != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(file), 0);
+
+  // C leaves anything past the characters it defines to the implementation,
+  // and one which is not known is ignored rather than failing the open.
+  file = LIBC_NAMESPACE::fopen("testdata/mode_ext.txt", "rcm");
+  ASSERT_TRUE(file != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(file), 0);
+
+  // The first character still has to be one of the three.
+  ASSERT_TRUE(LIBC_NAMESPACE::fopen("testdata/mode_ext.txt", "er") == nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::fopen("testdata/mode_ext.txt", "") == nullptr);
+
+  // 'x' asks for the open to fail if the file is already there, so the test
+  // starts from the file not being there.
+  LIBC_NAMESPACE::remove("testdata/mode_excl.txt");
+  file = LIBC_NAMESPACE::fopen("testdata/mode_excl.txt", "wx");
+  ASSERT_TRUE(file != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(file), 0);
+  ASSERT_TRUE(LIBC_NAMESPACE::fopen("testdata/mode_excl.txt", "wx") == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::remove("testdata/mode_excl.txt"), 0);
 }

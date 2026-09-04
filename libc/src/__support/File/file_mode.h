@@ -62,8 +62,14 @@ public:
       case 'x':
         file_mode_ |= static_cast<Mode>(CreateType::EXCLUSIVE);
         break;
+      case 'e':
+        file_mode_ |= static_cast<Mode>(DescriptorFlags::CLOEXEC);
+        break;
       default:
-        file_mode_ = 0;
+        // C leaves anything past the mode characters it defines to the
+        // implementation, and every implementation ignores what it does not
+        // know rather than failing the open.
+        break;
       }
     }
 
@@ -108,6 +114,11 @@ public:
     return (file_mode_ & static_cast<Mode>(CreateType::EXCLUSIVE)) != 0;
   }
 
+  // Whether the descriptor behind the stream is closed across an exec.
+  constexpr bool is_close_on_exec() const {
+    return (file_mode_ & static_cast<Mode>(DescriptorFlags::CLOEXEC)) != 0;
+  }
+
 private:
   // Mode is a generic or abstract mode bit for all kinds of modes
   // (open-mode, 'content-mode', 'create-modes')
@@ -136,6 +147,12 @@ private:
   // Denotes a file to be created for writing.
   enum class CreateType : Mode {
     EXCLUSIVE = 0x100,
+  };
+
+  // How the descriptor behind the stream is opened, rather than what the
+  // stream may then do with it.
+  enum class DescriptorFlags : Mode {
+    CLOEXEC = 0x200,
   };
 
   // This property tracks the mode for the particular file instance (i.e
