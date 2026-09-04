@@ -1,0 +1,22 @@
+add_libc_testsuite(libc-sys-msg-tests)
+
+add_libc_test(
+  msg_test
+  SUITE
+    libc-sys-msg-tests
+  SRCS
+    msg_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_ipc_macros
+    libc.hdr.sys_msg_macros
+    libc.hdr.types.struct_msqid_ds
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.sys.msg.msgctl
+    libc.src.sys.msg.msgget
+    libc.src.sys.msg.msgrcv
+    libc.src.sys.msg.msgsnd
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
