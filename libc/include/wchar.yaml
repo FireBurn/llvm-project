@@ -249,6 +249,19 @@ functions:
       - type: const wchar_t **__restrict
       - type: size_t
       - type: mbstate_t *__restrict
+  - name: wcwidth
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: wchar_t
+  - name: wcswidth
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const wchar_t *
+      - type: size_t
   - name: wcrtomb
     standards:
       - stdc
