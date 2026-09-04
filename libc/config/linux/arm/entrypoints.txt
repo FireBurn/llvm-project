@@ -383,8 +383,10 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.readdir
     libc.src.dirent.fdopendir
     libc.src.dirent.rewinddir
+    libc.src.dirent.scandir
     libc.src.dirent.seekdir
     libc.src.dirent.telldir
+    libc.src.dirent.versionsort
 
     # langinfo.h entrypoints
     libc.src.langinfo.nl_langinfo

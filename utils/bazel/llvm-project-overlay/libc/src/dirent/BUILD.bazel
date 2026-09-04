@@ -28,6 +28,18 @@ libc_support_library(
 )
 
 libc_function(
+    name = "versionsort",
+    srcs = ["versionsort.cpp"],
+    hdrs = ["versionsort.h"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string:strverscmp",
+    ],
+)
+
+libc_function(
     name = "opendir",
     srcs = ["opendir.cpp"],
     hdrs = ["opendir.h"],

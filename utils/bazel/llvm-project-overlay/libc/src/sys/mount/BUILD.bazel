@@ -1,0 +1,85 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "mount",
+    srcs = ["linux/mount.cpp"],
+    hdrs = ["mount.h"],
+    deps = [
+        ":sys_mount_mount",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mount",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "umount",
+    srcs = ["linux/umount.cpp"],
+    hdrs = ["umount.h"],
+    deps = [
+        ":sys_mount_umount",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:umount2",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "umount2",
+    srcs = ["linux/umount2.cpp"],
+    hdrs = ["umount2.h"],
+    deps = [
+        ":sys_mount_umount2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:umount2",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_mount",
+    hdrs = ["mount.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_umount",
+    hdrs = ["umount.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_umount2",
+    hdrs = ["umount2.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
