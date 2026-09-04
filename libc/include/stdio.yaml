@@ -128,6 +128,19 @@ functions:
       - type: char *__restrict
       - type: int
       - type: FILE *__restrict
+  - name: popen
+    standards:
+      - posix
+    return_type: FILE *
+    arguments:
+      - type: const char *
+      - type: const char *
+  - name: pclose
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: FILE *
   - name: getdelim
     standards:
       - posix
