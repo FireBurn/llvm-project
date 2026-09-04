@@ -20,15 +20,38 @@
 #define W_OK 2
 #define R_OK 4
 
+// The numbers are the ones Linux already uses, so a program built against
+// another libc and run here asks the same questions.
 #define _SC_ARG_MAX 0
+#define _SC_CHILD_MAX 1
 #define _SC_CLK_TCK 2
+#define _SC_NGROUPS_MAX 3
 #define _SC_OPEN_MAX 4
+#define _SC_STREAM_MAX 5
+#define _SC_TZNAME_MAX 6
+#define _SC_JOB_CONTROL 7
+#define _SC_SAVED_IDS 8
+#define _SC_VERSION 29
 #define _SC_PAGESIZE 30
 #define _SC_PAGE_SIZE _SC_PAGESIZE
+#define _SC_LINE_MAX 43
+#define _SC_RE_DUP_MAX 44
+#define _SC_IOV_MAX 60
+#define _SC_GETGR_R_SIZE_MAX 69
+#define _SC_GETPW_R_SIZE_MAX 70
+#define _SC_LOGIN_NAME_MAX 71
+#define _SC_TTY_NAME_MAX 72
+#define _SC_THREAD_STACK_MIN 75
+#define _SC_THREAD_THREADS_MAX 76
+#define _SC_THREAD_KEYS_MAX 74
+#define _SC_ATEXIT_MAX 87
+#define _SC_SYMLOOP_MAX 173
+#define _SC_HOST_NAME_MAX 180
 #define _SC_THREADS 67
 #define _SC_NPROCESSORS_CONF 83
 #define _SC_NPROCESSORS_ONLN 84
 #define _SC_PHYS_PAGES 85
+#define _SC_AVPHYS_PAGES 86
 
 #define _PC_FILESIZEBITS 0
 #define _PC_LINK_MAX 1
