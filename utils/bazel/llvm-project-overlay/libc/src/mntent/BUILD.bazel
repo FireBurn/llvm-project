@@ -1,0 +1,121 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "mntent_utils",
+    srcs = ["mntent_utils.cpp"],
+    hdrs = ["mntent_utils.h"],
+    deps = [
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
+    ],
+)
+
+libc_function(
+    name = "setmntent",
+    srcs = ["setmntent.cpp"],
+    hdrs = ["setmntent.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "endmntent",
+    srcs = ["endmntent.cpp"],
+    hdrs = ["endmntent.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getmntent_r",
+    srcs = ["getmntent_r.cpp"],
+    hdrs = ["getmntent_r.h"],
+    deps = [
+        ":mntent_utils",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "getmntent",
+    srcs = ["getmntent.cpp"],
+    hdrs = ["getmntent.h"],
+    deps = [
+        ":getmntent_r",
+        ":mntent_utils",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "addmntent",
+    srcs = ["addmntent.cpp"],
+    hdrs = ["addmntent.h"],
+    deps = [
+        ":mntent_utils",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "hasmntopt",
+    srcs = ["hasmntopt.cpp"],
+    hdrs = ["hasmntopt.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_mntent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string:utils",
+    ],
+)
