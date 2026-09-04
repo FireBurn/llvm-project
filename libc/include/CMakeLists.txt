@@ -1032,6 +1032,14 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_io
+  ../libc/include/sys/io.yaml
+  sys/io.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header_macro(
   sys_resource
   ../libc/include/sys/resource.yaml
   sys/resource.h
