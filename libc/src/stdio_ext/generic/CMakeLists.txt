@@ -101,3 +101,29 @@ add_entrypoint_object(
     libc.src.__support.File.file
     libc.src.__support.File.platform_file
 )
+
+add_entrypoint_object(
+  __freadahead
+  SRCS
+    __freadahead.cpp
+  HDRS
+    ../__freadahead.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_entrypoint_object(
+  __fseterr
+  SRCS
+    __fseterr.cpp
+  HDRS
+    ../__fseterr.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
