@@ -791,6 +791,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  ttyname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.ttyname
+)
+
+add_entrypoint_object(
+  ttyname_r
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.ttyname_r
+)
+
+add_entrypoint_object(
   brk
   ALIAS
   DEPENDS
