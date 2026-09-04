@@ -1499,3 +1499,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_timezone
 )
+
+add_proxy_header_library(
+  struct_msqid_ds
+  HDRS
+    struct_msqid_ds.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_msqid_ds
+)
