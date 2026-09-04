@@ -1168,4 +1168,16 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  getgroups
+  SRCS
+    getgroups.cpp
+  HDRS
+    ../getgroups.h
+  DEPENDS
+    libc.hdr.types.gid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getgroups
+    libc.src.errno.errno
+)
     libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
