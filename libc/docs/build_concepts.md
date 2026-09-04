@@ -40,6 +40,20 @@ cmake -S runtimes -B build -DLLVM_ENABLE_RUNTIMES="libc;compiler-rt" \
       -DLLVM_LIBC_FULL_BUILD=ON ...
 ```
 
+Setting `LIBC_ENABLE_SHARED=ON` additionally builds `libc.so`, `libm.so` and
+`libmvec.so` alongside the archives. This makes the entrypoint objects position
+independent and gives the public symbols default visibility, so the archives
+built in this configuration are position independent too.
+
+```sh
+cmake -S runtimes -B build -DLLVM_ENABLE_RUNTIMES="libc;compiler-rt" \
+      -DLLVM_LIBC_FULL_BUILD=ON -DLIBC_ENABLE_SHARED=ON ...
+```
+
+Note that a dynamically linked program needs a dynamic loader, which LLVM-libc
+does not yet provide. The shared objects are usable by a loader supplied
+elsewhere, and are a prerequisite for adding one.
+
 ### 3. Bootstrap Build
 
 A bootstrap build first builds the compiler (Clang) and other LLVM tools using
