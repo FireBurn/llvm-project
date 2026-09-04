@@ -21445,3 +21445,17 @@ libc_support_library(
         ":hdr_stdint_proxy",
     ],
 )
+
+libc_support_library(
+    name = "__support_elf_symbol",
+    hdrs = ["src/__support/elf/symbol.h"],
+    deps = [
+        ":__support_elf_hash",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+    ],
+)
