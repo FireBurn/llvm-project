@@ -999,3 +999,18 @@ add_libc_test(
     libc.src.unistd.ttyname_r
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  sbrk_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    sbrk_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.src.errno.errno
+    libc.src.unistd.brk
+    libc.src.unistd.sbrk
+    libc.test.UnitTest.ErrnoCheckingTest
+)
