@@ -79,6 +79,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  spawn_macros
+  HDR
+    spawn-macros.h
+)
+
+add_macro_header(
   getopt_macros
   HDR
     getopt-macros.h
