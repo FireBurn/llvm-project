@@ -51,6 +51,8 @@ static struct passwd pwd_entry;
 
 void TESTONLY_set_passwd_path(const char *path) { db.set_path(path); }
 
+const char *path() { return db.path(); }
+
 ErrorOr<void> open() { return db.setdb(); }
 
 ErrorOr<void> close() { return db.enddb(); }
