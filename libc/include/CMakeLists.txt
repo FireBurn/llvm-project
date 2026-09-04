@@ -773,6 +773,7 @@ add_header_macro(
   ../libc/include/spawn.yaml
   spawn.h
   DEPENDS
+    .llvm-libc-macros.spawn_macros
     .llvm_libc_common_h
     .llvm-libc-types.mode_t
     .llvm-libc-types.pid_t
