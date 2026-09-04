@@ -575,6 +575,13 @@ if(LLVM_LIBC_FULL_BUILD AND LIBC_TEST_SUBPROCESS_TESTS)
     SRCS
       exit_test.cpp
     DEPENDS
+      libc.src.stdio.fclose
+      libc.src.stdio.fopen
+      libc.src.stdio.fputs
+      libc.src.stdio.fread
+      libc.hdr.types.FILE
+      libc.src.__support.CPP.string_view
+      libc.src.stdio.remove
       libc.src.stdlib._Exit
       libc.src.stdlib.exit
   )
