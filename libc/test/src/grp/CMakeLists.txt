@@ -16,3 +16,41 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  grp_utils_test
+  SUITE
+    libc_grp_unittests
+  SRCS
+    grp_utils_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_group
+    libc.src.grp.grp_utils
+)
+
+add_libc_test(
+  getgrnam_test
+  SUITE
+    libc_grp_unittests
+  SRCS
+    getgrnam_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.grp.endgrent
+    libc.src.grp.getgrent
+    libc.src.grp.getgrgid
+    libc.src.grp.getgrnam
+    libc.src.grp.grp_utils
+    libc.src.grp.setgrent
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
