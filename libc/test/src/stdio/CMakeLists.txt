@@ -874,3 +874,24 @@ add_libc_test(
     libc.src.stdio.fputc
     libc.src.stdio.putc
 )
+
+add_libc_test(
+  dprintf_test
+  SUITE
+    libc-stdio-tests
+  SRCS
+    dprintf_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.stdio.dprintf
+    libc.src.stdio.remove
+    libc.src.stdio.vdprintf
+    libc.src.unistd.close
+    libc.src.unistd.read
+    libc.test.UnitTest.ErrnoCheckingTest
+)
