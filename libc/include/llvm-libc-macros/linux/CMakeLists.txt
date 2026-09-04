@@ -71,6 +71,12 @@ add_header(
 )
 
 add_header(
+  sys_xattr_macros
+  HDR
+    sys-xattr-macros.h
+)
+
+add_header(
   sys_personality_macros
   HDR
     sys-personality-macros.h
