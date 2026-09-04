@@ -1,0 +1,58 @@
+header: stdio_ext.h
+standards:
+  - gnu
+macros: []
+types:
+  - type_name: FILE
+  - type_name: size_t
+enums: []
+objects: []
+functions:
+  - name: __fbufsize
+    standards:
+      - gnu
+    return_type: size_t
+    arguments:
+      - type: FILE *
+  - name: __fpending
+    standards:
+      - gnu
+    return_type: size_t
+    arguments:
+      - type: FILE *
+  - name: __fpurge
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: FILE *
+  - name: __flbf
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+  - name: __freadable
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+  - name: __freading
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+  - name: __fwritable
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+  - name: __fwriting
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *

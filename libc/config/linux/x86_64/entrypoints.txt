@@ -376,6 +376,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.stat.fstat
     libc.src.sys.stat.lstat
     libc.src.sys.stat.mkdir
+    libc.src.sys.stat.umask
     libc.src.sys.stat.mkdirat
     libc.src.sys.stat.stat
     libc.src.sys.stat.utimensat
@@ -1427,6 +1428,16 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fgetc
     libc.src.stdio.fgetc_unlocked
     libc.src.stdio.fgets
+
+    # stdio_ext.h entrypoints
+    libc.src.stdio_ext.__fbufsize
+    libc.src.stdio_ext.__fpending
+    libc.src.stdio_ext.__flbf
+    libc.src.stdio_ext.__fpurge
+    libc.src.stdio_ext.__freadable
+    libc.src.stdio_ext.__freading
+    libc.src.stdio_ext.__fwritable
+    libc.src.stdio_ext.__fwriting
     libc.src.stdio.getdelim
     libc.src.stdio.pclose
     libc.src.stdio.popen
