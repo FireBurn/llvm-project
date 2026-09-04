@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_SRC_STDIO_SCANF_CORE_SCANF_MAIN_H
 #define LLVM_LIBC_SRC_STDIO_SCANF_CORE_SCANF_MAIN_H
 
+#include "hdr/stdio_macros.h"
 #include "src/__support/arg_list.h"
 #include "src/__support/macros/config.h"
 #include "src/stdio/scanf_core/converter.h"
@@ -30,6 +31,7 @@ int scanf_main(Reader<T> *reader, const char *__restrict str,
   for (FormatSection cur_section = parser.get_next_section();
        !cur_section.raw_string.empty() && ret_val == READ_OK;
        cur_section = parser.get_next_section()) {
+    reader->begin_directive();
     if (cur_section.has_conv) {
       ret_val = convert(reader, cur_section);
       // The %n (current position) conversion doesn't increment the number of
@@ -40,6 +42,13 @@ int scanf_main(Reader<T> *reader, const char *__restrict str,
       ret_val = raw_match(reader, cur_section.raw_string);
     }
   }
+
+  // A directive which failed for want of input, with nothing assigned yet, is
+  // an input failure before any conversion, which C says is reported as EOF
+  // rather than as a count of zero.
+  if (conversions == 0 && ret_val != READ_OK && reader->hit_end_of_input() &&
+      !reader->took_non_space())
+    return EOF;
 
   return conversions;
 }
