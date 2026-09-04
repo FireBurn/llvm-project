@@ -1,0 +1,100 @@
+header: sys/fanotify.h
+standards:
+  - linux
+macros:
+  - macro_name: FAN_ACCESS
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MODIFY
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLOSE_WRITE
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLOSE_NOWRITE
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_OPEN
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_Q_OVERFLOW
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_OPEN_PERM
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_ACCESS_PERM
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_ONDIR
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_EVENT_ON_CHILD
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLOSE
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLOEXEC
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_NONBLOCK
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLASS_NOTIF
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLASS_CONTENT
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_CLASS_PRE_CONTENT
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_UNLIMITED_QUEUE
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_UNLIMITED_MARKS
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_ADD
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_REMOVE
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_DONT_FOLLOW
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_ONLYDIR
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_MOUNT
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_IGNORED_MASK
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_IGNORED_SURV_MODIFY
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_MARK_FLUSH
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FANOTIFY_METADATA_VERSION
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_ALLOW
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_DENY
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_NOFD
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_EVENT_METADATA_LEN
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_EVENT_NEXT
+    macro_header: sys-fanotify-macros.h
+  - macro_name: FAN_EVENT_OK
+    macro_header: sys-fanotify-macros.h
+types:
+  - type_name: struct_fanotify_event_metadata
+  - type_name: struct_fanotify_event_info_header
+  - type_name: struct_fanotify_event_info_fid
+  - type_name: struct_fanotify_event_info_pidfd
+  - type_name: struct_fanotify_event_info_error
+  - type_name: struct_fanotify_event_info_range
+  - type_name: struct_fanotify_event_info_mnt
+  - type_name: struct_fanotify_response
+  - type_name: uint64_t
+enums: []
+objects: []
+functions:
+  - name: fanotify_init
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: unsigned int
+      - type: unsigned int
+  - name: fanotify_mark
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: unsigned int
+      - type: uint64_t
+      - type: int
+      - type: const char *
