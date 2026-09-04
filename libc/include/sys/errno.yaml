@@ -1,0 +1,9 @@
+header: sys/errno.h
+header_template: errno.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
