@@ -180,6 +180,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_errno_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_errno_test.cpp
+  DEPENDS
+    libc.include.sys_errno
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
