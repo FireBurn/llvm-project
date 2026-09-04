@@ -369,6 +369,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/mount.h entrypoints
+    libc.src.sys.mount.mount
+    libc.src.sys.mount.umount
+    libc.src.sys.mount.umount2
+
     # sys/swap.h entrypoints
     libc.src.sys.swap.swapoff
     libc.src.sys.swap.swapon
