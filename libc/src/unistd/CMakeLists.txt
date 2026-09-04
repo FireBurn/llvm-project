@@ -732,6 +732,21 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.getentropy
 )
+
+add_entrypoint_object(
+  ALIAS
+  DEPENDS
+)
+  ALIAS
+  DEPENDS
+)
+  ALIAS
+  DEPENDS
+)
+  ALIAS
+  DEPENDS
+)
+  DEPENDS
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.pwd.pwd_utils
     libc.src.stdlib.environ_internal
