@@ -51,6 +51,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("netinet/if_ether"),
     libc_header_info("netinet/ip"),
     libc_header_info("netinet/ip6"),
+    libc_header_info("paths"),
     libc_header_info("printf"),
     libc_header_info("shadow"),
     libc_header_info(
