@@ -64,7 +64,25 @@ ErrorOr<struct dirent *> Dir::read() {
     return Error(EIO);
 
   readptr += reclen;
+  offset = platform_dir_offset(d);
   return d;
+}
+
+off_t Dir::tell() {
+  cpp::lock_guard lock(mutex);
+  return offset;
+}
+
+int Dir::seek(off_t loc) {
+  cpp::lock_guard lock(mutex);
+  int retval = platform_seekdir(fd, loc);
+  if (retval != 0)
+    return retval;
+  // The buffered entries are from the old position, so drop them.
+  readptr = 0;
+  fillsize = 0;
+  offset = loc;
+  return 0;
 }
 
 int Dir::close() {
