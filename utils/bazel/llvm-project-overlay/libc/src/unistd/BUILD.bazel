@@ -991,6 +991,37 @@ libc_function(
 )
 
 libc_function(
+    name = "ttyname",
+    srcs = ["linux/ttyname.cpp"],
+    hdrs = ["ttyname.h"],
+    deps = [
+        ":ttyname_r",
+        "//libc/hdr:limits_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "ttyname_r",
+    srcs = ["linux/ttyname_r.cpp"],
+    hdrs = ["ttyname_r.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlink",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/errno:errno",
+        "//libc/src/termios:linux_kernel_termios",
+    ],
+)
+
+libc_function(
     name = "vfork",
     srcs = ["linux/vfork.cpp"],
     hdrs = ["vfork.h"],
