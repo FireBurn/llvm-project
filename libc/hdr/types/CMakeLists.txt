@@ -1421,3 +1421,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.fpos_t
 )
+
+add_proxy_header_library(
+  iconv_t
+  HDRS
+    iconv_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.iconv_t
+)
