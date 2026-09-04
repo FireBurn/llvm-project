@@ -398,6 +398,49 @@ TEST(LlvmLibcSScanfTest, FloatConvLongNumber) {
   EXPECT_FP_EQ(d_result, 1e287);
 }
 
+TEST(LlvmLibcSScanfTest, InputFailureBeforeAnyConversion) {
+  int a = 0, b = 0;
+  char buf[8];
+
+  // Running out of input before anything has been assigned is EOF.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%d", &a), EOF);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%s", buf), EOF);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%c", buf), EOF);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "x"), EOF);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%*d"), EOF);
+
+  // White space alone is not something to convert, so a conversion which
+  // finds only white space and then the end also ran out of input.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("  ", "%d", &a), EOF);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("\n", "%u %u", &a, &b), EOF);
+
+  // Input which is there but does not match is a matching failure, and that
+  // is a count of zero.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("x", "%d", &a), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("x", "y"), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("0x", "%x", &a), 0);
+
+  // Once something has been assigned the count is what is reported, however
+  // the rest of the format goes.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("12", "%u %u", &a, &b), 1);
+
+  // A directive which only skips white space does not fail, so a format made
+  // of nothing else leaves the count at zero rather than reporting EOF.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", " "), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", ""), 0);
+}
+
+TEST(LlvmLibcSScanfTest, UnterminatedScanSet) {
+  char buf[8];
+  buf[0] = 'z';
+
+  // A set which is never closed is not a conversion, and the scan stops
+  // where it is rather than matching the rest of the format as text.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%[", buf), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("abc", "%[", buf), 0);
+  EXPECT_EQ(buf[0], 'z');
+}
+
 TEST(LlvmLibcSScanfTest, FloatConvComplexParsing) {
   int ret_val;
   float result = 0;
@@ -409,8 +452,10 @@ TEST(LlvmLibcSScanfTest, FloatConvComplexParsing) {
   EXPECT_EQ(ret_val, 1);
   EXPECT_FP_EQ(result, 0x1.0e3p0f);
 
+  // Nothing to read at all is an input failure before any conversion, which
+  // is reported as EOF rather than as a count of zero.
   ret_val = LIBC_NAMESPACE::sscanf("", "%a", &result);
-  EXPECT_EQ(ret_val, 0);
+  EXPECT_EQ(ret_val, EOF);
 
   ret_val = LIBC_NAMESPACE::sscanf("+", "%a", &result);
   EXPECT_EQ(ret_val, 0);

@@ -20223,6 +20223,7 @@ libc_support_library(
     hdrs = ["src/stdio/scanf_core/reader.h"],
     deps = [
         ":__support_cpp_string_view",
+        ":__support_ctype_utils",
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":types_FILE",
@@ -20268,7 +20269,10 @@ libc_support_library(
     hdrs = ["src/stdio/scanf_core/scanf_main.h"],
     deps = [
         ":__support_arg_list",
+        ":__support_libc_errno",
         ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
         ":scanf_config",
         ":scanf_converter",
         ":scanf_core_structs",
@@ -22890,6 +22894,49 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_raise",
         ":errno",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_scanf_core_parser",
+    hdrs = ["src/stdio/scanf_core/parser.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_cpp_algorithm",
+        ":__support_cpp_bit",
+        ":__support_cpp_bitset",
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":__support_str_to_integer",
+        ":scanf_config",
+        ":scanf_core_structs",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_scanf_core_scanf_main",
+    hdrs = ["src/stdio/scanf_core/scanf_main.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
+        ":scanf_converter",
+        ":scanf_core_structs",
+        ":scanf_parser",
+        ":scanf_reader",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_scanf_core_reader",
+    hdrs = ["src/stdio/scanf_core/reader.h"],
+    deps = [
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
     ],
 )
 
