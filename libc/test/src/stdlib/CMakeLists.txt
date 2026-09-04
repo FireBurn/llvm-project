@@ -642,3 +642,19 @@ add_libc_test(
     libc.src.unistd.rmdir
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  random_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    random_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.errno.errno
+    libc.src.stdlib.initstate
+    libc.src.stdlib.random
+    libc.src.stdlib.setstate
+    libc.src.stdlib.srandom
+    libc.test.UnitTest.ErrnoCheckingTest
+)
