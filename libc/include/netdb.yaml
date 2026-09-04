@@ -27,6 +27,12 @@ types:
 enums: []
 objects: []
 functions:
+  - name: gai_strerror
+    standards:
+      - posix
+    return_type: const char *
+    arguments:
+      - type: int
   - name: freeaddrinfo
     standards:
       - posix
