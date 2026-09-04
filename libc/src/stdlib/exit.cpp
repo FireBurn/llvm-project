@@ -15,6 +15,10 @@
 #include "src/__support/threads/thread.h"
 #endif
 
+#ifdef LIBC_COPT_EXIT_FLUSHES_STREAMS
+#include "src/__support/File/file.h"
+#endif
+
 namespace LIBC_NAMESPACE_DECL {
 
 extern "C" void __cxa_finalize(void *);
@@ -26,6 +30,11 @@ extern "C" void __cxa_finalize(void *);
   internal::call_atexit_callbacks(current_thread().attrib);
 #endif
   __cxa_finalize(nullptr);
+#ifdef LIBC_COPT_EXIT_FLUSHES_STREAMS
+  // C requires the streams to be flushed after the handlers have run, so a
+  // handler which writes something still gets it out.
+  File::flush_all();
+#endif
   internal::exit(status);
 }
 
