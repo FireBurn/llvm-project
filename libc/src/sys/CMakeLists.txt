@@ -1,3 +1,4 @@
+add_subdirectory(io)
 add_subdirectory(auxv)
 add_subdirectory(capability)
 add_subdirectory(epoll)
