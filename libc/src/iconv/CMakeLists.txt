@@ -1,0 +1,68 @@
+add_header_library(
+  charsets
+  HDRS
+    charsets.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_header_library(
+  conversion
+  HDRS
+    conversion.h
+  DEPENDS
+    .charsets
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.char32_t
+    libc.hdr.types.size_t
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  iconv_open
+  SRCS
+    iconv_open.cpp
+  HDRS
+    iconv_open.h
+  DEPENDS
+    .conversion
+    libc.hdr.errno_macros
+    libc.hdr.func.malloc
+    libc.hdr.types.iconv_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  iconv
+  SRCS
+    iconv.cpp
+  HDRS
+    iconv.h
+  DEPENDS
+    .conversion
+    libc.hdr.errno_macros
+    libc.hdr.types.char32_t
+    libc.hdr.types.iconv_t
+    libc.hdr.types.size_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  iconv_close
+  SRCS
+    iconv_close.cpp
+  HDRS
+    iconv_close.h
+  DEPENDS
+    .conversion
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.types.iconv_t
+    libc.src.errno.errno
+)

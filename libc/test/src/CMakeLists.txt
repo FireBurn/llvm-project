@@ -97,6 +97,7 @@ add_subdirectory(time)
 add_subdirectory(unistd)
 
 # Depends on utilities in stdlib
+add_subdirectory(iconv)
 add_subdirectory(inttypes)
 
 if(${LIBC_TARGET_OS} STREQUAL "linux")
