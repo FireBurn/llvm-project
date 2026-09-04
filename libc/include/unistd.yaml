@@ -195,6 +195,20 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: ttyname
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: int
+  - name: ttyname_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: char *
+      - type: size_t
   - name: _exit
     standards:
       - posix

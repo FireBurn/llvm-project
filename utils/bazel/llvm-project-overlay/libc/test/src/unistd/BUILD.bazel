@@ -248,6 +248,22 @@ libc_test(
 )
 
 libc_test(
+    name = "ttyname_test",
+    srcs = ["ttyname_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:isatty",
+        "//libc:open",
+        "//libc:pipe",
+        "//libc:ttyname",
+        "//libc:ttyname_r",
+    ],
+)
+
+libc_test(
     name = "unlink_test",
     srcs = ["unlink_test.cpp"],
     deps = [
