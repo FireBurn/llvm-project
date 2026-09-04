@@ -119,3 +119,18 @@ if(LIBC_ENABLE_SHARED)
   add_dependencies(libc.test.src.__support.elf.bind_test.__build__
     libc-shared libm-shared)
 endif()
+
+if(LIBC_ENABLE_SHARED)
+  add_libc_test(
+    tls_block_test
+    SUITE
+      libc-support-tests
+    SRCS
+      tls_block_test.cpp
+    COMPILE_OPTIONS
+      -DLIBC_TEST_SHARED_OBJECT="$<TARGET_FILE:libc-shared>"
+    DEPENDS
+      libc.src.__support.elf.load_module
+      libc.src.__support.elf.tls_block
+  )
+endif()
