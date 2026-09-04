@@ -1,0 +1,13 @@
+add_entrypoint_object(
+  utime
+  SRCS
+    utime.cpp
+  HDRS
+    ../utime.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.struct_utimbuf
+    libc.src.__support.OSUtil.linux.syscall_wrappers.utimensat
+    libc.src.errno.errno
+)
