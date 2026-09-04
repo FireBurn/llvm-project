@@ -1,0 +1,29 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc utime.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "utime_test",
+    srcs = ["utime_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:stat",
+        "//libc:sys_stat_stat",
+        "//libc:types_struct_stat",
+        "//libc:types_struct_utimbuf",
+        "//libc:unlink",
+        "//libc:utime",
+    ],
+)
