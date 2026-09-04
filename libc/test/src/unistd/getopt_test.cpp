@@ -165,3 +165,48 @@ TEST_F(LlvmLibcGetoptTest, ParseMultiInOne) {
   EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "abc"), (int)'c');
   EXPECT_EQ(test_globals::optind, 2);
 }
+
+// An option after an operand is still an option, and the operands are left
+// at the end in the order they were given. This is what lets a command be
+// written "mount tmpfs /tmp -t tmpfs", which a great deal of software does.
+TEST_F(LlvmLibcGetoptTest, OptionAfterAnOperand) {
+  array<char *, 5> argv{"prog"_c, "src"_c, "dst"_c, "-b"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "b"), (int)'b');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "b"), -1);
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_STREQ(argv[2], "src");
+  EXPECT_STREQ(argv[3], "dst");
+}
+
+// The argument of an option moved over an operand comes with it.
+TEST_F(LlvmLibcGetoptTest, OptionWithArgumentAfterAnOperand) {
+  array<char *, 6> argv{"prog"_c, "src"_c, "-b"_c, "arg"_c, "dst"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "b:"), (int)'b');
+  EXPECT_STREQ(test_globals::optarg, "arg");
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "b:"), -1);
+  EXPECT_EQ(test_globals::optind, 3);
+  EXPECT_STREQ(argv[3], "src");
+  EXPECT_STREQ(argv[4], "dst");
+}
+
+// A leading '+' asks for the POSIX order, where the first operand ends the
+// options and everything after it is an operand whatever it looks like.
+TEST_F(LlvmLibcGetoptTest, PlusStopsAtTheFirstOperand) {
+  array<char *, 5> argv{"prog"_c, "src"_c, "-b"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(3, argv.data(), "+b"), -1);
+  EXPECT_EQ(test_globals::optind, 1);
+  EXPECT_STREQ(argv[1], "src");
+}
+
+// A lone dash is an operand, not an option, and is carried along as one.
+TEST_F(LlvmLibcGetoptTest, ALoneDashIsAnOperand) {
+  array<char *, 4> argv{"prog"_c, "-"_c, "-b"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(3, argv.data(), "b"), (int)'b');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(3, argv.data(), "b"), -1);
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_STREQ(argv[2], "-");
+}
