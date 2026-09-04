@@ -3469,3 +3469,54 @@ add_header_library(
     libc.hdr.types.size_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  shmat
+  HDRS
+    shmat.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  shmctl
+  HDRS
+    shmctl.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_shmid_ds
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  shmdt
+  HDRS
+    shmdt.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  shmget
+  HDRS
+    shmget.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.key_t
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
