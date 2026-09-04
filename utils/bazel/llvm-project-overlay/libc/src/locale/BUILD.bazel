@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_support_library")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -29,6 +29,61 @@ libc_support_library(
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/unistd:environ",
+    ],
+)
+
+libc_function(
+    name = "newlocale",
+    srcs = ["newlocale.cpp"],
+    hdrs = ["newlocale.h"],
+    deps = [
+        ":locale",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "setlocale",
+    srcs = ["setlocale.cpp"],
+    hdrs = ["setlocale.h"],
+    deps = [
+        ":locale",
+        ":locale_data",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "uselocale",
+    srcs = ["uselocale.cpp"],
+    hdrs = ["uselocale.h"],
+    deps = [
+        ":locale",
+        ":locale_data",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "freelocale",
+    srcs = ["freelocale.cpp"],
+    hdrs = ["freelocale.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
