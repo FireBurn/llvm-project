@@ -917,3 +917,29 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
+add_entrypoint_object(
+  ttyname_r
+  SRCS
+    ttyname_r.cpp
+  HDRS
+    ../ttyname_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_ioctl_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.readlink
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  ttyname
+  SRCS
+    ttyname.cpp
+  HDRS
+    ../ttyname.h
+  DEPENDS
+    .ttyname_r
+    libc.hdr.limits_macros
+    libc.src.errno.errno
+)
