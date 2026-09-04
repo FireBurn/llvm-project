@@ -187,3 +187,36 @@ libc_test(
         "//conditions:default": [],
     }),
 )
+
+libc_test(
+    name = "fclose_stdstream_test",
+    srcs = ["fclose_stdstream_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:stdin",
+    ],
+)
+
+libc_test(
+    name = "getdelim_test",
+    srcs = ["getdelim_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:getdelim",
+        "//libc/src/stdio:getline",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:strcmp",
+    ],
+)

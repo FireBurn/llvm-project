@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -14,6 +14,26 @@ package(
 )
 
 licenses(["notice"])
+
+libc_support_library(
+    name = "kernel_termios",
+    hdrs = ["linux/kernel_termios.h"],
+    deps = [
+        "//libc/hdr/types:cc_t",
+        "//libc/hdr/types:tcflag_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_kernel_termios",
+    hdrs = ["linux/kernel_termios.h"],
+    deps = [
+        "//libc/hdr/types:cc_t",
+        "//libc/hdr/types:tcflag_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
 
 libc_function(
     name = "tcdrain",

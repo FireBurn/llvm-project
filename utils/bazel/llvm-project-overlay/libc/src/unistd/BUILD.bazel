@@ -385,6 +385,8 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",
+        "//libc/src/termios:kernel_termios",
+        "//libc/src/termios:linux_kernel_termios",
     ],
 )
 
