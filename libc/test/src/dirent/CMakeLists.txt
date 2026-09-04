@@ -37,3 +37,21 @@ add_libc_test(
     libc.hdr.types.DIR
     libc.hdr.types.struct_dirent
 )
+
+add_libc_test(
+  rewinddir_test
+  SUITE
+    libc_dirent_unittests
+  SRCS
+    rewinddir_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.string_view
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.dirent.readdir
+    libc.src.dirent.rewinddir
+    libc.src.dirent.seekdir
+    libc.src.dirent.telldir
+    libc.src.errno.errno
+    libc.test.UnitTest.ErrnoCheckingTest
+)

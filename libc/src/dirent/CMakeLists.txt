@@ -62,3 +62,39 @@ add_entrypoint_object(
     libc.src.__support.File.dir
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  rewinddir
+  SRCS
+    rewinddir.cpp
+  HDRS
+    rewinddir.h
+  DEPENDS
+    libc.include.dirent
+    libc.src.__support.File.dir
+    libc.src.__support.File.platform_dir
+)
+
+add_entrypoint_object(
+  seekdir
+  SRCS
+    seekdir.cpp
+  HDRS
+    seekdir.h
+  DEPENDS
+    libc.include.dirent
+    libc.src.__support.File.dir
+    libc.src.__support.File.platform_dir
+)
+
+add_entrypoint_object(
+  telldir
+  SRCS
+    telldir.cpp
+  HDRS
+    telldir.h
+  DEPENDS
+    libc.include.dirent
+    libc.src.__support.File.dir
+    libc.src.__support.File.platform_dir
+)
