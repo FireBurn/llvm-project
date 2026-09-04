@@ -70,3 +70,28 @@ add_object_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  getpwnam
+  SRCS
+    getpwnam.cpp
+  HDRS
+    getpwnam.h
+  DEPENDS
+    .pwd_utils
+    libc.hdr.types.struct_passwd
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getpwuid
+  SRCS
+    getpwuid.cpp
+  HDRS
+    getpwuid.h
+  DEPENDS
+    .pwd_utils
+    libc.hdr.types.struct_passwd
+    libc.hdr.types.uid_t
+    libc.src.errno.errno
+)
