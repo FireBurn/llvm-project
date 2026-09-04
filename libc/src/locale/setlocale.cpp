@@ -15,11 +15,22 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, setlocale, (int category, const char *locale_name)) {
-  cpp::string_view name(locale_name);
-  if (category > LC_ALL || (!name.empty() && name != "C"))
+  static char locale_str[] = "C";
+
+  if (category < 0 || category > LC_ALL)
     return nullptr;
 
-  static char locale_str[] = "C";
+  // A null name is a query rather than a request to change anything, which is
+  // how callers ask what the current locale is. It must not be parsed.
+  if (locale_name == nullptr)
+    return locale_str;
+
+  cpp::string_view name(locale_name);
+  // The empty string means the locale named by the environment, which here is
+  // the only one there is.
+  if (!name.empty() && name != "C" && name != "POSIX")
+    return nullptr;
+
   return locale_str;
 }
 
