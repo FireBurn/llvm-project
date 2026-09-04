@@ -5620,6 +5620,7 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        ":__support_elf_passive_abi",
         ":__support_elf_tls_block",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_exit",
@@ -21567,6 +21568,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_passive_abi",
+    hdrs = ["src/__support/elf/passive_abi.h"],
+    deps = [
+        ":__support_elf_map_segments",
+        ":__support_elf_module",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_bind",
     hdrs = ["src/__support/elf/bind.h"],
     deps = [
@@ -21605,6 +21619,19 @@ libc_support_library(
         ":hdr_link_macros",
         ":hdr_stdint_proxy",
         ":hdr_stdio_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dl_internal",
+    srcs = ["src/dlfcn/dl_internal.cpp"],
+    hdrs = ["src/dlfcn/dl_internal.h"],
+    deps = [
+        ":__support_elf_passive_abi",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
         ":types_size_t",
     ],
 )
@@ -21650,5 +21677,66 @@ libc_support_library(
         ":hdr_link_macros",
         ":hdr_stdint_proxy",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dlopen",
+    srcs = ["src/dlfcn/dlopen.cpp"],
+    hdrs = ["src/dlfcn/dlopen.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_bind",
+        ":__support_elf_load_module",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":environ",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_fcntl_macros",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dlclose",
+    srcs = ["src/dlfcn/dlclose.cpp"],
+    hdrs = ["src/dlfcn/dlclose.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_map_segments",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":stdlib_exit_handler",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dlerror",
+    srcs = ["src/dlfcn/dlerror.cpp"],
+    hdrs = ["src/dlfcn/dlerror.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dlsym",
+    srcs = ["src/dlfcn/dlsym.cpp"],
+    hdrs = ["src/dlfcn/dlsym.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_bind",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
     ],
 )
