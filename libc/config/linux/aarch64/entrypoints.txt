@@ -50,6 +50,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.grp.getgrent
     libc.src.grp.getgrgid
     libc.src.grp.getgrnam
+    libc.src.grp.initgroups
     libc.src.grp.setgrent
     libc.src.grp.setgroups
 
