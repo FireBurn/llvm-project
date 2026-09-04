@@ -21,7 +21,8 @@ namespace LIBC_NAMESPACE_DECL {
 
 constexpr size_t STDERR_BUFFER_SIZE = 0;
 static LinuxFile StdErr(2, nullptr, STDERR_BUFFER_SIZE, _IONBF, false,
-                        FileMode::APPEND_MODE);
+                        FileMode::APPEND_MODE,
+                        /*static_stream=*/true);
 
 LLVM_LIBC_VARIABLE(FILE *, stderr) = reinterpret_cast<FILE *>(&StdErr);
 
