@@ -106,6 +106,7 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
+
 add_entrypoint_object(
   mknodat
   SRCS
@@ -214,17 +215,4 @@ add_entrypoint_object(
     libc.hdr.types.mode_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.umask
     libc.src.__support.common
-)
-
-add_entrypoint_object(
-  fstatat
-  SRCS
-    fstatat.cpp
-  HDRS
-    ../fstatat.h
-  DEPENDS
-    libc.hdr.types.struct_stat
-    libc.src.__support.OSUtil.linux.stat.stat_via_statx
-    libc.src.__support.error_or
-    libc.src.errno.errno
 )

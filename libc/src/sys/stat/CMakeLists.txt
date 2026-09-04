@@ -79,6 +79,7 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.mknod
 )
 
+
 add_entrypoint_object(
   mknodat
   ALIAS
@@ -112,11 +113,4 @@ add_entrypoint_object(
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.futimens
-)
-
-add_entrypoint_object(
-  fstatat
-  ALIAS
-  DEPENDS
-    .${LIBC_TARGET_OS}.fstatat
 )
