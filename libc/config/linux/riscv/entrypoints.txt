@@ -1514,7 +1514,9 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio_ext.__fpending
     libc.src.stdio_ext.__fpurge
     libc.src.stdio_ext.__freadable
+    libc.src.stdio_ext.__freadahead
     libc.src.stdio_ext.__freading
+    libc.src.stdio_ext.__fseterr
     libc.src.stdio_ext.__fwritable
     libc.src.stdio_ext.__fwriting
     libc.src.stdio.fileno
