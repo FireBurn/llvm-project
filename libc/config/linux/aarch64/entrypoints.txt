@@ -1227,6 +1227,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fgetc
     libc.src.stdio.fgetc_unlocked
     libc.src.stdio.fgets
+    libc.src.stdio.getdelim
+    libc.src.stdio.getline
     libc.src.stdio.fileno
     libc.src.stdio.flockfile
     libc.src.stdio.fopen
