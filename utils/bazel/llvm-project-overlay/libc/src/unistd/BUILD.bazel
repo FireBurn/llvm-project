@@ -715,6 +715,22 @@ libc_function(
 )
 
 libc_function(
+    name = "brk",
+    srcs = ["linux/brk.cpp"],
+    hdrs = ["brk.h"],
+    deps = [
+        ":linux_brk_utils",
+        ":unistd_brk",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:brk",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "get_current_dir_name",
     srcs = ["linux/get_current_dir_name.cpp"],
     hdrs = ["get_current_dir_name.h"],
@@ -810,6 +826,23 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "sbrk",
+    srcs = ["linux/sbrk.cpp"],
+    hdrs = ["sbrk.h"],
+    deps = [
+        ":brk",
+        ":linux_brk_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:brk",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "unistd_get_current_dir_name",
     hdrs = ["get_current_dir_name.h"],
@@ -840,6 +873,23 @@ libc_support_library(
         ":getopt_common",
         "//libc/hdr:getopt_macros",
         "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_brk",
+    hdrs = ["brk.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_brk_utils",
+    hdrs = ["linux/brk_utils.h"],
+    deps = [
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
 )
