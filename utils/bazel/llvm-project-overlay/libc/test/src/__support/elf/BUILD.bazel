@@ -52,3 +52,11 @@ libc_test(
         "//libc/src/__support:elf_module",
     ],
 )
+
+libc_test(
+    name = "tls_layout_test",
+    srcs = ["tls_layout_test.cpp"],
+    deps = [
+        "//libc/src/__support:elf_tls_layout",
+    ],
+)

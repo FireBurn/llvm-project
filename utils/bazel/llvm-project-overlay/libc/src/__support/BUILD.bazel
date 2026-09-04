@@ -500,3 +500,16 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_tls_layout",
+    hdrs = ["elf/tls_layout.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
