@@ -21,6 +21,16 @@ libc_test(
 )
 
 libc_test(
+    name = "fclose_stdstream_test",
+    srcs = ["fclose_stdstream_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:stdin",
+        "//libc:types_FILE",
+    ],
+)
+
+libc_test(
     name = "getdelim_test",
     srcs = ["getdelim_test.cpp"],
     deps = [
