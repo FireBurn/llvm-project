@@ -745,6 +745,29 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_netdb_macros",
+    hdrs = ["llvm-libc-macros/netdb-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_net_if_macros",
+    hdrs = ["llvm-libc-macros/linux/net-if-macros.h"],
+    deps = [
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_net_if_macros",
+    hdrs = ["llvm-libc-macros/net-if-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_net_if_macros",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
@@ -850,6 +873,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ifreq",
+    hdrs = ["llvm-libc-types/struct_ifreq.h"],
 )
 
 libc_support_library(
