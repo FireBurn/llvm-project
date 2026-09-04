@@ -2723,6 +2723,31 @@ add_header_library(
 )
 
 add_header_library(
+  fanotify_init
+  HDRS
+    fanotify_init.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  fanotify_mark
+  HDRS
+    fanotify_mark.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+)
+
+add_header_library(
   setsid
   HDRS
     setsid.h
