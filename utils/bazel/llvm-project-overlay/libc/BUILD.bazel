@@ -21493,3 +21493,16 @@ libc_support_library(
         ":types_size_t",
     ],
 )
+
+libc_support_library(
+    name = "__support_elf_tls_layout",
+    hdrs = ["src/__support/elf/tls_layout.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
