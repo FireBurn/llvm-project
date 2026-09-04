@@ -5,7 +5,9 @@ macros:
   - macro_name: IF_NAMESIZE
     macro_header: net-if-macros.h
 types:
+  - type_name: struct_ifmap
   - type_name: struct_ifreq
+  - type_name: struct_ifconf
   - type_name: struct_if_nameindex
 enums: []
 objects: []
