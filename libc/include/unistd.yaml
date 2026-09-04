@@ -91,6 +91,19 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: getlogin
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: void
+  - name: getlogin_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: char *
+      - type: size_t
   - name: getgroups
     standards:
       - posix
