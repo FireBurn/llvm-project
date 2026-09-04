@@ -41,9 +41,9 @@ protected:
   // For subclasses which need to do extra cleanup when the file is closed.
   constexpr LinuxFile(int file_descriptor, uint8_t *buffer, size_t buffer_size,
                       int buffer_mode, bool owned, FileMode mode,
-                      CloseFunc *close_func)
+                      CloseFunc *close_func, bool static_stream = false)
       : File(&linux_file_write, &linux_file_read, &linux_file_seek, close_func,
-             buffer, buffer_size, buffer_mode, owned, mode),
+             buffer, buffer_size, buffer_mode, owned, mode, static_stream),
         fd(file_descriptor) {}
 
   // Closes the underlying file descriptor. Returns 0 on success, or an error
@@ -52,9 +52,10 @@ protected:
 
 public:
   constexpr LinuxFile(int file_descriptor, uint8_t *buffer, size_t buffer_size,
-                      int buffer_mode, bool owned, FileMode mode)
+                      int buffer_mode, bool owned, FileMode mode,
+                      bool static_stream = false)
       : LinuxFile(file_descriptor, buffer, buffer_size, buffer_mode, owned,
-                  mode, &linux_file_close) {}
+                  mode, &linux_file_close, static_stream) {}
 
   // Allocates a FileT owning a new default-size buffer. FileT must be
   // LinuxFile or a subclass with LinuxFile's constructor signature.
