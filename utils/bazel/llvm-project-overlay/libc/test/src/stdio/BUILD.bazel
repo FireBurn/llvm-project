@@ -135,11 +135,13 @@ libc_test(
     name = "sscanf_test",
     srcs = ["sscanf_test.cpp"],
     deps = [
+        "//libc/hdr/types:wchar_t",
         "//libc/hdr:stdio_macros",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/locale:locale_data",
         "//libc/src/stdio:sscanf",
+        "//libc/src/string:utils",
         "//libc/test/UnitTest:fp_test_helpers",
     ],
 )
