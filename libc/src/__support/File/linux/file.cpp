@@ -93,6 +93,10 @@ static int mode_flags_to_open_flags(File::ModeFlags modeflags) {
     else
       open_flags |= O_RDONLY;
   }
+  if (modeflags & ModeFlags(File::CreateType::EXCLUSIVE))
+    open_flags |= O_EXCL;
+  if (modeflags & ModeFlags(File::DescriptorFlags::CLOEXEC))
+    open_flags |= O_CLOEXEC;
   return open_flags;
 }
 

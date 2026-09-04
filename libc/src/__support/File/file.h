@@ -102,6 +102,12 @@ public:
     EXCLUSIVE = 0x100,
   };
 
+  // How the descriptor behind the stream is opened, rather than what the
+  // stream may then do with it.
+  enum class DescriptorFlags : ModeFlags {
+    CLOEXEC = 0x200,
+  };
+
   // This is a convenience RAII class to lock and unlock file objects.
   class FileLock {
     File *file;
