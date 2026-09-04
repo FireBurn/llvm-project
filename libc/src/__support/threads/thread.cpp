@@ -150,6 +150,11 @@ extern "C" int __cxa_thread_atexit_impl(AtExitCallback *callback, void *obj,
 
 namespace internal {
 
+#ifdef LIBC_COPT_SHARED_LIBRARY
+// The single definition; see the comment in thread.h.
+LIBC_SHARED_INTERNAL LIBC_THREAD_LOCAL Thread self;
+#endif
+
 ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr() {
   return &atexit_callback_mgr;
 }
