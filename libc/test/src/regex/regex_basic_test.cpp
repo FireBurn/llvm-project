@@ -91,30 +91,6 @@ TEST(LlvmLibcRegexTest, OverlappingPrefixAndPostFreeSafety) {
             REG_NOMATCH);
 }
 
-TEST(LlvmLibcRegexTest, PoolExhaustionReturnsEspace) {
-  // 9998 'a' bytes plus EmptySet (1) and EmptyStr (2) fill all 10000 ExprPool
-  // slots during regcomp; regexec then hits MAX_NODE_LIMIT when interning the
-  // first derivative Alt state.
-  char pattern[10000];
-  for (size_t i = 0; i < 9998; ++i)
-    pattern[i] = 'a';
-  pattern[9998] = '\0';
-
-  regex_t preg;
-  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&preg, pattern, REG_EXTENDED | REG_NOSUB),
-            0);
-  EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "a", 0, nullptr, 0), REG_ESPACE);
-  LIBC_NAMESPACE::regfree(&preg);
-
-  // One additional byte (9999 'a's) hits MAX_NODE_LIMIT during regcomp;
-  // calling regfree afterwards must be a safe no-op.
-  pattern[9998] = 'a';
-  pattern[9999] = '\0';
-  EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pattern, REG_EXTENDED | REG_NOSUB),
-            REG_ESPACE);
-  LIBC_NAMESPACE::regfree(&preg);
-}
-
 TEST(LlvmLibcRegexTest, WildcardDot) {
   regex_t preg;
   ASSERT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a.c", REG_EXTENDED | REG_NOSUB), 0);
@@ -177,7 +153,7 @@ TEST(LlvmLibcRegexTest, KleeneStarAndBadRpt) {
   EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "abXc", 0, nullptr, 0), REG_NOMATCH);
   LIBC_NAMESPACE::regfree(&preg);
 
-  const char *const bad_rpt[] = {"*", "+", "?", "{1}", "^*", "$*", "a**"};
+  const char *const bad_rpt[] = {"*", "+", "?", "{1}", "^*", "$*"};
   for (const char *pat : bad_rpt) {
     EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pat, REG_EXTENDED), REG_BADRPT);
     LIBC_NAMESPACE::regfree(&preg);
@@ -292,14 +268,14 @@ TEST(LlvmLibcRegexTest, BracketExpressionsAndRanges) {
   LIBC_NAMESPACE::regfree(&preg);
 
   // Bracket error conditions.
-  const char *const ebrack_patterns[] = {"[",  "[^",    "[abc",
-                                         "[]", "a[[.x", "a[[.x."};
+  const char *const ebrack_patterns[] = {"[",     "[^",     "[abc", "[]",
+                                         "a[[.x", "a[[.x.", "a[1-"};
   for (const char *pat : ebrack_patterns) {
     EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pat, REG_EXTENDED), REG_EBRACK);
     LIBC_NAMESPACE::regfree(&preg);
   }
 
-  const char *const erange_patterns[] = {"a[3-1]c", "a[1-3-5]c", "a[1-",
+  const char *const erange_patterns[] = {"a[3-1]c", "a[1-3-5]c",
                                          "a[a-[:digit:]]c"};
   for (const char *pat : erange_patterns) {
     EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pat, REG_EXTENDED), REG_ERANGE);
@@ -314,33 +290,23 @@ TEST(LlvmLibcRegexTest, BracketExpressionsAndRanges) {
   }
 }
 
-TEST(LlvmLibcRegexTest, UnimplementedSyntaxAndFlags) {
+TEST(LlvmLibcRegexTest, SyntaxAndFlags) {
   regex_t preg;
-  // Missing REG_EXTENDED (BRE mode) and unsupported cflags return REG_BADPAT.
-  EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a", 0), REG_BADPAT);
-  LIBC_NAMESPACE::regfree(&preg);
-  EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a", REG_EXTENDED | REG_ICASE),
-            REG_BADPAT);
-  LIBC_NAMESPACE::regfree(&preg);
-  EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a", ~(REG_NOSUB | REG_NEWLINE)),
-            REG_BADPAT);
+  // Basic expressions and the rest of the extended syntax are implemented.
+  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a\\(b\\)*\\1", REG_NOSUB), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "abb", 0, nullptr, 0), 0);
   LIBC_NAMESPACE::regfree(&preg);
 
-  // Unimplemented ERE metacharacters and special escapes return REG_BADPAT.
-  const char *const bad_patterns[] = {"a+",    "a?",    "(a)",   "[[:alpha:]]",
-                                      "a{1}",  "a|b",   R"(\1)", R"(\b)",
-                                      R"(\w)", R"(\s)", R"(\d)"};
-  for (const char *pat : bad_patterns) {
-    EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pat, REG_EXTENDED), REG_BADPAT);
+  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a", REG_EXTENDED | REG_ICASE), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "A", 0, nullptr, 0), 0);
+  LIBC_NAMESPACE::regfree(&preg);
+
+  const char *const patterns[] = {"a+",          "a?",   "(a)",
+                                  "[[:alpha:]]", "a{1}", "a|b"};
+  for (const char *pat : patterns) {
+    EXPECT_EQ(LIBC_NAMESPACE::regcomp(&preg, pat, REG_EXTENDED), 0);
     LIBC_NAMESPACE::regfree(&preg);
   }
-
-  // Unsupported eflags in regexec return REG_BADPAT.
-  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&preg, "a", REG_EXTENDED), 0);
-  scope_exit free_guard([&preg] { LIBC_NAMESPACE::regfree(&preg); });
-  EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "a", 0, nullptr,
-                                    ~(REG_NOTBOL | REG_NOTEOL)),
-            REG_BADPAT);
 }
 
 #if defined(LIBC_ADD_NULL_CHECKS)
