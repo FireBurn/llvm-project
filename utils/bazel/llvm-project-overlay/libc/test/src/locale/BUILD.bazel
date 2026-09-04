@@ -15,6 +15,7 @@ libc_test(
     srcs = ["locale_test.cpp"],
     deps = [
         "//libc:freelocale",
+        "//libc:hdr_langinfo_macros",
         "//libc:hdr_locale_macros",
         "//libc:newlocale",
         "//libc:setlocale",
