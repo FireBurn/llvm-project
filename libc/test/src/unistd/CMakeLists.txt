@@ -1235,6 +1235,26 @@ add_libc_test(
 )
 
 add_libc_test(
+  ttyname_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    ttyname_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.unistd.close
+    libc.src.unistd.isatty
+    libc.src.unistd.pipe
+    libc.src.unistd.ttyname
+    libc.src.unistd.ttyname_r
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   getdtablesize_test
   SUITE
     libc-unistd-tests
