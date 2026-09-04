@@ -22,4 +22,10 @@
 #define FNM_CASEFOLD (1 << 4)
 #define FNM_IGNORECASE FNM_CASEFOLD
 
+// GNU extensions. FNM_LEADING_DIR stops at a '/' once the pattern has
+// matched, and FNM_EXTMATCH accepts the ksh style !(...) and @(...) forms.
+#define FNM_FILE_NAME FNM_PATHNAME
+#define FNM_LEADING_DIR (1 << 3)
+#define FNM_EXTMATCH (1 << 5)
+
 #endif // LLVM_LIBC_MACROS_FNMATCH_MACROS_H
