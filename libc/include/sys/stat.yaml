@@ -58,6 +58,23 @@ functions:
     arguments:
       - type: const char *
       - type: mode_t
+  - name: mknod
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: mode_t
+      - type: dev_t
+  - name: mknodat
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: mode_t
+      - type: dev_t
   - name: mkdirat
     return_type: int
     arguments:

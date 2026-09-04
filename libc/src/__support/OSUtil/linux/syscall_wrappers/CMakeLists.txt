@@ -1300,3 +1300,18 @@ add_header_library(
     libc.src.__support.macros.config
     libc.src.__support.OSUtil.osutil
 )
+
+add_header_library(
+  mknodat
+  HDRS
+    mknodat.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.dev_t
+    libc.hdr.types.mode_t
+    libc.include.sys_syscall
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.__support.OSUtil.osutil
+)
