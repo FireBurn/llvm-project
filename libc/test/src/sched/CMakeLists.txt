@@ -203,3 +203,22 @@ add_libc_test(
     libc.src.sched.__sched_setcpuzero
     libc.src.sched.__sched_xorcpuset
 )
+
+add_libc_test(
+  namespace_test
+  SUITE
+    libc_sched_unittests
+  SRCS
+    namespace_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.include.sched
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.sched.setns
+    libc.src.sched.unshare
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
