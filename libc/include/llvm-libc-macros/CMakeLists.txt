@@ -307,12 +307,6 @@ add_macro_header(
 )
 
 add_macro_header(
-  sys_mount_macros
-  HDR
-    sys-mount-macros.h
-)
-
-add_macro_header(
   sys_personality_macros
   HDR
     sys-personality-macros.h
@@ -559,4 +553,10 @@ add_macro_header(
   sys_swap_macros
   HDR
     sys-swap-macros.h
+)
+
+add_macro_header(
+  sys_mount_macros
+  HDR
+    sys-mount-macros.h
 )
