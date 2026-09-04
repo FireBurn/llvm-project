@@ -739,3 +739,38 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.errno.errno
 )
+
+add_header_library(
+  wcwidth_table
+  HDRS
+    wcwidth_table.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  wcwidth
+  SRCS
+    wcwidth.cpp
+  HDRS
+    wcwidth.h
+  DEPENDS
+    .wcwidth_table
+    libc.hdr.stdint_proxy
+    libc.hdr.types.wchar_t
+)
+
+add_entrypoint_object(
+  wcswidth
+  SRCS
+    wcswidth.cpp
+  HDRS
+    wcswidth.h
+  DEPENDS
+    .wcwidth
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+)
