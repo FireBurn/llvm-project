@@ -21610,6 +21610,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_thread_pointer",
+    hdrs = ["src/__support/elf/thread_pointer.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_syscall",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_registry",
     hdrs = ["src/__support/elf/registry.h"],
     deps = [
