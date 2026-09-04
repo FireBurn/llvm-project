@@ -64,6 +64,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_random
     libc.include.sys_errno
     libc.include.sys_file
+    libc.include.sys_mount
     libc.include.sys_swap
     libc.include.sys_resource
     libc.include.sys_select
