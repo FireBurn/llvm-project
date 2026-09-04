@@ -9,3 +9,12 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "fnmatch_test",
+    srcs = ["fnmatch_test.cpp"],
+    deps = [
+        "//libc:fnmatch",
+        "//libc:hdr_fnmatch_macros",
+    ],
+)
