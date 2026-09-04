@@ -119,6 +119,13 @@ functions:
     arguments:
       - type: int
       - type: void (*)(int)))(int
+  - name: killpg
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pid_t
+      - type: int
   - name: sigsuspend
     standards:
       - posix
