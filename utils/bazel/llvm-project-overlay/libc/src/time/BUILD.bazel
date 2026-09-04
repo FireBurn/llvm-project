@@ -45,6 +45,23 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "timegm",
+    srcs = ["timegm.cpp"],
+    hdrs = ["timegm.h"],
+    deps = [
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "strftime_core_num_converter",
     hdrs = ["strftime_core/num_converter.h"],
@@ -187,6 +204,22 @@ libc_support_library(
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "gmtime_r",
+    srcs = ["gmtime_r.cpp"],
+    hdrs = ["gmtime_r.h"],
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
 

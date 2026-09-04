@@ -369,6 +369,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getopt_macros",
+    hdrs = ["getopt_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_getopt_macros",
+    ],
+)
+
+libc_support_library(
     name = "locale_macros",
     hdrs = ["locale_macros.h"],
     deps = [

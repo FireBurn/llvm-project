@@ -738,6 +738,67 @@ libc_function(
 )
 
 libc_function(
+    name = "getopt",
+    srcs = ["getopt.cpp"],
+    hdrs = ["getopt.h"],
+    deps = [
+        ":getopt_common",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdio:fprintf",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdlib:environ_internal",
+    ],
+)
+
+libc_function(
+    name = "getopt_long",
+    srcs = ["getopt_long.cpp"],
+    hdrs = ["getopt_long.h", "getopt_long_impl.h", "getopt_common.h"],
+    deps = [
+        ":getopt",
+        ":getopt_common",
+        ":getopt_long_impl",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:getopt_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdio:fprintf",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdlib:environ_internal",
+    ],
+)
+
+libc_function(
+    name = "getopt_long_only",
+    srcs = ["getopt_long_only.cpp"],
+    hdrs = ["getopt_long_only.h", "getopt_long_impl.h", "getopt_common.h"],
+    deps = [
+        ":getopt",
+        ":getopt_common",
+        ":getopt_long_impl",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:getopt_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdio:fprintf",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdlib:environ_internal",
+    ],
+)
+
+libc_function(
     name = "getpgrp",
     srcs = ["linux/getpgrp.cpp"],
     hdrs = ["getpgrp.h"],
@@ -753,6 +814,32 @@ libc_support_library(
     name = "unistd_get_current_dir_name",
     hdrs = ["get_current_dir_name.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "getopt_common",
+    hdrs = ["getopt_common.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/stdio:fprintf",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdlib:environ_internal",
+    ],
+)
+
+libc_support_library(
+    name = "getopt_long_impl",
+    hdrs = ["getopt_long_impl.h"],
+    deps = [
+        ":getopt_common",
+        "//libc/hdr:getopt_macros",
+        "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:config",
     ],
 )
