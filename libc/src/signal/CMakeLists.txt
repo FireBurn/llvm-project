@@ -85,3 +85,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sigismember
 )
+
+add_entrypoint_object(
+  sigsuspend
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigsuspend
+)
