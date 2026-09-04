@@ -57,6 +57,7 @@
 // riscv
 #define R_RISCV_64 2
 #define R_RISCV_RELATIVE 3
+#define R_RISCV_TLS_TPREL64 11
 #define R_RISCV_JUMP_SLOT 5
 #define R_RISCV_IRELATIVE 58
 
@@ -153,6 +154,7 @@
 #define R_X86_64_TPOFF64 18
 
 #define R_AARCH64_NONE 0
+#define R_AARCH64_TLS_TPREL64 1030
 
 #define R_ARM_NONE 0
 
