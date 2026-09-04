@@ -43,3 +43,12 @@ libc_test(
         "//libc/src/__support:elf_relocation",
     ],
 )
+
+libc_test(
+    name = "module_test",
+    srcs = ["module_test.cpp"],
+    deps = [
+        "//libc/src/__support:elf_elf_types",
+        "//libc/src/__support:elf_module",
+    ],
+)
