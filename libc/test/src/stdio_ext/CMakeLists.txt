@@ -1,0 +1,28 @@
+add_custom_target(libc_stdio_ext_unittests)
+
+add_libc_test(
+  stdio_ext_test
+  SUITE
+    libc_stdio_ext_unittests
+  SRCS
+    stdio_ext_test.cpp
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.src.stdio.fclose
+    libc.src.stdio.ferror
+    libc.src.stdio.fflush
+    libc.src.stdio.fgetc
+    libc.src.stdio.fopen
+    libc.src.stdio.fwrite
+    libc.src.stdio.remove
+    libc.src.stdio_ext.__fbufsize
+    libc.src.stdio_ext.__flbf
+    libc.src.stdio_ext.__fpending
+    libc.src.stdio_ext.__fpurge
+    libc.src.stdio_ext.__freadable
+    libc.src.stdio_ext.__freadahead
+    libc.src.stdio_ext.__freading
+    libc.src.stdio_ext.__fseterr
+    libc.src.stdio_ext.__fwritable
+    libc.src.stdio_ext.__fwriting
+)
