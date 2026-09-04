@@ -591,6 +591,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  utime
+  ../libc/include/utime.yaml
+  utime.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_utimbuf
+    .llvm-libc-types.time_t
+)
+
+add_header_macro(
   iconv
   ../libc/include/iconv.yaml
   iconv.h
