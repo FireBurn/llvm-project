@@ -1016,6 +1016,23 @@ add_libc_test(
 )
 
 add_libc_test(
+  getlogin_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getlogin_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.stdlib.unsetenv
+    libc.src.unistd.getlogin
+    libc.src.unistd.getlogin_r
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   lchown_test
   SUITE
     libc_unistd_unittests

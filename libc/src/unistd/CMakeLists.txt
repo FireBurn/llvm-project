@@ -673,3 +673,30 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.lchown
 )
+
+add_entrypoint_object(
+  getlogin_r
+  SRCS
+    getlogin_r.cpp
+  HDRS
+    getlogin_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.pwd.getpwuid
+    libc.src.stdlib.getenv
+    libc.src.string.string_utils
+    libc.src.unistd.getuid
+)
+
+add_entrypoint_object(
+  getlogin
+  SRCS
+    getlogin.cpp
+  HDRS
+    getlogin.h
+  DEPENDS
+    .getlogin_r
+    libc.hdr.limits_macros
+    libc.src.errno.errno
+)
