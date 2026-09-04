@@ -1,0 +1,36 @@
+add_entrypoint_object(
+  eventfd
+  SRCS
+    eventfd.cpp
+  HDRS
+    ../eventfd.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+    libc.hdr.types.eventfd_t
+)
+
+add_entrypoint_object(
+  eventfd_read
+  SRCS
+    eventfd_read.cpp
+  HDRS
+    ../eventfd_read.h
+  DEPENDS
+    libc.hdr.types.eventfd_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  eventfd_write
+  SRCS
+    eventfd_write.cpp
+  HDRS
+    ../eventfd_write.h
+  DEPENDS
+    libc.hdr.types.eventfd_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
+    libc.src.errno.errno
+)
