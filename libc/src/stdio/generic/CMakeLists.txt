@@ -685,3 +685,32 @@ add_generic_entrypoint_object(
     libc.src.__support.File.file
     libc.src.stdio.stderr
 )
+
+
+add_entrypoint_object(
+  dprintf
+  SRCS
+    dprintf.cpp
+  HDRS
+    ../dprintf.h
+  DEPENDS
+    libc.src.__support.CPP.limits
+    libc.src.__support.arg_list
+    libc.src.__support.printf_core.error_mapper
+    libc.src.__support.printf_core.vdprintf_internal
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  vdprintf
+  SRCS
+    vdprintf.cpp
+  HDRS
+    ../vdprintf.h
+  DEPENDS
+    libc.src.__support.CPP.limits
+    libc.src.__support.arg_list
+    libc.src.__support.printf_core.error_mapper
+    libc.src.__support.printf_core.vdprintf_internal
+    libc.src.errno.errno
+)
