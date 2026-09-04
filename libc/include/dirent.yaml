@@ -64,3 +64,22 @@ functions:
     return_type: struct dirent *
     arguments:
       - type: DIR *
+  - name: rewinddir
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: DIR *
+  - name: seekdir
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: DIR *
+      - type: long
+  - name: telldir
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: DIR *
