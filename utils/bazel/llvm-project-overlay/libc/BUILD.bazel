@@ -24704,9 +24704,114 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "getnameinfo",
+    srcs = ["src/netdb/getnameinfo.cpp"],
+    hdrs = ["src/netdb/getnameinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_net_if_macros",
+        ":hdr_netdb_macros",
+        ":inet_ntop",
+        ":net_if_if_indextoname",
+        ":ntohs",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_socklen_t",
+        ":types_struct_sockaddr",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+    ],
+)
+
 libc_support_library(
     name = "llvm_libc_macros_linux_netdb_macros",
     hdrs = ["include/llvm-libc-macros/linux/netdb-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_netdb_macros",
+    hdrs = ["include/llvm-libc-macros/netdb-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_netdb_macros",
+    hdrs = ["hdr/netdb_macros.h"],
+    deps = [
+        ":llvm_libc_macros_netdb_macros",
+    ],
+)
+
+libc_support_library(
+    name = "net_if_if_nametoindex",
+    srcs = ["src/net/if/linux/if_nametoindex.cpp"],
+    hdrs = ["src/net/if/if_nametoindex.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_socket",
+        ":hdr_errno_macros",
+        ":hdr_net_if_macros",
+        ":hdr_sys_socket_macros",
+        ":string_memory_utils",
+        ":sys_ioctl_macros",
+        ":types_struct_ifreq",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_net_if_macros",
+    hdrs = ["include/llvm-libc-macros/linux/net-if-macros.h"],
+    deps = [
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_net_if_macros",
+    hdrs = ["include/llvm-libc-macros/net-if-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_net_if_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_net_if_macros",
+    hdrs = ["hdr/net_if_macros.h"],
+    deps = [
+        ":llvm_libc_macros_net_if_macros",
+    ],
+)
+
+libc_support_library(
+    name = "net_if_if_indextoname",
+    srcs = ["src/net/if/linux/if_indextoname.cpp"],
+    hdrs = ["src/net/if/if_indextoname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_socket",
+        ":hdr_errno_macros",
+        ":hdr_net_if_macros",
+        ":hdr_sys_socket_macros",
+        ":string_memory_utils",
+        ":string_utils",
+        ":sys_ioctl_macros",
+        ":types_struct_ifreq",
+    ],
 )
 
 libc_support_library(
@@ -25065,6 +25170,20 @@ libc_support_library(
     hdrs = ["hdr/types/struct_dl_phdr_info.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_dl_phdr_info"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ifreq",
+    hdrs = ["include/llvm-libc-types/struct_ifreq.h"],
+)
+
+libc_support_library(
+    name = "types_struct_ifreq",
+    hdrs = ["hdr/types/struct_ifreq.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ifreq"],
         "//conditions:default": [],
     }),
 )
