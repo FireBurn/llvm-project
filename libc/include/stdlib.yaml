@@ -171,6 +171,32 @@ functions:
     return_type: size_t
     arguments:
       - type: const void *
+  - name: random
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: void
+  - name: srandom
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: unsigned int
+  - name: initstate
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: unsigned int
+      - type: char *
+      - type: size_t
+  - name: setstate
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: char *
   - name: mktemp
     standards:
       - gnu
