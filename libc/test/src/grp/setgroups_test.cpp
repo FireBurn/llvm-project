@@ -44,7 +44,7 @@ TEST_F(LlvmLibcSetGroupsTest, TooManyGroups) {
   gid_t list[1] = {0};
   // A size beyond NGROUPS_MAX is rejected, but the kernel checks for
   // CAP_SETGID first, so an unprivileged process is told EPERM instead.
-  EXPECT_THAT(LIBC_NAMESPACE::setgroups(static_cast<size_t>(NGROUPS_MAX) + 1,
-                                        list),
-              Fails(any_of(EINVAL, EPERM), -1));
+  EXPECT_THAT(
+      LIBC_NAMESPACE::setgroups(static_cast<size_t>(NGROUPS_MAX) + 1, list),
+      Fails(any_of(EINVAL, EPERM), -1));
 }
