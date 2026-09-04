@@ -20723,3 +20723,16 @@ libc_support_library(
         ":types_size_t",
     ],
 )
+
+libc_support_library(
+    name = "__support_elf_passive_abi",
+    hdrs = ["src/__support/elf/passive_abi.h"],
+    deps = [
+        ":__support_elf_map_segments",
+        ":__support_elf_module",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
