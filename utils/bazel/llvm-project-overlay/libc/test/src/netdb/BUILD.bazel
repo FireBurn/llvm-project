@@ -9,3 +9,18 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "getnameinfo_test",
+    srcs = ["getnameinfo_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:getnameinfo",
+        "//libc:hdr_netdb_macros",
+        "//libc:htons",
+        "//libc:net_if_if_nametoindex",
+        "//libc:types_struct_sockaddr",
+        "//libc:types_struct_sockaddr_in",
+        "//libc:types_struct_sockaddr_in6",
+    ],
+)
