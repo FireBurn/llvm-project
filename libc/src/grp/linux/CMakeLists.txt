@@ -1,0 +1,12 @@
+add_entrypoint_object(
+  setgroups
+  SRCS
+    setgroups.cpp
+  HDRS
+    ../setgroups.h
+  DEPENDS
+    libc.hdr.types.gid_t
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setgroups
+    libc.src.errno.errno
+)
