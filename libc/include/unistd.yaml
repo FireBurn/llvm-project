@@ -2,6 +2,8 @@ header: unistd.h
 standards:
   - posix
 macros:
+  - macro_name: _CS_PATH
+    macro_header: unistd-macros.h
   - macro_name: SEEK_SET
     macro_header: file-seek-macros.h
   - macro_name: SEEK_CUR
