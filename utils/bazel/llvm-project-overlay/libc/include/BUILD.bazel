@@ -22,6 +22,7 @@ package(
 )
 
 LLVM_LIBC_GENERATED_HEADERS = [
+    libc_header_info("alloca"),
     libc_header_info(
         "assert",
         has_def_template = True,

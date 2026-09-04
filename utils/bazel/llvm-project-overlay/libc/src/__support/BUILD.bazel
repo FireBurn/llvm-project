@@ -418,3 +418,27 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "elf_elf_types",
+    hdrs = ["elf/elf_types.h"],
+    deps = [
+        "//libc/hdr:elf_proxy",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "elf_dynamic",
+    hdrs = ["elf/dynamic.h"],
+    deps = [
+        ":elf_elf_types",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)

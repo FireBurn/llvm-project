@@ -222,39 +222,3 @@ libc_test(
         "//libc/src/unistd:getegid",
     ],
 )
-
-# TODO: add rules for functions modifying directories.
-
-#TODO: Enable once fullbuild is added to bazel, since this depends on a macro
-# definition in the public header
-
-# libc_test(
-#     name = "syscall_test",
-#     srcs = ["syscall_test.cpp"],
-#     deps = [
-#         "//libc/src/compat:syscall",
-#     ],
-# )
-
-# TODO: add once sysconf is complete
-
-# libc_test(
-#     name = "sysconf_test",
-#     srcs = ["sysconf_test.cpp"],
-#     deps = [
-#         "//libc/src/unistd:sysconf",
-#     ],
-# )
-
-# TODO: add fopencookie and fflush
-
-# libc_test(
-#     name = "getopt_test",
-#     srcs = ["getopt_test.cpp"],
-#     deps = [
-#         "//libc/src/__support/CPP:array",
-#         "//libc/src/unistd:getopt",
-#         "//libc/src/stdio:fopencookie",
-#         "//libc/src/stdio:fflush",
-#     ],
-# )
