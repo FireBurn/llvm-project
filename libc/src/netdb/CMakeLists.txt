@@ -36,3 +36,21 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  getnameinfo
+  SRCS
+    getnameinfo.cpp
+  HDRS
+    getnameinfo.h
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_sockaddr
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.include.sys_socket
+    libc.src.arpa.inet.inet_ntop
+    libc.src.arpa.inet.ntohs
+    libc.src.string.string_utils
+)
