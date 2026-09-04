@@ -8,6 +8,7 @@ types:
 enums: []
 objects: []
 functions:
+<<<<<<< HEAD
   - name: endgrent
     standards:
       - posix
@@ -55,3 +56,12 @@ functions:
       - posix
     return_type: void
     arguments: []
+=======
+  - name: setgroups
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: size_t
+      - type: const gid_t *
+>>>>>>> b35cc89d12ec ([libc] Add setgroups)
