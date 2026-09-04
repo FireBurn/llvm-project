@@ -401,6 +401,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/swap.h entrypoints
+    libc.src.sys.swap.swapoff
+    libc.src.sys.swap.swapon
+
     # sys/stat.h entrypoints
     libc.src.sys.stat.chmod
     libc.src.sys.stat.fchmod
