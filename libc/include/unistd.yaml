@@ -374,6 +374,16 @@ functions:
       - type: int
       - type: uid_t
       - type: gid_t
+  - name: fchownat
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: uid_t
+      - type: gid_t
+      - type: int
   - name: fpathconf
     standards:
       - posix

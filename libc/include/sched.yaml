@@ -18,6 +18,19 @@ types:
 enums: []
 objects: []
 functions:
+  - name: setns
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: int
+  - name: unshare
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
   - name: __sched_andcpuset
     standards:
       - llvm_libc_ext
