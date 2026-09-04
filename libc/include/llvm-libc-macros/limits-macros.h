@@ -363,6 +363,49 @@
 #define _POSIX_ARG_MAX 4096
 #endif
 
+#ifndef _POSIX_ATEXIT_MAX
+#define _POSIX_ATEXIT_MAX 32
+#endif
+
+/// The POSIX minimum for the utilities, which is a separate set from the
+/// values above.
+#ifndef _POSIX2_LINE_MAX
+#define _POSIX2_LINE_MAX 2048
+#endif
+
+// The minimums for the bc, regular expression and collation utilities.
+#ifndef _POSIX2_BC_BASE_MAX
+#define _POSIX2_BC_BASE_MAX 99
+#endif
+
+#ifndef _POSIX2_BC_DIM_MAX
+#define _POSIX2_BC_DIM_MAX 2048
+#endif
+
+#ifndef _POSIX2_BC_SCALE_MAX
+#define _POSIX2_BC_SCALE_MAX 99
+#endif
+
+#ifndef _POSIX2_BC_STRING_MAX
+#define _POSIX2_BC_STRING_MAX 1000
+#endif
+
+#ifndef _POSIX2_CHARCLASS_NAME_MAX
+#define _POSIX2_CHARCLASS_NAME_MAX 14
+#endif
+
+#ifndef _POSIX2_COLL_WEIGHTS_MAX
+#define _POSIX2_COLL_WEIGHTS_MAX 2
+#endif
+
+#ifndef _POSIX2_EXPR_NEST_MAX
+#define _POSIX2_EXPR_NEST_MAX 32
+#endif
+
+#ifndef _POSIX2_RE_DUP_MAX
+#define _POSIX2_RE_DUP_MAX 255
+#endif
+
 /// The POSIX minimum values. An implementation must support at least these,
 /// so portable code sizes its buffers from them rather than from the values
 /// this implementation happens to offer.
