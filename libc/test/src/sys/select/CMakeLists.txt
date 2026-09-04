@@ -31,4 +31,26 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
+add_libc_test(
+  pselect_test
+  SUITE
+    libc_sys_select_unittests
+  SRCS
+    pselect_test.cpp
+  DEPENDS
+    libc.include.sys_select
+    libc.src.errno.errno
+    libc.src.signal.sigaction
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.sys.select.pselect
+    libc.src.sys.select.select
+    libc.src.unistd.alarm
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
 add_subdirectory(testdata)
