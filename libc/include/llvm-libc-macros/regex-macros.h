@@ -15,6 +15,9 @@
 #define LLVM_LIBC_MACROS_REGEX_MACROS_H
 
 // regcomp cflags
+// POSIX requires at least 255 repetitions to be accepted in a bound.
+#define RE_DUP_MAX 255
+
 #define REG_EXTENDED 1
 #define REG_ICASE 2
 #define REG_NOSUB 4
