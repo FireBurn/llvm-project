@@ -10,10 +10,10 @@
 #include "src/__support/File/file.h"
 
 #include "hdr/errno_macros.h"
+#include "hdr/func/realloc.h"
 #include "hdr/types/FILE.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "hdr/func/realloc.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -42,8 +42,7 @@ LLVM_LIBC_FUNCTION(ssize_t, getdelim,
     // Always keep room for the character just read plus the null terminator.
     if (len + 2 > *n) {
       size_t new_size = *n < DEFAULT_BUFSIZE ? DEFAULT_BUFSIZE : *n * 2;
-      char *new_buf =
-          reinterpret_cast<char *>(::realloc(*lineptr, new_size));
+      char *new_buf = reinterpret_cast<char *>(::realloc(*lineptr, new_size));
       if (new_buf == nullptr) {
         libc_errno = ENOMEM;
         return -1;

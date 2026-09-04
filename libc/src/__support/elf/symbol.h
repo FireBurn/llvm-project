@@ -81,11 +81,10 @@ private:
     if (header_->bloom_size == 0)
       return true;
     constexpr uint32_t BITS = 8 * sizeof(ElfW(Addr));
-    const ElfW(Addr) word =
-        bloom_[(hash / BITS) % header_->bloom_size];
-    const ElfW(Addr) mask =
-        (ElfW(Addr))1 << (hash % BITS) |
-        (ElfW(Addr))1 << ((hash >> header_->bloom_shift) % BITS);
+    const ElfW(Addr) word = bloom_[(hash / BITS) % header_->bloom_size];
+    const ElfW(Addr) mask = (ElfW(Addr))1 << (hash % BITS) |
+                            (ElfW(Addr))1
+                                << ((hash >> header_->bloom_shift) % BITS);
     return (word & mask) == mask;
   }
 

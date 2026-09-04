@@ -72,8 +72,7 @@ public:
       const ElfW(Rela) &rela = entries_[i];
       if (reloc_type(rela.r_info) != RELATIVE_RELOC)
         continue;
-      auto *target =
-          reinterpret_cast<ElfW(Addr) *>(load_bias + rela.r_offset);
+      auto *target = reinterpret_cast<ElfW(Addr) *>(load_bias + rela.r_offset);
       *target = load_bias + static_cast<ElfW(Addr)>(rela.r_addend);
       ++applied;
     }
