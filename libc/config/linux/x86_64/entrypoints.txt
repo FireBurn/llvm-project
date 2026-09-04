@@ -64,6 +64,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     # poll.h entrypoints
     libc.src.poll.poll
 
+    # glob.h entrypoints
+    libc.src.glob.glob
+    libc.src.glob.globfree
+
     # grp.h entrypoints
     libc.src.grp.endgrent
     libc.src.grp.getgrent
