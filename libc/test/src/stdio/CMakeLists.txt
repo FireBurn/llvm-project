@@ -143,6 +143,27 @@ add_libc_test(
 )
 
 add_libc_test(
+  fmemopen_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    fmemopen_test.cpp
+  DEPENDS
+    libc.include.stdio
+    libc.hdr.types.size_t
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.stdio.feof
+    libc.src.stdio.fflush
+    libc.src.stdio.fmemopen
+    libc.src.stdio.fread
+    libc.src.stdio.fseek
+    libc.src.stdio.ftell
+    libc.src.stdio.fwrite
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   fopencookie_test
   SUITE
     libc_stdio_unittests
