@@ -258,6 +258,17 @@ libc_test(
 )
 
 libc_test(
+    name = "sysconf_test",
+    srcs = ["sysconf_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/unistd:sysconf",
+    ],
+)
+
+libc_test(
     name = "getopt_test",
     srcs = ["getopt_test.cpp"],
     deps = [
