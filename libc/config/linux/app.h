@@ -61,7 +61,14 @@ struct AppProperties {
   uintptr_t *env_ptr;
 };
 
+#ifdef LIBC_COPT_SHARED_LIBRARY
+// Defined in libc rather than in crt1.o, so libc.so can reach it too. The
+// reference has to be strong: a weak one would not pull the definition out of
+// libc.a on a static link, and would then quietly resolve to nothing.
+extern LIBC_SHARED_INTERNAL AppProperties app;
+#else
 [[gnu::weak]] extern AppProperties app;
+#endif
 
 // The descriptor of a thread's TLS area.
 struct TLSDescriptor {

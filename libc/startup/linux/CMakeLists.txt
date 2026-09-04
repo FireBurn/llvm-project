@@ -168,3 +168,12 @@ foreach(target IN LISTS startup_components)
     RENAME $<TARGET_PROPERTY:${fq_target_name},OUTPUT_NAME>
     COMPONENT libc)
 endforeach()
+
+add_object_library(
+  app
+  SRCS
+    app.cpp
+  DEPENDS
+    libc.config.app_h
+    libc.src.__support.macros.config
+)
