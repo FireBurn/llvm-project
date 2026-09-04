@@ -58,6 +58,15 @@ functions:
     arguments:
       - type: const char *
       - type: mode_t
+  - name: fstatat
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *__restrict
+      - type: struct stat *__restrict
+      - type: int
   - name: mknod
     standards:
       - posix
