@@ -16920,6 +16920,22 @@ libc_function(
 )
 
 libc_function(
+    name = "reallocarray",
+    srcs = ["src/stdlib/reallocarray.cpp"],
+    hdrs = ["src/stdlib/reallocarray.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":stdlib_reallocarray",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "realpath",
     srcs = ["src/stdlib/linux/realpath.cpp"],
     hdrs = ["src/stdlib/realpath.h"],
@@ -21449,5 +21465,19 @@ libc_support_library(
     hdrs = ["src/termios/linux/kernel_termios.h"],
     deps = [
         ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_reallocarray",
+    srcs = ["src/stdlib/reallocarray.cpp"],
+    hdrs = ["src/stdlib/reallocarray.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":types_size_t",
     ],
 )
