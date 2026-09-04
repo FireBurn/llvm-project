@@ -601,6 +601,28 @@ add_libc_test(
 )
 
 add_libc_test(
+  getdelim_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    getdelim_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.stdio
+    libc.src.__support.CPP.scope
+    libc.src.errno.errno
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fwrite
+    libc.src.stdio.getdelim
+    libc.src.stdio.getline
+    libc.hdr.func.free
+    libc.src.string.strcmp
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   ftell_test
   SUITE
     libc_stdio_unittests
