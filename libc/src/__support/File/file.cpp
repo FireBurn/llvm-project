@@ -553,8 +553,14 @@ File::ModeFlags File::mode_flags(const char *mode) {
     case 'x':
       flags |= static_cast<ModeFlags>(CreateType::EXCLUSIVE);
       break;
+    case 'e':
+      flags |= static_cast<ModeFlags>(DescriptorFlags::CLOEXEC);
+      break;
     default:
-      return 0;
+      // C leaves anything past the mode characters it defines to the
+      // implementation, and every implementation ignores what it does not
+      // know rather than failing the open.
+      break;
     }
   }
 
