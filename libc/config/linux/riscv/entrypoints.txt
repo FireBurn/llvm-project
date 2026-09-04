@@ -401,6 +401,25 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.file.flock
 
+    # sys/eventfd.h entrypoints
+    libc.src.sys.eventfd.eventfd
+    libc.src.sys.eventfd.eventfd_read
+    libc.src.sys.eventfd.eventfd_write
+
+    # sys/signalfd.h entrypoints
+    libc.src.sys.signalfd.signalfd
+
+    # sys/timerfd.h entrypoints
+    libc.src.sys.timerfd.timerfd_create
+    libc.src.sys.timerfd.timerfd_gettime
+    libc.src.sys.timerfd.timerfd_settime
+
+    # sys/inotify.h entrypoints
+    libc.src.sys.inotify.inotify_add_watch
+    libc.src.sys.inotify.inotify_init
+    libc.src.sys.inotify.inotify_init1
+    libc.src.sys.inotify.inotify_rm_watch
+
     # sys/xattr.h entrypoints
     libc.src.sys.xattr.fgetxattr
     libc.src.sys.xattr.flistxattr

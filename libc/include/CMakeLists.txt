@@ -879,6 +879,48 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_eventfd
+  ../libc/include/sys/eventfd.yaml
+  sys/eventfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_eventfd_macros
+    .llvm-libc-types.eventfd_t
+)
+
+add_header_macro(
+  sys_signalfd
+  ../libc/include/sys/signalfd.yaml
+  sys/signalfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_signalfd_macros
+    .llvm-libc-types.struct_signalfd_siginfo
+    .llvm-libc-types.sigset_t
+)
+
+add_header_macro(
+  sys_timerfd
+  ../libc/include/sys/timerfd.yaml
+  sys/timerfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_timerfd_macros
+    .llvm-libc-types.struct_itimerspec
+    .llvm-libc-types.clockid_t
+)
+
+add_header_macro(
+  sys_inotify
+  ../libc/include/sys/inotify.yaml
+  sys/inotify.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_inotify_macros
+    .llvm-libc-types.struct_inotify_event
+)
+
+add_header_macro(
   sys_xattr
   ../libc/include/sys/xattr.yaml
   sys/xattr.h

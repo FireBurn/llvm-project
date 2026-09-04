@@ -1,0 +1,29 @@
+add_custom_target(libc_sys_inotify_unittests)
+
+add_libc_test(
+  inotify_test
+  SUITE
+    libc_sys_inotify_unittests
+  SRCS
+    inotify_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_inotify_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_inotify_event
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.stdio.remove
+    libc.src.sys.inotify.inotify_add_watch
+    libc.src.sys.inotify.inotify_init
+    libc.src.sys.inotify.inotify_init1
+    libc.src.sys.inotify.inotify_rm_watch
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.read
+    libc.src.unistd.rmdir
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
