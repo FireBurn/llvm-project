@@ -84,3 +84,17 @@ add_libc_test(
     libc.src.__support.c_string
     libc.src.__support.elf.map_segments
 )
+
+if(LIBC_ENABLE_SHARED)
+  add_libc_test(
+    load_module_test
+    SUITE
+      libc-support-tests
+    SRCS
+      load_module_test.cpp
+    COMPILE_OPTIONS
+      -DLIBC_TEST_SHARED_OBJECT="$<TARGET_FILE:libc-shared>"
+    DEPENDS
+      libc.src.__support.elf.load_module
+  )
+endif()
