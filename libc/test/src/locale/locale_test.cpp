@@ -66,11 +66,14 @@ TEST_F(LlvmLibcLocale, SetLocale) {
   // Setting a "C" or default locale.
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, "C"), "C");
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, ""), "C");
+  // POSIX is another name for it.
+  EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, "POSIX"), "C");
   // Querying the current locale.
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_NUMERIC, nullptr), "C");
 
   // Unsupported categories or non-C locales.
+  EXPECT_EQ(LIBC_NAMESPACE::setlocale(-1, "C"), nullptr);
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL + 1, "C"), nullptr);
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL + 1, nullptr), nullptr);
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "does-not-exist"), nullptr);
