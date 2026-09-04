@@ -46,6 +46,7 @@ add_subdirectory(pwd)
   add_subdirectory(semaphore)
   add_subdirectory(sys)
   add_subdirectory(termios)
+  add_subdirectory(utime)
 endif()
 
 if(LIBC_COMPILER_HAS_EXT_VECTOR_TYPE)
