@@ -1,4 +1,5 @@
 add_subdirectory(file)
+add_subdirectory(swap)
 add_subdirectory(mman)
 add_subdirectory(personality)
 add_subdirectory(random)
