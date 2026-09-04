@@ -560,6 +560,21 @@ libc_function(
 )
 
 libc_function(
+    name = "initstate",
+    srcs = ["initstate.cpp"],
+    hdrs = ["initstate.h"],
+    deps = [
+        ":random_util",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "mkdtemp",
     srcs = ["linux/mkdtemp.cpp"],
     hdrs = ["mkdtemp.h"],
@@ -593,6 +608,45 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "random",
+    srcs = ["random.cpp"],
+    hdrs = ["random.h"],
+    deps = [
+        ":random_util",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "setstate",
+    srcs = ["setstate.cpp"],
+    hdrs = ["setstate.h"],
+    deps = [
+        ":random_util",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "srandom",
+    srcs = ["srandom.cpp"],
+    hdrs = ["srandom.h"],
+    deps = [
+        ":random_util",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_support_library(
     name = "stdlib_mktemp",
     hdrs = ["mktemp.h"],
@@ -616,5 +670,17 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "random_util",
+    srcs = ["random_util.cpp"],
+    hdrs = ["random_util.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
     ],
 )
