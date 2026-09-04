@@ -144,3 +144,22 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  sigismember_test
+  SUITE
+    libc_signal_unittests
+  SRCS
+    sigismember_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.src.errno.errno
+    libc.src.signal.sigaddset
+    libc.src.signal.sigdelset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigfillset
+    libc.src.signal.sigismember
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
