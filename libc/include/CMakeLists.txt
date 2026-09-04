@@ -1141,6 +1141,7 @@ add_header_macro(
     .llvm-libc-macros.time_macros
     .llvm-libc-types.struct_itimerspec
     .llvm-libc-types.struct_timespec
+    .llvm-libc-types.struct_timezone
 )
 
 add_header_macro(

@@ -717,6 +717,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_timezone",
+    hdrs = ["llvm-libc-types/struct_timezone.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_Elf64_Sxword",
     hdrs = ["llvm-libc-types/Elf64_Sxword.h"],
 )

@@ -61,3 +61,20 @@ add_libc_test(
     libc.hdr.types.struct_timeval
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  settimeofday_test
+  SUITE
+    libc-sys-time-tests
+  SRCS
+    settimeofday_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_timeval
+    libc.hdr.types.struct_timezone
+    libc.src.errno.errno
+    libc.src.sys.time.gettimeofday
+    libc.src.sys.time.settimeofday
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)

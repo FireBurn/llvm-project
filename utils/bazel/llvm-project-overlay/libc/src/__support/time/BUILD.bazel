@@ -96,3 +96,13 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "units",
+    hdrs = ["units.h"],
+    deps = [
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
