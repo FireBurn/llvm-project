@@ -14,14 +14,12 @@
 #include "src/regex/regexec.h"
 
 #include "hdr/regex_macros.h"
-#include "src/__support/CPP/mutex.h"
-#include "src/__support/CPP/string_view.h"
 #include "src/__support/common.h"
-#include "src/__support/libc_assert.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
-#include "src/__support/regex/regex_internal.h"
-#include "src/__support/regex/regex_matcher.h"
+#include "src/regex/regex_engine.h"
+#include "src/regex/regex_matcher.h"
+#include "src/string/string_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -31,46 +29,33 @@ LLVM_LIBC_FUNCTION(int, regexec,
                     regmatch_t *__restrict pmatch, int eflags)) {
   LIBC_CRASH_ON_NULLPTR(preg);
   LIBC_CRASH_ON_NULLPTR(string);
-
-  if ((eflags & ~(REG_NOTBOL | REG_NOTEOL)) != 0)
-    return REG_BADPAT;
-
-  // Guard against a null internal pointer (e.g. called after regfree).
-  auto *internal = static_cast<regex::RegexInternal *>(preg->__internal);
-  if (!internal)
+  // A pattern that has been freed matches nothing.
+  if (preg->__internal == nullptr)
     return REG_NOMATCH;
 
-  const bool want_pmatch = nmatch > 0 && !(internal->cflags & REG_NOSUB);
-  if (want_pmatch)
-    LIBC_CRASH_ON_NULLPTR(pmatch);
+  const auto *compiled = static_cast<const regex::Compiled *>(preg->__internal);
+  const size_t length = internal::string_length(string);
 
-  // POSIX requires regexec to be thread-safe across concurrent calls sharing a
-  // const regex_t*. Serialise access to internal->pool during lazy derivative
-  // evaluation, then release the lock before writing caller-owned pmatch.
-  regex::MatchResult res = regex::MatchResult::NoMatch;
-  {
-    cpp::lock_guard guard(internal->lock);
-    res = regex::match(*internal, cpp::string_view(string), eflags);
-  }
-  switch (res) {
-  case regex::MatchResult::Match:
-    // TODO: Populate leftmost-longest match offsets in subsequent patches.
-    // Initialise pmatch to {-1, -1} so callers never observe uninitialised
-    // stack memory.
-    if (want_pmatch) {
-      for (size_t i = 0; i < nmatch; ++i) {
-        pmatch[i].rm_so = -1;
-        pmatch[i].rm_eo = -1;
-      }
-    }
+  regex::Matcher matcher(*compiled, string, length, eflags);
+  regex::Matcher::Span groups[regex::MAX_GROUPS];
+  if (!matcher.search(0, groups))
+    return REG_NOMATCH;
+
+  // REG_NOSUB says the caller does not want offsets, so nothing is written
+  // even if it passed a buffer.
+  if (pmatch == nullptr || (compiled->cflags & REG_NOSUB) != 0)
     return 0;
-  case regex::MatchResult::NoMatch:
-    return REG_NOMATCH;
-  case regex::MatchResult::OutOfMemory:
-    return REG_ESPACE;
+
+  for (size_t i = 0; i < nmatch; ++i) {
+    if (i < regex::MAX_GROUPS) {
+      pmatch[i].rm_so = groups[i].start;
+      pmatch[i].rm_eo = groups[i].end;
+    } else {
+      pmatch[i].rm_so = -1;
+      pmatch[i].rm_eo = -1;
+    }
   }
-  LIBC_ASSERT(false);
-  __builtin_unreachable();
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

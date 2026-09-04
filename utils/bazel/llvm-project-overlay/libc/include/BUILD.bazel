@@ -22,7 +22,10 @@ package(
 )
 
 LLVM_LIBC_GENERATED_HEADERS = [
-    libc_header_info("alloca"),
+    libc_header_info(
+        "alloca",
+        other_srcs = ["stdlib-alloca.yaml"],
+    ),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -742,6 +745,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_regex_t",
+    hdrs = ["llvm-libc-types/regex_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_regmatch_t",
+    hdrs = ["llvm-libc-types/regmatch_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
 )
@@ -757,4 +770,9 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_printf_macros",
     hdrs = ["llvm-libc-macros/printf-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_regex_macros",
+    hdrs = ["llvm-libc-macros/regex-macros.h"],
 )

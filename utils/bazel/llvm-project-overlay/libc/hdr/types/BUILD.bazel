@@ -616,6 +616,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "regex_t",
+    hdrs = ["regex_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_regex_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "regmatch_t",
+    hdrs = ["regmatch_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_regmatch_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_dl_phdr_info",
     hdrs = ["struct_dl_phdr_info.h"],
     deps = select({
