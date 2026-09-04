@@ -22,7 +22,8 @@ namespace LIBC_NAMESPACE_DECL {
 constexpr size_t STDOUT_BUFFER_SIZE = 1024;
 uint8_t stdout_buffer[STDOUT_BUFFER_SIZE];
 static LinuxFile StdOut(1, stdout_buffer, STDOUT_BUFFER_SIZE, _IOLBF, false,
-                        FileMode::APPEND_MODE);
+                        FileMode::APPEND_MODE,
+                        /*static_stream=*/true);
 
 LLVM_LIBC_VARIABLE(FILE *, stdout) = reinterpret_cast<FILE *>(&StdOut);
 
