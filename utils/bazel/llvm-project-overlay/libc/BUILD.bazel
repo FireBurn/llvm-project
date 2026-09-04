@@ -27440,6 +27440,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_spawn_macros",
+    hdrs = ["include/llvm-libc-macros/spawn-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_regex_macros",
     hdrs = ["include/llvm-libc-macros/regex-macros.h"],
 )
