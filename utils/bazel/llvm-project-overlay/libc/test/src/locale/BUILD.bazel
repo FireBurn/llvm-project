@@ -9,3 +9,15 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "locale_test",
+    srcs = ["locale_test.cpp"],
+    deps = [
+        "//libc:freelocale",
+        "//libc:hdr_locale_macros",
+        "//libc:newlocale",
+        "//libc:setlocale",
+        "//libc:uselocale",
+    ],
+)
