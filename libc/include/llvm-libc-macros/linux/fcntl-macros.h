@@ -64,6 +64,24 @@
 // Perform access checks using the effective user and group IDs.
 #define AT_EACCESS 0x200
 
+// Follow the symlink, for the calls whose default is not to.
+#define AT_SYMLINK_FOLLOW 0x400
+
+// Do not trigger an automount of the last component.
+#define AT_NO_AUTOMOUNT 0x800
+
+// Apply to the whole subtree below the path, not just the path itself.
+#define AT_RECURSIVE 0x8000
+
+// How much of a network file's attributes statx has to go and fetch.
+#define AT_STATX_SYNC_TYPE 0x6000
+#define AT_STATX_SYNC_AS_STAT 0x0000
+#define AT_STATX_FORCE_SYNC 0x2000
+#define AT_STATX_DONT_SYNC 0x4000
+
+// Ask faccessat2 whether the file could be executed, without running it.
+#define AT_EXECVE_CHECK 0x10000
+
 // Values of SYS_fcntl commands.
 #define F_DUPFD 0
 #define F_GETFD 1
