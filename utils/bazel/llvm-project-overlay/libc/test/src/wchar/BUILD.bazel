@@ -187,6 +187,16 @@ libc_test(
 )
 
 libc_test(
+    name = "wcwidth_test",
+    srcs = ["wcwidth_test.cpp"],
+    deps = [
+        "//libc:types_wchar_t",
+        "//libc:wcswidth",
+        "//libc:wcwidth",
+    ],
+)
+
+libc_test(
     name = "wmemchr_test",
     srcs = ["wmemchr_test.cpp"],
     deps = [
