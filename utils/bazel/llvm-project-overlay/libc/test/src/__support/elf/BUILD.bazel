@@ -83,3 +83,11 @@ libc_test(
         "//libc:hdr_fcntl_macros",
     ],
 )
+
+libc_test(
+    name = "startup_stack_test",
+    srcs = ["startup_stack_test.cpp"],
+    deps = [
+        "//libc:__support_elf_startup_stack",
+    ],
+)
