@@ -1604,6 +1604,7 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # sys/select.h entrypoints
     libc.src.sys.select.select
+    libc.src.sys.select.pselect
 
     # wchar.h entrypoints
     libc.src.wchar.mbrlen
