@@ -1,0 +1,33 @@
+add_header_library(
+  cap_types
+  HDRS
+    cap_types.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+)
+
+add_entrypoint_object(
+  capget
+  SRCS
+    capget.cpp
+  HDRS
+    capget.h
+  DEPENDS
+    .cap_types
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  capset
+  SRCS
+    capset.cpp
+  HDRS
+    capset.h
+  DEPENDS
+    .cap_types
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
