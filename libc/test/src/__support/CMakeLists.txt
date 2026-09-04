@@ -323,6 +323,7 @@ add_libc_test(
     libc.src.__support.macros.properties.os
 )
 
+add_subdirectory(elf)
 add_subdirectory(CPP)
 add_subdirectory(File)
 add_subdirectory(printf_core)
