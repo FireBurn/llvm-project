@@ -32,6 +32,13 @@ functions:
     return_type: struct group *
     arguments:
       - type: const char *
+  - name: initgroups
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: gid_t
   - name: setgrent
     standards:
       - posix
