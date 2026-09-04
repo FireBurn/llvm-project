@@ -435,6 +435,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.termios.tcsendbreak
     libc.src.termios.tcsetattr
 
+    # utime.h entrypoints
+    libc.src.utime.utime
+
     # unistd.h entrypoints
     libc.src.unistd.alarm
     libc.src.unistd.access
