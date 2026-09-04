@@ -9,6 +9,7 @@ add_libc_test(
   DEPENDS
     libc.hdr.types.FILE
     libc.src.stdio.fclose
+    libc.src.stdio.ferror
     libc.src.stdio.fflush
     libc.src.stdio.fgetc
     libc.src.stdio.fopen
@@ -19,7 +20,9 @@ add_libc_test(
     libc.src.stdio_ext.__fpending
     libc.src.stdio_ext.__fpurge
     libc.src.stdio_ext.__freadable
+    libc.src.stdio_ext.__freadahead
     libc.src.stdio_ext.__freading
+    libc.src.stdio_ext.__fseterr
     libc.src.stdio_ext.__fwritable
     libc.src.stdio_ext.__fwriting
 )
