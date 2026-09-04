@@ -46,6 +46,7 @@ add_object_library(
     libc.src.__support.error_or
     libc.src.__support.macros.config
     libc.src.__support.alloc_checker
+    libc.hdr.types.off_t
     libc.hdr.errno_macros
     libc.hdr.types.struct_dirent
 )

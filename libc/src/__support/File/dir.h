@@ -19,6 +19,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/mutex.h"
 
+#include "hdr/types/off_t.h"
 #include "hdr/types/struct_dirent.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -41,8 +42,15 @@ ErrorOr<size_t> platform_fetch_dirents(int fd, cpp::span<uint8_t> buffer);
 // error number on failure.
 int platform_check_dir(int fd);
 
+// Moves the OS read position of the directory to |offset|. Returns 0 on
+// success or the error number on failure.
+int platform_seekdir(int fd, off_t offset);
+
 // Platform specific function to get the size of the directory entry record.
 size_t platform_dir_reclen(struct dirent *d);
+
+// The position at which the entry following |d| begins.
+off_t platform_dir_offset(struct dirent *d);
 
 // This class is designed to allow implementation of the POSIX dirent.h API.
 // By itself, it is platform independent but calls platform specific
@@ -52,6 +60,11 @@ class Dir {
   int fd;
   size_t readptr = 0;  // The current read pointer.
   size_t fillsize = 0; // The number of valid bytes availabe in the buffer.
+
+  // Where the next entry begins, as reported by the OS in the d_off of the
+  // entry last handed out. This is what telldir reports and what seekdir
+  // takes back.
+  off_t offset = 0;
 
   // This is a buffer of struct dirent values which will be fetched
   // from the OS. Since the d_name of struct dirent can be of a variable
@@ -68,7 +81,7 @@ class Dir {
   LIBC_INLINE Dir(const Dir &) = delete;
 
   LIBC_INLINE explicit Dir(int fdesc)
-      : fd(fdesc), readptr(0), fillsize(0),
+      : fd(fdesc), readptr(0), fillsize(0), offset(0),
         mutex(/*timed=*/false, /*recursive=*/false, /*robust=*/false,
               /*pshared=*/false) {}
   LIBC_INLINE ~Dir() = default;
@@ -80,6 +93,12 @@ public:
   static ErrorOr<Dir *> fdopen(int fd);
 
   ErrorOr<struct dirent *> read();
+
+  // The position of the entry which the next read will return.
+  off_t tell();
+
+  // Returns 0 on success or the error number on failure.
+  int seek(off_t loc);
 
   // Returns 0 on success or the error number on failure. If an error number
   // was returned, then the resources associated with the directory are not
