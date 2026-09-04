@@ -601,6 +601,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  fclose_stdstream_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    fclose_stdstream_test.cpp
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.src.stdio.fclose
+    libc.src.stdio.stdin
+)
+
+add_libc_test(
   getdelim_test
   SUITE
     libc_stdio_unittests
