@@ -372,6 +372,7 @@ libc_support_library(
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -418,8 +419,11 @@ libc_support_library(
         ":scanf_core_structs",
         ":scanf_parser",
         ":scanf_reader",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
