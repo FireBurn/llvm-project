@@ -25,6 +25,8 @@ endfunction()
 
 add_stdio_ext_entrypoint_object(__fbufsize)
 add_stdio_ext_entrypoint_object(__fpending)
+add_stdio_ext_entrypoint_object(__freadahead)
+add_stdio_ext_entrypoint_object(__fseterr)
 add_stdio_ext_entrypoint_object(__freading)
 add_stdio_ext_entrypoint_object(__fwriting)
 add_stdio_ext_entrypoint_object(__freadable)
