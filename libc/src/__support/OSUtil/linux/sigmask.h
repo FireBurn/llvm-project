@@ -36,6 +36,18 @@ LIBC_INLINE constexpr sigset_t full_set() {
   return set;
 }
 
+/// Whether the bit corresponding to |signal| is set in |set|. Returns false
+/// for a signal number outside the valid range, which the caller reports as
+/// an error rather than as absence.
+LIBC_INLINE constexpr bool has_signal(const sigset_t &set, int signal) {
+  if (signal >= NSIG || signal <= 0)
+    return false;
+  size_t n = static_cast<size_t>(signal) - 1;
+  size_t word = n / BITS_PER_SIGWORD;
+  size_t bit = n % BITS_PER_SIGWORD;
+  return (set.__signals[word] & (1UL << bit)) != 0;
+}
+
 /// Return an empty signal set with no signals set.
 LIBC_INLINE constexpr sigset_t empty_set() { return sigset_t{}; }
 
