@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int strverscmp(const char *lhs, const char *rhs);
 
+namespace internal {
+int strverscmp_impl(const char *lhs, const char *rhs);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STRING_STRVERSCMP_H
