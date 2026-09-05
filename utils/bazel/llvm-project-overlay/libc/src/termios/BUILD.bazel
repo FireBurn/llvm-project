@@ -49,3 +49,15 @@ libc_function(
         "//libc/src/errno:errno",
     ],
 )
+
+libc_function(
+    name = "cfmakeraw",
+    srcs = ["linux/cfmakeraw.cpp"],
+    hdrs = ["cfmakeraw.h"],
+    deps = [
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
