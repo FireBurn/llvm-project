@@ -494,6 +494,7 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
+
 add_libc_test(
   mbtowc_test
   SUITE
@@ -785,3 +786,36 @@ add_libc_test(
     libc.src.stdlib.srandom
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  pty_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    pty_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.libc_errno
+    libc.src.stdlib.grantpt
+    libc.src.stdlib.posix_openpt
+    libc.src.stdlib.ptsname
+    libc.src.stdlib.ptsname_r
+    libc.src.stdlib.unlockpt
+    libc.src.string.strlen
+    libc.src.string.strncmp
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+  add_libc_test(
+    malloc_trim_test
+    SUITE
+      libc-stdlib-tests
+    SRCS
+      malloc_trim_test.cpp
+    DEPENDS
+      libc.src.stdlib.free
+      libc.src.stdlib.malloc
+      libc.src.stdlib.malloc_trim
+  )
