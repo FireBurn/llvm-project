@@ -83,7 +83,9 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_inotify
     libc.include.sys_xattr
     libc.include.sys_swap
+    libc.include.sys_quota
     libc.include.sys_reboot
+    libc.include.sys_timex
     libc.include.sys_resource
     libc.include.sys_select
     libc.include.sys_sendfile
