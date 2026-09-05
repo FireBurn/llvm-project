@@ -19,6 +19,8 @@ add_entrypoint_object(
   HDRS
     ../select.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     .select_utils
     libc.hdr.types.fd_set
     libc.hdr.types.sigset_t

@@ -74,3 +74,27 @@ add_libc_test(
     libc.src.pthread.pthread_rwlockattr_setkind_np
     libc.src.pthread.pthread_rwlockattr_setpshared
 )
+
+add_libc_test(
+  pthread_cancel_test
+  SUITE
+    libc_pthread_unittests
+  SRCS
+    pthread_cancel_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.__support.CPP.atomic
+    libc.src.pthread.pthread_cancel
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.pthread.pthread_setcancelstate
+    libc.src.pthread.pthread_setcanceltype
+    libc.src.pthread.pthread_testcancel
+    libc.src.pthread._pthread_cleanup_pop
+    libc.src.pthread._pthread_cleanup_push
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+    libc.src.unistd.write
+)

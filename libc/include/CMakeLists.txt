@@ -732,6 +732,8 @@ add_header_macro(
     .llvm-libc-types.pthread_spinlock_t
     .llvm-libc-types.pthread_t
     .llvm-libc-types.pthread_id_np_t
+    .llvm-libc-types.struct__pthread_cleanup_buffer
+    .llvm-libc-types.__pthread_cleanup_routine_t
     .llvm-libc-types.struct_timespec
     .llvm_libc_common_h
 )

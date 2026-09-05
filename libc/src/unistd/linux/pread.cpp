@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/unistd/pread.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "hdr/stdint_proxy.h"             // For uint64_t.
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
@@ -20,6 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, pread,
                    (int fd, void *buf, size_t count, off_t offset)) {
+  internal::cancel_point();
   ssize_t ret;
   if constexpr (sizeof(long) == sizeof(uint32_t) &&
                 sizeof(off_t) == sizeof(uint64_t)) {
@@ -38,6 +41,9 @@ LLVM_LIBC_FUNCTION(ssize_t, pread,
   // The cast is important since there is a check that dereferences the pointer
   // which fails on void*.
   LIBC_MSAN_UNPOISON(reinterpret_cast<char *>(buf), count);
+  if (ret == -EINTR)
+    internal::cancel_point();
+
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

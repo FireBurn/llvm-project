@@ -10,6 +10,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_assert.h"
 #include "src/__support/libc_errno.h"
+#include "src/__support/threads/cancel.h"
 
 #include "src/__support/macros/config.h"
 #include "src/sys/wait/wait.h"
@@ -17,7 +18,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(pid_t, wait, (int *wait_status)) {
-  auto result = linux_syscalls::wait4(-1, wait_status, 0, nullptr);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::wait4(-1, wait_status, 0, nullptr); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;

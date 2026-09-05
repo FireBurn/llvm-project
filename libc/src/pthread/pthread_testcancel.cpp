@@ -1,4 +1,4 @@
-//===-- Linux implementation of fsync -------------------------------------===//
+//===-- Implementation of pthread_testcancel ------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,23 +6,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/unistd/fsync.h"
+#include "src/pthread/pthread_testcancel.h"
 
-#include "src/__support/OSUtil/linux/syscall_wrappers/fsync.h"
 #include "src/__support/common.h"
-#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, fsync, (int fd)) {
-  auto ret = internal::cancellable([&] { return linux_syscalls::fsync(fd); });
-  if (!ret) {
-    libc_errno = ret.error();
-    return -1;
-  }
-  return 0;
-}
+// A cancellation point put where the caller wants one, for code that would
+// otherwise run for a long time without reaching any of its own.
+LLVM_LIBC_FUNCTION(void, pthread_testcancel, ()) { internal::cancel_point(); }
 
 } // namespace LIBC_NAMESPACE_DECL
