@@ -38,6 +38,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.netinet_ether
     libc.include.netinet_in
     libc.include.netinet_ip
+    libc.include.netinet_ip6
     libc.include.netinet_tcp
     libc.include.netinet_udp
     libc.include.nl_types
@@ -126,6 +127,8 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.libintl
     libc.include.iconv
     libc.include.netdb
+    libc.include.netinet_icmp6
+    libc.include.netinet_if_ether
     libc.include.pty
     libc.include.regex
     libc.include.sys_kd
