@@ -25951,3 +25951,35 @@ libc_support_library(
         ":types_struct_timespec",
     ],
 )
+
+libc_function(
+    name = "putpwent",
+    srcs = ["src/pwd/putpwent.cpp"],
+    hdrs = ["src/pwd/putpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":pwd_putpwent",
+        ":types_FILE",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_support_library(
+    name = "pwd_putpwent",
+    srcs = ["src/pwd/putpwent.cpp"],
+    hdrs = ["src/pwd/putpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":types_FILE",
+        ":types_struct_passwd",
+    ],
+)
