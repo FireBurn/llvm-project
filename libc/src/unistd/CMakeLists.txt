@@ -767,3 +767,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sbrk
 )
+
+add_entrypoint_object(
+  getdtablesize
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getdtablesize
+)

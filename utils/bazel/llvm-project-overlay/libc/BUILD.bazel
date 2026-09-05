@@ -19362,6 +19362,21 @@ libc_function(
 )
 
 libc_function(
+    name = "getdtablesize",
+    srcs = ["src/unistd/linux/getdtablesize.cpp"],
+    hdrs = ["src/unistd/getdtablesize.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_prlimit64",
+        ":hdr_limits_macros",
+        ":hdr_sys_resource_macros",
+        ":types_struct_rlimit",
+        ":unistd_getdtablesize",
+    ],
+)
+
+libc_function(
     name = "geteuid",
     srcs = ["src/unistd/linux/geteuid.cpp"],
     hdrs = ["src/unistd/geteuid.h"],
@@ -23842,6 +23857,27 @@ libc_support_library(
         ":__support_common",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_getdtablesize",
+    hdrs = ["src/unistd/getdtablesize.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_prlimit64",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/prlimit64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+        ":types_struct_rlimit",
     ],
 )
 
