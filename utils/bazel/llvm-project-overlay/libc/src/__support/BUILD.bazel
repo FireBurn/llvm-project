@@ -586,6 +586,39 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "elf_dtv",
+    hdrs = ["elf/dtv.h"],
+    deps = [
+        ":elf_module",
+        ":elf_passive_abi",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:sys_mman_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mmap",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:munmap",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "elf_dynamic_blocks",
+    srcs = ["elf/dynamic_blocks.cpp"],
+    hdrs = ["elf/dynamic_blocks.h"],
+    deps = [
+        ":elf_dtv",
+        ":elf_passive_abi",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_bind",
     hdrs = ["elf/bind.h"],
     deps = [
