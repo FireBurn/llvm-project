@@ -21,6 +21,7 @@ add_subdirectory(stdio_ext)
 # unistd must be added before stdlib because stdlib's environ_internal
 # target conditionally depends on unistd's environ target.
 add_subdirectory(unistd)
+add_subdirectory(utmpx)
 add_subdirectory(stdlib)
 add_subdirectory(string)
 add_subdirectory(strings)
