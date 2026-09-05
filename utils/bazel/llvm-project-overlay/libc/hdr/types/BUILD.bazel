@@ -661,6 +661,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_servent",
+    hdrs = ["struct_servent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_servent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_hostent",
+    hdrs = ["struct_hostent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_hostent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_termios",
     hdrs = ["struct_termios.h"],
     deps = select({
