@@ -20102,6 +20102,19 @@ libc_function(
 )
 
 libc_function(
+    name = "setlinebuf",
+    srcs = ["src/stdio/generic/setlinebuf.cpp"],
+    hdrs = ["src/stdio/setlinebuf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_macros_config",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "sprintf",
     srcs = ["src/stdio/sprintf.cpp"],
     hdrs = ["src/stdio/sprintf.h"],
