@@ -1,0 +1,22 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/module.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "module_test",
+    srcs = ["module_test.cpp"],
+    deps = [
+        "//libc:delete_module",
+        "//libc:geteuid",
+        "//libc:hdr_errno_macros",
+        "//libc:init_module",
+    ],
+)
