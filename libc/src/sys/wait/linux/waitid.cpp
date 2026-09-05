@@ -34,3 +34,9 @@ LLVM_LIBC_FUNCTION(int, waitid,
 }
 
 } // namespace LIBC_NAMESPACE_DECL
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
+  internal::cancel_point();
+  if (ret == -EINTR)
+    internal::cancel_point();
+
