@@ -28826,6 +28826,26 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "clone",
+    srcs = select({
+        "@platforms//cpu:x86_64": ["src/sched/linux/x86_64/clone.cpp"],
+        "//conditions:default": ["src/sched/linux/clone.cpp"],
+    }),
+    hdrs = ["src/sched/clone.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_clone",
+        ":__support_threads_identifier",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_sched_macros",
+        ":types_pid_t",
+    ],
+)
+
 libc_support_library(
     name = "shadow_shadow_utils",
     srcs = ["src/shadow/shadow_utils.cpp"],
