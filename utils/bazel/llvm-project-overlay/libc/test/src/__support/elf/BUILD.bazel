@@ -91,3 +91,12 @@ libc_test(
         "//libc/src/__support:elf_startup_stack",
     ],
 )
+
+libc_test(
+    name = "run_path_test",
+    srcs = ["run_path_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support:elf_run_path",
+    ],
+)
