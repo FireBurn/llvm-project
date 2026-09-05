@@ -425,6 +425,8 @@ add_libc_test(
   SRCS
     sscanf_test.cpp
   DEPENDS
+    libc.hdr.func.free
+    libc.src.string.string_utils
     libc.src.stdio.sscanf
     libc.test.UnitTest.FPTestHelpers
   COMPILE_OPTIONS
