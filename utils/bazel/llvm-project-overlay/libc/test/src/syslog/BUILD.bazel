@@ -1,0 +1,59 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc syslog.h functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test", "libc_test_library")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test_library(
+    name = "log_receiver",
+    hdrs = ["log_receiver.h"],
+    deps = [
+        "//libc:__support_cpp_mutex",
+        "//libc:__support_cpp_string_view",
+        "//libc:__support_libc_errno",
+        "//libc:bind",
+        "//libc:close",
+        "//libc:closelog",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:recv",
+        "//libc:socket",
+        "//libc:syslog_syslog_state",
+        "//libc:types_size_t",
+        "//libc:types_ssize_t",
+        "//libc:types_struct_sockaddr_un",
+        "//libc:unlink",
+        "//libc/test/src/sys/socket:socket_test_support",
+    ],
+)
+
+libc_test(
+    name = "syslog_test",
+    srcs = ["syslog_test.cpp"],
+    deps = [
+        ":log_receiver",
+        "//libc:__support_cpp_string_view",
+        "//libc:closelog",
+        "//libc:hdr_syslog_macros",
+        "//libc:openlog",
+        "//libc:setlogmask",
+        "//libc:syslog",
+    ],
+)
+
+libc_test(
+    name = "vsyslog_test",
+    srcs = ["vsyslog_test.cpp"],
+    deps = [
+        ":log_receiver",
+        "//libc:__support_cpp_string_view",
+        "//libc:closelog",
+        "//libc:openlog",
+        "//libc:vsyslog",
+    ],
+)
