@@ -954,6 +954,27 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_timex
+  ../libc/include/sys/timex.yaml
+  sys/timex.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_timex_macros
+    .llvm-libc-types.struct_timex
+    .llvm-libc-types.struct_timeval
+)
+
+add_header_macro(
+  sys_quota
+  ../libc/include/sys/quota.yaml
+  sys/quota.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_quota_macros
+    .llvm-libc-types.struct_dqblk
+)
+
+add_header_macro(
   sys_reboot
   ../libc/include/sys/reboot.yaml
   sys/reboot.h
