@@ -16,4 +16,8 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.spawn.file_actions
     libc.src.signal.linux.signal_utils
+    libc.hdr.signal_macros
+    libc.hdr.spawn_macros
+    libc.hdr.types.sigset_t
+    libc.src.signal.sigismember
 )
