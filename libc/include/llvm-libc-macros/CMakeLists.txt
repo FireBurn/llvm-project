@@ -528,6 +528,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  ar_macros
+  HDR
+    ar-macros.h
+)
+
+add_macro_header(
   stdio_ext_macros
   HDR
     stdio-ext-macros.h
