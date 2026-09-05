@@ -25,3 +25,19 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "dl_iterate_phdr",
+    srcs = ["dl_iterate_phdr.cpp"],
+    hdrs = ["dl_iterate_phdr.h"],
+    deps = [
+        "//libc/hdr/types:struct_dl_phdr_info",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_passive_abi",
+        "//libc/src/dlfcn:dl_internal",
+    ],
+)

@@ -681,3 +681,8 @@ libc_support_library(
         "//conditions:default": [],
     }),
 )
+
+libc_support_library(
+    name = "llvm_libc_types_struct_dl_phdr_info",
+    hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
+)
