@@ -233,6 +233,7 @@ add_header(
     .blksize_t .blkcnt_t
 )
 add_header(struct_tm HDR struct_tm.h)
+add_header(struct_mtconfiginfo HDR struct_mtconfiginfo.h)
 add_header(struct_passwd HDR struct_passwd.h DEPENDS .uid_t .gid_t)
 add_header(struct_group HDR struct_group.h DEPENDS .gid_t)
 add_header(struct_sgrp HDR struct_sgrp.h)
