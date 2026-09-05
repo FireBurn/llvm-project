@@ -50,6 +50,9 @@ LLVM_LIBC_FUNCTION(int, dlclose, (void *handle)) {
     elf::run_fini_array(set.modules[index]);
     elf::unmap_module(set.mappings[index]);
     set.count = index;
+    // The index goes back to the next dlopen, which stamps what it puts there
+    // with a later generation than any block a thread made for this one.
+    ++set.generation;
   }
   return 0;
 }
