@@ -8,6 +8,14 @@ add_libc_test(
   SRCS
     dirent_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.src.unistd.unlink
     libc.src.__support.CPP.string_view
     libc.src.dirent.closedir
     libc.src.dirent.dirfd
