@@ -14,6 +14,18 @@
 #define PTHREAD_CREATE_JOINABLE 0
 #define PTHREAD_CREATE_DETACHED 1
 
+// Whether a thread may be cancelled at all.
+#define PTHREAD_CANCEL_ENABLE 0
+#define PTHREAD_CANCEL_DISABLE 1
+
+// When a thread acts on a cancellation request: at its next cancellation
+// point, or as soon as the request arrives.
+#define PTHREAD_CANCEL_DEFERRED 0
+#define PTHREAD_CANCEL_ASYNCHRONOUS 1
+
+// What joining a cancelled thread gives back.
+#define PTHREAD_CANCELED ((void *)-1)
+
 #define PTHREAD_MUTEX_NORMAL 0
 #define PTHREAD_MUTEX_ERRORCHECK 1
 #define PTHREAD_MUTEX_RECURSIVE 2
