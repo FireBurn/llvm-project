@@ -26658,6 +26658,17 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "__h_errno_location",
+    srcs = ["src/netdb/__h_errno_location.cpp"],
+    hdrs = ["src/netdb/__h_errno_location.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
 libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["include/llvm-libc-types/struct_termios.h"],
