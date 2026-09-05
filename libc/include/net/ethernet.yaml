@@ -1,0 +1,42 @@
+header: net/ethernet.h
+standards:
+  - bsd
+macros:
+  - macro_name: ETH_ALEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_HLEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_ZLEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_DATA_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_FRAME_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHER_ADDR_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHER_HDR_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHER_MIN_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHER_MAX_LEN
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHERTYPE_IP
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHERTYPE_ARP
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETHERTYPE_IPV6
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_P_IP
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_P_ARP
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_P_IPV6
+    macro_header: net-ethernet-macros.h
+  - macro_name: ETH_P_ALL
+    macro_header: net-ethernet-macros.h
+types:
+  - type_name: struct_ether_addr
+  - type_name: struct_ether_header
+enums: []
+objects: []
+functions: []
