@@ -20005,6 +20005,18 @@ libc_function(
 )
 
 libc_function(
+    name = "ftrylockfile",
+    srcs = ["src/stdio/ftrylockfile.cpp"],
+    hdrs = ["src/stdio/ftrylockfile.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "funlockfile",
     srcs = ["src/stdio/funlockfile.cpp"],
     hdrs = ["src/stdio/funlockfile.h"],
