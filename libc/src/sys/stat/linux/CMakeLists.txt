@@ -212,3 +212,16 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
+add_entrypoint_object(
+  statx
+  SRCS
+    statx.cpp
+  HDRS
+    ../statx.h
+  DEPENDS
+    libc.hdr.types.struct_statx
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
