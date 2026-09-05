@@ -63,6 +63,19 @@ libc_test(
 )
 
 libc_test(
+    name = "fileno_test",
+    srcs = ["fileno_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:fileno",
+        "//libc:fmemopen",
+        "//libc:fopen",
+        "//libc:hdr_errno_macros",
+        "//libc:open_memstream",
+    ],
+)
+
+libc_test(
     name = "fputc_unlocked_test",
     srcs = ["fputc_unlocked_test.cpp"],
     deps = [
