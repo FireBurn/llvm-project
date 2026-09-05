@@ -1,6 +1,25 @@
 add_libc_testsuite(libc-stdio-tests)
 
 add_libc_test(
+  fputc_unlocked_test
+  SUITE
+    libc-stdio-tests
+  SRCS
+    fputc_unlocked_test.cpp
+  DEPENDS
+    libc.include.stdio
+    libc.src.__support.libc_errno
+    libc.src.stdio.fclose
+    libc.src.stdio.fgets
+    libc.src.stdio.flockfile
+    libc.src.stdio.fopen
+    libc.src.stdio.fputc_unlocked
+    libc.src.stdio.fputs_unlocked
+    libc.src.stdio.funlockfile
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   freopen_test
   SUITE
     libc-stdio-tests
