@@ -11,9 +11,10 @@
 #include "src/time/time_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/src/time/TzFixture.h"
 #include "test/src/time/TmHelper.h"
 
-using LlvmLibcCtime = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
+using LlvmLibcCtime = TzErrnoFixture;
 
 TEST_F(LlvmLibcCtime, nullptr) {
   EXPECT_DEATH([] { LIBC_NAMESPACE::ctime(nullptr); }, WITH_SIGNAL(-1));
