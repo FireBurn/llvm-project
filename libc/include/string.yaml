@@ -83,6 +83,13 @@ functions:
       - type: const void *
       - type: int
       - type: size_t
+  - name: explicit_bzero
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: void *
+      - type: size_t
   - name: memset
     standards:
       - stdc

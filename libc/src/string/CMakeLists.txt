@@ -183,6 +183,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  explicit_bzero
+  SRCS
+    explicit_bzero.cpp
+  HDRS
+    explicit_bzero.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.string.memory_utils.inline_memset
+)
+
+add_entrypoint_object(
   strdup
   SRCS
     strdup.cpp
