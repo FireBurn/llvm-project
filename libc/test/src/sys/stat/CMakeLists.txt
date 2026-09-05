@@ -302,6 +302,3 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
-
-
-
