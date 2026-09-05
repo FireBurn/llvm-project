@@ -222,7 +222,11 @@ functions:
       - type: char *
   - name: mkostemp
     standards:
+<<<<<<< HEAD
       - posix
+=======
+      - gnu
+>>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)
     return_type: int
     arguments:
       - type: char *

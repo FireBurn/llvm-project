@@ -208,3 +208,22 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.stdio.fprintf
 )
+<<<<<<< HEAD
+>>>>>>> c66ec21f747f ([libc] Add ppoll, preadv, pwritev, copy_file_range and cfmakeraw)
+=======
+
+add_entrypoint_object(
+  fgetgrent
+  SRCS
+    fgetgrent.cpp
+  HDRS
+    fgetgrent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.span
+    libc.src.errno.errno
+    libc.src.grp.grp_utils
+    libc.src.stdio.fgets
+)

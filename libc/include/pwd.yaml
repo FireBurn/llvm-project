@@ -10,6 +10,47 @@ types:
 enums: []
 objects: []
 functions:
+<<<<<<< HEAD
+=======
+  - name: getpwnam_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct passwd *
+      - type: char *
+      - type: size_t
+      - type: struct passwd **
+  - name: getpwuid_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: uid_t
+      - type: struct passwd *
+      - type: char *
+      - type: size_t
+      - type: struct passwd **
+  - name: getpwnam
+    standards:
+      - posix
+    return_type: struct passwd *
+    arguments:
+      - type: const char *
+  - name: getpwuid
+    standards:
+      - posix
+    return_type: struct passwd *
+    arguments:
+      - type: uid_t
+  - name: fgetpwent
+    standards:
+      - gnu
+    return_type: struct passwd *
+    arguments:
+      - type: FILE *
+>>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)
   - name: getpwent
     standards:
       - posix
