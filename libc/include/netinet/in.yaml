@@ -4,6 +4,7 @@ standards:
 merge_yaml_files:
   - ../htons-family.yaml
 public_includes:
+  - endian.h
   # This is permitted (but not required) by POSIX and many applications depend
   # on it. If we have a "pedantic" mode in the future, we might want to exclude
   # it there.
