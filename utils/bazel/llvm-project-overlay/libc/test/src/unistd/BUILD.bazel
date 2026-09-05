@@ -80,6 +80,16 @@ libc_test(
 )
 
 libc_test(
+    name = "getdtablesize_test",
+    srcs = ["getdtablesize_test.cpp"],
+    deps = [
+        "//libc:getdtablesize",
+        "//libc:getrlimit",
+        "//libc:types_struct_rlimit",
+    ],
+)
+
+libc_test(
     name = "getopt_long_test",
     srcs = ["getopt_long_test.cpp"],
     deps = [
