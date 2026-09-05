@@ -494,6 +494,26 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
+add_libc_test(
+  mkstemps_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mkstemps_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.unistd_macros
+    libc.src.stdlib.mkostemps
+    libc.src.stdlib.mkstemps
+    libc.src.string.strdup
+    libc.src.string.strlen
+    libc.src.unistd.access
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
 
 add_libc_test(
   mbtowc_test
@@ -715,26 +735,6 @@ add_libc_test(
   DEPENDS
     libc.hdr.stdlib_macros
     libc.src.stdlib.rand_r
-)
-
-add_libc_test(
-  mkstemps_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    mkstemps_test.cpp
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.hdr.fcntl_macros
-    libc.hdr.unistd_macros
-    libc.src.stdlib.mkostemps
-    libc.src.stdlib.mkstemps
-    libc.src.string.strdup
-    libc.src.string.strlen
-    libc.src.unistd.access
-    libc.src.unistd.close
-    libc.src.unistd.unlink
-    libc.test.UnitTest.ErrnoCheckingTest
 )
 
 add_libc_test(
