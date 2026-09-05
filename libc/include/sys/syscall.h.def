@@ -133,6 +133,10 @@
 #define SYS_cacheflush __NR_cacheflush
 #endif
 
+#ifdef __NR_cachestat
+#define SYS_cachestat __NR_cachestat
+#endif
+
 #ifdef __NR_capget
 #define SYS_capget __NR_capget
 #endif
@@ -207,6 +211,10 @@
 
 #ifdef __NR_close
 #define SYS_close __NR_close
+#endif
+
+#ifdef __NR_close_range
+#define SYS_close_range __NR_close_range
 #endif
 
 #ifdef __NR_cmpxchg_badaddr
@@ -409,8 +417,24 @@
 #define SYS_fremovexattr __NR_fremovexattr
 #endif
 
+#ifdef __NR_fsconfig
+#define SYS_fsconfig __NR_fsconfig
+#endif
+
 #ifdef __NR_fsetxattr
 #define SYS_fsetxattr __NR_fsetxattr
+#endif
+
+#ifdef __NR_fsmount
+#define SYS_fsmount __NR_fsmount
+#endif
+
+#ifdef __NR_fsopen
+#define SYS_fsopen __NR_fsopen
+#endif
+
+#ifdef __NR_fspick
+#define SYS_fspick __NR_fspick
 #endif
 
 #ifdef __NR_fstat
@@ -455,6 +479,10 @@
 
 #ifdef __NR_futex_time64
 #define SYS_futex_time64 __NR_futex_time64
+#endif
+
+#ifdef __NR_futex_waitv
+#define SYS_futex_waitv __NR_futex_waitv
 #endif
 
 #ifdef __NR_futimesat
@@ -637,6 +665,10 @@
 #define SYS_getxattr __NR_getxattr
 #endif
 
+#ifdef __NR_getxattrat
+#define SYS_getxattrat __NR_getxattrat
+#endif
+
 #ifdef __NR_getxgid
 #define SYS_getxgid __NR_getxgid
 #endif
@@ -749,6 +781,18 @@
 #define SYS_kill __NR_kill
 #endif
 
+#ifdef __NR_landlock_add_rule
+#define SYS_landlock_add_rule __NR_landlock_add_rule
+#endif
+
+#ifdef __NR_landlock_create_ruleset
+#define SYS_landlock_create_ruleset __NR_landlock_create_ruleset
+#endif
+
+#ifdef __NR_landlock_restrict_self
+#define SYS_landlock_restrict_self __NR_landlock_restrict_self
+#endif
+
 #ifdef __NR_lchown
 #define SYS_lchown __NR_lchown
 #endif
@@ -773,8 +817,16 @@
 #define SYS_listen __NR_listen
 #endif
 
+#ifdef __NR_listmount
+#define SYS_listmount __NR_listmount
+#endif
+
 #ifdef __NR_listxattr
 #define SYS_listxattr __NR_listxattr
+#endif
+
+#ifdef __NR_listxattrat
+#define SYS_listxattrat __NR_listxattrat
 #endif
 
 #ifdef __NR_llistxattr
@@ -805,6 +857,18 @@
 #define SYS_lsetxattr __NR_lsetxattr
 #endif
 
+#ifdef __NR_lsm_get_self_attr
+#define SYS_lsm_get_self_attr __NR_lsm_get_self_attr
+#endif
+
+#ifdef __NR_lsm_list_modules
+#define SYS_lsm_list_modules __NR_lsm_list_modules
+#endif
+
+#ifdef __NR_lsm_set_self_attr
+#define SYS_lsm_set_self_attr __NR_lsm_set_self_attr
+#endif
+
 #ifdef __NR_lstat
 #define SYS_lstat __NR_lstat
 #endif
@@ -817,6 +881,10 @@
 #define SYS_madvise __NR_madvise
 #endif
 
+#ifdef __NR_map_shadow_stack
+#define SYS_map_shadow_stack __NR_map_shadow_stack
+#endif
+
 #ifdef __NR_mbind
 #define SYS_mbind __NR_mbind
 #endif
@@ -827,6 +895,10 @@
 
 #ifdef __NR_memfd_create
 #define SYS_memfd_create __NR_memfd_create
+#endif
+
+#ifdef __NR_memfd_secret
+#define SYS_memfd_secret __NR_memfd_secret
 #endif
 
 #ifdef __NR_memory_ordering
@@ -885,6 +957,14 @@
 #define SYS_mount __NR_mount
 #endif
 
+#ifdef __NR_mount_setattr
+#define SYS_mount_setattr __NR_mount_setattr
+#endif
+
+#ifdef __NR_move_mount
+#define SYS_move_mount __NR_move_mount
+#endif
+
 #ifdef __NR_move_pages
 #define SYS_move_pages __NR_move_pages
 #endif
@@ -923,6 +1003,10 @@
 
 #ifdef __NR_mremap
 #define SYS_mremap __NR_mremap
+#endif
+
+#ifdef __NR_mseal
+#define SYS_mseal __NR_mseal
 #endif
 
 #ifdef __NR_msgctl
@@ -1021,8 +1105,16 @@
 #define SYS_open_by_handle_at __NR_open_by_handle_at
 #endif
 
+#ifdef __NR_open_tree
+#define SYS_open_tree __NR_open_tree
+#endif
+
 #ifdef __NR_openat
 #define SYS_openat __NR_openat
+#endif
+
+#ifdef __NR_openat2
+#define SYS_openat2 __NR_openat2
 #endif
 
 #ifdef __NR_osf_adjtime
@@ -1497,6 +1589,18 @@
 #define SYS_personality __NR_personality
 #endif
 
+#ifdef __NR_pidfd_getfd
+#define SYS_pidfd_getfd __NR_pidfd_getfd
+#endif
+
+#ifdef __NR_pidfd_open
+#define SYS_pidfd_open __NR_pidfd_open
+#endif
+
+#ifdef __NR_pidfd_send_signal
+#define SYS_pidfd_send_signal __NR_pidfd_send_signal
+#endif
+
 #ifdef __NR_pipe
 #define SYS_pipe __NR_pipe
 #endif
@@ -1553,6 +1657,10 @@
 #define SYS_prlimit64 __NR_prlimit64
 #endif
 
+#ifdef __NR_process_mrelease
+#define SYS_process_mrelease __NR_process_mrelease
+#endif
+
 #ifdef __NR_process_vm_readv
 #define SYS_process_vm_readv __NR_process_vm_readv
 #endif
@@ -1603,6 +1711,10 @@
 
 #ifdef __NR_quotactl
 #define SYS_quotactl __NR_quotactl
+#endif
+
+#ifdef __NR_quotactl_fd
+#define SYS_quotactl_fd __NR_quotactl_fd
 #endif
 
 #ifdef __NR_read
@@ -1659,6 +1771,10 @@
 
 #ifdef __NR_removexattr
 #define SYS_removexattr __NR_removexattr
+#endif
+
+#ifdef __NR_removexattrat
+#define SYS_removexattrat __NR_removexattrat
 #endif
 
 #ifdef __NR_rename
@@ -1861,6 +1977,10 @@
 #define SYS_set_mempolicy __NR_set_mempolicy
 #endif
 
+#ifdef __NR_set_mempolicy_home_node
+#define SYS_set_mempolicy_home_node __NR_set_mempolicy_home_node
+#endif
+
 #ifdef __NR_set_robust_list
 #define SYS_set_robust_list __NR_set_robust_list
 #endif
@@ -1997,6 +2117,10 @@
 #define SYS_setxattr __NR_setxattr
 #endif
 
+#ifdef __NR_setxattrat
+#define SYS_setxattrat __NR_setxattrat
+#endif
+
 #ifdef __NR_sgetmask
 #define SYS_sgetmask __NR_sgetmask
 #endif
@@ -2099,6 +2223,10 @@
 
 #ifdef __NR_statfs64
 #define SYS_statfs64 __NR_statfs64
+#endif
+
+#ifdef __NR_statmount
+#define SYS_statmount __NR_statmount
 #endif
 
 #ifdef __NR_statx
