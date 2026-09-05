@@ -181,6 +181,7 @@ add_header_macro(
   ../libc/include/grp.yaml
   grp.h
   DEPENDS
+    .llvm-libc-types.FILE
     .llvm-libc-types.struct_group
     .llvm-libc-types.gid_t
     .llvm-libc-types.size_t
@@ -728,6 +729,7 @@ add_header_macro(
   ../libc/include/pwd.yaml
   pwd.h
   DEPENDS
+    .llvm-libc-types.FILE
     .llvm-libc-types.struct_passwd
     .llvm-libc-types.uid_t
     .llvm-libc-types.gid_t
