@@ -16,12 +16,40 @@ package(
 licenses(["notice"])
 
 libc_support_library(
+    name = "alphasort",
+    srcs = ["alphasort.cpp"],
+    hdrs = ["alphasort.h"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_support_library(
     name = "readdir",
     srcs = ["readdir.cpp"],
     hdrs = ["readdir.h"],
     deps = [
         "//libc/src/__support/File:dir",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "scandir",
+    srcs = ["scandir.cpp"],
+    hdrs = ["scandir.h"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/src/__support/File:dir",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/macros:optimization",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
     ],

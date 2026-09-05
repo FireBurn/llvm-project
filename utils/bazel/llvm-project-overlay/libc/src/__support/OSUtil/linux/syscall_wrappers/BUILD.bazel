@@ -3007,6 +3007,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "fallocate",
+    hdrs = ["fallocate.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "pause",
     hdrs = ["pause.h"],
     deps = [
