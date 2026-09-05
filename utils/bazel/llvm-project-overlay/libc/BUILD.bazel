@@ -27593,6 +27593,76 @@ libc_support_library(
 )
 
 libc_function(
+    name = "__xpg_strerror_r",
+    srcs = ["src/compat/__xpg_strerror_r.cpp"],
+    hdrs = ["src/compat/__xpg_strerror_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_stringutil",
+        ":hdr_errno_macros",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "lfs64",
+    srcs = ["src/compat/lfs64.cpp"],
+    hdrs = ["src/compat/lfs64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":creat",
+        ":dirent_alphasort",
+        ":dirent_readdir",
+        ":dirent_scandir",
+        ":fcntl_fallocate",
+        ":fcntl_posix_fallocate",
+        ":fopen",
+        ":fstat",
+        ":ftruncate",
+        ":getrlimit",
+        ":lseek",
+        ":mmap",
+        ":open",
+        ":openat",
+        ":pread",
+        ":pwrite",
+        ":sendfile",
+        ":setrlimit",
+        ":stat",
+        ":stdio_freopen",
+        ":stdio_fseeko",
+        ":stdio_ftello",
+        ":stdio_tmpfile",
+        ":sys_stat_fstat",
+        ":sys_stat_fstatat",
+        ":sys_stat_lstat",
+        ":sys_stat_stat",
+        ":sys_statfs_fstatfs",
+        ":sys_statfs_statfs",
+        ":sys_statvfs_fstatvfs",
+        ":sys_statvfs_statvfs",
+        ":sys_uio_preadv",
+        ":sys_uio_pwritev",
+        ":truncate",
+        ":types_DIR",
+        ":types_FILE",
+        ":types_mode_t",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":types_struct_dirent",
+        ":types_struct_iovec",
+        ":types_struct_rlimit",
+        ":types_struct_stat",
+        ":types_struct_statfs",
+        ":versionsort",
+    ],
+)
+
+libc_function(
     name = "syscall",
     srcs = ["src/compat/syscall.cpp"],
     hdrs = ["src/compat/syscall.h"],
@@ -28213,6 +28283,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dirent_alphasort",
+    srcs = ["src/dirent/alphasort.cpp"],
+    hdrs = ["src/dirent/alphasort.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":string_utils",
+        ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
     name = "__support_file_dir_scan_impl",
     hdrs = ["src/__support/File/dir_scan_impl.h"],
     deps = [
@@ -28280,6 +28363,46 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dirent_scandir",
+    srcs = ["src/dirent/scandir.cpp"],
+    hdrs = ["src/dirent/scandir.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_macros_optimization",
+        ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_fallocate",
+    srcs = ["src/fcntl/linux/fallocate.cpp"],
+    hdrs = ["src/fcntl/fallocate.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fallocate",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_posix_fallocate",
+    srcs = ["src/fcntl/linux/posix_fallocate.cpp"],
+    hdrs = ["src/fcntl/posix_fallocate.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fallocate",
+        ":hdr_errno_macros",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
     name = "stdio_freopen",
     srcs = ["src/stdio/generic/freopen.cpp"],
     hdrs = ["src/stdio/freopen.h"],
@@ -28294,10 +28417,66 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "stdio_fseeko",
+    srcs = ["src/stdio/generic/fseeko.cpp"],
+    hdrs = ["src/stdio/fseeko.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_ftello",
+    srcs = ["src/stdio/generic/ftello.cpp"],
+    hdrs = ["src/stdio/ftello.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_tmpfile",
+    srcs = ["src/stdio/linux/tmpfile.cpp"],
+    hdrs = ["src/stdio/tmpfile.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":hdr_fcntl_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_support_library(
     name = "sys_stat_fstat",
     hdrs = ["src/sys/stat/fstat.h"],
     deps = [
         ":__support_macros_config",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "sys_stat_fstatat",
+    srcs = ["src/sys/stat/linux/fstatat.cpp"],
+    hdrs = ["src/sys/stat/fstatat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":hdr_fcntl_macros",
         ":types_struct_stat",
     ],
 )
@@ -28323,6 +28502,62 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "sys_statfs_fstatfs",
+    srcs = ["src/sys/statfs/linux/fstatfs.cpp"],
+    hdrs = ["src/sys/statfs/fstatfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fstatfs",
+        ":types_struct_statfs",
+    ],
+)
+
+libc_support_library(
+    name = "sys_statfs_statfs",
+    srcs = ["src/sys/statfs/linux/statfs.cpp"],
+    hdrs = ["src/sys/statfs/statfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_statfs",
+        ":types_struct_statfs",
+    ],
+)
+
+libc_support_library(
+    name = "sys_statvfs_fstatvfs",
+    srcs = ["src/sys/statvfs/linux/fstatvfs.cpp"],
+    hdrs = ["src/sys/statvfs/fstatvfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_assert",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_fstatfs",
+        ":sys_statvfs_linux_statfs_utils",
+    ],
+)
+
+libc_support_library(
+    name = "sys_statvfs_statvfs",
+    srcs = ["src/sys/statvfs/linux/statvfs.cpp"],
+    hdrs = ["src/sys/statvfs/statvfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_assert",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_statfs",
+        ":sys_statvfs_linux_statfs_utils",
     ],
 )
 
@@ -29313,6 +29548,21 @@ libc_support_library(
         ":types_pid_t",
         ":types_struct_sigevent",
         ":types_timer_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fallocate",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fallocate.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_bit",
+        ":__support_cpp_limits",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_errno_macros",
+        ":types_off_t",
     ],
 )
 
@@ -31928,6 +32178,18 @@ libc_function(
         ":types_fd_set",
         ":types_sigset_t",
         ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "sys_statvfs_linux_statfs_utils",
+    hdrs = ["src/sys/statvfs/linux/statfs_utils.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_struct_statfs",
     ],
 )
 

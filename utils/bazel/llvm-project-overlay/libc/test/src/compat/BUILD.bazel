@@ -19,3 +19,26 @@ libc_test(
         "//libc:syscall",
     ],
 )
+
+libc_test(
+    name = "compat_test",
+    srcs = ["compat_test.cpp"],
+    deps = [
+        "//libc:__xpg_strerror_r",
+        "//libc:close",
+        "//libc:closedir",
+        "//libc:fclose",
+        "//libc:fputs",
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:lfs64",
+        "//libc:opendir",
+        "//libc:strcmp",
+        "//libc:strlen",
+        "//libc:syscall",
+        "//libc:write",
+    ],
+)
