@@ -41,7 +41,17 @@ TEST(LlvmLibcLocale, NewLocaleValidation) {
   loc = LIBC_NAMESPACE::newlocale(~0, "C", nullptr);
   EXPECT_EQ(loc, static_cast<locale_t>(nullptr));
 
-  // Invalid locale name is rejected.
-  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "does-not-exist", nullptr);
+  // A name stating a character set that cannot be honoured is rejected,
+  // rather than answered with a locale that would encode differently.
+  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "ja_JP.EUC-JP", nullptr);
   EXPECT_EQ(loc, static_cast<locale_t>(nullptr));
+
+  // The names a machine is actually set to are honoured.
+  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "C.UTF-8", nullptr);
+  EXPECT_NE(loc, static_cast<locale_t>(nullptr));
+  LIBC_NAMESPACE::freelocale(loc);
+
+  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "en_GB.UTF-8", nullptr);
+  EXPECT_NE(loc, static_cast<locale_t>(nullptr));
+  LIBC_NAMESPACE::freelocale(loc);
 }
