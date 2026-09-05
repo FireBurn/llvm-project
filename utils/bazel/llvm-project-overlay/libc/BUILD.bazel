@@ -160,6 +160,7 @@ py_binary(
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("execinfo"),
+    libc_header_info("printf"),
     libc_header_info("stdio_ext"),
     libc_header_info(
         "assert",
@@ -22733,6 +22734,19 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "parse_printf_format",
+    srcs = ["src/printf/parse_printf_format.cpp"],
+    hdrs = ["src/printf/parse_printf_format.h"],
+    deps = [
+        ":__support_common",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":hdr_printf_macros",
+        ":types_size_t",
+    ],
+)
+
 libc_support_library(
     name = "pthread_pthread_attr",
     hdrs = ["src/pthread/pthread_attr.h"],
@@ -23337,6 +23351,22 @@ libc_function(
         ":hdr_errno_macros",
         ":types_struct_timespec",
     ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_printf_macros",
+    hdrs = ["include/llvm-libc-macros/printf-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_printf_macros",
+    hdrs = ["hdr/printf_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_printf_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
