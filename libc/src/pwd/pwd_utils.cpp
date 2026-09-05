@@ -46,7 +46,7 @@ static LIBC_CONSTINIT internal::FlatFileDatabase<struct passwd>
     db(LIBC_COPT_PWD_FILE_PATH);
 // Note: These static buffers are process-global and NOT protected by a mutex
 // at this stage. POSIX getpwent is non-reentrant.
-static char line_buffer[1024];
+static char line_buffer[pwd::PASSWD_LINE_SIZE];
 static struct passwd pwd_entry;
 
 void TESTONLY_set_passwd_path(const char *path) { db.set_path(path); }
