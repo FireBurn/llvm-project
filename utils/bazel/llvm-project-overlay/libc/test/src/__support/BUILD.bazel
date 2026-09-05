@@ -167,6 +167,20 @@ libc_test(
 )
 
 libc_test(
+    name = "hash_test",
+    srcs = ["hash_test.cpp"],
+    deps = [
+        "//libc:__support_alloc_checker",
+        "//libc:__support_cpp_bit",
+        "//libc:__support_cpp_new",
+        "//libc:__support_hash",
+        "//libc:memset",
+        "//libc:rand",
+        "//libc:srand",
+    ],
+)
+
+libc_test(
     name = "parser_test",
     srcs = ["printf_core/parser_test.cpp"],
     deps = [
