@@ -1,0 +1,13 @@
+add_header_library(
+  parser
+  HDRS
+    parser.h
+  DEPENDS
+    libc.hdr.types.struct_tm
+    libc.hdr.types.time_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.time.time_constants
+    libc.src.time.time_utils
+)
