@@ -1,6 +1,29 @@
 add_libc_testsuite(libc-signal-tests)
 
 add_libc_test(
+  sigtimedwait_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    sigtimedwait_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_timespec
+    libc.src.signal.kill
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigprocmask
+    libc.src.signal.sigtimedwait
+    libc.src.signal.sigwaitinfo
+    libc.src.unistd.getpid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   raise_test
   SUITE
     libc-signal-tests
