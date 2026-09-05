@@ -15,6 +15,9 @@
 #include "src/stdio/scanf_core/core_structs.h"
 #include "src/stdio/scanf_core/reader.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/realloc.h"
+
 #include <stddef.h>
 
 namespace LIBC_NAMESPACE_DECL {
@@ -40,7 +43,18 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
     }
   }
 
-  char *output = reinterpret_cast<char *>(to_conv.output_ptr);
+  // With the allocating conversion the caller gives somewhere to put a
+  // pointer rather than somewhere to put the characters, and how much room
+  // there is to be is this function's to decide.
+  const bool allocating =
+      (to_conv.flags & ALLOCATE) != 0 && (to_conv.flags & NO_WRITE) == 0;
+  const bool writing = (to_conv.flags & NO_WRITE) == 0;
+  // Everything but %c is terminated, so there has to be room for that too.
+  const size_t terminator = to_conv.conv_name == 'c' ? 0 : 1;
+
+  char *output =
+      allocating ? nullptr : reinterpret_cast<char *>(to_conv.output_ptr);
+  size_t capacity = 0;
 
   char cur_char = reader->getc();
   size_t i = 0;
@@ -51,8 +65,19 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
         (to_conv.conv_name == '[' && !to_conv.scan_set.test(cur_char))) {
       break;
     }
+    if (allocating && i + terminator + 1 > capacity) {
+      const size_t wanted = capacity == 0 ? 32 : capacity * 2;
+      char *grown = reinterpret_cast<char *>(::realloc(output, wanted));
+      if (grown == nullptr) {
+        ::free(output);
+        reader->ungetc(cur_char);
+        return ALLOCATION_FAILURE;
+      }
+      output = grown;
+      capacity = wanted;
+    }
     // if the NO_WRITE flag is not set, write to the output.
-    if ((to_conv.flags & NO_WRITE) == 0)
+    if (writing)
       output[i] = cur_char;
     cur_char = reader->getc();
   }
@@ -61,8 +86,18 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
   // last one back.
   reader->ungetc(cur_char);
 
+  // %c takes exactly as many characters as the width says, so input that ran
+  // out before then matched nothing at all.
+  const bool short_read = to_conv.conv_name == 'c' && i < max_width;
+
+  if (i == 0 || short_read) {
+    if (allocating)
+      ::free(output);
+    return short_read ? INPUT_FAILURE : MATCHING_FAILURE;
+  }
+
   // If this is %s or %[]
-  if (to_conv.conv_name != 'c' && (to_conv.flags & NO_WRITE) == 0) {
+  if (terminator != 0 && writing) {
     // Always null terminate the string. This may cause a write to the
     // (max_width + 1) byte, which is correct. The max width describes the max
     // number of characters read from the input string, and doesn't necessarily
@@ -70,8 +105,9 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
     output[i] = '\0';
   }
 
-  if (i == 0)
-    return MATCHING_FAILURE;
+  if (allocating)
+    *reinterpret_cast<char **>(to_conv.output_ptr) = output;
+
   return READ_OK;
 }
 
