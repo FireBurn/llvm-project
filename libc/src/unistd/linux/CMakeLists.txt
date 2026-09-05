@@ -1355,6 +1355,21 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  copy_file_range
+  SRCS
+    copy_file_range.cpp
+  HDRS
+    ../copy_file_range.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   sethostname
   SRCS
     sethostname.cpp
