@@ -11,7 +11,7 @@
 #include "hdr/types/time_t.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/null_check.h"
-#include "src/time/time_utils.h"
+#include "src/time/tz/timezone.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -20,7 +20,7 @@ LLVM_LIBC_FUNCTION(struct tm *, localtime_r,
   LIBC_CRASH_ON_NULLPTR(timer);
   LIBC_CRASH_ON_NULLPTR(buf);
 
-  auto res = time_utils::localtime_internal(timer, buf);
+  auto res = tz::to_local(*timer, buf);
   if (!res) {
     libc_errno = res.error();
     return nullptr;
