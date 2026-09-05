@@ -215,6 +215,24 @@ libc_test(
 )
 
 libc_test(
+    name = "renameat2_test",
+    srcs = ["renameat2_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:renameat2",
+        "//libc/src/stdio:stdio_renameat2",
+        "//libc/src/unistd:access",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
     name = "dprintf_test",
     srcs = ["dprintf_test.cpp"],
     deps = [
