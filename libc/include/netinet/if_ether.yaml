@@ -1,0 +1,30 @@
+header: netinet/if_ether.h
+standards:
+  - bsd
+public_includes:
+  - net/ethernet.h
+macros:
+  - macro_name: ARPHRD_ETHER
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ARPHRD_LOOPBACK
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ARPHRD_INFINIBAND
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ARPHRD_NONE
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ARPOP_REQUEST
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ARPOP_REPLY
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ATF_COM
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ATF_PERM
+    macro_header: netinet-if-ether-macros.h
+  - macro_name: ATF_PUBL
+    macro_header: netinet-if-ether-macros.h
+types:
+  - type_name: struct_arphdr
+  - type_name: struct_ether_arp
+enums: []
+objects: []
+functions: []
