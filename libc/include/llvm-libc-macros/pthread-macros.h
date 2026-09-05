@@ -14,6 +14,30 @@
 #define PTHREAD_CREATE_JOINABLE 0
 #define PTHREAD_CREATE_DETACHED 1
 
+// Whether a thread may be cancelled at all.
+#define PTHREAD_CANCEL_ENABLE 0
+#define PTHREAD_CANCEL_DISABLE 1
+
+// When a thread acts on a cancellation request: at its next cancellation
+// point, or as soon as the request arrives.
+#define PTHREAD_CANCEL_DEFERRED 0
+#define PTHREAD_CANCEL_ASYNCHRONOUS 1
+
+// What joining a cancelled thread gives back.
+#define PTHREAD_CANCELED ((void *)-1)
+
+// A cleanup handler lives in the frame that pushed it, which is why these two
+// have to appear in the same block as each other: the opening brace is in one
+// and the closing brace in the other.
+#define pthread_cleanup_push(routine, arg)                                     \
+  {                                                                            \
+    struct _pthread_cleanup_buffer __llvm_libc_cleanup_buffer;                 \
+    _pthread_cleanup_push(&__llvm_libc_cleanup_buffer, (routine), (arg));
+
+#define pthread_cleanup_pop(execute)                                           \
+  _pthread_cleanup_pop(&__llvm_libc_cleanup_buffer, (execute));                \
+  }
+
 #define PTHREAD_MUTEX_NORMAL 0
 #define PTHREAD_MUTEX_ERRORCHECK 1
 #define PTHREAD_MUTEX_RECURSIVE 2
