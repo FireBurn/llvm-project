@@ -2184,6 +2184,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "ppoll",
+    hdrs = ["ppoll.h"],
+    deps = [
+        "//libc/hdr/types:nfds_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_pollfd",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "swapoff",
     hdrs = ["swapoff.h"],
     deps = [

@@ -859,6 +859,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_addrinfo",
+    hdrs = ["struct_addrinfo.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_addrinfo"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_dirent",
     hdrs = ["struct_dirent.h"],
     deps = select({
