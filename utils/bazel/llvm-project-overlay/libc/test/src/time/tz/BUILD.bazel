@@ -1,0 +1,46 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc time/tz.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "posix_tz_test",
+    srcs = ["posix_tz_test.cpp"],
+    deps = [
+        "//libc:time_tz_posix_tz",
+        "//libc:types_time_t",
+    ],
+)
+
+libc_test(
+    name = "tzfile_test",
+    srcs = ["tzfile_test.cpp"],
+    deps = [
+        "//libc:time_tz_tzfile",
+        "//libc:types_size_t",
+        "//libc:types_time_t",
+    ],
+)
+
+libc_test(
+    name = "tzset_test",
+    srcs = ["tzset_test.cpp"],
+    deps = [
+        "//libc:localtime_r",
+        "//libc:mktime",
+        "//libc:setenv",
+        "//libc:strcmp",
+        "//libc:tz_variables",
+        "//libc:time_tzset",
+        "//libc:types_struct_tm",
+        "//libc:types_time_t",
+        "//libc:tzset",
+    ],
+)
