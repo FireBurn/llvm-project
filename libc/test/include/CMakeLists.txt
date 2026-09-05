@@ -160,6 +160,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  net_ethernet_test
+  SUITE
+    libc-include-tests
+  SRCS
+    net_ethernet_test.cpp
+  DEPENDS
+    libc.include.net_ethernet
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
@@ -921,3 +931,14 @@ foreach(target ${TARGET_PUBLIC_HEADERS})
     )
   endforeach()
 endforeach()
+
+add_libc_test(
+  netinet_icmp6_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_icmp6_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.netinet_icmp6_macros
+    libc.include.llvm-libc-types.struct_icmp6_hdr
+)
