@@ -381,3 +381,25 @@ add_entrypoint_object(
     libc.src.__support.File.file
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  open_memstream
+  SRCS
+    open_memstream.cpp
+  HDRS
+    open_memstream.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.func.realloc
+    libc.hdr.stdint_proxy
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.off_t
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.new
+    libc.src.__support.alloc_checker
+    libc.src.__support.File.file
+    libc.src.errno.errno
+)
