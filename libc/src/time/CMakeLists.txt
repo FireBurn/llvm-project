@@ -39,6 +39,7 @@ add_object_library(
 )
 
 add_subdirectory(strftime_core) #TODO: Move to top
+add_subdirectory(strptime_core) #TODO: Move to top
 
 add_header_library(
   asctime_utils
@@ -242,6 +243,7 @@ add_entrypoint_object(
     libc.hdr.types.struct_tm
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.time.strptime_core.parser
 )
 
 add_entrypoint_object(
