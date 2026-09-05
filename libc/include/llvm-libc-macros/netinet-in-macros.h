@@ -9,10 +9,15 @@
 #ifndef LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 #define LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 
+#include "uapi-compat-macros.h"
+
 #include "../__llvm-libc-common.h"
 #include "../llvm-libc-types/in_addr_t.h"
 #include "../llvm-libc-types/struct_in6_addr.h"
 
+// The protocol numbers are the kernel's too, in <linux/in.h>. Leaving them
+// to it is right only where that header has been read.
+#if !(__UAPI_DEF_IN_IPPROTO && defined(_LINUX_IN_H))
 #define IPPROTO_IP 0
 #define IPPROTO_ICMP 1
 #define IPPROTO_IGMP 2
@@ -43,6 +48,7 @@
 #define IPPROTO_RAW 255
 #define IPPROTO_SMC 256
 #define IPPROTO_MPTCP 262
+#endif
 
 // The extension headers an IPv6 packet may carry, which sit in the same
 // number space as the protocols above.

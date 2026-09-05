@@ -14,14 +14,21 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_IP6_MTUINFO_H
 #define LLVM_LIBC_TYPES_STRUCT_IP6_MTUINFO_H
 
+#include "../llvm-libc-macros/uapi-compat-macros.h"
+
 #include "../llvm-libc-macros/stdint-macros.h"
 #include "struct_sockaddr_in6.h"
 
+// The kernel defines this too, in <linux/in6.h>. Leaving it to the
+// kernel is right only where that header has been read and its
+// guard says the definition is the kernel's.
+#if !(__UAPI_DEF_IP6_MTUINFO && defined(_LINUX_IN6_H))
 // What IPV6_PATHMTU reports: the path's largest packet, in host order,
 // and where that path leads.
 struct ip6_mtuinfo {
   struct sockaddr_in6 ip6m_addr;
   uint32_t ip6m_mtu;
 };
+#endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_IP6_MTUINFO_H
