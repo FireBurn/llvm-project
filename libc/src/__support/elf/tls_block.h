@@ -16,6 +16,7 @@
 #include "hdr/stdint_proxy.h"
 #include "hdr/sys_mman_macros.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getrandom.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/mmap.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/munmap.h"
 #include "src/__support/elf/module.h"
@@ -76,13 +77,23 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
   const uintptr_t base = reinterpret_cast<uintptr_t>(storage.value());
   // Variant 2 puts the thread control block at the top with the module blocks
   // below it; variant 1 puts it at the bottom with the modules above.
-  const uintptr_t tp = TLS_VARIANT_2 ? base + (total - TLS_TCB_SIZE) : base;
+  const uintptr_t tp = TLS_VARIANT_2 ? base + (total - TLS_TCB_RESERVE) : base;
 
   // The ABI requires the first word of the thread control block to point at
   // the thread pointer itself. Compiler generated thread local accesses read
   // it to find their own base, so leaving it zero makes every one of them
   // dereference an offset from address zero.
   *reinterpret_cast<uintptr_t *>(tp) = tp;
+
+  // Code built with -fstack-protector reads its guard from a fixed offset
+  // from the thread pointer, so every thread needs one before any such code
+  // runs. A failed read leaves the value at zero, which still compares equal
+  // to itself and so costs correctness nothing.
+  if (TLS_VARIANT_2) {
+    auto *guard = reinterpret_cast<uintptr_t *>(tp + TLS_STACK_GUARD_OFFSET);
+    if (!linux_syscalls::getrandom(guard, sizeof(uintptr_t), 0).has_value())
+      *guard = 0;
+  }
 
   TlsLayout again;
   for (size_t i = 0; i < count; ++i) {
