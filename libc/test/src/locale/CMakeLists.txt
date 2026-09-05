@@ -8,6 +8,7 @@ add_libc_test(
     locale_test.cpp
   DEPENDS
     libc.hdr.errno_macros
+    libc.hdr.langinfo_macros
     libc.hdr.locale_macros
     libc.src.__support.CPP.scope
     libc.src.locale.freelocale
@@ -24,6 +25,23 @@ add_libc_test(
   SRCS
     localeconv_test.cpp
   DEPENDS
+    libc.hdr.langinfo_macros
     libc.hdr.locale_macros
     libc.src.locale.localeconv
+)
+
+add_libc_test(
+  setlocale_test
+  SUITE
+    libc-locale-tests
+  SRCS
+    setlocale_test.cpp
+  DEPENDS
+    libc.hdr.langinfo_macros
+    libc.hdr.locale_macros
+    libc.src.langinfo.nl_langinfo
+    libc.src.locale.setlocale
+    libc.src.stdlib.mb_cur_max
+    libc.src.stdlib.setenv
+    libc.src.stdlib.unsetenv
 )

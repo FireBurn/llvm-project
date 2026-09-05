@@ -57,17 +57,29 @@ TEST_F(LlvmLibcLocale, NewLocaleValidation) {
   EXPECT_EQ(LIBC_NAMESPACE::newlocale(LC_ALL_MASK, nullptr, nullptr), nullptr);
   ASSERT_ERRNO_EQ(EINVAL);
 
-  EXPECT_EQ(LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "does-not-exist", nullptr),
+  // A name stating a character set that cannot be honoured is rejected,
+  // rather than answered with a locale that would encode differently.
+  EXPECT_EQ(LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "ja_JP.EUC-JP", nullptr),
             nullptr);
   ASSERT_ERRNO_EQ(ENOENT);
+
+  // The names a machine is actually set to are honoured.
+  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "C.UTF-8", nullptr);
+  ASSERT_NE(loc, nullptr);
+  LIBC_NAMESPACE::freelocale(loc);
+
+  loc = LIBC_NAMESPACE::newlocale(LC_ALL_MASK, "en_GB.UTF-8", nullptr);
+  ASSERT_NE(loc, nullptr);
+  LIBC_NAMESPACE::freelocale(loc);
 }
 
 TEST_F(LlvmLibcLocale, SetLocale) {
   // Setting a "C" or default locale.
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, "C"), "C");
-  EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, ""), "C");
-  // POSIX is another name for it.
-  EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, "POSIX"), "C");
+  // "" selects what the environment names, so only that it is accepted.
+  EXPECT_NE(LIBC_NAMESPACE::setlocale(LC_CTYPE, ""),
+            static_cast<char *>(nullptr));
+  EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, "C"), "C");
   // Querying the current locale.
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
   EXPECT_STREQ(LIBC_NAMESPACE::setlocale(LC_NUMERIC, nullptr), "C");
@@ -76,5 +88,5 @@ TEST_F(LlvmLibcLocale, SetLocale) {
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(-1, "C"), nullptr);
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL + 1, "C"), nullptr);
   EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL + 1, nullptr), nullptr);
-  EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "does-not-exist"), nullptr);
+  EXPECT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "ja_JP.EUC-JP"), nullptr);
 }
