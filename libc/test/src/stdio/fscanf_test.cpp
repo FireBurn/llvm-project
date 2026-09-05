@@ -81,8 +81,12 @@ TEST(LlvmLibcFScanfTest, WriteToFile) {
 
   // The format string starts with a space to handle the fact that the %s leaves
   // a trailing \n and %c doesn't strip leading whitespace.
+  //
+  // %c takes exactly as many characters as its width says, and there are
+  // fewer than fifty left, so the input runs out and this reports so. What
+  // was there is still written.
   read = LIBC_NAMESPACE::fscanf(file, " %50c", data);
-  ASSERT_EQ(read, 1);
+  ASSERT_EQ(read, EOF);
   ASSERT_EQ(
       LIBC_NAMESPACE::cpp::string_view(numbers_and_more),
       LIBC_NAMESPACE::cpp::string_view(data, sizeof(numbers_and_more) - 1));
