@@ -518,6 +518,7 @@ add_header_macro(
     .llvm-libc-types.siginfo_t
     .llvm-libc-types.sigset_t
     .llvm-libc-types.stack_t
+    .llvm-libc-types.struct_timespec
     .llvm-libc-types.struct_sigaction
     .llvm-libc-types.struct_sigevent
     .llvm-libc-types.union_sigval
@@ -1144,6 +1145,7 @@ add_header_macro(
     .llvm-libc-types.struct_timeval
     .llvm-libc-types.blksize_t
     .llvm-libc-types.blkcnt_t
+    .llvm-libc-types.struct_statx
     .llvm-libc-types.struct_stat
 )
 
