@@ -11,8 +11,8 @@ add_object_library(
     libc.src.__support.common
     libc.src.__support.ctype_utils
     libc.src.__support.macros.config
-    libc.src.stdlib.getenv
     libc.src.stdlib.mb_cur_max
+    libc.src.unistd.environ
 )
 
 add_entrypoint_object(
