@@ -33,13 +33,17 @@ types:
 enums: []
 objects: []
 functions:
-  - name: creat
+  - name: splice
     standards:
-      - posix
-    return_type: int
+      - linux
+    return_type: ssize_t
     arguments:
-      - type: const char *
-      - type: mode_t
+      - type: int
+      - type: off_t *
+      - type: int
+      - type: off_t *
+      - type: size_t
+      - type: unsigned int
   - name: fallocate
     standards:
       - linux
@@ -49,6 +53,13 @@ functions:
       - type: int
       - type: off_t
       - type: off_t
+  - name: creat
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: mode_t
   - name: fcntl
     standards:
       - posix
