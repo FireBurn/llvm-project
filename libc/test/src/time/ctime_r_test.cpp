@@ -12,9 +12,10 @@
 #include "src/time/time_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/src/time/TzFixture.h"
 #include "test/src/time/TmHelper.h"
 
-using LlvmLibcCtimeR = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
+using LlvmLibcCtimeR = TzErrnoFixture;
 
 TEST_F(LlvmLibcCtimeR, Nullptr) {
   char buffer[LIBC_NAMESPACE::time_constants::ASCTIME_BUFFER_SIZE];
