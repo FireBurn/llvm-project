@@ -14,6 +14,12 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_IFMAP_H
 #define LLVM_LIBC_TYPES_STRUCT_IFMAP_H
 
+#include "../llvm-libc-macros/uapi-compat-macros.h"
+
+// The kernel defines this too, in <linux/if.h>. Leaving it to the
+// kernel is right only where that header has been read and its
+// guard says the definition is the kernel's.
+#if !(__UAPI_DEF_IF_IFMAP && defined(_LINUX_IF_H))
 struct ifmap {
   unsigned long mem_start;
   unsigned long mem_end;
@@ -22,5 +28,6 @@ struct ifmap {
   unsigned char dma;
   unsigned char port;
 };
+#endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_IFMAP_H
