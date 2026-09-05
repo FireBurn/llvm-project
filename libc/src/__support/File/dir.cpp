@@ -42,8 +42,15 @@ ErrorOr<struct dirent *> Dir::read() {
   cpp::lock_guard lock(mutex);
   if (readptr >= fillsize) {
     auto readsize = platform_fetch_dirents(fd, buffer);
-    if (!readsize)
+    if (!readsize) {
+      // A directory that has been removed while it was open has nothing more
+      // in it, which is the end of it rather than something going wrong. A
+      // caller telling the two apart looks at errno, so this must not set
+      // one.
+      if (readsize.error() == ENOENT)
+        return nullptr;
       return LIBC_NAMESPACE::Error(readsize.error());
+    }
     fillsize = readsize.value();
     readptr = 0;
   }
