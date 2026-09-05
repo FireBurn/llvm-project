@@ -1552,3 +1552,19 @@ add_proxy_header_library(
   HDRS
   FULL_BUILD_DEPENDS
 )
+
+add_proxy_header_library(
+  struct_sgrp
+  HDRS
+    struct_sgrp.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_sgrp
+)
+
+add_proxy_header_library(
+  struct_spwd
+  HDRS
+    struct_spwd.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_spwd
+)
