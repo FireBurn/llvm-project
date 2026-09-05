@@ -117,6 +117,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.shadow.sgetspent
     libc.src.shadow.sgetspent_r
     libc.src.shadow.ulckpwdf
+    libc.src.grp.putgrent
 
     # mntent.h entrypoints
     libc.src.mntent.addmntent
@@ -135,6 +136,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.pwd.getpwuid
     libc.src.pwd.getpwuid_r
     libc.src.pwd.setpwent
+    libc.src.pwd.putpwent
 
     # sched.h entrypoints
     libc.src.sched.getcpu
@@ -1707,6 +1709,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fmemopen
     libc.src.stdio.fopen
     libc.src.stdio.freopen
+    libc.src.stdio.open_memstream
     libc.src.stdio.fopencookie
     libc.src.stdio.fputc
     libc.src.stdio.fputc_unlocked
