@@ -82,4 +82,10 @@ extern FILE *stderr;
 #define SEEK_END 2
 #endif
 
+// What renameat2 may be asked to do instead of a plain rename. glibc
+// declares these in <stdio.h> too.
+#define RENAME_NOREPLACE (1 << 0)
+#define RENAME_EXCHANGE (1 << 1)
+#define RENAME_WHITEOUT (1 << 2)
+
 #endif // LLVM_LIBC_MACROS_STDIO_MACROS_H
