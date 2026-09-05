@@ -35,3 +35,8 @@ TEST(LlvmLibcLinuxUnistdMacrosTest, Define_Posix_VersionAndTheSupportedOptio) {
   EXPECT_EQ(static_cast<long long>(_POSIX_NO_TRUNC), 1LL);
   EXPECT_EQ(static_cast<long long>(_POSIX_VDISABLE), 0LL);
 }
+
+TEST(LlvmLibcLinuxUnistdMacrosTest, DefineSeek_DataAndSeek_Hole) {
+  EXPECT_EQ(static_cast<long long>(SEEK_DATA), 3LL);
+  EXPECT_EQ(static_cast<long long>(SEEK_HOLE), 4LL);
+}
