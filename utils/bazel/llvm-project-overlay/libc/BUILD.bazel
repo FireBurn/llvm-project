@@ -1025,6 +1025,11 @@ alias(
         "ufromfpxl",
         "ufromfpxf128",
         "ufromfpxf16",
+        "acosh",
+        "asinh",
+        "atanh",
+        "erf",
+        "erfc",
     ]
 ]
 

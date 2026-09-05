@@ -6876,3 +6876,83 @@ libc_support_library(
         "//libc/src/__support:common",
     ],
 )
+
+libc_support_library(
+    name = "acosh",
+    hdrs = ["acosh.h"],
+    deps = [
+        ":log",
+        ":log1p",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:sqrt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "asinh",
+    hdrs = ["asinh.h"],
+    deps = [
+        ":log",
+        ":log1p",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:sqrt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_support_library(
+    name = "atanh",
+    hdrs = ["atanh.h"],
+    deps = [
+        ":log1p",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "erf_common",
+    hdrs = ["erf_common.h"],
+    deps = [
+        ":exp",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:multiply_add",
+        "//libc/src/__support/FPUtil:polyeval",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_support_library(
+    name = "erf",
+    hdrs = ["erf.h"],
+    deps = [
+        ":erf_common",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_support_library(
+    name = "erfc",
+    hdrs = ["erfc.h"],
+    deps = [
+        ":erf_common",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/errno:errno",
+    ],
+)
