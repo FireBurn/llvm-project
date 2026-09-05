@@ -12,6 +12,7 @@
 #include "hdr/types/struct_sockaddr.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/connect.h"
 #include "src/__support/common.h"
+#include "src/__support/threads/cancel.h"
 #include "src/__support/libc_errno.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -19,7 +20,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, connect,
                    (int sockfd, const struct sockaddr *addr,
                     socklen_t addrlen)) {
-  auto result = linux_syscalls::connect(sockfd, addr, addrlen);
+  auto result = internal::cancellable([&] { return linux_syscalls::connect(sockfd, addr, addrlen); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;
