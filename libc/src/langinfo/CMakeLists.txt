@@ -21,6 +21,8 @@ add_entrypoint_object(
     libc.hdr.types.locale_t
     libc.hdr.types.nl_item
     libc.hdr.types.size_t
+    libc.src.__support.CPP.string_view
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
