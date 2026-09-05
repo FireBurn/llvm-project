@@ -1,0 +1,9 @@
+add_object_library(
+  zone_source
+  SRCS
+    zone_source.cpp
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.macros.config
+    libc.src.time.tz.zone_source_header
+)
