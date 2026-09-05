@@ -313,6 +313,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  common_cxx98_spellings_test
+  SUITE
+    libc-include-tests
+  SRCS
+    common_cxx98_spellings_test.cpp
+  DEPENDS
+    libc.include.stdlib
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
