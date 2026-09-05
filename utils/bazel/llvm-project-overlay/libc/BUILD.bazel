@@ -26227,6 +26227,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_glob_t",
+    hdrs = ["include/llvm-libc-types/glob_t.h"],
+)
+
+libc_support_library(
+    name = "types_glob_t",
+    hdrs = ["hdr/types/glob_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_glob_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_iconv_t",
     hdrs = ["include/llvm-libc-types/iconv_t.h"],
 )
@@ -27705,6 +27719,47 @@ libc_function(
         ":__support_macros_config",
         ":fnmatch_fnmatch_matcher",
         ":hdr_fnmatch_macros",
+    ],
+)
+
+libc_function(
+    name = "glob",
+    srcs = ["src/glob/glob.cpp"],
+    hdrs = ["src/glob/glob.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":closedir",
+        ":dirent_readdir",
+        ":errno",
+        ":fnmatch",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_fnmatch_macros",
+        ":hdr_glob_macros",
+        ":hdr_limits_macros",
+        ":hdr_sys_stat_macros",
+        ":opendir",
+        ":stat",
+        ":string_utils",
+        ":sys_stat_stat",
+        ":types_glob_t",
+    ],
+)
+
+libc_function(
+    name = "globfree",
+    srcs = ["src/glob/globfree.cpp"],
+    hdrs = ["src/glob/globfree.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_glob_t",
     ],
 )
 
@@ -30108,6 +30163,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_langinfo_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_glob_macros",
+    hdrs = ["include/llvm-libc-macros/glob-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_glob_macros",
+    hdrs = ["hdr/glob_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_glob_macros",
         ],
         "//conditions:default": [],
     }),
