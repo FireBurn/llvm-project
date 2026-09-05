@@ -23,10 +23,21 @@ macros:
   - macro_name: POLLWRBAND
     macro_header: poll-macros.h
 types:
+  - type_name: sigset_t
+  - type_name: struct_timespec
   - type_name: struct_pollfd
   - type_name: nfds_t
 enums: []
 functions:
+  - name: ppoll
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct pollfd *
+      - type: nfds_t
+      - type: const struct timespec *
+      - type: const sigset_t *
   - name: poll
     standards:
       - posix
