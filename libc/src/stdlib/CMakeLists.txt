@@ -375,6 +375,7 @@ add_object_library(
   HDRS
     rand_util.h
   DEPENDS
+    libc.hdr.stdint_proxy
     libc.src.__support.common
 )
 
