@@ -46,6 +46,7 @@
 #define SOCK_RAW 3
 #define SOCK_RDM 4
 #define SOCK_SEQPACKET 5
+#define SOCK_DCCP 6
 #define SOCK_PACKET 10
 
 #define SOCK_CLOEXEC 0x80000
