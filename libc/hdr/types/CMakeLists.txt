@@ -1497,3 +1497,11 @@ add_proxy_header_library(
   HDRS
     cap_user_data_t.h
 )
+
+add_proxy_header_library(
+  union_sigval
+  HDRS
+    union_sigval.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.union_sigval
+)
