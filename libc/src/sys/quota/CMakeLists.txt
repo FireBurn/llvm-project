@@ -1,0 +1,21 @@
+add_entrypoint_object(
+  quotactl
+  SRCS
+    quotactl.cpp
+  HDRS
+    quotactl.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.quotactl
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  quotactl_fd
+  SRCS
+    quotactl_fd.cpp
+  HDRS
+    quotactl_fd.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.quotactl_fd
+    libc.src.errno.errno
+)
