@@ -5,6 +5,8 @@ macros:
   - macro_name: WCOREDUMP
     macro_header: sys-wait-macros.h
 types:
+  - type_name: id_t
+  - type_name: idtype_t
   - type_name: siginfo_t
   - type_name: struct_rusage
   - type_name: pid_t

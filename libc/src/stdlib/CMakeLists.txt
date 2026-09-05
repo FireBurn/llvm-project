@@ -938,8 +938,6 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
-
-
 add_object_library(
   random_util
   HDRS
