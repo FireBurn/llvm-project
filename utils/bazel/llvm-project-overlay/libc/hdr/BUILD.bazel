@@ -481,6 +481,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "spawn_macros",
+    hdrs = ["spawn_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_spawn_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "sys_xattr_macros",
     hdrs = ["sys_xattr_macros.h"],
     deps = select({

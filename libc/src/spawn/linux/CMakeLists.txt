@@ -13,8 +13,23 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.execve
     libc.src.__support.OSUtil.linux.syscall_wrappers.exit_group
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigaction
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setparam
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setscheduler
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setpgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setsid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setuid
     libc.src.spawn.file_actions
     libc.src.signal.linux.signal_utils
+    libc.hdr.signal_macros
+    libc.hdr.spawn_macros
+    libc.hdr.types.sigset_t
+    libc.src.signal.sigismember
 )

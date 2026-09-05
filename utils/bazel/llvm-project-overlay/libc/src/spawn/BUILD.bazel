@@ -1,0 +1,301 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "file_actions",
+    hdrs = ["file_actions.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_init",
+    srcs = ["posix_spawnattr_init.cpp"],
+    hdrs = ["posix_spawnattr_init.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_destroy",
+    srcs = ["posix_spawnattr_destroy.cpp"],
+    hdrs = ["posix_spawnattr_destroy.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getflags",
+    srcs = ["posix_spawnattr_getflags.cpp"],
+    hdrs = ["posix_spawnattr_getflags.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setflags",
+    srcs = ["posix_spawnattr_setflags.cpp"],
+    hdrs = ["posix_spawnattr_setflags.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getpgroup",
+    srcs = ["posix_spawnattr_getpgroup.cpp"],
+    hdrs = ["posix_spawnattr_getpgroup.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setpgroup",
+    srcs = ["posix_spawnattr_setpgroup.cpp"],
+    hdrs = ["posix_spawnattr_setpgroup.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getsigdefault",
+    srcs = ["posix_spawnattr_getsigdefault.cpp"],
+    hdrs = ["posix_spawnattr_getsigdefault.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setsigdefault",
+    srcs = ["posix_spawnattr_setsigdefault.cpp"],
+    hdrs = ["posix_spawnattr_setsigdefault.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getsigmask",
+    srcs = ["posix_spawnattr_getsigmask.cpp"],
+    hdrs = ["posix_spawnattr_getsigmask.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setsigmask",
+    srcs = ["posix_spawnattr_setsigmask.cpp"],
+    hdrs = ["posix_spawnattr_setsigmask.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getschedpolicy",
+    srcs = ["posix_spawnattr_getschedpolicy.cpp"],
+    hdrs = ["posix_spawnattr_getschedpolicy.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setschedpolicy",
+    srcs = ["posix_spawnattr_setschedpolicy.cpp"],
+    hdrs = ["posix_spawnattr_setschedpolicy.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getschedparam",
+    srcs = ["posix_spawnattr_getschedparam.cpp"],
+    hdrs = ["posix_spawnattr_getschedparam.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setschedparam",
+    srcs = ["posix_spawnattr_setschedparam.cpp"],
+    hdrs = ["posix_spawnattr_setschedparam.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:posix_spawnattr_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn",
+    srcs = ["linux/posix_spawn.cpp"],
+    hdrs = ["posix_spawn.h"],
+    deps = [
+        ":file_actions",
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr:spawn_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:chdir",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:exit_group",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchdir",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fcntl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getgid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getuid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pipe2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigaction",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigprocmask",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setparam",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setscheduler",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setgid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpgid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setsid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setuid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:wait4",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/signal:__signal_utils",
+        "//libc/src/signal:sigismember",
+        "//libc/src/unistd:linux_exec_utils",
+    ],
+)

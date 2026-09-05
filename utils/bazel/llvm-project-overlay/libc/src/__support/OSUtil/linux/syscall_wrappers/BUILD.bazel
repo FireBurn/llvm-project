@@ -2662,6 +2662,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "setgid",
+    hdrs = ["setgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "setuid",
+    hdrs = ["setuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigsuspend",
     hdrs = ["rt_sigsuspend.h"],
     deps = [
@@ -2749,6 +2773,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pipe2",
+    hdrs = ["pipe2.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:sanitizer",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "fdatasync",
     hdrs = ["fdatasync.h"],
     deps = [
@@ -2784,6 +2820,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "rt_sigaction",
+    hdrs = ["rt_sigaction.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "waitid",
     hdrs = ["waitid.h"],
     deps = [
@@ -2791,6 +2839,18 @@ libc_support_library(
         "//libc/hdr/types:idtype_t",
         "//libc/hdr/types:siginfo_t",
         "//libc/hdr/types:struct_rusage",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "execve",
+    hdrs = ["execve.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
