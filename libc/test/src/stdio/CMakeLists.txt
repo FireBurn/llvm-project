@@ -1,6 +1,22 @@
 add_libc_testsuite(libc-stdio-tests)
 
 add_libc_test(
+  setlinebuf_test
+  SUITE
+    libc-stdio-tests
+  SRCS
+    setlinebuf_test.cpp
+  DEPENDS
+    libc.include.stdio
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fread
+    libc.src.stdio.fwrite
+    libc.src.stdio.setlinebuf
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   fputc_unlocked_test
   SUITE
     libc-stdio-tests
