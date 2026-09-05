@@ -328,6 +328,7 @@ add_type_header(
 )
 add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_arphdr HDR struct_arphdr.h)
+add_header(struct_mount_attr HDR struct_mount_attr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_in_pktinfo HDR struct_in_pktinfo.h DEPENDS .struct_in_addr)
 add_header(struct_ip6_mtuinfo HDR struct_ip6_mtuinfo.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_sockaddr_in6)
 add_header(struct_ether_arp HDR struct_ether_arp.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros .struct_arphdr)
