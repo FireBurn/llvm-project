@@ -19079,6 +19079,19 @@ libc_function(
 )
 
 libc_function(
+    name = "ftrylockfile",
+    srcs = ["src/stdio/ftrylockfile.cpp"],
+    hdrs = ["src/stdio/ftrylockfile.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":stdio_ftrylockfile",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "fwrite",
     srcs = ["src/stdio/generic/fwrite.cpp"],
     hdrs = ["src/stdio/fwrite.h"],
@@ -21326,5 +21339,16 @@ libc_support_library(
         ":types_FILE",
         ":types_off_t",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_ftrylockfile",
+    srcs = ["src/stdio/ftrylockfile.cpp"],
+    hdrs = ["src/stdio/ftrylockfile.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_macros_config",
+        ":types_FILE",
     ],
 )
