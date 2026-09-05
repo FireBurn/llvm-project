@@ -1993,12 +1993,49 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "rt_sigpending",
+    hdrs = ["rt_sigpending.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "getpgid",
+    hdrs = ["getpgid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigtimedwait",
     hdrs = ["rt_sigtimedwait.h"],
     deps = [
         "//libc/hdr/types:siginfo_t",
         "//libc/hdr/types:sigset_t",
         "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "rt_sigqueueinfo",
+    hdrs = ["rt_sigqueueinfo.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:siginfo_t",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
