@@ -56,3 +56,27 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  file_handle_test
+  SUITE
+    libc_fcntl_unittests
+  SRCS
+    file_handle_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_file_handle
+    libc.src.__support.libc_errno
+    libc.src.fcntl.name_to_handle_at
+    libc.src.fcntl.open
+    libc.src.fcntl.open_by_handle_at
+    libc.src.string.memcmp
+    libc.src.unistd.close
+    libc.src.unistd.read
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
