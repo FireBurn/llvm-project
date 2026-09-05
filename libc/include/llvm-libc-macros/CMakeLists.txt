@@ -604,6 +604,32 @@ add_macro_header(
 )
 
 add_macro_header(
+  net_ethernet_macros
+  HDR
+    net-ethernet-macros.h
+)
+
+add_macro_header(
+  netinet_if_ether_macros
+  HDR
+    netinet-if-ether-macros.h
+)
+
+add_macro_header(
+  netinet_ip_macros
+  HDR
+    netinet-ip-macros.h
+)
+
+add_macro_header(
+  netinet_icmp6_macros
+  HDR
+    netinet-icmp6-macros.h
+  DEPENDS
+    .endian_macros
+)
+
+add_macro_header(
   printf_macros
   HDR
     printf-macros.h
