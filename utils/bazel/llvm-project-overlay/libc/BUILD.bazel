@@ -26228,6 +26228,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setuid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_time_units",
     hdrs = ["src/__support/time/units.h"],
     deps = [
@@ -26435,6 +26459,20 @@ libc_support_library(
     hdrs = ["hdr/types/nl_item.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_nl_item"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_posix_spawnattr_t",
+    hdrs = ["include/llvm-libc-types/posix_spawnattr_t.h"],
+)
+
+libc_support_library(
+    name = "types_posix_spawnattr_t",
+    hdrs = ["hdr/types/posix_spawnattr_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_posix_spawnattr_t"],
         "//conditions:default": [],
     }),
 )
@@ -27661,6 +27699,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pipe2",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pipe2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_macros_sanitizer",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_fdatasync",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fdatasync.h"],
     deps = [
@@ -27696,6 +27746,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigaction",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigaction.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_waitid",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/waitid.h"],
     deps = [
@@ -27707,6 +27769,18 @@ libc_support_library(
         ":types_idtype_t",
         ":types_siginfo_t",
         ":types_struct_rusage",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_execve",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/execve.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
     ],
 )
 
@@ -27734,6 +27808,17 @@ libc_support_library(
         ":types_sigset_t",
         ":types_size_t",
         ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_getgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/getgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
     ],
 )
 
@@ -28995,6 +29080,282 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "spawn_file_actions",
+    hdrs = ["src/spawn/file_actions.h"],
+    deps = [
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_init",
+    srcs = ["src/spawn/posix_spawnattr_init.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_destroy",
+    srcs = ["src/spawn/posix_spawnattr_destroy.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_destroy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getflags",
+    srcs = ["src/spawn/posix_spawnattr_getflags.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getflags.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setflags",
+    srcs = ["src/spawn/posix_spawnattr_setflags.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setflags.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getpgroup",
+    srcs = ["src/spawn/posix_spawnattr_getpgroup.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getpgroup.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setpgroup",
+    srcs = ["src/spawn/posix_spawnattr_setpgroup.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setpgroup.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getsigdefault",
+    srcs = ["src/spawn/posix_spawnattr_getsigdefault.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getsigdefault.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setsigdefault",
+    srcs = ["src/spawn/posix_spawnattr_setsigdefault.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setsigdefault.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getsigmask",
+    srcs = ["src/spawn/posix_spawnattr_getsigmask.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getsigmask.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setsigmask",
+    srcs = ["src/spawn/posix_spawnattr_setsigmask.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setsigmask.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getschedpolicy",
+    srcs = ["src/spawn/posix_spawnattr_getschedpolicy.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getschedpolicy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setschedpolicy",
+    srcs = ["src/spawn/posix_spawnattr_setschedpolicy.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setschedpolicy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_getschedparam",
+    srcs = ["src/spawn/posix_spawnattr_getschedparam.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_getschedparam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawnattr_setschedparam",
+    srcs = ["src/spawn/posix_spawnattr_setschedparam.cpp"],
+    hdrs = ["src/spawn/posix_spawnattr_setschedparam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_spawn_macros",
+        ":types_pid_t",
+        ":types_posix_spawnattr_t",
+        ":types_sigset_t",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn",
+    srcs = ["src/spawn/linux/posix_spawn.cpp"],
+    hdrs = ["src/spawn/posix_spawn.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_chdir",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_dup2",
+        ":__support_osutil_linux_syscall_wrappers_execve",
+        ":__support_osutil_linux_syscall_wrappers_exit_group",
+        ":__support_osutil_linux_syscall_wrappers_fchdir",
+        ":__support_osutil_linux_syscall_wrappers_fcntl",
+        ":__support_osutil_linux_syscall_wrappers_getgid",
+        ":__support_osutil_linux_syscall_wrappers_getuid",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_pipe2",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigaction",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":__support_osutil_linux_syscall_wrappers_sched_setparam",
+        ":__support_osutil_linux_syscall_wrappers_sched_setscheduler",
+        ":__support_osutil_linux_syscall_wrappers_setgid",
+        ":__support_osutil_linux_syscall_wrappers_setpgid",
+        ":__support_osutil_linux_syscall_wrappers_setsid",
+        ":__support_osutil_linux_syscall_wrappers_setuid",
+        ":__support_osutil_linux_syscall_wrappers_wait4",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+        ":hdr_signal_macros",
+        ":hdr_spawn_macros",
+        ":sigismember",
+        ":spawn_file_actions",
+        ":types_mode_t",
+        ":types_sigset_t",
+        ":unistd_linux_exec_utils",
+    ],
+)
+
 libc_function(
     name = "fopencookie",
     srcs = ["src/stdio/fopencookie.cpp"],
@@ -29744,6 +30105,23 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "unistd_linux_exec_utils",
+    hdrs = ["src/unistd/linux/exec_utils.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_execve",
+        ":hdr_errno_macros",
+        ":hdr_limits_macros",
+        ":stdlib_environ_internal",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
 libc_function(
     name = "pathconf",
     srcs = ["src/unistd/linux/pathconf.cpp"],
@@ -30440,6 +30818,17 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_spawn_macros",
     hdrs = ["include/llvm-libc-macros/spawn-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_spawn_macros",
+    hdrs = ["hdr/spawn_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_spawn_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(

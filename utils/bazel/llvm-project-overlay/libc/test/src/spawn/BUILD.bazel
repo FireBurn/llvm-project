@@ -9,3 +9,33 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "posix_spawnattr_test",
+    srcs = ["posix_spawnattr_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:hdr_spawn_macros",
+        "//libc:posix_spawnattr_destroy",
+        "//libc:posix_spawnattr_getflags",
+        "//libc:posix_spawnattr_getpgroup",
+        "//libc:posix_spawnattr_getschedparam",
+        "//libc:posix_spawnattr_getschedpolicy",
+        "//libc:posix_spawnattr_getsigdefault",
+        "//libc:posix_spawnattr_getsigmask",
+        "//libc:posix_spawnattr_init",
+        "//libc:posix_spawnattr_setflags",
+        "//libc:posix_spawnattr_setpgroup",
+        "//libc:posix_spawnattr_setschedparam",
+        "//libc:posix_spawnattr_setschedpolicy",
+        "//libc:posix_spawnattr_setsigdefault",
+        "//libc:posix_spawnattr_setsigmask",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:sigismember",
+        "//libc:types_posix_spawnattr_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_sched_param",
+    ],
+)
