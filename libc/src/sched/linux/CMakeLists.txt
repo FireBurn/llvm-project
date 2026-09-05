@@ -1,3 +1,7 @@
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_ARCHITECTURE})
+  add_subdirectory(${LIBC_TARGET_ARCHITECTURE})
+endif()
+
 add_entrypoint_object(
   getcpu
   SRCS
