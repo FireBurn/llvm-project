@@ -873,6 +873,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_glob_t",
+    hdrs = ["llvm-libc-types/glob_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_iconv_t",
     hdrs = ["llvm-libc-types/iconv_t.h"],
 )
@@ -1003,6 +1008,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_langinfo_macros",
     hdrs = ["llvm-libc-macros/langinfo-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_glob_macros",
+    hdrs = ["llvm-libc-macros/glob-macros.h"],
 )
 
 libc_support_library(
