@@ -1,0 +1,24 @@
+add_libc_testsuite(libc-ftw-tests)
+
+add_libc_test(
+  nftw_test
+  SUITE
+    libc-ftw-tests
+  SRCS
+    nftw_test.cpp
+  DEPENDS
+    libc.hdr.ftw_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_FTW
+    libc.hdr.types.struct_stat
+    libc.src.fcntl.open
+    libc.src.ftw.ftw
+    libc.src.ftw.nftw
+    libc.src.stdio.remove
+    libc.src.string.strstr
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
