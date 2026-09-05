@@ -97,9 +97,12 @@ private:
 
 } // anonymous namespace
 
-bool port_for_service(const char *name, const char *protocol, uint16_t &port) {
+bool port_for_service(const char *name, const char *protocol, uint16_t &port,
+                      char *found_protocol, size_t found_capacity) {
   if (name == nullptr)
     return false;
+  if (found_protocol != nullptr && found_capacity != 0)
+    found_protocol[0] = '\0';
 
   Reader reader;
   if (!reader.open(SERVICES_PATH))
@@ -157,6 +160,10 @@ bool port_for_service(const char *name, const char *protocol, uint16_t &port) {
 
     const uint16_t host_order = static_cast<uint16_t>(value.value);
     port = static_cast<uint16_t>((host_order << 8) | (host_order >> 8));
+    if (found_protocol != nullptr && named.size() < found_capacity) {
+      inline_memcpy(found_protocol, named.data(), named.size());
+      found_protocol[named.size()] = '\0';
+    }
     return true;
   }
   return false;
