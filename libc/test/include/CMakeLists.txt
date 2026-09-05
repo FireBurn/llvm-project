@@ -283,6 +283,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  ar_test
+  SUITE
+    libc-include-tests
+  SRCS
+    ar_test.cpp
+  DEPENDS
+    libc.include.ar
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
