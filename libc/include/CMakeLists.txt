@@ -577,6 +577,7 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.wchar_t
     .llvm_libc_common_h
+    .alloca
 )
 
 add_header_macro(
