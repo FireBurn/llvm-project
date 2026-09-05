@@ -337,7 +337,13 @@ public:
     auto seconds = mktime_internal(timeptr);
     if (!seconds)
       return cpp::unexpected(TIME_OVERFLOW);
+#if defined(__linux__)
+    // The fields state a local time, so the offset they carry has to come off
+    // again to count from the epoch.
+    return *seconds - timeptr->tm_gmtoff;
+#else
     return *seconds;
+#endif
   }
 
   /// Get timezone offset.
