@@ -49,6 +49,9 @@ add_integration_test(
     libc.src.errno.errno
     libc.src.stdio.fgets
     libc.src.stdio.fputs
+    libc.hdr.fcntl_macros
+    libc.src.fcntl.fcntl
+    libc.src.stdio.fileno
     libc.src.stdio.pclose
     libc.src.stdio.popen
     libc.src.string.strcmp
