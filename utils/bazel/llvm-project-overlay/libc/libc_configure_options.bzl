@@ -72,6 +72,9 @@ LIBC_CONFIGURE_FULL_BUILD_OPTIONS = [
 
     # Defined for targets which support threads.
     "LIBC_COPT_SUPPORT_THREADS",
+
+    # setenv keeps the exported environ pointing at the array it builds.
+    "LIBC_COPT_SUPPORT_ENVIRON",
 ]
 
 LIBC_CONFIGURE_OPTIONS = LIBC_CONFIGURE_COMMON_OPTIONS + select({
