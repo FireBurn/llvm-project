@@ -260,6 +260,20 @@ libc_test(
 )
 
 libc_test(
+    name = "fputc_unlocked_test",
+    srcs = ["fputc_unlocked_test.cpp"],
+    deps = [
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fgets",
+        "//libc/src/stdio:flockfile",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fputc_unlocked",
+        "//libc/src/stdio:fputs_unlocked",
+        "//libc/src/stdio:funlockfile",
+    ],
+)
+
+libc_test(
     name = "getdelim_test",
     srcs = ["getdelim_test.cpp"],
     deps = [

@@ -594,6 +594,76 @@ libc_function(
 )
 
 libc_function(
+    name = "fgets",
+    srcs = ["generic/fgets.cpp"],
+    hdrs = ["fgets.h"],
+    deps = [
+        ":stdio_fgets",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "flockfile",
+    srcs = ["flockfile.cpp"],
+    hdrs = ["flockfile.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fputc_unlocked",
+    srcs = ["generic/fputc_unlocked.cpp"],
+    hdrs = ["fputc_unlocked.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fputs_unlocked",
+    srcs = ["generic/fputs_unlocked.cpp"],
+    hdrs = ["fputs_unlocked.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "funlockfile",
+    srcs = ["funlockfile.cpp"],
+    hdrs = ["funlockfile.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "getdelim",
     srcs = [
         "generic/getdelim.cpp",
@@ -687,6 +757,15 @@ libc_support_library(
     name = "stdio_renameat2",
     hdrs = ["renameat2.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_fgets",
+    hdrs = ["fgets.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
         "//libc/src/__support/macros:config",
     ],
 )
