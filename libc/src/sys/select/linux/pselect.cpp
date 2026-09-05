@@ -13,6 +13,8 @@
 
 #include "src/sys/select/pselect.h"
 
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 #include "hdr/types/fd_set.h"
 #include "hdr/types/sigset_t.h"
 #include "hdr/types/struct_timespec.h"
@@ -28,6 +30,7 @@ LLVM_LIBC_FUNCTION(int, pselect,
                     fd_set *__restrict writefds, fd_set *__restrict exceptfds,
                     const struct timespec *__restrict timeout,
                     const sigset_t *__restrict sigmask)) {
+  internal::cancel_point();
   // The Linux raw pselect6 syscall modifies its timeout argument. To conform to
   // POSIX (which declares timeout as const), we pass a copy.
   timespec ts;
@@ -39,6 +42,8 @@ LLVM_LIBC_FUNCTION(int, pselect,
   auto result = linux_syscalls::pselect6(nfds, readfds, writefds, exceptfds,
                                          tsp, sigmask);
   if (!result.has_value()) {
+    if (result.error() == EINTR)
+      internal::cancel_point();
     libc_errno = result.error();
     return -1;
   }

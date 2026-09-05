@@ -13,12 +13,14 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/accept.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, accept,
                    (int sockfd, struct sockaddr *addr, socklen_t *addrlen)) {
-  auto result = linux_syscalls::accept(sockfd, addr, addrlen);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::accept(sockfd, addr, addrlen); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;
