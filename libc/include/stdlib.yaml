@@ -14,6 +14,8 @@ macros:
     macro_header: stdlib-macros.h
   - macro_name: EXIT_FAILURE
     macro_header: stdlib-macros.h
+  - macro_name: MB_CUR_MAX
+    macro_header: stdlib-macros.h
 types:
   - type_name: __atexithandler_t
   - type_name: __qsortcompare_t
@@ -27,9 +29,10 @@ types:
   - type_name: rsize_t
   - type_name: size_t
   - type_name: wchar_t
-  - type_name: errno_t
 enums: []
-objects: []
+objects:
+  - object_name: __llvm_libc_mb_cur_max
+    object_type: size_t
 functions:
   - name: _Exit
     standards:
