@@ -65,6 +65,8 @@ add_entrypoint_object(
   HDRS
     ../close.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.include.unistd
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.errno.errno
@@ -308,6 +310,8 @@ add_entrypoint_object(
   HDRS
     ../fsync.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.src.__support.OSUtil.linux.syscall_wrappers.fsync
     libc.src.errno.errno
 )
@@ -609,6 +613,8 @@ add_entrypoint_object(
   HDRS
     ../pread.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
@@ -628,6 +634,8 @@ add_entrypoint_object(
   HDRS
     ../pwrite.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
@@ -646,6 +654,8 @@ add_entrypoint_object(
   HDRS
     ../read.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.hdr.fcntl_macros
@@ -771,6 +781,8 @@ add_entrypoint_object(
   HDRS
     ../sleep.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_timespec
     libc.hdr.types.time_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.nanosleep
@@ -925,6 +937,8 @@ add_entrypoint_object(
   HDRS
     ../write.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.hdr.fcntl_macros
@@ -1214,6 +1228,8 @@ add_entrypoint_object(
   HDRS
     ../pause.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
