@@ -2067,3 +2067,16 @@ add_header_library(
     libc.src.__support.macros.config
     libc.src.__support.OSUtil.osutil
 )
+
+add_header_library(
+  sethostname
+  HDRS
+    sethostname.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
