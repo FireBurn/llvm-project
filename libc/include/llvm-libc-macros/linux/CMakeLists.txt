@@ -212,3 +212,9 @@ add_header(
     sys-fanotify-macros.h
 )
 
+add_header(
+  sys_reboot_macros
+  HDR
+    sys-reboot-macros.h
+)
+
