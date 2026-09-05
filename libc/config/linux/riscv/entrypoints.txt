@@ -336,6 +336,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.remove
     libc.src.stdio.rename
     libc.src.stdio.renameat
+    libc.src.stdio.renameat2
 
     # printf.h entrypoints
     libc.src.printf.parse_printf_format
@@ -499,6 +500,14 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/mount.h entrypoints
     libc.src.sys.mount.mount
+    libc.src.sys.mount.pivot_root
+    libc.src.sys.mount.fsconfig
+    libc.src.sys.mount.fsmount
+    libc.src.sys.mount.fsopen
+    libc.src.sys.mount.fspick
+    libc.src.sys.mount.move_mount
+    libc.src.sys.mount.mount_setattr
+    libc.src.sys.mount.open_tree
     libc.src.sys.mount.umount
     libc.src.sys.mount.umount2
 
@@ -511,6 +520,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.stat.fchmod
     libc.src.sys.stat.fchmodat
     libc.src.sys.stat.fstat
+    libc.src.sys.stat.futimens
     libc.src.sys.stat.lstat
     libc.src.sys.stat.mkdir
     libc.src.sys.stat.umask
@@ -1616,7 +1626,9 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fmemopen
     libc.src.stdio.fopencookie
     libc.src.stdio.fputc
+    libc.src.stdio.fputc_unlocked
     libc.src.stdio.fputs
+    libc.src.stdio.fputs_unlocked
     libc.src.stdio.fread
     libc.src.stdio.fread_unlocked
     libc.src.stdio.fseek
