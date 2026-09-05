@@ -191,6 +191,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/timerfd"),
+    libc_header_info("sys/times"),
     libc_header_info("sys/timex"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
@@ -20892,6 +20893,21 @@ libc_function(
 )
 
 libc_function(
+    name = "times",
+    srcs = ["src/sys/times/linux/times.cpp"],
+    hdrs = ["src/sys/times/times.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_times",
+        ":sys_times_times",
+        ":types_clock_t",
+        ":types_struct_tms",
+    ],
+)
+
+libc_function(
     name = "umount",
     srcs = ["src/sys/mount/linux/umount.cpp"],
     hdrs = ["src/sys/mount/umount.h"],
@@ -26647,6 +26663,42 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":types_clockid_t",
         ":types_struct_timex",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_tms",
+    hdrs = ["include/llvm-libc-types/struct_tms.h"],
+)
+
+libc_support_library(
+    name = "types_struct_tms",
+    hdrs = ["hdr/types/struct_tms.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_tms"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_times",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/times.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_tms",
+    ],
+)
+
+libc_support_library(
+    name = "sys_times_times",
+    hdrs = ["src/sys/times/times.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_clock_t",
+        ":types_struct_tms",
     ],
 )
 
