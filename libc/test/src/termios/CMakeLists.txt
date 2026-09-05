@@ -23,3 +23,15 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  cfmakeraw_test
+  SUITE
+    libc_termios_unittests
+  SRCS
+    cfmakeraw_test.cpp
+  DEPENDS
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+    libc.src.termios.cfmakeraw
+)

@@ -22,6 +22,22 @@ macros:
     macro_header: glob-macros.h
   - macro_name: GLOB_NOMATCH
     macro_header: glob-macros.h
+  - macro_name: GLOB_BRACE
+    macro_header: glob-macros.h
+  - macro_name: GLOB_TILDE
+    macro_header: glob-macros.h
+  - macro_name: GLOB_ONLYDIR
+    macro_header: glob-macros.h
+  - macro_name: GLOB_NOMAGIC
+    macro_header: glob-macros.h
+  - macro_name: GLOB_PERIOD
+    macro_header: glob-macros.h
+  - macro_name: GLOB_MAGCHAR
+    macro_header: glob-macros.h
+  - macro_name: GLOB_ALTDIRFUNC
+    macro_header: glob-macros.h
+  - macro_name: GLOB_NOSYS
+    macro_header: glob-macros.h
 types:
   - type_name: glob_t
   - type_name: size_t
