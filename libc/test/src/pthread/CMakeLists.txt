@@ -109,3 +109,22 @@ add_libc_test(
     libc.src.unistd.read
     libc.src.unistd.write
 )
+
+add_libc_test(
+  pthread_affinity_test
+  SUITE
+    libc-pthread-tests
+  SRCS
+    pthread_affinity_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.cpu_set_t
+    libc.include.pthread
+    libc.src.pthread.pthread_getaffinity_np
+    libc.src.pthread.pthread_self
+    libc.src.pthread.pthread_setaffinity_np
+    libc.src.sched.__sched_getcpucount
+    libc.src.sched.__sched_getcpuisset
+    libc.src.sched.__sched_setcpuset
+    libc.src.string.memset
+)

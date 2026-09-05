@@ -662,6 +662,37 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_setaffinity_np
+  SRCS
+    pthread_setaffinity_np.cpp
+  HDRS
+    pthread_setaffinity_np.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.cpu_set_t
+    libc.hdr.types.size_t
+    libc.include.pthread
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setaffinity
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
+  pthread_getaffinity_np
+  SRCS
+    pthread_getaffinity_np.cpp
+  HDRS
+    pthread_getaffinity_np.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.cpu_set_t
+    libc.hdr.types.size_t
+    libc.include.pthread
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_getaffinity
+    libc.src.__support.threads.thread
+)
+
+
+add_entrypoint_object(
   pthread_setcancelstate
   SRCS
     pthread_setcancelstate.cpp
