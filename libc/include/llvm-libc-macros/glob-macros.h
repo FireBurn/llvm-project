@@ -14,7 +14,7 @@
 #ifndef LLVM_LIBC_MACROS_GLOB_MACROS_H
 #define LLVM_LIBC_MACROS_GLOB_MACROS_H
 
-// Flags controlling glob() behavior.
+// Flags for the third argument of glob.
 #define GLOB_ERR (1 << 0)
 #define GLOB_MARK (1 << 1)
 #define GLOB_NOSORT (1 << 2)
@@ -23,9 +23,21 @@
 #define GLOB_APPEND (1 << 5)
 #define GLOB_NOESCAPE (1 << 6)
 
-// glob() error return values.
+// The flags past what POSIX names, which glob() here takes too.
+#define GLOB_PERIOD (1 << 7)
+#define GLOB_MAGCHAR (1 << 8)
+#define GLOB_ALTDIRFUNC (1 << 9)
+#define GLOB_BRACE (1 << 10)
+#define GLOB_NOMAGIC (1 << 11)
+#define GLOB_TILDE (1 << 12)
+#define GLOB_ONLYDIR (1 << 13)
+#define GLOB_TILDE_CHECK (1 << 14)
+
+// Return values.
 #define GLOB_NOSPACE 1
 #define GLOB_ABORTED 2
 #define GLOB_NOMATCH 3
+#define GLOB_NOSYS 4
+#define GLOB_ABEND GLOB_ABORTED
 
 #endif // LLVM_LIBC_MACROS_GLOB_MACROS_H
