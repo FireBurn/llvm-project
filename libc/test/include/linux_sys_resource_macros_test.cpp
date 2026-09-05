@@ -25,3 +25,8 @@ TEST(LlvmLibcLinuxSysResourceMacrosTest,
   EXPECT_EQ(static_cast<long long>(RLIMIT_NLIMITS), 16LL);
   EXPECT_EQ(static_cast<long long>(RLIM_NLIMITS), 16LL);
 }
+
+TEST(LlvmLibcLinuxSysResourceMacrosTest, AddPrio_MinAndPrio_Max) {
+  EXPECT_EQ(static_cast<long long>(PRIO_MIN), -20LL);
+  EXPECT_EQ(static_cast<long long>(PRIO_MAX), 20LL);
+}
