@@ -273,6 +273,7 @@ libc_test(
     srcs = ["vfscanf_test.cpp"],
     deps = [
         "//libc:__support_cpp_string_view",
+        "//libc:hdr_stdio_macros",
         "//libc:vfscanf",
     ] + select({
         "//libc:full_build": [
