@@ -42,6 +42,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.name_to_handle_at
     libc.src.fcntl.open_by_handle_at
     libc.src.fcntl.splice
+    libc.src.fcntl.posix_fallocate
     libc.src.fcntl.fcntl
     libc.src.fcntl.open
     libc.src.fcntl.openat
@@ -89,6 +90,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.shadow.ulckpwdf
     libc.src.grp.initgroups
     libc.src.grp.setgrent
+    libc.src.grp.putgrent
     libc.src.grp.setgroups
 
     # mntent.h entrypoints
@@ -107,6 +109,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.pwd.getpwuid
     libc.src.pwd.getpwuid_r
     libc.src.pwd.setpwent
+    libc.src.pwd.putpwent
 
     # sched.h entrypoints
     libc.src.sched.sched_get_priority_max
@@ -1492,6 +1495,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fopen
     libc.src.stdio.freopen
     libc.src.stdio.fmemopen
+    libc.src.stdio.open_memstream
     libc.src.stdio.fopencookie
     libc.src.stdio.fputc
     libc.src.stdio.fputc_unlocked
