@@ -1,0 +1,117 @@
+add_object_library(
+  gshadow_utils
+  SRCS
+    gshadow_utils.cpp
+  HDRS
+    gshadow_utils.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_sgrp
+    libc.src.__support.CPP.span
+    libc.src.__support.error_or
+    libc.src.__support.field_tokenizer
+    libc.src.__support.flat_file_db
+)
+
+add_header_library(
+  gshadow_r_utils
+  HDRS
+    gshadow_r_utils.h
+  DEPENDS
+    .gshadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_sgrp
+    libc.src.__support.CPP.span
+)
+
+add_entrypoint_object(
+  setsgent
+  SRCS
+    setsgent.cpp
+  HDRS
+    setsgent.h
+  DEPENDS
+    .gshadow_utils
+)
+
+add_entrypoint_object(
+  endsgent
+  SRCS
+    endsgent.cpp
+  HDRS
+    endsgent.h
+  DEPENDS
+    .gshadow_utils
+)
+
+add_entrypoint_object(
+  getsgent
+  SRCS
+    getsgent.cpp
+  HDRS
+    getsgent.h
+  DEPENDS
+    .gshadow_utils
+    libc.hdr.types.struct_sgrp
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getsgnam
+  SRCS
+    getsgnam.cpp
+  HDRS
+    getsgnam.h
+  DEPENDS
+    .gshadow_utils
+    libc.hdr.types.struct_sgrp
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getsgnam_r
+  SRCS
+    getsgnam_r.cpp
+  HDRS
+    getsgnam_r.h
+  DEPENDS
+    .gshadow_r_utils
+    .gshadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_sgrp
+    libc.src.__support.CPP.span
+    libc.src.__support.flat_file_db
+)
+
+add_entrypoint_object(
+  putsgent
+  SRCS
+    putsgent.cpp
+  HDRS
+    putsgent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_sgrp
+    libc.src.errno.errno
+    libc.src.stdio.fprintf
+)
+
+add_entrypoint_object(
+  fgetsgent
+  SRCS
+    fgetsgent.cpp
+  HDRS
+    fgetsgent.h
+  DEPENDS
+    .gshadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_sgrp
+    libc.src.__support.CPP.span
+    libc.src.errno.errno
+    libc.src.stdio.fgets
+)
