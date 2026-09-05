@@ -149,6 +149,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sched.sched_setscheduler
     libc.src.sched.sched_yield
 
+    # The general dynamic thread local model
+    libc.src.tls.__tls_get_addr
+    libc.src.sched.setns
+    libc.src.sched.unshare
+
     # string.h entrypoints
     libc.src.string.memccpy
     libc.src.string.memchr
@@ -1658,8 +1663,6 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # sched.h entrypoints
     libc.src.sched.clone
-    libc.src.sched.setns
-    libc.src.sched.unshare
     libc.src.sched.__sched_andcpuset
     libc.src.sched.__sched_clrcpuset
     libc.src.sched.__sched_cpualloc
