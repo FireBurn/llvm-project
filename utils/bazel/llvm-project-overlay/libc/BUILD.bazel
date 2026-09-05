@@ -20242,6 +20242,21 @@ libc_function(
 )
 
 libc_function(
+    name = "sethostname",
+    srcs = ["src/unistd/linux/sethostname.cpp"],
+    hdrs = ["src/unistd/sethostname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sethostname",
+        ":errno",
+        ":types_size_t",
+        ":unistd_sethostname",
+    ],
+)
+
+libc_function(
     name = "symlink",
     srcs = ["src/unistd/linux/symlink.cpp"],
     hdrs = ["src/unistd/symlink.h"],
@@ -23878,6 +23893,27 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":types_pid_t",
         ":types_struct_rlimit",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_sethostname",
+    hdrs = ["src/unistd/sethostname.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_sethostname",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/sethostname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
     ],
 )
 
