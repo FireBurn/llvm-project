@@ -26431,6 +26431,22 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "putpwent",
+    srcs = ["src/pwd/putpwent.cpp"],
+    hdrs = ["src/pwd/putpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":types_FILE",
+        ":types_struct_passwd",
+    ],
+)
+
 libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
@@ -26895,6 +26911,20 @@ libc_support_library(
     hdrs = ["hdr/types/struct_dl_phdr_info.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_dl_phdr_info"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_group",
+    hdrs = ["include/llvm-libc-types/struct_group.h"],
+)
+
+libc_support_library(
+    name = "types_struct_group",
+    hdrs = ["hdr/types/struct_group.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_group"],
         "//conditions:default": [],
     }),
 )
@@ -28522,6 +28552,23 @@ libc_function(
         ":__support_macros_config",
         ":func_free",
         ":types_glob_t",
+    ],
+)
+
+libc_function(
+    name = "putgrent",
+    srcs = ["src/grp/putgrent.cpp"],
+    hdrs = ["src/grp/putgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_group",
     ],
 )
 
