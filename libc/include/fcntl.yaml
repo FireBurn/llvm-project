@@ -11,6 +11,7 @@ macros:
   - macro_name: AT_EACCESS
     macro_header: fcntl-macros.h
 types:
+  - type_name: struct_file_handle
   - type_name: mode_t
   - type_name: off_t
   - type_name: pid_t
@@ -20,6 +21,24 @@ types:
 enums: []
 objects: []
 functions:
+  - name: name_to_handle_at
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: struct file_handle *
+      - type: int *
+      - type: int
+  - name: open_by_handle_at
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: struct file_handle *
+      - type: int
   - name: splice
     standards:
       - linux
