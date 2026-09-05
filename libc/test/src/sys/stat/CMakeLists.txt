@@ -40,7 +40,11 @@ add_libc_test(
     libc.hdr.types.struct_stat
     libc.src.fcntl.open
     libc.src.sys.stat.fchmodat
+    libc.src.sys.stat.fstat
+    libc.src.sys.stat.stat
     libc.src.unistd.close
+    libc.src.unistd.symlink
+    libc.src.unistd.unlink
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
