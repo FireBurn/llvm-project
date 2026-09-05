@@ -2,6 +2,10 @@ header: unistd.h
 standards:
   - posix
 macros:
+  - macro_name: SEEK_DATA
+    macro_header: unistd-macros.h
+  - macro_name: SEEK_HOLE
+    macro_header: unistd-macros.h
   - macro_name: _CS_PATH
     macro_header: unistd-macros.h
   - macro_name: _POSIX_VERSION
