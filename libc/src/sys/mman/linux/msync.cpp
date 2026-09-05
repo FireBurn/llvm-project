@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/sys/mman/msync.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 
@@ -16,7 +18,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, msync, (void *addr, size_t len, int flags)) {
+  internal::cancel_point();
   long ret = syscall_impl(SYS_msync, cpp::bit_cast<long>(addr), len, flags);
+  if (ret == -EINTR)
+    internal::cancel_point();
+
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

@@ -11,12 +11,15 @@
 #include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
+#include "src/__support/threads/cancel.h"
 #include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, writev, (int fd, const iovec *iov, int iovcnt)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_writev, fd, iov, iovcnt);
+  long ret = internal::cancellable_raw([&] {
+    return LIBC_NAMESPACE::syscall_impl<long>(SYS_writev, fd, iov, iovcnt);
+  });
   // On failure, return -1 and set errno.
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);

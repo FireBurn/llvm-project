@@ -43,6 +43,8 @@ add_entrypoint_object(
   HDRS
     ../open.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.mode_t
     libc.hdr.fcntl_macros
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
@@ -56,6 +58,8 @@ add_entrypoint_object(
   HDRS
     ../openat.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.mode_t
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
