@@ -21,18 +21,6 @@ add_libc_test(
 )
 
 add_libc_test(
-  gai_strerror_test
-  SUITE
-    libc-netdb-tests
-  SRCS
-    gai_strerror_test.cpp
-  DEPENDS
-    libc.include.netdb
-    libc.src.netdb.gai_strerror
-    libc.src.string.strlen
-)
-
-add_libc_test(
   getnameinfo_test
   SUITE
     libc_netdb_unittests
@@ -57,4 +45,34 @@ add_libc_test(
     h_errno_test.cpp
   DEPENDS
     libc.src.netdb.__h_errno_location
+)
+
+add_libc_test(
+  gethostbyname_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    gethostbyname_test.cpp
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.hdr.types.struct_servent
+    libc.src.netdb.__h_errno_location
+    libc.src.netdb.gethostbyname
+    libc.src.netdb.gethostbyname2
+    libc.src.netdb.getservbyname
+    libc.src.string.strcmp
+)
+
+add_libc_test(
+  gai_strerror_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    gai_strerror_test.cpp
+  DEPENDS
+    libc.include.netdb
+    libc.src.netdb.gai_strerror
+    libc.src.string.strlen
 )
