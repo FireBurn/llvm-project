@@ -1549,3 +1549,19 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_timex
 )
+
+add_proxy_header_library(
+  mqd_t
+  HDRS
+    mqd_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.mqd_t
+)
+
+add_proxy_header_library(
+  struct_mq_attr
+  HDRS
+    struct_mq_attr.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_mq_attr
+)
