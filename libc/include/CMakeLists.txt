@@ -1029,6 +1029,8 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_mount_macros
+    .llvm-libc-types.struct_mount_attr
+    .llvm-libc-types.size_t
 )
 
 add_header_macro(
@@ -1426,6 +1428,9 @@ add_header_macro(
     .llvm-libc-types.struct_ipv6_mreq
     .llvm_libc_common_h
     .sys_socket
+    .llvm-libc-types.struct_in_pktinfo
+    .llvm-libc-types.struct_in6_pktinfo
+    .llvm-libc-types.struct_ip6_mtuinfo
 )
 
 add_header_macro(
