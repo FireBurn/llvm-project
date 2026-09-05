@@ -281,6 +281,21 @@ add_header_macro(
 )
 
 add_header_macro(
+  mqueue
+  ../libc/include/mqueue.yaml
+  mqueue.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.mqd_t
+    .llvm-libc-types.struct_mq_attr
+    .llvm-libc-types.struct_timespec
+    .llvm-libc-types.struct_sigevent
+    .llvm-libc-types.size_t
+    .llvm-libc-types.ssize_t
+    .llvm-libc-types.mode_t
+)
+
+add_header_macro(
   printf
   ../libc/include/printf.yaml
   printf.h
