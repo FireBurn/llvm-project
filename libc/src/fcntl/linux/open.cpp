@@ -14,6 +14,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 #include <stdarg.h>
 
 namespace LIBC_NAMESPACE_DECL {
@@ -29,7 +30,8 @@ LLVM_LIBC_FUNCTION(int, open, (const char *path, int flags, ...)) {
     va_end(varargs);
   }
 
-  auto result = linux_syscalls::open(path, flags, mode_flags);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::open(path, flags, mode_flags); });
 
   if (!result.has_value()) {
     libc_errno = result.error();
