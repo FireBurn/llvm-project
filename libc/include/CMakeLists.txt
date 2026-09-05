@@ -1221,6 +1221,7 @@ add_header_macro(
   ../libc/include/sys/statvfs.yaml
   sys/statvfs.h
   DEPENDS
+    .llvm-libc-macros.sys_statvfs_macros
     .llvm_libc_common_h
     .llvm-libc-types.struct_statvfs
 )
