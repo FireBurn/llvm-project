@@ -314,6 +314,7 @@ add_libc_test(
     strptime_test.cpp
   DEPENDS
     libc.hdr.types.struct_tm
+    libc.src.string.memset
     libc.src.time.strptime
 )
 
