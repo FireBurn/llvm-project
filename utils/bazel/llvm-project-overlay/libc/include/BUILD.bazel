@@ -815,6 +815,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_statx",
+    hdrs = ["llvm-libc-types/struct_statx.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
