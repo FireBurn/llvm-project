@@ -593,6 +593,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.statvfs.fstatvfs
     libc.src.sys.statvfs.statvfs
 
+    # sys/times.h entrypoints
+    libc.src.sys.times.times
+
     # sys/time.h entrypoints
     libc.src.sys.time.utimes
 
@@ -790,6 +793,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.uio.preadv
     libc.src.sys.uio.pwritev
     libc.src.sys.uio.readv
+
+    # sys/times.h entrypoints
+    libc.src.sys.times.times
 
     # sys/time.h entrypoints
     libc.src.sys.time.setitimer
