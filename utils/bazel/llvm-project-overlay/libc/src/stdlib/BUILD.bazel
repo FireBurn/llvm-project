@@ -617,6 +617,42 @@ libc_function(
 )
 
 libc_function(
+    name = "mkostemps",
+    srcs = ["linux/mkostemps.cpp"],
+    hdrs = ["mkostemps.h"],
+    deps = [
+        ":linux_mktemp_util",
+        ":stdlib_mkostemps",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "mkstemps",
+    srcs = ["linux/mkstemps.cpp"],
+    hdrs = ["mkstemps.h"],
+    deps = [
+        ":linux_mktemp_util",
+        ":stdlib_mkstemps",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "mktemp",
     srcs = ["linux/mktemp.cpp"],
     hdrs = ["mktemp.h"],
@@ -848,6 +884,22 @@ libc_support_library(
 libc_support_library(
     name = "stdlib_unlockpt",
     hdrs = ["unlockpt.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mkostemps",
+    hdrs = ["mkostemps.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mkstemps",
+    hdrs = ["mkstemps.h"],
     deps = [
         "//libc/src/__support/macros:config",
     ],
