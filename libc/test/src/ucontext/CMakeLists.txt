@@ -16,3 +16,18 @@ if(TARGET libc.src.ucontext.getcontext)
       libc.src.signal.sigprocmask
   )
 endif()
+
+if(TARGET libc.src.ucontext.swapcontext)
+  add_libc_test(
+    swapcontext_test
+    SUITE
+      libc-ucontext-tests
+    SRCS
+      swapcontext_test.cpp
+    DEPENDS
+      libc.include.ucontext
+      libc.src.ucontext.getcontext
+      libc.src.ucontext.makecontext
+      libc.src.ucontext.swapcontext
+  )
+endif()
