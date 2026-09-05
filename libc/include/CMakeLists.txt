@@ -174,6 +174,8 @@ add_header_macro(
     .llvm-libc-macros.glob_macros
     .llvm-libc-types.glob_t
     .llvm-libc-types.size_t
+    .llvm-libc-types.struct_dirent
+    .llvm-libc-types.struct_stat
 )
 
 add_header_macro(
