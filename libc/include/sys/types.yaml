@@ -1,6 +1,8 @@
 header: sys/types.h
 standards:
   - posix
+public_includes:
+  - endian.h
 types:
   - type_name: blkcnt_t
   - type_name: blksize_t

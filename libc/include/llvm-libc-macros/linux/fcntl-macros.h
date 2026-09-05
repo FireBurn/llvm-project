@@ -101,6 +101,24 @@
 #define F_SETOWN_EX 15
 #define F_GETOWN_EX 16
 
+// Commands past the ones every Unix has. The kernel numbers these from a
+// base of its own.
+#define F_LINUX_SPECIFIC_BASE 1024
+#define F_DUPFD_CLOEXEC (F_LINUX_SPECIFIC_BASE + 6)
+#define F_SETPIPE_SZ (F_LINUX_SPECIFIC_BASE + 7)
+#define F_GETPIPE_SZ (F_LINUX_SPECIFIC_BASE + 8)
+#define F_ADD_SEALS (F_LINUX_SPECIFIC_BASE + 9)
+#define F_GET_SEALS (F_LINUX_SPECIFIC_BASE + 10)
+
+// The seals a memfd can be given, which say what may no longer be done to
+// it.
+#define F_SEAL_SEAL 0x0001
+#define F_SEAL_SHRINK 0x0002
+#define F_SEAL_GROW 0x0004
+#define F_SEAL_WRITE 0x0008
+#define F_SEAL_FUTURE_WRITE 0x0010
+#define F_SEAL_EXEC 0x0020
+
 // Open File Description Locks.
 #define F_OFD_GETLK 36
 #define F_OFD_SETLK 37
@@ -111,6 +129,23 @@
 
 // Close on execute for fcntl.
 #define FD_CLOEXEC 1
+
+// What splice and vmsplice may do with the pages they move.
+#define SPLICE_F_MOVE 1
+#define SPLICE_F_NONBLOCK 2
+#define SPLICE_F_MORE 4
+#define SPLICE_F_GIFT 8
+
+// What fallocate may do to the range it is given.
+#define FALLOC_FL_ALLOCATE_RANGE 0x00
+#define FALLOC_FL_KEEP_SIZE 0x01
+#define FALLOC_FL_PUNCH_HOLE 0x02
+#define FALLOC_FL_NO_HIDE_STALE 0x04
+#define FALLOC_FL_COLLAPSE_RANGE 0x08
+#define FALLOC_FL_ZERO_RANGE 0x10
+#define FALLOC_FL_INSERT_RANGE 0x20
+#define FALLOC_FL_UNSHARE_RANGE 0x40
+#define FALLOC_FL_WRITE_ZEROES 0x80
 
 #define F_RDLCK 0
 #define F_WRLCK 1
