@@ -1209,6 +1209,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  sethostname_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    sethostname_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.sys_utsname
+    libc.src.__support.libc_errno
+    libc.src.string.strlen
+    libc.src.sys.utsname.uname
+    libc.src.unistd.sethostname
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   sbrk_test
   SUITE
     libc-unistd-tests

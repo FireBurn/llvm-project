@@ -578,6 +578,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.readlinkat
     libc.src.unistd.rmdir
     libc.src.unistd.sbrk
+    libc.src.unistd.sethostname
     libc.src.unistd.setpgid
     libc.src.unistd.setsid
     libc.src.unistd.sleep
