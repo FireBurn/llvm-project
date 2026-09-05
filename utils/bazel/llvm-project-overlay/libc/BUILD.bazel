@@ -19007,6 +19007,23 @@ libc_function(
     ],
 )
 
+################################ fcntl targets #################################
+
+libc_function(
+    name = "name_to_handle_at",
+    srcs = ["src/fcntl/linux/name_to_handle_at.cpp"],
+    hdrs = ["src/fcntl/name_to_handle_at.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_name_to_handle_at",
+        ":errno",
+        ":fcntl_name_to_handle_at",
+        ":types_struct_file_handle",
+    ],
+)
+
 libc_function(
     name = "open",
     srcs = ["src/fcntl/linux/open.cpp"],
@@ -19042,6 +19059,21 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_fcntl",
         ":errno",
+    ],
+)
+
+libc_function(
+    name = "open_by_handle_at",
+    srcs = ["src/fcntl/linux/open_by_handle_at.cpp"],
+    hdrs = ["src/fcntl/open_by_handle_at.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_open_by_handle_at",
+        ":errno",
+        ":fcntl_open_by_handle_at",
+        ":types_struct_file_handle",
     ],
 )
 
@@ -26064,6 +26096,62 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_struct_statx",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_file_handle",
+    hdrs = ["include/llvm-libc-types/struct_file_handle.h"],
+)
+
+libc_support_library(
+    name = "types_struct_file_handle",
+    hdrs = ["hdr/types/struct_file_handle.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_file_handle"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "fcntl_name_to_handle_at",
+    hdrs = ["src/fcntl/name_to_handle_at.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_file_handle",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_open_by_handle_at",
+    hdrs = ["src/fcntl/open_by_handle_at.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_file_handle",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_name_to_handle_at",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/name_to_handle_at.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_file_handle",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_open_by_handle_at",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/open_by_handle_at.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_file_handle",
     ],
 )
 
