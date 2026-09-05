@@ -159,6 +159,9 @@ private:
   // streams do. Closing one must not hand it to the deallocator.
   bool static_storage;
 
+  // True when the stream is over something the system gave a descriptor for.
+  bool has_descriptor_;
+
   // The mode in which the file was opened.
   ModeFlags mode;
 
@@ -212,7 +215,8 @@ public:
   // the set_buffer method and allocate a buffer.
   constexpr File(WriteFunc *wf, ReadFunc *rf, SeekFunc *sf, CloseFunc *cf,
                  uint8_t *buffer, size_t buffer_size, int buffer_mode,
-                 bool owned, ModeFlags modeflags, bool static_stream = false)
+                 bool owned, ModeFlags modeflags, bool static_stream = false,
+                 bool has_file_descriptor = false)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
         platform_close(cf),
         // POSIX requires the lock a stream is held under to be recursive:
@@ -221,7 +225,8 @@ public:
         mutex(/*timed=*/false, /*recursive=*/true,
               /*robust=*/false, /*pshared=*/false),
         ungetc_buf{}, buf(buffer), bufsize(buffer_size), bufmode(buffer_mode),
-        own_buf(owned), static_storage(static_stream), mode(modeflags), pos(0),
+        own_buf(owned), static_storage(static_stream),
+        has_descriptor_(has_file_descriptor), mode(modeflags), pos(0),
         prev_op(FileOp::NONE), read_limit(0), eof(false), err(false),
         orientation(Orientation::UNORIENTED), mbstate(), prev(nullptr),
         next(nullptr) {
@@ -231,6 +236,10 @@ public:
   LIBC_INLINE constexpr bool has_static_storage() const {
     return static_storage;
   }
+
+  // Whether the stream is over something the system gave a descriptor for. A
+  // stream over memory is not, and has no descriptor to report.
+  LIBC_INLINE constexpr bool has_descriptor() const { return has_descriptor_; }
 
   // Bytes written to the stream but not yet handed to the system. The buffer
   // position only counts as pending output when the last operation was a

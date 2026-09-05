@@ -183,6 +183,25 @@ add_libc_test(
 
 
 add_libc_test(
+  fileno_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    fileno_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.src.__support.libc_errno
+    libc.src.stdio.fclose
+    libc.src.stdio.fileno
+    libc.src.stdio.fmemopen
+    libc.src.stdio.fopen
+    libc.src.stdio.open_memstream
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+
+add_libc_test(
   fopencookie_test
   SUITE
     libc_stdio_unittests
