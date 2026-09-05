@@ -3684,3 +3684,28 @@ libc_math_function(
         "//libc/src/__support/math:ufromfpxf16",
     ],
 )
+
+libc_math_function(
+    name = "acosh",
+    additional_deps = ["//libc/src/__support/math:acosh"],
+)
+
+libc_math_function(
+    name = "asinh",
+    additional_deps = ["//libc/src/__support/math:asinh"],
+)
+
+libc_math_function(
+    name = "atanh",
+    additional_deps = ["//libc/src/__support/math:atanh"],
+)
+
+libc_math_function(
+    name = "erf",
+    additional_deps = ["//libc/src/__support/math:erf"],
+)
+
+libc_math_function(
+    name = "erfc",
+    additional_deps = ["//libc/src/__support/math:erfc"],
+)
