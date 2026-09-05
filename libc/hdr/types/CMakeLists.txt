@@ -1521,3 +1521,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_spwd
 )
+
+add_proxy_header_library(
+  struct_mount_attr
+  HDRS
+    struct_mount_attr.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_mount_attr
+)
