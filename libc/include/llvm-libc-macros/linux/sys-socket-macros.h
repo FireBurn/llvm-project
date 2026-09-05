@@ -18,6 +18,9 @@
 #define AF_INET 2     // Internet IPv4 Protocol
 #define AF_INET6 10   // IP version 6
 #define AF_NETLINK 16 // Netlink sockets
+#define AF_BRIDGE 7   // Multiprotocol bridge
+#define AF_PACKET 17  // Packets straight off the device
+#define AF_VSOCK 40   // Sockets between a guest and its host
 
 // 4.2BSD protocol families
 #define PF_UNSPEC AF_UNSPEC
@@ -26,6 +29,9 @@
 #define PF_INET AF_INET
 #define PF_INET6 AF_INET6
 #define PF_NETLINK AF_NETLINK
+#define PF_BRIDGE AF_BRIDGE
+#define PF_PACKET AF_PACKET
+#define PF_VSOCK AF_VSOCK
 
 #define SOCK_STREAM 1
 #define SOCK_DGRAM 2
@@ -38,6 +44,12 @@
 #define SOCK_NONBLOCK 0x800
 
 #define SOL_SOCKET 1
+
+// The other levels setsockopt takes, for options which belong to a
+// protocol rather than to the socket itself.
+#define SOL_RAW 255
+#define SOL_PACKET 263
+#define SOL_NETLINK 270
 
 // The values of the following constants differ on some architectures
 #if defined(__parisc__) || defined(__alpha__) || defined(__sparc__) ||         \
@@ -143,6 +155,8 @@
 #define SHUT_RDWR 2
 
 #define SCM_RIGHTS 1
+#define SCM_CREDENTIALS 2
+#define SCM_SECURITY 3
 
 #define MSG_OOB 0x01
 #define MSG_PEEK 0x02
