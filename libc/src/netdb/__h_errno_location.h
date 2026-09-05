@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int *__h_errno_location(void);
 
+namespace internal {
+int *h_errno_location_impl(void);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_NETDB___H_ERRNO_LOCATION_H

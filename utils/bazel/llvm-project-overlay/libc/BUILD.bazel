@@ -25577,6 +25577,32 @@ libc_support_library(
 )
 
 libc_function(
+    name = "gethostbyname",
+    srcs = ["src/netdb/gethostbyname.cpp"],
+    hdrs = ["src/netdb/gethostbyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_sys_socket_macros",
+        ":netdb_hostent_storage",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname2",
+    srcs = ["src/netdb/gethostbyname2.cpp"],
+    hdrs = ["src/netdb/gethostbyname2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_sys_socket_macros",
+        ":netdb_hostent_storage",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
     name = "getnameinfo",
     srcs = ["src/netdb/getnameinfo.cpp"],
     hdrs = ["src/netdb/getnameinfo.h"],
@@ -25761,6 +25787,7 @@ libc_support_library(
         ":string_utils",
         ":types_size_t",
         ":types_socklen_t",
+        ":types_struct_hostent",
         ":types_struct_pollfd",
         ":types_struct_sockaddr_in",
         ":types_struct_sockaddr_in6",
@@ -27000,6 +27027,35 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "getservbyname",
+    srcs = ["src/netdb/getservbyname.cpp"],
+    hdrs = ["src/netdb/getservbyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_servent",
+    hdrs = ["include/llvm-libc-types/struct_servent.h"],
+)
+
+libc_support_library(
+    name = "types_struct_servent",
+    hdrs = ["hdr/types/struct_servent.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_servent"],
+        "//conditions:default": [],
+    }),
+)
+
 libc_support_library(
     name = "netdb_resolv_dns_message",
     srcs = ["src/netdb/resolv/dns_message.cpp"],
@@ -27030,6 +27086,42 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":string_memory_utils",
         ":types_size_t",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_hostent",
+    hdrs = ["include/llvm-libc-types/struct_hostent.h"],
+)
+
+libc_support_library(
+    name = "types_struct_hostent",
+    hdrs = ["hdr/types/struct_hostent.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_hostent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "netdb_hostent_storage",
+    srcs = ["src/netdb/hostent_storage.cpp"],
+    hdrs = ["src/netdb/hostent_storage.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_getnameinfo_utils",
+        ":hdr_netdb_macros",
+        ":hdr_sys_socket_macros",
+        ":__h_errno_location",
+        ":netdb_resolv_lookup",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_socklen_t",
+        ":types_struct_hostent",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
     ],
 )
 
