@@ -1075,6 +1075,8 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_mount_macros
+    .llvm-libc-types.struct_mount_attr
+    .llvm-libc-types.size_t
 )
 
 add_header_macro(

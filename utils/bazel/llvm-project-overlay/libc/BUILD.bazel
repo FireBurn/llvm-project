@@ -20231,6 +20231,62 @@ libc_function(
 )
 
 libc_function(
+    name = "fsconfig",
+    srcs = ["src/sys/mount/linux/fsconfig.cpp"],
+    hdrs = ["src/sys/mount/fsconfig.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fsconfig",
+        ":errno",
+        ":sys_mount_fsconfig",
+    ],
+)
+
+libc_function(
+    name = "fsmount",
+    srcs = ["src/sys/mount/linux/fsmount.cpp"],
+    hdrs = ["src/sys/mount/fsmount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fsmount",
+        ":errno",
+        ":sys_mount_fsmount",
+    ],
+)
+
+libc_function(
+    name = "fsopen",
+    srcs = ["src/sys/mount/linux/fsopen.cpp"],
+    hdrs = ["src/sys/mount/fsopen.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fsopen",
+        ":errno",
+        ":sys_mount_fsopen",
+    ],
+)
+
+libc_function(
+    name = "fspick",
+    srcs = ["src/sys/mount/linux/fspick.cpp"],
+    hdrs = ["src/sys/mount/fspick.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fspick",
+        ":errno",
+        ":sys_mount_fspick",
+    ],
+)
+
+libc_function(
     name = "ioperm",
     srcs = ["src/sys/io/linux/ioperm.cpp"],
     hdrs = ["src/sys/io/ioperm.h"],
@@ -20285,6 +20341,36 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_mount",
         ":errno",
         ":sys_mount_mount",
+    ],
+)
+
+libc_function(
+    name = "mount_setattr",
+    srcs = ["src/sys/mount/linux/mount_setattr.cpp"],
+    hdrs = ["src/sys/mount/mount_setattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_mount_setattr",
+        ":errno",
+        ":sys_mount_mount_setattr",
+        ":types_size_t",
+        ":types_struct_mount_attr",
+    ],
+)
+
+libc_function(
+    name = "move_mount",
+    srcs = ["src/sys/mount/linux/move_mount.cpp"],
+    hdrs = ["src/sys/mount/move_mount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_move_mount",
+        ":errno",
+        ":sys_mount_move_mount",
     ],
 )
 
@@ -20346,6 +20432,20 @@ libc_function(
         ":errno",
         ":sys_msg_msgsnd",
         ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "open_tree",
+    srcs = ["src/sys/mount/linux/open_tree.cpp"],
+    hdrs = ["src/sys/mount/open_tree.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_open_tree",
+        ":errno",
+        ":sys_mount_open_tree",
     ],
 )
 
@@ -25778,6 +25878,157 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_mount_attr",
+    hdrs = ["include/llvm-libc-types/struct_mount_attr.h"],
+)
+
+libc_support_library(
+    name = "types_struct_mount_attr",
+    hdrs = ["hdr/types/struct_mount_attr.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_mount_attr"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fsconfig",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fsconfig.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fsmount",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fsmount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fsopen",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fsopen.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fspick",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fspick.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_mount_setattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/mount_setattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+        ":types_struct_mount_attr",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_move_mount",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/move_mount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_open_tree",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/open_tree.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsconfig",
+    hdrs = ["src/sys/mount/fsconfig.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsmount",
+    hdrs = ["src/sys/mount/fsmount.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsopen",
+    hdrs = ["src/sys/mount/fsopen.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fspick",
+    hdrs = ["src/sys/mount/fspick.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_mount_setattr",
+    hdrs = ["src/sys/mount/mount_setattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_struct_mount_attr",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_move_mount",
+    hdrs = ["src/sys/mount/move_mount.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_open_tree",
+    hdrs = ["src/sys/mount/open_tree.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
 
