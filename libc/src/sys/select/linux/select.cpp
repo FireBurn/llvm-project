@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/sys/select/select.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "hdr/types/struct_timespec.h"
 #include "src/__support/CPP/limits.h"
@@ -21,6 +23,7 @@ LLVM_LIBC_FUNCTION(int, select,
                    (int nfds, fd_set *__restrict read_set,
                     fd_set *__restrict write_set, fd_set *__restrict error_set,
                     struct timeval *__restrict timeout)) {
+  internal::cancel_point();
   // Linux has a SYS_select syscall but it is not available on all
   // architectures. So, we use the SYS_pselect6 syscall which is more
   // widely available. However, SYS_pselect6 takes a struct timespec argument
@@ -48,6 +51,9 @@ LLVM_LIBC_FUNCTION(int, select,
   }
   internal::pselect6_sigset_t pss{nullptr, sizeof(sigset_t)};
   int ret = internal::pselect6(nfds, read_set, write_set, error_set, tsp, &pss);
+  if (ret == -EINTR)
+    internal::cancel_point();
+
   if (ret < 0) {
     libc_errno = -ret;
     return -1;
