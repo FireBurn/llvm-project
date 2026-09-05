@@ -1,7 +1,3 @@
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
-endif()
-
 add_header_library(
   time_constants
   HDRS
@@ -37,6 +33,22 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.__support.uint128
 )
+
+add_entrypoint_object(
+  tz_variables
+  SRCS
+    tz_variables.cpp
+  HDRS
+    tz_variables.h
+  DEPENDS
+    libc.src.__support.macros.config
+)
+
+add_subdirectory(tz)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
+endif()
 
 add_subdirectory(strftime_core) #TODO: Move to top
 add_subdirectory(strptime_core) #TODO: Move to top
@@ -94,6 +106,7 @@ add_entrypoint_object(
   HDRS
     ctime.h
   DEPENDS
+    .tz.timezone
     .asctime_utils
     .time_utils
     .time_constants
@@ -110,6 +123,7 @@ add_entrypoint_object(
   HDRS
     ctime_r.h
   DEPENDS
+    .tz.timezone
     .asctime_utils
     .time_utils
     .time_constants
@@ -126,7 +140,7 @@ add_entrypoint_object(
   HDRS
     localtime.h
   DEPENDS
-    .time_utils
+    .tz.timezone
     libc.hdr.types.time_t
     libc.hdr.types.struct_tm
     libc.src.errno.errno
@@ -140,7 +154,7 @@ add_entrypoint_object(
   HDRS
     localtime_r.h
   DEPENDS
-    .time_utils
+    .tz.timezone
     libc.hdr.types.time_t
     libc.hdr.types.struct_tm
     libc.src.errno.errno
@@ -195,7 +209,7 @@ add_entrypoint_object(
   HDRS
     mktime.h
   DEPENDS
-    .time_utils
+    .tz.timezone
     .time_constants
     libc.include.time
     libc.src.errno.errno
@@ -335,13 +349,6 @@ add_entrypoint_object(
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.timer_settime
-)
-
-add_entrypoint_object(
-  tz_variables
-  ALIAS
-  DEPENDS
-    .${LIBC_TARGET_OS}.tz_variables
 )
 
 add_entrypoint_object(
