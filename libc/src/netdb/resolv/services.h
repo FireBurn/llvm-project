@@ -10,15 +10,19 @@
 #define LLVM_LIBC_SRC_NETDB_RESOLV_SERVICES_H
 
 #include "hdr/stdint_proxy.h"
+#include "hdr/types/size_t.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace resolv {
 
 // The port `name` is registered on for `protocol`, in the order the wire
-// uses. `protocol` is "tcp" or "udp", or null for either. Returns false if
-// the file says nothing about it.
-bool port_for_service(const char *name, const char *protocol, uint16_t &port);
+// uses. `protocol` is "tcp" or "udp", or null for either, in which case
+// `found_protocol` is filled in with the one the file gave. Returns false if
+// the file says nothing about the service.
+bool port_for_service(const char *name, const char *protocol, uint16_t &port,
+                      char *found_protocol = nullptr,
+                      size_t found_capacity = 0);
 
 } // namespace resolv
 } // namespace LIBC_NAMESPACE_DECL
