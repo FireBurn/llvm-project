@@ -362,6 +362,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  dirent_lfs64_test
+  SUITE
+    libc-include-tests
+  SRCS
+    dirent_lfs64_test.cpp
+  DEPENDS
+    libc.include.dirent
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
