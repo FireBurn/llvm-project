@@ -1,0 +1,17 @@
+add_object_library(
+  zone_source
+  SRCS
+    zone_source.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
+    libc.src.__support.OSUtil.linux.syscall_wrappers.munmap
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.macros.config
+    libc.src.time.tz.zone_source_header
+    libc.src.unistd.close
+    libc.src.unistd.environ
+)
