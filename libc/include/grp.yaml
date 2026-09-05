@@ -24,6 +24,12 @@ functions:
       - type: gid_t
       - type: gid_t *
       - type: int *
+  - name: fgetgrent
+    standards:
+      - gnu
+    return_type: struct group *
+    arguments:
+      - type: FILE *
   - name: getgrent
     standards:
       - posix
