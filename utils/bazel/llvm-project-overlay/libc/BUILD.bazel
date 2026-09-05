@@ -16886,6 +16886,18 @@ libc_support_library(
 )
 
 libc_function(
+    name = "mb_cur_max",
+    srcs = ["src/stdlib/mb_cur_max.cpp"],
+    hdrs = ["src/stdlib/mb_cur_max.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_mb_cur_max",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "mktemp",
     srcs = ["src/stdlib/linux/mktemp.cpp"],
     hdrs = ["src/stdlib/mktemp.h"],
@@ -22195,5 +22207,16 @@ libc_support_library(
         ":__support_macros_config",
         ":types_wchar_t",
         ":wchar_vwprintf",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mb_cur_max",
+    srcs = ["src/stdlib/mb_cur_max.cpp"],
+    hdrs = ["src/stdlib/mb_cur_max.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_size_t",
     ],
 )
