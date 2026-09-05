@@ -17,6 +17,9 @@ add_entrypoint_object(
   HDRS
     dl_iterate_phdr.h
   DEPENDS
+    libc.src.__support.CPP.mutex
+    libc.src.__support.elf.passive_abi
+    libc.src.dlfcn.dl_internal
     libc.hdr.stdint_proxy
     libc.include.elf
     libc.include.llvm-libc-macros.link_macros
