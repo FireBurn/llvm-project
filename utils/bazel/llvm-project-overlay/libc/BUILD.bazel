@@ -20101,6 +20101,30 @@ libc_function(
 )
 
 libc_function(
+    name = "open_memstream",
+    srcs = ["src/stdio/open_memstream.cpp"],
+    hdrs = ["src/stdio/open_memstream.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+        ":types_off_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "renameat2",
     srcs = ["src/stdio/linux/renameat2.cpp"],
     hdrs = ["src/stdio/renameat2.h"],
@@ -22756,63 +22780,6 @@ libc_function(
 )
 
 libc_support_library(
-    name = "__support_file_linux_file",
-    srcs = ["src/__support/File/linux/file.cpp"],
-    hdrs = ["src/__support/File/linux/file.h"],
-    deps = [
-        ":__support_alloc_checker",
-        ":__support_cpp_new",
-        ":__support_cpp_type_traits",
-        ":__support_error_or",
-        ":__support_file_file",
-        ":__support_file_platform_file",
-        ":__support_macros_config",
-        ":__support_osutil_linux_syscall_wrappers_close",
-        ":__support_osutil_linux_syscall_wrappers_dup3",
-        ":__support_osutil_linux_syscall_wrappers_fcntl",
-        ":__support_osutil_linux_syscall_wrappers_ioctl",
-        ":__support_osutil_linux_syscall_wrappers_lseek",
-        ":__support_osutil_linux_syscall_wrappers_open",
-        ":__support_osutil_linux_syscall_wrappers_read",
-        ":__support_osutil_linux_syscall_wrappers_write",
-        ":func_free",
-        ":hdr_errno_macros",
-        ":hdr_fcntl_macros",
-        ":hdr_stdio_macros",
-        ":hdr_sys_stat_macros",
-        ":termios_kernel_termios",
-        ":types_FILE",
-        ":types_mode_t",
-        ":types_off_t",
-    ],
-)
-
-libc_support_library(
-    name = "__support_osutil_linux_vdso",
-    srcs = ["src/__support/OSUtil/linux/vdso.cpp"],
-    hdrs = ["src/__support/OSUtil/linux/vdso.h"],
-    deps = [
-        ":__support_common",
-        ":__support_cpp_array",
-        ":__support_cpp_optional",
-        ":__support_cpp_string_view",
-        ":__support_macros_attributes",
-        ":__support_macros_properties_architectures",
-        ":__support_osutil_linux_auxv",
-        ":__support_osutil_vdso",
-        ":__support_threads_callonce",
-        ":__support_threads_linux_futex_word_type",
-        ":hdr_elf_proxy",
-        ":hdr_link_macros",
-        ":hdr_sys_auxv_macros",
-        ":types_clockid_t",
-        ":types_struct_timespec",
-        ":types_struct_timeval",
-        ":types_time_t",
-    ],
-)
-
-libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_fdatasync",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fdatasync.h"],
     deps = [
@@ -23579,5 +23546,62 @@ libc_function(
         ":stdout",
         ":types_FILE",
         ":types_file",
+    ],
+)
+
+libc_support_library(
+    name = "__support_file_linux_file",
+    srcs = ["src/__support/File/linux/file.cpp"],
+    hdrs = ["src/__support/File/linux/file.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_cpp_new",
+        ":__support_cpp_type_traits",
+        ":__support_error_or",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_dup3",
+        ":__support_osutil_linux_syscall_wrappers_fcntl",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":func_free",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_stdio_macros",
+        ":hdr_sys_stat_macros",
+        ":termios_kernel_termios",
+        ":types_FILE",
+        ":types_mode_t",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_vdso",
+    srcs = ["src/__support/OSUtil/linux/vdso.cpp"],
+    hdrs = ["src/__support/OSUtil/linux/vdso.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_array",
+        ":__support_cpp_optional",
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_linux_auxv",
+        ":__support_osutil_vdso",
+        ":__support_threads_callonce",
+        ":__support_threads_linux_futex_word_type",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_sys_auxv_macros",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+        ":types_time_t",
     ],
 )
