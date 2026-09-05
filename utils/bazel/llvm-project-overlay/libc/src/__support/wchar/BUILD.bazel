@@ -74,3 +74,19 @@ libc_support_library(
         "//libc/src/__support:error_or",
     ],
 )
+
+libc_support_library(
+    name = "mbrtowc",
+    srcs = ["mbrtowc.cpp"],
+    hdrs = ["mbrtowc.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)

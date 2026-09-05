@@ -400,12 +400,19 @@ libc_support_library(
     deps = [
         ":scanf_core_structs",
         ":scanf_reader",
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/CPP:bitset",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
         "//libc/src/__support:char_vector",
         "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
     ],
 )
@@ -767,6 +774,39 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:alloc_checker",
         "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "putc_unlocked",
+    srcs = ["generic/putc_unlocked.cpp"],
+    hdrs = ["putc_unlocked.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "putchar_unlocked",
+    srcs = ["generic/putchar_unlocked.cpp"],
+    hdrs = ["putchar_unlocked.h"],
+    deps = [
+        ":stdout",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
     ],

@@ -203,6 +203,7 @@ libc_test(
     name = "vfscanf_test",
     srcs = ["vfscanf_test.cpp"],
     deps = [
+        "//libc/hdr:stdio_macros",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/stdio:vfscanf",
     ] + select({
@@ -252,6 +253,8 @@ libc_test(
         "//libc/src/stdio:fputc_unlocked",
         "//libc/src/stdio:fputs_unlocked",
         "//libc/src/stdio:fread",
+        "//libc/src/stdio:putc_unlocked",
+        "//libc/src/stdio:putchar_unlocked",
         "//libc/src/stdio:remove",
         "//libc/src/stdio:setlinebuf",
         "//libc/src/stdio_ext:__flbf",
