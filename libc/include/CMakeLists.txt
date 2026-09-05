@@ -1106,6 +1106,8 @@ add_header_macro(
     .llvm-libc-types.ssize_t
     .llvm-libc-types.time_t
     .llvm-libc-types.struct_msginfo
+    .llvm-libc-types.struct_mount_attr
+    .llvm-libc-types.size_t
 )
 
 add_header_macro(
