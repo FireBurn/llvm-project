@@ -1033,6 +1033,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  getdtablesize_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getdtablesize_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_rlimit
+    libc.include.sys_resource
+    libc.src.sys.resource.getrlimit
+    libc.src.unistd.getdtablesize
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   sync_test
   SUITE
     libc_unistd_unittests
@@ -1066,6 +1080,22 @@ add_libc_test(
     libc.src.unistd.seteuid
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  sethostname_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    sethostname_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.sys_utsname
+    libc.src.__support.libc_errno
+    libc.src.string.strlen
+    libc.src.sys.utsname.uname
+    libc.src.unistd.sethostname
+    libc.test.UnitTest.ErrnoCheckingTest
 )
 
 add_libc_test(
@@ -1107,6 +1137,29 @@ add_libc_test(
     libc.src.unistd.getegid
     libc.src.unistd.geteuid
     libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  copy_file_range_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    copy_file_range_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.string.memcmp
+    libc.src.unistd.close
+    libc.src.unistd.copy_file_range
+    libc.src.unistd.lseek
+    libc.src.unistd.read
+    libc.src.unistd.unlink
+    libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )

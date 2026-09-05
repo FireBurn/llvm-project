@@ -749,3 +749,24 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.execvpe
 )
+
+add_entrypoint_object(
+  copy_file_range
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.copy_file_range
+)
+
+add_entrypoint_object(
+  sethostname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sethostname
+)
+
+add_entrypoint_object(
+  getdtablesize
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getdtablesize
+)

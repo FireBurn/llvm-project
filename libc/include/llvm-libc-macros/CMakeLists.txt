@@ -618,6 +618,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_statvfs_macros
+  HDR
+    sys-statvfs-macros.h
+)
+
+add_macro_header(
   net_ethernet_macros
   HDR
     net-ethernet-macros.h

@@ -162,3 +162,14 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.__support.macros.null_check
 )
+
+add_entrypoint_object(
+  cfmakeraw
+  SRCS
+    cfmakeraw.cpp
+  HDRS
+    ../cfmakeraw.h
+  DEPENDS
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+)

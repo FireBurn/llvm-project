@@ -12,3 +12,25 @@ add_libc_test(
     libc.src.poll.poll
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  ppoll_test
+  SUITE
+    libc_poll_unittests
+  SRCS
+    ppoll_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.poll
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_pollfd
+    libc.hdr.types.struct_timespec
+    libc.src.poll.ppoll
+    libc.src.signal.sigemptyset
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)

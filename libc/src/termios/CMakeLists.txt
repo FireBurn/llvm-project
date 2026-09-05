@@ -78,3 +78,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.tcsetattr
 )
+
+add_entrypoint_object(
+  cfmakeraw
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.cfmakeraw
+)
