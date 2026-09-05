@@ -326,6 +326,14 @@ add_type_header(
   HDR
     struct_ifreq.h
 )
+add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_arphdr HDR struct_arphdr.h)
+add_header(struct_ether_arp HDR struct_ether_arp.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros .struct_arphdr)
+add_header(struct_iphdr HDR struct_iphdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_ip HDR struct_ip.h DEPENDS libc.include.llvm-libc-macros.endian_macros libc.include.llvm-libc-macros.stdint_macros .struct_in_addr)
+add_header(struct_ip6_hdr HDR struct_ip6_hdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_in6_addr)
+add_header(struct_ip6_hbh HDR struct_ip6_hbh.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_icmp6_hdr HDR struct_icmp6_hdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_in6_addr)
 add_header(struct_ifconf HDR struct_ifconf.h DEPENDS .struct_ifreq)
 add_header(struct_if_nameindex HDR struct_if_nameindex.h)
 add_header(struct_ifaddrs HDR struct_ifaddrs.h DEPENDS .struct_sockaddr)
@@ -335,7 +343,6 @@ add_header(struct_ucred HDR struct_ucred.h DEPENDS .pid_t .uid_t .gid_t)
 add_header(struct_cmsghdr HDR struct_cmsghdr.h DEPENDS .size_t)
 add_header(struct_msghdr HDR struct_msghdr.h DEPENDS .size_t .socklen_t .struct_iovec)
 add_header(struct_mmsghdr HDR struct_mmsghdr.h DEPENDS .struct_msghdr)
-add_header(struct_iphdr HDR struct_iphdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_type_header(
   struct_tcp_info
   HDR
