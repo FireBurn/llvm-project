@@ -538,6 +538,85 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_cancel
+  SRCS
+    pthread_cancel.cpp
+  HDRS
+    pthread_cancel.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.struct_sigaction
+    libc.include.pthread
+    libc.include.sys_syscall
+    libc.src.__support.CPP.atomic
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.threads.cancel
+    libc.src.__support.threads.thread
+    libc.src.signal.linux.signal_utils
+    libc.src.unistd.getpid
+)
+
+add_entrypoint_object(
+  pthread_setcancelstate
+  SRCS
+    pthread_setcancelstate.cpp
+  HDRS
+    pthread_setcancelstate.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.__support.threads.cancel
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
+  pthread_setcanceltype
+  SRCS
+    pthread_setcanceltype.cpp
+  HDRS
+    pthread_setcanceltype.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.__support.threads.cancel
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
+  pthread_testcancel
+  SRCS
+    pthread_testcancel.cpp
+  HDRS
+    pthread_testcancel.h
+  DEPENDS
+    libc.src.__support.threads.cancel
+)
+
+add_entrypoint_object(
+  _pthread_cleanup_push
+  SRCS
+    pthread_cleanup_push.cpp
+  HDRS
+    pthread_cleanup_push.h
+  DEPENDS
+    libc.include.pthread
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
+  _pthread_cleanup_pop
+  SRCS
+    pthread_cleanup_pop.cpp
+  HDRS
+    pthread_cleanup_pop.h
+  DEPENDS
+    libc.include.pthread
+    libc.src.__support.threads.thread
+)
+
+
+add_entrypoint_object(
   pthread_equal
   SRCS
     pthread_equal.cpp
