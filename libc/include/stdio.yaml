@@ -343,6 +343,12 @@ functions:
     return_type: off_t
     arguments:
       - type: FILE *
+  - name: ftrylockfile
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: FILE *
   - name: funlockfile
     standards:
       - posix
