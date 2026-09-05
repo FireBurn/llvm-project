@@ -21,6 +21,19 @@ libc_test(
 )
 
 libc_test(
+    name = "setlinebuf_test",
+    srcs = ["setlinebuf_test.cpp"],
+    deps = [
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:setlinebuf",
+    ],
+)
+
+libc_test(
     name = "sprintf_test",
     srcs = ["sprintf_test.cpp"],
     deps = [

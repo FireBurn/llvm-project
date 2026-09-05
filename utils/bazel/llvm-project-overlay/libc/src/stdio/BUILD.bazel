@@ -738,6 +738,19 @@ libc_function(
 )
 
 libc_function(
+    name = "setlinebuf",
+    srcs = ["generic/setlinebuf.cpp"],
+    hdrs = ["setlinebuf.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "vdprintf",
     srcs = ["generic/vdprintf.cpp"],
     hdrs = ["vdprintf.h"],
