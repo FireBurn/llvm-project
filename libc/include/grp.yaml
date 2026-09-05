@@ -14,6 +14,15 @@ functions:
     return_type: void
     arguments:
       - type: void
+  - name: getgrouplist
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: gid_t
+      - type: gid_t *
+      - type: int *
   - name: getgrent
     standards:
       - posix
