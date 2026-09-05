@@ -25,17 +25,28 @@
 #define __restrict
 #endif
 
+// The C spellings map onto the C++ keywords, which only C++11 onwards has.
+// Before that the compiler extensions they were built on stand in, so a
+// header carrying one of them still compiles as C++98.
 #undef _Noreturn
-#define _Noreturn [[noreturn]]
-
 #undef _Alignas
-#define _Alignas alignas
-
 #undef _Static_assert
-#define _Static_assert static_assert
-
 #undef _Alignof
+#if __cplusplus >= 201103L
+#define _Noreturn [[noreturn]]
+#define _Alignas alignas
+#define _Static_assert static_assert
 #define _Alignof alignof
+#else
+#define _Noreturn __attribute__((noreturn))
+#define _Alignas(x) __attribute__((aligned(x)))
+#define _Alignof(x) __alignof__(x)
+#define __LLVM_LIBC_STATIC_ASSERT_JOIN(a, b) a##b
+#define __LLVM_LIBC_STATIC_ASSERT_NAME(line)                                   \
+  __LLVM_LIBC_STATIC_ASSERT_JOIN(__llvm_libc_static_assert_, line)
+#define _Static_assert(expr, msg)                                              \
+  typedef char __LLVM_LIBC_STATIC_ASSERT_NAME(__LINE__)[(expr) ? 1 : -1]
+#endif
 
 #undef __NOEXCEPT
 #if __cplusplus >= 201103L
