@@ -1052,6 +1052,17 @@ add_header_macro(
     .llvm-libc-types.struct_mtconfiginfo
 )
 
+add_header_macro(
+  ar
+  ../libc/include/ar.yaml
+  ar.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.ar_macros
+    .llvm-libc-types.struct_ar_hdr
+)
+
+
 
 add_header_macro(
   sys_fanotify
