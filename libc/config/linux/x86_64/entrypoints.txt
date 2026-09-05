@@ -302,6 +302,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.dprintf
     libc.src.stdio.fprintf
     libc.src.stdio.fscanf
+    libc.src.stdio.renameat2
+    libc.src.execinfo.backtrace
+    libc.src.execinfo.backtrace_symbols
+    libc.src.execinfo.backtrace_symbols_fd
     libc.src.stdio.vfscanf
     libc.src.stdio.printf
     libc.src.stdio.remove
@@ -1846,9 +1850,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.syslog.setlogmask
     libc.src.syslog.syslog
     libc.src.syslog.vsyslog
-    libc.src.execinfo.backtrace
-    libc.src.execinfo.backtrace_symbols
-    libc.src.execinfo.backtrace_symbols_fd
 
     # wchar.h entrypoints
     libc.src.wchar.mbrlen
