@@ -55,6 +55,12 @@ void run_init_array(const elf::Module &module) {
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
+  // The run path that applies is the one belonging to whatever called, which
+  // is found from where the call is returning to. Taken before anything else,
+  // so nothing stands between this and the caller.
+  const ElfW(Addr) caller =
+      reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
+
   elf::ModuleSet &set = elf::loaded_modules();
   cpp::lock_guard lock(dl::dl_mutex);
 
@@ -84,8 +90,26 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
 
-  auto loaded =
-      elf::find_and_load(path, nullptr, nullptr, library_path, set.page_size);
+  const elf::Module *caller_module = nullptr;
+  size_t caller_index = 0;
+  for (size_t i = 0; i < set.count; ++i) {
+    if (set.modules[i].contains(caller)) {
+      caller_module = &set.modules[i];
+      caller_index = i;
+      break;
+    }
+  }
+
+  // The executable, which is always the first module, takes its run path
+  // against the file it really is, as it did when the process started.
+  char executable_path[elf::MAX_EXECUTABLE_PATH];
+  const char *caller_origin = nullptr;
+  if (caller_module != nullptr && caller_index == 0)
+    caller_origin = elf::executable_origin(
+        caller_module->name(), executable_path, sizeof(executable_path));
+
+  auto loaded = elf::find_and_load(path, caller_module, caller_origin,
+                                   library_path, set.page_size);
   if (!loaded.has_value()) {
     dl::set_error("cannot open shared object");
     return nullptr;
