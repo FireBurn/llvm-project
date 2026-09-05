@@ -16,6 +16,11 @@
 
 #include <linux/close_range.h>
 
+// Whence values for lseek beyond the three the standard defines. These find
+// where a sparse file's data and its holes begin.
+#define SEEK_DATA 3
+#define SEEK_HOLE 4
+
 // Values for mode argument to the access(...) function.
 #define F_OK 0
 #define X_OK 1
