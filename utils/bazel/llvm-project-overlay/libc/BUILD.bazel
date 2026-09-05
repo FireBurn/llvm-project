@@ -19022,6 +19022,37 @@ libc_function(
 )
 
 libc_function(
+    name = "fputc_unlocked",
+    srcs = ["src/stdio/generic/fputc_unlocked.cpp"],
+    hdrs = ["src/stdio/fputc_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
+    name = "fputs_unlocked",
+    srcs = ["src/stdio/generic/fputs_unlocked.cpp"],
+    hdrs = ["src/stdio/fputs_unlocked.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "fread",
     srcs = ["src/stdio/generic/fread.cpp"],
     hdrs = ["src/stdio/fread.h"],
