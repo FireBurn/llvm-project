@@ -1407,6 +1407,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_attr_setscope
     libc.src.pthread.pthread_attr_setstack
     libc.src.pthread.pthread_attr_setstacksize
+    libc.src.pthread.pthread_cancel
     libc.src.pthread.pthread_condattr_destroy
     libc.src.pthread.pthread_condattr_getclock
     libc.src.pthread.pthread_condattr_getpshared
@@ -1469,6 +1470,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_rwlockattr_init
     libc.src.pthread.pthread_rwlockattr_setkind_np
     libc.src.pthread.pthread_rwlockattr_setpshared
+    libc.src.pthread.pthread_setcancelstate
+    libc.src.pthread.pthread_setcanceltype
     libc.src.pthread.pthread_spin_destroy
     libc.src.pthread.pthread_spin_init
     libc.src.pthread.pthread_spin_lock
@@ -1478,6 +1481,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_setname_np
     libc.src.pthread.pthread_setschedparam
     libc.src.pthread.pthread_setspecific
+    libc.src.pthread.pthread_testcancel
 
     # sched.h entrypoints
     libc.src.sched.clone
