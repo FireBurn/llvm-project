@@ -1580,3 +1580,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_utmpx
 )
+
+add_proxy_header_library(
+  struct_timex
+  HDRS
+    struct_timex.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_timex
+)
