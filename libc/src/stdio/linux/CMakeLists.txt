@@ -159,3 +159,15 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.access
     libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
 )
+
+add_entrypoint_object(
+  renameat2
+  SRCS
+    renameat2.cpp
+  HDRS
+    ../renameat2.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
