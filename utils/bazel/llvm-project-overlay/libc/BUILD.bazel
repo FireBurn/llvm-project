@@ -24331,8 +24331,38 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_termios",
+    hdrs = ["include/llvm-libc-types/struct_termios.h"],
+)
+
+libc_support_library(
+    name = "types_struct_termios",
+    hdrs = ["hdr/types/struct_termios.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_termios"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_macros_linux_termios_macros",
     hdrs = ["include/llvm-libc-macros/linux/termios-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_termios_macros",
+    hdrs = ["include/llvm-libc-macros/termios-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_termios_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_termios_macros",
+    hdrs = ["hdr/termios_macros.h"],
+    deps = [
+        ":llvm_libc_macros_termios_macros",
+    ],
 )
 
 libc_support_library(
@@ -26680,6 +26710,18 @@ libc_function(
         ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "cfmakeraw",
+    srcs = ["src/termios/linux/cfmakeraw.cpp"],
+    hdrs = ["src/termios/cfmakeraw.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_termios_macros",
+        ":types_struct_termios",
     ],
 )
 
