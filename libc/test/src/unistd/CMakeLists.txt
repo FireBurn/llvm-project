@@ -1142,6 +1142,26 @@ add_libc_test(
 )
 
 add_libc_test(
+  close_range_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    close_range_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.unistd.close
+    libc.src.unistd.close_range
+    libc.src.unistd.dup
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   copy_file_range_test
   SUITE
     libc_unistd_unittests
@@ -1160,6 +1180,21 @@ add_libc_test(
     libc.src.unistd.read
     libc.src.unistd.unlink
     libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  pause_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    pause_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.signal.signal
+    libc.src.unistd.alarm
+    libc.src.unistd.pause
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
