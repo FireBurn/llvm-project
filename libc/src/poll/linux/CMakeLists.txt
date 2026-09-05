@@ -5,6 +5,8 @@ add_entrypoint_object(
   HDRS
     ../poll.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.nfds_t
     libc.hdr.types.struct_pollfd
     libc.hdr.types.struct_timespec
