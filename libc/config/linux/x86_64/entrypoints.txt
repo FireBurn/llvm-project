@@ -57,6 +57,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.posix_fadvise
     libc.src.fcntl.posix_fadvise64
     libc.src.fcntl.posix_fallocate
+    libc.src.fcntl.splice
 
     # grp.h entrypoints
     libc.src.grp.endgrent
@@ -151,6 +152,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.tls.__tls_get_addr
 
     # string.h entrypoints
+    libc.src.string.explicit_bzero
     libc.src.string.memccpy
     libc.src.string.memchr
     libc.src.string.memcmp
@@ -409,6 +411,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     libc.src.sys.fanotify.fanotify_init
     libc.src.sys.fanotify.fanotify_mark
+    libc.src.sys.reboot.reboot
 
     # sys/shm.h entrypoints
     libc.src.sys.shm.shmat
