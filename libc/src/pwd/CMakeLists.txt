@@ -151,3 +151,19 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.stdio.fprintf
 )
+
+add_entrypoint_object(
+  fgetpwent
+  SRCS
+    fgetpwent.cpp
+  HDRS
+    fgetpwent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_passwd
+    libc.src.__support.CPP.span
+    libc.src.errno.errno
+    libc.src.pwd.pwd_utils
+    libc.src.stdio.fgets
+)

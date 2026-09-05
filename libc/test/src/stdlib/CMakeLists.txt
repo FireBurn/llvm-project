@@ -682,6 +682,24 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
+add_libc_test(
+  mkostemp_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mkostemp_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.fcntl.fcntl
+    libc.src.stdlib.mkostemp
+    libc.src.string.strncmp
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
 # Handing memory back needs an allocator that can be asked, which is the
 # same condition the entrypoint itself is built under.
 if(TARGET libc.src.stdlib.malloc_trim)
