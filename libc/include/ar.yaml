@@ -1,0 +1,15 @@
+header: ar.h
+standards:
+  - bsd
+macros:
+  - macro_name: ARMAG
+    macro_header: ar-macros.h
+  - macro_name: SARMAG
+    macro_header: ar-macros.h
+  - macro_name: ARFMAG
+    macro_header: ar-macros.h
+types:
+  - type_name: struct_ar_hdr
+enums: []
+objects: []
+functions: []
