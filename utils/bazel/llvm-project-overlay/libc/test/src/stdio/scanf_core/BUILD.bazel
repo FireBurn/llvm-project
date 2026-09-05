@@ -9,3 +9,16 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "converter_test",
+    srcs = ["converter_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:scanf_converter",
+        "//libc:scanf_core_structs",
+        "//libc:scanf_string_reader",
+        "//libc:stdio_scanf_core_converter",
+        "//libc:stdio_scanf_core_string_reader",
+    ],
+)
