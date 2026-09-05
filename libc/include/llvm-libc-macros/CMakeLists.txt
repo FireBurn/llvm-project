@@ -624,6 +624,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  stdio_ext_macros
+  HDR
+    stdio-ext-macros.h
+)
+
+add_macro_header(
   net_ethernet_macros
   HDR
     net-ethernet-macros.h
