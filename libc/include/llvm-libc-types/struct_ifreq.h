@@ -23,7 +23,7 @@
 // The kernel defines this too, in <linux/if.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(__UAPI_DEF_IF_IFREQ && defined(_LINUX_IF_H))
+#if !(defined(__UAPI_DEF_IF_IFREQ) && __UAPI_DEF_IF_IFREQ && defined(_LINUX_IF_H))
 struct ifreq {
   char ifr_name[IF_NAMESIZE];
   __extension__ union {
@@ -44,6 +44,11 @@ struct ifreq {
     char *ifr_data;
   };
 };
+
+// Say the definition here is the one, so <linux/if.h> skips its own if it
+// is read after this.
+#undef __UAPI_DEF_IF_IFREQ
+#define __UAPI_DEF_IF_IFREQ 0
 #endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_IFREQ_H
