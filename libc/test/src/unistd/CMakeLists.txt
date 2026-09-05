@@ -1033,6 +1033,26 @@ add_libc_test(
 )
 
 add_libc_test(
+  sync_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    sync_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.unistd.close
+    libc.src.unistd.sync
+    libc.src.unistd.syncfs
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   lchown_test
   SUITE
     libc_unistd_unittests

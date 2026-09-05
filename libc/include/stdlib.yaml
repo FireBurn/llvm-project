@@ -116,6 +116,12 @@ functions:
     return_type: char *
     arguments:
       - type: const char *
+  - name: secure_getenv
+    standards:
+      - gnu
+    return_type: char *
+    arguments:
+      - type: const char *
   - name: labs
     standards:
       - stdc
