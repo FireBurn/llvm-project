@@ -1,0 +1,107 @@
+add_object_library(
+  utmpx_db
+  SRCS
+    utmpx_db.cpp
+  HDRS
+    utmpx_db.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.types.struct_utmpx
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
+
+add_entrypoint_object(
+  setutxent
+  SRCS
+    setutxent.cpp
+  HDRS
+    setutxent.h
+  DEPENDS
+    .utmpx_db
+)
+
+add_entrypoint_object(
+  endutxent
+  SRCS
+    endutxent.cpp
+  HDRS
+    endutxent.h
+  DEPENDS
+    .utmpx_db
+)
+
+add_entrypoint_object(
+  getutxent
+  SRCS
+    getutxent.cpp
+  HDRS
+    getutxent.h
+  DEPENDS
+    .utmpx_db
+    libc.hdr.types.struct_utmpx
+)
+
+add_entrypoint_object(
+  getutxid
+  SRCS
+    getutxid.cpp
+  HDRS
+    getutxid.h
+  DEPENDS
+    .utmpx_db
+    libc.hdr.types.struct_utmpx
+    libc.hdr.utmpx_macros
+)
+
+add_entrypoint_object(
+  getutxline
+  SRCS
+    getutxline.cpp
+  HDRS
+    getutxline.h
+  DEPENDS
+    .utmpx_db
+    libc.hdr.types.struct_utmpx
+    libc.hdr.utmpx_macros
+)
+
+add_entrypoint_object(
+  pututxline
+  SRCS
+    pututxline.cpp
+  HDRS
+    pututxline.h
+  DEPENDS
+    .getutxid
+    .utmpx_db
+    libc.hdr.stdio_macros
+    libc.hdr.types.struct_utmpx
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  utmpxname
+  SRCS
+    utmpxname.cpp
+  HDRS
+    utmpxname.h
+  DEPENDS
+    .utmpx_db
+)
+
+add_entrypoint_object(
+  updwtmpx
+  SRCS
+    updwtmpx.cpp
+  HDRS
+    updwtmpx.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_utmpx
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
