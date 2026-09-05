@@ -85,6 +85,9 @@ enum ErrorCodes : int {
   FILE_STATUS_ERROR = -2,
   MATCHING_FAILURE = -3,
   ALLOCATION_FAILURE = -4,
+  // The input ended while a directive still needed more of it, as opposed to
+  // a character being there and not fitting.
+  INPUT_FAILURE = -5,
 };
 } // namespace scanf_core
 } // namespace LIBC_NAMESPACE_DECL
