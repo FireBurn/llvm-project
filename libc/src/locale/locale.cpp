@@ -13,8 +13,8 @@
 #include "src/__support/common.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/macros/config.h"
-#include "src/stdlib/getenv.h"
 #include "src/stdlib/mb_cur_max.h"
+#include "src/unistd/environ.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -73,9 +73,31 @@ bool codeset_is_supported(cpp::string_view name) {
          same_codeset(codeset, "ansix341968");
 }
 
+namespace {
+
+// What the environment says a variable is, or nullptr where it says nothing.
+// The environment is read directly rather than through getenv, so a program
+// that keeps its own environment and defines getenv itself, as a shell does,
+// does not end up with two of them.
+const char *environment_value(const char *name) {
+  if (environ == nullptr)
+    return nullptr;
+  for (char **entry = environ; *entry != nullptr; ++entry) {
+    const char *at = *entry;
+    size_t i = 0;
+    while (name[i] != '\0' && at[i] == name[i])
+      ++i;
+    if (name[i] == '\0' && at[i] == '=')
+      return at + i + 1;
+  }
+  return nullptr;
+}
+
+} // anonymous namespace
+
 const char *locale_from_environment(int category) {
   // LC_ALL overrides the rest where it says anything at all.
-  const char *all = getenv("LC_ALL");
+  const char *all = environment_value("LC_ALL");
   if (all != nullptr && *all != '\0')
     return all;
 
@@ -83,12 +105,12 @@ const char *locale_from_environment(int category) {
       "LC_CTYPE",   "LC_NUMERIC",  "LC_TIME",
       "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES"};
   if (category >= 0 && category < NUM_LOCALE_CATEGORIES) {
-    const char *named = getenv(NAMES[category]);
+    const char *named = environment_value(NAMES[category]);
     if (named != nullptr && *named != '\0')
       return named;
   }
 
-  const char *lang = getenv("LANG");
+  const char *lang = environment_value("LANG");
   if (lang != nullptr && *lang != '\0')
     return lang;
   return nullptr;
