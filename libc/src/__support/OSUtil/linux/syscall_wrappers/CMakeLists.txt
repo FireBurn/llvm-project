@@ -617,6 +617,7 @@ add_header_library(
   HDRS
     fchmodat.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.src.__support.OSUtil.osutil
     libc.src.__support.common
     libc.src.__support.error_or

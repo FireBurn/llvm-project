@@ -9,9 +9,14 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "hdr/types/struct_stat.h"
+#include "src/__support/libc_errno.h"
 #include "src/fcntl/open.h"
 #include "src/sys/stat/fchmodat.h"
+#include "src/sys/stat/fstat.h"
+#include "src/sys/stat/stat.h"
 #include "src/unistd/close.h"
+#include "src/unistd/symlink.h"
+#include "src/unistd/unlink.h"
 #include "src/unistd/write.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"
@@ -64,4 +69,56 @@ TEST_F(LlvmLibcFchmodatTest, NonExistentFile) {
   ASSERT_THAT(
       LIBC_NAMESPACE::fchmodat(AT_FDCWD, "non-existent-file", S_IRUSR, 0),
       Fails(ENOENT));
+}
+
+TEST_F(LlvmLibcFchmodatTest, EmptyPathActsOnTheDescriptor) {
+  constexpr const char *FILENAME = "fchmodat_empty_path.test";
+  auto TEST_FILE = libc_make_test_file_path(FILENAME);
+  int fd = LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT, S_IRWXU);
+  ASSERT_ERRNO_SUCCESS();
+  ASSERT_GT(fd, 0);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
+
+  // AT_EMPTY_PATH names what the descriptor is open on, so the path is empty
+  // rather than naming anything.
+  int path_fd = LIBC_NAMESPACE::open(TEST_FILE, O_PATH);
+  ASSERT_GT(path_fd, 0);
+  EXPECT_THAT(
+      LIBC_NAMESPACE::fchmodat(path_fd, "", S_IRUSR | S_IWUSR, AT_EMPTY_PATH),
+      Succeeds(0));
+
+  struct stat statbuf;
+  ASSERT_EQ(LIBC_NAMESPACE::fstat(path_fd, &statbuf), 0);
+  EXPECT_EQ(statbuf.st_mode & 07777, mode_t(S_IRUSR | S_IWUSR));
+
+  ASSERT_THAT(LIBC_NAMESPACE::close(path_fd), Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::unlink(TEST_FILE), Succeeds(0));
+}
+
+TEST_F(LlvmLibcFchmodatTest, DoesNotFollowALinkWhenToldNotTo) {
+  constexpr const char *TARGET_NAME = "fchmodat_nofollow_target.test";
+  constexpr const char *LINK_NAME = "fchmodat_nofollow_link.test";
+  auto TARGET = libc_make_test_file_path(TARGET_NAME);
+  auto LINK = libc_make_test_file_path(LINK_NAME);
+
+  int fd = LIBC_NAMESPACE::open(TARGET, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+  ASSERT_GT(fd, 0);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::symlink(TARGET, LINK), Succeeds(0));
+
+  // A mode cannot be set on a symbolic link at all, so this reports that
+  // rather than quietly changing what the link points at.
+  ASSERT_EQ(
+      LIBC_NAMESPACE::fchmodat(AT_FDCWD, LINK, S_IRWXU, AT_SYMLINK_NOFOLLOW),
+      -1);
+  // That failure was the point of the call, so what it left behind is not an
+  // error the rest of the test should be checked against.
+  libc_errno = 0;
+
+  struct stat statbuf;
+  ASSERT_EQ(LIBC_NAMESPACE::stat(TARGET, &statbuf), 0);
+  EXPECT_EQ(statbuf.st_mode & 07777, mode_t(S_IRUSR | S_IWUSR));
+
+  ASSERT_THAT(LIBC_NAMESPACE::unlink(LINK), Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::unlink(TARGET), Succeeds(0));
 }
