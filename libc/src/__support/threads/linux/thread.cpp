@@ -29,6 +29,7 @@
 #include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h" // For error macros
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 #include "src/__support/threads/linux/futex_utils.h" // For FutexWordType
 #include "src/__support/threads/linux/futex_word.h"
 #include "src/__support/threads/thread_attributes.h"
@@ -44,6 +45,11 @@
 #include <sys/syscall.h>         // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
+
+namespace internal {
+// Defined below, beside the rest of the cancellation machinery.
+static bool cancel_pending();
+} // namespace internal
 
 static constexpr size_t NAME_SIZE_MAX = 16; // Includes the null terminator
 static constexpr unsigned CLONE_SYSCALL_FLAGS =
@@ -296,7 +302,16 @@ int Thread::join(ThreadReturnValue &retval) {
     }
   }
 
-  wait();
+  // Joining waits without limit, so POSIX has it be a cancellation point. A
+  // joiner that stops here has to give up the role first, or nothing could
+  // ever join the thread afterwards.
+  while (true) {
+    internal::cancel_point();
+    if (!wait_once())
+      break;
+    if (internal::cancel_pending())
+      attrib->joiner.store(nullptr, cpp::MemoryOrder::RELEASE);
+  }
 
   if (attrib->style == ThreadStyle::POSIX)
     retval.posix_retval = attrib->retval.posix_retval;
@@ -326,15 +341,24 @@ int Thread::detach() {
 }
 
 void Thread::wait() {
+  while (wait_once())
+    ;
+}
+
+// One turn of the wait, so a caller which has something to do between them
+// gets the chance. Returns false once the thread has gone.
+bool Thread::wait_once() {
   // The kernel should set the value at the clear tid address to zero.
   // If not, it is a spurious wake and we should continue to wait on
   // the futex.
   auto *clear_tid = reinterpret_cast<Futex *>(attrib->platform_data);
+  FutexWordType clear_tid_value = clear_tid->load();
+  if (clear_tid_value == 0)
+    return false;
   // We cannot do a FUTEX_WAIT_PRIVATE here as the kernel does a
   // FUTEX_WAKE and not a FUTEX_WAKE_PRIVATE.
-  FutexWordType clear_tid_value;
-  while ((clear_tid_value = clear_tid->load()) != 0)
-    clear_tid->wait(clear_tid_value, cpp::nullopt, true);
+  clear_tid->wait(clear_tid_value, cpp::nullopt, true);
+  return true;
 }
 
 bool Thread::operator==(const Thread &thread) const {
@@ -484,6 +508,41 @@ ErrorOr<void> Thread::kill(int sig) {
   }
   return {};
 }
+
+
+namespace internal {
+
+// True if the calling thread has been asked to stop and is willing to.
+static bool cancel_pending() {
+  ThreadAttributes *attrib = current_thread().attrib;
+  return attrib != nullptr &&
+         attrib->cancel_state.load() == uint32_t(CancelState::ENABLE) &&
+         attrib->cancel_requested.load() != 0;
+}
+
+// Ends the calling thread because it was asked to. Exiting runs the cleanup
+// handlers, innermost first, which is what lets a thread holding a lock or a
+// buffer give it up before it goes.
+[[noreturn]] void cancel_self() {
+  ThreadAttributes *attrib = current_thread().attrib;
+  // Further requests are of no interest, and a handler that reaches a
+  // cancellation point of its own must not start this again.
+  attrib->cancel_state.store(uint32_t(CancelState::DISABLE));
+  // What joining gives back has to be stored where join reads it, the same
+  // way an ordinary return from the thread's function is.
+  attrib->retval.posix_retval = canceled();
+  thread_exit(ThreadReturnValue(canceled()), ThreadStyle::POSIX);
+}
+
+// What a cancellation point calls once the thread machinery is in the link.
+// Declared weak where the cancellation points are, so that this definition is
+// found only by a program which has threads in it.
+void reach_cancel_point() {
+  if (cancel_pending())
+    cancel_self();
+}
+
+} // namespace internal
 
 void thread_exit(ThreadReturnValue retval, ThreadStyle style) {
   auto attrib = current_thread().attrib;
