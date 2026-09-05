@@ -11,6 +11,16 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "strptime_test",
+    srcs = ["strptime_test.cpp"],
+    deps = [
+        "//libc:memset",
+        "//libc:strptime",
+        "//libc:types_struct_tm",
+    ],
+)
+
+libc_test(
     name = "timegm_test",
     srcs = ["timegm_test.cpp"],
     deps = [
