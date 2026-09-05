@@ -933,6 +933,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_reboot
+  ../libc/include/sys/reboot.yaml
+  sys/reboot.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_reboot_macros
+)
+
+add_header_macro(
   sys_fanotify
   ../libc/include/sys/fanotify.yaml
   sys/fanotify.h
@@ -1285,6 +1294,8 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_wait_macros
+    .llvm-libc-types.id_t
+    .llvm-libc-types.idtype_t
     .llvm-libc-types.pid_t
     .llvm-libc-types.struct_rusage
     .llvm-libc-types.siginfo_t

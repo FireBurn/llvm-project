@@ -33,6 +33,17 @@ types:
 enums: []
 objects: []
 functions:
+  - name: splice
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: off_t *
+      - type: int
+      - type: off_t *
+      - type: size_t
+      - type: unsigned int
   - name: creat
     standards:
       - posix

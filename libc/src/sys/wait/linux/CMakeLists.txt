@@ -36,3 +36,18 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  waitid
+  SRCS
+    waitid.cpp
+  HDRS
+    ../waitid.h
+  DEPENDS
+    libc.hdr.types.id_t
+    libc.hdr.types.idtype_t
+    libc.hdr.types.siginfo_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
