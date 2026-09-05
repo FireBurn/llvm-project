@@ -33,6 +33,25 @@ libc_test(
 )
 
 libc_test(
+    name = "copy_file_range_test",
+    srcs = ["copy_file_range_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:copy_file_range",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:lseek",
+        "//libc:memcmp",
+        "//libc:open",
+        "//libc:read",
+        "//libc:unlink",
+        "//libc:write",
+    ],
+)
+
+libc_test(
     name = "dup_test",
     srcs = ["dup_test.cpp"],
     deps = [

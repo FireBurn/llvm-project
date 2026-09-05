@@ -19026,6 +19026,23 @@ libc_function(
 )
 
 libc_function(
+    name = "copy_file_range",
+    srcs = ["src/unistd/linux/copy_file_range.cpp"],
+    hdrs = ["src/unistd/copy_file_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_copy_file_range",
+        ":errno",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":unistd_copy_file_range",
+    ],
+)
+
+libc_function(
     name = "daemon",
     srcs = ["src/unistd/linux/daemon.cpp"],
     hdrs = ["src/unistd/daemon.h"],
@@ -25989,6 +26006,31 @@ libc_support_library(
         ":types_off_t",
         ":types_ssize_t",
         ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_copy_file_range",
+    hdrs = ["src/unistd/copy_file_range.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_copy_file_range",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/copy_file_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
     ],
 )
 
