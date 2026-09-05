@@ -224,6 +224,32 @@ libc_function(
 )
 
 libc_function(
+    name = "strptime",
+    srcs = ["strptime.cpp"],
+    hdrs = ["strptime.h"],
+    deps = [
+        ":strptime_core_parser",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "strptime_core_parser",
+    hdrs = ["strptime_core/parser.h"],
+    deps = [
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+    ],
+)
+
+libc_function(
     name = "nanosleep",
     srcs = ["linux/nanosleep.cpp"],
     hdrs = ["nanosleep.h"],
