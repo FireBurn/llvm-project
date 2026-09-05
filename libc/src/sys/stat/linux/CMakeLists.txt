@@ -180,3 +180,42 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  statx
+  SRCS
+    statx.cpp
+  HDRS
+    ../statx.h
+  DEPENDS
+    libc.hdr.types.struct_statx
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mkfifoat
+  SRCS
+    mkfifoat.cpp
+  HDRS
+    ../mkfifoat.h
+  DEPENDS
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.mode_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mkfifo
+  SRCS
+    mkfifo.cpp
+  HDRS
+    ../mkfifo.h
+  DEPENDS
+    .mkfifoat
+    libc.hdr.fcntl_macros
+    libc.hdr.types.mode_t
+)
