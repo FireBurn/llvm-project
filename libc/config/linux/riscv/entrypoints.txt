@@ -364,6 +364,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.mqueue.mq_timedsend
     libc.src.mqueue.mq_unlink
 
+    # netdb.h entrypoints
+    libc.src.netdb.__h_errno_location
+
     # printf.h entrypoints
     libc.src.printf.parse_printf_format
 

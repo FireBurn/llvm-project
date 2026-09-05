@@ -52,3 +52,13 @@ add_entrypoint_object(
     libc.src.arpa.inet.ntohs
     libc.src.string.string_utils
 )
+
+add_entrypoint_object(
+  __h_errno_location
+  SRCS
+    __h_errno_location.cpp
+  HDRS
+    __h_errno_location.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+)
