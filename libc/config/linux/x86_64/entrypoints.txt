@@ -564,6 +564,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/statvfs.h entrypoints
     libc.src.sys.statvfs.fstatvfs
     libc.src.sys.statvfs.statvfs
+    libc.src.sys.times.times
 
     # sys/swap.h entrypoints
     libc.src.sys.swap.swapoff

@@ -1,0 +1,13 @@
+add_entrypoint_object(
+  times
+  SRCS
+    times.cpp
+  HDRS
+    ../times.h
+  DEPENDS
+    libc.hdr.types.clock_t
+    libc.hdr.types.struct_tms
+    libc.src.__support.OSUtil.linux.syscall_wrappers.times
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+)
