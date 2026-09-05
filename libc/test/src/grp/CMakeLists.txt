@@ -102,3 +102,21 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  putgrent_test
+  SUITE
+    libc_grp_unittests
+  SRCS
+    putgrent_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_group
+    libc.src.grp.putgrent
+    libc.src.stdio.fclose
+    libc.src.stdio.open_memstream
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
