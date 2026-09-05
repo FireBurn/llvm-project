@@ -237,6 +237,8 @@ add_header(
 add_header(struct_tm HDR struct_tm.h)
 add_header(struct_passwd HDR struct_passwd.h DEPENDS .uid_t .gid_t)
 add_header(struct_group HDR struct_group.h DEPENDS .gid_t)
+add_header(struct_sgrp HDR struct_sgrp.h)
+add_header(struct_spwd HDR struct_spwd.h)
 add_header(struct_mntent HDR struct_mntent.h)
 add_header(iconv_t HDR iconv_t.h)
 add_type_header(
