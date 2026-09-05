@@ -967,6 +967,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_group",
+    hdrs = ["llvm-libc-types/struct_group.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ifreq",
     hdrs = ["llvm-libc-types/struct_ifreq.h"],
 )
