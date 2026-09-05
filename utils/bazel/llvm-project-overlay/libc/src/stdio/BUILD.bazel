@@ -737,6 +737,30 @@ libc_function(
 )
 
 libc_function(
+    name = "open_memstream",
+    srcs = ["open_memstream.cpp"],
+    hdrs = ["open_memstream.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "renameat2",
     srcs = ["linux/renameat2.cpp"],
     hdrs = ["renameat2.h"],
