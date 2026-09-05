@@ -388,7 +388,15 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.msg.msgsnd
 
     # sys/mount.h entrypoints
+    libc.src.sys.mount.fsconfig
+    libc.src.sys.mount.fsmount
+    libc.src.sys.mount.fsopen
+    libc.src.sys.mount.fspick
     libc.src.sys.mount.mount
+    libc.src.sys.mount.mount_setattr
+    libc.src.sys.mount.move_mount
+    libc.src.sys.mount.open_tree
+    libc.src.sys.mount.pivot_root
     libc.src.sys.mount.umount
     libc.src.sys.mount.umount2
 
