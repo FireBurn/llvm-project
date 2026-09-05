@@ -5,6 +5,8 @@ add_entrypoint_object(
   HDRS
     ../writev.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
     libc.include.sys_syscall
@@ -20,6 +22,8 @@ add_entrypoint_object(
   HDRS
     ../readv.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
     libc.include.sys_syscall
