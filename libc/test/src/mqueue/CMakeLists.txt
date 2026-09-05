@@ -1,0 +1,39 @@
+add_custom_target(libc_mqueue_unittests)
+
+add_libc_test(
+  mqueue_test
+  SUITE
+    libc_mqueue_unittests
+  SRCS
+    mqueue_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.signal_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.time_macros
+    libc.hdr.types.mqd_t
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_mq_attr
+    libc.hdr.types.struct_sigevent
+    libc.hdr.types.struct_timespec
+    libc.src.__support.libc_errno
+    libc.src.mqueue.mq_close
+    libc.src.mqueue.mq_getattr
+    libc.src.mqueue.mq_notify
+    libc.src.mqueue.mq_open
+    libc.src.mqueue.mq_receive
+    libc.src.mqueue.mq_send
+    libc.src.mqueue.mq_setattr
+    libc.src.mqueue.mq_timedreceive
+    libc.src.mqueue.mq_timedsend
+    libc.src.mqueue.mq_unlink
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigprocmask
+    libc.src.signal.sigtimedwait
+    libc.src.string.memcmp
+    libc.src.time.clock_gettime
+    libc.test.UnitTest.ErrnoCheckingTest
+)
