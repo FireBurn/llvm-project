@@ -1054,6 +1054,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_mtio
+  ../libc/include/sys/mtio.yaml
+  sys/mtio.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_mtio_macros
+    .llvm-libc-types.struct_mtconfiginfo
+)
+
+
+add_header_macro(
   sys_fanotify
   ../libc/include/sys/fanotify.yaml
   sys/fanotify.h
