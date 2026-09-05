@@ -30980,6 +30980,32 @@ libc_function(
 )
 
 libc_function(
+    name = "strptime",
+    srcs = ["src/time/strptime.cpp"],
+    hdrs = ["src/time/strptime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":time_strptime_core_parser",
+        ":types_struct_tm",
+    ],
+)
+
+libc_support_library(
+    name = "time_strptime_core_parser",
+    hdrs = ["src/time/strptime_core/parser.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
     name = "mbrtoc32",
     srcs = ["src/uchar/mbrtoc32.cpp"],
     hdrs = ["src/uchar/mbrtoc32.h"],
