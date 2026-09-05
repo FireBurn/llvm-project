@@ -13,6 +13,8 @@
 
 #include "src/unistd/pause.h"
 
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/pause.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -21,8 +23,11 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, pause, ()) {
+  internal::cancel_point();
   ErrorOr<int> ret = linux_syscalls::pause();
   if (!ret) {
+    if (ret.error() == EINTR)
+      internal::cancel_point();
     libc_errno = ret.error();
     return -1;
   }
