@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/sys/wait/waitid.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
@@ -18,10 +20,14 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, waitid,
                    (idtype_t idtype, id_t id, siginfo_t *infop, int options)) {
+  internal::cancel_point();
   // The kernel call takes a fifth argument for the resource usage, which
   // POSIX has no way to ask for.
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_waitid, idtype, id, infop,
                                               options, nullptr);
+  if (ret == -EINTR)
+    internal::cancel_point();
+
   if (ret < 0) {
     libc_errno = -ret;
     return -1;
