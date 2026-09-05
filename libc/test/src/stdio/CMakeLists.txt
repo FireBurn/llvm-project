@@ -163,6 +163,7 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
+
 add_libc_test(
   fopencookie_test
   SUITE
@@ -771,6 +772,7 @@ add_libc_test(
     libc.hdr.sys_stat_macros
     libc.src.fcntl.open
     libc.src.stdio.renameat
+    libc.src.stdio.renameat2
     libc.src.sys.stat.stat
     libc.src.unistd.close
     libc.src.unistd.unlink
