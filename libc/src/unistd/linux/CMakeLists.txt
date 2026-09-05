@@ -156,6 +156,26 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  get_current_dir_name
+  SRCS
+    get_current_dir_name.cpp
+  HDRS
+    ../get_current_dir_name.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.limits_macros
+    libc.hdr.types.struct_stat
+    libc.src.__support.CPP.optional
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getcwd
+    libc.src.__support.error_or
+    libc.src.errno.errno
+    libc.src.stdlib.environ_internal
+    libc.src.string.allocating_string_utils
+)
+
+add_entrypoint_object(
   fdatasync
   SRCS
     fdatasync.cpp
@@ -187,6 +207,7 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
     libc.src.errno.errno
     libc.src.__support.threads.identifier
+    libc.src.__support.error_or
 )
 
 add_entrypoint_object(
@@ -652,6 +673,7 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
   pathconf
   SRCS
     pathconf.cpp
@@ -919,6 +941,14 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+    libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setsid
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.error_or
+    libc.src.errno.errno
   setuid
   SRCS
     setuid.cpp
@@ -1138,3 +1168,4 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
     libc.src.errno.errno
 )
+    libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
