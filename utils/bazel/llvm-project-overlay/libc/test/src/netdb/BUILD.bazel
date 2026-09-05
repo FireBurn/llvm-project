@@ -32,3 +32,18 @@ libc_test(
         "//libc:__h_errno_location",
     ],
 )
+
+libc_test(
+    name = "getaddrinfo_test",
+    srcs = ["getaddrinfo_test.cpp"],
+    deps = [
+        "//libc:freeaddrinfo",
+        "//libc:getaddrinfo",
+        "//libc:hdr_netdb_macros",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:net_if_if_nametoindex",
+        "//libc:types_struct_addrinfo",
+        "//libc:types_struct_sockaddr_in",
+        "//libc:types_struct_sockaddr_in6",
+    ],
+)
