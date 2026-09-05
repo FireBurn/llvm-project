@@ -18,4 +18,8 @@
 #include "linux/netdb-macros.h"
 #endif
 
+// The last name lookup failure, which like errno is per thread and so is
+// reached through a function.
+#define h_errno (*__h_errno_location())
+
 #endif // LLVM_LIBC_MACROS_NETDB_MACROS_H

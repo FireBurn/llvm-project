@@ -50,6 +50,8 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: NI_MAXSERV
     macro_header: netdb-macros.h
+  - macro_name: h_errno
+    macro_header: netdb-macros.h
   - macro_name: HOST_NOT_FOUND
     macro_header: netdb-macros.h
   - macro_name: TRY_AGAIN
@@ -67,6 +69,12 @@ types:
 enums: []
 objects: []
 functions:
+  - name: __h_errno_location
+    standards:
+      - gnu
+    return_type: int *
+    arguments:
+      - type: void
   - name: getnameinfo
     standards:
       - posix
