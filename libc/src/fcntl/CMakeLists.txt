@@ -58,7 +58,6 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.posix_fallocate
 )
 
-
 add_entrypoint_object(
   splice
   ALIAS
@@ -79,3 +78,4 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.open_by_handle_at
 )
+
