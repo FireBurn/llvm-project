@@ -29,8 +29,13 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.malloc
     libc.include.math
     libc.include.memory
+    libc.include.net_ethernet
     libc.include.net_if
     libc.include.netinet_in
+    libc.include.netinet_icmp6
+    libc.include.netinet_if_ether
+    libc.include.netinet_ip
+    libc.include.netinet_ip6
     libc.include.netinet_tcp
     libc.include.netinet_udp
     libc.include.nl_types
