@@ -276,6 +276,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/types"),
     libc_header_info("sys/utsname"),
     libc_header_info("sys/wait"),
+    libc_header_info("syslog"),
     libc_header_info("sysexits"),
     libc_header_info("termios"),
     libc_header_info("threads"),
@@ -30386,6 +30387,109 @@ libc_function(
 )
 
 libc_support_library(
+    name = "syslog_syslog_state",
+    srcs = ["src/syslog/syslog_state.cpp"],
+    hdrs = ["src/syslog/syslog_state.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_connect",
+        ":__support_osutil_linux_syscall_wrappers_socket",
+        ":__support_threads_mutex",
+        ":hdr_fcntl_macros",
+        ":hdr_sys_socket_macros",
+        ":hdr_syslog_macros",
+        ":types_struct_sockaddr_un",
+    ],
+)
+
+libc_function(
+    name = "openlog",
+    srcs = ["src/syslog/openlog.cpp"],
+    hdrs = ["src/syslog/openlog.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":hdr_syslog_macros",
+        ":syslog_syslog_state",
+    ],
+)
+
+libc_function(
+    name = "closelog",
+    srcs = ["src/syslog/closelog.cpp"],
+    hdrs = ["src/syslog/closelog.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":hdr_syslog_macros",
+        ":syslog_syslog_state",
+    ],
+)
+
+libc_function(
+    name = "setlogmask",
+    srcs = ["src/syslog/setlogmask.cpp"],
+    hdrs = ["src/syslog/setlogmask.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":syslog_syslog_state",
+    ],
+)
+
+libc_function(
+    name = "vsyslog",
+    srcs = ["src/syslog/vsyslog.cpp"],
+    hdrs = ["src/syslog/vsyslog.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_cpp_string_view",
+        ":__support_integer_to_string",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_osutil_linux_syscall_wrappers_sendto",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":__support_printf_core_printf_main",
+        ":__support_printf_core_printf_writer",
+        ":__support_printf_core_writer",
+        ":__support_stringutil",
+        ":__support_time_clock_gettime",
+        ":errno",
+        ":hdr_fcntl_macros",
+        ":hdr_syslog_macros",
+        ":hdr_time_macros",
+        ":program_invocation_short_name",
+        ":syslog_syslog_state",
+        ":time_time_utils",
+        ":types_struct_timespec",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "syslog",
+    srcs = ["src/syslog/syslog.cpp"],
+    hdrs = ["src/syslog/syslog.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_common",
+        ":__support_macros_config",
+        ":vsyslog",
+    ],
+)
+
+libc_support_library(
     name = "termios_linux_speed_utils",
     hdrs = ["src/termios/linux/speed_utils.h"],
     deps = [
@@ -31402,6 +31506,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_glob_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_syslog_macros",
+    hdrs = ["include/llvm-libc-macros/syslog-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_syslog_macros",
+    hdrs = ["hdr/syslog_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_syslog_macros",
         ],
         "//conditions:default": [],
     }),
