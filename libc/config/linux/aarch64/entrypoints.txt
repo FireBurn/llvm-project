@@ -1679,6 +1679,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.time.time
     libc.src.time.timegm
     libc.src.time.timespec_get
+    libc.src.time.tz_variables
+    libc.src.time.tzset
     libc.src.time.timer_create
     libc.src.time.timer_delete
     libc.src.time.timer_gettime
@@ -1757,8 +1759,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
 
       # time.h entrypoints
       libc.src.time.strptime
-      libc.src.time.tz_variables
-      libc.src.time.tzset
 
       # wchar.h entrypoints
       libc.src.wchar.swprintf

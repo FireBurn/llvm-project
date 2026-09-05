@@ -1,4 +1,4 @@
-//===-- Implementation of tzset -------------------------------------------===//
+//===-- Where the zone is read from, on a target with nowhere to read it --===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,13 +6,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/time/tzset.h"
-#include "src/__support/common.h"
+#include "src/time/tz/zone_source.h"
+
 #include "src/__support/macros/config.h"
-#include "src/time/tz/timezone.h"
 
 namespace LIBC_NAMESPACE_DECL {
+namespace tz {
 
-LLVM_LIBC_FUNCTION(void, tzset, ()) { tz::set_from_environment(); }
+bool map_zone_file(const char *, Mapping &) { return false; }
 
+void unmap_zone_file(Mapping &) {}
+
+const char *tz_from_environment() { return nullptr; }
+
+} // namespace tz
 } // namespace LIBC_NAMESPACE_DECL
