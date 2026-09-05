@@ -253,3 +253,21 @@ libc_test(
         "//libc:putc",
     ],
 )
+
+libc_test(
+    name = "renameat2_test",
+    srcs = ["renameat2_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_scope",
+        "//libc:access",
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:hdr_unistd_macros",
+        "//libc:open",
+        "//libc:renameat2",
+        "//libc:stdio_renameat2",
+        "//libc:unlink",
+    ],
+)

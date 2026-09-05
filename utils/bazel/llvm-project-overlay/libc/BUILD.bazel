@@ -20018,6 +20018,20 @@ libc_function(
 )
 
 libc_function(
+    name = "renameat2",
+    srcs = ["src/stdio/linux/renameat2.cpp"],
+    hdrs = ["src/stdio/renameat2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_renameat2",
+        ":errno",
+        ":stdio_renameat2",
+    ],
+)
+
+libc_function(
     name = "sprintf",
     srcs = ["src/stdio/sprintf.cpp"],
     hdrs = ["src/stdio/sprintf.h"],
@@ -22088,6 +22102,25 @@ libc_support_library(
         ":__support_printf_core_printf_main",
         ":__support_printf_core_printf_writer",
         ":__support_printf_core_writer",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_renameat2",
+    hdrs = ["src/stdio/renameat2.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_renameat2",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/renameat2.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
