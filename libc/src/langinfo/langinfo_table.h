@@ -36,6 +36,7 @@ inline constexpr const char *CTYPE_ITEMS[] = {
     "ANSI_X3.4-1968", // CODESET, the name of the character set.
 };
 
+
 inline constexpr const char *NUMERIC_ITEMS[] = {
     ".", // RADIXCHAR
     "",  // THOUSEP, which the C locale does not have.
