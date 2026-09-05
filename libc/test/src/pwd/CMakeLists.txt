@@ -81,3 +81,21 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  putpwent_test
+  SUITE
+    libc_pwd_unittests
+  SRCS
+    putpwent_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_passwd
+    libc.src.pwd.putpwent
+    libc.src.stdio.fclose
+    libc.src.stdio.open_memstream
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)

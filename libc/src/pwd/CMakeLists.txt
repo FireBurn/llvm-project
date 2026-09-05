@@ -137,3 +137,17 @@ add_entrypoint_object(
     libc.hdr.types.struct_passwd
     libc.hdr.types.uid_t
 )
+
+add_entrypoint_object(
+  putpwent
+  SRCS
+    putpwent.cpp
+  HDRS
+    putpwent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_passwd
+    libc.src.errno.errno
+    libc.src.stdio.fprintf
+)
