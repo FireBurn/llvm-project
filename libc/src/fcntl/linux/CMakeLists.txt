@@ -100,3 +100,19 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
 )
+
+
+add_entrypoint_object(
+  splice
+  SRCS
+    splice.cpp
+  HDRS
+    ../splice.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

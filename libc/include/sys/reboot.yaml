@@ -1,0 +1,28 @@
+header: sys/reboot.h
+standards:
+  - linux
+macros:
+  - macro_name: RB_AUTOBOOT
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_HALT_SYSTEM
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_ENABLE_CAD
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_DISABLE_CAD
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_POWER_OFF
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_SW_SUSPEND
+    macro_header: sys-reboot-macros.h
+  - macro_name: RB_KEXEC
+    macro_header: sys-reboot-macros.h
+types: []
+enums: []
+objects: []
+functions:
+  - name: reboot
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
