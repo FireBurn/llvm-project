@@ -73,9 +73,32 @@ types:
   - type_name: pthread_attr_t
   - type_name: pthread_spinlock_t
   - type_name: pthread_id_np_t
+  - type_name: struct__pthread_cleanup_buffer
+  - type_name: __pthread_cleanup_routine_t
     standards:
       - llvm_libc_ext
 functions:
+  - name: _pthread_cleanup_pop
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: struct _pthread_cleanup_buffer *
+      - type: int
+  - name: _pthread_cleanup_push
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: struct _pthread_cleanup_buffer *
+      - type: __pthread_cleanup_routine_t
+      - type: void *
+  - name: pthread_cancel
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_t
   - name: pthread_atfork
     return_type: int
     arguments:
@@ -450,6 +473,26 @@ functions:
       - type: pthread_t
       - type: int
       - type: const struct sched_param *
+  - name: pthread_setcancelstate
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: int *
+  - name: pthread_setcanceltype
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: int *
+  - name: pthread_testcancel
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
   - name: pthread_setspecific
     return_type: int
     arguments:
