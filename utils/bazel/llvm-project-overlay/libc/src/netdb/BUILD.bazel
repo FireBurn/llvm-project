@@ -16,6 +16,32 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "gethostbyname",
+    srcs = ["gethostbyname.cpp"],
+    hdrs = ["gethostbyname.h"],
+    deps = [
+        ":hostent_storage",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname2",
+    srcs = ["gethostbyname2.cpp"],
+    hdrs = ["gethostbyname2.h"],
+    deps = [
+        ":hostent_storage",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getnameinfo",
     srcs = ["getnameinfo.cpp"],
     hdrs = ["getnameinfo.h"],
@@ -69,6 +95,7 @@ libc_support_library(
         ":resolv_resolv_conf",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_hostent",
         "//libc/hdr/types:struct_pollfd",
         "//libc/hdr/types:struct_sockaddr_in",
         "//libc/hdr/types:struct_sockaddr_in6",
@@ -114,6 +141,21 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "getservbyname",
+    srcs = ["getservbyname.cpp"],
+    hdrs = ["getservbyname.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+    ],
+)
+
 libc_support_library(
     name = "resolv_dns_message",
     srcs = ["resolv/dns_message.cpp"],
@@ -132,6 +174,7 @@ libc_support_library(
     hdrs = ["resolv/services.h"],
     deps = [
         "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_servent",
         "//libc/hdr:errno_macros",
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:stdint_proxy",
@@ -144,6 +187,27 @@ libc_support_library(
         "//libc/src/__support:str_to_integer",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/unistd:close",
+    ],
+)
+
+libc_support_library(
+    name = "hostent_storage",
+    srcs = ["hostent_storage.cpp"],
+    hdrs = ["hostent_storage.h"],
+    deps = [
+        ":__h_errno_location",
+        ":getnameinfo_utils",
+        ":resolv_lookup",
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr/types:struct_sockaddr_in",
+        "//libc/hdr/types:struct_sockaddr_in6",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
     ],
 )
 

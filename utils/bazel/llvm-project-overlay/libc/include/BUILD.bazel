@@ -848,6 +848,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_servent",
+    hdrs = ["llvm-libc-types/struct_servent.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_hostent",
+    hdrs = ["llvm-libc-types/struct_hostent.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
