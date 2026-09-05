@@ -787,6 +787,8 @@ add_header_macro(
   ../libc/include/spawn.yaml
   spawn.h
   DEPENDS
+    .llvm-libc-types.sigset_t
+    .llvm-libc-types.struct_sched_param
     .llvm-libc-macros.spawn_macros
     .llvm_libc_common_h
     .llvm-libc-types.mode_t

@@ -1783,6 +1783,20 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # spawn.h entrypoints
     libc.src.spawn.posix_spawn
+    libc.src.spawn.posix_spawnattr_init
+    libc.src.spawn.posix_spawnattr_destroy
+    libc.src.spawn.posix_spawnattr_getflags
+    libc.src.spawn.posix_spawnattr_setflags
+    libc.src.spawn.posix_spawnattr_getpgroup
+    libc.src.spawn.posix_spawnattr_setpgroup
+    libc.src.spawn.posix_spawnattr_getsigdefault
+    libc.src.spawn.posix_spawnattr_setsigdefault
+    libc.src.spawn.posix_spawnattr_getsigmask
+    libc.src.spawn.posix_spawnattr_setsigmask
+    libc.src.spawn.posix_spawnattr_getschedpolicy
+    libc.src.spawn.posix_spawnattr_setschedpolicy
+    libc.src.spawn.posix_spawnattr_getschedparam
+    libc.src.spawn.posix_spawnattr_setschedparam
     libc.src.spawn.posix_spawn_file_actions_addclose
     libc.src.spawn.posix_spawn_file_actions_adddup2
     libc.src.spawn.posix_spawn_file_actions_addopen

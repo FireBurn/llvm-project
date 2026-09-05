@@ -1589,3 +1589,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.union_sigval
 )
+
+add_proxy_header_library(
+  posix_spawnattr_t
+  HDRS
+    posix_spawnattr_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.posix_spawnattr_t
+)
