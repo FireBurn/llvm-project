@@ -13,9 +13,11 @@
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
 #include "test/src/time/TmHelper.h"
+#include "test/src/time/TzFixture.h"
 
-using LlvmLibcCtimeR = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
+using LlvmLibcCtimeR = TzErrnoFixture;
 
+#if defined(LIBC_ADD_NULL_CHECKS)
 TEST_F(LlvmLibcCtimeR, Nullptr) {
   [[maybe_unused]] char
       buffer[LIBC_NAMESPACE::time_constants::ASCTIME_BUFFER_SIZE];
@@ -26,6 +28,7 @@ TEST_F(LlvmLibcCtimeR, Nullptr) {
                WITH_SIGNAL(-1));
   EXPECT_DEATH([&] { LIBC_NAMESPACE::ctime_r(&t, nullptr); }, WITH_SIGNAL(-1));
 }
+#endif // defined(LIBC_ADD_NULL_CHECKS)
 
 TEST_F(LlvmLibcCtimeR, ValidUnixTimestamp0) {
   char buffer[LIBC_NAMESPACE::time_constants::ASCTIME_BUFFER_SIZE];
