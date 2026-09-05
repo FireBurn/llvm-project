@@ -19163,6 +19163,31 @@ libc_function(
 )
 
 libc_function(
+    name = "open_memstream",
+    srcs = ["src/stdio/open_memstream.cpp"],
+    hdrs = ["src/stdio/open_memstream.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":stdio_open_memstream",
+        ":types_FILE",
+        ":types_off_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "renameat2",
     srcs = ["src/stdio/linux/renameat2.cpp"],
     hdrs = ["src/stdio/renameat2.h"],
@@ -21280,5 +21305,26 @@ libc_support_library(
     hdrs = ["hdr/stdio_ext_macros.h"],
     deps = [
         ":llvm_libc_macros_stdio_ext_macros",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_open_memstream",
+    srcs = ["src/stdio/open_memstream.cpp"],
+    hdrs = ["src/stdio/open_memstream.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+        ":types_off_t",
+        ":types_size_t",
     ],
 )
