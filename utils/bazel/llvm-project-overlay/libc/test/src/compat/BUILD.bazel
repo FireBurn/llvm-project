@@ -9,3 +9,25 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "compat_test",
+    srcs = ["compat_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/compat:__xpg_strerror_r",
+        "//libc/src/compat:lfs64",
+        "//libc/src/dirent:closedir",
+        "//libc/src/dirent:opendir",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fputs",
+        "//libc/src/string:strcmp",
+        "//libc/src/string:strlen",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:getpid",
+        "//libc/src/unistd:write",
+    ],
+)

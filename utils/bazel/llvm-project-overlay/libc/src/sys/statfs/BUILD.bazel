@@ -1,0 +1,42 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "fstatfs",
+    srcs = ["linux/fstatfs.cpp"],
+    hdrs = ["fstatfs.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fstatfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "statfs",
+    srcs = ["linux/statfs.cpp"],
+    hdrs = ["statfs.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
