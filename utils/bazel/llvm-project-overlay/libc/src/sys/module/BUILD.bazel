@@ -1,0 +1,43 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "delete_module",
+    srcs = ["delete_module.cpp"],
+    hdrs = ["delete_module.h"],
+    deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:delete_module",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "init_module",
+    srcs = ["init_module.cpp"],
+    hdrs = ["init_module.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:init_module",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)

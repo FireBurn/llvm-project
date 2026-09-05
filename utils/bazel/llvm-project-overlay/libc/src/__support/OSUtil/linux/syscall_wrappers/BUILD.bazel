@@ -2661,6 +2661,28 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "delete_module",
+    hdrs = ["delete_module.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "init_module",
+    hdrs = ["init_module.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
