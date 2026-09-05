@@ -82,6 +82,9 @@ add_subdirectory(spawn)
 add_subdirectory(threads)
 add_subdirectory(ucontext)
 
+# Names the platform ABI settled on, which lean on the functions behind them.
+add_subdirectory(compat)
+
 if(${LIBC_TARGET_OS} STREQUAL "linux")
   add_subdirectory(syslog)
 endif()
