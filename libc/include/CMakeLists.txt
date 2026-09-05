@@ -174,6 +174,8 @@ add_header_macro(
     .llvm-libc-macros.glob_macros
     .llvm-libc-types.glob_t
     .llvm-libc-types.size_t
+    .llvm-libc-types.struct_dirent
+    .llvm-libc-types.struct_stat
 )
 
 add_header_macro(
@@ -999,6 +1001,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_timex_macros
+    .llvm-libc-types.clockid_t
     .llvm-libc-types.struct_timex
     .llvm-libc-types.struct_timeval
 )
