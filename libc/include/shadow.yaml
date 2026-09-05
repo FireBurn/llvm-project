@@ -1,0 +1,104 @@
+header: shadow.h
+standards:
+  - gnu
+types:
+  - type_name: struct_spwd
+  - type_name: FILE
+  - type_name: size_t
+enums: []
+objects: []
+functions:
+  - name: endspent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: fgetspent
+    standards:
+      - gnu
+    return_type: struct spwd *
+    arguments:
+      - type: FILE *
+  - name: fgetspent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+      - type: struct spwd *
+      - type: char *
+      - type: size_t
+      - type: struct spwd **
+  - name: getspent
+    standards:
+      - gnu
+    return_type: struct spwd *
+    arguments:
+      - type: void
+  - name: getspent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct spwd *
+      - type: char *
+      - type: size_t
+      - type: struct spwd **
+  - name: getspnam
+    standards:
+      - gnu
+    return_type: struct spwd *
+    arguments:
+      - type: const char *
+  - name: getspnam_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct spwd *
+      - type: char *
+      - type: size_t
+      - type: struct spwd **
+  - name: lckpwdf
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void
+  - name: putspent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct spwd *
+      - type: FILE *
+  - name: setspent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: sgetspent
+    standards:
+      - gnu
+    return_type: struct spwd *
+    arguments:
+      - type: const char *
+  - name: sgetspent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct spwd *
+      - type: char *
+      - type: size_t
+      - type: struct spwd **
+  - name: ulckpwdf
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void

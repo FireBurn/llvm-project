@@ -16,9 +16,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(char *, fgets,
-                   (char *__restrict str, int count,
-                    ::FILE *__restrict raw_stream)) {
+namespace internal {
+
+char *fgets_impl(char *__restrict str, int count,
+                 ::FILE *__restrict raw_stream) {
   if (count < 1)
     return nullptr;
 
@@ -52,6 +53,14 @@ LLVM_LIBC_FUNCTION(char *, fgets,
 
   str[i] = '\0';
   return str;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(char *, fgets,
+                   (char *__restrict str, int count,
+                    ::FILE *__restrict raw_stream)) {
+  return internal::fgets_impl(str, count, raw_stream);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
