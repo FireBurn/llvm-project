@@ -666,6 +666,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wctype.towupper
 
     # sys/uio.h entrypoints
+    libc.src.sys.uio.preadv
+    libc.src.sys.uio.pwritev
     libc.src.sys.uio.writev
     libc.src.sys.uio.readv
 
