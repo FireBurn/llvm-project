@@ -1,0 +1,16 @@
+header: sys/times.h
+standards:
+  - posix
+macros: []
+types:
+  - type_name: clock_t
+  - type_name: struct_tms
+enums: []
+objects: []
+functions:
+  - name: times
+    standards:
+      - posix
+    return_type: clock_t
+    arguments:
+      - type: struct tms *
