@@ -18147,9 +18147,12 @@ libc_support_library(
     srcs = ["src/stdlib/rand_util.cpp"],
     hdrs = ["src/stdlib/rand_util.h"],
     deps = [
+        ":__support_common",
         ":__support_cpp_atomic",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
     ],
 )
 
@@ -28937,6 +28940,19 @@ libc_support_library(
         ":__support_wctype_utils",
         ":types_wchar_t",
         ":types_wctype_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_hash",
+    hdrs = ["src/__support/hash.h"],
+    deps = [
+        ":__support_cpp_bit",
+        ":__support_cpp_limits",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_uint128",
+        ":hdr_stdint_proxy",
     ],
 )
 
