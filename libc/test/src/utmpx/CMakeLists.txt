@@ -1,0 +1,27 @@
+add_libc_testsuite(libc-utmpx-tests)
+
+add_libc_test(
+  utmpx_test
+  SUITE
+    libc-utmpx-tests
+  SRCS
+    utmpx_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_utmpx
+    libc.include.utmpx
+    libc.src.fcntl.open
+    libc.src.stdio.remove
+    libc.src.string.strcpy
+    libc.src.string.strncmp
+    libc.src.unistd.close
+    libc.src.utmpx.endutxent
+    libc.src.utmpx.getutxent
+    libc.src.utmpx.getutxid
+    libc.src.utmpx.getutxline
+    libc.src.utmpx.pututxline
+    libc.src.utmpx.setutxent
+    libc.src.utmpx.updwtmpx
+    libc.src.utmpx.utmpxname
+)
