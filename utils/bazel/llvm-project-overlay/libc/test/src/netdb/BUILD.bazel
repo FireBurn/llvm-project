@@ -24,3 +24,11 @@ libc_test(
         "//libc/src/netdb:getnameinfo",
     ],
 )
+
+libc_test(
+    name = "h_errno_test",
+    srcs = ["h_errno_test.cpp"],
+    deps = [
+        "//libc/src/netdb:__h_errno_location",
+    ],
+)
