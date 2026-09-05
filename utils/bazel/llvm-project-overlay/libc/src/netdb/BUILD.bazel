@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -20,6 +20,7 @@ libc_function(
     srcs = ["getnameinfo.cpp"],
     hdrs = ["getnameinfo.h"],
     deps = [
+        ":resolv_lookup",
         "//libc/hdr/types:socklen_t",
         "//libc/hdr/types:struct_sockaddr",
         "//libc/hdr/types:struct_sockaddr_in",
@@ -36,6 +37,72 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "resolv_resolv_conf",
+    srcs = ["resolv/resolv_conf.cpp"],
+    hdrs = ["resolv/resolv_conf.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/arpa/inet:inet_pton",
+        "//libc/src/net:if_if_nametoindex",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_lookup",
+    srcs = ["resolv/lookup.cpp"],
+    hdrs = ["resolv/lookup.h"],
+    deps = [
+        ":resolv_dns_message",
+        ":resolv_resolv_conf",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_pollfd",
+        "//libc/hdr/types:struct_sockaddr_in",
+        "//libc/hdr/types:struct_sockaddr_in6",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:time_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/include:llvm_libc_macros_poll_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ppoll",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:recvfrom",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sendto",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:socket",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/arpa/inet:inet_pton",
+        "//libc/src/net:if_if_nametoindex",
+        "//libc/src/poll:poll",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+        "//libc/src/sys/socket:recvfrom",
+        "//libc/src/sys/socket:sendto",
+        "//libc/src/sys/socket:socket",
+        "//libc/src/unistd:close",
+    ],
+)
+
 libc_function(
     name = "__h_errno_location",
     srcs = ["__h_errno_location.cpp"],
@@ -44,5 +111,76 @@ libc_function(
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_dns_message",
+    srcs = ["resolv/dns_message.cpp"],
+    hdrs = ["resolv/dns_message.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_services",
+    srcs = ["resolv/services.cpp"],
+    hdrs = ["resolv/services.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_function(
+    name = "freeaddrinfo",
+    srcs = ["freeaddrinfo.cpp"],
+    hdrs = ["freeaddrinfo.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getaddrinfo",
+    srcs = ["getaddrinfo.cpp"],
+    hdrs = ["getaddrinfo.h"],
+    deps = [
+        ":freeaddrinfo",
+        ":resolv_lookup",
+        ":resolv_services",
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/hdr/types:struct_sockaddr_in",
+        "//libc/hdr/types:struct_sockaddr_in6",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
     ],
 )

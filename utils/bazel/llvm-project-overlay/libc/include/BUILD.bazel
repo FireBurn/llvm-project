@@ -976,6 +976,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_addrinfo",
+    hdrs = ["llvm-libc-types/struct_addrinfo.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dirent",
     hdrs = ["llvm-libc-types/struct_dirent.h"],
 )
