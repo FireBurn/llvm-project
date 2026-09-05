@@ -1,0 +1,58 @@
+header: sys/timex.h
+standards:
+  - gnu
+macros:
+  - macro_name: ADJ_OFFSET
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_FREQUENCY
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_MAXERROR
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_ESTERROR
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_STATUS
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_TIMECONST
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_TAI
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_SETOFFSET
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_NANO
+    macro_header: sys-timex-macros.h
+  - macro_name: ADJ_TICK
+    macro_header: sys-timex-macros.h
+  - macro_name: STA_UNSYNC
+    macro_header: sys-timex-macros.h
+  - macro_name: STA_NANO
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_OK
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_INS
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_DEL
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_OOP
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_WAIT
+    macro_header: sys-timex-macros.h
+  - macro_name: TIME_ERROR
+    macro_header: sys-timex-macros.h
+types:
+  - type_name: struct_timex
+  - type_name: struct_timeval
+enums: []
+objects: []
+functions:
+  - name: adjtimex
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct timex *
+  - name: ntp_adjtime
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct timex *

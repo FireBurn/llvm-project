@@ -630,6 +630,18 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_timex_macros
+  HDR
+    sys-timex-macros.h
+)
+
+add_macro_header(
+  sys_quota_macros
+  HDR
+    sys-quota-macros.h
+)
+
+add_macro_header(
   utmpx_macros
   HDR
     utmpx-macros.h

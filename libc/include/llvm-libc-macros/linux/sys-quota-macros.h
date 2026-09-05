@@ -1,0 +1,68 @@
+//===-- Macros defined in sys/quota.h header file -------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_MACROS_LINUX_SYS_QUOTA_MACROS_H
+#define LLVM_LIBC_MACROS_LINUX_SYS_QUOTA_MACROS_H
+
+// Whose quota is being asked about.
+#define USRQUOTA 0
+#define GRPQUOTA 1
+#define PRJQUOTA 2
+#define MAXQUOTAS 3
+
+// A command is the operation and the kind of quota packed together.
+#define SUBCMDMASK 0x00ff
+#define SUBCMDSHIFT 8
+#define QCMD(cmd, type) (((cmd) << SUBCMDSHIFT) | ((type) & SUBCMDMASK))
+
+// The operations.
+#define Q_SYNC 0x800001
+#define Q_QUOTAON 0x800002
+#define Q_QUOTAOFF 0x800003
+#define Q_GETFMT 0x800004
+#define Q_GETINFO 0x800005
+#define Q_SETINFO 0x800006
+#define Q_GETQUOTA 0x800007
+#define Q_SETQUOTA 0x800008
+#define Q_GETNEXTQUOTA 0x800009
+
+// Which fields of a struct dqblk are being set or were filled in.
+#define QIF_DQBLKSIZE_BITS 10
+#define QIF_DQBLKSIZE (1 << QIF_DQBLKSIZE_BITS)
+
+#define QIF_BLIMITS_B 0
+#define QIF_SPACE_B 1
+#define QIF_ILIMITS_B 2
+#define QIF_INODES_B 3
+#define QIF_BTIME_B 4
+#define QIF_ITIME_B 5
+
+#define QIF_BLIMITS (1 << QIF_BLIMITS_B)
+#define QIF_SPACE (1 << QIF_SPACE_B)
+#define QIF_ILIMITS (1 << QIF_ILIMITS_B)
+#define QIF_INODES (1 << QIF_INODES_B)
+#define QIF_BTIME (1 << QIF_BTIME_B)
+#define QIF_ITIME (1 << QIF_ITIME_B)
+#define QIF_LIMITS (QIF_BLIMITS | QIF_ILIMITS)
+#define QIF_USAGE (QIF_SPACE | QIF_INODES)
+#define QIF_TIMES (QIF_BTIME | QIF_ITIME)
+#define QIF_ALL (QIF_LIMITS | QIF_USAGE | QIF_TIMES)
+
+// The same for a struct dqinfo.
+#define IIF_BGRACE 1
+#define IIF_IGRACE 2
+#define IIF_FLAGS 4
+#define IIF_ALL (IIF_BGRACE | IIF_IGRACE | IIF_FLAGS)
+
+// The formats the kernel knows.
+#define QFMT_VFS_OLD 1
+#define QFMT_VFS_V0 2
+#define QFMT_OCFS2 3
+#define QFMT_VFS_V1 4
+
+#endif // LLVM_LIBC_MACROS_LINUX_SYS_QUOTA_MACROS_H
