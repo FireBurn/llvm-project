@@ -123,3 +123,46 @@ TEST(LlvmLibcElfMapSegmentsTest, PartialPageBssIsZeroed) {
 
   unmap_module(module);
 }
+
+TEST(LlvmLibcElfMapSegmentsTest, ASegmentWithNothingInTheFileStillGetsMemory) {
+  // A segment whose file size is zero is all .bss. Rounding up from where the
+  // file part ended would skip the page its first byte falls in and leave it
+  // with no memory at all, which is a write to an unmapped address the first
+  // time anything touches it.
+  ElfW(Phdr) headers[2] = {};
+  // Something file backed, ending part way into a page.
+  headers[0].p_type = PT_LOAD;
+  headers[0].p_flags = PF_R | PF_W;
+  headers[0].p_offset = 0;
+  headers[0].p_vaddr = 0;
+  headers[0].p_filesz = 64;
+  headers[0].p_memsz = 64;
+  headers[0].p_align = PAGE;
+  // And a segment of nothing but memory, in a page of its own.
+  headers[1].p_type = PT_LOAD;
+  headers[1].p_flags = PF_R | PF_W;
+  headers[1].p_offset = 64;
+  headers[1].p_vaddr = 2 * PAGE + 16;
+  headers[1].p_filesz = 0;
+  headers[1].p_memsz = 32;
+  headers[1].p_align = PAGE;
+
+  auto fd = LIBC_NAMESPACE::linux_syscalls::open(PATH, O_RDONLY, 0);
+  ASSERT_TRUE(fd.has_value());
+  auto mapped = map_segments(fd.value(), headers, 2, PAGE);
+  LIBC_NAMESPACE::linux_syscalls::close(fd.value());
+  ASSERT_TRUE(mapped.has_value());
+
+  // The whole of the second segment can be written to and reads back what was
+  // written, which it could not if it had never been mapped.
+  auto *bss = reinterpret_cast<unsigned char *>(mapped.value().load_bias +
+                                                headers[1].p_vaddr);
+  for (size_t i = 0; i < headers[1].p_memsz; ++i)
+    ASSERT_EQ(bss[i], static_cast<unsigned char>(0));
+  for (size_t i = 0; i < headers[1].p_memsz; ++i)
+    bss[i] = static_cast<unsigned char>(i + 1);
+  for (size_t i = 0; i < headers[1].p_memsz; ++i)
+    ASSERT_EQ(bss[i], static_cast<unsigned char>(i + 1));
+
+  unmap_module(mapped.value());
+}

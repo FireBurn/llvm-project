@@ -77,6 +77,10 @@ LIBC_INLINE ErrorOr<MappedModule> map_segments(int fd, const ElfW(Phdr) * phdrs,
     return Error(error);
   };
 
+  // How far the segments mapped so far reach, so that a segment which shares
+  // a page with the one before it does not map over what is already there.
+  ElfW(Addr) mapped_to = 0;
+
   for (ElfW(Half) i = 0; i < phnum; ++i) {
     const ElfW(Phdr) &phdr = phdrs[i];
     if (phdr.p_type != PT_LOAD || phdr.p_memsz == 0)
@@ -99,6 +103,7 @@ LIBC_INLINE ErrorOr<MappedModule> map_segments(int fd, const ElfW(Phdr) * phdrs,
                                          fd, static_cast<off_t>(offset));
       if (!mapped.has_value())
         return fail(mapped.error());
+      mapped_to = start + length;
     }
 
     if (phdr.p_memsz <= phdr.p_filesz)
@@ -114,7 +119,16 @@ LIBC_INLINE ErrorOr<MappedModule> map_segments(int fd, const ElfW(Phdr) * phdrs,
         *reinterpret_cast<unsigned char *>(p) = 0;
     }
 
-    const ElfW(Addr) bss_start = LoadLayout::page_align_up(file_end, page_size);
+    // A segment with nothing in the file behind it is all .bss, and the page
+    // its first byte falls in is its own to map: rounding up from where the
+    // file part ended would skip that page and leave the segment with no
+    // memory at all. Where an earlier segment already reached into that page,
+    // the mapping starts after it instead of over it.
+    ElfW(Addr) bss_start = phdr.p_filesz != 0
+                               ? LoadLayout::page_align_up(file_end, page_size)
+                               : start;
+    if (bss_start < mapped_to)
+      bss_start = mapped_to;
     const ElfW(Addr) bss_end = LoadLayout::page_align_up(
         bias + phdr.p_vaddr + phdr.p_memsz, page_size);
     if (bss_end > bss_start) {
@@ -123,6 +137,7 @@ LIBC_INLINE ErrorOr<MappedModule> map_segments(int fd, const ElfW(Phdr) * phdrs,
           MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
       if (!zeroed.has_value())
         return fail(zeroed.error());
+      mapped_to = bss_end;
     }
   }
 
