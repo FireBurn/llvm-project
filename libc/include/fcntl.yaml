@@ -52,17 +52,6 @@ functions:
       - type: int
       - type: struct file_handle *
       - type: int
-  - name: splice
-    standards:
-      - linux
-    return_type: ssize_t
-    arguments:
-      - type: int
-      - type: off_t *
-      - type: int
-      - type: off_t *
-      - type: size_t
-      - type: unsigned int
   - name: creat
     standards:
       - posix
@@ -130,3 +119,14 @@ functions:
       - type: int
       - type: off_t
       - type: off_t
+  - name: splice
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: off_t *
+      - type: int
+      - type: off_t *
+      - type: size_t
+      - type: unsigned int

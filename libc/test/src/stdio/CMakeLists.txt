@@ -569,6 +569,22 @@ if(${LIBC_TARGET_OS} STREQUAL "linux")
       libc.test.UnitTest.ErrnoSetterMatcher
   )
 
+add_libc_test(
+  open_memstream_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    open_memstream_test.cpp
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.types.FILE
+    libc.src.stdio.fclose
+    libc.src.stdio.fflush
+    libc.src.stdio.fwrite
+    libc.src.stdio.open_memstream
+    libc.src.string.memcmp
+)
+
   add_libc_test(
     renameat2_test
     SUITE
