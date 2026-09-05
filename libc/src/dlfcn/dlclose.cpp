@@ -49,6 +49,9 @@ LLVM_LIBC_FUNCTION(int, dlclose, (void *handle)) {
   if (index + 1 == set.count) {
     elf::unmap_module(set.mappings[index]);
     set.count = index;
+    // The index goes back to the next dlopen, so nothing a thread kept for
+    // what was here may be used again.
+    ++set.generation;
   }
   return 0;
 }
