@@ -25953,6 +25953,24 @@ libc_support_library(
 )
 
 libc_function(
+    name = "fgetpwent",
+    srcs = ["src/pwd/fgetpwent.cpp"],
+    hdrs = ["src/pwd/fgetpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_errno_macros",
+        ":pwd_pwd_utils",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
     name = "putpwent",
     srcs = ["src/pwd/putpwent.cpp"],
     hdrs = ["src/pwd/putpwent.h"],
@@ -25981,5 +25999,14 @@ libc_support_library(
         ":hdr_errno_macros",
         ":types_FILE",
         ":types_struct_passwd",
+    ],
+)
+
+libc_support_library(
+    name = "stdio_fgets",
+    hdrs = ["src/stdio/fgets.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_FILE",
     ],
 )
