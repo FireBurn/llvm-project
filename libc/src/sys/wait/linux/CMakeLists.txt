@@ -5,6 +5,8 @@ add_entrypoint_object(
   HDRS
     ../wait.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.pid_t
     libc.hdr.types.struct_rusage
     libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
@@ -37,6 +39,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.waitid
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.__support.threads.cancel
     libc.src.errno.errno
 )
 
@@ -47,6 +50,8 @@ add_entrypoint_object(
   HDRS
     ../waitpid.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.pid_t
     libc.hdr.types.struct_rusage
     libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
