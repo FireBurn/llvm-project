@@ -470,11 +470,33 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "syslog_macros",
+    hdrs = ["syslog_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_syslog_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "printf_macros",
     hdrs = ["printf_macros.h"],
     deps = select({
         "//libc:full_build": [
             "//libc/include:llvm_libc_macros_printf_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "utmpx_macros",
+    hdrs = ["utmpx_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_utmpx_macros",
         ],
         "//conditions:default": [],
     }),
