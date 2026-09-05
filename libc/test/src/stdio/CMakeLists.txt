@@ -569,6 +569,28 @@ if(${LIBC_TARGET_OS} STREQUAL "linux")
       libc.test.UnitTest.ErrnoSetterMatcher
   )
 
+  add_libc_test(
+    renameat2_test
+    SUITE
+      libc_stdio_unittests
+    SRCS
+      renameat2_test.cpp
+    DEPENDS
+      libc.hdr.errno_macros
+      libc.hdr.fcntl_macros
+      libc.hdr.sys_stat_macros
+      libc.hdr.unistd_macros
+      libc.src.__support.CPP.scope
+      libc.src.errno.errno
+      libc.src.fcntl.open
+      libc.src.stdio.renameat2
+      libc.src.unistd.access
+      libc.src.unistd.close
+      libc.src.unistd.unlink
+      libc.test.UnitTest.ErrnoCheckingTest
+      libc.test.UnitTest.ErrnoSetterMatcher
+  )
+
 
   add_libc_test(
     fdopen_test

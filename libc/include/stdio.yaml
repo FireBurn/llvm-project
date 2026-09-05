@@ -217,9 +217,23 @@ functions:
     arguments:
       - type: int
       - type: FILE *
+  - name: fputc_unlocked
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: FILE *
   - name: fputs
     standards:
       - stdc
+    return_type: int
+    arguments:
+      - type: const char *__restrict
+      - type: FILE *__restrict
+  - name: fputs_unlocked
+    standards:
+      - gnu
     return_type: int
     arguments:
       - type: const char *__restrict
@@ -424,6 +438,16 @@ functions:
       - type: const char *
       - type: int
       - type: const char *
+  - name: renameat2
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: int
+      - type: const char *
+      - type: unsigned int
   - name: scanf
     standards:
       - stdc
