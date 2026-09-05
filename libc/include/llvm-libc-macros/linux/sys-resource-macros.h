@@ -32,6 +32,10 @@
 #define RLIMIT_NLIMITS 16
 #define RLIM_NLIMITS RLIMIT_NLIMITS
 
+// The range setpriority takes. A lower number is a higher priority.
+#define PRIO_MIN (-20)
+#define PRIO_MAX 20
+
 #define RLIM_INFINITY ((rlim_t) - 1)
 
 // A limit which could not be represented in the older, narrower rlim_t.
