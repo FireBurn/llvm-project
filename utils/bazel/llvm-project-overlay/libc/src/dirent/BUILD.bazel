@@ -68,6 +68,17 @@ libc_function(
 )
 
 libc_function(
+    name = "dirfd",
+    srcs = ["dirfd.cpp"],
+    hdrs = ["dirfd.h"],
+    deps = [
+        "//libc/src/__support/File:dir",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "closedir",
     srcs = ["closedir.cpp"],
     hdrs = ["closedir.h"],

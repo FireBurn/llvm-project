@@ -31,6 +31,25 @@ libc_test(
 )
 
 libc_test(
+    name = "dirent_test",
+    srcs = ["dirent_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/dirent:closedir",
+        "//libc/src/dirent:dirfd",
+        "//libc/src/dirent:opendir",
+        "//libc/src/dirent:readdir",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:rmdir",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
     name = "rewinddir_test",
     srcs = ["rewinddir_test.cpp"],
     deps = [
