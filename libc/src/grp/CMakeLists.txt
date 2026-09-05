@@ -196,3 +196,18 @@ add_object_library(
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
 )
+
+add_entrypoint_object(
+  putgrent
+  SRCS
+    putgrent.cpp
+  HDRS
+    putgrent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_group
+    libc.src.errno.errno
+    libc.src.stdio.fprintf
+)
