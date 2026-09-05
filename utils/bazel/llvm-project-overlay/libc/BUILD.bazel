@@ -159,6 +159,7 @@ py_binary(
 
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
+    libc_header_info("ar"),
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
