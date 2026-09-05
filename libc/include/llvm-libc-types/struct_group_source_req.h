@@ -22,13 +22,18 @@
 // The kernel defines this too, in <linux/in.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(__UAPI_DEF_IP_MREQ && defined(_LINUX_IN_H))
+#if !(defined(__UAPI_DEF_IP_MREQ) && __UAPI_DEF_IP_MREQ && defined(_LINUX_IN_H))
 struct group_source_req {
   uint32_t gsr_interface;
   // NB: Architecture-specific padding.
   struct sockaddr_storage gsr_group;
   struct sockaddr_storage gsr_source;
 };
+
+// Say the definition here is the one, so <linux/in.h> skips its own if it
+// is read after this.
+#undef __UAPI_DEF_IP_MREQ
+#define __UAPI_DEF_IP_MREQ 0
 #endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_GROUP_SOURCE_REQ_H
