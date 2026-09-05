@@ -131,6 +131,8 @@ private:
   // streams do. Closing one must not hand it to the deallocator.
   bool static_storage : 1;
 
+  // True when the stream is over something the system gave a descriptor for.
+  bool has_descriptor_ : 1;
   bool eof : 1;
   bool err : 1;
 
@@ -166,24 +168,31 @@ public:
   LIBC_INLINE constexpr File(WriteFunc *wf, ReadFunc *rf, SeekFunc *sf,
                              CloseFunc *cf, uint8_t *buffer, size_t buffer_size,
                              int buffer_mode, bool owned, FileMode mode,
-                             bool static_stream = false)
+                             bool static_stream = false,
+                             bool has_file_descriptor = false)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
+        platform_close(cf), buf(buffer), bufsize(buffer_size), pos(0),
+        read_limit(0), prev(nullptr), next(nullptr), mbstate(), mode(mode),
+        ungetc_buf{},
         // POSIX requires the lock a stream is held under to be recursive:
         // flockfile may be called more than once by the same thread, and
         // anything called while it is held takes it again.
-        platform_close(cf), buf(buffer), bufsize(buffer_size), pos(0),
-        read_limit(0), prev(nullptr), next(nullptr), mbstate(), mode(mode),
-        ungetc_buf{}, mutex(/*timed=*/false, /*recursive=*/true,
-                            /*robust=*/false, /*pshared=*/false),
+        mutex(/*timed=*/false, /*recursive=*/true,
+              /*robust=*/false, /*pshared=*/false),
         bufmode(static_cast<int8_t>(buffer_mode)), prev_op(FileOp::NONE),
         orientation(Orientation::UNORIENTED), own_buf(owned),
-        static_storage(static_stream), eof(false), err(false) {
+        static_storage(static_stream), has_descriptor_(has_file_descriptor),
+        eof(false), err(false) {
     adjust_buf();
   }
 
   LIBC_INLINE constexpr bool has_static_storage() const {
     return static_storage;
   }
+
+  // Whether the stream is over something the system gave a descriptor for. A
+  // stream over memory is not, and has no descriptor to report.
+  LIBC_INLINE constexpr bool has_descriptor() const { return has_descriptor_; }
 
   // Bytes written to the stream but not yet handed to the system. The buffer
   // position only counts as pending output when the last operation was a
@@ -460,7 +469,7 @@ int reopenfile_unlocked(File *f, const char *path, const char *mode);
 
 // The platform_file library should implement it if it relevant for that
 // platform.
-int get_fileno(File *f);
+ErrorOr<int> get_fileno(File *f);
 
 } // namespace LIBC_NAMESPACE_DECL
 

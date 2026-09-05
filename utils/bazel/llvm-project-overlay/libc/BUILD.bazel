@@ -19951,6 +19951,20 @@ libc_function(
 )
 
 libc_function(
+    name = "fileno",
+    srcs = ["src/stdio/generic/fileno.cpp"],
+    hdrs = ["src/stdio/fileno.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "flockfile",
     srcs = ["src/stdio/flockfile.cpp"],
     hdrs = ["src/stdio/flockfile.h"],
@@ -19959,6 +19973,28 @@ libc_function(
         ":__support_file_platform_file",
         ":__support_macros_config",
         ":types_FILE",
+    ],
+)
+
+libc_function(
+    name = "fmemopen",
+    srcs = ["src/stdio/fmemopen.cpp"],
+    hdrs = ["src/stdio/fmemopen.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_cpp_algorithm",
+        ":__support_cpp_new",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":string_memory_utils",
+        ":types_FILE",
+        ":types_off_t",
+        ":types_size_t",
     ],
 )
 
