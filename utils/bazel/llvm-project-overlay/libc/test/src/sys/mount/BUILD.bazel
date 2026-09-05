@@ -24,3 +24,30 @@ libc_test(
         "//libc:umount2",
     ],
 )
+
+libc_test(
+    name = "new_mount_api_test",
+    srcs = ["new_mount_api_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:fsconfig",
+        "//libc:fsmount",
+        "//libc:fsopen",
+        "//libc:fspick",
+        "//libc:geteuid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_mount_macros",
+        "//libc:mount_setattr",
+        "//libc:move_mount",
+        "//libc:open_tree",
+        "//libc:sys_mount_fsconfig",
+        "//libc:sys_mount_fsmount",
+        "//libc:sys_mount_fsopen",
+        "//libc:sys_mount_fspick",
+        "//libc:sys_mount_mount_setattr",
+        "//libc:sys_mount_move_mount",
+        "//libc:sys_mount_open_tree",
+        "//libc:types_struct_mount_attr",
+    ],
+)
