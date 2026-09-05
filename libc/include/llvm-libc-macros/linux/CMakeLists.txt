@@ -211,6 +211,12 @@ add_header(
 )
 
 add_header(
+  sys_reboot_macros
+  HDR
+    sys-reboot-macros.h
+)
+
+add_header(
   HDR
   DEPENDS
     .fcntl_macros
