@@ -452,6 +452,36 @@ add_generic_entrypoint_object(
     libc.src.__support.File.platform_file
 )
 
+add_generic_entrypoint_object(
+  putc_unlocked
+  SRCS
+    putc_unlocked.cpp
+  HDRS
+    ../putc_unlocked.h
+  DEPENDS
+    libc.src.errno.errno
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_generic_entrypoint_object(
+  putchar_unlocked
+  SRCS
+    putchar_unlocked.cpp
+  HDRS
+    ../putchar_unlocked.h
+  DEPENDS
+    libc.src.errno.errno
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+    libc.src.stdio.stdout
+)
+
+
 list(APPEND fprintf_deps
   libc.hdr.types.FILE
   libc.src.__support.arg_list
