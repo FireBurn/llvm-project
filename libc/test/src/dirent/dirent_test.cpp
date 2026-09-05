@@ -7,13 +7,18 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/__support/CPP/string_view.h"
+#include "src/__support/libc_errno.h"
 #include "src/dirent/closedir.h"
 #include "src/dirent/dirfd.h"
 #include "src/dirent/opendir.h"
 #include "src/dirent/readdir.h"
+#include "src/sys/stat/mkdir.h"
+#include "src/unistd/rmdir.h"
 
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+
+#include "hdr/sys_stat_macros.h"
 
 #include <dirent.h>
 
@@ -73,4 +78,27 @@ TEST_F(LlvmLibcDirentTest, OpenFile) {
   ::DIR *dir = LIBC_NAMESPACE::opendir("testdata/file1.txt");
   ASSERT_TRUE(dir == nullptr);
   ASSERT_ERRNO_EQ(ENOTDIR);
+}
+
+TEST_F(LlvmLibcDirentTest, ADirectoryRemovedWhileOpenIsSimplyEnded) {
+  auto path = libc_make_test_file_path("dirent_removed");
+  ASSERT_EQ(LIBC_NAMESPACE::mkdir(path, S_IRWXU), 0);
+
+  ::DIR *dir = LIBC_NAMESPACE::opendir(path);
+  ASSERT_TRUE(dir != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::rmdir(path), 0);
+
+  // There is nothing more in a directory that is no longer there, which is
+  // the end of it rather than something going wrong. A caller tells the two
+  // apart by looking at errno, so this must leave it alone.
+  libc_errno = 0;
+  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir),
+            static_cast<struct dirent *>(nullptr));
+  ASSERT_ERRNO_SUCCESS();
+  // And asking again says the same thing.
+  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir),
+            static_cast<struct dirent *>(nullptr));
+  ASSERT_ERRNO_SUCCESS();
+
+  ASSERT_EQ(LIBC_NAMESPACE::closedir(dir), 0);
 }
