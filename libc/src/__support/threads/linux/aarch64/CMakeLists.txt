@@ -7,6 +7,8 @@ add_object_library(
     libc.hdr.sys_mman_macros
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.elf.tls_block
     libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
     libc.src.__support.OSUtil.linux.syscall_wrappers.munmap
     libc.src.__support.threads.linux.tcb
