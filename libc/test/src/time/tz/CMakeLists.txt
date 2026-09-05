@@ -1,0 +1,40 @@
+add_libc_test(
+  posix_tz_test
+  SUITE
+    libc_time_unittests
+  SRCS
+    posix_tz_test.cpp
+  DEPENDS
+    libc.hdr.types.time_t
+    libc.src.time.tz.posix_tz
+)
+
+add_libc_test(
+  tzfile_test
+  SUITE
+    libc_time_unittests
+  SRCS
+    tzfile_test.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.hdr.types.time_t
+    libc.src.time.tz.tzfile
+)
+
+add_libc_test(
+  tzset_test
+  SUITE
+    libc_time_unittests
+  SRCS
+    tzset_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_tm
+    libc.hdr.types.time_t
+    libc.src.stdlib.setenv
+    libc.src.string.strcmp
+    libc.src.time.localtime_r
+    libc.src.time.mktime
+    libc.src.time.tz_variables
+    libc.src.time.tzset
+)
