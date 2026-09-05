@@ -9,7 +9,20 @@
 #ifndef LLVM_LIBC_MACROS_LINUX_SYS_WAIT_MACROS_H
 #define LLVM_LIBC_MACROS_LINUX_SYS_WAIT_MACROS_H
 
-#include <linux/wait.h>
+// What a wait call is willing to be told about, and whether it should
+// block. These are the kernel's numbers, spelled out rather than taken from
+// <linux/wait.h>, which also defines the P_* names that idtype_t's
+// enumerators carry.
+#define WNOHANG 0x00000001
+#define WUNTRACED 0x00000002
+#define WSTOPPED WUNTRACED
+#define WEXITED 0x00000004
+#define WCONTINUED 0x00000008
+#define WNOWAIT 0x01000000
+
+#define __WNOTHREAD 0x20000000
+#define __WALL 0x40000000
+#define __WCLONE 0x80000000
 
 #define WCOREDUMP(status) ((status) & WCOREFLAG)
 #define WEXITSTATUS(status) (((status) & 0xff00) >> 8)
