@@ -19,15 +19,12 @@ add_libc_test(
   SRCS
     getaddrinfo_test.cpp
   DEPENDS
-    libc.hdr.errno_macros
     libc.hdr.netdb_macros
     libc.hdr.sys_socket_macros
     libc.hdr.types.struct_addrinfo
-    libc.src.errno.errno
     libc.src.netdb.freeaddrinfo
     libc.src.netdb.getaddrinfo
     libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
 )
 
 add_libc_test(
@@ -56,3 +53,5 @@ add_libc_test(
   DEPENDS
     libc.src.netdb.__h_errno_location
 )
+
+add_subdirectory(resolv)

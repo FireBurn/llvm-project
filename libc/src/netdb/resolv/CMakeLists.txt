@@ -1,0 +1,86 @@
+add_object_library(
+  dns_message
+  SRCS
+    dns_message.cpp
+  HDRS
+    dns_message.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.macros.config
+    libc.src.string.string_utils
+)
+
+add_object_library(
+  services
+  SRCS
+    services.cpp
+  HDRS
+    services.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.stdint_proxy
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.__support.str_to_integer
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.unistd.close
+)
+
+add_object_library(
+  resolv_conf
+  SRCS
+    resolv_conf.cpp
+  HDRS
+    resolv_conf.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.__support.str_to_integer
+    libc.src.arpa.inet.inet_pton
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.unistd.close
+)
+
+add_object_library(
+  lookup
+  SRCS
+    lookup.cpp
+  HDRS
+    lookup.h
+  DEPENDS
+    .dns_message
+    .resolv_conf
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.netdb_macros
+    libc.include.llvm-libc-macros.poll-macros
+    libc.hdr.stdint_proxy
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_pollfd
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.arpa.inet.inet_pton
+    libc.src.poll.poll
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+    libc.src.sys.socket.recvfrom
+    libc.src.sys.socket.sendto
+    libc.src.sys.socket.socket
+    libc.src.unistd.close
+)
