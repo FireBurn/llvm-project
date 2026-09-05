@@ -14,6 +14,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.errno
     libc.include.execinfo
     libc.include.fcntl
+    libc.include.ftw
     libc.include.getopt
     libc.include.features
     libc.include.fenv
