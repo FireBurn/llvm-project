@@ -63,12 +63,34 @@ macros:
   - macro_name: NO_ADDRESS
     macro_header: netdb-macros.h
 types:
+  - type_name: struct_hostent
+  - type_name: struct_servent
   - type_name: struct_sockaddr
   - type_name: socklen_t
   - type_name: struct_addrinfo
 enums: []
 objects: []
 functions:
+  - name: gethostbyname
+    standards:
+      - posix
+    return_type: struct hostent *
+    arguments:
+      - type: const char *
+  - name: gethostbyname2
+    standards:
+      - gnu
+    return_type: struct hostent *
+    arguments:
+      - type: const char *
+      - type: int
+  - name: getservbyname
+    standards:
+      - posix
+    return_type: struct servent *
+    arguments:
+      - type: const char *
+      - type: const char *
   - name: __h_errno_location
     standards:
       - gnu

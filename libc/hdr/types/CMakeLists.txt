@@ -1622,3 +1622,20 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.posix_spawnattr_t
 )
+
+add_proxy_header_library(
+  struct_hostent
+  HDRS
+    struct_hostent.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_hostent
+)
+
+add_proxy_header_library(
+  struct_servent
+  HDRS
+    struct_servent.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_servent
+)
+
