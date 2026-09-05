@@ -690,6 +690,13 @@ functions:
     return_type: int
     arguments:
       - type: uid_t
+  - name: sethostname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: size_t
   - name: setgid
     standards:
       - posix
