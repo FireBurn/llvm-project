@@ -203,6 +203,18 @@ add_header(
 )
 
 add_header(
+  sys_timex_macros
+  HDR
+    sys-timex-macros.h
+)
+
+add_header(
+  sys_quota_macros
+  HDR
+    sys-quota-macros.h
+)
+
+add_header(
   sys_inotify_macros
   HDR
     sys-inotify-macros.h
