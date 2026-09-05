@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -54,5 +54,61 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "preadv",
+    srcs = ["linux/preadv.cpp"],
+    hdrs = ["preadv.h"],
+    deps = [
+        ":sys_uio_preadv",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:preadv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "pwritev",
+    srcs = ["linux/pwritev.cpp"],
+    hdrs = ["pwritev.h"],
+    deps = [
+        ":sys_uio_pwritev",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pwritev",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_uio_preadv",
+    hdrs = ["preadv.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_uio_pwritev",
+    hdrs = ["pwritev.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/macros:config",
     ],
 )
