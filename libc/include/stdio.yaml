@@ -417,9 +417,22 @@ functions:
     arguments:
       - type: int
       - type: FILE *
+  - name: putc_unlocked
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: FILE *
   - name: putchar
     standards:
       - stdc
+    return_type: int
+    arguments:
+      - type: int
+  - name: putchar_unlocked
+    standards:
+      - posix
     return_type: int
     arguments:
       - type: int
