@@ -182,3 +182,21 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  sigwait_test
+  SUITE
+    libc_signal_unittests
+  SRCS
+    sigwait_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.src.__support.libc_errno
+    libc.src.signal.raise
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigprocmask
+    libc.src.signal.sigwait
+    libc.test.UnitTest.ErrnoCheckingTest
+)
