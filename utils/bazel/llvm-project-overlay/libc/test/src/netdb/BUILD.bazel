@@ -24,3 +24,11 @@ libc_test(
         "//libc:types_struct_sockaddr_in6",
     ],
 )
+
+libc_test(
+    name = "h_errno_test",
+    srcs = ["h_errno_test.cpp"],
+    deps = [
+        "//libc:__h_errno_location",
+    ],
+)
