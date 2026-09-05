@@ -3137,6 +3137,20 @@ add_header_library(
 )
 
 add_header_library(
+  clock_adjtime
+  HDRS
+    clock_adjtime.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_timex
+    libc.include.sys_syscall
+)
+
+add_header_library(
   getgid
   HDRS
     getgid.h
