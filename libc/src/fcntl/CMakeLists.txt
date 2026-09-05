@@ -57,3 +57,11 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.posix_fallocate
 )
+
+
+add_entrypoint_object(
+  splice
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.splice
+)
