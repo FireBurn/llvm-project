@@ -18012,6 +18012,42 @@ libc_function(
 )
 
 libc_function(
+    name = "mkostemps",
+    srcs = ["src/stdlib/linux/mkostemps.cpp"],
+    hdrs = ["src/stdlib/mkostemps.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":stdlib_linux_mktemp_util",
+        ":stdlib_mkostemps",
+    ],
+)
+
+libc_function(
+    name = "mkstemps",
+    srcs = ["src/stdlib/linux/mkstemps.cpp"],
+    hdrs = ["src/stdlib/mkstemps.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":stdlib_linux_mktemp_util",
+        ":stdlib_mkstemps",
+    ],
+)
+
+libc_function(
     name = "mktemp",
     srcs = ["src/stdlib/linux/mktemp.cpp"],
     hdrs = ["src/stdlib/mktemp.h"],
@@ -27191,6 +27227,22 @@ libc_support_library(
 libc_support_library(
     name = "sys_klog_klogctl",
     hdrs = ["src/sys/klog/klogctl.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mkostemps",
+    hdrs = ["src/stdlib/mkostemps.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_mkstemps",
+    hdrs = ["src/stdlib/mkstemps.h"],
     deps = [
         ":__support_macros_config",
     ],
