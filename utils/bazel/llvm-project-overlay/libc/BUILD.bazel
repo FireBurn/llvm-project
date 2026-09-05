@@ -27251,6 +27251,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sched_sched_getcpucount",
+    srcs = ["src/sched/linux/sched_getcpucount.cpp"],
+    hdrs = ["src/sched/sched_getcpucount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":types_cpu_set_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_setgid",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgid.h"],
     deps = [
@@ -30273,6 +30286,38 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_setaffinity_np",
+    srcs = ["src/pthread/pthread_setaffinity_np.cpp"],
+    hdrs = ["src/pthread/pthread_setaffinity_np.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sched_setaffinity",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":types_cpu_set_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "pthread_getaffinity_np",
+    srcs = ["src/pthread/pthread_getaffinity_np.cpp"],
+    hdrs = ["src/pthread/pthread_getaffinity_np.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sched_getaffinity",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":types_cpu_set_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "pthread_setcancelstate",
     srcs = ["src/pthread/pthread_setcancelstate.cpp"],
     hdrs = ["src/pthread/pthread_setcancelstate.h"],
@@ -30336,6 +30381,18 @@ libc_function(
         ":__support_threads_thread",
         ":__support_threads_thread_headers",
         ":types_struct___pthread_cleanup_frame",
+    ],
+)
+
+libc_function(
+    name = "pthread_self",
+    srcs = ["src/pthread/pthread_self.cpp"],
+    hdrs = ["src/pthread/pthread_self.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
     ],
 )
 
@@ -30474,6 +30531,34 @@ libc_function(
         ":hdr_errno_macros",
         ":hdr_sched_macros",
         ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "__sched_setcpuset",
+    srcs = ["src/sched/linux/sched_setcpuset.cpp"],
+    hdrs = ["src/sched/sched_setcpuset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_sched_macros",
+        ":types_cpu_set_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__sched_getcpuisset",
+    srcs = ["src/sched/linux/sched_getcpuisset.cpp"],
+    hdrs = ["src/sched/sched_getcpuisset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_sched_macros",
+        ":types_cpu_set_t",
+        ":types_size_t",
     ],
 )
 
