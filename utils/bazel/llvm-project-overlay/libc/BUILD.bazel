@@ -162,6 +162,7 @@ LLVM_LIBC_HEADERS = [
         "alloca",
         other_srcs = ["include/stdlib-alloca.yaml"],
     ),
+    libc_header_info("ar"),
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
