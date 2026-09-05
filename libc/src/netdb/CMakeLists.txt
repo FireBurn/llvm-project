@@ -76,3 +76,61 @@ add_entrypoint_object(
   DEPENDS
     libc.src.__support.macros.attributes
 )
+
+add_object_library(
+  hostent_storage
+  SRCS
+    hostent_storage.cpp
+  HDRS
+    hostent_storage.h
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.__support.macros.attributes
+    libc.src.netdb.__h_errno_location
+    libc.src.netdb.resolv.lookup
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  gethostbyname
+  SRCS
+    gethostbyname.cpp
+  HDRS
+    gethostbyname.h
+  DEPENDS
+    .hostent_storage
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  gethostbyname2
+  SRCS
+    gethostbyname2.cpp
+  HDRS
+    gethostbyname2.h
+  DEPENDS
+    .hostent_storage
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  getservbyname
+  SRCS
+    getservbyname.cpp
+  HDRS
+    getservbyname.h
+  DEPENDS
+    libc.hdr.types.struct_servent
+    libc.src.__support.common
+    libc.src.__support.macros.attributes
+    libc.src.netdb.resolv.services
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+)
