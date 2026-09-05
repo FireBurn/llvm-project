@@ -248,6 +248,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("threads"),
     libc_header_info("time"),
     libc_header_info("uchar"),
+    libc_header_info("ucontext"),
     libc_header_info("unistd"),
     libc_header_info("wchar"),
     libc_header_info("wctype"),
@@ -22705,6 +22706,76 @@ libc_function(
         ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "swapcontext",
+    srcs = ["src/ucontext/swapcontext.cpp"],
+    hdrs = ["src/ucontext/swapcontext.h"],
+    full_build_only = True,
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":getcontext",
+        ":setcontext",
+    ],
+)
+
+libc_function(
+    name = "getcontext",
+    srcs = select({
+        "@platforms//cpu:aarch64": ["src/ucontext/aarch64/getcontext.cpp"],
+        "@platforms//cpu:riscv64": ["src/ucontext/riscv/getcontext.cpp"],
+        "@platforms//cpu:x86_64": ["src/ucontext/x86_64/getcontext.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["src/ucontext/getcontext.h"],
+    full_build_only = True,
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":llvm_libc_macros_signal_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "setcontext",
+    srcs = select({
+        "@platforms//cpu:aarch64": ["src/ucontext/aarch64/setcontext.cpp"],
+        "@platforms//cpu:riscv64": ["src/ucontext/riscv/setcontext.cpp"],
+        "@platforms//cpu:x86_64": ["src/ucontext/x86_64/setcontext.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["src/ucontext/setcontext.h"],
+    full_build_only = True,
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":llvm_libc_macros_signal_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "makecontext",
+    srcs = select({
+        "@platforms//cpu:aarch64": ["src/ucontext/aarch64/makecontext.cpp"],
+        "@platforms//cpu:riscv64": ["src/ucontext/riscv/makecontext.cpp"],
+        "@platforms//cpu:x86_64": ["src/ucontext/x86_64/makecontext.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["src/ucontext/makecontext.h"],
+    full_build_only = True,
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":exit",
+        ":hdr_stdint_proxy",
+        ":setcontext",
     ],
 )
 
