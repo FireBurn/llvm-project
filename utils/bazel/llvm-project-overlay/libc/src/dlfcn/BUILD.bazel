@@ -39,11 +39,13 @@ libc_support_library(
         "//libc/hdr/types:struct_stat",
         "//libc/hdr:fcntl_macros",
         "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:newfstatat",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:elf_bind",
         "//libc/src/__support:elf_load_module",
         "//libc/src/__support:elf_passive_abi",
+        "//libc/src/__support:elf_search",
         "//libc/src/unistd:environ",
     ],
 )

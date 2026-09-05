@@ -673,6 +673,27 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "elf_search",
+    hdrs = ["elf/search.h"],
+    deps = [
+        ":elf_load_module",
+        ":elf_module",
+        ":elf_run_path",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:link_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_thread_pointer",
     hdrs = ["elf/thread_pointer.h"],
     deps = [
