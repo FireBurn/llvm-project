@@ -41,6 +41,15 @@ struct ModuleSet {
   // Objects loaded at startup begin at one and are never released.
   size_t *references;
   size_t count;
+  // How many of those were loaded at startup. Those have a place in the block
+  // each thread is given; anything past this was opened later and takes a
+  // block of its own per thread.
+  size_t static_count;
+  // Bumped whenever a module is added or dropped after startup. A thread
+  // holding blocks for modules opened later checks this: an index freed by
+  // dlclose is given to the next dlopen, so a block kept from before then
+  // belongs to something that is no longer there.
+  size_t generation;
   size_t capacity;
   size_t page_size;
   // Set once the startup linker has finished, so a caller can tell a linked
