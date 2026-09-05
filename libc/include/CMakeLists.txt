@@ -1360,6 +1360,7 @@ add_header_macro(
   sys/uio.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-types.off_t
     .llvm-libc-types.struct_iovec
     .llvm-libc-types.ssize_t
 )
@@ -1636,8 +1637,8 @@ add_header_macro(
   DEPENDS
     .llvm-libc-types.struct_pollfd
     .llvm-libc-types.nfds_t
-    .llvm-libc-types.struct_timespec
     .llvm-libc-types.sigset_t
+    .llvm-libc-types.struct_timespec
     .llvm-libc-macros.poll-macros
 )
 

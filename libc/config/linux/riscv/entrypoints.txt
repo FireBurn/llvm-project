@@ -87,6 +87,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.poll.poll
     libc.src.poll.ppoll
 
+    # grp.h entrypoints
+
     # gshadow.h entrypoints
     libc.src.gshadow.endsgent
     libc.src.gshadow.fgetsgent
@@ -746,6 +748,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.xattr.setxattr
 
     # sys/uio.h entrypoints
+    libc.src.sys.uio.preadv
+    libc.src.sys.uio.pwritev
     libc.src.sys.uio.writev
     libc.src.sys.uio.readv
 
