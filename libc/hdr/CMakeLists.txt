@@ -74,6 +74,15 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  ftw_macros
+  HDRS
+    ftw_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.ftw_macros
+)
+
+
+add_proxy_header_library(
   fenv_macros
   HDRS
     fenv_macros.h
