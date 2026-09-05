@@ -143,6 +143,95 @@ libc_function(
 )
 
 libc_function(
+    name = "sigisemptyset",
+    srcs = ["linux/sigisemptyset.cpp"],
+    hdrs = ["sigisemptyset.h"],
+    deps = [
+        ":__signal_utils",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "killpg",
+    srcs = ["linux/killpg.cpp"],
+    hdrs = ["killpg.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:kill",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "sigpending",
+    srcs = ["linux/sigpending.cpp"],
+    hdrs = ["sigpending.h"],
+    deps = [
+        ":signal_sigpending",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigpending",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "signal_sigpending",
+    hdrs = ["sigpending.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "sigismember",
+    srcs = ["linux/sigismember.cpp"],
+    hdrs = ["sigismember.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sigqueue",
+    srcs = ["linux/sigqueue.cpp"],
+    hdrs = ["sigqueue.h"],
+    deps = [
+        ":signal_sigqueue",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:union_sigval",
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getuid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigqueueinfo",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "sigsuspend",
     srcs = ["linux/sigsuspend.cpp"],
     hdrs = ["sigsuspend.h"],
@@ -191,6 +280,16 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "signal_sigqueue",
+    hdrs = ["sigqueue.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:union_sigval",
+        "//libc/src/__support/macros:config",
     ],
 )
 

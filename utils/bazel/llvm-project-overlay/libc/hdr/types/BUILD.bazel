@@ -522,6 +522,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "union_sigval",
+    hdrs = ["union_sigval.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_union_sigval"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "fd_set",
     hdrs = ["fd_set.h"],
     deps = select({

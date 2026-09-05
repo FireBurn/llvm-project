@@ -713,6 +713,18 @@ libc_function(
 )
 
 libc_function(
+    name = "getpgrp",
+    srcs = ["linux/getpgrp.cpp"],
+    hdrs = ["getpgrp.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "fdatasync",
     srcs = ["linux/fdatasync.cpp"],
     hdrs = ["fdatasync.h"],
