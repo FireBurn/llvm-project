@@ -68,6 +68,11 @@ class EnvironmentManager {
   // True if we allocated storage (and are responsible for freeing it)
   bool is_ours = false;
 
+  // The array the environment was last known to be. POSIX makes `environ`
+  // the environment itself, so a program may point it at an array of its own
+  // and everything here has to follow it there.
+  char **last_seen = nullptr;
+
   EnvironmentManager() = default;
   ~EnvironmentManager() = default;
 
@@ -75,9 +80,14 @@ class EnvironmentManager {
   // Called internally by get_instance(); idempotent.
   void init_once();
 
-  // Get a pointer to the current environ array.
-  // This may be app.env_ptr (startup environ) or storage (our copy).
+  // Get a pointer to the current environ array, which is whatever `environ`
+  // names. Notices when a program has replaced it.
   char **get_array();
+
+  // Takes the given array to be the environment, from a program that pointed
+  // `environ` at one of its own. Nothing that was known about the old one
+  // describes it.
+  void adopt(char **array);
 
   // Search for a variable by name in the current environ array.
   // Returns the index if found, or nullopt if not found.
