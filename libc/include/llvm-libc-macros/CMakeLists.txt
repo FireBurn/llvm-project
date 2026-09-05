@@ -85,6 +85,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  ftw_macros
+  HDR
+    ftw-macros.h
+)
+
+add_macro_header(
   spawn_macros
   HDR
     spawn-macros.h
