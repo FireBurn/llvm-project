@@ -28,3 +28,24 @@ libc_test(
         "//libc/src/unistd:write",
     ],
 )
+
+libc_test(
+    name = "file_handle_test",
+    srcs = ["file_handle_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_file_handle",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:fcntl_name_to_handle_at",
+        "//libc/src/fcntl:fcntl_open_by_handle_at",
+        "//libc/src/fcntl:name_to_handle_at",
+        "//libc/src/fcntl:open",
+        "//libc/src/fcntl:open_by_handle_at",
+        "//libc/src/string:memcmp",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
