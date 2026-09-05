@@ -14313,6 +14313,7 @@ libc_support_library(
         ":__support_cpp_atomic",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":hdr_stdint_proxy",
     ],
 )
 

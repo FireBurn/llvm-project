@@ -107,9 +107,14 @@ TEST(LlvmLibcHashTest, UniformLSB) {
         counters.data[hash % sz]++;
       }
     }
+    // Two hundred are expected in each bucket, and how far a count strays
+    // from that is roughly the square root of it, so about fourteen. The
+    // bound is six of those either way: wide enough that a fair hash fed a
+    // different random sequence stays inside it, and narrow enough that a
+    // biased one does not.
     for (size_t i = 0; i < sz; ++i) {
-      ASSERT_GE(counters.data[i], size_t{140});
-      ASSERT_LE(counters.data[i], size_t{260});
+      ASSERT_GE(counters.data[i], size_t{115});
+      ASSERT_LE(counters.data[i], size_t{285});
     }
   }
 }
