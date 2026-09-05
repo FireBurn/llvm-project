@@ -33,6 +33,8 @@ add_entrypoint_object(
   HDRS
     ../accept.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.include.sys_socket
     libc.src.__support.OSUtil.osutil
     libc.hdr.types.struct_sockaddr
@@ -61,6 +63,8 @@ add_entrypoint_object(
   HDRS
     ../connect.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.include.sys_socket
     libc.src.__support.OSUtil.osutil
     libc.hdr.types.struct_sockaddr
@@ -145,6 +149,8 @@ add_entrypoint_object(
   HDRS
     ../send.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.src.__support.common
@@ -159,6 +165,8 @@ add_entrypoint_object(
   HDRS
     ../sendto.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_sockaddr
     libc.hdr.types.socklen_t
     libc.hdr.types.ssize_t
@@ -201,6 +209,8 @@ add_entrypoint_object(
   HDRS
     ../sendmsg.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_msghdr
     libc.hdr.types.ssize_t
     libc.src.__support.common
@@ -214,6 +224,8 @@ add_entrypoint_object(
   HDRS
     ../recv.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.src.__support.macros.sanitizer
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
@@ -229,6 +241,8 @@ add_entrypoint_object(
   HDRS
     ../recvfrom.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_sockaddr
     libc.hdr.types.socklen_t
     libc.src.__support.macros.sanitizer
@@ -259,6 +273,8 @@ add_entrypoint_object(
   HDRS
     ../recvmsg.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_msghdr
     libc.src.__support.macros.sanitizer
     libc.hdr.types.ssize_t
