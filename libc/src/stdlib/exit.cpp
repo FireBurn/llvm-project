@@ -16,12 +16,36 @@
 #endif
 
 #ifdef LIBC_COPT_EXIT_FLUSHES_STREAMS
+#include "hdr/types/FILE.h"
 #include "src/__support/File/file.h"
+#include "src/__support/macros/attributes.h"
 #endif
 
 namespace LIBC_NAMESPACE_DECL {
 
 extern "C" void __cxa_finalize(void *);
+
+#ifdef LIBC_COPT_EXIT_FLUSHES_STREAMS
+// The standard streams have static storage and were opened by nobody, so they
+// never join the list of open files and flushing that list does not reach
+// them. They are flushed by name instead, and referred to weakly so that a
+// program which never uses one does not pull it in for the sake of this.
+extern FILE *stdin [[gnu::weak]];
+extern FILE *stdout [[gnu::weak]];
+extern FILE *stderr [[gnu::weak]];
+
+namespace {
+
+// The variable itself may not be there at all, since the reference to it is
+// weak, so what is checked first is whether there is one to read.
+LIBC_INLINE void flush_standard_stream(FILE *const *slot) {
+  if (slot == nullptr || *slot == nullptr)
+    return;
+  reinterpret_cast<File *>(*slot)->flush();
+}
+
+} // anonymous namespace
+#endif
 
 // TODO: use recursive mutex to protect this routine.
 [[noreturn]] LLVM_LIBC_FUNCTION(void, exit, (int status)) {
@@ -34,6 +58,9 @@ extern "C" void __cxa_finalize(void *);
   // C requires the streams to be flushed after the handlers have run, so a
   // handler which writes something still gets it out.
   File::flush_all();
+  flush_standard_stream(&stdin);
+  flush_standard_stream(&stdout);
+  flush_standard_stream(&stderr);
 #endif
   internal::exit(status);
 }
