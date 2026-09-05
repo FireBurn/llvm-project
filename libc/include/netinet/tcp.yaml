@@ -4,6 +4,84 @@ standards:
 macros:
   - macro_name: TCP_NODELAY
     macro_value: 1
+  - macro_name: TCP_MAXSEG
+    macro_value: 2
+  - macro_name: TCP_CORK
+    macro_value: 3
+  - macro_name: TCP_KEEPIDLE
+    macro_value: 4
+  - macro_name: TCP_KEEPINTVL
+    macro_value: 5
+  - macro_name: TCP_KEEPCNT
+    macro_value: 6
+  - macro_name: TCP_SYNCNT
+    macro_value: 7
+  - macro_name: TCP_LINGER2
+    macro_value: 8
+  - macro_name: TCP_DEFER_ACCEPT
+    macro_value: 9
+  - macro_name: TCP_WINDOW_CLAMP
+    macro_value: 10
+  - macro_name: TCP_INFO
+    macro_value: 11
+  - macro_name: TCP_QUICKACK
+    macro_value: 12
+  - macro_name: TCP_CONGESTION
+    macro_value: 13
+  - macro_name: TCP_MD5SIG
+    macro_value: 14
+  - macro_name: TCP_COOKIE_TRANSACTIONS
+    macro_value: 15
+  - macro_name: TCP_THIN_LINEAR_TIMEOUTS
+    macro_value: 16
+  - macro_name: TCP_THIN_DUPACK
+    macro_value: 17
+  - macro_name: TCP_USER_TIMEOUT
+    macro_value: 18
+  - macro_name: TCP_REPAIR
+    macro_value: 19
+  - macro_name: TCP_REPAIR_QUEUE
+    macro_value: 20
+  - macro_name: TCP_QUEUE_SEQ
+    macro_value: 21
+  - macro_name: TCP_REPAIR_OPTIONS
+    macro_value: 22
+  - macro_name: TCP_FASTOPEN
+    macro_value: 23
+  - macro_name: TCP_TIMESTAMP
+    macro_value: 24
+  - macro_name: TCP_NOTSENT_LOWAT
+    macro_value: 25
+  - macro_name: TCP_CC_INFO
+    macro_value: 26
+  - macro_name: TCP_SAVE_SYN
+    macro_value: 27
+  - macro_name: TCP_SAVED_SYN
+    macro_value: 28
+  - macro_name: TCP_REPAIR_WINDOW
+    macro_value: 29
+  - macro_name: TCP_FASTOPEN_CONNECT
+    macro_value: 30
+  - macro_name: TCP_ULP
+    macro_value: 31
+  - macro_name: TCP_MD5SIG_EXT
+    macro_value: 32
+  - macro_name: TCP_FASTOPEN_KEY
+    macro_value: 33
+  - macro_name: TCP_FASTOPEN_NO_COOKIE
+    macro_value: 34
+  - macro_name: TCP_ZEROCOPY_RECEIVE
+    macro_value: 35
+  - macro_name: TCP_INQ
+    macro_value: 36
+  - macro_name: TCP_TX_DELAY
+    macro_value: 37
+  - macro_name: TCP_REPAIR_ON
+    macro_value: 1
+  - macro_name: TCP_REPAIR_OFF
+    macro_value: 0
+  - macro_name: TCP_MD5SIG_MAXKEYLEN
+    macro_value: 80
 types: []
 enums: []
 objects: []
