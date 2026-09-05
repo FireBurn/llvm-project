@@ -87,7 +87,6 @@ add_header_macro(
     .llvm-libc-types.__nftw_func_t
 )
 
-
 add_header_macro(
   sys_fcntl
   ../libc/include/sys/fcntl.yaml
@@ -736,6 +735,8 @@ add_header_macro(
     .llvm-libc-types.pthread_spinlock_t
     .llvm-libc-types.pthread_t
     .llvm-libc-types.pthread_id_np_t
+    .llvm-libc-types.cpu_set_t
+    .llvm-libc-types.size_t
     .llvm-libc-types.struct_timespec
     .llvm_libc_common_h
 )
