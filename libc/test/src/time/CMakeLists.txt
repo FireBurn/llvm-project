@@ -1,5 +1,7 @@
 add_custom_target(libc_time_unittests)
 
+add_subdirectory(tz)
+
 add_header_library(
   time_test_utils
   HDRS
@@ -93,6 +95,7 @@ add_libc_test(
   SRCS
     localtime_test.cpp
   DEPENDS
+    .time_test_utils
     libc.hdr.types.time_t
     libc.src.time.localtime
 )
@@ -104,6 +107,7 @@ add_libc_test(
   SRCS
     localtime_r_test.cpp
   DEPENDS
+    .time_test_utils
     libc.hdr.types.struct_tm
     libc.hdr.types.time_t
     libc.src.time.localtime_r
