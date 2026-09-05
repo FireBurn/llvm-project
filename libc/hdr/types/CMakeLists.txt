@@ -114,6 +114,31 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_FTW
+  HDRS
+    struct_FTW.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_FTW
+)
+
+add_proxy_header_library(
+  __ftw_func_t
+  HDRS
+    __ftw_func_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.__ftw_func_t
+)
+
+add_proxy_header_library(
+  __nftw_func_t
+  HDRS
+    __nftw_func_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.__nftw_func_t
+)
+
+
+add_proxy_header_library(
   struct_epoll_event
   HDRS
     struct_epoll_event.h

@@ -238,6 +238,9 @@ add_header(struct_mntent HDR struct_mntent.h)
 add_header(iconv_t HDR iconv_t.h)
 add_header(fpos_t HDR fpos_t.h DEPENDS .mbstate_t .off_t)
 add_header(glob_t HDR glob_t.h DEPENDS .size_t .struct_dirent .struct_stat)
+add_header(struct_FTW HDR struct_FTW.h)
+add_header(__ftw_func_t HDR __ftw_func_t.h DEPENDS .struct_stat)
+add_header(__nftw_func_t HDR __nftw_func_t.h DEPENDS .struct_FTW .struct_stat)
 add_type_header(
   struct_sysinfo
   HDR
