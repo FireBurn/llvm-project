@@ -167,3 +167,16 @@ add_entrypoint_object(
     libc.src.__support.error_or
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  futimens
+  SRCS
+    futimens.cpp
+  HDRS
+    ../futimens.h
+  DEPENDS
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
