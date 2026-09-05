@@ -176,3 +176,11 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.unshare
 )
+
+add_entrypoint_object(
+  clone
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.${LIBC_TARGET_ARCHITECTURE}.clone
+)
+

@@ -508,6 +508,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.quota.quotactl
     libc.src.sys.quota.quotactl_fd
     libc.src.sys.timex.adjtimex
+    libc.src.sys.timex.clock_adjtime
     libc.src.sys.timex.ntp_adjtime
     libc.src.sys.inotify.inotify_init
     libc.src.sys.inotify.inotify_init1
