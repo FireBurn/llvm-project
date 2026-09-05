@@ -19,3 +19,9 @@ TEST(LlvmLibcLinuxSysResourceMacrosTest, AddRlim_Saved_CurAndRlim_Saved_Max) {
   EXPECT_EQ(static_cast<long long>(RLIM_SAVED_CUR), -1LL);
   EXPECT_EQ(static_cast<long long>(RLIM_SAVED_MAX), -1LL);
 }
+
+TEST(LlvmLibcLinuxSysResourceMacrosTest,
+     AddClone_NewtimeRlimit_NlimitsAndLine_Ma) {
+  EXPECT_EQ(static_cast<long long>(RLIMIT_NLIMITS), 16LL);
+  EXPECT_EQ(static_cast<long long>(RLIM_NLIMITS), 16LL);
+}

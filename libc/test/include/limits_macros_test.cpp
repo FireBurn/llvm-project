@@ -75,3 +75,7 @@ TEST(LlvmLibcLimitsMacrosTest, Posix2UtilityLimits) {
   EXPECT_EQ(static_cast<long long>(_POSIX2_EXPR_NEST_MAX), 32LL);
   EXPECT_EQ(static_cast<long long>(_POSIX2_RE_DUP_MAX), 255LL);
 }
+
+TEST(LlvmLibcLimitsMacrosTest, AddClone_NewtimeRlimit_NlimitsAndLine_Ma) {
+  EXPECT_EQ(static_cast<long long>(LINE_MAX), 2048LL);
+}

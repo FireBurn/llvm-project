@@ -2624,6 +2624,32 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "capget",
+    hdrs = ["capget.h"],
+    deps = [
+        "//libc/hdr/types:cap_user_data_t",
+        "//libc/hdr/types:cap_user_header_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "capset",
+    hdrs = ["capset.h"],
+    deps = [
+        "//libc/hdr/types:cap_user_data_t",
+        "//libc/hdr/types:cap_user_header_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
