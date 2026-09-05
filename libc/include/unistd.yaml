@@ -430,6 +430,12 @@ functions:
     arguments:
       - type: char *
       - type: size_t
+  - name: getdtablesize
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: void
   - name: getegid
     standards:
       - posix
