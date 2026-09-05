@@ -1,0 +1,20 @@
+//===-- Definition of idtype_t type ---------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_TYPES_IDTYPE_T_H
+#define LLVM_LIBC_TYPES_IDTYPE_T_H
+
+// Which of the three kinds of id waitid was given.
+typedef enum {
+  P_ALL,  // Every child, and the id is ignored.
+  P_PID,  // One process.
+  P_PGID, // Every child in a process group.
+  P_PIDFD // The process a descriptor refers to.
+} idtype_t;
+
+#endif // LLVM_LIBC_TYPES_IDTYPE_T_H
