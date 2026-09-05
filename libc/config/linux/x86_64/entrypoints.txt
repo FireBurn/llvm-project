@@ -1612,6 +1612,11 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getschedparam
     libc.src.pthread.pthread_getspecific
     libc.src.pthread.pthread_getstack_np
+    libc.src.compat.__errno_location
+    libc.src.compat.syscall
+    libc.src.compat.__xpg_strerror_r
+    libc.src.compat.lfs64
+    libc.src.pthread.pthread_getattr_np
     libc.src.pthread.pthread_getthreadid_np
     libc.src.pthread.pthread_getunique_np
     libc.src.pthread.pthread_join
