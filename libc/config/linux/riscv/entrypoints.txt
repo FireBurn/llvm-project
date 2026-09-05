@@ -91,6 +91,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.iconv.iconv_open
 
     # grp.h entrypoints
+    libc.src.grp.fgetgrent
 
     # gshadow.h entrypoints
     libc.src.gshadow.endsgent
@@ -129,6 +130,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.pwd.endpwent
     libc.src.pwd.getpwent
     libc.src.pwd.getpwent_r
+    libc.src.pwd.fgetpwent
     libc.src.pwd.getpwnam
     libc.src.pwd.getpwnam_r
     libc.src.pwd.getpwuid
@@ -312,6 +314,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.mkdtemp
     libc.src.stdlib.mkostemp
     libc.src.stdlib.mkstemp
+    libc.src.stdlib.mkstemps
+    libc.src.stdlib.mkostemps
     libc.src.stdlib.mktemp
     libc.src.stdlib.qsort
     libc.src.stdlib.qsort_r
