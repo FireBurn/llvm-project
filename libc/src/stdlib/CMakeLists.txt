@@ -56,6 +56,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  mb_cur_max
+  SRCS
+    mb_cur_max.cpp
+  HDRS
+    mb_cur_max.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   getenv
   SRCS
     getenv.cpp
