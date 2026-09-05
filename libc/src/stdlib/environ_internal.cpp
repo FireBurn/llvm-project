@@ -38,16 +38,33 @@ void EnvironmentManager::init_once() {
   if (initialized)
     return;
 
-  // Count entries in the startup environ.
-  char **env_ptr = reinterpret_cast<char **>(app.env_ptr);
-  if (env_ptr) {
-    size_t c = 0;
-    for (char **env = env_ptr; *env != nullptr; env++)
-      c++;
-    count = c;
-  }
+  // The startup code points `environ` at what the kernel passed, and that is
+  // where everything reads the environment from afterwards.
+#ifdef LIBC_COPT_SUPPORT_ENVIRON
+  if (environ == nullptr)
+    environ = reinterpret_cast<char **>(app.env_ptr);
+  adopt(environ);
+#else
+  adopt(reinterpret_cast<char **>(app.env_ptr));
+#endif
 
   initialized = true;
+}
+
+void EnvironmentManager::adopt(char **array) {
+  // Whatever was allocated before is no longer reachable through the
+  // environment, and is not this object's to free: the program may be
+  // holding on to it.
+  storage = nullptr;
+  ownership = nullptr;
+  capacity = 0;
+  is_ours = false;
+
+  count = 0;
+  if (array != nullptr)
+    while (array[count] != nullptr)
+      ++count;
+  last_seen = array;
 }
 
 EnvironmentManager &EnvironmentManager::get_instance() {
@@ -57,9 +74,17 @@ EnvironmentManager &EnvironmentManager::get_instance() {
 }
 
 char **EnvironmentManager::get_array() {
+#ifdef LIBC_COPT_SUPPORT_ENVIRON
+  // A program is allowed to point `environ` at an array of its own, and from
+  // then on that is the environment.
+  if (environ != last_seen)
+    adopt(environ);
+  return environ;
+#else
   if (is_ours)
     return storage;
   return reinterpret_cast<char **>(app.env_ptr);
+#endif
 }
 
 EnvironmentManager::iterator EnvironmentManager::begin() { return get_array(); }
@@ -126,7 +151,7 @@ bool EnvironmentManager::ensure_capacity(size_t needed) {
   // we must transition to our own managed storage. This allows us to
   // track ownership of strings and safely expand the array.
   if (!is_ours) {
-    char **old_env = reinterpret_cast<char **>(app.env_ptr);
+    char **old_env = get_array();
 
     // Allocate new array with room to grow.
     size_t new_capacity = needed < MIN_ENVIRON_CAPACITY
@@ -148,6 +173,7 @@ bool EnvironmentManager::ensure_capacity(size_t needed) {
 #ifdef LIBC_COPT_SUPPORT_ENVIRON
     environ = storage;
 #endif
+    last_seen = storage;
 
     return true;
   }
@@ -177,6 +203,7 @@ bool EnvironmentManager::ensure_capacity(size_t needed) {
 #ifdef LIBC_COPT_SUPPORT_ENVIRON
   environ = storage;
 #endif
+  last_seen = storage;
 
   return true;
 }
