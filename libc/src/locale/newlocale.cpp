@@ -17,8 +17,13 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(locale_t, newlocale,
                    (int category_mask, const char *locale_name, locale_t)) {
-  cpp::string_view name(locale_name);
-  if ((category_mask & ~LC_ALL_MASK) != 0 || (!name.empty() && name != "C"))
+  if ((category_mask & ~LC_ALL_MASK) != 0 || locale_name == nullptr)
+    return nullptr;
+
+  // There is one locale, so any name it can honour is answered with it.
+  // Refusing the names the environment states would leave callers with
+  // nothing where they ask for the locale the machine is set to.
+  if (!internal::codeset_is_supported(cpp::string_view(locale_name)))
     return nullptr;
 
   return &c_locale;
