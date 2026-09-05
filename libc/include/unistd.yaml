@@ -666,6 +666,18 @@ functions:
     return_type: unsigned int
     arguments:
       - type: unsigned int
+  - name: sync
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
+  - name: syncfs
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
   - name: symlink
     standards:
       - posix
