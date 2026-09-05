@@ -149,6 +149,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("sys/vt"),
     libc_header_info("sys/wait"),
     libc_header_info("sysexits"),
+    libc_header_info("syslog"),
     libc_header_info("termios"),
     libc_header_info("threads"),
     libc_header_info("time"),
@@ -156,6 +157,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("ucontext"),
     libc_header_info("unistd"),
     libc_header_info("utime"),
+    libc_header_info("utmpx"),
     libc_header_info("wchar"),
     libc_header_info("wctype"),
     libc_header_info(
@@ -1025,6 +1027,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_utmpx",
+    hdrs = ["llvm-libc-types/struct_utmpx.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_winsize",
     hdrs = ["llvm-libc-types/struct_winsize.h"],
 )
@@ -1063,8 +1070,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_syslog_macros",
+    hdrs = ["llvm-libc-macros/syslog-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_printf_macros",
     hdrs = ["llvm-libc-macros/printf-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_utmpx_macros",
+    hdrs = ["llvm-libc-macros/utmpx-macros.h"],
 )
 
 libc_support_library(
