@@ -4,6 +4,24 @@ standards:
 macros:
   - macro_name: TCP_NODELAY
     macro_header: netinet-tcp-macros.h
+  - macro_name: TCP_INFO
+    macro_value: 11
+  - macro_name: TCP_MD5SIG
+    macro_value: 14
+  - macro_name: TCP_COOKIE_TRANSACTIONS
+    macro_value: 15
+  - macro_name: TCP_REPAIR_OPTIONS
+    macro_value: 22
+  - macro_name: TCP_CC_INFO
+    macro_value: 26
+  - macro_name: TCP_REPAIR_WINDOW
+    macro_value: 29
+  - macro_name: TCP_MD5SIG_EXT
+    macro_value: 32
+  - macro_name: TCP_ZEROCOPY_RECEIVE
+    macro_value: 35
+  - macro_name: TCP_MD5SIG_MAXKEYLEN
+    macro_value: 80
 types: []
 enums: []
 objects: []
