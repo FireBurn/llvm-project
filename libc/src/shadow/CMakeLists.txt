@@ -1,0 +1,208 @@
+add_object_library(
+  shadow_utils
+  SRCS
+    shadow_utils.cpp
+  HDRS
+    shadow_utils.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.span
+    libc.src.__support.ctype_utils
+    libc.src.__support.error_or
+    libc.src.__support.field_tokenizer
+    libc.src.__support.flat_file_db
+    libc.src.__support.str_to_integer
+)
+
+add_header_library(
+  shadow_r_utils
+  HDRS
+    shadow_r_utils.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.span
+    libc.src.__support.flat_file_db
+)
+
+add_header_library(
+  pwdlock
+  HDRS
+    pwdlock.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+)
+
+add_entrypoint_object(
+  setspent
+  SRCS
+    setspent.cpp
+  HDRS
+    setspent.h
+  DEPENDS
+    .shadow_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  endspent
+  SRCS
+    endspent.cpp
+  HDRS
+    endspent.h
+  DEPENDS
+    .shadow_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getspent
+  SRCS
+    getspent.cpp
+  HDRS
+    getspent.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.types.struct_spwd
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getspnam
+  SRCS
+    getspnam.cpp
+  HDRS
+    getspnam.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.types.struct_spwd
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getspent_r
+  SRCS
+    getspent_r.cpp
+  HDRS
+    getspent_r.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_spwd
+)
+
+add_entrypoint_object(
+  getspnam_r
+  SRCS
+    getspnam_r.cpp
+  HDRS
+    getspnam_r.h
+  DEPENDS
+    .shadow_r_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_spwd
+)
+
+add_entrypoint_object(
+  sgetspent_r
+  SRCS
+    sgetspent_r.cpp
+  HDRS
+    sgetspent_r.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.span
+    libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  sgetspent
+  SRCS
+    sgetspent.cpp
+  HDRS
+    sgetspent.h
+  DEPENDS
+    .sgetspent_r
+    .shadow_utils
+    libc.hdr.types.struct_spwd
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fgetspent_r
+  SRCS
+    fgetspent_r.cpp
+  HDRS
+    fgetspent_r.h
+  DEPENDS
+    .shadow_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.span
+    libc.src.stdio.fgets
+)
+
+add_entrypoint_object(
+  fgetspent
+  SRCS
+    fgetspent.cpp
+  HDRS
+    fgetspent.h
+  DEPENDS
+    .fgetspent_r
+    .shadow_utils
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_spwd
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  putspent
+  SRCS
+    putspent.cpp
+  HDRS
+    putspent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_spwd
+    libc.src.errno.errno
+    libc.src.stdio.fprintf
+)
+
+add_entrypoint_object(
+  lckpwdf
+  SRCS
+    lckpwdf.cpp
+  HDRS
+    lckpwdf.h
+  DEPENDS
+    .pwdlock
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.types.struct_flock
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
+
+add_entrypoint_object(
+  ulckpwdf
+  SRCS
+    ulckpwdf.cpp
+  HDRS
+    ulckpwdf.h
+  DEPENDS
+    .pwdlock
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
