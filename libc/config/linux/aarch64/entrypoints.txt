@@ -270,13 +270,16 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.dprintf
     libc.src.stdio.fprintf
     libc.src.stdio.fscanf
-    libc.src.stdio.vdprintf
     libc.src.stdio.vfscanf
     libc.src.stdio.printf
     libc.src.stdio.remove
     libc.src.stdio.rename
     libc.src.stdio.renameat
+
+    # printf.h entrypoints
+    libc.src.printf.parse_printf_format
     libc.src.stdio.scanf
+    libc.src.stdio.vdprintf
     libc.src.stdio.vscanf
     libc.src.stdio.snprintf
     libc.src.stdio.sprintf
