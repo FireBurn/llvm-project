@@ -59,4 +59,38 @@
 #define MOUNT_ATTR_NOSYMFOLLOW 0x00200000
 #define MOUNT_ATTR_SIZE_VER0 32
 
+// The newer way to mount something, in which a filesystem is set up as a
+// context first and only attached to the tree once it is ready.
+
+// Flags to fsopen and fsmount.
+#define FSOPEN_CLOEXEC 0x00000001
+#define FSMOUNT_CLOEXEC 0x00000001
+#define FSMOUNT_NAMESPACE 0x00000002
+
+// What fsconfig is being asked to do.
+#define FSCONFIG_SET_FLAG 0
+#define FSCONFIG_SET_STRING 1
+#define FSCONFIG_SET_BINARY 2
+#define FSCONFIG_SET_PATH 3
+#define FSCONFIG_SET_PATH_EMPTY 4
+#define FSCONFIG_SET_FD 5
+#define FSCONFIG_CMD_CREATE 6
+#define FSCONFIG_CMD_RECONFIGURE 7
+#define FSCONFIG_CMD_CREATE_EXCL 8
+
+// Flags to open_tree.
+#define OPEN_TREE_CLONE (1 << 0)
+#define OPEN_TREE_NAMESPACE (1 << 1)
+#define OPEN_TREE_CLOEXEC O_CLOEXEC
+
+// Flags to move_mount, which has a pair of each for the two paths it takes.
+#define MOVE_MOUNT_F_SYMLINKS 0x00000001
+#define MOVE_MOUNT_F_AUTOMOUNTS 0x00000002
+#define MOVE_MOUNT_F_EMPTY_PATH 0x00000004
+#define MOVE_MOUNT_T_SYMLINKS 0x00000010
+#define MOVE_MOUNT_T_AUTOMOUNTS 0x00000020
+#define MOVE_MOUNT_T_EMPTY_PATH 0x00000040
+#define MOVE_MOUNT_SET_GROUP 0x00000100
+#define MOVE_MOUNT_BENEATH 0x00000200
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_MOUNT_MACROS_H
