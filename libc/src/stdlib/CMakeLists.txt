@@ -1061,3 +1061,18 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.ptsname
 )
+
+add_entrypoint_object(
+  mkostemp
+  SRCS
+    mkostemp.cpp
+  HDRS
+    mkostemp.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.macros.null_check
+    libc.src.errno.errno
+    libc.src.stdlib.temp_template
+)

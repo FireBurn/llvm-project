@@ -42,6 +42,12 @@ functions:
     return_type: struct passwd *
     arguments:
       - type: uid_t
+  - name: fgetpwent
+    standards:
+      - gnu
+    return_type: struct passwd *
+    arguments:
+      - type: FILE *
   - name: getpwent
     standards:
       - posix
