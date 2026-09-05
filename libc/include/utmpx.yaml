@@ -20,6 +20,10 @@ macros:
     macro_header: utmpx-macros.h
   - macro_name: DEAD_PROCESS
     macro_header: utmpx-macros.h
+  - macro_name: UTMPX_FILE
+    macro_header: utmpx-macros.h
+  - macro_name: WTMPX_FILE
+    macro_header: utmpx-macros.h
 types:
   - type_name: struct_utmpx
   - type_name: pid_t
