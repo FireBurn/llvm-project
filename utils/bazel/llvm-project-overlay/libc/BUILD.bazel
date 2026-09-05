@@ -160,6 +160,7 @@ py_binary(
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("execinfo"),
+    libc_header_info("ftw"),
     libc_header_info("getopt"),
     libc_header_info("gshadow"),
     libc_header_info("iconv"),
@@ -26432,6 +26433,34 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types___ftw_func_t",
+    hdrs = ["include/llvm-libc-types/__ftw_func_t.h"],
+)
+
+libc_support_library(
+    name = "types___ftw_func_t",
+    hdrs = ["hdr/types/__ftw_func_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types___ftw_func_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types___nftw_func_t",
+    hdrs = ["include/llvm-libc-types/__nftw_func_t.h"],
+)
+
+libc_support_library(
+    name = "types___nftw_func_t",
+    hdrs = ["hdr/types/__nftw_func_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types___nftw_func_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_char16_t",
     hdrs = ["include/llvm-libc-types/char16_t.h"],
 )
@@ -26637,6 +26666,20 @@ libc_support_library(
     hdrs = ["hdr/types/speed_t.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_speed_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_FTW",
+    hdrs = ["include/llvm-libc-types/struct_FTW.h"],
+)
+
+libc_support_library(
+    name = "types_struct_FTW",
+    hdrs = ["hdr/types/struct_FTW.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_FTW"],
         "//conditions:default": [],
     }),
 )
@@ -28001,6 +28044,58 @@ libc_function(
         ":__support_macros_config",
         ":fnmatch_fnmatch_matcher",
         ":hdr_fnmatch_macros",
+    ],
+)
+
+libc_support_library(
+    name = "ftw_ftw_walk",
+    hdrs = ["src/ftw/ftw_walk.h"],
+    deps = [
+        ":__support_error_or",
+        ":__support_file_dir",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_ftw_macros",
+        ":hdr_limits_macros",
+        ":hdr_sys_stat_macros",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_DIR",
+        ":types___ftw_func_t",
+        ":types___nftw_func_t",
+        ":types_struct_FTW",
+        ":types_struct_dirent",
+        ":types_struct_stat",
+    ],
+)
+
+libc_function(
+    name = "ftw",
+    srcs = ["src/ftw/ftw.cpp"],
+    hdrs = ["src/ftw/ftw.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":ftw_ftw_walk",
+        ":types___ftw_func_t",
+    ],
+)
+
+libc_function(
+    name = "nftw",
+    srcs = ["src/ftw/nftw.cpp"],
+    hdrs = ["src/ftw/nftw.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":ftw_ftw_walk",
+        ":types___nftw_func_t",
     ],
 )
 
@@ -30416,6 +30511,22 @@ libc_function(
         ":types_clockid_t",
         ":types_struct_timespec",
     ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_ftw_macros",
+    hdrs = ["include/llvm-libc-macros/ftw-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_ftw_macros",
+    hdrs = ["hdr/ftw_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_ftw_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
