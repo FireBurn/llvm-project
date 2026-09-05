@@ -28,8 +28,14 @@ LIBC_THREAD_LOCAL int thread_h_errno;
 
 // <netdb.h> defines h_errno as *__h_errno_location(), the same shape errno
 // has, so that it can be per thread and still be assigned to.
+namespace internal {
+
+int *h_errno_location_impl(void) { return &thread_h_errno; }
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(int *, __h_errno_location, (void)) {
-  return &thread_h_errno;
+  return internal::h_errno_location_impl();
 }
 
 } // namespace LIBC_NAMESPACE_DECL
