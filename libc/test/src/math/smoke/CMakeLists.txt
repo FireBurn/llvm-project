@@ -6908,3 +6908,58 @@ add_fp_unittest(
     libc.src.__support.FPUtil.bfloat16
     libc.src.__support.macros.properties.os
 )
+
+add_fp_unittest(
+  asinh_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    asinh_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.asinh
+)
+
+add_fp_unittest(
+  acosh_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    acosh_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.acosh
+)
+
+add_fp_unittest(
+  atanh_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    atanh_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.atanh
+)
+
+add_fp_unittest(
+  erf_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    erf_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.erf
+)
+
+add_fp_unittest(
+  erfc_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    erfc_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.erfc
+)
