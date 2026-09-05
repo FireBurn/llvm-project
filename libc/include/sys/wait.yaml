@@ -1,4 +1,9 @@
 header: sys/wait.h
+public_includes:
+  # glibc's <sys/wait.h> pulls in all of <signal.h>: waiting on a child
+  # reports how a signal ended it, and callers name and send those signals
+  # without including anything further.
+  - signal.h
 standards:
   - posix
 macros:
