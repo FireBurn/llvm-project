@@ -9,6 +9,7 @@
 #include "src/stdio/popen.h"
 
 #include "hdr/errno_macros.h"
+#include "hdr/fcntl_macros.h"
 #include "hdr/types/FILE.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -21,7 +22,7 @@
 #include "src/unistd/dup2.h"
 #include "src/unistd/execv.h"
 #include "src/unistd/fork.h"
-#include "src/unistd/pipe.h"
+#include "src/unistd/pipe2.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -37,16 +38,44 @@ LLVM_LIBC_FUNCTION(::FILE *, popen, (const char *command, const char *type)) {
     libc_errno = EINVAL;
     return nullptr;
   }
-  // POSIX only requires "r" and "w"; anything else is an error rather than
-  // being silently treated as one of them.
-  const bool reading = type[0] == 'r';
-  if ((!reading && type[0] != 'w') || type[1] != '\0') {
+  // POSIX requires "r" and "w". The 'e' the other libcs take, which asks for
+  // the stream to be closed when something is executed, may appear anywhere
+  // and as often as it likes; the direction may be repeated but not
+  // contradicted, and anything else is an error.
+  bool reading = false;
+  bool have_direction = false;
+  bool close_on_exec = false;
+  for (const char *m = type; *m != '\0'; ++m) {
+    switch (*m) {
+    case 'e':
+      close_on_exec = true;
+      continue;
+    case 'r':
+    case 'w': {
+      const bool wants_read = *m == 'r';
+      if (have_direction && reading != wants_read) {
+        libc_errno = EINVAL;
+        return nullptr;
+      }
+      reading = wants_read;
+      have_direction = true;
+      continue;
+    }
+    default:
+      libc_errno = EINVAL;
+      return nullptr;
+    }
+  }
+  if (!have_direction) {
     libc_errno = EINVAL;
     return nullptr;
   }
 
   int fds[2];
-  if (LIBC_NAMESPACE::pipe(fds) != 0)
+  // The child's end is put on its standard input or output by dup2, which
+  // gives a descriptor that is not closed on exec whatever this one is, so
+  // asking for both ends here costs the child nothing.
+  if (LIBC_NAMESPACE::pipe2(fds, close_on_exec ? O_CLOEXEC : 0) != 0)
     return nullptr;
 
   // The parent keeps one end and the child inherits the other.

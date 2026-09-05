@@ -127,7 +127,8 @@ add_entrypoint_object(
     libc.src.unistd.dup2
     libc.src.unistd.execv
     libc.src.unistd.fork
-    libc.src.unistd.pipe
+    libc.hdr.fcntl_macros
+    libc.src.unistd.pipe2
 )
 
 add_entrypoint_object(
