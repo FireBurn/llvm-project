@@ -47,12 +47,16 @@ LIBC_INLINE_VAR constexpr size_t MIN_MKTEMP_SUFFIX = 6;
 /// `ErrorOr<int>`.
 /// \return `ErrorOr<int>` with the result of `create_fn` on success, or Error
 /// on failure.
+// |suffix_len| characters at the end of the template, as mkstemps takes, are
+// kept, and the X characters come before them.
 template <typename CreateFn>
-LIBC_INLINE ErrorOr<int> mktemp_core(char *tmpl, CreateFn create_fn) {
+LIBC_INLINE ErrorOr<int> mktemp_core(char *tmpl, CreateFn create_fn,
+                                     size_t suffix_len = 0) {
   cpp::string_view str_view(tmpl);
-  size_t len = str_view.size();
-  if (len < MIN_MKTEMP_SUFFIX)
+  if (str_view.size() < MIN_MKTEMP_SUFFIX + suffix_len)
     return Error(EINVAL);
+  str_view = str_view.substr(0, str_view.size() - suffix_len);
+  size_t len = str_view.size();
 
   size_t pos = str_view.find_last_not_of('X');
   size_t count = (pos == cpp::string_view::npos) ? len : len - pos - 1;
