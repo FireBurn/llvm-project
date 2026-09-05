@@ -1,0 +1,22 @@
+add_entrypoint_object(
+  init_module
+  SRCS
+    init_module.cpp
+  HDRS
+    init_module.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.init_module
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  delete_module
+  SRCS
+    delete_module.cpp
+  HDRS
+    delete_module.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.delete_module
+    libc.src.errno.errno
+)
