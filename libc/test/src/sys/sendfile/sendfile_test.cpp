@@ -9,6 +9,7 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "src/__support/CPP/string_view.h"
+#include "src/__support/libc_errno.h"
 #include "src/fcntl/open.h"
 #include "src/sys/sendfile/sendfile.h"
 #include "src/unistd/close.h"
@@ -46,7 +47,8 @@ TEST_F(LlvmLibcSendfileTest, CreateAndTransfer) {
   int out_fd = LIBC_NAMESPACE::open(OUT_FILE, O_CREAT | O_WRONLY, S_IRWXU);
   ASSERT_GT(out_fd, 0);
   ASSERT_ERRNO_SUCCESS();
-  ssize_t size = LIBC_NAMESPACE::sendfile(in_fd, out_fd, nullptr, IN_SIZE);
+  // The destination comes first, as it does for the syscall.
+  ssize_t size = LIBC_NAMESPACE::sendfile(out_fd, in_fd, nullptr, IN_SIZE);
   ASSERT_EQ(size, IN_SIZE);
   ASSERT_THAT(LIBC_NAMESPACE::close(in_fd), Succeeds(0));
   ASSERT_THAT(LIBC_NAMESPACE::close(out_fd), Succeeds(0));
@@ -60,4 +62,30 @@ TEST_F(LlvmLibcSendfileTest, CreateAndTransfer) {
 
   ASSERT_THAT(LIBC_NAMESPACE::unlink(IN_FILE), Succeeds(0));
   ASSERT_THAT(LIBC_NAMESPACE::unlink(OUT_FILE), Succeeds(0));
+}
+
+TEST_F(LlvmLibcSendfileTest, ReadsFromTheSecondAndWritesToTheFirst) {
+  // Which way round the descriptors go is what this is about, so it is
+  // checked by giving one of them no permission to do what it would need.
+  constexpr const char *IN_FILE = "testdata/sendfile_direction.test";
+  const char IN_DATA[] = "direction";
+  constexpr ssize_t IN_SIZE = ssize_t(sizeof(IN_DATA));
+
+  int fd = LIBC_NAMESPACE::open(IN_FILE, O_CREAT | O_WRONLY, S_IRWXU);
+  ASSERT_GT(fd, 0);
+  ASSERT_EQ(LIBC_NAMESPACE::write(fd, IN_DATA, IN_SIZE), IN_SIZE);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
+
+  int readable = LIBC_NAMESPACE::open(IN_FILE, O_RDONLY);
+  ASSERT_GT(readable, 0);
+
+  // Reading from something opened only for reading and writing to it as well
+  // cannot work, and which error comes back says which way round they went.
+  ASSERT_EQ(LIBC_NAMESPACE::sendfile(readable, readable, nullptr, IN_SIZE),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EBADF);
+  libc_errno = 0;
+
+  ASSERT_THAT(LIBC_NAMESPACE::close(readable), Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::unlink(IN_FILE), Succeeds(0));
 }
