@@ -90,6 +90,7 @@ add_generic_entrypoint_object(
     ../fileno.h
   DEPENDS
     libc.hdr.types.FILE
+    libc.src.errno.errno
     libc.src.__support.File.file
     libc.src.__support.File.platform_file
 )
