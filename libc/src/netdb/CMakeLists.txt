@@ -1,3 +1,5 @@
+add_subdirectory(resolv)
+
 add_entrypoint_object(
   freeaddrinfo
   SRCS
@@ -5,9 +7,9 @@ add_entrypoint_object(
   HDRS
     freeaddrinfo.h
   DEPENDS
+    libc.hdr.func.free
     libc.hdr.types.struct_addrinfo
     libc.src.__support.common
-    libc.src.__support.macros.config
 )
 
 add_entrypoint_object(
@@ -17,12 +19,24 @@ add_entrypoint_object(
   HDRS
     getaddrinfo.h
   DEPENDS
+    .freeaddrinfo
     libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
     libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.include.llvm-libc-macros.netinet_in_macros
     libc.hdr.types.struct_addrinfo
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
     libc.src.__support.common
-    libc.src.__support.macros.config
-    libc.src.errno.errno
+    libc.src.__support.ctype_utils
+    libc.src.__support.libc_errno
+    libc.src.__support.str_to_integer
+    libc.src.netdb.resolv.lookup
+    libc.src.netdb.resolv.services
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
 )
 
 add_entrypoint_object(
