@@ -314,6 +314,12 @@ int LinuxFile::reopen_unlocked(const char *path, const char *mode) {
 }
 
 int get_fileno(File *f) {
+  // A stream over memory has no descriptor behind it, and what follows the
+  // base object there is not one either.
+  if (!f->has_descriptor()) {
+    libc_errno = EBADF;
+    return -1;
+  }
   auto *lf = reinterpret_cast<LinuxFile *>(f);
   return lf->get_fd();
 }
