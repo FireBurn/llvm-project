@@ -9,8 +9,11 @@
 #include "hdr/signal_macros.h"
 #include "src/time/localtime.h"
 #include "test/UnitTest/Test.h"
+#include "test/src/time/TzFixture.h"
 
-TEST(LlvmLibcLocaltime, ValidUnixTimestamp0) {
+class LlvmLibcLocaltime : public TzFixture {};
+
+TEST_F(LlvmLibcLocaltime, ValidUnixTimestamp0) {
   const time_t timer = 0;
   struct tm *result = LIBC_NAMESPACE::localtime(&timer);
 
@@ -25,7 +28,7 @@ TEST(LlvmLibcLocaltime, ValidUnixTimestamp0) {
   ASSERT_EQ(0, result->tm_isdst);
 }
 
-TEST(LlvmLibcLocaltime, NullPtr) {
+TEST_F(LlvmLibcLocaltime, NullPtr) {
   EXPECT_DEATH([] { LIBC_NAMESPACE::localtime(nullptr); }, WITH_SIGNAL(-1));
 }
 
@@ -34,7 +37,7 @@ TEST(LlvmLibcLocaltime, NullPtr) {
 // https://github.com/llvm/llvm-project/pull/110363.
 // This will be resolved a new pull request.
 
-TEST(LlvmLibcLocaltime, ValidUnixTimestamp) {
+TEST_F(LlvmLibcLocaltime, ValidUnixTimestamp) {
   const time_t timer = 1756595338;
   struct tm *result = LIBC_NAMESPACE::localtime(&timer);
 
@@ -49,7 +52,7 @@ TEST(LlvmLibcLocaltime, ValidUnixTimestamp) {
   ASSERT_EQ(0, result->tm_isdst);
 }
 
-TEST(LlvmLibcLocaltime, ValidUnixTimestampNegative) {
+TEST_F(LlvmLibcLocaltime, ValidUnixTimestampNegative) {
   const time_t timer = -1756595338;
   struct tm *result = LIBC_NAMESPACE::localtime(&timer);
 
