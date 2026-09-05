@@ -55,6 +55,12 @@ void run_init_array(const elf::Module &module) {
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
+  // The run path that applies is the one belonging to whatever called, which
+  // is found from where the call is returning to. Taken before anything else,
+  // so nothing stands between this and the caller.
+  const ElfW(Addr) caller =
+      reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
+
   elf::ModuleSet &set = elf::loaded_modules();
   cpp::lock_guard lock(dl::dl_mutex);
 
@@ -84,7 +90,16 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
 
-  auto loaded = elf::find_and_load(path, nullptr, library_path, set.page_size);
+  const elf::Module *caller_module = nullptr;
+  for (size_t i = 0; i < set.count; ++i) {
+    if (set.modules[i].contains(caller)) {
+      caller_module = &set.modules[i];
+      break;
+    }
+  }
+
+  auto loaded =
+      elf::find_and_load(path, caller_module, library_path, set.page_size);
   if (!loaded.has_value()) {
     dl::set_error("cannot open shared object");
     return nullptr;
