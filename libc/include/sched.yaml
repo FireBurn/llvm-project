@@ -18,6 +18,16 @@ types:
 enums: []
 objects: []
 functions:
+  - name: clone
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int (*)(void *)
+      - type: void *
+      - type: int
+      - type: void *
+      - type: ...
   - name: setns
     standards:
       - gnu
