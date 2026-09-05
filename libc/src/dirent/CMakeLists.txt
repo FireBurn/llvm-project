@@ -139,3 +139,17 @@ add_entrypoint_object(
     libc.src.__support.File.platform_dir
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  getdents64
+  SRCS
+    getdents64.cpp
+  HDRS
+    getdents64.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
