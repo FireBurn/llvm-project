@@ -1,0 +1,31 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc ftw.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "nftw_test",
+    srcs = ["nftw_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:ftw",
+        "//libc:hdr_ftw_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:mkdir",
+        "//libc:nftw",
+        "//libc:open",
+        "//libc:remove",
+        "//libc:rmdir",
+        "//libc:strstr",
+        "//libc:types_struct_FTW",
+        "//libc:types_struct_stat",
+        "//libc:unlink",
+    ],
+)
