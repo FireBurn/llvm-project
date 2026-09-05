@@ -514,6 +514,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.stat.fstat
     libc.src.sys.stat.fstatat
     libc.src.sys.stat.futimens
+    libc.src.sys.stat.mkfifo
+    libc.src.sys.stat.mkfifoat
+    libc.src.sys.stat.statx
     libc.src.sys.stat.lstat
     libc.src.sys.stat.mkdir
     libc.src.sys.stat.umask
@@ -1556,6 +1559,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.sigfillset
     libc.src.signal.signal
     libc.src.signal.sigprocmask
+    libc.src.signal.sigtimedwait
+    libc.src.signal.sigwaitinfo
     libc.src.signal.sigsuspend
 
     # spawn.h entrypoints
