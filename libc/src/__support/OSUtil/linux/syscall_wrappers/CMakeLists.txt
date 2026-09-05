@@ -3965,3 +3965,40 @@ add_header_library(
     libc.src.__support.macros.config
     libc.include.sys_syscall
 )
+
+add_header_library(
+  adjtimex
+  HDRS
+    adjtimex.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_timex
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  quotactl
+  HDRS
+    quotactl.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  quotactl_fd
+  HDRS
+    quotactl_fd.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
