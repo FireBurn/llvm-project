@@ -604,6 +604,18 @@ add_macro_header(
 )
 
 add_macro_header(
+  printf_macros
+  HDR
+    printf-macros.h
+)
+
+add_macro_header(
+  sys_reboot_macros
+  HDR
+    sys-reboot-macros.h
+)
+
+add_macro_header(
   sys_fanotify_macros
   HDR
     sys-fanotify-macros.h
