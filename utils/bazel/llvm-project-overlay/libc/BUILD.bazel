@@ -20272,6 +20272,19 @@ libc_function(
 )
 
 libc_function(
+    name = "delete_module",
+    srcs = ["src/sys/module/delete_module.cpp"],
+    hdrs = ["src/sys/module/delete_module.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_delete_module",
+        ":errno",
+    ],
+)
+
+libc_function(
     name = "fanotify_init",
     srcs = ["src/sys/fanotify/fanotify_init.cpp"],
     hdrs = ["src/sys/fanotify/fanotify_init.h"],
@@ -20367,6 +20380,20 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_fspick",
         ":errno",
         ":sys_mount_fspick",
+    ],
+)
+
+libc_function(
+    name = "init_module",
+    srcs = ["src/sys/module/init_module.cpp"],
+    hdrs = ["src/sys/module/init_module.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_init_module",
+        ":errno",
+        ":types_size_t",
     ],
 )
 
@@ -26472,6 +26499,28 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_FILE",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_delete_module",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/delete_module.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_init_module",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/init_module.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
