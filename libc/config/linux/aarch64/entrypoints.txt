@@ -270,6 +270,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.dprintf
     libc.src.stdio.fprintf
     libc.src.stdio.fscanf
+    libc.src.stdio.renameat2
     libc.src.stdio.vfscanf
     libc.src.stdio.printf
     libc.src.stdio.remove
