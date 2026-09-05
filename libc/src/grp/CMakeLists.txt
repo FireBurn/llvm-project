@@ -165,3 +165,31 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.string.string_utils
 )
+
+add_header_library(
+  grp_r_utils
+  HDRS
+    grp_r_utils.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.span
+    libc.src.__support.flat_file_db
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  getgrouplist
+  SRCS
+    getgrouplist.cpp
+  HDRS
+    getgrouplist.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.gid_t
+    libc.hdr.types.struct_group
+)

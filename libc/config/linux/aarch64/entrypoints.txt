@@ -57,6 +57,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     # grp.h entrypoints
     libc.src.grp.endgrent
     libc.src.grp.getgrent
+    libc.src.grp.getgrouplist
     libc.src.grp.getgrgid
     libc.src.grp.getgrgid_r
     libc.src.grp.getgrnam
@@ -582,6 +583,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # termios.h entrypoints
     libc.src.termios.cfgetispeed
+    libc.src.termios.cfmakeraw
     libc.src.termios.cfgetospeed
     libc.src.termios.cfsetispeed
     libc.src.termios.cfsetospeed
@@ -602,6 +604,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.brk
     libc.src.unistd.chdir
     libc.src.unistd.chown
+    libc.src.unistd.copy_file_range
     libc.src.unistd.chroot
     libc.src.unistd.close
     libc.src.unistd.dup
@@ -622,6 +625,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.ftruncate
     libc.src.unistd.get_current_dir_name
     libc.src.unistd.getcwd
+    libc.src.unistd.getdtablesize
     libc.src.unistd.getegid
     libc.src.unistd.getentropy
     libc.src.unistd.geteuid
@@ -657,6 +661,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.rmdir
     libc.src.unistd.sbrk
     libc.src.unistd.setegid
+    libc.src.unistd.sethostname
     libc.src.unistd.seteuid
     libc.src.unistd.setgid
     libc.src.unistd.setpgid
@@ -709,6 +714,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/uio.h entrypoints
     libc.src.sys.uio.writev
+    libc.src.sys.uio.preadv
+    libc.src.sys.uio.pwritev
     libc.src.sys.uio.readv
 
     # sys/time.h entrypoints
@@ -1504,6 +1511,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fputc_unlocked
     libc.src.stdio.fputs
     libc.src.stdio.fputs_unlocked
+    libc.src.stdio.setlinebuf
     libc.src.stdio.fread
     libc.src.stdio.fread_unlocked
     libc.src.stdio.fseek
@@ -1562,6 +1570,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.signal
     libc.src.signal.sigprocmask
     libc.src.signal.sigtimedwait
+    libc.src.signal.sigisemptyset
+    libc.src.signal.sigqueue
     libc.src.signal.sigwaitinfo
     libc.src.signal.sigsuspend
 
