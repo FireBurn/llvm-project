@@ -29,6 +29,7 @@ macros:
   - macro_name: SIGEV_THREAD_ID
     macro_header: signal-macros.h
 types:
+  - type_name: struct_timespec
   - type_name: pid_t
   - type_name: sig_atomic_t
   - type_name: sig_t
@@ -46,6 +47,21 @@ types:
 enums: []
 objects: []
 functions:
+  - name: sigtimedwait
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const sigset_t *__restrict
+      - type: siginfo_t *__restrict
+      - type: const struct timespec *__restrict
+  - name: sigwaitinfo
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const sigset_t *__restrict
+      - type: siginfo_t *__restrict
   - name: sigismember
     standards:
       - posix
