@@ -14,13 +14,15 @@
 #include "src/time/asctime_utils.h"
 #include "src/time/time_constants.h"
 #include "src/time/time_utils.h"
+#include "src/time/tz/timezone.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, ctime, (const time_t *t_ptr)) {
   LIBC_CRASH_ON_NULLPTR(t_ptr);
 
-  auto lt_res = time_utils::localtime(t_ptr);
+  static struct tm tm_storage;
+  auto lt_res = tz::to_local(*t_ptr, &tm_storage);
   if (!lt_res) {
     libc_errno = lt_res.error();
     return nullptr;
