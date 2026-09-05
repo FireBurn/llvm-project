@@ -193,6 +193,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
     libc_header_info("utime"),
+    libc_header_info("utmpx"),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -26813,6 +26814,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_utmpx",
+    hdrs = ["include/llvm-libc-types/struct_utmpx.h"],
+)
+
+libc_support_library(
+    name = "types_struct_utmpx",
+    hdrs = ["hdr/types/struct_utmpx.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_utmpx"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_winsize",
     hdrs = ["include/llvm-libc-types/struct_winsize.h"],
 )
@@ -30679,6 +30694,126 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "utmpx_utmpx_db",
+    srcs = ["src/utmpx/utmpx_db.cpp"],
+    hdrs = ["src/utmpx/utmpx_db.h"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":hdr_fcntl_macros",
+        ":hdr_stdio_macros",
+        ":types_struct_utmpx",
+    ],
+)
+
+libc_function(
+    name = "setutxent",
+    srcs = ["src/utmpx/setutxent.cpp"],
+    hdrs = ["src/utmpx/setutxent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "endutxent",
+    srcs = ["src/utmpx/endutxent.cpp"],
+    hdrs = ["src/utmpx/endutxent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "getutxent",
+    srcs = ["src/utmpx/getutxent.cpp"],
+    hdrs = ["src/utmpx/getutxent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmpx",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "getutxid",
+    srcs = ["src/utmpx/getutxid.cpp"],
+    hdrs = ["src/utmpx/getutxid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_utmpx_macros",
+        ":types_struct_utmpx",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "getutxline",
+    srcs = ["src/utmpx/getutxline.cpp"],
+    hdrs = ["src/utmpx/getutxline.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_utmpx_macros",
+        ":types_struct_utmpx",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "pututxline",
+    srcs = ["src/utmpx/pututxline.cpp"],
+    hdrs = ["src/utmpx/pututxline.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":errno",
+        ":getutxid",
+        ":hdr_stdio_macros",
+        ":types_struct_utmpx",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "utmpxname",
+    srcs = ["src/utmpx/utmpxname.cpp"],
+    hdrs = ["src/utmpx/utmpxname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "updwtmpx",
+    srcs = ["src/utmpx/updwtmpx.cpp"],
+    hdrs = ["src/utmpx/updwtmpx.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":hdr_fcntl_macros",
+        ":types_struct_utmpx",
+    ],
+)
+
 libc_function(
     name = "mbsinit",
     srcs = ["src/wchar/mbsinit.cpp"],
@@ -31295,6 +31430,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_printf_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_utmpx_macros",
+    hdrs = ["include/llvm-libc-macros/utmpx-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_utmpx_macros",
+    hdrs = ["hdr/utmpx_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_utmpx_macros",
         ],
         "//conditions:default": [],
     }),
