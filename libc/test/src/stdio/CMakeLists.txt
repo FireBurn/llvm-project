@@ -143,6 +143,24 @@ add_libc_test(
 )
 
 add_libc_test(
+  filelock_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    filelock_test.cpp
+  DEPENDS
+    libc.include.stdio
+    libc.src.stdio.fclose
+    libc.src.stdio.fgetc
+    libc.src.stdio.flockfile
+    libc.src.stdio.fopen
+    libc.src.stdio.fread
+    libc.src.stdio.ftrylockfile
+    libc.src.stdio.funlockfile
+    libc.src.stdio.fwrite
+)
+
+add_libc_test(
   fmemopen_test
   SUITE
     libc_stdio_unittests
