@@ -21,6 +21,16 @@ libc_test(
 )
 
 libc_test(
+    name = "struct_dirent_test",
+    srcs = ["struct_dirent_test.cpp"],
+    deps = [
+        "//libc:hdr_limits_macros",
+        "//libc:strlen",
+        "//libc:types_struct_dirent",
+    ],
+)
+
+libc_test(
     name = "rewinddir_test",
     srcs = ["rewinddir_test.cpp"],
     deps = [
