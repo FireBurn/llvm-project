@@ -233,6 +233,38 @@ functions:
       - type: void **
       - type: size_t
       - type: size_t
+  - name: grantpt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+  - name: posix_openpt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+  - name: ptsname
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: int
+  - name: ptsname_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: char *
+      - type: size_t
+  - name: unlockpt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
   - name: putenv
     standards:
       - posix
