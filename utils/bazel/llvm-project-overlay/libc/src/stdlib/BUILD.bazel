@@ -575,6 +575,18 @@ libc_function(
 )
 
 libc_function(
+    name = "mb_cur_max",
+    srcs = ["mb_cur_max.cpp"],
+    hdrs = ["mb_cur_max.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
     name = "mkdtemp",
     srcs = ["linux/mkdtemp.cpp"],
     hdrs = ["mkdtemp.h"],
@@ -621,6 +633,20 @@ libc_function(
 )
 
 libc_function(
+    name = "setenv",
+    srcs = ["linux/setenv.cpp"],
+    hdrs = ["setenv.h"],
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "setstate",
     srcs = ["setstate.cpp"],
     hdrs = ["setstate.h"],
@@ -644,6 +670,20 @@ libc_function(
         "//libc/hdr/types:size_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "unsetenv",
+    srcs = ["linux/unsetenv.cpp"],
+    hdrs = ["unsetenv.h"],
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 

@@ -24,3 +24,17 @@ libc_test(
         "//libc/src/locale:uselocale",
     ],
 )
+
+libc_test(
+    name = "setlocale_test",
+    srcs = ["setlocale_test.cpp"],
+    deps = [
+        "//libc/hdr:langinfo_macros",
+        "//libc/hdr:locale_macros",
+        "//libc/src/langinfo:nl_langinfo",
+        "//libc/src/locale:setlocale",
+        "//libc/src/stdlib:mb_cur_max",
+        "//libc/src/stdlib:setenv",
+        "//libc/src/stdlib:unsetenv",
+    ],
+)

@@ -21,6 +21,7 @@ libc_support_library(
     hdrs = ["locale.h"],
     deps = [
         ":locale_data",
+        "//libc/config:app_h",
         "//libc/hdr/types:locale_t",
         "//libc/hdr:locale_macros",
         "//libc/src/__support/CPP:string_view",
@@ -28,7 +29,7 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/unistd:environ",
+        "//libc/src/stdlib:mb_cur_max",
     ],
 )
 
