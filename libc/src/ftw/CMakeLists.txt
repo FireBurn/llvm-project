@@ -1,0 +1,52 @@
+add_header_library(
+  ftw_walk
+  HDRS
+    ftw_walk.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.func.realloc
+    libc.hdr.ftw_macros
+    libc.hdr.limits_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.DIR
+    libc.hdr.types.__ftw_func_t
+    libc.hdr.types.__nftw_func_t
+    libc.hdr.types.struct_FTW
+    libc.hdr.types.struct_dirent
+    libc.hdr.types.struct_stat
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+    libc.src.__support.File.dir
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.hdr.fcntl_macros
+    libc.src.__support.error_or
+    libc.src.__support.File.platform_dir
+)
+
+add_entrypoint_object(
+  ftw
+  SRCS
+    ftw.cpp
+  HDRS
+    ftw.h
+  DEPENDS
+    libc.hdr.types.__ftw_func_t
+    libc.src.__support.common
+    libc.src.ftw.ftw_walk
+)
+
+add_entrypoint_object(
+  nftw
+  SRCS
+    nftw.cpp
+  HDRS
+    nftw.h
+  DEPENDS
+    libc.hdr.types.__nftw_func_t
+    libc.src.__support.common
+    libc.src.ftw.ftw_walk
+)
