@@ -248,6 +248,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  printf
+  ../libc/include/printf.yaml
+  printf.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.printf_macros
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   syslog
   ../libc/include/syslog.yaml
   syslog.h
