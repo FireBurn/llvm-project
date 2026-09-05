@@ -1,4 +1,15 @@
 add_header_library(
+  run_path
+  HDRS
+    run_path.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.readlink
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_header_library(
   thread_pointer
   HDRS
     thread_pointer.h
