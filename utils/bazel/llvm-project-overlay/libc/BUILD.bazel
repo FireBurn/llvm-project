@@ -21624,6 +21624,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_run_path",
+    hdrs = ["src/__support/elf/run_path.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_readlink",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "dlfcn_dl_internal",
     srcs = ["src/dlfcn/dl_internal.cpp"],
     hdrs = ["src/dlfcn/dl_internal.h"],
