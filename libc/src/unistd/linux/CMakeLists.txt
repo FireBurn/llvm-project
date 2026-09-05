@@ -1206,6 +1206,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  sethostname
+  SRCS
+    sethostname.cpp
+  HDRS
+    ../sethostname.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   getdtablesize
   SRCS
     getdtablesize.cpp
