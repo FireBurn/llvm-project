@@ -338,6 +338,16 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.renameat
     libc.src.stdio.renameat2
 
+    # utmpx.h entrypoints
+    libc.src.utmpx.endutxent
+    libc.src.utmpx.getutxent
+    libc.src.utmpx.getutxid
+    libc.src.utmpx.getutxline
+    libc.src.utmpx.pututxline
+    libc.src.utmpx.setutxent
+    libc.src.utmpx.updwtmpx
+    libc.src.utmpx.utmpxname
+
     # printf.h entrypoints
     libc.src.printf.parse_printf_format
 
