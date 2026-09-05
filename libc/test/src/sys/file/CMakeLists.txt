@@ -1,3 +1,21 @@
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
-  add_subdirectory(${LIBC_TARGET_OS})
-endif()
+add_custom_target(libc_sys_file_unittests)
+
+add_libc_test(
+  flock_test
+  SUITE
+    libc_sys_file_unittests
+  SRCS
+    flock_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_file_macros
+    libc.hdr.sys_stat_macros
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.stdio.remove
+    libc.src.sys.file.flock
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
