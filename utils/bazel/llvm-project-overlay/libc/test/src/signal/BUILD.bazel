@@ -31,3 +31,48 @@ libc_test(
         "//libc:types_struct_timespec",
     ],
 )
+
+libc_test(
+    name = "sigqueue_basic_test",
+    srcs = ["sigqueue_basic_test.cpp"],
+    deps = [
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:sigisemptyset",
+        "//libc:signal_sigqueue",
+        "//libc:sigprocmask",
+        "//libc:sigqueue",
+        "//libc:sigwaitinfo",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset_t",
+    ],
+)
+
+libc_test(
+    name = "sigqueue_test",
+    srcs = ["sigqueue_test.cpp"],
+    deps = [
+        "//libc:getpgrp",
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:killpg",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:sigisemptyset",
+        "//libc:sigismember",
+        "//libc:signal_sigpending",
+        "//libc:signal_sigqueue",
+        "//libc:sigpending",
+        "//libc:sigprocmask",
+        "//libc:sigqueue",
+        "//libc:sigtimedwait",
+        "//libc:sigwaitinfo",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_timespec",
+    ],
+)
