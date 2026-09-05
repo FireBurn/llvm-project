@@ -2008,6 +2008,8 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.netdb.gai_strerror
     libc.src.netdb.getnameinfo
       libc.src.netdb.getaddrinfo
+      libc.src.netdb.gethostbyname
+      libc.src.netdb.gethostbyname2
 
       # regex.h entrypoints
       libc.src.regex.regcomp
