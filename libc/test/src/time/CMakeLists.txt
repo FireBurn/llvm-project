@@ -5,10 +5,14 @@ add_header_library(
   HDRS
     TmHelper.h
     TmMatcher.h
+    TzFixture.h
   DEPENDS
     libc.hdr.types.struct_tm
     libc.src.__support.macros.config
+    libc.src.stdlib.setenv
     libc.src.time.time_constants
+    libc.src.time.tzset
+    libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.LibcTest
 )
 
@@ -316,12 +320,16 @@ add_libc_test(
 )
 
 add_libc_test(
-  tzset_test
+  clock_nanosleep_test
   SUITE
     libc_time_unittests
   SRCS
-    tzset_test.cpp
+    clock_nanosleep_test.cpp
   DEPENDS
-    libc.src.time.tz_variables
-    libc.src.time.tzset
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.src.time.clock_gettime
+    libc.src.time.clock_nanosleep
+    libc.test.UnitTest.ErrnoCheckingTest
 )

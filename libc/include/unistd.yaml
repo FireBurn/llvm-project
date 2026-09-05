@@ -410,6 +410,12 @@ functions:
     arguments:
       - type: int
       - type: off_t
+  - name: get_current_dir_name
+    standards:
+      - gnu
+    return_type: char *
+    arguments:
+      - type: void
   - name: getcwd
     standards:
       - posix
