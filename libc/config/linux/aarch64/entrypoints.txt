@@ -84,6 +84,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sched.sched_yield
     libc.src.sched.unshare
 
+    # The general dynamic thread local model
+    libc.src.tls.__tls_get_addr
+
     # string.h entrypoints
     libc.src.string.memccpy
     libc.src.string.memchr
