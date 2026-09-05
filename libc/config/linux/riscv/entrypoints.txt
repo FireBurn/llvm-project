@@ -1784,6 +1784,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.sigtimedwait
     libc.src.signal.sigisemptyset
     libc.src.signal.sigqueue
+    libc.src.signal.sigwait
     libc.src.signal.sigwaitinfo
     libc.src.signal.sigsuspend
 
