@@ -858,6 +858,21 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "sethostname",
+    srcs = ["linux/sethostname.cpp"],
+    hdrs = ["sethostname.h"],
+    deps = [
+        ":unistd_sethostname",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sethostname",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "unistd_get_current_dir_name",
     hdrs = ["get_current_dir_name.h"],
@@ -913,6 +928,15 @@ libc_support_library(
     name = "unistd_getdtablesize",
     hdrs = ["getdtablesize.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_sethostname",
+    hdrs = ["sethostname.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
         "//libc/src/__support/macros:config",
     ],
 )
