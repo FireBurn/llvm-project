@@ -1,0 +1,138 @@
+add_entrypoint_object(
+  mq_open
+  SRCS
+    mq_open.cpp
+  HDRS
+    mq_open.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.mode_t
+    libc.hdr.types.mqd_t
+    libc.hdr.types.struct_mq_attr
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_close
+  SRCS
+    mq_close.cpp
+  HDRS
+    mq_close.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_unlink
+  SRCS
+    mq_unlink.cpp
+  HDRS
+    mq_unlink.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_send
+  SRCS
+    mq_send.cpp
+  HDRS
+    mq_send.h
+  DEPENDS
+    .mq_timedsend
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+)
+
+add_entrypoint_object(
+  mq_timedsend
+  SRCS
+    mq_timedsend.cpp
+  HDRS
+    mq_timedsend.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_receive
+  SRCS
+    mq_receive.cpp
+  HDRS
+    mq_receive.h
+  DEPENDS
+    .mq_timedreceive
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+)
+
+add_entrypoint_object(
+  mq_timedreceive
+  SRCS
+    mq_timedreceive.cpp
+  HDRS
+    mq_timedreceive.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_getattr
+  SRCS
+    mq_getattr.cpp
+  HDRS
+    mq_getattr.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.hdr.types.struct_mq_attr
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_setattr
+  SRCS
+    mq_setattr.cpp
+  HDRS
+    mq_setattr.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.hdr.types.struct_mq_attr
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mq_notify
+  SRCS
+    mq_notify.cpp
+  HDRS
+    mq_notify.h
+  DEPENDS
+    libc.hdr.types.mqd_t
+    libc.hdr.types.struct_sigevent
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
