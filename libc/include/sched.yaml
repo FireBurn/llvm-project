@@ -29,6 +29,7 @@ functions:
       - type: int
       - type: void *
       - type: '...'
+      - type: ...
   - name: setns
     standards:
       - gnu

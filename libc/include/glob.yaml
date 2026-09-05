@@ -39,6 +39,8 @@ macros:
   - macro_name: GLOB_NOSYS
     macro_header: glob-macros.h
 types:
+  - type_name: struct_stat
+  - type_name: struct_dirent
   - type_name: glob_t
   - type_name: size_t
 enums: []
