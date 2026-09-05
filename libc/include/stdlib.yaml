@@ -222,10 +222,22 @@ functions:
       - type: char *
   - name: mkostemp
     standards:
+<<<<<<< HEAD
       - posix
+=======
+      - gnu
+>>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)
     return_type: int
     arguments:
       - type: char *
+      - type: int
+  - name: mkostemps
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char *
+      - type: int
       - type: int
   - name: mkstemp
     standards:
@@ -233,6 +245,13 @@ functions:
     return_type: int
     arguments:
       - type: char *
+  - name: mkstemps
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: char *
+      - type: int
   - name: posix_memalign
     standards:
       - posix
