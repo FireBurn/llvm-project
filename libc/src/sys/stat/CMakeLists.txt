@@ -92,3 +92,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.fstatat
 )
+
+add_entrypoint_object(
+  futimens
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.futimens
+)

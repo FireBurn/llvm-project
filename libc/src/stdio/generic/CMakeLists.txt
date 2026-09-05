@@ -268,6 +268,35 @@ add_generic_entrypoint_object(
 )
 
 add_generic_entrypoint_object(
+  fputs_unlocked
+  SRCS
+    fputs_unlocked.cpp
+  HDRS
+    ../fputs_unlocked.h
+  DEPENDS
+    libc.src.errno.errno
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.__support.CPP.string_view
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_generic_entrypoint_object(
+  fputc_unlocked
+  SRCS
+    fputc_unlocked.cpp
+  HDRS
+    ../fputc_unlocked.h
+  DEPENDS
+    libc.src.errno.errno
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_generic_entrypoint_object(
   puts
   SRCS
     puts.cpp
