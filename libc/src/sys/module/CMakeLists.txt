@@ -1,0 +1,24 @@
+add_entrypoint_object(
+  init_module
+  SRCS
+    init_module.cpp
+  HDRS
+    init_module.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  delete_module
+  SRCS
+    delete_module.cpp
+  HDRS
+    delete_module.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
