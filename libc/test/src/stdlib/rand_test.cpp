@@ -49,3 +49,44 @@ TEST(LlvmLibcRandTest, SetSeed) {
     EXPECT_EQ(results[i], val);
   }
 }
+
+TEST(LlvmLibcRandTest, ZeroIsAUsableSeed) {
+  // The generator has no way out of a state of all zero bits, so a seed of
+  // zero must not be used as the state directly. Zero is what people reach
+  // for when they want a run they can repeat, so this matters.
+  LIBC_NAMESPACE::srand(0);
+  int nonzero = 0;
+  int previous = LIBC_NAMESPACE::rand();
+  int distinct = 0;
+  for (int i = 0; i < 64; ++i) {
+    const int value = LIBC_NAMESPACE::rand();
+    if (value != 0)
+      ++nonzero;
+    if (value != previous)
+      ++distinct;
+    previous = value;
+  }
+  EXPECT_GT(nonzero, 60);
+  EXPECT_GT(distinct, 60);
+}
+
+TEST(LlvmLibcRandTest, EverySeedGivesItsOwnRun) {
+  LIBC_NAMESPACE::srand(0);
+  const int from_zero = LIBC_NAMESPACE::rand();
+  LIBC_NAMESPACE::srand(1);
+  const int from_one = LIBC_NAMESPACE::rand();
+  LIBC_NAMESPACE::srand(2);
+  const int from_two = LIBC_NAMESPACE::rand();
+  EXPECT_NE(from_zero, from_one);
+  EXPECT_NE(from_one, from_two);
+  EXPECT_NE(from_zero, from_two);
+}
+
+TEST(LlvmLibcRandTest, TheSameSeedGivesTheSameRun) {
+  LIBC_NAMESPACE::srand(12345);
+  const int first = LIBC_NAMESPACE::rand();
+  const int second = LIBC_NAMESPACE::rand();
+  LIBC_NAMESPACE::srand(12345);
+  EXPECT_EQ(LIBC_NAMESPACE::rand(), first);
+  EXPECT_EQ(LIBC_NAMESPACE::rand(), second);
+}
