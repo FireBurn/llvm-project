@@ -15,14 +15,19 @@
 #include "hdr/types/struct_tm.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/time/strptime_core/parser.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, strptime,
-                   ([[maybe_unused]] const char *__restrict buf,
-                    [[maybe_unused]] const char *__restrict format,
-                    [[maybe_unused]] const struct tm *__restrict tm)) {
-  return nullptr;
+                   (const char *__restrict buf, const char *__restrict format,
+                    struct tm *__restrict tm)) {
+  strptime_core::ParseState state;
+  const char *end = strptime_core::parse(buf, format, tm, state);
+  if (end == nullptr)
+    return nullptr;
+  strptime_core::complete(tm, state);
+  return const_cast<char *>(end);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
