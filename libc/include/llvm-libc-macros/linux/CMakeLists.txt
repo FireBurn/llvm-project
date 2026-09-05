@@ -197,6 +197,12 @@ add_header(
 )
 
 add_header(
+  sys_reboot_macros
+  HDR
+    sys-reboot-macros.h
+)
+
+add_header(
   sys_inotify_macros
   HDR
     sys-inotify-macros.h

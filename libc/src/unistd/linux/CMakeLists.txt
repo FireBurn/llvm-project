@@ -1048,3 +1048,26 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  sync
+  SRCS
+    sync.cpp
+  HDRS
+    ../sync.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
+
+add_entrypoint_object(
+  syncfs
+  SRCS
+    syncfs.cpp
+  HDRS
+    ../syncfs.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

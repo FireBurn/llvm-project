@@ -48,3 +48,31 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  fallocate
+  SRCS
+    fallocate.cpp
+  HDRS
+    ../fallocate.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  splice
+  SRCS
+    splice.cpp
+  HDRS
+    ../splice.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

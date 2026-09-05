@@ -714,3 +714,17 @@ add_entrypoint_object(
     libc.hdr.limits_macros
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  sync
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sync
+)
+
+add_entrypoint_object(
+  syncfs
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.syncfs
+)
