@@ -367,6 +367,12 @@
 
 /// The POSIX minimum for the utilities, which is a separate set from the
 /// values above.
+// The length of a line a text utility has to be able to handle. POSIX gives
+// a floor of 2048 and lets an implementation raise it; Linux does not.
+#ifndef LINE_MAX
+#define LINE_MAX 2048
+#endif
+
 #ifndef _POSIX2_LINE_MAX
 #define _POSIX2_LINE_MAX 2048
 #endif
