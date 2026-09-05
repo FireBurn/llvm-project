@@ -99,3 +99,24 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.futimens
 )
+
+add_entrypoint_object(
+  statx
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.statx
+)
+
+add_entrypoint_object(
+  mkfifoat
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mkfifoat
+)
+
+add_entrypoint_object(
+  mkfifo
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mkfifo
+)

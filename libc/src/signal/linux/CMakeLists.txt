@@ -203,3 +203,30 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.signal.kill
 )
+
+add_entrypoint_object(
+  sigtimedwait
+  SRCS
+    sigtimedwait.cpp
+  HDRS
+    ../sigtimedwait.h
+  DEPENDS
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  sigwaitinfo
+  SRCS
+    sigwaitinfo.cpp
+  HDRS
+    ../sigwaitinfo.h
+  DEPENDS
+    .sigtimedwait
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+)

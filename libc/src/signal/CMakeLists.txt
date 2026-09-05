@@ -99,3 +99,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.killpg
 )
+
+add_entrypoint_object(
+  sigtimedwait
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigtimedwait
+)
+
+add_entrypoint_object(
+  sigwaitinfo
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigwaitinfo
+)
