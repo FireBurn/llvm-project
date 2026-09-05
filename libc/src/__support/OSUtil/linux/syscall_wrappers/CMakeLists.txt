@@ -1954,3 +1954,29 @@ add_header_library(
     libc.hdr.types.struct_timespec
     libc.include.sys_syscall
 )
+
+add_header_library(
+  getuid
+  HDRS
+    getuid.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.hdr.types.uid_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  rt_sigqueueinfo
+  HDRS
+    rt_sigqueueinfo.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.pid_t
+    libc.hdr.types.siginfo_t
+    libc.include.sys_syscall
+)
