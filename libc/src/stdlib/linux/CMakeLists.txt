@@ -128,6 +128,77 @@ add_entrypoint_object(
     libc.src.signal.linux.signal_utils
 )
 
+add_header_library(
+  pty_utils
+  HDRS
+    pty_utils.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_ioctl_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.error_or
+    libc.src.__support.integer_to_string
+    libc.src.__support.macros.attributes
+)
+
+add_entrypoint_object(
+  posix_openpt
+  SRCS
+    posix_openpt.cpp
+  HDRS
+    ../posix_openpt.h
+  DEPENDS
+    .pty_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  grantpt
+  SRCS
+    grantpt.cpp
+  HDRS
+    ../grantpt.h
+  DEPENDS
+    .pty_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  unlockpt
+  SRCS
+    unlockpt.cpp
+  HDRS
+    ../unlockpt.h
+  DEPENDS
+    .pty_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  ptsname_r
+  SRCS
+    ptsname_r.cpp
+  HDRS
+    ../ptsname_r.h
+  DEPENDS
+    .pty_utils
+    libc.hdr.types.size_t
+)
+
+add_entrypoint_object(
+  ptsname
+  SRCS
+    ptsname.cpp
+  HDRS
+    ../ptsname.h
+  DEPENDS
+    .pty_utils
+    libc.src.errno.errno
+)
+
 add_entrypoint_object(
   getloadavg
   SRCS
