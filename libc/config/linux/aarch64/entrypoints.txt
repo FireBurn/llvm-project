@@ -354,6 +354,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.mqueue.mq_timedsend
     libc.src.mqueue.mq_unlink
 
+    # netdb.h entrypoints
+    libc.src.netdb.__h_errno_location
+
     # utmpx.h entrypoints
     libc.src.utmpx.endutxent
     libc.src.utmpx.getutxent
