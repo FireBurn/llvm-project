@@ -429,6 +429,8 @@ add_macro_header(
   sys_wait_macros
   HDR
     sys-wait-macros.h
+  DEPENDS
+    .signal_macros
 )
 
 add_macro_header(
