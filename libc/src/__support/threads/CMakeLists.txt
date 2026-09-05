@@ -1,4 +1,15 @@
 add_header_library(
+  cancel
+  HDRS
+    cancel.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.__support.threads.thread
+)
+
+add_header_library(
   mutex_common
   HDRS
     mutex_common.h
