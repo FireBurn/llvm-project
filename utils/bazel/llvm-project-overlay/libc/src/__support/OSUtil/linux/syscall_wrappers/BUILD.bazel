@@ -2078,6 +2078,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "prlimit64",
+    hdrs = ["prlimit64.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:struct_rlimit",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigsuspend",
     hdrs = ["rt_sigsuspend.h"],
     deps = [

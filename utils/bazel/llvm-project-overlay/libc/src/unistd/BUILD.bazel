@@ -754,6 +754,21 @@ libc_function(
 )
 
 libc_function(
+    name = "getdtablesize",
+    srcs = ["linux/getdtablesize.cpp"],
+    hdrs = ["getdtablesize.h"],
+    deps = [
+        ":unistd_getdtablesize",
+        "//libc/hdr/types:struct_rlimit",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_resource_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit64",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getopt",
     srcs = ["getopt.cpp"],
     hdrs = ["getopt.h"],
@@ -890,6 +905,14 @@ libc_support_library(
     hdrs = ["linux/brk_utils.h"],
     deps = [
         "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_getdtablesize",
+    hdrs = ["getdtablesize.h"],
+    deps = [
         "//libc/src/__support/macros:config",
     ],
 )
