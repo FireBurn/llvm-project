@@ -1026,3 +1026,38 @@ add_entrypoint_object(
     libc.hdr.errno_macros
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  posix_openpt
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.posix_openpt
+)
+
+add_entrypoint_object(
+  grantpt
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.grantpt
+)
+
+add_entrypoint_object(
+  unlockpt
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.unlockpt
+)
+
+add_entrypoint_object(
+  ptsname_r
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.ptsname_r
+)
+
+add_entrypoint_object(
+  ptsname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.ptsname
+)
