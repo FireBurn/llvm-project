@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_support_library")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -37,5 +37,21 @@ libc_support_library(
         "//libc/src/__support:pwd_flat_file_db",
         "//libc/src/__support:str_to_integer",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "putpwent",
+    srcs = ["putpwent.cpp"],
+    hdrs = ["putpwent.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+        "//libc/src/stdio:fprintf",
     ],
 )
