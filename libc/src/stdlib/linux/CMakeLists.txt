@@ -104,3 +104,76 @@ add_entrypoint_object(
     libc.src.signal.linux.signal_utils
     libc.src.unistd.environ
 )
+
+add_header_library(
+  pty_utils
+  HDRS
+    pty_utils.h
+  DEPENDS
+    libc.hdr.sys_ioctl_macros
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.macros.attributes
+)
+
+add_entrypoint_object(
+  posix_openpt
+  SRCS
+    posix_openpt.cpp
+  HDRS
+    ../posix_openpt.h
+  DEPENDS
+    .pty_utils
+    libc.hdr.fcntl_macros
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  grantpt
+  SRCS
+    grantpt.cpp
+  HDRS
+    ../grantpt.h
+  DEPENDS
+    .pty_utils
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  unlockpt
+  SRCS
+    unlockpt.cpp
+  HDRS
+    ../unlockpt.h
+  DEPENDS
+    libc.hdr.sys_ioctl_macros
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  ptsname_r
+  SRCS
+    ptsname_r.cpp
+  HDRS
+    ../ptsname_r.h
+  DEPENDS
+    .pty_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.integer_to_string
+)
+
+add_entrypoint_object(
+  ptsname
+  SRCS
+    ptsname.cpp
+  HDRS
+    ../ptsname.h
+  DEPENDS
+    .pty_utils
+    .ptsname_r
+    libc.src.errno.errno
+)
