@@ -88,6 +88,7 @@ add_header_library(
     vdso_sym.h
   DEPENDS
     libc.src.__support.common
+    libc.hdr.types.cpu_set_t
 )
 
 add_object_library(
