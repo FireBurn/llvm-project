@@ -1,0 +1,27 @@
+add_custom_target(libc_compat_unittests)
+
+add_libc_test(
+  compat_test
+  SUITE
+    libc_compat_unittests
+  SRCS
+    compat_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.libc_errno
+    libc.src.compat.__errno_location
+    libc.src.compat.__xpg_strerror_r
+    libc.src.compat.lfs64
+    libc.src.compat.syscall
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.stdio.fclose
+    libc.src.stdio.fputs
+    libc.src.string.strcmp
+    libc.src.unistd.close
+    libc.src.unistd.getpid
+    libc.src.unistd.write
+)
