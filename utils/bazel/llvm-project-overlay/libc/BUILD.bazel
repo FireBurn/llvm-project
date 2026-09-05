@@ -16072,7 +16072,10 @@ libc_support_library(
     hdrs = ["src/stdio/scanf_core/scanf_main.h"],
     deps = [
         ":__support_arg_list",
+        ":__support_libc_errno",
         ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
         ":scanf_config",
         ":scanf_converter",
         ":scanf_core_structs",

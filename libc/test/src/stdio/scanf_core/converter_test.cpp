@@ -213,9 +213,11 @@ TEST(LlvmLibcScanfConverterTest, CharsConv) {
   ASSERT_EQ(reader.chars_read(), size_t(27));
   ASSERT_EQ(result_view, LIBC_NAMESPACE::cpp::string_view(" MNOpqr&", 8));
 
-  //%c will stop on a null byte though.
+  //%c takes exactly as many characters as its width says, and the null byte
+  // ends the input before then, so this reports that the input ran out. What
+  // was there is still written.
   ASSERT_EQ(LIBC_NAMESPACE::scanf_core::convert(&reader, conv),
-            static_cast<int>(LIBC_NAMESPACE::scanf_core::READ_OK));
+            static_cast<int>(LIBC_NAMESPACE::scanf_core::INPUT_FAILURE));
   ASSERT_EQ(reader.chars_read(), size_t(29));
   ASSERT_EQ(LIBC_NAMESPACE::cpp::string_view(result, 2),
             LIBC_NAMESPACE::cpp::string_view("*(", 2));
