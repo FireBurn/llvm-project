@@ -1052,3 +1052,4 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.ptsname
 )
+
