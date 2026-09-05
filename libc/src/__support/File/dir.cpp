@@ -52,7 +52,12 @@ ErrorOr<struct dirent *> Dir::read() {
 
   cpp::span<uint8_t> buf_span(buffer, BUFSIZE);
 
-  if (fillsize - readptr < sizeof(struct dirent))
+  // Only the part before the name is a fixed size. An entry's name is as
+  // long as it needs to be and no longer, so a record is almost always
+  // shorter than the type, and what has to be there to read one is the part
+  // up to the name plus at least the byte that ends it.
+  constexpr size_t HEADER_SIZE = __builtin_offsetof(struct dirent, d_name);
+  if (fillsize - readptr < HEADER_SIZE + 1)
     return Error(EIO);
 
   struct dirent *d =
