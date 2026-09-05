@@ -1556,6 +1556,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_utmpx
+  HDRS
+    struct_utmpx.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_utmpx
+)
+
+add_proxy_header_library(
   struct_statx
   HDRS
     struct_statx.h
