@@ -1,0 +1,11 @@
+add_entrypoint_object(
+  reboot
+  SRCS
+    reboot.cpp
+  HDRS
+    reboot.h
+  DEPENDS
+    libc.hdr.sys_reboot_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.reboot
+    libc.src.errno.errno
+)
