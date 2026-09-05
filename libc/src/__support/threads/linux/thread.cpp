@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "src/__support/elf/dynamic_blocks.h"
 #include "src/__support/threads/cancel.h"
 #include "src/__support/threads/thread.h"
 #include "config/app.h"
@@ -570,6 +571,11 @@ void thread_exit(ThreadReturnValue retval, ThreadStyle style) {
   // different thread. The destructors of thread local and TSS objects should
   // be called by the thread which owns them.
   internal::call_atexit_callbacks(attrib);
+
+  // Anything this thread allocated for a module opened after it started is
+  // its own, so it goes back now. The callbacks above may have touched such a
+  // module's thread locals, so this comes after them.
+  elf::release_dynamic_thread_blocks();
 
   uint32_t joinable_state = uint32_t(DetachState::JOINABLE);
   if (!attrib->detach_state.compare_exchange_strong(
