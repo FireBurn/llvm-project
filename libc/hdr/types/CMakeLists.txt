@@ -1676,3 +1676,12 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_servent
 )
+
+
+add_proxy_header_library(
+  struct_tms
+  HDRS
+    struct_tms.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_tms
+)
