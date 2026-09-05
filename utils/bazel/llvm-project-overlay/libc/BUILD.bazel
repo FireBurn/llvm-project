@@ -5174,6 +5174,8 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        ":__support_elf_passive_abi",
+        ":__support_elf_tls_block",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_exit",
         ":__support_osutil_linux_syscall_wrappers_getrandom",
