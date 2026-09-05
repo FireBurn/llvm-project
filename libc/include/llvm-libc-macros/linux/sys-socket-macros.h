@@ -21,6 +21,10 @@
 #define AF_BRIDGE 7   // Multiprotocol bridge
 #define AF_PACKET 17  // Packets straight off the device
 #define AF_VSOCK 40   // Sockets between a guest and its host
+#define AF_MPLS 28    // Multiprotocol label switching
+#define AF_CAN 29     // Controller area network
+#define AF_ALG 38     // Kernel crypto
+#define AF_XDP 44     // Express data path
 
 // 4.2BSD protocol families
 #define PF_UNSPEC AF_UNSPEC
@@ -32,6 +36,10 @@
 #define PF_BRIDGE AF_BRIDGE
 #define PF_PACKET AF_PACKET
 #define PF_VSOCK AF_VSOCK
+#define PF_MPLS AF_MPLS
+#define PF_CAN AF_CAN
+#define PF_ALG AF_ALG
+#define PF_XDP AF_XDP
 
 #define SOCK_STREAM 1
 #define SOCK_DGRAM 2
@@ -157,6 +165,7 @@
 #define SCM_RIGHTS 1
 #define SCM_CREDENTIALS 2
 #define SCM_SECURITY 3
+#define SCM_PIDFD 4
 
 #define MSG_OOB 0x01
 #define MSG_PEEK 0x02

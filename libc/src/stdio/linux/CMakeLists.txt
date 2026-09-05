@@ -144,3 +144,15 @@ add_entrypoint_object(
     libc.src.stdio.fclose
     libc.src.sys.wait.waitpid
 )
+
+add_entrypoint_object(
+  renameat2
+  SRCS
+    renameat2.cpp
+  HDRS
+    ../renameat2.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

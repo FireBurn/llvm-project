@@ -31,3 +31,101 @@ add_entrypoint_object(
   DEPENDS
     .umount2
 )
+
+add_entrypoint_object(
+  fsopen
+  SRCS
+    fsopen.cpp
+  HDRS
+    ../fsopen.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fsmount
+  SRCS
+    fsmount.cpp
+  HDRS
+    ../fsmount.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fsconfig
+  SRCS
+    fsconfig.cpp
+  HDRS
+    ../fsconfig.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fspick
+  SRCS
+    fspick.cpp
+  HDRS
+    ../fspick.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  open_tree
+  SRCS
+    open_tree.cpp
+  HDRS
+    ../open_tree.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  move_mount
+  SRCS
+    move_mount.cpp
+  HDRS
+    ../move_mount.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  mount_setattr
+  SRCS
+    mount_setattr.cpp
+  HDRS
+    ../mount_setattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_mount_attr
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pivot_root
+  SRCS
+    pivot_root.cpp
+  HDRS
+    ../pivot_root.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

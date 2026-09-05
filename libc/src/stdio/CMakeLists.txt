@@ -258,6 +258,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  renameat2
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.renameat2
+)
+
+add_entrypoint_object(
   fdopen
   ALIAS
   DEPENDS
@@ -293,9 +300,11 @@ add_stdio_entrypoint_object(fread)
 add_stdio_entrypoint_object(perror)
 add_stdio_entrypoint_object(puts)
 add_stdio_entrypoint_object(fputs)
+add_stdio_entrypoint_object(fputs_unlocked)
 add_stdio_entrypoint_object(fwrite_unlocked)
 add_stdio_entrypoint_object(fwrite)
 add_stdio_entrypoint_object(fputc)
+add_stdio_entrypoint_object(fputc_unlocked)
 add_stdio_entrypoint_object(putc)
 add_stdio_entrypoint_object(putchar)
 add_stdio_entrypoint_object(printf)

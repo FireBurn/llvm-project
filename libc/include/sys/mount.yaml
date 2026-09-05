@@ -21,6 +21,74 @@ types: []
 enums: []
 objects: []
 functions:
+  - name: pivot_root
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+  - name: fsopen
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: unsigned int
+  - name: fsmount
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: unsigned int
+      - type: unsigned int
+  - name: fsconfig
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: unsigned int
+      - type: const char *
+      - type: const void *
+      - type: int
+  - name: fspick
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: unsigned int
+  - name: open_tree
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: unsigned int
+  - name: move_mount
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: int
+      - type: const char *
+      - type: unsigned int
+  - name: mount_setattr
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: unsigned int
+      - type: struct mount_attr *
+      - type: size_t
   - name: mount
     standards:
       - linux

@@ -16,3 +16,29 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  new_mount_api_test
+  SUITE
+    libc_sys_mount_unittests
+  SRCS
+    new_mount_api_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_mount_macros
+    libc.hdr.types.struct_mount_attr
+    libc.src.__support.libc_errno
+    libc.src.sys.mount.fsconfig
+    libc.src.sys.mount.fsmount
+    libc.src.sys.mount.fsopen
+    libc.src.sys.mount.fspick
+    libc.src.sys.mount.mount_setattr
+    libc.src.sys.mount.move_mount
+    libc.src.sys.mount.open_tree
+    libc.src.sys.mount.pivot_root
+    libc.src.unistd.close
+    libc.src.unistd.geteuid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
