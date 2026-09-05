@@ -24,6 +24,12 @@ namespace LIBC_NAMESPACE_DECL {
 int sigtimedwait(const sigset_t *__restrict set, siginfo_t *__restrict info,
                  const struct timespec *__restrict timeout);
 
+namespace internal {
+int sigtimedwait_impl(const sigset_t *__restrict set,
+                      siginfo_t *__restrict info,
+                      const struct timespec *__restrict timeout);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SIGNAL_SIGTIMEDWAIT_H

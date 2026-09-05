@@ -22,6 +22,11 @@ namespace LIBC_NAMESPACE_DECL {
 
 int sigwaitinfo(const sigset_t *__restrict set, siginfo_t *__restrict info);
 
+namespace internal {
+int sigwaitinfo_impl(const sigset_t *__restrict set,
+                     siginfo_t *__restrict info);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SIGNAL_SIGWAITINFO_H
