@@ -742,3 +742,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.setegid
 )
+
+add_entrypoint_object(
+  execvpe
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.execvpe
+)
