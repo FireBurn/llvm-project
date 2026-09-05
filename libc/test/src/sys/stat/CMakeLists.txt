@@ -151,6 +151,25 @@ add_libc_test(
 )
 
 add_libc_test(
+  statx_test
+  SUITE
+    libc_sys_stat_unittests
+  SRCS
+    statx_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.sys.stat.statx
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   mknodat_test
   SUITE
     libc_sys_stat_unittests
