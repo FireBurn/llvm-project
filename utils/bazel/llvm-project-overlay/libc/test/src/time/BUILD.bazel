@@ -4,11 +4,53 @@
 
 # Tests for LLVM libc time.
 
-load("//libc/test:libc_test_rules.bzl", "libc_test")
+load("//libc/test:libc_test_rules.bzl", "libc_test", "libc_test_library")
 
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test_library(
+    name = "tm_helper",
+    hdrs = ["TmHelper.h"],
+    deps = [
+        "//libc:__support_macros_config",
+        "//libc:time_time_constants",
+        "//libc:types_struct_tm",
+    ],
+)
+
+libc_test_library(
+    name = "tm_matcher",
+    hdrs = ["TmMatcher.h"],
+    deps = [
+        "//libc:__support_macros_config",
+        "//libc:types_struct_tm",
+        "//libc/test/UnitTest:LibcUnitTest",
+    ],
+)
+
+libc_test_library(
+    name = "tz_fixture",
+    hdrs = ["TzFixture.h"],
+    deps = [
+        "//libc:setenv",
+        "//libc:tzset",
+        "//libc/test/UnitTest:LibcUnitTest",
+    ],
+)
+
+libc_test(
+    name = "strftime_test",
+    srcs = ["strftime_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_array",
+        "//libc:__support_integer_to_string",
+        "//libc:strftime",
+        "//libc:time_time_constants",
+        "//libc:types_struct_tm",
+    ],
+)
 
 libc_test(
     name = "strptime_test",
@@ -42,5 +84,64 @@ libc_test(
         "//libc:time_clock_nanosleep",
         "//libc:types_clockid_t",
         "//libc:types_struct_timespec",
+    ],
+)
+
+libc_test(
+    name = "ctime_test",
+    srcs = ["ctime_test.cpp"],
+    deps = [
+        ":tm_helper",
+        ":tz_fixture",
+        "//libc:ctime",
+        "//libc:hdr_signal_macros",
+        "//libc:time_time_utils",
+    ],
+)
+
+libc_test(
+    name = "ctime_r_test",
+    srcs = ["ctime_r_test.cpp"],
+    deps = [
+        ":tm_helper",
+        ":tz_fixture",
+        "//libc:ctime_r",
+        "//libc:hdr_signal_macros",
+        "//libc:time_time_constants",
+        "//libc:time_time_utils",
+    ],
+)
+
+libc_test(
+    name = "localtime_test",
+    srcs = ["localtime_test.cpp"],
+    deps = [
+        ":tz_fixture",
+        "//libc:hdr_signal_macros",
+        "//libc:localtime",
+    ],
+)
+
+libc_test(
+    name = "localtime_r_test",
+    srcs = ["localtime_r_test.cpp"],
+    deps = [
+        ":tz_fixture",
+        "//libc:hdr_signal_macros",
+        "//libc:localtime_r",
+    ],
+)
+
+libc_test(
+    name = "mktime_test",
+    srcs = ["mktime_test.cpp"],
+    deps = [
+        ":tm_helper",
+        ":tm_matcher",
+        ":tz_fixture",
+        "//libc:__support_cpp_limits",
+        "//libc:mktime",
+        "//libc:time_time_constants",
+        "//libc:time_time_utils",
     ],
 )
