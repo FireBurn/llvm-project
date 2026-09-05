@@ -74,6 +74,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  struct_dirent_test
+  SUITE
+    libc_dirent_unittests
+  SRCS
+    struct_dirent_test.cpp
+  DEPENDS
+    libc.hdr.limits_macros
+    libc.hdr.types.struct_dirent
+    libc.src.string.strlen
+)
+
+add_libc_test(
   getdents64_test
   SUITE
     libc_dirent_unittests
