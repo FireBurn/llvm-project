@@ -144,6 +144,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         other_srcs = ["sys/select-time.yaml"],
     ),
     libc_header_info("sys/timerfd"),
+    libc_header_info("sys/times"),
     libc_header_info("sys/timex"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/types"),
@@ -833,6 +834,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_timex",
     hdrs = ["llvm-libc-types/struct_timex.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_tms",
+    hdrs = ["llvm-libc-types/struct_tms.h"],
 )
 
 libc_support_library(
