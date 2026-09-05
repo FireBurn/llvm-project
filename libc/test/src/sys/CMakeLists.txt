@@ -31,6 +31,7 @@ add_subdirectory(xattr)
 
 add_subdirectory(timerfd)
 add_subdirectory(signalfd)
+add_subdirectory(timex)
 add_subdirectory(capability)
 add_subdirectory(fanotify)
 add_subdirectory(io)

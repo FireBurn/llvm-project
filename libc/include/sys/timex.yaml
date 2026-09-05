@@ -39,11 +39,19 @@ macros:
   - macro_name: TIME_ERROR
     macro_header: sys-timex-macros.h
 types:
+  - type_name: clockid_t
   - type_name: struct_timex
   - type_name: struct_timeval
 enums: []
 objects: []
 functions:
+  - name: clock_adjtime
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: clockid_t
+      - type: struct timex *
   - name: adjtimex
     standards:
       - gnu
