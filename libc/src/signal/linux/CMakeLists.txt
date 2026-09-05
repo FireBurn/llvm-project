@@ -252,4 +252,32 @@ add_entrypoint_object(
     libc.hdr.types.siginfo_t
     libc.hdr.types.sigset_t
 )
+
+add_entrypoint_object(
+  sigisemptyset
+  SRCS
+    sigisemptyset.cpp
+  HDRS
+    ../sigisemptyset.h
+  DEPENDS
+    .signal_utils
+    libc.hdr.types.sigset_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  sigqueue
+  SRCS
+    sigqueue.cpp
+  HDRS
+    ../sigqueue.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.pid_t
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.union_sigval
     libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigqueueinfo
+    libc.src.errno.errno
+)
