@@ -728,3 +728,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.syncfs
 )
+
+add_entrypoint_object(
+  seteuid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.seteuid
+)
+
+add_entrypoint_object(
+  setegid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setegid
+)
