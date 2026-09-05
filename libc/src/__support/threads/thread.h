@@ -135,6 +135,10 @@ struct Thread {
   // which requires exposing it via a public API.
   void wait();
 
+  // One turn of the wait, for a caller which has something to do between
+  // them. Returns false once the thread has gone.
+  bool wait_once();
+
   // Return true if this thread is equal to the other thread.
   bool operator==(const Thread &other) const;
 
