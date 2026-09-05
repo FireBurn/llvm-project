@@ -35,3 +35,14 @@ TEST(LlvmLibcLinuxSysSocketMacrosTest, AddScm_TimestampnsAndScm_Timestamping) {
   EXPECT_EQ(static_cast<long long>(SCM_TIMESTAMPNS), 64LL);
   EXPECT_EQ(static_cast<long long>(SCM_TIMESTAMPING), 65LL);
 }
+
+TEST(LlvmLibcLinuxSysSocketMacrosTest, AddSomaxconn) {
+  EXPECT_EQ(static_cast<long long>(SOMAXCONN), 0x1000LL);
+  EXPECT_EQ(static_cast<long long>(SOL_IP), 0LL);
+  EXPECT_EQ(static_cast<long long>(SOL_TCP), 6LL);
+  EXPECT_EQ(static_cast<long long>(SOL_UDP), 17LL);
+  EXPECT_EQ(static_cast<long long>(SOL_IPV6), 41LL);
+  EXPECT_EQ(static_cast<long long>(SOL_ICMPV6), 58LL);
+  EXPECT_EQ(static_cast<long long>(SOL_SCTP), 132LL);
+  EXPECT_EQ(static_cast<long long>(SOL_UDPLITE), 136LL);
+}
