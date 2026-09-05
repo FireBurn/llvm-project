@@ -56,3 +56,24 @@ add_integration_test(
     libc.src.stdio.popen
     libc.src.string.strcmp
 )
+
+add_integration_test(
+  exit_flushes_stdout_test
+  SUITE
+    stdio-integration-tests
+  SRCS
+    exit_flushes_stdout_test.cpp
+  DEPENDS
+    libc.src.stdio.fflush
+    libc.src.stdio.fputs
+    libc.src.stdio.stdout
+    libc.src.stdlib.exit
+    libc.src.string.strncmp
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.close
+    libc.src.unistd.dup2
+    libc.src.unistd.fork
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+)
+
