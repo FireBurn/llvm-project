@@ -2,9 +2,28 @@ header: sys/uio.h
 standards:
   - posix
 types:
+  - type_name: off_t
   - type_name: struct_iovec
   - type_name: ssize_t
 functions:
+  - name: preadv
+    standards:
+      - bsd
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: const struct iovec *
+      - type: int
+      - type: off_t
+  - name: pwritev
+    standards:
+      - bsd
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: const struct iovec *
+      - type: int
+      - type: off_t
   - name: writev
     standards:
       - posix
