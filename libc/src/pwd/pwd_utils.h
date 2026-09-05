@@ -92,6 +92,10 @@ LIBC_INLINE bool parse_line<struct passwd>(cpp::span<char> line,
 
 namespace pwd {
 
+// How long a line the password file may have. A caller which reads one
+// entry at a time needs the same room.
+constexpr size_t PASSWD_LINE_SIZE = 1024;
+
 // Parses a colon-separated password database line into a struct passwd.
 ErrorOr<struct passwd> parse_passwd_line(char *line);
 
