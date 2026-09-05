@@ -386,6 +386,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "termios_macros",
+    hdrs = ["termios_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_termios_macros",
+    ],
+)
+
+libc_support_library(
     name = "locale_macros",
     hdrs = ["locale_macros.h"],
     deps = [
