@@ -319,6 +319,7 @@ private:
       set->references[i] = 1;
     }
     set->count = n;
+    set->static_count = n;
     set->page_size = page_size_;
     set->linked = true;
   }
