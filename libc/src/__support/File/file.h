@@ -168,9 +168,12 @@ public:
                              int buffer_mode, bool owned, FileMode mode,
                              bool static_stream = false)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
+        // POSIX requires the lock a stream is held under to be recursive:
+        // flockfile may be called more than once by the same thread, and
+        // anything called while it is held takes it again.
         platform_close(cf), buf(buffer), bufsize(buffer_size), pos(0),
         read_limit(0), prev(nullptr), next(nullptr), mbstate(), mode(mode),
-        ungetc_buf{}, mutex(/*timed=*/false, /*recursive=*/false,
+        ungetc_buf{}, mutex(/*timed=*/false, /*recursive=*/true,
                             /*robust=*/false, /*pshared=*/false),
         bufmode(static_cast<int8_t>(buffer_mode)), prev_op(FileOp::NONE),
         orientation(Orientation::UNORIENTED), own_buf(owned),
@@ -344,6 +347,13 @@ public:
   LIBC_INLINE void unlock() {
     if (!caller_locking)
       mutex.unlock();
+  }
+  // Zero if the lock was taken, non-zero if another thread holds it. A stream
+  // whose caller has asked to do its own locking is always available.
+  int try_lock() {
+    if (caller_locking)
+      return 0;
+    return mutex.try_lock() == MutexError::NONE ? 0 : 1;
   }
 
   // What __fsetlocking reads and writes. These are only called with the
