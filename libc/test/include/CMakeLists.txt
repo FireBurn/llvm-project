@@ -242,6 +242,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_mtio_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_mtio_test.cpp
+  DEPENDS
+    libc.include.sys_mtio
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
