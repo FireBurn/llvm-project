@@ -324,12 +324,19 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.dprintf
     libc.src.stdio.fprintf
     libc.src.stdio.fscanf
-    libc.src.stdio.renameat2
     libc.src.stdio.vfscanf
     libc.src.stdio.printf
     libc.src.stdio.remove
     libc.src.stdio.rename
     libc.src.stdio.renameat
+
+    # syslog.h entrypoints
+    libc.src.syslog.closelog
+    libc.src.syslog.openlog
+    libc.src.syslog.setlogmask
+    libc.src.syslog.syslog
+    libc.src.syslog.vsyslog
+    libc.src.stdio.renameat2
 
     # mqueue.h entrypoints
     libc.src.mqueue.mq_close
