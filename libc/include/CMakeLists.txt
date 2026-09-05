@@ -1332,6 +1332,61 @@ add_header_macro(
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/net)
 
 add_header_macro(
+  net_ethernet
+  ../libc/include/net/ethernet.yaml
+  net/ethernet.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.net_ethernet_macros
+    .llvm-libc-types.struct_ether_addr
+    .llvm-libc-types.struct_ether_header
+)
+
+add_header_macro(
+  netinet_if_ether
+  ../libc/include/netinet/if_ether.yaml
+  netinet/if_ether.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.netinet_if_ether_macros
+    .llvm-libc-types.struct_arphdr
+    .llvm-libc-types.struct_ether_arp
+)
+
+add_header_macro(
+  netinet_ip
+  ../libc/include/netinet/ip.yaml
+  netinet/ip.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.netinet_ip_macros
+    .llvm-libc-types.struct_in_addr
+    .llvm-libc-types.struct_ip
+    .llvm-libc-types.struct_iphdr
+)
+
+add_header_macro(
+  netinet_ip6
+  ../libc/include/netinet/ip6.yaml
+  netinet/ip6.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_in6_addr
+    .llvm-libc-types.struct_ip6_hdr
+)
+
+add_header_macro(
+  netinet_icmp6
+  ../libc/include/netinet/icmp6.yaml
+  netinet/icmp6.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.netinet_icmp6_macros
+    .llvm-libc-types.struct_icmp6_hdr
+    .llvm-libc-types.struct_in6_addr
+)
+
+add_header_macro(
   net_if
   ../libc/include/net/if.yaml
   net/if.h
