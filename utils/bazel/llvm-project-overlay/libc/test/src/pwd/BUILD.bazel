@@ -11,6 +11,27 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "fgetpwent_test",
+    srcs = ["fgetpwent_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/fcntl:open",
+        "//libc/src/pwd:fgetpwent",
+        "//libc/src/pwd:putpwent",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:remove",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "putpwent_test",
     srcs = ["putpwent_test.cpp"],
     deps = [
