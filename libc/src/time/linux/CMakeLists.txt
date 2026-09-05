@@ -157,23 +157,15 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
-  tz_variables
-  SRCS
-    tz_variables.cpp
-  HDRS
-    ../tz_variables.h
-  DEPENDS
-    libc.src.__support.macros.config
-)
-
-add_entrypoint_object(
   tzset
   SRCS
     tzset.cpp
   HDRS
     ../tzset.h
   DEPENDS
+    libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.time.tz.timezone
 )
 
 add_entrypoint_object(
