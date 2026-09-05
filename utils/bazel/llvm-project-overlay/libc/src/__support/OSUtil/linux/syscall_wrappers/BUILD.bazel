@@ -2478,6 +2478,85 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "fsconfig",
+    hdrs = ["fsconfig.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fsmount",
+    hdrs = ["fsmount.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fsopen",
+    hdrs = ["fsopen.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fspick",
+    hdrs = ["fspick.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "mount_setattr",
+    hdrs = ["mount_setattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_mount_attr",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "move_mount",
+    hdrs = ["move_mount.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "open_tree",
+    hdrs = ["open_tree.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [

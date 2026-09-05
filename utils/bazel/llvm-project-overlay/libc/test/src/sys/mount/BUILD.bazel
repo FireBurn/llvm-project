@@ -15,6 +15,7 @@ libc_test(
     srcs = ["mount_test.cpp"],
     deps = [
         "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_mount_macros",
         "//libc/hdr:sys_stat_macros",
         "//libc/src/__support/CPP:scope",
         "//libc/src/sys/mount:mount",
@@ -25,5 +26,32 @@ libc_test(
         "//libc/src/sys/mount:umount2",
         "//libc/src/sys/stat:mkdir",
         "//libc/src/unistd:rmdir",
+    ],
+)
+
+libc_test(
+    name = "new_mount_api_test",
+    srcs = ["new_mount_api_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_mount_attr",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_mount_macros",
+        "//libc/src/sys/mount:fsconfig",
+        "//libc/src/sys/mount:fsmount",
+        "//libc/src/sys/mount:fsopen",
+        "//libc/src/sys/mount:fspick",
+        "//libc/src/sys/mount:mount_setattr",
+        "//libc/src/sys/mount:move_mount",
+        "//libc/src/sys/mount:open_tree",
+        "//libc/src/sys/mount:sys_mount_fsconfig",
+        "//libc/src/sys/mount:sys_mount_fsmount",
+        "//libc/src/sys/mount:sys_mount_fsopen",
+        "//libc/src/sys/mount:sys_mount_fspick",
+        "//libc/src/sys/mount:sys_mount_mount_setattr",
+        "//libc/src/sys/mount:sys_mount_move_mount",
+        "//libc/src/sys/mount:sys_mount_open_tree",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:geteuid",
     ],
 )

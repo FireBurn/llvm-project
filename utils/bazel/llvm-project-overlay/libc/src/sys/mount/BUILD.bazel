@@ -16,6 +16,62 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "fsconfig",
+    srcs = ["linux/fsconfig.cpp"],
+    hdrs = ["fsconfig.h"],
+    deps = [
+        ":sys_mount_fsconfig",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsconfig",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fsmount",
+    srcs = ["linux/fsmount.cpp"],
+    hdrs = ["fsmount.h"],
+    deps = [
+        ":sys_mount_fsmount",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsmount",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fsopen",
+    srcs = ["linux/fsopen.cpp"],
+    hdrs = ["fsopen.h"],
+    deps = [
+        ":sys_mount_fsopen",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsopen",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fspick",
+    srcs = ["linux/fspick.cpp"],
+    hdrs = ["fspick.h"],
+    deps = [
+        ":sys_mount_fspick",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fspick",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "mount",
     srcs = ["linux/mount.cpp"],
     hdrs = ["mount.h"],
@@ -25,6 +81,50 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "mount_setattr",
+    srcs = ["linux/mount_setattr.cpp"],
+    hdrs = ["mount_setattr.h"],
+    deps = [
+        ":sys_mount_mount_setattr",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_mount_attr",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mount_setattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "move_mount",
+    srcs = ["linux/move_mount.cpp"],
+    hdrs = ["move_mount.h"],
+    deps = [
+        ":sys_mount_move_mount",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:move_mount",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "open_tree",
+    srcs = ["linux/open_tree.cpp"],
+    hdrs = ["open_tree.h"],
+    deps = [
+        ":sys_mount_open_tree",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open_tree",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
     ],
@@ -79,6 +179,64 @@ libc_support_library(
 libc_support_library(
     name = "sys_mount_umount2",
     hdrs = ["umount2.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsconfig",
+    hdrs = ["fsconfig.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsmount",
+    hdrs = ["fsmount.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fsopen",
+    hdrs = ["fsopen.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_fspick",
+    hdrs = ["fspick.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_mount_setattr",
+    hdrs = ["mount_setattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_mount_attr",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_move_mount",
+    hdrs = ["move_mount.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_mount_open_tree",
+    hdrs = ["open_tree.h"],
     deps = [
         "//libc/src/__support/macros:config",
     ],
