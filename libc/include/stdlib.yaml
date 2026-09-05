@@ -1,4 +1,8 @@
 header: stdlib.h
+public_includes:
+  # glibc's <stdlib.h> makes alloca visible and a good deal of code
+  # counts on it.
+  - alloca.h
 standards:
   - stdc
 merge_yaml_files:
