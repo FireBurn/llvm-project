@@ -30,3 +30,19 @@ libc_test(
         "//libc:write",
     ],
 )
+
+libc_test(
+    name = "pthread_affinity_test",
+    srcs = ["pthread_affinity_test.cpp"],
+    deps = [
+        "//libc:sched_sched_getcpucount",
+        "//libc:__sched_getcpuisset",
+        "//libc:__sched_setcpuset",
+        "//libc:hdr_errno_macros",
+        "//libc:memset",
+        "//libc:pthread_getaffinity_np",
+        "//libc:pthread_self",
+        "//libc:pthread_setaffinity_np",
+        "//libc:types_cpu_set_t",
+    ],
+)
