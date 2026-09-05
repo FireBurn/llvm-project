@@ -2018,6 +2018,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.time.timer_getoverrun
     libc.src.time.timer_gettime
     libc.src.time.timer_settime
+    libc.src.time.tz_variables
+    libc.src.time.tzset
 
     # langinfo.h entrypoints
     libc.src.langinfo.nl_langinfo
@@ -2143,8 +2145,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
 
       # time.h entrypoints
       libc.src.time.strptime
-      libc.src.time.tz_variables
-      libc.src.time.tzset
 
       # unistd.h entrypoints
       libc.src.unistd.setegid
