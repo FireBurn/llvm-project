@@ -162,6 +162,7 @@ add_entrypoint_object(
   HDRS
     ../fdatasync.h
   DEPENDS
+    libc.src.__support.threads.cancel
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
@@ -684,6 +685,8 @@ add_entrypoint_object(
   HDRS
     ../pause.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.src.__support.OSUtil.linux.syscall_wrappers.pause
     libc.src.__support.common
     libc.src.__support.macros.config
