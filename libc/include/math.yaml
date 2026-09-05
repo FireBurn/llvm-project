@@ -27,6 +27,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: acosh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: acoshf
     standards:
       - stdc
@@ -72,6 +78,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: asinh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: asinhf
     standards:
       - stdc
@@ -160,6 +172,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: atanh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: atanhf
     standards:
       - stdc
@@ -323,6 +341,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: cosh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: coshf
     standards:
       - stdc
@@ -452,6 +476,18 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: erf
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
+  - name: erfc
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: erfcf16
     standards:
       - stdc
@@ -2653,6 +2689,12 @@ functions:
       - type: float
       - type: float *
       - type: float *
+  - name: sinh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: sinhf
     standards:
       - stdc
@@ -2730,6 +2772,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: tanh
+    standards:
+      - stdc
+    return_type: double
+    arguments:
+      - type: double
   - name: tanhf
     standards:
       - stdc
