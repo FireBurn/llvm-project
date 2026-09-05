@@ -521,6 +521,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_wait_signal_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_wait_signal_test.cpp
+  DEPENDS
+    libc.include.sys_wait
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
