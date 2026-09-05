@@ -61,6 +61,19 @@ public:
     // Otherwise, no more fields remain.
     return cpp::nullopt;
   }
+
+  // Everything not yet taken, as one field. A record whose last field may
+  // itself hold the separator is read this way rather than with next_field.
+  LIBC_INLINE cpp::optional<cpp::span<char>> remaining() {
+    if (data.empty())
+      return cpp::nullopt;
+    auto field = data;
+    data = cpp::span<char>();
+    return field;
+  }
+
+  // Whether every field has been taken.
+  LIBC_INLINE bool exhausted() const { return data.empty(); }
 };
 
 } // namespace internal

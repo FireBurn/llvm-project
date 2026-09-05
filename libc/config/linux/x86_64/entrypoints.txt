@@ -78,6 +78,30 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.grp.getgrgid_r
     libc.src.grp.getgrnam
     libc.src.grp.getgrnam_r
+
+    # gshadow.h entrypoints
+    libc.src.gshadow.endsgent
+    libc.src.gshadow.fgetsgent
+    libc.src.gshadow.getsgent
+    libc.src.gshadow.getsgnam
+    libc.src.gshadow.getsgnam_r
+    libc.src.gshadow.putsgent
+    libc.src.gshadow.setsgent
+
+    # shadow.h entrypoints
+    libc.src.shadow.endspent
+    libc.src.shadow.fgetspent
+    libc.src.shadow.fgetspent_r
+    libc.src.shadow.getspent
+    libc.src.shadow.getspent_r
+    libc.src.shadow.getspnam
+    libc.src.shadow.getspnam_r
+    libc.src.shadow.lckpwdf
+    libc.src.shadow.putspent
+    libc.src.shadow.setspent
+    libc.src.shadow.sgetspent
+    libc.src.shadow.sgetspent_r
+    libc.src.shadow.ulckpwdf
     libc.src.grp.initgroups
     libc.src.grp.setgrent
     libc.src.grp.setgroups

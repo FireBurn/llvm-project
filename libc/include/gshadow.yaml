@@ -1,0 +1,57 @@
+header: gshadow.h
+standards:
+  - gnu
+types:
+  - type_name: struct_sgrp
+  - type_name: FILE
+  - type_name: size_t
+enums: []
+objects: []
+functions:
+  - name: endsgent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: fgetsgent
+    standards:
+      - gnu
+    return_type: struct sgrp *
+    arguments:
+      - type: FILE *
+  - name: getsgent
+    standards:
+      - gnu
+    return_type: struct sgrp *
+    arguments:
+      - type: void
+  - name: getsgnam
+    standards:
+      - gnu
+    return_type: struct sgrp *
+    arguments:
+      - type: const char *
+  - name: getsgnam_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct sgrp *
+      - type: char *
+      - type: size_t
+      - type: struct sgrp **
+  - name: putsgent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct sgrp *
+      - type: FILE *
+  - name: setsgent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void

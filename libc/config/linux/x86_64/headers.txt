@@ -19,6 +19,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.fnmatch
     libc.include.float
     libc.include.grp
+    libc.include.gshadow
     libc.include.inttypes
     libc.include.langinfo
     libc.include.libgen
@@ -42,6 +43,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.search
     libc.include.semaphore
     libc.include.setjmp
+    libc.include.shadow
     libc.include.signal
     libc.include.spawn
     libc.include.stdbit
