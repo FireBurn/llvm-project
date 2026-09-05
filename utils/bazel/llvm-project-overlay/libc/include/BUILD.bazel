@@ -118,6 +118,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("threads"),
     libc_header_info("time"),
     libc_header_info("uchar"),
+    libc_header_info("ucontext"),
     libc_header_info("unistd"),
     libc_header_info("wchar"),
     libc_header_info("wctype"),
