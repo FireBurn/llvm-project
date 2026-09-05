@@ -21740,3 +21740,17 @@ libc_support_library(
         ":dlfcn_dl_internal",
     ],
 )
+
+libc_function(
+    name = "__tls_get_addr",
+    srcs = ["src/tls/tls_get_addr.cpp"],
+    hdrs = ["src/tls/tls_get_addr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_elf_passive_abi",
+        ":__support_elf_thread_pointer",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
