@@ -694,10 +694,24 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  mkostemps
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mkostemps
+)
+
+add_entrypoint_object(
   mkstemp
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.mkstemp
+)
+
+add_entrypoint_object(
+  mkstemps
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mkstemps
 )
 
 if(NOT LLVM_LIBC_FULL_BUILD)
@@ -1069,3 +1083,4 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.ptsname
 )
+
