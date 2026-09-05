@@ -2557,6 +2557,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "name_to_handle_at",
+    hdrs = ["name_to_handle_at.h"],
+    deps = [
+        "//libc/hdr/types:struct_file_handle",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "open_by_handle_at",
+    hdrs = ["open_by_handle_at.h"],
+    deps = [
+        "//libc/hdr/types:struct_file_handle",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
