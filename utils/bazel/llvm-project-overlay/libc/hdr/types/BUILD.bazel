@@ -652,6 +652,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__ftw_func_t",
+    hdrs = ["__ftw_func_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types___ftw_func_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__nftw_func_t",
+    hdrs = ["__nftw_func_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types___nftw_func_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "char16_t",
     hdrs = ["char16_t.h"],
     deps = select({
@@ -782,6 +800,15 @@ libc_support_library(
     hdrs = ["speed_t.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_speed_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_FTW",
+    hdrs = ["struct_FTW.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_FTW"],
         "//conditions:default": [],
     }),
 )
