@@ -522,6 +522,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_mtio_macros
+  HDR
+    sys-mtio-macros.h
+)
+
+add_macro_header(
   stdio_ext_macros
   HDR
     stdio-ext-macros.h
