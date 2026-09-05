@@ -2787,3 +2787,13 @@ math_test(name = "tanf16")
 math_test(name = "tanhf16")
 
 math_test(name = "tanpif16")
+
+math_test(name = "acosh")
+
+math_test(name = "asinh")
+
+math_test(name = "atanh")
+
+math_test(name = "erf")
+
+math_test(name = "erfc")
