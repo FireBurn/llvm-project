@@ -56,6 +56,8 @@ add_entrypoint_object(
   HDRS
     ../nanosleep.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.struct_timespec
     libc.src.__support.OSUtil.linux.syscall_wrappers.nanosleep
     libc.src.__support.common
