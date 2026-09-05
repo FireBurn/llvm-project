@@ -88,17 +88,50 @@ char *duplicate(string_view s, char extra = '\0') {
   return out;
 }
 
-bool is_directory(const char *path) {
-  struct stat buf;
-  if (LIBC_NAMESPACE::stat(path, &buf) != 0)
-    return false;
-  return S_ISDIR(buf.st_mode);
-}
+// Where the search reads from. GLOB_ALTDIRFUNC says the caller has put its
+// own calls in the glob_t, and everything the walk does goes through these
+// so there is only one place which decides.
+struct DirSource {
+  const glob_t *hooks; // Null unless GLOB_ALTDIRFUNC was given.
 
-bool path_exists(const char *path) {
-  struct stat buf;
-  return LIBC_NAMESPACE::stat(path, &buf) == 0;
-}
+  void *opendir(const char *path) const {
+    if (hooks != nullptr)
+      return hooks->gl_opendir(path);
+    return LIBC_NAMESPACE::opendir(path);
+  }
+
+  struct ::dirent *readdir(void *dir) const {
+    if (hooks != nullptr)
+      return hooks->gl_readdir(dir);
+    return LIBC_NAMESPACE::readdir(reinterpret_cast<::DIR *>(dir));
+  }
+
+  void closedir(void *dir) const {
+    if (hooks != nullptr) {
+      hooks->gl_closedir(dir);
+      return;
+    }
+    LIBC_NAMESPACE::closedir(reinterpret_cast<::DIR *>(dir));
+  }
+
+  int stat(const char *path, struct stat *buf) const {
+    if (hooks != nullptr)
+      return hooks->gl_stat(path, buf);
+    return LIBC_NAMESPACE::stat(path, buf);
+  }
+
+  bool is_directory(const char *path) const {
+    struct stat buf;
+    if (stat(path, &buf) != 0)
+      return false;
+    return S_ISDIR(buf.st_mode);
+  }
+
+  bool path_exists(const char *path) const {
+    struct stat buf;
+    return stat(path, &buf) == 0;
+  }
+};
 
 // Whether the component holds a metacharacter, which is what decides between
 // reading a directory and simply appending the name.
@@ -155,6 +188,7 @@ void sort(char **items, size_t count) {
 struct Walk {
   int flags;
   int (*errfunc)(const char *, int);
+  DirSource source;
   bool aborted = false;
   bool out_of_memory = false;
 
@@ -171,7 +205,7 @@ struct Walk {
       out[at++] = name[i];
     out[at] = '\0';
     if (mark_dir && (flags & GLOB_MARK) && at > 0 && out[at - 1] != '/' &&
-        is_directory(out)) {
+        source.is_directory(out)) {
       out[at++] = '/';
       out[at] = '\0';
     }
@@ -205,7 +239,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
       out_of_memory = true;
       return;
     }
-    if (!path_exists(result)) {
+    if (!source.path_exists(result)) {
       ::free(result);
       return;
     }
@@ -256,7 +290,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
       return;
     }
     if (last) {
-      if (!path_exists(joined)) {
+      if (!source.path_exists(joined)) {
         ::free(joined);
         return;
       }
@@ -292,7 +326,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
   }
 
   libc_errno = 0;
-  ::DIR *dir = LIBC_NAMESPACE::opendir(dirname);
+  void *dir = source.opendir(dirname);
   if (dir == nullptr) {
     if (report(dirname, libc_errno))
       aborted = true;
@@ -302,7 +336,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
 
   char *pattern_text = unescape(component, /*noescape=*/true);
   if (pattern_text == nullptr) {
-    LIBC_NAMESPACE::closedir(dir);
+    source.closedir(dir);
     ::free(owned_dirname);
     out_of_memory = true;
     return;
@@ -311,7 +345,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
       FNM_PERIOD | FNM_PATHNAME | (noescape ? FNM_NOESCAPE : 0);
 
   PathList matches;
-  while (struct ::dirent *entry = LIBC_NAMESPACE::readdir(dir)) {
+  while (struct ::dirent *entry = source.readdir(dir)) {
     string_view name(&entry->d_name[0]);
     if (LIBC_NAMESPACE::fnmatch(pattern_text, name.data(), fnmatch_flags) != 0)
       continue;
@@ -326,7 +360,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
       break;
     }
   }
-  LIBC_NAMESPACE::closedir(dir);
+  source.closedir(dir);
   ::free(pattern_text);
   ::free(owned_dirname);
 
@@ -348,7 +382,7 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
       }
       continue;
     }
-    if (is_directory(matches.at(i))) {
+    if (source.is_directory(matches.at(i))) {
       char *with_slash = duplicate(string_view(matches.at(i)), '/');
       if (with_slash == nullptr) {
         out_of_memory = true;
@@ -393,7 +427,13 @@ LLVM_LIBC_FUNCTION(int, glob,
   }
 
   PathList found;
-  Walk walk{flags, errfunc};
+  // The caller's own directory calls are used only when it asked for them
+  // and supplied all five.
+  const bool alt = (flags & GLOB_ALTDIRFUNC) != 0 && pglob != nullptr &&
+                   pglob->gl_opendir != nullptr &&
+                   pglob->gl_readdir != nullptr &&
+                   pglob->gl_closedir != nullptr && pglob->gl_stat != nullptr;
+  Walk walk{flags, errfunc, DirSource{alt ? pglob : nullptr}};
   walk.expand(string_view(), string_view(pattern), found);
 
   if (walk.out_of_memory) {
