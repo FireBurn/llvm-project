@@ -125,11 +125,13 @@ foreach(file ${added_bitcode_targets})
   )
 endforeach()
 
-# Add empty archive libraries for compatibility with systems expecting certain
-# bits of libc to be located in separate files (e.g. libpthread).
+# Everything is in libc, but a great deal of software still asks for the
+# separate libraries it used to be split across, and a link that names one
+# fails if there is nothing of that name to find. Empty archives are what
+# glibc leaves in their place for the same reason.
 set(added_empty_archives "")
 if(LLVM_LIBC_FULL_BUILD AND ${LIBC_TARGET_OS} STREQUAL "linux")
-  list(APPEND libc_empty_archive_names pthread)
+  list(APPEND libc_empty_archive_names pthread dl rt util)
   foreach(archive ${libc_empty_archive_names})
     set(empty_archive_path ${LIBC_LIBRARY_DIR}/lib${archive}.a)
     add_custom_command(
