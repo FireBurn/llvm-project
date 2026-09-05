@@ -88,6 +88,8 @@ types:
     standards:
       - llvm_libc_ext
   - type_name: struct___pthread_cleanup_frame
+  - type_name: cpu_set_t
+  - type_name: size_t
     standards:
       - llvm_libc_ext
 functions:
@@ -305,6 +307,22 @@ functions:
     arguments:
       - type: pthread_t
       - type: pthread_attr_t *
+  - name: pthread_getaffinity_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: size_t
+      - type: cpu_set_t *
+  - name: pthread_setaffinity_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: size_t
+      - type: const cpu_set_t *
   - name: pthread_getname_np
     standards:
       - gnu
