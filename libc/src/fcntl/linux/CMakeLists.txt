@@ -105,7 +105,6 @@ add_entrypoint_object(
     libc.src.__support.macros.config
 )
 
-
 add_entrypoint_object(
   splice
   SRCS
@@ -146,3 +145,4 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
+
