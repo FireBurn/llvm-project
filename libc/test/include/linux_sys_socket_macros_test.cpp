@@ -46,3 +46,7 @@ TEST(LlvmLibcLinuxSysSocketMacrosTest, AddSomaxconn) {
   EXPECT_EQ(static_cast<long long>(SOL_SCTP), 132LL);
   EXPECT_EQ(static_cast<long long>(SOL_UDPLITE), 136LL);
 }
+
+TEST(LlvmLibcLinuxSysSocketMacrosTest, AddSock_Dccp) {
+  EXPECT_EQ(static_cast<long long>(SOCK_DCCP), 6LL);
+}
