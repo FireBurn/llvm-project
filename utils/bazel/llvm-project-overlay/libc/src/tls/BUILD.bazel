@@ -22,8 +22,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+        "//libc/src/__support:elf_dynamic_blocks",
         "//libc/src/__support:elf_passive_abi",
         "//libc/src/__support:elf_thread_pointer",
     ],
