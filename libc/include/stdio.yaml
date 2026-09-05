@@ -432,6 +432,16 @@ functions:
       - type: const char *
       - type: int
       - type: const char *
+  - name: renameat2
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: int
+      - type: const char *
+      - type: unsigned int
   - name: scanf
     standards:
       - stdc
