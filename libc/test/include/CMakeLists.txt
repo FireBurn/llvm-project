@@ -966,6 +966,17 @@ add_libc_test(
     libc.include.llvm-libc-macros.sys_statvfs_macros
 )
 
+add_libc_test(
+  loff_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    loff_t_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.loff_t
+    libc.include.llvm-libc-types.off_t
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.
