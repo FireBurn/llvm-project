@@ -9,6 +9,10 @@
 #ifndef LLVM_LIBC_MACROS_LINUX_FCNTL_MACROS_H
 #define LLVM_LIBC_MACROS_LINUX_FCNTL_MACROS_H
 
+// POSIX requires the file mode bits to be defined here as well as in
+// <sys/stat.h>, since the mode a file is created with is given to open.
+#include "../../llvm-libc-macros/linux/sys-stat-macros.h"
+
 // File creation and file status flags.
 #define O_APPEND 000002000
 #define O_ASYNC 000020000
