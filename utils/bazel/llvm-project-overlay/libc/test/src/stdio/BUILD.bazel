@@ -77,6 +77,19 @@ libc_test(
 )
 
 libc_test(
+    name = "open_memstream_test",
+    srcs = ["open_memstream_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:fflush",
+        "//libc:fwrite",
+        "//libc:memcmp",
+        "//libc:open_memstream",
+        "//libc:types_FILE",
+    ],
+)
+
+libc_test(
     name = "setlinebuf_test",
     srcs = ["setlinebuf_test.cpp"],
     deps = [
