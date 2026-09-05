@@ -170,6 +170,9 @@ macros:
   - macro_name: IPV6_TCLASS
     macro_value: 67 # int
 types:
+  - type_name: struct_in_pktinfo
+  - type_name: struct_in6_pktinfo
+  - type_name: struct_ip6_mtuinfo
   - type_name: in_port_t
   - type_name: in_addr_t
   - type_name: struct_sockaddr_in
