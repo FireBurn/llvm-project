@@ -7,6 +7,22 @@ types:
   - type_name: sigset_t
   - type_name: stack_t
 functions:
+  - name: makecontext
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: ucontext_t *
+      - type: void (*)(void)
+      - type: int
+      - type: ...
+  - name: swapcontext
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: ucontext_t *
+      - type: const ucontext_t *
   - name: getcontext
     standards:
       - posix
