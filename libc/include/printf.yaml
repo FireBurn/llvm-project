@@ -1,0 +1,47 @@
+header: printf.h
+standards:
+  - gnu
+macros:
+  - macro_name: PA_INT
+    macro_header: printf-macros.h
+  - macro_name: PA_CHAR
+    macro_header: printf-macros.h
+  - macro_name: PA_WCHAR
+    macro_header: printf-macros.h
+  - macro_name: PA_STRING
+    macro_header: printf-macros.h
+  - macro_name: PA_WSTRING
+    macro_header: printf-macros.h
+  - macro_name: PA_POINTER
+    macro_header: printf-macros.h
+  - macro_name: PA_FLOAT
+    macro_header: printf-macros.h
+  - macro_name: PA_DOUBLE
+    macro_header: printf-macros.h
+  - macro_name: PA_LAST
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_MASK
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_LONG_LONG
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_LONG_DOUBLE
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_LONG
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_SHORT
+    macro_header: printf-macros.h
+  - macro_name: PA_FLAG_PTR
+    macro_header: printf-macros.h
+types:
+  - type_name: size_t
+enums: []
+objects: []
+functions:
+  - name: parse_printf_format
+    standards:
+      - gnu
+    return_type: size_t
+    arguments:
+      - type: const char *__restrict
+      - type: size_t
+      - type: int *__restrict
