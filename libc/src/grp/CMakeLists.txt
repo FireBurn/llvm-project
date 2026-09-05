@@ -196,3 +196,15 @@ add_object_library(
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
 )
+
+add_entrypoint_object(
+  getgrouplist
+  SRCS
+    getgrouplist.cpp
+  HDRS
+    getgrouplist.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.gid_t
+    libc.hdr.types.struct_group
+)
