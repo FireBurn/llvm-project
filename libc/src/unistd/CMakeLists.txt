@@ -127,6 +127,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  get_current_dir_name
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.get_current_dir_name
+)
+
+add_entrypoint_object(
   fork
   ALIAS
   DEPENDS

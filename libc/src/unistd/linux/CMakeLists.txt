@@ -155,6 +155,23 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  get_current_dir_name
+  SRCS
+    get_current_dir_name.cpp
+  HDRS
+    ../get_current_dir_name.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_stat
+    libc.src.__support.CPP.optional
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.src.errno.errno
+    libc.src.stdlib.getenv
+    libc.src.string.allocating_string_utils
+    libc.src.unistd.getcwd
+)
+
+add_entrypoint_object(
   fork
   SRCS
     fork.cpp
