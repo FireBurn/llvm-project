@@ -1159,6 +1159,12 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
+  getdtablesize_test
+    getdtablesize_test.cpp
+    libc.hdr.types.struct_rlimit
+    libc.include.sys_resource
+    libc.src.sys.resource.getrlimit
+    libc.src.unistd.getdtablesize
   sbrk_test
     sbrk_test.cpp
     libc.hdr.stdint_proxy

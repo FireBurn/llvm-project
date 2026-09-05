@@ -1199,4 +1199,18 @@ add_header_library(
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.src.__support.OSUtil.linux.syscall_wrappers.brk
+
+add_entrypoint_object(
+  getdtablesize
+  SRCS
+    getdtablesize.cpp
+  HDRS
+    ../getdtablesize.h
+  DEPENDS
+    libc.hdr.limits_macros
+    libc.hdr.sys_resource_macros
+    libc.hdr.types.struct_rlimit
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.sys.resource.getrlimit
     libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
