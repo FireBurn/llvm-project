@@ -119,3 +119,27 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.splice
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  name_to_handle_at
+  SRCS
+    name_to_handle_at.cpp
+  HDRS
+    ../name_to_handle_at.h
+  DEPENDS
+    libc.hdr.types.struct_file_handle
+    libc.src.__support.OSUtil.linux.syscall_wrappers.name_to_handle_at
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  open_by_handle_at
+  SRCS
+    open_by_handle_at.cpp
+  HDRS
+    ../open_by_handle_at.h
+  DEPENDS
+    libc.hdr.types.struct_file_handle
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open_by_handle_at
+    libc.src.errno.errno
+)
