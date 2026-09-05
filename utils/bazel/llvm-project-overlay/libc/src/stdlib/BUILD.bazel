@@ -334,9 +334,12 @@ libc_support_library(
     srcs = ["rand_util.cpp"],
     hdrs = ["rand_util.h"],
     deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:atomic",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
