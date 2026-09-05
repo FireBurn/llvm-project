@@ -57,6 +57,23 @@ enum class DetachState : uint32_t {
 
 enum class ThreadStyle : uint8_t { POSIX = 0x1, STDC = 0x2 };
 
+// Whether a thread may be cancelled at all, and when it acts on a request.
+// A thread starts able to be cancelled, acting at the next cancellation
+// point rather than the moment the request arrives.
+enum class CancelState : uint32_t { ENABLE = 0, DISABLE = 1 };
+enum class CancelType : uint32_t { DEFERRED = 0, ASYNCHRONOUS = 1 };
+
+// One entry of a thread's stack of cleanup handlers, which run in turn when
+// the thread is cancelled or exits with handlers still pushed. The buffer
+// lives in the frame that pushed it, which is what makes the stack free.
+struct CleanupHandler {
+  void (*routine)(void *);
+  void *argument;
+  CleanupHandler *next;
+  // Set by pthread_cleanup_pop so a handler cannot run twice.
+  int reserved;
+};
+
 // Detach type is useful in testing the detach operation.
 enum class DetachType : int {
   // Indicates that the detach operation just set the detach state to DETACHED
@@ -108,12 +125,22 @@ struct alignas(STACK_ALIGNMENT) ThreadAttributes {
   ThreadAtExitCallbackMgr *atexit_callback_mgr;
   void *platform_data;
   cpp::Atomic<ThreadAttributes *> joiner;
+  // Cancellation. The request is set by whichever thread asks and read by
+  // the thread it is asked of, so it is atomic; the state and type are only
+  // ever set by the thread itself, but the signal handler reads the state,
+  // so it is atomic too. The cleanup stack is the thread's alone.
+  cpp::Atomic<uint32_t> cancel_state;
+  cpp::Atomic<uint32_t> cancel_requested;
+  uint32_t cancel_type;
+  CleanupHandler *cleanup_stack;
 
   LIBC_INLINE constexpr ThreadAttributes()
       : detach_state(uint32_t(DetachState::DETACHED)), stack(nullptr),
         stacksize(0), guardsize(0), tls(0), tls_size(0), owned_stack(false),
         tid(-1), style(ThreadStyle::POSIX), retval(),
-        atexit_callback_mgr(nullptr), platform_data(nullptr), joiner(nullptr) {}
+        atexit_callback_mgr(nullptr), platform_data(nullptr), joiner(nullptr),
+        cancel_state(uint32_t(CancelState::ENABLE)), cancel_requested(0),
+        cancel_type(uint32_t(CancelType::DEFERRED)), cleanup_stack(nullptr) {}
 };
 
 } // namespace LIBC_NAMESPACE_DECL
