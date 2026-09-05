@@ -280,6 +280,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  clock_nanosleep
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.clock_nanosleep
+)
+
+add_entrypoint_object(
   clock_gettime
   ALIAS
   DEPENDS
