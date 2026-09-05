@@ -14,6 +14,8 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/glob_macros.h"
 #include "hdr/sys_stat_macros.h"
+#include "hdr/types/struct_dirent.h"
+#include "hdr/types/struct_stat.h"
 #include "hdr/types/glob_t.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/libc_errno.h"
@@ -71,7 +73,78 @@ void tear_down_tree() {
   libc_errno = 0;
 }
 
+// A directory "fake" holding a, b and sub, which exists only in these hooks.
+struct FakeDir {
+  size_t next = 0;
+};
+constexpr const char *FAKE_NAMES[] = {"a", "b", "sub"};
+FakeDir fake_dir;
+bool fake_dir_open = false;
+
+void *fake_opendir(const char *path) {
+  if (string_view(path) != "fake/")
+    return nullptr;
+  fake_dir.next = 0;
+  fake_dir_open = true;
+  return &fake_dir;
+}
+
+struct dirent *fake_readdir(void *dir) {
+  static struct dirent entry;
+  FakeDir *d = static_cast<FakeDir *>(dir);
+  if (d->next == sizeof(FAKE_NAMES) / sizeof(FAKE_NAMES[0]))
+    return nullptr;
+  const char *name = FAKE_NAMES[d->next++];
+  size_t i = 0;
+  for (; name[i] != '\0'; ++i)
+    entry.d_name[i] = name[i];
+  entry.d_name[i] = '\0';
+  // The type is left unknown, so what each name is comes from the stat hook.
+  entry.d_type = 0;
+  return &entry;
+}
+
+void fake_closedir(void *) { fake_dir_open = false; }
+
+int fake_stat(const char *path, struct stat *buf) {
+  *buf = {};
+  buf->st_mode = (string_view(path) == "fake/sub") ? S_IFDIR : S_IFREG;
+  return 0;
+}
+
 } // anonymous namespace
+
+TEST_F(LlvmLibcGlobTest, AlternativeDirectoryFunctionsAreUsedWhenAsked) {
+  glob_t g = {};
+  g.gl_opendir = fake_opendir;
+  g.gl_readdir = fake_readdir;
+  g.gl_closedir = fake_closedir;
+  g.gl_lstat = fake_stat;
+  g.gl_stat = fake_stat;
+
+  // No directory called "fake" exists, so anything found came from the hooks.
+  ASSERT_EQ(LIBC_NAMESPACE::glob("fake/*", GLOB_ALTDIRFUNC, nullptr, &g), 0);
+  ASSERT_EQ(g.gl_pathc, size_t(3));
+  EXPECT_TRUE(string_view(g.gl_pathv[0]) == "fake/a");
+  EXPECT_TRUE(string_view(g.gl_pathv[1]) == "fake/b");
+  EXPECT_TRUE(string_view(g.gl_pathv[2]) == "fake/sub");
+  // The directory the hooks opened was closed through them.
+  EXPECT_FALSE(fake_dir_open);
+  LIBC_NAMESPACE::globfree(&g);
+}
+
+TEST_F(LlvmLibcGlobTest, WithoutTheFlagTheHooksAreIgnored) {
+  glob_t g = {};
+  g.gl_opendir = fake_opendir;
+  g.gl_readdir = fake_readdir;
+  g.gl_closedir = fake_closedir;
+  g.gl_lstat = fake_stat;
+  g.gl_stat = fake_stat;
+
+  ASSERT_EQ(LIBC_NAMESPACE::glob("fake/*", 0, nullptr, &g), GLOB_NOMATCH);
+  EXPECT_FALSE(fake_dir_open);
+  LIBC_NAMESPACE::globfree(&g);
+}
 
 TEST_F(LlvmLibcGlobTest, MatchesAndSorts) {
   build_tree();

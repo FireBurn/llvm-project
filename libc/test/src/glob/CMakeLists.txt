@@ -11,6 +11,8 @@ add_libc_test(
     libc.hdr.glob_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.glob_t
+    libc.hdr.types.struct_dirent
+    libc.hdr.types.struct_stat
     libc.src.__support.CPP.string_view
     libc.src.errno.errno
     libc.src.fcntl.open
