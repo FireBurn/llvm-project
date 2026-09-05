@@ -124,6 +124,7 @@ add_header_library(
   DEPENDS
     libc.hdr.types.cpu_set_t
     libc.src.__support.common
+    libc.hdr.types.cpu_set_t
 )
 
 add_object_library(

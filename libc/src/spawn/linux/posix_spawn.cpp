@@ -9,8 +9,19 @@
 #include "src/spawn/posix_spawn.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/execve.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/exit_group.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigaction.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigprocmask.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setparam.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setscheduler.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setpgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setsid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setuid.h"
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
@@ -18,8 +29,12 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/signal_macros.h" // For SIGCHLD
+#include "hdr/signal_macros.h"
+#include "hdr/spawn_macros.h"
 #include "hdr/types/mode_t.h"
+#include "hdr/types/sigset_t.h"
 #include "src/signal/linux/signal_utils.h"
+#include "src/signal/sigismember.h"
 #include <spawn.h>
 #include <sys/syscall.h> // For syscall numbers.
 
@@ -46,15 +61,78 @@ pid_t fork() {
 // exit implementation which exits with code 127.
 [[noreturn]] void exit() { linux_syscalls::exit_group(127); }
 
+// Puts into effect the parts of |attr| the flags asked for. This runs in
+// the child, between the fork and the exec, so anything it does is undone
+// by the exec except for what the exec keeps: the ids, the process group,
+// the session, the signal dispositions and mask, and the scheduling.
+void apply_attributes(const posix_spawnattr_t *attr) {
+  if (attr == nullptr || attr->__flags == 0)
+    return;
+  const short flags = attr->__flags;
+
+  if (flags & POSIX_SPAWN_SETSID) {
+    if (!linux_syscalls::setsid())
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_SETPGROUP) {
+    if (!linux_syscalls::setpgid(0, attr->__pgroup))
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_RESETIDS) {
+    // Give up whatever the exec of this program granted, so the child runs
+    // as whoever asked for it.
+    gid_t gid = linux_syscalls::getgid();
+    uid_t uid = linux_syscalls::getuid();
+    if (!linux_syscalls::setgid(gid) || !linux_syscalls::setuid(uid))
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_SETSIGDEF) {
+    // A handler is not carried over an exec anyway, but a signal set to be
+    // ignored is, so the ones named here are put back to the default.
+    struct KernelSigaction {
+      void *handler;
+      unsigned long sa_flags;
+      void (*restorer)(void);
+      sigset_t mask;
+    } action{};
+    action.handler = nullptr; // SIG_DFL
+    for (int sig = 1; sig < NSIG; ++sig) {
+      if (!LIBC_NAMESPACE::sigismember(&attr->__sigdefault, sig))
+        continue;
+      linux_syscalls::rt_sigaction(sig, &action, nullptr);
+    }
+  }
+
+  if (flags & POSIX_SPAWN_SETSCHEDULER) {
+    if (!linux_syscalls::sched_setscheduler(0, attr->__policy,
+                                            &attr->__schedparam))
+      exit();
+  } else if (flags & POSIX_SPAWN_SETSCHEDPARAM) {
+    if (!linux_syscalls::sched_setparam(0, &attr->__schedparam))
+      exit();
+  }
+
+  // The mask goes last, so that anything above which needed a signal
+  // through still had one.
+  if (flags & POSIX_SPAWN_SETSIGMASK) {
+    if (!linux_syscalls::rt_sigprocmask(SIG_SETMASK, &attr->__sigmask, nullptr))
+      exit();
+  }
+}
+
 void child_process(const char *__restrict path,
                    const posix_spawn_file_actions_t *file_actions,
-                   const posix_spawnattr_t *__restrict, // For now unused
+                   const posix_spawnattr_t *__restrict attr,
                    char *const *__restrict argv, char *const *__restrict envp) {
   // TODO: In the code below, the child_process just exits on error during
   // processing |file_actions| and |attr|. The correct way would be to exit
   // after conveying the information about the failure to the parent process
   // (via a pipe for example).
-  // TODO: Handle |attr|.
+
+  apply_attributes(attr);
 
   if (file_actions != nullptr) {
     auto *act = reinterpret_cast<BaseSpawnFileAction *>(file_actions->__front);
@@ -92,7 +170,7 @@ void child_process(const char *__restrict path,
     }
   }
 
-  if (LIBC_NAMESPACE::syscall_impl<long>(SYS_execve, path, argv, envp) < 0)
+  if (!linux_syscalls::execve(path, argv, envp))
     exit();
 }
 
