@@ -1529,3 +1529,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_mount_attr
 )
+
+add_proxy_header_library(
+  struct_statx
+  HDRS
+    struct_statx.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_statx
+)
