@@ -31,19 +31,26 @@ namespace temp_template {
 // something is wrong with the directory.
 constexpr int MAX_ATTEMPTS = 100;
 
-// The part of |tmpl| which is replaced, or an error if the template does not
-// end in enough 'X' characters.
-LIBC_INLINE ErrorOr<cpp::string_view> suffix_of(char *tmpl) {
-  cpp::string_view view(tmpl);
-  size_t count = 0;
-  for (size_t i = view.size(); i > 0; --i) {
-    if (view[i - 1] != 'X')
-      break;
-    ++count;
-  }
-  if (count < 6)
+// How many characters of the template are replaced. Any 'X' before these is
+// part of the name the caller chose and is left alone.
+constexpr size_t PLACEHOLDER_LENGTH = 6;
+
+// The part of |tmpl| which is replaced: the six 'X' characters that come
+// before its last |suffix_length| bytes, which are kept. An error if the
+// template is not that shape.
+LIBC_INLINE ErrorOr<cpp::string_view> suffix_of(char *tmpl,
+                                                int suffix_length = 0) {
+  if (suffix_length < 0)
     return Error(EINVAL);
-  return cpp::string_view(tmpl + view.size() - count, count);
+  cpp::string_view view(tmpl);
+  const size_t kept = static_cast<size_t>(suffix_length);
+  if (view.size() < PLACEHOLDER_LENGTH + kept)
+    return Error(EINVAL);
+  const size_t start = view.size() - PLACEHOLDER_LENGTH - kept;
+  for (size_t i = 0; i < PLACEHOLDER_LENGTH; ++i)
+    if (view[start + i] != 'X')
+      return Error(EINVAL);
+  return cpp::string_view(tmpl + start, PLACEHOLDER_LENGTH);
 }
 
 // Replaces the run of 'X' characters with a random name. Returns the error
