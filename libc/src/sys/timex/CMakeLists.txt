@@ -1,0 +1,25 @@
+add_entrypoint_object(
+  adjtimex
+  SRCS
+    adjtimex.cpp
+  HDRS
+    adjtimex.h
+  DEPENDS
+    libc.hdr.types.struct_timex
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  ntp_adjtime
+  SRCS
+    ntp_adjtime.cpp
+  HDRS
+    ntp_adjtime.h
+  DEPENDS
+    libc.hdr.types.struct_timex
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
