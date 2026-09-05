@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/poll/poll.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "hdr/types/nfds_t.h"
 #include "hdr/types/struct_pollfd.h"
@@ -21,6 +23,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, poll, (pollfd * fds, nfds_t nfds, int timeout)) {
+  internal::cancel_point();
   int ret = 0;
 
 #if defined(SYS_poll)
@@ -49,6 +52,9 @@ LLVM_LIBC_FUNCTION(int, poll, (pollfd * fds, nfds_t nfds, int timeout)) {
 #error "poll, ppoll, ppoll_time64 syscalls not available."
 #endif // defined(SYS_ppoll) || defined(SYS_ppoll_time64)
 #endif // defined(SYS_poll)
+
+  if (ret == -EINTR)
+    internal::cancel_point();
 
   if (ret < 0) {
     libc_errno = -ret;
