@@ -224,3 +224,15 @@ add_header(
     sys-reboot-macros.h
 )
 
+add_header(
+  sys_timex_macros
+  HDR
+    sys-timex-macros.h
+)
+
+add_header(
+  sys_quota_macros
+  HDR
+    sys-quota-macros.h
+)
+
