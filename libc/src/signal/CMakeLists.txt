@@ -113,3 +113,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sigwaitinfo
 )
+
+add_entrypoint_object(
+  sigisemptyset
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigisemptyset
+)
+
+add_entrypoint_object(
+  sigqueue
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigqueue
+)
