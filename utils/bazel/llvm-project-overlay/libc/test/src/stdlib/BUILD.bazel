@@ -129,6 +129,23 @@ libc_test_library(
 )
 
 libc_test(
+    name = "mkstemps_test",
+    srcs = ["mkstemps_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/stdlib:mkostemps",
+        "//libc/src/stdlib:mkstemps",
+        "//libc/src/string:strdup",
+        "//libc/src/string:strlen",
+        "//libc/src/unistd:access",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
     name = "mktemp_test",
     srcs = ["mktemp_test.cpp"],
     deps = [
