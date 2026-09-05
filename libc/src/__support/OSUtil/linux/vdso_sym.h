@@ -13,13 +13,16 @@
 #include "src/__support/common.h"
 #include <stddef.h> // For size_t.
 
+// cpu_set_t is a typedef rather than a struct tag, so it cannot be forward
+// declared the way the others here are.
+#include "hdr/types/cpu_set_t.h"
+
 // NOLINTBEGIN(llvmlibc-implementation-in-namespace)
 // TODO: some of the following can be defined via proxy headers.
 struct __kernel_timespec;
 struct timezone;
 struct riscv_hwprobe;
 struct getcpu_cache;
-struct cpu_set_t;
 // NOLINTEND(llvmlibc-implementation-in-namespace)
 
 namespace LIBC_NAMESPACE_DECL {
