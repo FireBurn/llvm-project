@@ -198,6 +198,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  utmpx_macros
+  HDRS
+    utmpx_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.utmpx_macros
+)
+
+add_proxy_header_library(
   semaphore_macros
   HDRS
     semaphore_macros.h

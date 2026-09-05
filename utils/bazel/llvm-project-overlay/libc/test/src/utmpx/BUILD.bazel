@@ -1,0 +1,34 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc utmpx.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "utmpx_test",
+    srcs = ["utmpx_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_utmpx",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:strcpy",
+        "//libc/src/string:strncmp",
+        "//libc/src/unistd:close",
+        "//libc/src/utmpx:endutxent",
+        "//libc/src/utmpx:getutxent",
+        "//libc/src/utmpx:getutxid",
+        "//libc/src/utmpx:getutxline",
+        "//libc/src/utmpx:pututxline",
+        "//libc/src/utmpx:setutxent",
+        "//libc/src/utmpx:updwtmpx",
+        "//libc/src/utmpx:utmpxname",
+    ],
+)
