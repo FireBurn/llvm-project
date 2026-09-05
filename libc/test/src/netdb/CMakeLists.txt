@@ -45,3 +45,13 @@ add_libc_test(
     libc.src.arpa.inet.htons
     libc.src.netdb.getnameinfo
 )
+
+add_libc_test(
+  h_errno_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    h_errno_test.cpp
+  DEPENDS
+    libc.src.netdb.__h_errno_location
+)
