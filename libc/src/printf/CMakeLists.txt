@@ -1,0 +1,11 @@
+add_entrypoint_object(
+  parse_printf_format
+  SRCS
+    parse_printf_format.cpp
+  HDRS
+    parse_printf_format.h
+  DEPENDS
+    libc.hdr.printf_macros
+    libc.hdr.types.size_t
+    libc.src.__support.ctype_utils
+)
