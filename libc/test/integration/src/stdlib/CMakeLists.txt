@@ -17,6 +17,19 @@ add_integration_test(
     GERMANY=Berlin
 )
 
+add_integration_test(
+  environ_replacement_test
+  SUITE
+    stdlib-integration-tests
+  SRCS
+    environ_replacement_test.cpp
+  DEPENDS
+    libc.src.stdlib.getenv
+    libc.src.stdlib.setenv
+    libc.src.unistd.environ
+)
+
+
 if(${LIBC_TARGET_OS} STREQUAL "linux")
   add_integration_test(
     setenv_test
