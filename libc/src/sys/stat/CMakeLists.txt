@@ -80,6 +80,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  statx
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.statx
+)
+
+add_entrypoint_object(
   mknodat
   ALIAS
   DEPENDS

@@ -20561,6 +20561,21 @@ libc_function(
 )
 
 libc_function(
+    name = "statx",
+    srcs = ["src/sys/stat/linux/statx.cpp"],
+    hdrs = ["src/sys/stat/statx.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_statx",
+        ":errno",
+        ":sys_stat_statx",
+        ":types_struct_statx",
+    ],
+)
+
+libc_function(
     name = "swapoff",
     srcs = ["src/sys/swap/linux/swapoff.cpp"],
     hdrs = ["src/sys/swap/swapoff.h"],
@@ -26032,6 +26047,29 @@ libc_support_library(
     hdrs = ["src/sys/mount/open_tree.h"],
     deps = [
         ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_statx",
+    hdrs = ["include/llvm-libc-types/struct_statx.h"],
+)
+
+libc_support_library(
+    name = "types_struct_statx",
+    hdrs = ["hdr/types/struct_statx.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_statx"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "sys_stat_statx",
+    hdrs = ["src/sys/stat/statx.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_statx",
     ],
 )
 
