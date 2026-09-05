@@ -270,6 +270,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  utmpx
+  ../libc/include/utmpx.yaml
+  utmpx.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.utmpx_macros
+    .llvm-libc-types.struct_utmpx
+    .llvm-libc-types.pid_t
+)
+
+add_header_macro(
   printf
   ../libc/include/printf.yaml
   printf.h
