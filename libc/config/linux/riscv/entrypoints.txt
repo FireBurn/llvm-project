@@ -49,6 +49,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # fcntl.h entrypoints
     libc.src.fcntl.creat
+    libc.src.fcntl.fallocate
+    libc.src.fcntl.splice
     libc.src.fcntl.fcntl
     libc.src.fcntl.open
     libc.src.fcntl.openat
@@ -135,6 +137,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.string.strcpy
     libc.src.string.strcspn
     libc.src.string.strdup
+    libc.src.string.explicit_bzero
     libc.src.string.strerror
     libc.src.string.strerror_r
     libc.src.string.strlcat
@@ -439,6 +442,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.fanotify.fanotify_mark
     libc.src.sys.module.delete_module
     libc.src.sys.module.init_module
+    libc.src.sys.reboot.reboot
     libc.src.sys.inotify.inotify_init
     libc.src.sys.inotify.inotify_init1
     libc.src.sys.inotify.inotify_rm_watch
@@ -515,6 +519,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.wait.wait
     libc.src.sys.wait.wait4
     libc.src.sys.wait.waitpid
+    libc.src.sys.wait.waitid
 
     # sys/prctl.h entrypoints
     libc.src.sys.prctl.prctl
@@ -609,6 +614,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.setuid
     libc.src.unistd.sleep
     libc.src.unistd.symlink
+    libc.src.unistd.sync
+    libc.src.unistd.syncfs
     libc.src.unistd.symlinkat
     libc.src.unistd.sysconf
     libc.src.unistd.tcgetpgrp
@@ -1620,6 +1627,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.atexit
     libc.src.stdlib.exit
     libc.src.stdlib.getenv
+    libc.src.stdlib.secure_getenv
     libc.src.stdlib.putenv
     libc.src.stdlib.setenv
     libc.src.stdlib.system
