@@ -1,0 +1,44 @@
+header: netinet/icmp6.h
+standards:
+  - bsd
+public_includes:
+  - netinet/in.h
+macros:
+  - macro_name: ICMP6_FILTER
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_DST_UNREACH
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_PACKET_TOO_BIG
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_TIME_EXCEEDED
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_PARAM_PROB
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_ECHO_REQUEST
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_ECHO_REPLY
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_ROUTER_SOLICIT
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_ROUTER_ADVERT
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_NEIGHBOR_SOLICIT
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_NEIGHBOR_ADVERT
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_REDIRECT
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_OPT_PREFIX_INFORMATION
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ND_OPT_MTU
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_FILTER_SETPASSALL
+    macro_header: netinet-icmp6-macros.h
+  - macro_name: ICMP6_FILTER_SETBLOCKALL
+    macro_header: netinet-icmp6-macros.h
+types:
+  - type_name: struct_icmp6_hdr
+  - type_name: struct_in6_addr
+enums: []
+objects: []
+functions: []
