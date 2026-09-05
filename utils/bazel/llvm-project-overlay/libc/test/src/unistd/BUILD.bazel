@@ -159,6 +159,17 @@ libc_test(
 )
 
 libc_test(
+    name = "sethostname_test",
+    srcs = ["sethostname_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:sethostname",
+        "//libc:strlen",
+        "//libc:uname",
+    ],
+)
+
+libc_test(
     name = "swab_test",
     srcs = ["swab_test.cpp"],
     deps = [
