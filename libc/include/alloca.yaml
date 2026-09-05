@@ -1,9 +1,8 @@
 header: alloca.h
 standards:
   - gnu
-macros:
-  - macro_name: alloca
-    macro_header: alloca-macros.h
+merge_yaml_files:
+  - stdlib-alloca.yaml
 types:
   - type_name: size_t
 enums: []
