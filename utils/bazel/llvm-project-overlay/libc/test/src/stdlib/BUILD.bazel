@@ -145,6 +145,23 @@ libc_test(
 )
 
 libc_test(
+    name = "pty_test",
+    srcs = ["pty_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:grantpt",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:posix_openpt",
+        "//libc:ptsname",
+        "//libc:ptsname_r",
+        "//libc:strlen",
+        "//libc:strncmp",
+        "//libc:unlockpt",
+    ],
+)
+
+libc_test(
     name = "quick_sort_test",
     srcs = ["quick_sort_test.cpp"],
     deps = [
