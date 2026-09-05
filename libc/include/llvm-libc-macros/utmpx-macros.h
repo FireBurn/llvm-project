@@ -35,4 +35,13 @@
 #define DEAD_PROCESS 8  // One which has ended.
 #define ACCOUNTING 9
 
+// Where the two files live. A program which wants a file of its own passes
+// it to utmpxname instead.
+#define _PATH_UTMPX "/var/run/utmp"
+#define _PATH_WTMPX "/var/log/wtmp"
+#define UTMPX_FILE _PATH_UTMPX
+#define UTMPX_FILENAME _PATH_UTMPX
+#define WTMPX_FILE _PATH_WTMPX
+#define WTMPX_FILENAME _PATH_WTMPX
+
 #endif // LLVM_LIBC_MACROS_UTMPX_MACROS_H

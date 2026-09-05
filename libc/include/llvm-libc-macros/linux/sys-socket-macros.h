@@ -138,6 +138,12 @@
 #define SO_TIMESTAMP 63
 #define SO_TIMESTAMPNS 64
 #define SO_TIMESTAMPING 65
+
+// The control message a timestamp arrives in is named by the option which
+// asked for it.
+#define SCM_TIMESTAMP SO_TIMESTAMP
+#define SCM_TIMESTAMPNS SO_TIMESTAMPNS
+#define SCM_TIMESTAMPING SO_TIMESTAMPING
 #define SO_RCVTIMEO 66
 #define SO_SNDTIMEO 67
 
