@@ -17,11 +17,13 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/sanitizer.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, recvmsg, (int sockfd, msghdr *msg, int flags)) {
-  auto result = linux_syscalls::recvmsg(sockfd, msg, flags);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::recvmsg(sockfd, msg, flags); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;
