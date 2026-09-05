@@ -43,7 +43,8 @@ protected:
                       int buffer_mode, bool owned, FileMode mode,
                       CloseFunc *close_func, bool static_stream = false)
       : File(&linux_file_write, &linux_file_read, &linux_file_seek, close_func,
-             buffer, buffer_size, buffer_mode, owned, mode, static_stream),
+             buffer, buffer_size, buffer_mode, owned, mode, static_stream,
+             /*has_file_descriptor=*/true),
         fd(file_descriptor) {}
 
   // Closes the underlying file descriptor. Returns 0 on success, or an error
