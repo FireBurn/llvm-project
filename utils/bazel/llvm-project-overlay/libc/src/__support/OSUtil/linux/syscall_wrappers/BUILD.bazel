@@ -1991,3 +1991,15 @@ libc_support_library(
         "//libc/src/__support:error_or",
     ],
 )
+
+libc_support_library(
+    name = "newfstatat",
+    hdrs = ["newfstatat.h"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
