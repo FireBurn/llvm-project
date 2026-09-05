@@ -186,6 +186,7 @@ LLVM_LIBC_HEADERS = [
     ),
     libc_header_info("sys/kd"),
     libc_header_info("sys/msg"),
+    libc_header_info("sys/mtio"),
     libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
