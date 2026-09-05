@@ -2,6 +2,7 @@ header: grp.h
 standards:
   - posix
 types:
+  - type_name: FILE
   - type_name: struct_group
   - type_name: gid_t
   - type_name: size_t
@@ -68,6 +69,13 @@ functions:
     arguments:
       - type: const char *
       - type: gid_t
+  - name: putgrent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct group *
+      - type: FILE *
   - name: setgrent
     standards:
       - posix
