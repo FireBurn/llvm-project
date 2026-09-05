@@ -49,10 +49,11 @@
 #define NSIG 65
 #define _NSIG NSIG
 
-// SIGRTMIN is current set to the minimum usable from user mode programs. If
-// the libc itself uses some of these signal numbers for private operations,
-// then it has to be adjusted in future to reflect that.
-#define SIGRTMIN 32
+// The first real time signal is kept for the thread cancellation request,
+// which is not for programs to use: its only job is to interrupt whatever a
+// thread is blocked in so it reaches its next cancellation point. This is
+// what glibc does with the same signal.
+#define SIGRTMIN 33
 // SIGRTMAX is the largest allowed value for the runtime signal.
 #define SIGRTMAX (NSIG - 1)
 
