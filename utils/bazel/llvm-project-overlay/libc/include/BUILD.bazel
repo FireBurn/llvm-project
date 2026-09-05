@@ -39,6 +39,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "math",
         has_def_template = True,
     ),
+    libc_header_info("printf"),
     libc_header_info(
         "stdbit",
         has_def_template = True,
@@ -728,4 +729,9 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_printf_macros",
+    hdrs = ["llvm-libc-macros/printf-macros.h"],
 )
