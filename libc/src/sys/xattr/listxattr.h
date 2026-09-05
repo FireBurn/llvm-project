@@ -1,18 +1,13 @@
-//===----------------------------------------------------------------------===//
+//===-- Implementation header for listxattr ---------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-///
-/// \file
-/// Function declaration of listxattr.
-///
-//===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_SYS_XATTR_LINUX_LISTXATTR_H
-#define LLVM_LIBC_SRC_SYS_XATTR_LINUX_LISTXATTR_H
+#ifndef LLVM_LIBC_SRC_SYS_XATTR_LISTXATTR_H
+#define LLVM_LIBC_SRC_SYS_XATTR_LISTXATTR_H
 
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
@@ -24,4 +19,4 @@ ssize_t listxattr(const char *path, char *list, size_t size);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_SYS_XATTR_LINUX_LISTXATTR_H
+#endif // LLVM_LIBC_SRC_SYS_XATTR_LISTXATTR_H

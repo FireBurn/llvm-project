@@ -1,68 +1,32 @@
 add_custom_target(libc_sys_xattr_unittests)
 
 add_libc_test(
-  flistxattr_test
+  xattr_test
   SUITE
     libc_sys_xattr_unittests
   SRCS
-    flistxattr_test.cpp
+    xattr_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
-    libc.include.sys_xattr
-    libc.src.__support.CPP.scope
-    libc.src.__support.OSUtil.osutil
     libc.src.__support.libc_errno
-    libc.src.errno.errno
-    libc.src.fcntl.creat
+    libc.src.fcntl.open
+    libc.src.string.memcmp
+    libc.src.sys.xattr.fgetxattr
     libc.src.sys.xattr.flistxattr
-    libc.src.unistd.close
-    libc.src.unistd.unlink
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
-
-add_libc_test(
-  listxattr_test
-  SUITE
-    libc_sys_xattr_unittests
-  SRCS
-    listxattr_test.cpp
-  DEPENDS
-    libc.hdr.sys_stat_macros
-    libc.include.sys_xattr
-    libc.src.__support.CPP.scope
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.libc_errno
-    libc.src.errno.errno
-    libc.src.fcntl.creat
+    libc.src.sys.xattr.fremovexattr
+    libc.src.sys.xattr.fsetxattr
+    libc.src.sys.xattr.getxattr
+    libc.src.sys.xattr.lgetxattr
     libc.src.sys.xattr.listxattr
-    libc.src.unistd.close
-    libc.src.unistd.symlink
-    libc.src.unistd.unlink
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
-
-add_libc_test(
-  llistxattr_test
-  SUITE
-    libc_sys_xattr_unittests
-  SRCS
-    llistxattr_test.cpp
-  DEPENDS
-    libc.hdr.sys_stat_macros
-    libc.include.sys_xattr
-    libc.src.__support.CPP.scope
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.libc_errno
-    libc.src.errno.errno
-    libc.src.fcntl.creat
     libc.src.sys.xattr.llistxattr
+    libc.src.sys.xattr.lremovexattr
+    libc.src.sys.xattr.lsetxattr
+    libc.src.sys.xattr.removexattr
+    libc.src.sys.xattr.setxattr
     libc.src.unistd.close
-    libc.src.unistd.symlink
     libc.src.unistd.unlink
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
-
-add_subdirectory(testdata)

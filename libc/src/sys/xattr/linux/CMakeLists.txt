@@ -1,14 +1,84 @@
 add_entrypoint_object(
-  flistxattr
+  setxattr
   SRCS
-    flistxattr.cpp
+    setxattr.cpp
   HDRS
-    ../flistxattr.h
+    ../setxattr.h
   DEPENDS
-    libc.src.__support.OSUtil.linux.syscall_wrappers.flistxattr
-    libc.src.__support.common
-    libc.src.__support.libc_errno
-    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  lsetxattr
+  SRCS
+    lsetxattr.cpp
+  HDRS
+    ../lsetxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fsetxattr
+  SRCS
+    fsetxattr.cpp
+  HDRS
+    ../fsetxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  getxattr
+  SRCS
+    getxattr.cpp
+  HDRS
+    ../getxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  lgetxattr
+  SRCS
+    lgetxattr.cpp
+  HDRS
+    ../lgetxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fgetxattr
+  SRCS
+    fgetxattr.cpp
+  HDRS
+    ../fgetxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
 
@@ -19,11 +89,10 @@ add_entrypoint_object(
   HDRS
     ../listxattr.h
   DEPENDS
-    libc.src.__support.OSUtil.linux.syscall_wrappers.listxattr
-    libc.src.__support.common
-    libc.src.__support.libc_errno
-    libc.src.__support.macros.config
-    libc.src.__support.macros.null_check
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )
 
@@ -34,10 +103,65 @@ add_entrypoint_object(
   HDRS
     ../llistxattr.h
   DEPENDS
-    libc.src.__support.OSUtil.linux.syscall_wrappers.llistxattr
-    libc.src.__support.common
-    libc.src.__support.libc_errno
-    libc.src.__support.macros.config
-    libc.src.__support.macros.null_check
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  flistxattr
+  SRCS
+    flistxattr.cpp
+  HDRS
+    ../flistxattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  removexattr
+  SRCS
+    removexattr.cpp
+  HDRS
+    ../removexattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  lremovexattr
+  SRCS
+    lremovexattr.cpp
+  HDRS
+    ../lremovexattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fremovexattr
+  SRCS
+    fremovexattr.cpp
+  HDRS
+    ../fremovexattr.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
 )

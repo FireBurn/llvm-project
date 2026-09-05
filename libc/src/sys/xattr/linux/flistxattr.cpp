@@ -1,31 +1,31 @@
-//===----------------------------------------------------------------------===//
+//===-- Linux implementation of flistxattr --------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-///
-/// \file
-/// Implementation of flistxattr.
-///
-//===----------------------------------------------------------------------===//
 
 #include "src/sys/xattr/flistxattr.h"
-#include "src/__support/OSUtil/linux/syscall_wrappers/flistxattr.h"
+
+#include "hdr/types/size_t.h"
+#include "hdr/types/ssize_t.h"
+#include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 
+#include <sys/syscall.h>
+
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, flistxattr, (int fd, char *list, size_t size)) {
-  ErrorOr<ssize_t> ret = linux_syscalls::flistxattr(fd, list, size);
-  if (!ret) {
-    libc_errno = ret.error();
+  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_flistxattr, fd, list, size);
+  if (ret < 0) {
+    libc_errno = static_cast<int>(-ret);
     return -1;
   }
-  return *ret;
+  return static_cast<ssize_t>(ret);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
