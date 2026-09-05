@@ -1,0 +1,12 @@
+header: netinet/ip6.h
+standards:
+  - bsd
+public_includes:
+  - netinet/in.h
+macros: []
+types:
+  - type_name: struct_ip6_hdr
+  - type_name: struct_in6_addr
+enums: []
+objects: []
+functions: []
