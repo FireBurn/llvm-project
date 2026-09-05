@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Implementation header for delete_module
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_SRC_SYS_MODULE_DELETE_MODULE_H
+#define LLVM_LIBC_SRC_SYS_MODULE_DELETE_MODULE_H
+
+#include "src/__support/macros/config.h"
+
+namespace LIBC_NAMESPACE_DECL {
+
+long delete_module(const char *name, unsigned int flags);
+
+} // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_SYS_MODULE_DELETE_MODULE_H
