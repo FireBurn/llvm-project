@@ -214,3 +214,17 @@ add_integration_test(
     EXECV_TEST=PASS
 )
 
+add_integration_test(
+  get_current_dir_name_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    get_current_dir_name_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.stdlib.unsetenv
+    libc.src.sys.stat.stat
+    libc.src.unistd.get_current_dir_name
+)
+
