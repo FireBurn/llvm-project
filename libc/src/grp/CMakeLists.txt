@@ -165,3 +165,15 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.string.string_utils
 )
+
+add_entrypoint_object(
+  getgrouplist
+  SRCS
+    getgrouplist.cpp
+  HDRS
+    getgrouplist.h
+  DEPENDS
+    .grp_utils
+    libc.hdr.types.gid_t
+    libc.hdr.types.struct_group
+)
