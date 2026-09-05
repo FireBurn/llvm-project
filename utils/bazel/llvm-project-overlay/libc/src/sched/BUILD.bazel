@@ -215,3 +215,23 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_function(
+    name = "clone",
+    srcs = select({
+        "@platforms//cpu:x86_64": ["linux/x86_64/clone.cpp"],
+        "//conditions:default": ["linux/clone.cpp"],
+    }),
+    hdrs = ["clone.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sched_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clone",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
