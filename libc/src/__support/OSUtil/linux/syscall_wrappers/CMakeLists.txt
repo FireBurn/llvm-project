@@ -1913,3 +1913,16 @@ add_header_library(
     libc.src.__support.error_or
     libc.src.__support.macros.config
 )
+
+add_header_library(
+  newfstatat
+  HDRS
+    newfstatat.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_stat
+    libc.include.sys_syscall
+)
