@@ -100,3 +100,11 @@ libc_test(
         "//libc:__support_elf_run_path",
     ],
 )
+
+libc_test(
+    name = "search_paths_test",
+    srcs = ["search_paths_test.cpp"],
+    deps = [
+        "//libc:__support_elf_search",
+    ],
+)
