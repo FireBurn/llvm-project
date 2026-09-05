@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/unistd/pwrite.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
@@ -20,6 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, pwrite,
                    (int fd, const void *buf, size_t count, off_t offset)) {
+  internal::cancel_point();
 
   ssize_t ret;
   if constexpr (sizeof(long) == sizeof(uint32_t) &&
@@ -36,6 +39,9 @@ LLVM_LIBC_FUNCTION(ssize_t, pwrite,
     ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_pwrite64, fd, buf, count,
                                                 offset);
   }
+
+  if (ret == -EINTR)
+    internal::cancel_point();
 
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);

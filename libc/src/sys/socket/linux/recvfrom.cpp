@@ -18,6 +18,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/sanitizer.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -34,8 +35,9 @@ LLVM_LIBC_FUNCTION(ssize_t, recvfrom,
     srcaddr_sz = *addrlen;
   (void)srcaddr_sz; // prevent "set but not used" warning
 
-  auto result =
-      linux_syscalls::recvfrom(sockfd, buf, len, flags, src_addr, addrlen);
+  auto result = internal::cancellable([&] {
+    return linux_syscalls::recvfrom(sockfd, buf, len, flags, src_addr, addrlen);
+  });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;
