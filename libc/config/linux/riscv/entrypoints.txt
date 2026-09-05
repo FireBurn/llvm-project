@@ -1711,6 +1711,8 @@ if(LLVM_LIBC_FULL_BUILD)
     # net/if.h entrypoints
     libc.src.net.if.if_freenameindex
     libc.src.net.if.if_nameindex
+    libc.src.netdb.gethostbyname
+    libc.src.netdb.gethostbyname2
     libc.src.netdb.getnameinfo
 
     # pthread.h entrypoints

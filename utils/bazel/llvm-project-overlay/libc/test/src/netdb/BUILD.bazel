@@ -34,6 +34,22 @@ libc_test(
 )
 
 libc_test(
+    name = "gethostbyname_test",
+    srcs = ["gethostbyname_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr/types:struct_servent",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/netdb:__h_errno_location",
+        "//libc/src/netdb:gethostbyname",
+        "//libc/src/netdb:gethostbyname2",
+        "//libc/src/netdb:getservbyname",
+        "//libc/src/string:strcmp",
+    ],
+)
+
+libc_test(
     name = "getaddrinfo_test",
     srcs = ["getaddrinfo_test.cpp"],
     deps = [
