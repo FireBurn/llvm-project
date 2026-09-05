@@ -1,0 +1,17 @@
+header: sys/mtio.h
+public_includes:
+  # The requests are given to ioctl, so what takes them comes with them.
+  - sys/ioctl.h
+standards:
+  - bsd
+macros:
+  - macro_name: MTIOCTOP
+    macro_header: sys-mtio-macros.h
+  - macro_name: MTIOCGET
+    macro_header: sys-mtio-macros.h
+  - macro_name: MTIOCPOS
+    macro_header: sys-mtio-macros.h
+types: []
+enums: []
+objects: []
+functions: []
