@@ -56,14 +56,26 @@ constexpr const char *MODULE_SET_SYMBOL = "__llvm_libc_process_modules";
 } // namespace elf
 } // namespace LIBC_NAMESPACE_DECL
 
-extern "C" [[gnu::visibility("default")]]
+// Declared weak because the startup files refer to it and are also linked
+// into programs built against a static libc, where nothing defines it. Such a
+// program has no loader and no module set, and the reference resolves to
+// nothing rather than failing the link.
+extern "C" [[gnu::weak, gnu::visibility("default")]]
 LIBC_NAMESPACE::elf::ModuleSet __llvm_libc_process_modules;
 
 namespace LIBC_NAMESPACE_DECL {
 namespace elf {
 
-// The same object, under the name the rest of libc uses.
+// The same object, under the name the rest of libc uses. Only for code that
+// is always linked with the definition, which is everything inside libc and
+// the loader.
 LIBC_INLINE ModuleSet &loaded_modules() { return __llvm_libc_process_modules; }
+
+// The record, or null where it was not linked in at all. Callers that may run
+// in a statically linked program have to ask this way.
+LIBC_INLINE ModuleSet *process_modules() {
+  return &__llvm_libc_process_modules;
+}
 
 } // namespace elf
 } // namespace LIBC_NAMESPACE_DECL
