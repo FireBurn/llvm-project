@@ -57,3 +57,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.open_by_handle_at
 )
+
+add_entrypoint_object(
+  posix_fallocate
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.posix_fallocate
+)
