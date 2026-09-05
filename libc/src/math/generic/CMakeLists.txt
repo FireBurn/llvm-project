@@ -5066,3 +5066,83 @@ add_entrypoint_object(
   DEPENDS
     libc.src.__support.math.bf16subf128
 )
+
+add_entrypoint_object(
+  cosh
+  SRCS
+    cosh.cpp
+  HDRS
+    ../cosh.h
+  DEPENDS
+    libc.src.__support.math.cosh
+)
+
+add_entrypoint_object(
+  sinh
+  SRCS
+    sinh.cpp
+  HDRS
+    ../sinh.h
+  DEPENDS
+    libc.src.__support.math.sinh
+)
+
+add_entrypoint_object(
+  tanh
+  SRCS
+    tanh.cpp
+  HDRS
+    ../tanh.h
+  DEPENDS
+    libc.src.__support.math.tanh
+)
+
+add_entrypoint_object(
+  asinh
+  SRCS
+    asinh.cpp
+  HDRS
+    ../asinh.h
+  DEPENDS
+    libc.src.__support.math.asinh
+)
+
+add_entrypoint_object(
+  acosh
+  SRCS
+    acosh.cpp
+  HDRS
+    ../acosh.h
+  DEPENDS
+    libc.src.__support.math.acosh
+)
+
+add_entrypoint_object(
+  atanh
+  SRCS
+    atanh.cpp
+  HDRS
+    ../atanh.h
+  DEPENDS
+    libc.src.__support.math.atanh
+)
+
+add_entrypoint_object(
+  erf
+  SRCS
+    erf.cpp
+  HDRS
+    ../erf.h
+  DEPENDS
+    libc.src.__support.math.erf
+)
+
+add_entrypoint_object(
+  erfc
+  SRCS
+    erfc.cpp
+  HDRS
+    ../erfc.h
+  DEPENDS
+    libc.src.__support.math.erfc
+)
