@@ -1094,3 +1094,20 @@ add_entrypoint_object(
     libc.src.__support.macros.null_check
     libc.src.__support.threads.thread
 )
+
+add_entrypoint_object(
+  pthread_getattr_np
+  SRCS
+    pthread_getattr_np.cpp
+  HDRS
+    pthread_getattr_np.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_resource_macros
+    libc.include.pthread
+    libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.__support.threads.thread
+)
