@@ -73,6 +73,8 @@ types:
   - type_name: pthread_attr_t
   - type_name: pthread_spinlock_t
   - type_name: pthread_id_np_t
+  - type_name: cpu_set_t
+  - type_name: size_t
   - type_name: struct__pthread_cleanup_buffer
   - type_name: __pthread_cleanup_routine_t
     standards:
@@ -255,6 +257,22 @@ functions:
     arguments:
       - type: pthread_t
       - type: pthread_attr_t *
+  - name: pthread_getaffinity_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: size_t
+      - type: cpu_set_t *
+  - name: pthread_setaffinity_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: size_t
+      - type: const cpu_set_t *
   - name: pthread_getname_np
     standards:
       - gnu
