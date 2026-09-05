@@ -124,6 +124,9 @@
 #define SEGV_ACCERR 2 // Invalid permissions for mapped object
 #define SEGV_BNDERR 3 // Failed address bound check
 #define SEGV_PKUERR 4 // Failed protection key check
+#define SEGV_ACCADI 5 // Memory disambiguation not on for the mapping
+#define SEGV_ADIDERR 6 // Disrupting memory corruption error
+#define SEGV_ADIPERR 7 // Precise memory corruption error
 #define SEGV_MTEAERR 8 // Memory tagging fault reported later
 #define SEGV_MTESERR 9 // Memory tagging fault reported at once
 #define SEGV_CPERR 10  // Control flow protection fault

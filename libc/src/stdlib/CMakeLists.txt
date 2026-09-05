@@ -648,10 +648,42 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  mkostemps
+  SRCS
+    mkostemps.cpp
+  HDRS
+    mkostemps.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.macros.null_check
+    libc.src.errno.errno
+    libc.src.stdlib.temp_template
+)
+
+add_entrypoint_object(
   mkstemp
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.mkstemp
+)
+
+add_entrypoint_object(
+  mkstemps
+  SRCS
+    mkstemps.cpp
+  HDRS
+    mkstemps.h
+  DEPENDS
+    .temp_template
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
 )
 
 if(NOT LLVM_LIBC_FULL_BUILD)
@@ -1052,3 +1084,4 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.ptsname
 )
+

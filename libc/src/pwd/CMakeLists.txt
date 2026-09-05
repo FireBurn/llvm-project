@@ -149,3 +149,20 @@ add_object_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
 )
+
+
+add_entrypoint_object(
+  fgetpwent
+  SRCS
+    fgetpwent.cpp
+  HDRS
+    fgetpwent.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_passwd
+    libc.src.__support.CPP.span
+    libc.src.errno.errno
+    libc.src.pwd.pwd_utils
+    libc.src.stdio.fgets
+)
