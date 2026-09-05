@@ -248,6 +248,28 @@ add_header_macro(
 )
 
 add_header_macro(
+  gshadow
+  ../libc/include/gshadow.yaml
+  gshadow.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_sgrp
+    .llvm-libc-types.FILE
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
+  shadow
+  ../libc/include/shadow.yaml
+  shadow.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_spwd
+    .llvm-libc-types.FILE
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   printf
   ../libc/include/printf.yaml
   printf.h
