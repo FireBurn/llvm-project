@@ -22,10 +22,19 @@
 namespace LIBC_NAMESPACE_DECL {
 
 // Waiting with no deadline is the timed call with none given.
+namespace internal {
+
+int sigwaitinfo_impl(const sigset_t *__restrict set,
+                     siginfo_t *__restrict info) {
+  return internal::sigtimedwait_impl(set, info, nullptr);
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(int, sigwaitinfo,
                    (const sigset_t *__restrict set,
                     siginfo_t *__restrict info)) {
-  return LIBC_NAMESPACE::sigtimedwait(set, info, nullptr);
+  return internal::sigwaitinfo_impl(set, info);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
