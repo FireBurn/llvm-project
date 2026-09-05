@@ -1,0 +1,9 @@
+add_entrypoint_object(
+  clone
+  SRCS
+    clone.cpp
+  HDRS
+    ../../clone.h
+  DEPENDS
+    libc.include.sys_syscall
+)
