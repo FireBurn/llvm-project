@@ -20,6 +20,7 @@ add_object_library(
   DEPENDS
     libc.hdr.fcntl_macros
     libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
     libc.src.__support.CPP.string_view
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.__support.OSUtil.linux.syscall_wrappers.read
