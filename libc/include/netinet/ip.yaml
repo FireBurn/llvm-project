@@ -1,0 +1,39 @@
+header: netinet/ip.h
+standards:
+  - bsd
+public_includes:
+  - netinet/in.h
+macros:
+  - macro_name: IPVERSION
+    macro_header: netinet-ip-macros.h
+  - macro_name: IP_MAXPACKET
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPTOS_LOWDELAY
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPTOS_THROUGHPUT
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPTOS_RELIABILITY
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPTOS_CLASS_DEFAULT
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPTOS_DSCP_EF
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPOPT_EOL
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPOPT_NOP
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPOPT_RR
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPOPT_TS
+    macro_header: netinet-ip-macros.h
+  - macro_name: MAXTTL
+    macro_header: netinet-ip-macros.h
+  - macro_name: IPDEFTTL
+    macro_header: netinet-ip-macros.h
+types:
+  - type_name: struct_iphdr
+  - type_name: struct_ip
+  - type_name: struct_in_addr
+enums: []
+objects: []
+functions: []
