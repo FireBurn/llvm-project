@@ -5,6 +5,7 @@ add_entrypoint_object(
   HDRS
     ../select.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.fd_set
     libc.hdr.types.struct_timespec
     libc.hdr.types.struct_timeval
@@ -13,6 +14,7 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.__support.threads.cancel
 )
 
 add_entrypoint_object(
@@ -22,6 +24,7 @@ add_entrypoint_object(
   HDRS
     ../pselect.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.fd_set
     libc.hdr.types.sigset_t
     libc.hdr.types.struct_timespec
@@ -29,4 +32,5 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.__support.threads.cancel
 )
