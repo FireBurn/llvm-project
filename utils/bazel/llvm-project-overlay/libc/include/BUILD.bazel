@@ -820,6 +820,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_file_handle",
+    hdrs = ["llvm-libc-types/struct_file_handle.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
