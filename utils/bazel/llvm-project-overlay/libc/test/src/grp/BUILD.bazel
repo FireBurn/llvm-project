@@ -11,6 +11,29 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "fgetgrent_test",
+    srcs = ["fgetgrent_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:close",
+        "//libc:fclose",
+        "//libc:fgetgrent",
+        "//libc:fopen",
+        "//libc:getgrouplist",
+        "//libc:grp_grp_utils",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:putgrent",
+        "//libc:remove",
+        "//libc:types_FILE",
+        "//libc:types_struct_group",
+        "//libc:write",
+    ],
+)
+
+libc_test(
     name = "putgrent_test",
     srcs = ["putgrent_test.cpp"],
     deps = [
