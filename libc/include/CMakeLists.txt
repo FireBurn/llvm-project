@@ -63,6 +63,7 @@ add_header_macro(
   fcntl.h
   DEPENDS
     .llvm-libc-macros.fcntl_macros
+    .llvm-libc-types.struct_file_handle
     .llvm-libc-types.mode_t
     .llvm-libc-types.struct_f_owner_ex
     .llvm-libc-types.struct_flock
