@@ -560,6 +560,20 @@ libc_function(
 )
 
 libc_function(
+    name = "grantpt",
+    srcs = ["linux/grantpt.cpp"],
+    hdrs = ["grantpt.h"],
+    deps = [
+        ":linux_pty_utils",
+        ":stdlib_grantpt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "initstate",
     srcs = ["initstate.cpp"],
     hdrs = ["initstate.h"],
@@ -621,6 +635,47 @@ libc_function(
 )
 
 libc_function(
+    name = "posix_openpt",
+    srcs = ["linux/posix_openpt.cpp"],
+    hdrs = ["posix_openpt.h"],
+    deps = [
+        ":linux_pty_utils",
+        ":stdlib_posix_openpt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "ptsname",
+    srcs = ["linux/ptsname.cpp"],
+    hdrs = ["ptsname.h"],
+    deps = [
+        ":linux_pty_utils",
+        ":stdlib_ptsname",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "ptsname_r",
+    srcs = ["linux/ptsname_r.cpp"],
+    hdrs = ["ptsname_r.h"],
+    deps = [
+        ":linux_pty_utils",
+        ":stdlib_ptsname_r",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "random",
     srcs = ["random.cpp"],
     hdrs = ["random.h"],
@@ -674,6 +729,20 @@ libc_function(
 )
 
 libc_function(
+    name = "unlockpt",
+    srcs = ["linux/unlockpt.cpp"],
+    hdrs = ["unlockpt.h"],
+    deps = [
+        ":linux_pty_utils",
+        ":stdlib_unlockpt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "unsetenv",
     srcs = ["linux/unsetenv.cpp"],
     hdrs = ["unsetenv.h"],
@@ -721,6 +790,64 @@ libc_support_library(
         "//libc/hdr/types:size_t",
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_grantpt",
+    hdrs = ["grantpt.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_pty_utils",
+    hdrs = ["linux/pty_utils.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:openat",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:integer_to_string",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_posix_openpt",
+    hdrs = ["posix_openpt.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_ptsname",
+    hdrs = ["ptsname.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_ptsname_r",
+    hdrs = ["ptsname_r.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_unlockpt",
+    hdrs = ["unlockpt.h"],
+    deps = [
         "//libc/src/__support/macros:config",
     ],
 )
