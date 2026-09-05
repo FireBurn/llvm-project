@@ -1775,6 +1775,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.atexit
     libc.src.stdlib.exit
     libc.src.stdlib.getenv
+    libc.src.stdlib.mb_cur_max
     libc.src.stdlib.secure_getenv
     libc.src.stdlib.grantpt
     libc.src.stdlib.posix_openpt
