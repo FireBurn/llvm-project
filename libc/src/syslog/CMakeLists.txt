@@ -1,0 +1,89 @@
+add_object_library(
+  syslog_state
+  SRCS
+    syslog_state.cpp
+  HDRS
+    syslog_state.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.syslog_macros
+    libc.include.sys_socket
+    libc.include.sys_syscall
+    libc.include.sys_un
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.macros.attributes
+    libc.src.__support.threads.mutex
+)
+
+add_entrypoint_object(
+  openlog
+  SRCS
+    openlog.cpp
+  HDRS
+    openlog.h
+  DEPENDS
+    .syslog_state
+    libc.hdr.syslog_macros
+    libc.src.__support.CPP.mutex
+)
+
+add_entrypoint_object(
+  closelog
+  SRCS
+    closelog.cpp
+  HDRS
+    closelog.h
+  DEPENDS
+    .syslog_state
+    libc.hdr.syslog_macros
+    libc.src.__support.CPP.mutex
+)
+
+add_entrypoint_object(
+  setlogmask
+  SRCS
+    setlogmask.cpp
+  HDRS
+    setlogmask.h
+  DEPENDS
+    .syslog_state
+    libc.src.__support.CPP.mutex
+)
+
+add_entrypoint_object(
+  vsyslog
+  SRCS
+    vsyslog.cpp
+  HDRS
+    vsyslog.h
+  DEPENDS
+    .syslog_state
+    libc.hdr.fcntl_macros
+    libc.hdr.syslog_macros
+    libc.hdr.types.struct_tm
+    libc.hdr.types.time_t
+    libc.include.sys_socket
+    libc.include.sys_syscall
+    libc.src.__support.CPP.mutex
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.StringUtil.error_to_string
+    libc.src.__support.arg_list
+    libc.src.__support.integer_to_string
+    libc.src.__support.printf_core.printf_main
+    libc.src.__support.printf_core.writer
+    libc.src.errno.errno
+    libc.src.errno.program_invocation_short_name
+    libc.src.time.time_utils
+)
+
+add_entrypoint_object(
+  syslog
+  SRCS
+    syslog.cpp
+  HDRS
+    syslog.h
+  DEPENDS
+    .vsyslog
+    libc.src.__support.arg_list
+)
