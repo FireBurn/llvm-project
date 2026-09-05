@@ -194,6 +194,13 @@ functions:
       - type: void *
       - type: size_t
       - type: const char *
+  - name: open_memstream
+    standards:
+      - posix
+    return_type: FILE *
+    arguments:
+      - type: char **
+      - type: size_t *
   - name: fopencookie
     standards:
       - gnu
