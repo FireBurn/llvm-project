@@ -72,3 +72,15 @@ add_libc_test(
     libc.src.errno.errno
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  struct_dirent_test
+  SUITE
+    libc_dirent_unittests
+  SRCS
+    struct_dirent_test.cpp
+  DEPENDS
+    libc.hdr.limits_macros
+    libc.hdr.types.struct_dirent
+    libc.src.string.strlen
+)
