@@ -7,10 +7,9 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Proxy header for glob_t.
+/// Proxy for glob_t.
 ///
 //===----------------------------------------------------------------------===//
-
 #ifndef LLVM_LIBC_HDR_TYPES_GLOB_T_H
 #define LLVM_LIBC_HDR_TYPES_GLOB_T_H
 

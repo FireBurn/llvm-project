@@ -1,6 +1,23 @@
 header: sys/statvfs.h
 standards:
   - posix
+macros:
+  - macro_name: ST_RDONLY
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_NOSUID
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_NODEV
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_NOEXEC
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_SYNCHRONOUS
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_MANDLOCK
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_NOATIME
+    macro_header: sys-statvfs-macros.h
+  - macro_name: ST_RELATIME
+    macro_header: sys-statvfs-macros.h
 types:
   - type_name: struct_statvfs
   - type_name: fsblkcnt_t
