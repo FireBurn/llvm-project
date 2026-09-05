@@ -26426,6 +26426,25 @@ libc_support_library(
 )
 
 libc_function(
+    name = "fgetpwent",
+    srcs = ["src/pwd/fgetpwent.cpp"],
+    hdrs = ["src/pwd/fgetpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fgets",
+        ":hdr_errno_macros",
+        ":pwd_pwd_utils",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
     name = "putpwent",
     srcs = ["src/pwd/putpwent.cpp"],
     hdrs = ["src/pwd/putpwent.h"],
@@ -28107,6 +28126,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setgroups",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgroups.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_fdatasync",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fdatasync.h"],
     deps = [
@@ -28550,6 +28582,55 @@ libc_function(
 )
 
 libc_function(
+    name = "getgrouplist",
+    srcs = ["src/grp/getgrouplist.cpp"],
+    hdrs = ["src/grp/getgrouplist.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":grp_grp_utils",
+        ":hdr_errno_macros",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "grp_grp_utils",
+    srcs = ["src/grp/grp_utils.cpp"],
+    hdrs = ["src/grp/grp_utils.h"],
+    deps = [
+        ":__support_cpp_array",
+        ":__support_cpp_limits",
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_error_or",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_assert",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":__support_osutil_linux_syscall_wrappers_setgroups",
+        ":__support_pwd_dynamic_buffer",
+        ":__support_pwd_field_tokenizer",
+        ":__support_pwd_flat_file_db",
+        ":__support_str_to_integer",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":types_gid_t",
+        ":types_size_t",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
     name = "putgrent",
     srcs = ["src/grp/putgrent.cpp"],
     hdrs = ["src/grp/putgrent.h"],
@@ -28562,6 +28643,25 @@ libc_function(
         ":hdr_errno_macros",
         ":types_FILE",
         ":types_size_t",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
+    name = "fgetgrent",
+    srcs = ["src/grp/fgetgrent.cpp"],
+    hdrs = ["src/grp/fgetgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fgets",
+        ":grp_grp_utils",
+        ":hdr_errno_macros",
+        ":stdio_fgets",
+        ":types_FILE",
         ":types_struct_group",
     ],
 )
