@@ -62,6 +62,30 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "statx",
+    srcs = ["linux/statx.cpp"],
+    hdrs = ["statx.h"],
+    deps = [
+        ":sys_stat_statx",
+        "//libc/hdr/types:struct_statx",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_stat_statx",
+    hdrs = ["statx.h"],
+    deps = [
+        "//libc/hdr/types:struct_statx",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
 libc_support_library(
     name = "sys_stat_fstat",
     hdrs = ["fstat.h"],
