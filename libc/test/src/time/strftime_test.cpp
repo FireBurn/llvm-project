@@ -898,8 +898,8 @@ TEST(LlvmLibcStrftimeTest, MinuteOfHour) {
 
 TEST(LlvmLibcStrftimeTest, SecondsSinceEpoch) {
   // this tests %s, which reads: [tm_year, tm_mon, tm_mday, tm_hour, tm_min,
-  // tm_sec, tm_isdst]
-  struct tm time;
+  // tm_sec, tm_isdst], less tm_gmtoff
+  struct tm time = {};
   char buffer[100];
   size_t written = 0;
 
