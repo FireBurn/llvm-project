@@ -25340,6 +25340,7 @@ libc_function(
         ":hdr_netdb_macros",
         ":inet_ntop",
         ":net_if_if_indextoname",
+        ":netdb_resolv_lookup",
         ":ntohs",
         ":string_memory_utils",
         ":string_utils",
@@ -25436,6 +25437,88 @@ libc_support_library(
         ":string_utils",
         ":sys_ioctl_macros",
         ":types_struct_ifreq",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_resolv_conf",
+    srcs = ["src/netdb/resolv/resolv_conf.cpp"],
+    hdrs = ["src/netdb/resolv/resolv_conf.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_str_to_integer",
+        ":close",
+        ":hdr_fcntl_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_socket_macros",
+        ":inet_pton",
+        ":net_if_if_nametoindex",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_ppoll",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/ppoll.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_signal_macros",
+        ":types_nfds_t",
+        ":types_sigset_t",
+        ":types_struct_pollfd",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_lookup",
+    srcs = ["src/netdb/resolv/lookup.cpp"],
+    hdrs = ["src/netdb/resolv/lookup.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":__support_osutil_linux_syscall_wrappers_ppoll",
+        ":__support_osutil_linux_syscall_wrappers_recvfrom",
+        ":__support_osutil_linux_syscall_wrappers_sendto",
+        ":__support_osutil_linux_syscall_wrappers_socket",
+        ":close",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_netdb_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_socket_macros",
+        ":inet_pton",
+        ":llvm_libc_macros_poll_macros",
+        ":net_if_if_nametoindex",
+        ":netdb_resolv_dns_message",
+        ":netdb_resolv_resolv_conf",
+        ":poll",
+        ":recvfrom",
+        ":sendto",
+        ":socket",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_size_t",
+        ":types_socklen_t",
+        ":types_struct_pollfd",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+        ":types_struct_timespec",
+        ":types_time_t",
     ],
 )
 
@@ -26670,6 +26753,39 @@ libc_function(
 )
 
 libc_support_library(
+    name = "netdb_resolv_dns_message",
+    srcs = ["src/netdb/resolv/dns_message.cpp"],
+    hdrs = ["src/netdb/resolv/dns_message.h"],
+    deps = [
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":string_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_services",
+    srcs = ["src/netdb/resolv/services.cpp"],
+    hdrs = ["src/netdb/resolv/services.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_str_to_integer",
+        ":close",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_stdint_proxy",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["include/llvm-libc-types/struct_termios.h"],
 )
@@ -27084,6 +27200,20 @@ libc_support_library(
     hdrs = ["hdr/types/struct_FTW.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_FTW"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_addrinfo",
+    hdrs = ["include/llvm-libc-types/struct_addrinfo.h"],
+)
+
+libc_support_library(
+    name = "types_struct_addrinfo",
+    hdrs = ["hdr/types/struct_addrinfo.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_addrinfo"],
         "//conditions:default": [],
     }),
 )
@@ -29520,6 +29650,44 @@ libc_function(
         ":errno",
         ":types_mqd_t",
         ":types_struct_sigevent",
+    ],
+)
+
+libc_function(
+    name = "freeaddrinfo",
+    srcs = ["src/netdb/freeaddrinfo.cpp"],
+    hdrs = ["src/netdb/freeaddrinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_struct_addrinfo",
+    ],
+)
+
+libc_function(
+    name = "getaddrinfo",
+    srcs = ["src/netdb/getaddrinfo.cpp"],
+    hdrs = ["src/netdb/getaddrinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_ctype_utils",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_str_to_integer",
+        ":freeaddrinfo",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_errno_macros",
+        ":hdr_netdb_macros",
+        ":hdr_sys_socket_macros",
+        ":netdb_resolv_lookup",
+        ":netdb_resolv_services",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_struct_addrinfo",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
     ],
 )
 
