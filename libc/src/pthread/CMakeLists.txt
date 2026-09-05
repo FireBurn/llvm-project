@@ -1257,10 +1257,13 @@ add_entrypoint_object(
   HDRS
     pthread_getattr_np.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.pthread_macros
+    libc.hdr.sys_resource_macros
     libc.hdr.types.pthread_attr_t
     libc.hdr.types.pthread_t
     libc.src.__support.CPP.atomic
+    libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
@@ -1282,3 +1285,4 @@ add_entrypoint_object(
     libc.src.__support.macros.null_check
     libc.src.__support.threads.thread
 )
+
