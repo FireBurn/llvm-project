@@ -105,6 +105,7 @@
 #define ILL_PRVREG 6 // Privileged register
 #define ILL_COPROC 7 // Coprocessor error
 #define ILL_BADSTK 8 // Internal stack error
+#define ILL_BADIADDR 9 // Unimplemented instruction address
 
 // SIGFPE si_codes
 #define FPE_INTDIV 1 // Integer divide by zero
@@ -115,19 +116,32 @@
 #define FPE_FLTRES 6 // Floating-point inexact result
 #define FPE_FLTINV 7 // Invalid floating-point operation
 #define FPE_FLTSUB 8 // Subscript out of range
+#define FPE_FLTUNK 14   // Undiagnosed floating-point exception
+#define FPE_CONDTRAP 15 // Trap on condition
 
 // SIGSEGV si_codes
 #define SEGV_MAPERR 1 // Address not mapped to object
 #define SEGV_ACCERR 2 // Invalid permissions for mapped object
+#define SEGV_BNDERR 3 // Failed address bound check
+#define SEGV_PKUERR 4 // Failed protection key check
+#define SEGV_MTEAERR 8 // Memory tagging fault reported later
+#define SEGV_MTESERR 9 // Memory tagging fault reported at once
+#define SEGV_CPERR 10  // Control flow protection fault
 
 // SIGBUS si_codes
 #define BUS_ADRALN 1 // Invalid address alignment
 #define BUS_ADRERR 2 // Non-existent physical address
 #define BUS_OBJERR 3 // Object-specific hardware error
+#define BUS_MCEERR_AR 4 // Hardware memory error, action required
+#define BUS_MCEERR_AO 5 // Hardware memory error, action optional
 
 // SIGTRAP si_codes
 #define TRAP_BRKPT 1 // Process breakpoint
 #define TRAP_TRACE 2 // Process trace trap
+#define TRAP_BRANCH 3 // Process taken a branch trap
+#define TRAP_HWBKPT 4 // Hardware breakpoint or watchpoint
+#define TRAP_UNK 5    // Undiagnosed trap
+#define TRAP_PERF 6   // Performance monitoring counter overflow
 
 // SIGCHLD si_codes
 #define CLD_EXITED 1    // child has exited
