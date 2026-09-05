@@ -48,6 +48,20 @@ libc_test(
 )
 
 libc_test(
+    name = "fputc_unlocked_test",
+    srcs = ["fputc_unlocked_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:fgets",
+        "//libc:flockfile",
+        "//libc:fopen",
+        "//libc:fputc_unlocked",
+        "//libc:fputs_unlocked",
+        "//libc:funlockfile",
+    ],
+)
+
+libc_test(
     name = "getdelim_test",
     srcs = ["getdelim_test.cpp"],
     deps = [
