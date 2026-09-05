@@ -14,11 +14,18 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_IP_MREQ_H
 #define LLVM_LIBC_TYPES_STRUCT_IP_MREQ_H
 
+#include "../llvm-libc-macros/uapi-compat-macros.h"
+
 #include "struct_in_addr.h"
 
+// The kernel defines this too, in <linux/in.h>. Leaving it to the
+// kernel is right only where that header has been read and its
+// guard says the definition is the kernel's.
+#if !(__UAPI_DEF_IP_MREQ && defined(_LINUX_IN_H))
 struct ip_mreq {
   struct in_addr imr_multiaddr;
   struct in_addr imr_interface;
 };
+#endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_IP_MREQ_H
