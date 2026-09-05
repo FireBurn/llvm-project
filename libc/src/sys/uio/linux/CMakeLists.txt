@@ -31,3 +31,31 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  preadv
+  SRCS
+    preadv.cpp
+  HDRS
+    ../preadv.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.preadv
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pwritev
+  SRCS
+    pwritev.cpp
+  HDRS
+    ../pwritev.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pwritev
+    libc.src.errno.errno
+)
