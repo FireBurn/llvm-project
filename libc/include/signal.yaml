@@ -47,6 +47,20 @@ types:
 enums: []
 objects: []
 functions:
+  - name: sigisemptyset
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const sigset_t *
+  - name: sigqueue
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pid_t
+      - type: int
+      - type: const union sigval
   - name: sigtimedwait
     standards:
       - posix
