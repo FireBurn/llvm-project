@@ -28,6 +28,10 @@
 #define RLIMIT_RTPRIO 14
 #define RLIMIT_RTTIME 15
 
+// One past the last limit, which is how many there are.
+#define RLIMIT_NLIMITS 16
+#define RLIM_NLIMITS RLIMIT_NLIMITS
+
 #define RLIM_INFINITY ((rlim_t) - 1)
 
 // A limit which could not be represented in the older, narrower rlim_t.
