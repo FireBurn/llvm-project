@@ -17,8 +17,12 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/signal_macros.h" // For SIGCHLD
+#include "hdr/signal_macros.h"
+#include "hdr/spawn_macros.h"
 #include "hdr/types/mode_t.h"
+#include "hdr/types/sigset_t.h"
 #include "src/signal/linux/signal_utils.h"
+#include "src/signal/sigismember.h"
 #include <spawn.h>
 #include <sys/syscall.h> // For syscall numbers.
 
@@ -50,15 +54,83 @@ void exit() {
   }
 }
 
+// Puts into effect the parts of |attr| the flags asked for. This runs in
+// the child, between the fork and the exec, so anything it does is undone
+// by the exec except for what the exec keeps: the ids, the process group,
+// the session, the signal dispositions and mask, and the scheduling.
+void apply_attributes(const posix_spawnattr_t *attr) {
+  if (attr == nullptr || attr->__flags == 0)
+    return;
+  const short flags = attr->__flags;
+
+  if (flags & POSIX_SPAWN_SETSID) {
+    if (LIBC_NAMESPACE::syscall_impl<long>(SYS_setsid) < 0)
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_SETPGROUP) {
+    if (LIBC_NAMESPACE::syscall_impl<long>(SYS_setpgid, 0, attr->__pgroup) < 0)
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_RESETIDS) {
+    // Give up whatever the exec of this program granted, so the child runs
+    // as whoever asked for it.
+    long gid = LIBC_NAMESPACE::syscall_impl<long>(SYS_getgid);
+    long uid = LIBC_NAMESPACE::syscall_impl<long>(SYS_getuid);
+    if (LIBC_NAMESPACE::syscall_impl<long>(SYS_setgid, gid) < 0 ||
+        LIBC_NAMESPACE::syscall_impl<long>(SYS_setuid, uid) < 0)
+      exit();
+  }
+
+  if (flags & POSIX_SPAWN_SETSIGDEF) {
+    // A handler is not carried over an exec anyway, but a signal set to be
+    // ignored is, so the ones named here are put back to the default.
+    struct KernelSigaction {
+      void *handler;
+      unsigned long sa_flags;
+      void (*restorer)(void);
+      sigset_t mask;
+    } action{};
+    action.handler = nullptr; // SIG_DFL
+    for (int sig = 1; sig < NSIG; ++sig) {
+      if (!LIBC_NAMESPACE::sigismember(&attr->__sigdefault, sig))
+        continue;
+      LIBC_NAMESPACE::syscall_impl<long>(SYS_rt_sigaction, sig, &action,
+                                         nullptr, sizeof(sigset_t));
+    }
+  }
+
+  if (flags & POSIX_SPAWN_SETSCHEDULER) {
+    if (LIBC_NAMESPACE::syscall_impl<long>(
+            SYS_sched_setscheduler, 0, attr->__policy, &attr->__schedparam) < 0)
+      exit();
+  } else if (flags & POSIX_SPAWN_SETSCHEDPARAM) {
+    if (LIBC_NAMESPACE::syscall_impl<long>(SYS_sched_setparam, 0,
+                                           &attr->__schedparam) < 0)
+      exit();
+  }
+
+  // The mask goes last, so that anything above which needed a signal
+  // through still had one.
+  if (flags & POSIX_SPAWN_SETSIGMASK) {
+    if (LIBC_NAMESPACE::syscall_impl<long>(SYS_rt_sigprocmask, SIG_SETMASK,
+                                           &attr->__sigmask, nullptr,
+                                           sizeof(sigset_t)) < 0)
+      exit();
+  }
+}
+
 void child_process(const char *__restrict path,
                    const posix_spawn_file_actions_t *file_actions,
-                   const posix_spawnattr_t *__restrict, // For now unused
+                   const posix_spawnattr_t *__restrict attr,
                    char *const *__restrict argv, char *const *__restrict envp) {
   // TODO: In the code below, the child_process just exits on error during
   // processing |file_actions| and |attr|. The correct way would be to exit
   // after conveying the information about the failure to the parent process
   // (via a pipe for example).
-  // TODO: Handle |attr|.
+
+  apply_attributes(attr);
 
   if (file_actions != nullptr) {
     auto *act = reinterpret_cast<BaseSpawnFileAction *>(file_actions->__front);
