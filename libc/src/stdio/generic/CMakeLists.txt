@@ -726,3 +726,15 @@ add_entrypoint_object(
     libc.src.__support.printf_core.vdprintf_internal
     libc.src.errno.errno
 )
+
+add_generic_entrypoint_object(
+  setlinebuf
+  SRCS
+    setlinebuf.cpp
+  HDRS
+    ../setlinebuf.h
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.stdio.setvbuf
+)
