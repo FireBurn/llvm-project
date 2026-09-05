@@ -216,6 +216,19 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "sched_getcpucount",
+    srcs = ["linux/sched_getcpucount.cpp"],
+    hdrs = ["sched_getcpucount.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_function(
     name = "clone",
     srcs = select({
@@ -233,5 +246,33 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "__sched_setcpuset",
+    srcs = ["linux/sched_setcpuset.cpp"],
+    hdrs = ["sched_setcpuset.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:sched_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__sched_getcpuisset",
+    srcs = ["linux/sched_getcpuisset.cpp"],
+    hdrs = ["sched_getcpuisset.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:sched_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )

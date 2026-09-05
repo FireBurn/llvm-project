@@ -79,6 +79,38 @@ libc_function(
 )
 
 libc_function(
+    name = "setaffinity_np",
+    srcs = ["pthread_setaffinity_np.cpp"],
+    hdrs = ["pthread_setaffinity_np.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setaffinity",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getaffinity_np",
+    srcs = ["pthread_getaffinity_np.cpp"],
+    hdrs = ["pthread_getaffinity_np.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_getaffinity",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "setcancelstate",
     srcs = ["pthread_setcancelstate.cpp"],
     hdrs = ["pthread_setcancelstate.h"],
@@ -139,6 +171,18 @@ libc_function(
         "//libc/hdr/types:struct___pthread_cleanup_frame",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "self",
+    srcs = ["pthread_self.cpp"],
+    hdrs = ["pthread_self.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:thread",
         "//libc/src/__support/threads:thread_headers",
         "//libc/src/__support:common",
