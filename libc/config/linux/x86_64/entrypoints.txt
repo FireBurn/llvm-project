@@ -93,6 +93,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.shadow.sgetspent
     libc.src.shadow.sgetspent_r
     libc.src.shadow.ulckpwdf
+    libc.src.grp.putgrent
     libc.src.grp.setgrent
 
     # net/if.h entrypoints
@@ -136,6 +137,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.pwd.getpwnam_r
     libc.src.pwd.getpwuid
     libc.src.pwd.getpwuid_r
+    libc.src.pwd.putpwent
     libc.src.pwd.setpwent
 
     # sched.h entrypoints
