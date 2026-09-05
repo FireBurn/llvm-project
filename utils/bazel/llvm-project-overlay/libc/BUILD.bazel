@@ -186,10 +186,12 @@ LLVM_LIBC_HEADERS = [
     ),
     libc_header_info("sys/kd"),
     libc_header_info("sys/msg"),
+    libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/timerfd"),
+    libc_header_info("sys/timex"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
     libc_header_info("utime"),
@@ -20241,6 +20243,20 @@ libc_function(
 )
 
 libc_function(
+    name = "adjtimex",
+    srcs = ["src/sys/timex/adjtimex.cpp"],
+    hdrs = ["src/sys/timex/adjtimex.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_adjtimex",
+        ":errno",
+        ":types_struct_timex",
+    ],
+)
+
+libc_function(
     name = "capget",
     srcs = ["src/sys/capability/capget.cpp"],
     hdrs = ["src/sys/capability/capget.h"],
@@ -20544,6 +20560,20 @@ libc_function(
 )
 
 libc_function(
+    name = "ntp_adjtime",
+    srcs = ["src/sys/timex/ntp_adjtime.cpp"],
+    hdrs = ["src/sys/timex/ntp_adjtime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_adjtimex",
+        ":errno",
+        ":types_struct_timex",
+    ],
+)
+
+libc_function(
     name = "open_tree",
     srcs = ["src/sys/mount/linux/open_tree.cpp"],
     hdrs = ["src/sys/mount/open_tree.h"],
@@ -20604,6 +20634,32 @@ libc_function(
         ":types_off_t",
         ":types_ssize_t",
         ":types_struct_iovec",
+    ],
+)
+
+libc_function(
+    name = "quotactl",
+    srcs = ["src/sys/quota/quotactl.cpp"],
+    hdrs = ["src/sys/quota/quotactl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_quotactl",
+        ":errno",
+    ],
+)
+
+libc_function(
+    name = "quotactl_fd",
+    srcs = ["src/sys/quota/quotactl_fd.cpp"],
+    hdrs = ["src/sys/quota/quotactl_fd.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_quotactl_fd",
+        ":errno",
     ],
 )
 
@@ -26518,6 +26574,54 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_timex",
+    hdrs = ["include/llvm-libc-types/struct_timex.h"],
+)
+
+libc_support_library(
+    name = "types_struct_timex",
+    hdrs = ["hdr/types/struct_timex.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_timex"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_quotactl",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/quotactl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_quotactl_fd",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/quotactl_fd.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_adjtimex",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/adjtimex.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_timex",
     ],
 )
 
