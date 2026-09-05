@@ -30,6 +30,21 @@ libc_function(
 )
 
 libc_function(
+    name = "clock_adjtime",
+    srcs = ["clock_adjtime.cpp"],
+    hdrs = ["clock_adjtime.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timex",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_adjtime",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "ntp_adjtime",
     srcs = ["ntp_adjtime.cpp"],
     hdrs = ["ntp_adjtime.h"],
