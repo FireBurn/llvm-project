@@ -48,6 +48,21 @@ libc_test(
 )
 
 libc_test(
+    name = "filelock_test",
+    srcs = ["filelock_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:fgetc",
+        "//libc:flockfile",
+        "//libc:fopen",
+        "//libc:fread",
+        "//libc:ftrylockfile",
+        "//libc:funlockfile",
+        "//libc:fwrite",
+    ],
+)
+
+libc_test(
     name = "fputc_unlocked_test",
     srcs = ["fputc_unlocked_test.cpp"],
     deps = [
