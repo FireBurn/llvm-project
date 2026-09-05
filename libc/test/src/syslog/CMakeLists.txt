@@ -1,0 +1,55 @@
+add_custom_target(libc_syslog_unittests)
+
+add_header_library(
+  log_receiver
+  HDRS
+    log_receiver.h
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_sockaddr_un
+    libc.src.__support.CPP.mutex
+    libc.src.__support.CPP.string_view
+    libc.src.__support.libc_errno
+    libc.src.sys.socket.bind
+    libc.src.sys.socket.recv
+    libc.src.sys.socket.socket
+    libc.src.syslog.closelog
+    libc.src.syslog.syslog_state
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.src.sys.socket.linux.socket_test_support
+)
+
+add_libc_test(
+  syslog_test
+  SUITE
+    libc_syslog_unittests
+  SRCS
+    syslog_test.cpp
+  DEPENDS
+    .log_receiver
+    libc.src.__support.CPP.string_view
+    libc.src.__support.libc_errno
+    libc.hdr.syslog_macros
+    libc.src.syslog.closelog
+    libc.src.syslog.openlog
+    libc.src.syslog.setlogmask
+    libc.src.syslog.syslog
+)
+
+add_libc_test(
+  vsyslog_test
+  SUITE
+    libc_syslog_unittests
+  SRCS
+    vsyslog_test.cpp
+  DEPENDS
+    .log_receiver
+    libc.src.__support.CPP.string_view
+    libc.include.syslog
+    libc.src.syslog.closelog
+    libc.src.syslog.openlog
+    libc.src.syslog.vsyslog
+)
