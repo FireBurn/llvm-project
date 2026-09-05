@@ -53,8 +53,19 @@
 
 #define SOL_SOCKET 1
 
+// How many connections a listening socket may have waiting by default.
+#define SOMAXCONN 4096
+
 // The other levels setsockopt takes, for options which belong to a
-// protocol rather than to the socket itself.
+// protocol rather than to the socket itself. The ones which name a
+// protocol carried over IP are that protocol's own number.
+#define SOL_IP 0
+#define SOL_TCP 6
+#define SOL_UDP 17
+#define SOL_IPV6 41
+#define SOL_ICMPV6 58
+#define SOL_SCTP 132
+#define SOL_UDPLITE 136
 #define SOL_RAW 255
 #define SOL_PACKET 263
 #define SOL_NETLINK 270
