@@ -630,6 +630,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  utmpx_macros
+  HDR
+    utmpx-macros.h
+)
+
+add_macro_header(
   printf_macros
   HDR
     printf-macros.h
