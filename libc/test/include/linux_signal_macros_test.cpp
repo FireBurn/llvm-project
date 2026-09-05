@@ -31,3 +31,9 @@ TEST(LlvmLibcLinuxSignalMacrosTest, AddTheRemainingSi_CodeValues) {
   EXPECT_EQ(static_cast<long long>(TRAP_UNK), 5LL);
   EXPECT_EQ(static_cast<long long>(TRAP_PERF), 6LL);
 }
+
+TEST(LlvmLibcLinuxSignalMacrosTest, AddSegv_AccadiSegv_AdiderrAndSegv_Adiper) {
+  EXPECT_EQ(static_cast<long long>(SEGV_ACCADI), 5LL);
+  EXPECT_EQ(static_cast<long long>(SEGV_ADIDERR), 6LL);
+  EXPECT_EQ(static_cast<long long>(SEGV_ADIPERR), 7LL);
+}
