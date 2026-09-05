@@ -285,6 +285,11 @@ Answer answer_and_publish(time_t seconds) {
 }
 
 ErrorOr<tm *> to_local(time_t seconds, tm *result) {
+  // POSIX has telling the local time behave as though tzset had been called,
+  // so a program that changes TZ and converts without saying so again gets
+  // the zone it asked for. Reading it again costs a look at the environment;
+  // the file is only read again if what it says has changed.
+  set_from_environment();
   const Answer answer = answer_and_publish(seconds);
   auto status = time_utils::update_from_seconds(seconds + answer.offset, result);
   if (!status)
@@ -298,6 +303,8 @@ ErrorOr<tm *> to_local(time_t seconds, tm *result) {
 }
 
 ErrorOr<time_t> from_local_tm(tm *value) {
+  set_from_environment();
+
   // The fields are read as a count of seconds as if the zone were Greenwich,
   // which is exactly the local time the caller stated.
   auto as_utc = time_utils::mktime_internal(value);
