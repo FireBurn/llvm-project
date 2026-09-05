@@ -19042,6 +19042,20 @@ libc_function(
 )
 
 libc_function(
+    name = "sigisemptyset",
+    srcs = ["src/signal/linux/sigisemptyset.cpp"],
+    hdrs = ["src/signal/sigisemptyset.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "signal",
     srcs = ["src/signal/linux/signal.cpp"],
     hdrs = ["src/signal/signal.h"],
@@ -19052,6 +19066,117 @@ libc_function(
         ":__support_macros_config",
         ":hdr_signal_macros",
         ":sigaction",
+    ],
+)
+
+libc_function(
+    name = "getpgrp",
+    srcs = ["src/unistd/linux/getpgrp.cpp"],
+    hdrs = ["src/unistd/getpgrp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getpgid",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "killpg",
+    srcs = ["src/signal/linux/killpg.cpp"],
+    hdrs = ["src/signal/killpg.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_kill",
+        ":hdr_errno_macros",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "sigpending",
+    srcs = ["src/signal/linux/sigpending.cpp"],
+    hdrs = ["src/signal/sigpending.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigpending",
+        ":__support_osutil_syscall",
+        ":errno",
+        ":hdr_errno_macros",
+        ":signal_sigpending",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "signal_sigpending",
+    hdrs = ["src/signal/sigpending.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigpending",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigpending.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_getpgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/getpgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "sigismember",
+    srcs = ["src/signal/linux/sigismember.cpp"],
+    hdrs = ["src/signal/sigismember.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":errno",
+        ":hdr_errno_macros",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigqueue",
+    srcs = ["src/signal/linux/sigqueue.cpp"],
+    hdrs = ["src/signal/sigqueue.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_getuid",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigqueueinfo",
+        ":errno",
+        ":hdr_signal_macros",
+        ":signal_sigqueue",
+        ":types_pid_t",
+        ":types_siginfo_t",
+        ":types_union_sigval",
     ],
 )
 
@@ -21739,6 +21864,38 @@ libc_support_library(
         ":types_siginfo_t",
         ":types_sigset_t",
         ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "types_union_sigval",
+    hdrs = ["hdr/types/union_sigval.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_union_sigval"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "signal_sigqueue",
+    hdrs = ["src/signal/sigqueue.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+        ":types_union_sigval",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigqueueinfo",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigqueueinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+        ":types_siginfo_t",
     ],
 )
 

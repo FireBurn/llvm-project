@@ -23,7 +23,16 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace linux_syscalls {
 
-LIBC_INLINE uid_t getuid() { return syscall_impl<uid_t>(SYS_getuid); }
+LIBC_INLINE uid_t getuid() {
+  // getuid always succeeds, so there is no error checking here.
+#if defined(SYS_getuid32)
+  return syscall_impl<uid_t>(SYS_getuid32);
+#elif defined(SYS_getuid)
+  return syscall_impl<uid_t>(SYS_getuid);
+#else
+#error "SYS_getuid and SYS_getuid32 syscalls not available."
+#endif
+}
 
 } // namespace linux_syscalls
 } // namespace LIBC_NAMESPACE_DECL

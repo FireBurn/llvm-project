@@ -1405,3 +1405,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.eventfd_t
 )
+
+add_proxy_header_library(
+  union_sigval
+  HDRS
+    union_sigval.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.union_sigval
+)
