@@ -322,6 +322,8 @@ libc_test(
         "//libc:fread",
         "//libc:hdr_stdio_macros",
         "//libc:memcmp",
+        "//libc:putc_unlocked",
+        "//libc:putchar_unlocked",
         "//libc:remove",
         "//libc:setlinebuf",
         "//libc:types_FILE",

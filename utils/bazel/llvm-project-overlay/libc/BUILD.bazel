@@ -20137,6 +20137,37 @@ libc_function(
 )
 
 libc_function(
+    name = "putc_unlocked",
+    srcs = ["src/stdio/generic/putc_unlocked.cpp"],
+    hdrs = ["src/stdio/putc_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
+    name = "putchar_unlocked",
+    srcs = ["src/stdio/generic/putchar_unlocked.cpp"],
+    hdrs = ["src/stdio/putchar_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_stdio_macros",
+        ":stdout",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "renameat2",
     srcs = ["src/stdio/linux/renameat2.cpp"],
     hdrs = ["src/stdio/renameat2.h"],
