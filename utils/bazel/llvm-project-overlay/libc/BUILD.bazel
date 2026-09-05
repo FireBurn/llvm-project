@@ -5563,6 +5563,7 @@ libc_support_library(
         ":__support_cpp_optional",
         ":__support_cpp_string_view",
         ":__support_cpp_stringstream",
+        ":__support_elf_dynamic_blocks",
         ":__support_error_or",
         ":__support_fixedvector",
         ":__support_macros_attributes",
@@ -5576,6 +5577,7 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_mprotect",
         ":__support_osutil_linux_syscall_wrappers_munmap",
         ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_prlimit",
         ":__support_osutil_linux_syscall_wrappers_read",
         ":__support_osutil_linux_syscall_wrappers_sched_getparam",
         ":__support_osutil_linux_syscall_wrappers_sched_getscheduler",
@@ -5588,6 +5590,7 @@ libc_support_library(
         ":__support_threads_linux_futex_word_type",
         ":__support_threads_linux_tls",
         ":__support_threads_mutex",
+        ":__support_threads_raw_mutex",
         ":__support_threads_thread_attributes",
         ":__support_threads_thread_headers",
         ":config_app_h",
@@ -5596,6 +5599,7 @@ libc_support_library(
         ":hdr_sched_macros",
         ":hdr_stdint_proxy",
         ":hdr_sys_mman_macros",
+        ":hdr_sys_resource_macros",
     ],
 )
 
@@ -21581,6 +21585,39 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_dtv",
+    hdrs = ["src/__support/elf/dtv.h"],
+    deps = [
+        ":__support_elf_module",
+        ":__support_elf_passive_abi",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_mmap",
+        ":__support_osutil_linux_syscall_wrappers_munmap",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_mman_macros",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_elf_dynamic_blocks",
+    srcs = ["src/__support/elf/dynamic_blocks.cpp"],
+    hdrs = ["src/__support/elf/dynamic_blocks.h"],
+    deps = [
+        ":__support_elf_dtv",
+        ":__support_elf_passive_abi",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_bind",
     hdrs = ["src/__support/elf/bind.h"],
     deps = [
@@ -21758,8 +21795,10 @@ libc_function(
     hdrs = ["src/tls/tls_get_addr.h"],
     deps = [
         ":__support_common",
+        ":__support_elf_dynamic_blocks",
         ":__support_elf_passive_abi",
         ":__support_elf_thread_pointer",
+        ":__support_macros_attributes",
         ":__support_macros_config",
         ":hdr_stdint_proxy",
         ":types_size_t",

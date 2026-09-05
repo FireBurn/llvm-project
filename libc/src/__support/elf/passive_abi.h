@@ -50,6 +50,10 @@ struct ModuleSet {
   // each thread is given; anything past this was opened later and takes a
   // block of its own per thread.
   size_t static_count;
+  // Bumped whenever a module is added or dropped after startup. Each module
+  // opened later records the value its opening reached, and a thread's block
+  // for an index made before then was made for a module that is gone.
+  size_t generation;
   size_t capacity;
   size_t page_size;
   // Set once the startup linker has finished, so a caller can tell a linked
