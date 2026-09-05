@@ -519,6 +519,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.ftruncate
     libc.src.unistd.get_current_dir_name
     libc.src.unistd.getcwd
+    libc.src.unistd.getdtablesize
     libc.src.unistd.getegid
     libc.src.unistd.geteuid
     libc.src.unistd.getgroups

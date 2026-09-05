@@ -1196,6 +1196,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  getdtablesize_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    getdtablesize_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_rlimit
+    libc.include.sys_resource
+    libc.src.sys.resource.getrlimit
+    libc.src.unistd.getdtablesize
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   sbrk_test
   SUITE
     libc-unistd-tests
