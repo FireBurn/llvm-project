@@ -1194,3 +1194,19 @@ add_libc_test(
     libc.src.unistd.getlogin_r
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  seteuid_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    seteuid_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.unistd.getegid
+    libc.src.unistd.geteuid
+    libc.src.unistd.setegid
+    libc.src.unistd.seteuid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
