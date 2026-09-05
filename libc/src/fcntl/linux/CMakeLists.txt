@@ -105,7 +105,6 @@ add_entrypoint_object(
     libc.src.__support.macros.config
 )
 
-
 add_entrypoint_object(
   splice
   SRCS
@@ -143,3 +142,4 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.open_by_handle_at
     libc.src.errno.errno
 )
+
