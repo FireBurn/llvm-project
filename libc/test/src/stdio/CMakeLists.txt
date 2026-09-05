@@ -862,5 +862,11 @@ add_libc_test(
     libc.src.stdio.__fsetlocking
     libc.src.stdio.fclose
     libc.src.stdio.fopen
+    libc.src.stdio.fputc_unlocked
+    libc.src.stdio.fputs_unlocked
+    libc.src.stdio.fread
+    libc.src.stdio.putc_unlocked
+    libc.src.stdio.putchar_unlocked
     libc.src.stdio.remove
+    libc.src.string.memcmp
 )
