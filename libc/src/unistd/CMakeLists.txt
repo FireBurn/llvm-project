@@ -738,6 +738,13 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.sbrk
 
 add_entrypoint_object(
+  sethostname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sethostname
+)
+
+add_entrypoint_object(
   getdtablesize
   ALIAS
   DEPENDS

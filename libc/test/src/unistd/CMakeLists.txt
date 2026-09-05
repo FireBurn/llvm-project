@@ -1165,6 +1165,18 @@ endif()
     libc.include.sys_resource
     libc.src.sys.resource.getrlimit
     libc.src.unistd.getdtablesize
+  sethostname_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    sethostname_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.sys_utsname
+    libc.src.__support.libc_errno
+    libc.src.string.strlen
+    libc.src.sys.utsname.uname
+    libc.src.unistd.sethostname
   sbrk_test
     sbrk_test.cpp
     libc.hdr.stdint_proxy
