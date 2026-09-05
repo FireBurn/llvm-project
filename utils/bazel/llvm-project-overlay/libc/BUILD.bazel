@@ -19184,6 +19184,28 @@ libc_function(
         ":types_time_t",
     ],
 )
+
+libc_function(
+    name = "tz_variables",
+    srcs = ["src/time/tz_variables.cpp"],
+    hdrs = ["src/time/tz_variables.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "tzset",
+    srcs = ["src/time/linux/tzset.cpp"],
+    hdrs = ["src/time/tzset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":time_tz_timezone",
+        ":time_tzset",
+    ],
+)
 ################################ unistd targets ################################
 
 libc_function(
@@ -26703,6 +26725,77 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "time_tz_zone_source",
+    hdrs = ["src/time/tz/zone_source.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "time_tzset",
+    hdrs = ["src/time/tzset.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "time_tz_timezone",
+    srcs = ["src/time/tz/timezone.cpp"],
+    hdrs = ["src/time/tz/timezone.h"],
+    deps = [
+        ":__support_cpp_mutex",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":string_memory_utils",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":time_tz_posix_tz",
+        ":time_tz_tzfile",
+        ":time_tz_zone_source",
+        ":tz_variables",
+        ":types_struct_tm",
+        ":types_time_t",
+    ] + select({
+        "@platforms//os:linux": [":time_tz_linux_zone_source"],
+        "//conditions:default": [":time_tz_generic_zone_source"],
+    }),
+)
+
+libc_support_library(
+    name = "time_tz_posix_tz",
+    srcs = ["src/time/tz/posix_tz.cpp"],
+    hdrs = ["src/time/tz/posix_tz.h"],
+    deps = [
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":types_size_t",
+        ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "time_tz_tzfile",
+    srcs = ["src/time/tz/tzfile.cpp"],
+    hdrs = ["src/time/tz/tzfile.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":string_memory_utils",
+        ":time_tz_posix_tz",
+        ":types_size_t",
+        ":types_time_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_utimensat",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/utimensat.h"],
     deps = [
@@ -31009,6 +31102,89 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "time_asctime_utils",
+    hdrs = ["src/time/asctime_utils.h"],
+    deps = [
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_printf_core_printf_writer",
+        ":__support_printf_core_writer",
+        ":hdr_errno_macros",
+        ":time_strftime_core_strftime_main",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":types_size_t",
+        ":types_struct_tm",
+    ],
+)
+
+libc_function(
+    name = "ctime",
+    srcs = ["src/time/ctime.cpp"],
+    hdrs = ["src/time/ctime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_asctime_utils",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":time_tz_timezone",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "ctime_r",
+    srcs = ["src/time/ctime_r.cpp"],
+    hdrs = ["src/time/ctime_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_asctime_utils",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":time_tz_timezone",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "localtime",
+    srcs = ["src/time/localtime.cpp"],
+    hdrs = ["src/time/localtime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_tz_timezone",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "localtime_r",
+    srcs = ["src/time/localtime_r.cpp"],
+    hdrs = ["src/time/localtime_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_tz_timezone",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
+
 libc_function(
     name = "gmtime_r",
     srcs = ["src/time/gmtime_r.cpp"],
@@ -31022,6 +31198,39 @@ libc_function(
         ":time_time_utils",
         ":types_struct_tm",
         ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "mktime",
+    srcs = ["src/time/mktime.cpp"],
+    hdrs = ["src/time/mktime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_time_constants",
+        ":time_tz_timezone",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "strftime",
+    srcs = ["src/time/strftime.cpp"],
+    hdrs = ["src/time/strftime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_printf_core_printf_writer",
+        ":__support_printf_core_writer",
+        ":time_strftime_core_strftime_main",
+        ":types_size_t",
+        ":types_struct_tm",
     ],
 )
 
@@ -31048,6 +31257,34 @@ libc_support_library(
         ":time_time_utils",
         ":types_struct_tm",
         ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "time_tz_generic_zone_source",
+    srcs = ["src/time/tz/generic/zone_source.cpp"],
+    deps = [
+        ":__support_macros_config",
+        ":time_tz_zone_source",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "time_tz_linux_zone_source",
+    srcs = ["src/time/tz/linux/zone_source.cpp"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_mmap",
+        ":__support_osutil_linux_syscall_wrappers_munmap",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":environ",
+        ":hdr_fcntl_macros",
+        ":hdr_sys_mman_macros",
+        ":time_tz_zone_source",
+        ":types_size_t",
     ],
 )
 
