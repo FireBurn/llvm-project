@@ -18,8 +18,9 @@
 #define EXIT_FAILURE 1
 
 #ifndef MB_CUR_MAX
-// We only support the "C" locale right now, so this is a constant byte.
-#define MB_CUR_MAX 1
+// How wide a character is follows from the locale in force, so this is not a
+// constant. Callers size buffers by it before writing a character into one.
+#define MB_CUR_MAX (__llvm_libc_mb_cur_max)
 #endif // MB_CUR_MAX
 
 #define RAND_MAX 2147483647
