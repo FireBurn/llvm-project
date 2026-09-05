@@ -310,6 +310,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.rename
     libc.src.stdio.renameat
 
+    # printf.h entrypoints
+    libc.src.printf.parse_printf_format
 
     # syslog.h entrypoints
     libc.src.syslog.closelog
