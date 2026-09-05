@@ -72,6 +72,24 @@ add_libc_test(
 )
 
 add_libc_test(
+  putgrent_test
+  SUITE
+    libc_grp_unittests
+  SRCS
+    putgrent_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_group
+    libc.src.grp.putgrent
+    libc.src.stdio.fclose
+    libc.src.stdio.open_memstream
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   getgrgid_r_test
   SUITE
     libc_grp_unittests
