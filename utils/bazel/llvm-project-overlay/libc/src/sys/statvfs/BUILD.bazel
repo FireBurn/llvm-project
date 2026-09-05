@@ -1,0 +1,58 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "fstatvfs",
+    srcs = ["linux/fstatvfs.cpp"],
+    hdrs = ["fstatvfs.h"],
+    deps = [
+        ":linux_statfs_utils",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fstatfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "statvfs",
+    srcs = ["linux/statvfs.cpp"],
+    hdrs = ["statvfs.h"],
+    deps = [
+        ":linux_statfs_utils",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "linux_statfs_utils",
+    hdrs = ["linux/statfs_utils.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)

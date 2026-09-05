@@ -163,3 +163,28 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "fallocate",
+    srcs = ["linux/fallocate.cpp"],
+    hdrs = ["fallocate.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fallocate",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "posix_fallocate",
+    srcs = ["linux/posix_fallocate.cpp"],
+    hdrs = ["posix_fallocate.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fallocate",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)

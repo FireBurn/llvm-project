@@ -1,0 +1,86 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "__xpg_strerror_r",
+    srcs = ["__xpg_strerror_r.cpp"],
+    hdrs = ["__xpg_strerror_r.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "lfs64",
+    srcs = ["lfs64.cpp"],
+    hdrs = ["lfs64.h"],
+    deps = [
+        "//libc/hdr/types:DIR",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_dirent",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/hdr/types:struct_rlimit",
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/dirent:alphasort",
+        "//libc/src/dirent:readdir",
+        "//libc/src/dirent:scandir",
+        "//libc/src/dirent:versionsort",
+        "//libc/src/fcntl:creat",
+        "//libc/src/fcntl:fallocate",
+        "//libc/src/fcntl:open",
+        "//libc/src/fcntl:openat",
+        "//libc/src/fcntl:posix_fallocate",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:freopen",
+        "//libc/src/stdio:fseeko",
+        "//libc/src/stdio:ftello",
+        "//libc/src/stdio:tmpfile",
+        "//libc/src/sys/mman:mmap",
+        "//libc/src/sys/resource:getrlimit",
+        "//libc/src/sys/resource:setrlimit",
+        "//libc/src/sys/sendfile:sendfile",
+        "//libc/src/sys/stat:fstat",
+        "//libc/src/sys/stat:fstatat",
+        "//libc/src/sys/stat:lstat",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/stat:sys_stat_fstat",
+        "//libc/src/sys/stat:sys_stat_stat",
+        "//libc/src/sys/statfs:fstatfs",
+        "//libc/src/sys/statfs:statfs",
+        "//libc/src/sys/statvfs:fstatvfs",
+        "//libc/src/sys/statvfs:statvfs",
+        "//libc/src/sys/uio:sys_uio_preadv",
+        "//libc/src/sys/uio:sys_uio_pwritev",
+        "//libc/src/unistd:ftruncate",
+        "//libc/src/unistd:lseek",
+        "//libc/src/unistd:pread",
+        "//libc/src/unistd:pwrite",
+        "//libc/src/unistd:truncate",
+    ],
+)

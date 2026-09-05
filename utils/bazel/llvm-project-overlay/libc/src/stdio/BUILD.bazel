@@ -966,6 +966,47 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "fseeko",
+    srcs = ["generic/fseeko.cpp"],
+    hdrs = ["fseeko.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "ftello",
+    srcs = ["generic/ftello.cpp"],
+    hdrs = ["ftello.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "tmpfile",
+    srcs = ["linux/tmpfile.cpp"],
+    hdrs = ["tmpfile.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_function(
     name = "fopencookie",
     srcs = ["fopencookie.cpp"],
