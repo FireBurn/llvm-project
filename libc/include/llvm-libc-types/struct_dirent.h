@@ -13,6 +13,8 @@
 #include "off_t.h"
 #include "reclen_t.h"
 
+#include "../llvm-libc-macros/limits-macros.h"
+
 struct dirent {
   ino_t d_ino;
 #ifdef __linux__
@@ -20,11 +22,15 @@ struct dirent {
   reclen_t d_reclen;
 #endif
   unsigned char d_type;
-  // The user code should use strlen to determine actual the size of d_name.
-  // Likewise, it is incorrect and prohibited by the POSIX standard to detemine
-  // the size of struct dirent type using sizeof. The size should be got using
-  // a different method, for example, from the d_reclen field on Linux.
-  char d_name[1];
+  // How long the name of an entry readdir returns actually is has to be found
+  // with strlen, or on Linux from d_reclen: what readdir hands back points
+  // into a buffer of packed entries, each only as long as its own name needs,
+  // so reading the whole array from one of those reads past it.
+  //
+  // The array is nonetheless as long as a name may be, because a program is
+  // allowed to declare one of these itself and put a name in it, which is
+  // what every other libc lets it do.
+  char d_name[NAME_MAX + 1];
 };
 
 #endif // LLVM_LIBC_TYPES_STRUCT_DIRENT_H
