@@ -21,6 +21,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  getprotoent_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    getprotoent_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_protoent
+    libc.src.netdb.endprotoent
+    libc.src.netdb.getprotobyname
+    libc.src.netdb.getprotobynumber
+    libc.src.netdb.getprotoent
+    libc.src.netdb.setprotoent
+    libc.src.string.strcmp
+)
+
+add_libc_test(
   getnameinfo_test
   SUITE
     libc_netdb_unittests
