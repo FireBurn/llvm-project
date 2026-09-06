@@ -1,0 +1,25 @@
+header: sys/kd.h
+public_includes:
+  # The requests are given to ioctl, so what takes them comes with them.
+  - sys/ioctl.h
+standards:
+  - linux
+macros:
+  - macro_name: KDGETMODE
+    macro_header: sys-kd-macros.h
+  - macro_name: KDSETMODE
+    macro_header: sys-kd-macros.h
+  - macro_name: KDGKBMODE
+    macro_header: sys-kd-macros.h
+  - macro_name: KDSKBMODE
+    macro_header: sys-kd-macros.h
+  - macro_name: KDGKBTYPE
+    macro_header: sys-kd-macros.h
+  - macro_name: GIO_CMAP
+    macro_header: sys-kd-macros.h
+  - macro_name: PIO_CMAP
+    macro_header: sys-kd-macros.h
+types: []
+enums: []
+objects: []
+functions: []
