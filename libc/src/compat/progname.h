@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// The BSD names for the program's own name
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_SRC_COMPAT_PROGNAME_H
+#define LLVM_LIBC_SRC_COMPAT_PROGNAME_H
+
+#include "src/__support/macros/config.h"
+
+namespace LIBC_NAMESPACE_DECL {
+
+extern LIBC_SHARED_INTERNAL char *__progname;
+extern LIBC_SHARED_INTERNAL char *__progname_full;
+
+} // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_COMPAT_PROGNAME_H
