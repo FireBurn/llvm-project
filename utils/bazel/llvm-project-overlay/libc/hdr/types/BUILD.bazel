@@ -913,6 +913,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_ifaddrs",
+    hdrs = ["struct_ifaddrs.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ifaddrs"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_ifreq",
     hdrs = ["struct_ifreq.h"],
     deps = select({
