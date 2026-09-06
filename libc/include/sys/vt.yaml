@@ -1,0 +1,25 @@
+header: sys/vt.h
+public_includes:
+  # The requests are given to ioctl, so what takes them comes with them.
+  - sys/ioctl.h
+standards:
+  - linux
+macros:
+  - macro_name: VT_OPENQRY
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_GETMODE
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_SETMODE
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_GETSTATE
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_ACTIVATE
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_WAITACTIVE
+    macro_header: sys-vt-macros.h
+  - macro_name: VT_DISALLOCATE
+    macro_header: sys-vt-macros.h
+types: []
+enums: []
+objects: []
+functions: []
