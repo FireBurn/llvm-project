@@ -11,6 +11,17 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "pwd_utils_test",
+    srcs = ["pwd_utils_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/pwd:pwd_utils",
+    ],
+)
+
+libc_test(
     name = "fgetpwent_test",
     srcs = ["fgetpwent_test.cpp"],
     deps = [

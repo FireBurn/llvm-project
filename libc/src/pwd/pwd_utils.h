@@ -48,12 +48,37 @@ LIBC_INLINE ErrorOr<void> parse_line<struct passwd>(cpp::span<char> line,
     return Error(EINVAL);
   pwd->pw_name = name->data();
 
+  // A line opening with a plus or a minus once pulled entries in from the
+  // network database. Such a line carries no numbers of its own, and they
+  // read as zero, as glibc reads them.
+  const bool compat = name->front() == '+' || name->front() == '-';
+  // A field the line stops before reads as empty.
+  char *empty = &line.back();
+
   auto passwd = tokenizer.next_field();
-  if (!passwd)
+  if (!passwd && !compat)
     return Error(EINVAL);
-  pwd->pw_passwd = passwd->data();
+  pwd->pw_passwd = passwd ? passwd->data() : empty;
 
   auto uid_str = tokenizer.next_field();
+  if (compat && (!uid_str || uid_str->front() == '\0')) {
+    pwd->pw_uid = 0;
+    pwd->pw_gid = 0;
+    auto gid_str = uid_str ? tokenizer.next_field() : cpp::nullopt;
+    if (gid_str && gid_str->front() != '\0') {
+      auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
+      if (gid_res.has_error())
+        return Error(EINVAL);
+      pwd->pw_gid = gid_res.value;
+    }
+    auto gecos = gid_str ? tokenizer.next_field() : cpp::nullopt;
+    pwd->pw_gecos = gecos ? gecos->data() : empty;
+    auto dir = gecos ? tokenizer.next_field() : cpp::nullopt;
+    pwd->pw_dir = dir ? dir->data() : empty;
+    auto shell = dir ? tokenizer.next_field() : cpp::nullopt;
+    pwd->pw_shell = shell ? shell->data() : empty;
+    return {};
+  }
   if (!uid_str || uid_str->empty() || !internal::isdigit(uid_str->front()))
     return Error(EINVAL);
   auto uid_res = internal::strtointeger<uid_t>(uid_str->data(), 10);
@@ -73,22 +98,15 @@ LIBC_INLINE ErrorOr<void> parse_line<struct passwd>(cpp::span<char> line,
     return Error(EINVAL);
   pwd->pw_gid = gid_res.value;
 
+  // What follows the numbers may be left off, and reads as empty.
   auto gecos = tokenizer.next_field();
-  if (!gecos)
-    return Error(EINVAL);
-  pwd->pw_gecos = gecos->data();
+  pwd->pw_gecos = gecos ? gecos->data() : empty;
+  auto dir = gecos ? tokenizer.next_field() : cpp::nullopt;
+  pwd->pw_dir = dir ? dir->data() : empty;
+  auto shell = dir ? tokenizer.next_field() : cpp::nullopt;
+  pwd->pw_shell = shell ? shell->data() : empty;
 
-  auto dir = tokenizer.next_field();
-  if (!dir)
-    return Error(EINVAL);
-  pwd->pw_dir = dir->data();
-
-  auto shell = tokenizer.next_field();
-  if (!shell)
-    return Error(EINVAL);
-  pwd->pw_shell = shell->data();
-
-  if (tokenizer.next_field())
+  if (shell && tokenizer.next_field())
     return Error(EINVAL);
 
   return {};
