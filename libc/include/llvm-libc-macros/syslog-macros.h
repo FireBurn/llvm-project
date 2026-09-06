@@ -67,4 +67,42 @@
 #define LOG_MASK(pri) (1 << (pri))
 #define LOG_UPTO(pri) ((1 << ((pri) + 1)) - 1)
 
+// The names of the priorities and the facilities, as tables a program can
+// walk. A program which turns a name from its command line into a number
+// asks for them by defining SYSLOG_NAMES before including this, and the
+// tables are then defined in whichever of its files did so, which is where
+// they have always been. logger and dmesg both want them.
+#ifdef SYSLOG_NAMES
+
+// The "no priority" priority, and the facility a periodic mark is logged
+// under. Neither is a real one, and neither is accepted by syslog itself.
+#define INTERNAL_NOPRI 0x10
+#define INTERNAL_MARK LOG_MAKEPRI(LOG_NFACILITIES << 3, 0)
+
+typedef struct _code {
+  const char *c_name;
+  int c_val;
+} CODE;
+
+CODE prioritynames[] = {
+    {"alert", LOG_ALERT},     {"crit", LOG_CRIT},
+    {"debug", LOG_DEBUG},     {"emerg", LOG_EMERG},
+    {"err", LOG_ERR},         {"error", LOG_ERR}, // Deprecated.
+    {"info", LOG_INFO},       {"none", INTERNAL_NOPRI},
+    {"notice", LOG_NOTICE},   {"panic", LOG_EMERG}, // Deprecated.
+    {"warn", LOG_WARNING},                          // Deprecated.
+    {"warning", LOG_WARNING}, {NULL, -1}};
+
+CODE facilitynames[] = {
+    {"auth", LOG_AUTH},     {"authpriv", LOG_AUTHPRIV}, {"cron", LOG_CRON},
+    {"daemon", LOG_DAEMON}, {"ftp", LOG_FTP},           {"kern", LOG_KERN},
+    {"lpr", LOG_LPR},       {"mail", LOG_MAIL},         {"mark", INTERNAL_MARK},
+    {"news", LOG_NEWS},     {"security", LOG_AUTH}, // Deprecated.
+    {"syslog", LOG_SYSLOG}, {"user", LOG_USER},         {"uucp", LOG_UUCP},
+    {"local0", LOG_LOCAL0}, {"local1", LOG_LOCAL1},     {"local2", LOG_LOCAL2},
+    {"local3", LOG_LOCAL3}, {"local4", LOG_LOCAL4},     {"local5", LOG_LOCAL5},
+    {"local6", LOG_LOCAL6}, {"local7", LOG_LOCAL7},     {NULL, -1}};
+
+#endif // SYSLOG_NAMES
+
 #endif // LLVM_LIBC_MACROS_SYSLOG_MACROS_H
