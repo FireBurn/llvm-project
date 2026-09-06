@@ -1,0 +1,32 @@
+add_custom_target(libc_pty_unittests)
+
+add_libc_test(
+  pty_test
+  SUITE
+    libc_pty_unittests
+  SRCS
+    pty_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_termios
+    libc.hdr.types.struct_winsize
+    libc.include.sys_wait
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.pty.forkpty
+    libc.src.pty.login_tty
+    libc.src.pty.openpty
+    libc.src.stdlib._Exit
+    libc.src.string.memcmp
+    libc.src.string.strlen
+    libc.src.sys.wait.waitpid
+    libc.src.termios.tcgetattr
+    libc.src.unistd.close
+    libc.src.unistd.fork
+    libc.src.unistd.isatty
+    libc.src.unistd.read
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
