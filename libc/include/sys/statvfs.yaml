@@ -2,6 +2,10 @@ header: sys/statvfs.h
 standards:
   - posix
 macros:
+  - macro_name: statvfs64
+    macro_header: lfs64-macros.h
+  - macro_name: fstatvfs64
+    macro_header: lfs64-macros.h
   - macro_name: ST_RDONLY
     macro_header: sys-statvfs-macros.h
   - macro_name: ST_NOSUID

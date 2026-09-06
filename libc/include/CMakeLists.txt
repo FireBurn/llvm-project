@@ -55,6 +55,7 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
     .llvm-libc-macros.dirent_macros
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -71,6 +72,7 @@ add_header_macro(
     .llvm-libc-types.pid_t
     .llvm-libc-types.off_t
     .llvm_libc_common_h
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -84,6 +86,7 @@ add_header_macro(
     .llvm-libc-types.struct_FTW
     .llvm-libc-types.__ftw_func_t
     .llvm-libc-types.__nftw_func_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 
@@ -418,6 +421,7 @@ add_header_macro(
     .llvm_libc_common_h
     .llvm-libc-macros.annex_k_macros
     .llvm-libc-macros.null_macro
+    .llvm-libc-macros.string_macros
     .llvm-libc-types.errno_t
     .llvm-libc-types.locale_t
     .llvm-libc-types.rsize_t
@@ -600,6 +604,8 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
     .llvm_libc_common_h
+    .llvm-libc-types.fpos64_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -624,6 +630,7 @@ add_header_macro(
     .llvm-libc-types.wchar_t
     .llvm_libc_common_h
     .alloca
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -647,6 +654,7 @@ add_header_macro(
     .llvm-libc-types.size_t
     .llvm-libc-types.struct_dirent
     .llvm-libc-types.struct_stat
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -690,6 +698,7 @@ add_header_macro(
     .llvm-libc-types.useconds_t
     .llvm-libc-types.__getoptargv_t
     .llvm-libc-types.intptr_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -943,6 +952,7 @@ add_header_macro(
     .llvm-libc-types.off_t
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -1220,6 +1230,8 @@ add_header_macro(
     .llvm-libc-types.rlim_t
     .llvm-libc-types.struct_rlimit
     .llvm-libc-types.struct_rusage
+    .llvm-libc-macros.lfs64_macros
+    .llvm-libc-types.rlim64_t
 )
 
 add_header_macro(
@@ -1242,6 +1254,7 @@ add_header_macro(
     .llvm-libc-types.blkcnt_t
     .llvm-libc-types.struct_statx
     .llvm-libc-types.struct_stat
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -1283,6 +1296,7 @@ add_header_macro(
     .llvm-libc-types.off_t
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -1314,6 +1328,7 @@ add_header_macro(
     .llvm_libc_common_h
     .llvm-libc-macros.sys_statfs_macros
     .llvm-libc-types.struct_statfs
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -1324,6 +1339,7 @@ add_header_macro(
     .llvm-libc-macros.sys_statvfs_macros
     .llvm_libc_common_h
     .llvm-libc-types.struct_statvfs
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(
@@ -1408,6 +1424,10 @@ add_header_macro(
     .llvm-libc-types.ulong
     .llvm-libc-types.useconds_t
     .llvm-libc-types.ushort
+    .llvm-libc-macros.lfs64_macros
+    .llvm-libc-types.blkcnt64_t
+    .llvm-libc-types.fsblkcnt64_t
+    .llvm-libc-types.fsfilcnt64_t
 )
 
 add_header_macro(
