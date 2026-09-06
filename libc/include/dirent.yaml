@@ -2,6 +2,8 @@ header: dirent.h
 standards:
   - posix
 macros:
+  - macro_name: readdir64_r
+    macro_header: lfs64-macros.h
   - macro_name: DT_UNKNOWN
     macro_header: dirent-macros.h
   - macro_name: DT_FIFO
