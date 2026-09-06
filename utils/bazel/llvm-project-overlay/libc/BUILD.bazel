@@ -186,6 +186,7 @@ LLVM_LIBC_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("sys/kd"),
+    libc_header_info("sys/klog"),
     libc_header_info("sys/msg"),
     libc_header_info("sys/mtio"),
     libc_header_info("sys/quota"),
@@ -20519,6 +20520,19 @@ libc_function(
 )
 
 libc_function(
+    name = "klogctl",
+    srcs = ["src/sys/klog/linux/klogctl.cpp"],
+    hdrs = ["src/sys/klog/klogctl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_syslog",
+        ":sys_klog_klogctl",
+    ],
+)
+
+libc_function(
     name = "lremovexattr",
     srcs = ["src/sys/xattr/linux/lremovexattr.cpp"],
     hdrs = ["src/sys/xattr/lremovexattr.h"],
@@ -27124,6 +27138,25 @@ libc_support_library(
         ":types_struct_hostent",
         ":types_struct_sockaddr_in",
         ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_syslog",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/syslog.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_klog_klogctl",
+    hdrs = ["src/sys/klog/klogctl.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
 
