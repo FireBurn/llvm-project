@@ -1797,6 +1797,11 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.ptsname
     libc.src.stdlib.ptsname_r
     libc.src.stdlib.unlockpt
+
+    # pty.h
+    libc.src.pty.forkpty
+    libc.src.pty.login_tty
+    libc.src.pty.openpty
     libc.src.stdlib.putenv
     libc.src.stdlib.setenv
     libc.src.stdlib.unsetenv
