@@ -1894,6 +1894,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.spawn.posix_spawnattr_setschedpolicy
     libc.src.spawn.posix_spawnattr_getschedparam
     libc.src.spawn.posix_spawnattr_setschedparam
+    libc.src.spawn.posix_spawn_file_actions_addchdir_np
+    libc.src.spawn.posix_spawn_file_actions_addfchdir_np
     libc.src.spawn.posix_spawn_file_actions_addclose
     libc.src.spawn.posix_spawn_file_actions_adddup2
     libc.src.spawn.posix_spawn_file_actions_addopen
