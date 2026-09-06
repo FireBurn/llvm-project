@@ -1,0 +1,10 @@
+add_entrypoint_object(
+  klogctl
+  SRCS
+    klogctl.cpp
+  HDRS
+    ../klogctl.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.syslog
+    libc.src.__support.libc_errno
+)
