@@ -8,6 +8,10 @@ standards:
 merge_yaml_files:
   - stdlib-malloc.yaml
 macros:
+  - macro_name: mkstemp64
+    macro_header: lfs64-macros.h
+  - macro_name: mkostemp64
+    macro_header: lfs64-macros.h
   - macro_name: "NULL"
     macro_header: null-macro.h
   - macro_name: EXIT_SUCCESS
