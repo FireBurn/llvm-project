@@ -45,6 +45,27 @@ TEST_MAIN([[maybe_unused]] int argc, [[maybe_unused]] char **argv,
   ASSERT_EQ(LIBC_NAMESPACE::setenv("LLVM_LIBC_ONLY", "only", 1), 0);
   ASSERT_STREQ(LIBC_NAMESPACE::getenv("LLVM_LIBC_ONLY"), "only");
 
+  // A program may also shorten the array in place, without moving it, which
+  // is what one that drops the variables it will not pass on does. The array
+  // ends where its null is, not where it was last time.
+  char a[] = "LLVM_LIBC_A=a";
+  char b[] = "LLVM_LIBC_B=b";
+  char c[] = "LLVM_LIBC_C=c";
+  char *editable[] = {a, b, c, nullptr};
+  LIBC_NAMESPACE::environ = editable;
+  ASSERT_STREQ(LIBC_NAMESPACE::getenv("LLVM_LIBC_C"), "c");
+
+  // Take the middle one out, the way removing an entry does.
+  editable[1] = editable[2];
+  editable[2] = nullptr;
+  ASSERT_STREQ(LIBC_NAMESPACE::getenv("LLVM_LIBC_A"), "a");
+  ASSERT_STREQ(LIBC_NAMESPACE::getenv("LLVM_LIBC_C"), "c");
+  ASSERT_TRUE(LIBC_NAMESPACE::getenv("LLVM_LIBC_B") == nullptr);
+
+  // And emptied entirely.
+  editable[0] = nullptr;
+  ASSERT_TRUE(LIBC_NAMESPACE::getenv("LLVM_LIBC_A") == nullptr);
+
   LIBC_NAMESPACE::environ = saved;
   ASSERT_FALSE(LIBC_NAMESPACE::getenv("PATH") == nullptr);
   return 0;
