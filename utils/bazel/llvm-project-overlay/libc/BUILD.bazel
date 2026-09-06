@@ -160,6 +160,7 @@ py_binary(
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("ar"),
+    libc_header_info("error"),
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
@@ -28926,6 +28927,86 @@ libc_function(
         ":__support_file_dir",
         ":__support_macros_config",
         ":types_DIR",
+    ],
+)
+
+libc_function(
+    name = "error_message_count",
+    srcs = ["src/error/error_message_count.cpp"],
+    hdrs = ["src/error/error_message_count.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "error_one_per_line",
+    srcs = ["src/error/error_one_per_line.cpp"],
+    hdrs = ["src/error/error_one_per_line.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "error_print_progname",
+    srcs = ["src/error/error_print_progname.cpp"],
+    hdrs = ["src/error/error_print_progname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "error_report",
+    srcs = ["src/error/report.cpp"],
+    hdrs = ["src/error/report.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_cpp_string_view",
+        ":__support_file_file",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_io",
+        ":__support_printf_core_printf_main",
+        ":__support_printf_core_printf_writer",
+        ":__support_printf_core_writer",
+        ":__support_stringutil",
+        ":error_message_count",
+        ":error_print_progname",
+        ":program_invocation_name",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
+    name = "error",
+    srcs = ["src/error/error.cpp"],
+    hdrs = ["src/error/error.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_exit_hdrs",
+        ":error_report",
+    ],
+)
+
+libc_function(
+    name = "error_at_line",
+    srcs = ["src/error/error_at_line.cpp"],
+    hdrs = ["src/error/error_at_line.h"],
+    deps = [
+        ":__support_arg_list",
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_exit_hdrs",
+        ":error_one_per_line",
+        ":error_report",
+        ":string_memory_utils",
     ],
 )
 
