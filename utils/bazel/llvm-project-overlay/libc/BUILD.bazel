@@ -19546,6 +19546,20 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "sync_file_range",
+    srcs = ["src/fcntl/linux/sync_file_range.cpp"],
+    hdrs = ["src/fcntl/sync_file_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sync_file_range",
+        ":fcntl_sync_file_range",
+        ":types_off_t",
+    ],
+)
+
 ################################ time targets ##################################
 
 libc_function(
@@ -28162,6 +28176,27 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_sync_file_range",
+    hdrs = ["src/fcntl/sync_file_range.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_sync_file_range",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/sync_file_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_off_t",
     ],
 )
 
