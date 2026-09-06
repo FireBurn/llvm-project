@@ -50,40 +50,60 @@ LIBC_INLINE bool parse_line<struct passwd>(cpp::span<char> line,
     return false;
   pwd->pw_passwd = passwd->data();
 
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no numbers of
+  // their own, and are read as zero rather than turned away.
+  const bool from_network_database =
+      pwd->pw_name[0] == '+' || pwd->pw_name[0] == '-';
+
   auto uid_str = tokenizer.next_field();
-  if (!uid_str || uid_str->empty() || !internal::isdigit(uid_str->front()))
+  if (!uid_str)
     return false;
-  auto uid_res = internal::strtointeger<uid_t>(uid_str->data(), 10);
-  if (uid_res.has_error() || uid_res.parsed_len <= 0 ||
-      static_cast<size_t>(uid_res.parsed_len) >= uid_str->size() ||
-      (*uid_str)[uid_res.parsed_len] != '\0')
-    return false;
-  pwd->pw_uid = uid_res.value;
+  if (uid_str->front() == '\0') {
+    if (!from_network_database)
+      return false;
+    pwd->pw_uid = 0;
+  } else {
+    if (!internal::isdigit(uid_str->front()))
+      return false;
+    auto uid_res = internal::strtointeger<uid_t>(uid_str->data(), 10);
+    if (uid_res.has_error() || uid_res.parsed_len <= 0 ||
+        static_cast<size_t>(uid_res.parsed_len) >= uid_str->size() ||
+        (*uid_str)[uid_res.parsed_len] != '\0')
+      return false;
+    pwd->pw_uid = uid_res.value;
+  }
 
   auto gid_str = tokenizer.next_field();
-  if (!gid_str || gid_str->empty() || !internal::isdigit(gid_str->front()))
+  if (!gid_str)
     return false;
-  auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
-  if (gid_res.has_error() || gid_res.parsed_len <= 0 ||
-      static_cast<size_t>(gid_res.parsed_len) >= gid_str->size() ||
-      (*gid_str)[gid_res.parsed_len] != '\0')
-    return false;
-  pwd->pw_gid = gid_res.value;
+  if (gid_str->front() == '\0') {
+    if (!from_network_database)
+      return false;
+    pwd->pw_gid = 0;
+  } else {
+    if (!internal::isdigit(gid_str->front()))
+      return false;
+    auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
+    if (gid_res.has_error() || gid_res.parsed_len <= 0 ||
+        static_cast<size_t>(gid_res.parsed_len) >= gid_str->size() ||
+        (*gid_str)[gid_res.parsed_len] != '\0')
+      return false;
+    pwd->pw_gid = gid_res.value;
+  }
+
+  // The last fields may be missing altogether rather than empty, which is
+  // what a line that stops early means. What is not there reads as empty.
+  static char nothing[] = "";
 
   auto gecos = tokenizer.next_field();
-  if (!gecos)
-    return false;
-  pwd->pw_gecos = gecos->data();
+  pwd->pw_gecos = gecos ? gecos->data() : nothing;
 
   auto dir = tokenizer.next_field();
-  if (!dir)
-    return false;
-  pwd->pw_dir = dir->data();
+  pwd->pw_dir = dir ? dir->data() : nothing;
 
   auto shell = tokenizer.next_field();
-  if (!shell)
-    return false;
-  pwd->pw_shell = shell->data();
+  pwd->pw_shell = shell ? shell->data() : nothing;
 
   return true;
 }

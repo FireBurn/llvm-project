@@ -76,3 +76,35 @@ TEST(LlvmLibcGrpTest, ParseGroupLine_Null) {
   ASSERT_FALSE(res.has_value());
   ASSERT_EQ(res.error(), EINVAL);
 }
+
+TEST(LlvmLibcGrpTest, ParseGroupLine_MissingMemberField) {
+  // A line may stop after the number, which names a group with nobody in it.
+  char line[] = "wheel:x:10";
+  auto res = LIBC_NAMESPACE::grp::parse_group_line(line);
+  ASSERT_TRUE(res.has_value());
+  ASSERT_EQ(res.value().gr_gid, gid_t(10));
+  ASSERT_EQ(res.value().gr_mem[0], static_cast<char *>(nullptr));
+}
+
+TEST(LlvmLibcGrpTest, ParseGroupLine_FromNetworkDatabase) {
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no number, and are
+  // read as zero rather than turned away.
+  char line[] = "+giant:::bill,tina";
+  auto res = LIBC_NAMESPACE::grp::parse_group_line(line);
+  ASSERT_TRUE(res.has_value());
+  ASSERT_STREQ(res.value().gr_name, "+giant");
+  ASSERT_EQ(res.value().gr_gid, gid_t(0));
+  ASSERT_STREQ(res.value().gr_mem[0], "bill");
+
+  char minus[] = "-transport:::";
+  auto res2 = LIBC_NAMESPACE::grp::parse_group_line(minus);
+  ASSERT_TRUE(res2.has_value());
+  ASSERT_EQ(res2.value().gr_gid, gid_t(0));
+
+  // An ordinary name with no number is still refused.
+  char ordinary[] = "plain:x::alice";
+  auto res3 = LIBC_NAMESPACE::grp::parse_group_line(ordinary);
+  ASSERT_FALSE(res3.has_value());
+  ASSERT_EQ(res3.error(), EINVAL);
+}
