@@ -19534,6 +19534,17 @@ libc_function(
 )
 
 libc_function(
+    name = "endusershell",
+    srcs = ["src/unistd/endusershell.cpp"],
+    hdrs = ["src/unistd/endusershell.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":unistd_usershell",
+    ],
+)
+
+libc_function(
     name = "environ",
     srcs = ["src/unistd/environ.cpp"],
     hdrs = ["src/unistd/environ.h"],
@@ -21256,6 +21267,17 @@ libc_support_library(
 )
 
 libc_function(
+    name = "getusershell",
+    srcs = ["src/unistd/getusershell.cpp"],
+    hdrs = ["src/unistd/getusershell.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":unistd_usershell",
+    ],
+)
+
+libc_function(
     name = "isatty",
     srcs = ["src/unistd/linux/isatty.cpp"],
     hdrs = ["src/unistd/isatty.h"],
@@ -21522,6 +21544,17 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_setpgid",
         ":errno",
         ":unistd_setpgrp",
+    ],
+)
+
+libc_function(
+    name = "setusershell",
+    srcs = ["src/unistd/setusershell.cpp"],
+    hdrs = ["src/unistd/setusershell.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":unistd_usershell",
     ],
 )
 
@@ -27780,6 +27813,18 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":types_ns_msg",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_usershell",
+    srcs = ["src/unistd/usershell.cpp"],
+    hdrs = ["src/unistd/usershell.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_flat_file_db",
     ],
 )
 
