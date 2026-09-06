@@ -467,6 +467,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/ipc.h entrypoints
     libc.src.sys.ipc.ftok
+    libc.src.sys.klog.klogctl
 
     # sys/mman.h entrypoints
     libc.src.sys.mman.madvise
