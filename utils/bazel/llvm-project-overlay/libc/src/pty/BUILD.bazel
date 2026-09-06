@@ -1,0 +1,79 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "openpty",
+    srcs = ["openpty.cpp"],
+    hdrs = ["openpty.h"],
+    deps = [
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr/types:struct_winsize",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:openat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+        "//libc/src/stdlib:linux_pty_utils",
+        "//libc/src/string:utils",
+        "//libc/src/termios:tcsetattr",
+    ],
+)
+
+libc_function(
+    name = "login_tty",
+    srcs = ["login_tty.cpp"],
+    hdrs = ["login_tty.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setsid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "forkpty",
+    srcs = ["forkpty.cpp"],
+    hdrs = ["forkpty.h"],
+    deps = [
+        ":login_tty",
+        ":openpty",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr/types:struct_winsize",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil:exit_hdrs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+        "//libc/src/unistd:fork",
+    ],
+)
