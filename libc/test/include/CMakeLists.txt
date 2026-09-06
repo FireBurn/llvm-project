@@ -262,6 +262,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  syslog_name_tables_test
+  SUITE
+    libc-include-tests
+  SRCS
+    syslog_name_tables_test.cpp
+  DEPENDS
+    libc.include.syslog
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
