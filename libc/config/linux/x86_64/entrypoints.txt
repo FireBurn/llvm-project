@@ -365,6 +365,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.renameat
     libc.src.stdio.renameat2
 
+    # ifaddrs.h entrypoints
+    libc.src.ifaddrs.freeifaddrs
+    libc.src.ifaddrs.getifaddrs
+
     # execinfo.h entrypoints
     libc.src.execinfo.backtrace
     libc.src.execinfo.backtrace_symbols
