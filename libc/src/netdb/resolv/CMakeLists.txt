@@ -11,6 +11,22 @@ add_object_library(
     libc.src.string.string_utils
 )
 
+add_header_library(
+  file_lines
+  HDRS
+    file_lines.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.hdr.fcntl_macros
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+)
+
 add_object_library(
   services
   SRCS
@@ -18,17 +34,38 @@ add_object_library(
   HDRS
     services.h
   DEPENDS
-    libc.hdr.fcntl_macros
+    .file_lines
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
     libc.src.__support.CPP.string_view
-    libc.src.__support.OSUtil.linux.syscall_wrappers.open
-    libc.src.__support.OSUtil.linux.syscall_wrappers.read
-    libc.src.__support.ctype_utils
     libc.src.__support.macros.config
     libc.src.__support.str_to_integer
     libc.src.string.memory_utils.inline_memcpy
-    libc.src.unistd.close
+)
+
+add_object_library(
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.time_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ppoll
+    libc.src.__support.OSUtil.linux.syscall_wrappers.recvfrom
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sendto
+    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
+    libc.src.__support.error_or
+  protocols
+  SRCS
+    protocols.cpp
+  HDRS
+    protocols.h
+  DEPENDS
+    .file_lines
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_protoent
+    libc.src.__support.CPP.string_view
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.__support.str_to_integer
+    libc.src.string.memory_utils.inline_memcpy
 )
 
 add_object_library(
@@ -43,6 +80,7 @@ add_object_library(
     libc.hdr.sys_socket_macros
     libc.hdr.types.size_t
     libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.src.__support.ctype_utils
@@ -50,7 +88,6 @@ add_object_library(
     libc.src.__support.str_to_integer
     libc.src.arpa.inet.inet_pton
     libc.src.string.memory_utils.inline_memcpy
-    libc.src.unistd.close
 )
 
 add_object_library(
@@ -79,11 +116,14 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.arpa.inet.inet_pton
     libc.src.net.if.if_nametoindex
-    libc.src.poll.poll
     libc.src.string.memory_utils.inline_memcpy
     libc.src.string.string_utils
-    libc.src.sys.socket.recvfrom
-    libc.src.sys.socket.sendto
-    libc.src.sys.socket.socket
-    libc.src.unistd.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ppoll
+    libc.src.__support.OSUtil.linux.syscall_wrappers.recvfrom
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sendto
+    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.time_t
+    libc.src.__support.error_or
 )
