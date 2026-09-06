@@ -184,4 +184,10 @@
 #define POSIX_FADV_DONTNEED 4
 #define POSIX_FADV_NOREUSE 5
 
+// What part of the writing back sync_file_range is to wait for. Any
+// combination of the three.
+#define SYNC_FILE_RANGE_WAIT_BEFORE 1
+#define SYNC_FILE_RANGE_WRITE 2
+#define SYNC_FILE_RANGE_WAIT_AFTER 4
+
 #endif // LLVM_LIBC_MACROS_LINUX_FCNTL_MACROS_H
