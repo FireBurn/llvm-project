@@ -1033,6 +1033,25 @@ add_libc_test(
 )
 
 add_libc_test(
+  usershell_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    usershell_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.endusershell
+    libc.src.unistd.getusershell
+    libc.src.unistd.setusershell
+    libc.src.unistd.usershell
+    libc.src.unistd.write
+)
+
+add_libc_test(
   fdatasync_test
   SUITE
     libc_unistd_unittests
