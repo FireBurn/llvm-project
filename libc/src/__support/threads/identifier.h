@@ -23,7 +23,14 @@ namespace internal {
 
 LIBC_INLINE pid_t *get_tid_cache() {
 #ifdef LIBC_FULL_BUILD
-  return &current_thread().attrib->tid;
+  // A thread has no attributes until the startup code gives it them, and the
+  // loader runs the initialisers of everything it loaded before that. One of
+  // those taking a lock is ordinary, so there has to be an answer here rather
+  // than a null to walk off: the caller asks the kernel instead.
+  ThreadAttributes *attrib = current_thread().attrib;
+  if (attrib == nullptr)
+    return nullptr;
+  return &attrib->tid;
 #else
   // in non-full build mode, we do not control the fork routine. Therefore,
   // we do not cache tid at all.
