@@ -427,6 +427,47 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.setsid
 )
 
+add_object_library(
+  usershell
+  SRCS
+    usershell.cpp
+  HDRS
+    usershell.h
+  DEPENDS
+    libc.src.__support.CPP.span
+    libc.src.__support.pwd.flat_file_db
+)
+
+add_entrypoint_object(
+  getusershell
+  SRCS
+    getusershell.cpp
+  HDRS
+    getusershell.h
+  DEPENDS
+    .usershell
+)
+
+add_entrypoint_object(
+  setusershell
+  SRCS
+    setusershell.cpp
+  HDRS
+    setusershell.h
+  DEPENDS
+    .usershell
+)
+
+add_entrypoint_object(
+  endusershell
+  SRCS
+    endusershell.cpp
+  HDRS
+    endusershell.h
+  DEPENDS
+    .usershell
+)
+
 add_entrypoint_object(
   daemon
   ALIAS
