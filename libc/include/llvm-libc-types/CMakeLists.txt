@@ -291,6 +291,8 @@ add_header(
 add_header(wint_t HDR wint_t.h)
 add_header(wctype_t HDR wctype_t.h)
 add_header(socklen_t HDR socklen_t.h)
+add_header(struct_sockaddr_ll HDR struct_sockaddr_ll.h)
+add_header(struct_packet_mreq HDR struct_packet_mreq.h)
 add_header(struct_addrinfo HDR struct_addrinfo.h DEPENDS .socklen_t .struct_sockaddr)
 add_header(struct_sockaddr_in HDR struct_sockaddr_in.h DEPENDS .in_port_t .sa_family_t .struct_in_addr libc.include.llvm-libc-macros.uapi_compat_macros)
 add_header(
