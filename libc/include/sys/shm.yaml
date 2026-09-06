@@ -3,6 +3,10 @@ public_includes:
   - sys/ipc.h
 standards:
   - posix
+public_includes:
+  # glibc's <sys/shm.h> carries the general IPC macros too, and code that uses
+  # them includes only this one.
+  - sys/ipc.h
   - linux
 macros:
   - macro_name: SHM_R
