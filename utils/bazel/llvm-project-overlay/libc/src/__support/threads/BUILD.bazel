@@ -272,6 +272,7 @@ libc_support_library(
         "//libc/hdr/types:struct___pthread_cleanup_frame",
         "//libc/hdr:limits_macros",
         "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:atomic",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/macros:attributes",
