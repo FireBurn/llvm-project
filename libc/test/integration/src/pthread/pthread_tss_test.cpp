@@ -78,6 +78,37 @@ static void null_value_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(key), 0);
 }
 
+// A destructor is allowed to put its value back, and is then called again, up
+// to PTHREAD_DESTRUCTOR_ITERATIONS times. That is how something which has to
+// run after every other destructor arranges to: the allocator does it so that
+// it can take the cache back only once nothing else will call free.
+static pthread_key_t repeat_key;
+static int repeat_calls = 0;
+static void *repeat_last = nullptr;
+
+static void repeat_dtor(void *data) {
+  ++repeat_calls;
+  repeat_last = data;
+  if (repeat_calls < 3)
+    LIBC_NAMESPACE::pthread_setspecific(repeat_key, data);
+}
+
+static void *repeat_func(void *) {
+  LIBC_NAMESPACE::pthread_setspecific(repeat_key, &child_thread_data);
+  return nullptr;
+}
+
+static void destructor_runs_again_test() {
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_create(&repeat_key, &repeat_dtor), 0);
+  pthread_t th;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&th, nullptr, &repeat_func, nullptr),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(th, nullptr), 0);
+  ASSERT_EQ(repeat_calls, 3);
+  ASSERT_EQ(repeat_last, reinterpret_cast<void *>(&child_thread_data));
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(repeat_key), 0);
+}
+
 // A process exiting is not a thread exiting: the destructor of a value the
 // main thread still holds is not run. The key is deliberately left in place
 // and the value left set, so that anything running it after main returns
@@ -92,6 +123,7 @@ static void main_thread_exit_test() {
 TEST_MAIN() {
   standard_usage_test();
   null_value_test();
+  destructor_runs_again_test();
   main_thread_exit_test();
   return 0;
 }
