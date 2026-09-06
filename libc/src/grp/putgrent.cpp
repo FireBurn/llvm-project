@@ -27,9 +27,21 @@ LLVM_LIBC_FUNCTION(int, putgrent, (const struct group *g, ::FILE *stream)) {
     return -1;
   }
 
-  if (LIBC_NAMESPACE::fprintf(stream, "%s:%s:%u:", g->gr_name,
-                              g->gr_passwd != nullptr ? g->gr_passwd : "",
-                              static_cast<unsigned>(g->gr_gid)) < 0)
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no number of their
+  // own, so writing the zero it was read as back out would turn the line into
+  // something it was not.
+  const bool from_network_database =
+      g->gr_name[0] == '+' || g->gr_name[0] == '-';
+
+  const int written =
+      from_network_database
+          ? LIBC_NAMESPACE::fprintf(stream, "%s:%s::", g->gr_name,
+                                    g->gr_passwd != nullptr ? g->gr_passwd : "")
+          : LIBC_NAMESPACE::fprintf(stream, "%s:%s:%u:", g->gr_name,
+                                    g->gr_passwd != nullptr ? g->gr_passwd : "",
+                                    static_cast<unsigned>(g->gr_gid));
+  if (written < 0)
     return -1;
 
   for (size_t i = 0; g->gr_mem != nullptr && g->gr_mem[i] != nullptr; ++i) {
