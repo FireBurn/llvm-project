@@ -1,0 +1,33 @@
+add_custom_target(libc_utmp_unittests)
+
+add_libc_test(
+  utmp_test
+  SUITE
+    libc_utmp_unittests
+  SRCS
+    utmp_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_utmp
+    libc.include.utmp
+    libc.src.__support.CPP.string_view
+    libc.src.fcntl.open
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.string.strcpy
+    libc.src.string.strncmp
+    libc.src.utmp.endutent
+    libc.src.utmp.getutent
+    libc.src.utmp.getutent_r
+    libc.src.utmp.getutid
+    libc.src.utmp.getutid_r
+    libc.src.utmp.getutline
+    libc.src.utmp.getutline_r
+    libc.src.utmp.logout
+    libc.src.utmp.logwtmp
+    libc.src.utmp.pututline
+    libc.src.utmp.setutent
+    libc.src.utmp.updwtmp
+    libc.src.utmp.utmpname
+)
