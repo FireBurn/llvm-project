@@ -301,39 +301,53 @@ FileIOResult File::read_unlocked_fbf(uint8_t *data, size_t len) {
   if (available_data == len)
     return available_data;
 
-  // Update the dataref to reflect that fact that we have already
-  // copied |available_data| into |data|.
+  // The rest has to come from the platform. It is asked again for as long as
+  // it keeps handing something over: a pipe, a socket or a terminal returns
+  // only what has arrived so far, which is short of the request without being
+  // the end of the file.
+  uint8_t *dest = data + available_data;
   size_t to_fetch = len - available_data;
-  cpp::span<uint8_t> dataref(static_cast<uint8_t *>(data) + available_data,
-                             to_fetch);
+  size_t fetched = 0;
 
-  if (to_fetch > bufsize) {
-    FileIOResult result = platform_read(this, dataref.data(), to_fetch);
-    size_t fetched_size = result.value;
-    if (result.has_error() || fetched_size < to_fetch) {
-      if (!result.has_error())
-        eof = true;
-      else
+  while (fetched < to_fetch) {
+    size_t remaining = to_fetch - fetched;
+
+    if (remaining > bufsize) {
+      // More is wanted than the buffer holds, so it goes straight to the
+      // caller.
+      FileIOResult result = platform_read(this, dest + fetched, remaining);
+      if (result.has_error()) {
         err = true;
-      return {available_data + fetched_size, result.error};
+        return {available_data + fetched, result.error};
+      }
+      if (result.value == 0) {
+        eof = true;
+        break;
+      }
+      fetched += result.value;
+      continue;
     }
-    return len;
+
+    // Fetch and buffer another buffer worth of data. Everything the buffer
+    // held has been handed over by now, so it starts again from the front.
+    read_limit = pos = 0;
+    FileIOResult result = platform_read(this, buf, bufsize);
+    if (result.has_error()) {
+      err = true;
+      return {available_data + fetched, result.error};
+    }
+    if (result.value == 0) {
+      eof = true;
+      break;
+    }
+    read_limit = result.value;
+    size_t transfer_size = result.value >= remaining ? remaining : result.value;
+    inline_memcpy(dest + fetched, buf, transfer_size);
+    pos = transfer_size;
+    fetched += transfer_size;
   }
 
-  // Fetch and buffer another buffer worth of data.
-  FileIOResult result = platform_read(this, buf, bufsize);
-  size_t fetched_size = result.value;
-  read_limit += fetched_size;
-  size_t transfer_size = fetched_size >= to_fetch ? to_fetch : fetched_size;
-  inline_memcpy(dataref.data(), buf, transfer_size);
-  pos += transfer_size;
-  if (result.has_error() || fetched_size < to_fetch) {
-    if (!result.has_error())
-      eof = true;
-    else
-      err = true;
-  }
-  return {transfer_size + available_data, result.error};
+  return available_data + fetched;
 }
 
 FileIOResult File::read_unlocked_nbf(uint8_t *data, size_t len) {
@@ -342,18 +356,28 @@ FileIOResult File::read_unlocked_nbf(uint8_t *data, size_t len) {
   if (available_data == len)
     return available_data;
 
-  // Directly copy the data into |data|.
-  cpp::span<uint8_t> dataref(static_cast<uint8_t *>(data) + available_data,
-                             len - available_data);
-  FileIOResult result = platform_read(this, dataref.data(), dataref.size());
+  // Directly copy the data into |data|, asking again for as long as the
+  // platform keeps handing something over. Only a read of nothing is the end
+  // of the file.
+  uint8_t *dest = data + available_data;
+  size_t to_fetch = len - available_data;
+  size_t fetched = 0;
 
-  if (result.has_error() || result < dataref.size()) {
-    if (!result.has_error())
-      eof = true;
-    else
+  while (fetched < to_fetch) {
+    FileIOResult result =
+        platform_read(this, dest + fetched, to_fetch - fetched);
+    if (result.has_error()) {
       err = true;
+      return {available_data + fetched, result.error};
+    }
+    if (result.value == 0) {
+      eof = true;
+      break;
+    }
+    fetched += result.value;
   }
-  return {result + available_data, result.error};
+
+  return available_data + fetched;
 }
 
 int File::ungetc_unlocked(int c) {
