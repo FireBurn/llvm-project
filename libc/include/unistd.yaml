@@ -561,6 +561,24 @@ functions:
     return_type: pid_t
     arguments:
       - type: void
+  - name: getusershell
+    standards:
+      - bsd
+    return_type: char *
+    arguments:
+      - type: void
+  - name: setusershell
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: void
+  - name: endusershell
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: void
   - name: getuid
     standards:
       - posix
