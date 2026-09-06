@@ -1458,9 +1458,14 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.ptsname_r
     libc.src.stdlib.putenv
     libc.src.stdlib.secure_getenv
+    libc.src.stdlib.unlockpt
+
+    # pty.h
+    libc.src.pty.forkpty
+    libc.src.pty.login_tty
+    libc.src.pty.openpty
     libc.src.stdlib.setenv
     libc.src.stdlib.system
-    libc.src.stdlib.unlockpt
     libc.src.stdlib.unsetenv
     libc.src.stdlib.quick_exit
 
