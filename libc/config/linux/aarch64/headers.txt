@@ -130,6 +130,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.glob
     libc.include.iconv
     libc.include.netdb
+    libc.include.pty
     libc.include.regex
     libc.include.sys_ptrace
   )
