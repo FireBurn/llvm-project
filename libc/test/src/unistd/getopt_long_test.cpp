@@ -64,6 +64,25 @@ TEST_F(LlvmLibcGetoptLongTest, NoArgumentSetsFlagAndReturnsZero) {
   EXPECT_EQ(test_globals::optind, 2);
 }
 
+TEST_F(LlvmLibcGetoptLongTest, ZeroMeansStartAgain) {
+  array<char *, 4> argv{"prog"_c, "--verbose"_c, "operand"_c, nullptr};
+  verbose_flag = 0;
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            0);
+  EXPECT_EQ(test_globals::optind, 2);
+
+  // A program which parses its arguments twice puts optind back to zero
+  // before the second pass, which starts at the argument after the program's
+  // own name rather than at the name itself.
+  verbose_flag = 0;
+  test_globals::optind = 0;
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            0);
+  EXPECT_EQ(verbose_flag, 1);
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_STREQ(argv[test_globals::optind], "operand");
+}
+
 TEST_F(LlvmLibcGetoptLongTest, RequiredArgumentInline) {
   array<char *, 3> argv{"prog"_c, "--file=out.txt"_c, nullptr};
   EXPECT_EQ(LIBC_NAMESPACE::getopt_long(2, argv.data(), "", LONGOPTS, nullptr),
