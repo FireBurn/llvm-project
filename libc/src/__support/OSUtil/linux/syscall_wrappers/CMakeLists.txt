@@ -2899,3 +2899,29 @@ add_header_library(
     libc.src.__support.macros.config
     libc.include.sys_syscall
 )
+
+add_header_library(
+  process_vm_readv
+  HDRS
+    process_vm_readv.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_iovec
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  process_vm_writev
+  HDRS
+    process_vm_writev.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.struct_iovec
+    libc.include.sys_syscall
+)
