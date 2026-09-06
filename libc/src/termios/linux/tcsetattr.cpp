@@ -26,7 +26,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, tcsetattr, (int fd, int actions, const termios *t)) {
+namespace internal {
+
+int tcsetattr_impl(int fd, int actions, const termios *t) {
   LIBC_CRASH_ON_NULLPTR(t);
   struct kernel_termios kt;
   long cmd;
@@ -72,6 +74,12 @@ LLVM_LIBC_FUNCTION(int, tcsetattr, (int fd, int actions, const termios *t)) {
     return -1;
   }
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, tcsetattr, (int fd, int actions, const termios *t)) {
+  return internal::tcsetattr_impl(fd, actions, t);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
