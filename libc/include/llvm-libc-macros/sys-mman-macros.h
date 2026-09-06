@@ -55,4 +55,9 @@
 #define POSIX_MADV_DONTNEED MADV_DONTNEED
 #endif
 
+// The name a mapping which is not anonymous went by.
+#ifndef MAP_FILE
+#define MAP_FILE 0
+#endif
+
 #endif // LLVM_LIBC_MACROS_SYS_MMAN_MACROS_H
