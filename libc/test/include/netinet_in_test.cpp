@@ -77,3 +77,20 @@ TEST(LlvmLibcNetinetInTest, IN6Macro) {
     addr.s6_addr[i] ^= 42;
   }
 }
+
+TEST(LlvmLibcNetinetInTest, AreAddrEqual) {
+  struct in6_addr a = {};
+  struct in6_addr b = {};
+
+  EXPECT_TRUE(IN6_ARE_ADDR_EQUAL(&a, &b));
+
+  // A difference anywhere in the address is a difference.
+  for (int i = 0; i < 16; ++i) {
+    b.s6_addr[i] ^= 42;
+    EXPECT_FALSE(IN6_ARE_ADDR_EQUAL(&a, &b));
+    a.s6_addr[i] ^= 42;
+    EXPECT_TRUE(IN6_ARE_ADDR_EQUAL(&a, &b));
+    a.s6_addr[i] ^= 42;
+    b.s6_addr[i] ^= 42;
+  }
+}
