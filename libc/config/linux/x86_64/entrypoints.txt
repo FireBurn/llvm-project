@@ -95,11 +95,15 @@ set(TARGET_LIBC_ENTRYPOINTS
     # gshadow.h entrypoints
     libc.src.gshadow.endsgent
     libc.src.gshadow.fgetsgent
+    libc.src.gshadow.fgetsgent_r
     libc.src.gshadow.getsgent
+    libc.src.gshadow.getsgent_r
     libc.src.gshadow.getsgnam
     libc.src.gshadow.getsgnam_r
     libc.src.gshadow.putsgent
     libc.src.gshadow.setsgent
+    libc.src.gshadow.sgetsgent
+    libc.src.gshadow.sgetsgent_r
 
     # shadow.h entrypoints
     libc.src.shadow.endspent
