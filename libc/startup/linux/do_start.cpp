@@ -22,6 +22,7 @@
 #include "src/__support/threads/linux/futex_utils.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
+#include "src/compat/progname.h"
 #include "src/errno/program_invocation_name.h"
 #include "src/errno/program_invocation_short_name.h"
 #include "src/link/_r_debug.h"
@@ -123,6 +124,9 @@ static TLSDescriptor tls;
       if (*p == '/')
         program_invocation_short_name = p + 1;
     }
+    // The names BSD gave the same two things.
+    __progname_full = program_invocation_name;
+    __progname = program_invocation_short_name;
   }
 
   // After the env array, is the aux-vector. The end of the aux-vector is
