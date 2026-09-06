@@ -50,6 +50,7 @@ add_entrypoint_object(
     lfs64.cpp
   HDRS
     lfs64.h
+    lfs64_undef.h
   DEPENDS
     libc.hdr.types.DIR
     libc.hdr.types.FILE
@@ -58,6 +59,7 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_dirent
+    libc.hdr.types.struct_iovec
     libc.hdr.types.struct_rlimit
     libc.hdr.types.struct_stat
     libc.hdr.types.struct_statfs
@@ -90,6 +92,8 @@ add_entrypoint_object(
     libc.src.sys.statfs.statfs
     libc.src.sys.statvfs.fstatvfs
     libc.src.sys.statvfs.statvfs
+    libc.src.sys.uio.preadv
+    libc.src.sys.uio.pwritev
     libc.src.unistd.ftruncate
     libc.src.unistd.lseek
     libc.src.unistd.pread
