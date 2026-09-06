@@ -710,6 +710,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  pty
+  ../libc/include/pty.yaml
+  pty.h
+  DEPENDS
+    .llvm-libc-types.pid_t
+    .llvm-libc-types.struct_termios
+    .llvm-libc-types.struct_winsize
+)
+
+add_header_macro(
   pthread
   ../libc/include/pthread.yaml
   pthread.h
