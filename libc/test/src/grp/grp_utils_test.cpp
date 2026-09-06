@@ -102,8 +102,11 @@ TEST(LlvmLibcGrpUtilsTest, ParseGroupLine_MissingFields) {
   char line1[] = "root:x";
   EXPECT_FALSE(LIBC_NAMESPACE::grp::parse_group_line(line1, &grp, mem_ptrs));
 
+  // A line that stops after the number names a group with nobody in it, as
+  // glibc reads it.
   char line2[] = "root:x:0";
-  EXPECT_FALSE(LIBC_NAMESPACE::grp::parse_group_line(line2, &grp, mem_ptrs));
+  EXPECT_TRUE(LIBC_NAMESPACE::grp::parse_group_line(line2, &grp, mem_ptrs));
+  EXPECT_EQ(grp.gr_mem[0], nullptr);
 }
 
 TEST(LlvmLibcGrpUtilsTest, ParseGroupLine_EmptyGroupName) {
@@ -188,4 +191,25 @@ TEST(LlvmLibcGrpUtilsTest, ParseLine_SuccessWithTailForMemberPointers) {
   EXPECT_STREQ(grp.gr_mem[2], "user1");
   EXPECT_STREQ(grp.gr_mem[3], "user2");
   EXPECT_EQ(grp.gr_mem[4], nullptr);
+}
+
+TEST(LlvmLibcGrpUtilsTest, ParseGroupLine_FromNetworkDatabase) {
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no number, and are
+  // read as zero rather than turned away.
+  char *mem_ptrs[4];
+  struct group grp;
+  char line[] = "+giant:::bill,tina";
+  ASSERT_TRUE(LIBC_NAMESPACE::grp::parse_group_line(line, &grp, mem_ptrs));
+  EXPECT_STREQ(grp.gr_name, "+giant");
+  EXPECT_EQ(grp.gr_gid, static_cast<gid_t>(0));
+  EXPECT_STREQ(grp.gr_mem[0], "bill");
+
+  char minus[] = "-transport:::";
+  ASSERT_TRUE(LIBC_NAMESPACE::grp::parse_group_line(minus, &grp, mem_ptrs));
+  EXPECT_EQ(grp.gr_gid, static_cast<gid_t>(0));
+
+  // An ordinary name with no number is still refused.
+  char ordinary[] = "plain:x::alice";
+  EXPECT_FALSE(LIBC_NAMESPACE::grp::parse_group_line(ordinary, &grp, mem_ptrs));
 }
