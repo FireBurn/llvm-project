@@ -23131,6 +23131,20 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "setvbuf",
+    srcs = ["src/stdio/setvbuf.cpp"],
+    hdrs = ["src/stdio/setvbuf.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+    ],
+)
+
 libc_support_library(
     name = "stdio_scanf_core_core_structs",
     hdrs = ["src/stdio/scanf_core/core_structs.h"],
@@ -23649,6 +23663,22 @@ libc_support_library(
         ],
         "//conditions:default": [],
     }),
+)
+
+
+
+
+libc_function(
+    name = "clearerr",
+    srcs = ["src/stdio/generic/clearerr.cpp"],
+    hdrs = ["src/stdio/clearerr.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_file",
+    ],
 )
 
 libc_function(
