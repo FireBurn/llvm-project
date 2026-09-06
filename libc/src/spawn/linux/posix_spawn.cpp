@@ -7,10 +7,12 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/spawn/posix_spawn.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/chdir.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/execve.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/exit_group.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fchdir.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getgid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
@@ -190,6 +192,20 @@ void child_process(const char *__restrict path,
       case BaseSpawnFileAction::DUP2: {
         auto *dup2_act = reinterpret_cast<SpawnFileDup2Action *>(act);
         auto result = linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd);
+        if (!result)
+          exit(result.error());
+        break;
+      }
+      case BaseSpawnFileAction::CHDIR: {
+        auto *chdir_act = reinterpret_cast<SpawnFileChdirAction *>(act);
+        ErrorOr<int> result = linux_syscalls::chdir(chdir_act->path);
+        if (!result)
+          exit(result.error());
+        break;
+      }
+      case BaseSpawnFileAction::FCHDIR: {
+        auto *fchdir_act = reinterpret_cast<SpawnFileFchdirAction *>(act);
+        ErrorOr<int> result = linux_syscalls::fchdir(fchdir_act->fd);
         if (!result)
           exit(result.error());
         break;
