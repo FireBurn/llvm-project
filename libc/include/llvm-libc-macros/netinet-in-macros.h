@@ -107,13 +107,13 @@
 
 #define IN6_IS_ADDR_UNSPECIFIED(a)                                             \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __IN6_IS_ADDR_UNSPECIFIED(__a);                                            \
   }))
 
 #define IN6_IS_ADDR_LOOPBACK(a)                                                \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __IN6_IS_ADDR_LOOPBACK(__a);                                               \
   }))
 
@@ -121,19 +121,19 @@
 
 #define IN6_IS_ADDR_LINKLOCAL(a)                                               \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __a->s6_addr[0] == 0xfe && (__a->s6_addr[1] & 0xc0) == 0x80;               \
   }))
 
 #define IN6_IS_ADDR_SITELOCAL(a)                                               \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __a->s6_addr[0] == 0xfe && (__a->s6_addr[1] & 0xc0) == 0xc0;               \
   }))
 
 #define IN6_IS_ADDR_V4MAPPED(a)                                                \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __a->s6_addr32[0] == 0 && __a->s6_addr32[1] == 0 &&                        \
         __a->s6_addr[8] == 0 && __a->s6_addr[9] == 0 &&                        \
         __a->s6_addr[10] == 0xff && __a->s6_addr[11] == 0xff;                  \
@@ -141,7 +141,7 @@
 
 #define IN6_IS_ADDR_V4COMPAT(a)                                                \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     __a->s6_addr32[0] == 0 && __a->s6_addr32[1] == 0 &&                        \
         __a->s6_addr32[2] == 0 && !__IN6_IS_ADDR_UNSPECIFIED(__a) &&           \
         !__IN6_IS_ADDR_LOOPBACK(__a);                                          \
@@ -149,31 +149,31 @@
 
 #define IN6_IS_ADDR_MC_NODELOCAL(a)                                            \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     IN6_IS_ADDR_MULTICAST(__a) && (__a->s6_addr[1] & 0xf) == 0x1;              \
   }))
 
 #define IN6_IS_ADDR_MC_LINKLOCAL(a)                                            \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     IN6_IS_ADDR_MULTICAST(__a) && (__a->s6_addr[1] & 0xf) == 0x2;              \
   }))
 
 #define IN6_IS_ADDR_MC_SITELOCAL(a)                                            \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     IN6_IS_ADDR_MULTICAST(__a) && (__a->s6_addr[1] & 0xf) == 0x5;              \
   }))
 
 #define IN6_IS_ADDR_MC_ORGLOCAL(a)                                             \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     IN6_IS_ADDR_MULTICAST(__a) && (__a->s6_addr[1] & 0xf) == 0x8;              \
   }))
 
 #define IN6_IS_ADDR_MC_GLOBAL(a)                                               \
   (__extension__({                                                             \
-    const struct in6_addr *__a = (a);                                          \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
     IN6_IS_ADDR_MULTICAST(__a) && (__a->s6_addr[1] & 0xf) == 0xe;              \
   }))
 
