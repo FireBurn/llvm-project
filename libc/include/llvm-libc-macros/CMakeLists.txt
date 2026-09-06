@@ -520,6 +520,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  packet_macros
+  HDR
+    packet-macros.h
+)
+
+add_macro_header(
   sys_sysmacros_macros
   HDR
     sys-sysmacros-macros.h
