@@ -5144,6 +5144,7 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_mprotect",
         ":__support_osutil_linux_syscall_wrappers_munmap",
         ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_prlimit",
         ":__support_osutil_linux_syscall_wrappers_read",
         ":__support_osutil_linux_syscall_wrappers_sched_getparam",
         ":__support_osutil_linux_syscall_wrappers_sched_getscheduler",
@@ -5165,6 +5166,7 @@ libc_support_library(
         ":hdr_sched_macros",
         ":hdr_stdint_proxy",
         ":hdr_sys_mman_macros",
+        ":hdr_sys_resource_macros",
     ],
 )
 
