@@ -1,0 +1,193 @@
+add_header_library(
+  utmp_record
+  HDRS
+    utmp_record.h
+  DEPENDS
+    libc.hdr.types.struct_utmp
+    libc.hdr.types.struct_utmpx
+)
+
+add_header_library(
+  utmp_fill
+  HDRS
+    utmp_fill.h
+  DEPENDS
+    libc.hdr.time_macros
+    libc.hdr.types.struct_utmp
+    libc.src.__support.time.clock_gettime
+)
+
+add_entrypoint_object(
+  setutent
+  SRCS
+    setutent.cpp
+  HDRS
+    setutent.h
+  DEPENDS
+    libc.src.utmpx.utmpx_db
+)
+
+add_entrypoint_object(
+  endutent
+  SRCS
+    endutent.cpp
+  HDRS
+    endutent.h
+  DEPENDS
+    libc.src.utmpx.utmpx_db
+)
+
+add_entrypoint_object(
+  getutent
+  SRCS
+    getutent.cpp
+  HDRS
+    getutent.h
+  DEPENDS
+    .utmp_record
+    libc.hdr.types.struct_utmp
+    libc.src.utmpx.utmpx_db
+)
+
+add_entrypoint_object(
+  getutid
+  SRCS
+    getutid.cpp
+  HDRS
+    getutid.h
+  DEPENDS
+    .utmp_record
+    libc.hdr.types.struct_utmp
+    libc.src.utmpx.getutxid
+)
+
+add_entrypoint_object(
+  getutline
+  SRCS
+    getutline.cpp
+  HDRS
+    getutline.h
+  DEPENDS
+    .utmp_record
+    libc.hdr.types.struct_utmp
+    libc.src.utmpx.getutxline
+)
+
+add_entrypoint_object(
+  pututline
+  SRCS
+    pututline.cpp
+  HDRS
+    pututline.h
+  DEPENDS
+    .utmp_record
+    libc.hdr.types.struct_utmp
+    libc.src.utmpx.pututxline
+)
+
+add_entrypoint_object(
+  utmpname
+  SRCS
+    utmpname.cpp
+  HDRS
+    utmpname.h
+  DEPENDS
+    libc.src.utmpx.utmpx_db
+)
+
+add_entrypoint_object(
+  updwtmp
+  SRCS
+    updwtmp.cpp
+  HDRS
+    updwtmp.h
+  DEPENDS
+    .utmp_record
+    libc.hdr.types.struct_utmp
+    libc.src.utmpx.updwtmpx
+)
+
+add_entrypoint_object(
+  getutent_r
+  SRCS
+    getutent_r.cpp
+  HDRS
+    getutent_r.h
+  DEPENDS
+    .getutent
+    libc.hdr.types.struct_utmp
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  getutid_r
+  SRCS
+    getutid_r.cpp
+  HDRS
+    getutid_r.h
+  DEPENDS
+    .getutid
+    libc.hdr.types.struct_utmp
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  getutline_r
+  SRCS
+    getutline_r.cpp
+  HDRS
+    getutline_r.h
+  DEPENDS
+    .getutline
+    libc.hdr.types.struct_utmp
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  logwtmp
+  SRCS
+    logwtmp.cpp
+  HDRS
+    logwtmp.h
+  DEPENDS
+    .updwtmp
+    .utmp_fill
+    libc.hdr.types.struct_utmp
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
+
+add_entrypoint_object(
+  login
+  SRCS
+    login.cpp
+  HDRS
+    login.h
+  DEPENDS
+    .endutent
+    .pututline
+    .setutent
+    .updwtmp
+    .utmp_fill
+    libc.hdr.types.struct_utmp
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.unistd.ttyname_r
+)
+
+add_entrypoint_object(
+  logout
+  SRCS
+    logout.cpp
+  HDRS
+    logout.h
+  DEPENDS
+    .endutent
+    .getutline
+    .pututline
+    .setutent
+    .utmp_fill
+    libc.hdr.types.struct_utmp
+    libc.src.string.memory_utils.inline_memcpy
+)
