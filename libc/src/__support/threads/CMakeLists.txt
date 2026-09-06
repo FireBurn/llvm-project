@@ -178,6 +178,9 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.thread)
       .mutex
       .${LIBC_TARGET_OS}.thread
       libc.hdr.types.struct___pthread_cleanup_frame
+      libc.hdr.limits_macros
+      libc.hdr.stdint_proxy
+      libc.src.__support.common
       libc.src.__support.fixedvector
       libc.src.__support.CPP.array
       libc.src.__support.CPP.mutex
