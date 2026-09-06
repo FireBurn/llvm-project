@@ -683,6 +683,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.close_range
     libc.src.unistd.dup
     libc.src.unistd.dup2
+    libc.src.unistd.daemon
     libc.src.unistd.dup3
     libc.src.unistd.execle
     libc.src.unistd.execlp
@@ -1785,6 +1786,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fputc_unlocked
     libc.src.stdio.fputs
     libc.src.stdio.fputs_unlocked
+    libc.src.stdio.setbuffer
     libc.src.stdio.setlinebuf
     libc.src.stdio.__fsetlocking
     libc.src.stdio.fread

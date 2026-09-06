@@ -17,6 +17,9 @@
 #include "src/stdio/putc_unlocked.h"
 #include "src/stdio/putchar_unlocked.h"
 #include "src/stdio/remove.h"
+#include "src/stdio/setbuffer.h"
+#include "src/stdio/setlinebuf.h"
+#include "src/stdio_ext/__flbf.h"
 #include "src/string/memcmp.h"
 #include "test/UnitTest/Test.h"
 
@@ -60,6 +63,30 @@ TEST(LlvmLibcStdioUnlockedTest, SetsAndReportsTheLockingInForce) {
             int(FSETLOCKING_BYCALLER));
 
   ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::remove(path), 0);
+}
+
+// setbuffer is setvbuf with the buffering decided by whether a buffer was
+// given, and setlinebuf asks for line buffering and nothing else.
+TEST(LlvmLibcStdioUnlockedTest, ChoosingHowTheStreamIsBuffered) {
+  auto path = libc_make_test_file_path("stdio_buffer.test");
+  ::FILE *f = LIBC_NAMESPACE::fopen(path, "w");
+  ASSERT_FALSE(f == nullptr);
+
+  ASSERT_EQ(LIBC_NAMESPACE::__flbf(f), 0);
+  LIBC_NAMESPACE::setlinebuf(f);
+  ASSERT_NE(LIBC_NAMESPACE::__flbf(f), 0);
+
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+
+  ::FILE *g = LIBC_NAMESPACE::fopen(path, "w");
+  ASSERT_FALSE(g == nullptr);
+  static char buffer[64];
+  LIBC_NAMESPACE::setbuffer(g, buffer, sizeof(buffer));
+  ASSERT_EQ(LIBC_NAMESPACE::__flbf(g), 0);
+  ASSERT_GE(LIBC_NAMESPACE::fputs_unlocked("through the given buffer", g), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(g), 0);
+
   ASSERT_EQ(LIBC_NAMESPACE::remove(path), 0);
 }
 
