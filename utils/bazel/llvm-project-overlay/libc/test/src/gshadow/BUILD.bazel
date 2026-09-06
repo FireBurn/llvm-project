@@ -16,6 +16,32 @@ libc_test(
     deps = [
         "//libc:__support_cpp_span",
         "//libc:gshadow_gshadow_utils",
+        "//libc:sgetsgent",
+        "//libc:sgetsgent_r",
+        "//libc:types_struct_sgrp",
+    ],
+)
+
+libc_test(
+    name = "gshadow_test",
+    srcs = ["gshadow_test.cpp"],
+    deps = [
+        "//libc:endsgent",
+        "//libc:fclose",
+        "//libc:fgetsgent",
+        "//libc:fgetsgent_r",
+        "//libc:fopen",
+        "//libc:fwrite",
+        "//libc:getsgent",
+        "//libc:getsgent_r",
+        "//libc:getsgnam",
+        "//libc:getsgnam_r",
+        "//libc:gshadow_gshadow_utils",
+        "//libc:hdr_errno_macros",
+        "//libc:putsgent",
+        "//libc:remove",
+        "//libc:setsgent",
+        "//libc:types_FILE",
         "//libc:types_struct_sgrp",
     ],
 )
