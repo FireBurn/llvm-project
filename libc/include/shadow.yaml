@@ -1,6 +1,12 @@
 header: shadow.h
+public_includes:
+  # The file the lookups read, under the name this header gives it.
+  - paths.h
 standards:
   - gnu
+macros:
+  - macro_name: SHADOW
+    macro_header: shadow-macros.h
 types:
   - type_name: struct_spwd
   - type_name: FILE
