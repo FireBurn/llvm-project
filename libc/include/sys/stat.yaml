@@ -2,6 +2,14 @@ header: sys/stat.h
 standards:
   - posix
 macros:
+  - macro_name: stat64
+    macro_header: lfs64-macros.h
+  - macro_name: fstat64
+    macro_header: lfs64-macros.h
+  - macro_name: lstat64
+    macro_header: lfs64-macros.h
+  - macro_name: fstatat64
+    macro_header: lfs64-macros.h
   - macro_name: S_IFMT
     macro_header: sys-stat-macros.h
 types:

@@ -2,6 +2,10 @@ header: glob.h
 standards:
   - posix
 macros:
+  - macro_name: glob64
+    macro_header: lfs64-macros.h
+  - macro_name: globfree64
+    macro_header: lfs64-macros.h
   - macro_name: GLOB_ERR
     macro_header: glob-macros.h
   - macro_name: GLOB_MARK
