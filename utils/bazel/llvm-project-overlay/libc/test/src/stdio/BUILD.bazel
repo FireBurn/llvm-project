@@ -21,6 +21,15 @@ libc_test(
 )
 
 libc_test(
+    name = "ctermid_test",
+    srcs = ["ctermid_test.cpp"],
+    deps = [
+        "//libc:ctermid",
+        "//libc:hdr_stdio_macros",
+    ],
+)
+
+libc_test(
     name = "dprintf_test",
     srcs = ["dprintf_test.cpp"],
     deps = [
