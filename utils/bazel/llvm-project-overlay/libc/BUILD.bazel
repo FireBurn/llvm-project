@@ -20490,6 +20490,21 @@ libc_function(
 )
 
 libc_function(
+    name = "lutimes",
+    srcs = ["src/sys/time/linux/lutimes.cpp"],
+    hdrs = ["src/sys/time/lutimes.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_utimensat",
+        ":hdr_fcntl_macros",
+        ":sys_time_lutimes",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+    ],
+)
+
+libc_function(
     name = "mount",
     srcs = ["src/sys/mount/linux/mount.cpp"],
     hdrs = ["src/sys/mount/mount.h"],
@@ -26808,6 +26823,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_time_lutimes",
+    hdrs = ["src/sys/time/lutimes.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_timeval",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["include/llvm-libc-types/struct_termios.h"],
 )
@@ -27564,6 +27588,21 @@ libc_support_library(
     hdrs = ["src/sys/stat/fstat.h"],
     deps = [
         ":__support_macros_config",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "sys_stat_lstat",
+    srcs = ["src/sys/stat/linux/lstat.cpp"],
+    hdrs = ["src/sys/stat/lstat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":hdr_fcntl_macros",
         ":types_struct_stat",
     ],
 )
