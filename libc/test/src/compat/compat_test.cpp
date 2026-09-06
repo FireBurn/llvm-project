@@ -18,6 +18,10 @@
 #include "src/string/strcmp.h"
 #include "src/unistd/close.h"
 #include "src/unistd/getpid.h"
+#include "src/dirent/closedir.h"
+#include "src/dirent/opendir.h"
+#include "src/stdio/fclose.h"
+#include "src/stdio/fputs.h"
 #include "src/unistd/write.h"
 #include "test/UnitTest/Test.h"
 
@@ -101,4 +105,31 @@ TEST(LlvmLibcCompat, TheSixtyFourNamesAreTheOrdinaryCalls) {
   ASSERT_EQ(LIBC_NAMESPACE::lseek64(fd, 0, SEEK_END),
             static_cast<off_t>(10));
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
+}
+
+// The dirent names are stated as macros onto the calls they name, for the
+// sake of anything compiled against the header. The symbols have to be there
+// as well, for anything already built, and this reaches them the same way.
+#undef readdir64
+
+TEST(LlvmLibcCompat, TheSixtyFourNamesReachTheSameDirectoryCalls) {
+  DIR *dir = LIBC_NAMESPACE::opendir(".");
+  ASSERT_NE(dir, static_cast<DIR *>(nullptr));
+  // Every directory has itself in it, so there is always something to read.
+  ASSERT_NE(LIBC_NAMESPACE::readdir64(dir), static_cast<struct dirent *>(nullptr));
+  ASSERT_EQ(LIBC_NAMESPACE::closedir(dir), 0);
+}
+
+TEST(LlvmLibcCompat, TheSixtyFourNamesReachTheSameStreamCalls) {
+  constexpr const char *PATH = "compat_lfs64_stream.test";
+  FILE *stream = LIBC_NAMESPACE::fopen64(PATH, "w");
+  ASSERT_NE(stream, static_cast<FILE *>(nullptr));
+  ASSERT_GE(LIBC_NAMESPACE::fputs("0123456789", stream), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(stream), 0);
+
+  stream = LIBC_NAMESPACE::fopen64(PATH, "r");
+  ASSERT_NE(stream, static_cast<FILE *>(nullptr));
+  ASSERT_EQ(LIBC_NAMESPACE::fseeko64(stream, 4, SEEK_SET), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::ftello64(stream), static_cast<off_t>(4));
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(stream), 0);
 }

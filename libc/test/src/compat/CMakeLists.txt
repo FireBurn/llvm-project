@@ -16,6 +16,10 @@ add_libc_test(
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.lfs64
     libc.src.compat.syscall
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.stdio.fclose
+    libc.src.stdio.fputs
     libc.src.string.strcmp
     libc.src.unistd.close
     libc.src.unistd.getpid

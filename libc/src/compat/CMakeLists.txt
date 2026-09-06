@@ -50,18 +50,50 @@ add_entrypoint_object(
   HDRS
     lfs64.h
   DEPENDS
+    libc.hdr.types.DIR
+    libc.hdr.types.FILE
     libc.hdr.types.mode_t
     libc.hdr.types.off_t
     libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_dirent
+    libc.hdr.types.struct_rlimit
     libc.hdr.types.struct_stat
+    libc.hdr.types.struct_statfs
+    libc.include.llvm-libc-types.struct_statvfs
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.dirent.alphasort
+    libc.src.dirent.readdir
+    libc.src.dirent.scandir
+    libc.src.dirent.versionsort
+    libc.src.fcntl.creat
+    libc.src.fcntl.fallocate
     libc.src.fcntl.open
+    libc.src.fcntl.openat
+    libc.src.fcntl.posix_fallocate
+    libc.src.stdio.fopen
+    libc.src.stdio.freopen
+    libc.src.stdio.fseeko
+    libc.src.stdio.ftello
+    libc.src.stdio.tmpfile
     libc.src.sys.mman.mmap
+    libc.src.sys.resource.getrlimit
+    libc.src.sys.resource.setrlimit
+    libc.src.sys.sendfile.sendfile
     libc.src.sys.stat.fstat
+    libc.src.sys.stat.fstatat
     libc.src.sys.stat.lstat
     libc.src.sys.stat.stat
+    libc.src.sys.statfs.fstatfs
+    libc.src.sys.statfs.statfs
+    libc.src.sys.statvfs.fstatvfs
+    libc.src.sys.statvfs.statvfs
+    libc.src.unistd.ftruncate
     libc.src.unistd.lseek
+    libc.src.unistd.pread
+    libc.src.unistd.pwrite
+    libc.src.unistd.truncate
 )
 
 add_entrypoint_object(
