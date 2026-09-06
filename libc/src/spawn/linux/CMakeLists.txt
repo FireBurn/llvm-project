@@ -4,6 +4,7 @@ add_entrypoint_object(
     posix_spawn.cpp
   HDRS
     ../posix_spawn.h
+    ../posix_spawnp.h
   DEPENDS
     libc.hdr.types.mode_t
     libc.hdr.fcntl_macros
@@ -18,6 +19,8 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.getgid
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pipe2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigaction
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
     libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setparam
@@ -26,8 +29,11 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.setpgid
     libc.src.__support.OSUtil.linux.syscall_wrappers.setsid
     libc.src.__support.OSUtil.linux.syscall_wrappers.setuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.spawn.file_actions
     libc.src.signal.linux.signal_utils
+    libc.src.unistd.linux.exec_utils
     libc.hdr.signal_macros
     libc.hdr.spawn_macros
     libc.hdr.types.sigset_t
