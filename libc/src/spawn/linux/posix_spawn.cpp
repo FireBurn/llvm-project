@@ -13,6 +13,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/execve.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/exit_group.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/fchdir.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fcntl.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getgid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
@@ -191,6 +192,23 @@ void child_process(const char *__restrict path,
       }
       case BaseSpawnFileAction::DUP2: {
         auto *dup2_act = reinterpret_cast<SpawnFileDup2Action *>(act);
+        // Where the two are the same descriptor there is nothing to
+        // duplicate, and dup2 would do nothing at all. What POSIX asks for
+        // here is that the descriptor be left open across the exec, so the
+        // close-on-exec flag is what actually has to be cleared. A caller
+        // handing a descriptor to a child it is about to start says so this
+        // way.
+        if (dup2_act->fd == dup2_act->newfd) {
+          ErrorOr<int> flags = linux_syscalls::fcntl(dup2_act->fd, F_GETFD);
+          if (!flags)
+            exit(flags.error());
+          ErrorOr<int> set = linux_syscalls::fcntl(
+              dup2_act->fd, F_SETFD,
+              reinterpret_cast<void *>(*flags & ~FD_CLOEXEC));
+          if (!set)
+            exit(set.error());
+          break;
+        }
         auto result = linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd);
         if (!result)
           exit(result.error());
