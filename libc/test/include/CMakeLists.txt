@@ -272,6 +272,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_param_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_param_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_param_macros
+)
+
+add_libc_test(
   elf_test
   SUITE
     libc-include-tests
@@ -290,6 +300,16 @@ add_libc_test(
     libc.include.llvm-libc-types.Elf64_Sxword
     libc.include.llvm-libc-types.Elf64_Syminfo
     libc.include.llvm-libc-types.Elf64_Xword
+)
+
+add_libc_test(
+  sys_klog_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_klog_test.cpp
+  DEPENDS
+    libc.include.sys_klog
 )
 
 add_libc_test(
