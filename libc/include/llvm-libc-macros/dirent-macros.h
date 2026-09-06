@@ -20,6 +20,15 @@
 
 #include "lfs64-macros.h"
 
+// The BSD name for what POSIX calls NAME_MAX, which <limits.h> gives.
+#ifndef MAXNAMLEN
+#ifdef NAME_MAX
+#define MAXNAMLEN NAME_MAX
+#else
+#define MAXNAMLEN 255
+#endif
+#endif
+
 // The name large file support gave struct dirent. LLVM-libc's ordinary
 // record is already the wide one, so the two name the same thing. This lives
 // with its own record rather than with the rest of the large file names so
