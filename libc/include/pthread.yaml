@@ -5,6 +5,10 @@ public_includes:
   # A thread attribute carries a struct sched_param and a scheduling policy,
   # so the header which names those comes with this one, as it does on glibc.
   - sched.h
+  # glibc's <pthread.h> carries all of <time.h> too, which is where the
+  # clocks a condition variable can be told to use are named, and where the
+  # timespec its timed waits take comes from.
+  - time.h
 macros:
   - macro_name: "PTHREAD_NULL"
     macro_header: pthread-macros.h
