@@ -50,6 +50,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("gshadow"),
     libc_header_info("iconv"),
     libc_header_info("ifaddrs"),
+    libc_header_info("lastlog"),
     libc_header_info(
         "link",
     ),
