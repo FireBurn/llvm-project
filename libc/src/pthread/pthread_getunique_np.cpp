@@ -26,9 +26,7 @@ LLVM_LIBC_FUNCTION(int, pthread_getunique_np,
     return EINVAL;
   }
   // We assume that unique thread ID is an integer value of a pointer to TCB.
-  *id = (thread == nullptr)
-            ? 0
-            : reinterpret_cast<pthread_id_np_t>(thread->__attrib);
+  *id = (thread == nullptr) ? 0 : static_cast<pthread_id_np_t>(*thread);
   return 0;
 }
 
