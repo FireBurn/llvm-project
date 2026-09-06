@@ -1805,6 +1805,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fputc_unlocked
     libc.src.stdio.fputs
     libc.src.stdio.fputs_unlocked
+    libc.src.stdio.ctermid
     libc.src.stdio.setbuffer
     libc.src.stdio.setlinebuf
     libc.src.stdio.__fsetlocking

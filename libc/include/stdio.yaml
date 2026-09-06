@@ -453,6 +453,12 @@ functions:
     return_type: int
     arguments:
       - type: const char *
+  - name: ctermid
+    standards:
+      - posix
+    return_type: char *
+    arguments:
+      - type: char *
   - name: remove
     standards:
       - stdc

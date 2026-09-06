@@ -60,6 +60,12 @@ extern FILE *stderr;
 #define L_tmpnam 20
 #endif
 
+// The size an array must have to hold the name ctermid returns, which on
+// Linux is always /dev/tty.
+#ifndef L_ctermid
+#define L_ctermid 9
+#endif
+
 // The minimum number of distinct names tmpnam can generate. The standard's
 // floor is 25.
 #ifndef TMP_MAX
