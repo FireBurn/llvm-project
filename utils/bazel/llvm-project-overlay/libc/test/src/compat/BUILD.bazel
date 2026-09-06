@@ -19,6 +19,7 @@ libc_test(
         "//libc/hdr:stdio_macros",
         "//libc/hdr:sys_stat_macros",
         "//libc/src/compat:__xpg_strerror_r",
+        "//libc/src/compat:gnu_get_libc_version",
         "//libc/src/compat:lfs64",
         "//libc/src/dirent:closedir",
         "//libc/src/dirent:opendir",
