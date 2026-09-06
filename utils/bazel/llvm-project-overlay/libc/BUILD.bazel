@@ -159,6 +159,7 @@ py_binary(
 
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
+    libc_header_info("execinfo"),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -21647,6 +21648,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_stat_fstat",
+    hdrs = ["src/sys/stat/fstat.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_bind",
     hdrs = ["src/__support/elf/bind.h"],
     deps = [
@@ -21902,5 +21912,83 @@ libc_function(
         ":__support_macros_config",
         ":dlfcn_dl_internal",
         ":hdr_types_dl_info",
+    ],
+)
+
+libc_support_library(
+    name = "execinfo_unwind",
+    hdrs = ["src/execinfo/unwind.h"],
+    deps = [
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "execinfo_backtrace_line",
+    hdrs = ["src/execinfo/backtrace_line.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "backtrace",
+    srcs = ["src/execinfo/backtrace.cpp"],
+    hdrs = ["src/execinfo/backtrace.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_callonce",
+        ":dlfcn_dlopen",
+        ":dlfcn_dlsym",
+        ":execinfo_unwind",
+    ],
+)
+
+libc_function(
+    name = "backtrace_symbols_fd",
+    srcs = ["src/execinfo/backtrace_symbols_fd.cpp"],
+    hdrs = ["src/execinfo/backtrace_symbols_fd.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":dladdr",
+        ":execinfo_backtrace_line",
+        ":hdr_types_dl_info",
+    ],
+)
+
+libc_function(
+    name = "backtrace_symbols",
+    srcs = ["src/execinfo/backtrace_symbols.cpp"],
+    hdrs = ["src/execinfo/backtrace_symbols.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":dladdr",
+        ":execinfo_backtrace_line",
+        ":func_malloc",
+        ":hdr_types_dl_info",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "fstat",
+    srcs = ["src/sys/stat/linux/fstat.cpp"],
+    hdrs = ["src/sys/stat/fstat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":hdr_fcntl_macros",
+        ":types_struct_stat",
     ],
 )
