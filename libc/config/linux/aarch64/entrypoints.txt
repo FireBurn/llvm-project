@@ -355,6 +355,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.syslog.syslog
     libc.src.syslog.vsyslog
     libc.src.stdio.renameat2
+    libc.src.ifaddrs.freeifaddrs
+    libc.src.ifaddrs.getifaddrs
 
     # mqueue.h entrypoints
     libc.src.mqueue.mq_close
