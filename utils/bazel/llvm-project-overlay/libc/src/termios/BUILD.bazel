@@ -35,6 +35,53 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "tcgetattr",
+    srcs = ["linux/tcgetattr.cpp"],
+    hdrs = ["tcgetattr.h"],
+    deps = [
+        ":kernel_termios",
+        ":linux_speed_utils",
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "tcsetattr",
+    srcs = ["linux/tcsetattr.cpp"],
+    hdrs = ["tcsetattr.h"],
+    deps = [
+        ":kernel_termios",
+        ":linux_speed_utils",
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "linux_speed_utils",
+    hdrs = ["linux/speed_utils.h"],
+    deps = [
+        "//libc/hdr/types:speed_t",
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
 libc_function(
     name = "tcdrain",
     srcs = ["linux/tcdrain.cpp"],

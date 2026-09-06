@@ -715,6 +715,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "speed_t",
+    hdrs = ["speed_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_speed_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_dirent",
     hdrs = ["struct_dirent.h"],
     deps = select({
@@ -755,6 +764,15 @@ libc_support_library(
     hdrs = ["struct_utimbuf.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_struct_utimbuf"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_winsize",
+    hdrs = ["struct_winsize.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_winsize"],
         "//conditions:default": [],
     }),
 )

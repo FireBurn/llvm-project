@@ -1,0 +1,36 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc pty.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "pty_test",
+    srcs = ["pty_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr/types:struct_winsize",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/pty:forkpty",
+        "//libc/src/pty:login_tty",
+        "//libc/src/pty:openpty",
+        "//libc/src/stdlib:_Exit",
+        "//libc/src/string:memcmp",
+        "//libc/src/string:strlen",
+        "//libc/src/sys/wait:waitpid",
+        "//libc/src/termios:tcgetattr",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:fork",
+        "//libc/src/unistd:isatty",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:write",
+    ],
+)
