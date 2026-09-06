@@ -11,6 +11,35 @@
 
 #define __LLVM_LIBC__ 1
 
+// Feature test macros. An application selects a view of the library by
+// defining one of these before including anything; where it has not, or
+// where it asked for all of them at once, the rest of the set is settled
+// here so that a program reading them back sees a consistent answer.
+#ifdef _GNU_SOURCE
+#undef _POSIX_SOURCE
+#define _POSIX_SOURCE 1
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 202405L
+#undef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 800
+#undef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE 1
+#endif
+
+#if defined _DEFAULT_SOURCE ||                                                 \
+    (!defined __STRICT_ANSI__ && !defined _ISOC95_SOURCE &&                    \
+     !defined _ISOC99_SOURCE && !defined _ISOC11_SOURCE &&                     \
+     !defined _ISOC23_SOURCE && !defined _ISOC2X_SOURCE &&                     \
+     !defined _POSIX_SOURCE && !defined _POSIX_C_SOURCE &&                     \
+     !defined _XOPEN_SOURCE)
+#undef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE 1
+#undef _POSIX_SOURCE
+#define _POSIX_SOURCE 1
+#undef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 202405L
+#endif
+
 #ifdef __cplusplus
 
 #undef __BEGIN_C_DECLS
