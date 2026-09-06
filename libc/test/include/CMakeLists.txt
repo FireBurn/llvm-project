@@ -582,6 +582,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  gshadow_shadow_files_test
+  SUITE
+    libc-include-tests
+  SRCS
+    gshadow_shadow_files_test.cpp
+  DEPENDS
+    libc.include.gshadow
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
