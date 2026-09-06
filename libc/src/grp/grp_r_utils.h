@@ -69,9 +69,10 @@ LIBC_INLINE int find(struct group *entry, char *buffer, size_t buflen,
       db.enddb();
       return read.error();
     }
-    if (read.value() == 0)
+    if (!read.value())
       break; // The end of the file, and no match is not an error.
-    if (!grp::parse_line_into(cpp::span<char>(buffer, read.value() + 1), entry,
+    const size_t length = *read.value();
+    if (!grp::parse_line_into(cpp::span<char>(buffer, length + 1), entry,
                               members, max_members))
       continue; // A line which is not an entry is skipped, not an error.
     if (matches(entry)) {
