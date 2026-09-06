@@ -138,6 +138,7 @@ libc_support_library(
         ":identifier",
         ":mutex_common",
         ":raw_mutex",
+        ":tcb",
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:size_t",
         "//libc/src/__support/CPP:atomic",

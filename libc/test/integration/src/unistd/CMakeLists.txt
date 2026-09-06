@@ -49,6 +49,8 @@ add_integration_test(
     libc.include.unistd
     libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
     libc.src.pthread.pthread_atfork
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
     libc.src.signal.raise
     libc.src.sys.wait.wait
     libc.src.sys.wait.wait4
