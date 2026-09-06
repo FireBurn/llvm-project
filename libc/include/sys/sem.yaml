@@ -1,4 +1,8 @@
 header: sys/sem.h
+public_includes:
+  # glibc's <sys/sem.h> carries the general IPC macros too, and code that uses
+  # them includes only this one.
+  - sys/ipc.h
 standards:
   - posix
   - linux
