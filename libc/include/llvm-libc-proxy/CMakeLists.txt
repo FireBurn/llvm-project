@@ -21,6 +21,10 @@ add_gen_header(
     libc.include.llvm-libc-types.Elf32_Phdr
     libc.include.llvm-libc-types.Elf32_Rel
     libc.include.llvm-libc-types.Elf32_Rela
+    libc.include.llvm-libc-types.Elf32_Section
+    libc.include.llvm-libc-types.Elf32_Move
+    libc.include.llvm-libc-types.Elf32_Lib
+    libc.include.llvm-libc-types.Elf32_Syminfo
     libc.include.llvm-libc-types.Elf32_Shdr
     libc.include.llvm-libc-types.Elf32_Sword
     libc.include.llvm-libc-types.Elf32_Sym
@@ -43,6 +47,10 @@ add_gen_header(
     libc.include.llvm-libc-types.Elf64_Phdr
     libc.include.llvm-libc-types.Elf64_Rel
     libc.include.llvm-libc-types.Elf64_Rela
+    libc.include.llvm-libc-types.Elf64_Section
+    libc.include.llvm-libc-types.Elf64_Move
+    libc.include.llvm-libc-types.Elf64_Lib
+    libc.include.llvm-libc-types.Elf64_Syminfo
     libc.include.llvm-libc-types.Elf64_Shdr
     libc.include.llvm-libc-types.Elf64_Sword
     libc.include.llvm-libc-types.Elf64_Sxword
