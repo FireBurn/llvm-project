@@ -356,6 +356,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.syslog_macros
+    .llvm-libc-macros.null_macro
 )
 
 add_header_macro(
