@@ -107,6 +107,23 @@ TEST_F(LlvmLibcGetoptTest, NoMatch) {
   EXPECT_EQ(test_globals::optind, 2);
 }
 
+TEST_F(LlvmLibcGetoptTest, ZeroMeansStartAgain) {
+  array<char *, 4> argv{"prog"_c, "-a"_c, "operand"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(3, argv.data(), "a"), int('a'));
+  EXPECT_EQ(test_globals::optind, 2);
+
+  // Zero is not an index into anything: the first argument is the program's
+  // own name and was never an option. It asks for the scan to start again,
+  // which is how a program that parses its arguments twice does the second
+  // pass.
+  test_globals::optind = 0;
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(3, argv.data(), "a"), int('a'));
+  EXPECT_EQ(test_globals::optind, 2);
+  // And what is left is the operand, not the program's own name.
+  EXPECT_STREQ(argv[test_globals::optind], "operand");
+}
+
 TEST_F(LlvmLibcGetoptTest, WrongMatch) {
   array<char *, 3> argv{"prog"_c, "-b"_c, nullptr};
 
