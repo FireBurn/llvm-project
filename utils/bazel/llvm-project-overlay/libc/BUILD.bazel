@@ -18273,6 +18273,30 @@ libc_function(
 )
 
 libc_function(
+    name = "daemon",
+    srcs = ["src/unistd/linux/daemon.cpp"],
+    hdrs = ["src/unistd/daemon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_exit",
+        ":__support_osutil_linux_syscall_wrappers_chdir",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_dup2",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_setsid",
+        ":__support_osutil_syscall",
+        ":errno",
+        ":fork",
+        ":hdr_fcntl_macros",
+        ":hdr_unistd_macros",
+        ":unistd_daemon",
+    ],
+)
+
+libc_function(
     name = "dup",
     srcs = ["src/unistd/linux/dup.cpp"],
     hdrs = ["src/unistd/dup.h"],
@@ -18694,6 +18718,7 @@ libc_function(
     }),
     deps = [
         ":__support_common",
+        ":__support_error_or",
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_syscall",
@@ -23286,5 +23311,25 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_daemon",
+    hdrs = ["src/unistd/daemon.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setsid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setsid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
     ],
 )
