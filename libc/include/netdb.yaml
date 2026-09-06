@@ -68,6 +68,7 @@ macros:
   - macro_name: NO_ADDRESS
     macro_header: netdb-macros.h
 types:
+  - type_name: struct_protoent
   - type_name: struct_hostent
   - type_name: struct_servent
   - type_name: struct_sockaddr
@@ -89,6 +90,36 @@ functions:
     arguments:
       - type: const char *
       - type: int
+  - name: getprotobyname
+    standards:
+      - posix
+    return_type: struct protoent *
+    arguments:
+      - type: const char *
+  - name: getprotobynumber
+    standards:
+      - posix
+    return_type: struct protoent *
+    arguments:
+      - type: int
+  - name: getprotoent
+    standards:
+      - posix
+    return_type: struct protoent *
+    arguments:
+      - type: void
+  - name: setprotoent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: int
+  - name: endprotoent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
   - name: getservbyname
     standards:
       - posix
