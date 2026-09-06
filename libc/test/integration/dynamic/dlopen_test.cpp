@@ -16,6 +16,9 @@
 #include "check.h"
 
 #include <dlfcn.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
 using AddFn = int (*)(int, int);
 using ReadFn = int (*)();
 
@@ -93,6 +96,58 @@ static void the_main_program_has_a_handle() {
   CHECK(dlclose(self) == 0);
 }
 
+// More objects than the block the module set starts with, each a copy of the
+// test object so that none of them is taken for one already open.
+static void more_objects_than_the_initial_block_can_be_open() {
+  constexpr int COUNT = 80;
+  static void *handles[COUNT];
+  static char paths[COUNT][64];
+
+  int source = open(LIBC_TEST_DL_OBJECT, O_RDONLY);
+  CHECK(source >= 0);
+  if (source < 0)
+    return;
+  static char image[1 << 16];
+  long size = read(source, image, sizeof(image));
+  close(source);
+  CHECK(size > 0 && size < static_cast<long>(sizeof(image)));
+  if (size <= 0)
+    return;
+
+  int opened = 0;
+  for (int i = 0; i < COUNT; ++i) {
+    snprintf(paths[i], sizeof(paths[i]), "/tmp/llvm_libc_dl_grow_%d_%d.so",
+             static_cast<int>(getpid()), i);
+    int out = open(paths[i], O_WRONLY | O_CREAT | O_TRUNC, 0700);
+    CHECK(out >= 0);
+    if (out < 0)
+      break;
+    CHECK(write(out, image, size) == size);
+    close(out);
+    handles[i] = dlopen(paths[i], RTLD_NOW);
+    CHECK(handles[i] != nullptr);
+    if (handles[i])
+      ++opened;
+  }
+  CHECK(opened == COUNT);
+
+  // The ones that came after the initial block still resolve their symbols.
+  for (int i = 0; i < COUNT; ++i) {
+    if (!handles[i])
+      continue;
+    using AddFn = int (*)(int, int);
+    AddFn add = reinterpret_cast<AddFn>(dlsym(handles[i], "llvm_libc_dl_add"));
+    CHECK(add != nullptr);
+    if (add)
+      CHECK(add(i, 1) == i + 1);
+  }
+  for (int i = COUNT - 1; i >= 0; --i) {
+    if (handles[i])
+      CHECK(dlclose(handles[i]) == 0);
+    unlink(paths[i]);
+  }
+}
+
 extern "C" int main() {
   loads_an_object_and_finds_its_symbols();
   an_unknown_symbol_is_an_error();
@@ -100,5 +155,6 @@ extern "C" int main() {
   opening_twice_gives_the_same_handle();
   noload_needs_an_object_that_is_loaded();
   the_main_program_has_a_handle();
+  more_objects_than_the_initial_block_can_be_open();
   return failures == 0 ? 0 : 1;
 }
