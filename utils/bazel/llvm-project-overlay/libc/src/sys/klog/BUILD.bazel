@@ -1,0 +1,38 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "klogctl",
+    srcs = ["linux/klogctl.cpp"],
+    hdrs = ["klogctl.h"],
+    deps = [
+        ":sys_klog_klogctl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:syslog",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_klog_klogctl",
+    hdrs = ["klogctl.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
