@@ -676,6 +676,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.fchownat
     libc.src.unistd.lchown
     libc.src.unistd.fpathconf
+    libc.src.unistd.fdatasync
     libc.src.unistd.fsync
     libc.src.unistd.ftruncate
     libc.src.unistd.get_current_dir_name
