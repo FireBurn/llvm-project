@@ -323,6 +323,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_types_fd_set_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_types_fd_set_test.cpp
+  DEPENDS
+    libc.include.sys_types
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
