@@ -56,10 +56,11 @@ bool parse_line_into(cpp::span<char> line, struct sgrp *entry, char **admins,
     return false;
   entry->sg_namp = name->data();
 
+  // A line may stop after the name, and the fields it leaves out are empty
+  // ones rather than a reason to reject it. The name's own terminator serves
+  // as the empty string, so nothing has to be written into the line.
   auto passwd = tokenizer.next_field();
-  if (!passwd)
-    return false;
-  entry->sg_passwd = passwd->data();
+  entry->sg_passwd = passwd ? passwd->data() : name->data() + name->size() - 1;
 
   // Either list may be missing from the line, and an absent one is an
   // empty one rather than a reason to reject the entry.
