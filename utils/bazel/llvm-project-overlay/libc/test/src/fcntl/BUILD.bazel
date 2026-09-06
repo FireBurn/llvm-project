@@ -11,6 +11,24 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "allocate_test",
+    srcs = ["allocate_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:fcntl_fallocate",
+        "//libc:fcntl_posix_fallocate",
+        "//libc:fstat",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:posix_fadvise",
+        "//libc:sys_stat_fstat",
+        "//libc:unlink",
+    ],
+)
+
+libc_test(
     name = "splice_test",
     srcs = ["splice_test.cpp"],
     deps = [
