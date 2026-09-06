@@ -4,6 +4,7 @@ add_entrypoint_object(
     posix_spawn.cpp
   HDRS
     ../posix_spawn.h
+    ../posix_spawnp.h
   DEPENDS
     libc.hdr.types.mode_t
     libc.hdr.fcntl_macros
@@ -16,6 +17,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.spawn.file_actions
     libc.src.signal.linux.signal_utils
+    libc.src.unistd.linux.exec_path_search
     libc.hdr.signal_macros
     libc.hdr.spawn_macros
     libc.hdr.types.sigset_t
