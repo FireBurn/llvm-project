@@ -288,6 +288,18 @@ add_header_macro(
 )
 
 add_header_macro(
+  utmp
+  ../libc/include/utmp.yaml
+  utmp.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.utmp_macros
+    .llvm-libc-types.struct_utmp
+    .llvm-libc-types.struct_lastlog
+    .llvm-libc-types.pid_t
+)
+
+add_header_macro(
   utmpx
   ../libc/include/utmpx.yaml
   utmpx.h
