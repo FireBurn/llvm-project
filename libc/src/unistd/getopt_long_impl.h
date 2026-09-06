@@ -138,6 +138,13 @@ LIBC_INLINE int getopt_long_r(int argc, char *const argv[],
                               const char *optstring,
                               const struct option *longopts, int *longindex,
                               bool long_only, GetoptContext &ctx) {
+  // Zero is a request to scan the arguments again from the start, not an
+  // index: see the note in getopt_r, which this shares the state with.
+  if (ctx.optind == 0) {
+    ctx.optind.get() = 1;
+    ctx.optpos.get() = 0;
+  }
+
   if (ctx.optind >= argc || argv[ctx.optind] == nullptr)
     return -1;
 
