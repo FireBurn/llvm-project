@@ -1410,6 +1410,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-types.off_t
+    .llvm-libc-types.pid_t
     .llvm-libc-types.struct_iovec
     .llvm-libc-types.ssize_t
 )
