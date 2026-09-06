@@ -11,6 +11,12 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "res_init_test",
+    srcs = ["res_init_test.cpp"],
+    deps = ["//libc:res_init"],
+)
+
+libc_test(
     name = "syscall_test",
     srcs = ["syscall_test.cpp"],
     deps = [
