@@ -2926,6 +2926,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "posix_fadvise",
+    hdrs = ["posix_fadvise.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "setgroups",
     hdrs = ["setgroups.h"],
     deps = [
