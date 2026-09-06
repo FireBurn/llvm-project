@@ -41,6 +41,27 @@ add_libc_test(
 )
 
 add_libc_test(
+  elf_test
+  SUITE
+    libc-include-tests
+  SRCS
+    elf_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.elf_macros
+    libc.include.llvm-libc-types.Elf32_Move
+    libc.include.llvm-libc-types.Elf32_Section
+    libc.include.llvm-libc-types.Elf32_Sword
+    libc.include.llvm-libc-types.Elf32_Word
+    libc.include.llvm-libc-types.Elf64_Lib
+    libc.include.llvm-libc-types.Elf64_Move
+    libc.include.llvm-libc-types.Elf64_Section
+    libc.include.llvm-libc-types.Elf64_Sword
+    libc.include.llvm-libc-types.Elf64_Sxword
+    libc.include.llvm-libc-types.Elf64_Syminfo
+    libc.include.llvm-libc-types.Elf64_Xword
+)
+
+add_libc_test(
   complex_test
   SUITE
     libc-include-tests
