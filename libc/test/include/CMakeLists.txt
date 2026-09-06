@@ -140,6 +140,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_ttydefaults_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_ttydefaults_test.cpp
+  DEPENDS
+    libc.include.sys_ttydefaults
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
