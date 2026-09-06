@@ -72,6 +72,7 @@ libc_startup_library(
         "//libc:hdr_stdint_proxy",
         "//libc:hdr_sys_auxv_macros",
         "//libc:hdr_sys_mman_macros",
+        "//libc:progname",
         "//libc:program_invocation_name",
         "//libc:program_invocation_short_name",
         "//libc:types_struct_link_map",
