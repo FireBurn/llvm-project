@@ -881,3 +881,110 @@ TEST(LlvmLibcFileTest, FileLockRAII) {
   ASSERT_EQ(f->write("def", 3).value, size_t(3));
   ASSERT_EQ(f->close(), 0);
 }
+
+// A file whose reads hand back at most a few bytes at a time and only report
+// the end of the file by returning nothing, the way a pipe, a socket or a
+// terminal behaves.
+class ShortReadFile : public File {
+  static constexpr size_t SIZE = 512;
+  size_t pos;
+  size_t len;
+  char str[SIZE] = {0};
+  size_t max_read;
+  size_t read_calls;
+
+  static FileIOResult short_read(LIBC_NAMESPACE::File *f, void *data,
+                                 size_t len) {
+    ShortReadFile *sf = static_cast<ShortReadFile *>(f);
+    ++sf->read_calls;
+    size_t available = sf->len - sf->pos;
+    size_t to_read = len < available ? len : available;
+    if (to_read > sf->max_read)
+      to_read = sf->max_read;
+    for (size_t i = 0; i < to_read; ++i)
+      reinterpret_cast<char *>(data)[i] = sf->str[sf->pos + i];
+    sf->pos += to_read;
+    return to_read;
+  }
+
+  static FileIOResult short_write(LIBC_NAMESPACE::File *, const void *,
+                                  size_t len) {
+    return len;
+  }
+
+  static ErrorOr<off_t> short_seek(LIBC_NAMESPACE::File *f, off_t, int) {
+    return static_cast<ShortReadFile *>(f)->pos;
+  }
+
+  static int short_close(LIBC_NAMESPACE::File *f) {
+    delete reinterpret_cast<ShortReadFile *>(f);
+    return 0;
+  }
+
+public:
+  explicit ShortReadFile(char *buffer, size_t buflen, int bufmode,
+                         ModeFlags modeflags, size_t max_read_bytes)
+      : LIBC_NAMESPACE::File(&short_write, &short_read, &short_seek,
+                             &short_close, reinterpret_cast<uint8_t *>(buffer),
+                             buflen, bufmode, false, modeflags),
+        pos(0), len(0), max_read(max_read_bytes), read_calls(0) {}
+
+  void fill(size_t count) {
+    for (size_t i = 0; i < count && i < SIZE; ++i)
+      str[i] = static_cast<char>('a' + (i % 26));
+    len = count < SIZE ? count : SIZE;
+    pos = 0;
+  }
+
+  size_t get_read_calls() const { return read_calls; }
+};
+
+// A read that is satisfied a few bytes at a time is still a whole read. The
+// end of the file is reached only where the platform returns nothing.
+TEST(LlvmLibcFileTest, ShortReadsAreNotTheEndOfTheFile) {
+  constexpr size_t DATA_SIZE = 300;
+  char buffer[16];
+  LIBC_NAMESPACE::AllocChecker ac;
+  ShortReadFile *f = new (ac)
+      ShortReadFile(buffer, sizeof(buffer), _IOFBF,
+                    LIBC_NAMESPACE::File::mode_flags("r"), /*max_read=*/7);
+  ASSERT_FALSE(f == nullptr);
+  f->fill(DATA_SIZE);
+
+  char data[DATA_SIZE];
+  auto result = f->read(data, DATA_SIZE);
+  ASSERT_FALSE(result.has_error());
+  ASSERT_EQ(result.value, DATA_SIZE);
+  ASSERT_FALSE(f->iseof());
+  ASSERT_GT(f->get_read_calls(), size_t(1));
+  for (size_t i = 0; i < DATA_SIZE; ++i)
+    ASSERT_EQ(data[i], static_cast<char>('a' + (i % 26)));
+
+  // Only now, with nothing left, does the end of the file show.
+  ASSERT_EQ(f->read(data, size_t(1)).value, size_t(0));
+  ASSERT_TRUE(f->iseof());
+
+  ASSERT_EQ(f->close(), 0);
+}
+
+// The same holds without a buffer in the way.
+TEST(LlvmLibcFileTest, ShortReadsUnbuffered) {
+  constexpr size_t DATA_SIZE = 100;
+  LIBC_NAMESPACE::AllocChecker ac;
+  ShortReadFile *f = new (ac)
+      ShortReadFile(nullptr, 0, _IONBF, LIBC_NAMESPACE::File::mode_flags("r"),
+                    /*max_read=*/3);
+  ASSERT_FALSE(f == nullptr);
+  f->fill(DATA_SIZE);
+
+  char data[DATA_SIZE];
+  auto result = f->read(data, DATA_SIZE);
+  ASSERT_FALSE(result.has_error());
+  ASSERT_EQ(result.value, DATA_SIZE);
+  ASSERT_FALSE(f->iseof());
+
+  ASSERT_EQ(f->read(data, size_t(1)).value, size_t(0));
+  ASSERT_TRUE(f->iseof());
+
+  ASSERT_EQ(f->close(), 0);
+}
