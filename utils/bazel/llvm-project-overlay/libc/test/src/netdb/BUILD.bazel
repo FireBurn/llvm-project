@@ -11,6 +11,20 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "getprotoent_test",
+    srcs = ["getprotoent_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/netdb:endprotoent",
+        "//libc/src/netdb:getprotobyname",
+        "//libc/src/netdb:getprotobynumber",
+        "//libc/src/netdb:getprotoent",
+        "//libc/src/netdb:setprotoent",
+        "//libc/src/string:strcmp",
+    ],
+)
+
+libc_test(
     name = "getnameinfo_test",
     srcs = ["getnameinfo_test.cpp"],
     deps = [

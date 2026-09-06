@@ -142,6 +142,57 @@ libc_function(
 )
 
 libc_function(
+    name = "endprotoent",
+    srcs = ["endprotoent.cpp"],
+    hdrs = ["endprotoent.h"],
+    deps = [
+        ":resolv_protocols",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getprotobyname",
+    srcs = ["getprotobyname.cpp"],
+    hdrs = ["getprotobyname.h"],
+    deps = [
+        ":proto_storage",
+        ":resolv_protocols",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getprotobynumber",
+    srcs = ["getprotobynumber.cpp"],
+    hdrs = ["getprotobynumber.h"],
+    deps = [
+        ":proto_storage",
+        ":resolv_protocols",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getprotoent",
+    srcs = ["getprotoent.cpp"],
+    hdrs = ["getprotoent.h"],
+    deps = [
+        ":proto_storage",
+        ":resolv_protocols",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getservbyname",
     srcs = ["getservbyname.cpp"],
     hdrs = ["getservbyname.h"],
@@ -153,6 +204,18 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "setprotoent",
+    srcs = ["setprotoent.cpp"],
+    hdrs = ["setprotoent.h"],
+    deps = [
+        ":resolv_protocols",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -169,24 +232,36 @@ libc_support_library(
 )
 
 libc_support_library(
-    name = "resolv_services",
-    srcs = ["resolv/services.cpp"],
-    hdrs = ["resolv/services.h"],
+    name = "resolv_file_lines",
+    hdrs = ["resolv/file_lines.h"],
     deps = [
         "//libc/hdr/types:size_t",
-        "//libc/hdr/types:struct_servent",
-        "//libc/hdr:errno_macros",
         "//libc/hdr:fcntl_macros",
-        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:ctype_utils",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_services",
+    srcs = ["resolv/services.cpp"],
+    hdrs = ["resolv/services.h"],
+    deps = [
+        ":resolv_file_lines",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_servent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:str_to_integer",
         "//libc/src/string/memory_utils:memory_utils",
-        "//libc/src/unistd:close",
     ],
 )
 
@@ -208,6 +283,33 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_protocols",
+    srcs = ["resolv/protocols.cpp"],
+    hdrs = ["resolv/protocols.h"],
+    deps = [
+        ":resolv_file_lines",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "proto_storage",
+    srcs = ["proto_storage.cpp"],
+    hdrs = ["proto_storage.h"],
+    deps = [
+        ":resolv_protocols",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
     ],
 )
 
