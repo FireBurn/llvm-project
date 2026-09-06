@@ -134,6 +134,23 @@ bool read_rule(const char *&at, Rule &out) {
   return true;
 }
 
+// Days from the epoch to the first of January of a year. The Gregorian
+// calendar repeats on a cycle of 400 years, which is 146097 days, so the
+// answer follows from the year rather than from counting the years one at a
+// time. A rule may be asked about a year hundreds of millions away, which
+// counting would take a moment of its own to reach.
+int64_t days_before_year(int64_t year) {
+  const int64_t y = year - 1;
+  const int64_t era = (y >= 0 ? y : y - 399) / 400;
+  const int64_t year_of_era = y - era * 400;
+  // 306 is where the first of January sits in a year that starts in March,
+  // which is the form the cycle is regular in.
+  const int64_t day_of_era =
+      year_of_era * 365 + year_of_era / 4 - year_of_era / 100 + 306;
+  // 719468 moves the count from the start of the cycle to the epoch.
+  return era * 146097 + day_of_era - 719468;
+}
+
 // Which day of the year, counting from zero, a rule names.
 int day_of_year(const Rule &rule, int year) {
   const bool leap = time_utils::is_leap_year(year);
@@ -159,18 +176,10 @@ int day_of_year(const Rule &rule, int year) {
       {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
       {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366}};
 
-  int days_before_year = 0;
-  if (year >= 1970) {
-    for (int y = 1970; y < year; ++y)
-      days_before_year += time_utils::is_leap_year(y) ? 366 : 365;
-  } else {
-    for (int y = year; y < 1970; ++y)
-      days_before_year -= time_utils::is_leap_year(y) ? 366 : 365;
-  }
-  const int first_of_month =
-      days_before_year + DAYS_BEFORE_MONTH[leap_index][rule.month - 1];
+  const int64_t first_of_month =
+      days_before_year(year) + DAYS_BEFORE_MONTH[leap_index][rule.month - 1];
   // Thursday is four days from Sunday.
-  int weekday = (first_of_month + 4) % 7;
+  int weekday = static_cast<int>((first_of_month + 4) % 7);
   if (weekday < 0)
     weekday += 7;
 
@@ -188,15 +197,7 @@ int day_of_year(const Rule &rule, int year) {
 // The moment a rule names, as a count of seconds from the epoch in local
 // standard time.
 time_t moment_of(const Rule &rule, int year, int32_t offset) {
-  int days = 0;
-  if (year >= 1970) {
-    for (int y = 1970; y < year; ++y)
-      days += time_utils::is_leap_year(y) ? 366 : 365;
-  } else {
-    for (int y = year; y < 1970; ++y)
-      days -= time_utils::is_leap_year(y) ? 366 : 365;
-  }
-  days += day_of_year(rule, year);
+  int64_t days = days_before_year(year) + day_of_year(rule, year);
   return static_cast<time_t>(days) * SECONDS_PER_DAY + rule.seconds - offset;
 }
 
@@ -204,21 +205,27 @@ time_t moment_of(const Rule &rule, int year, int32_t offset) {
 // day out at the very edge of a year does not matter: the two rules of a year
 // are months apart from its edges.
 int year_of(time_t seconds) {
-  int year = 1970;
-  time_t remaining = seconds;
-  while (remaining < 0) {
-    --year;
-    remaining += (time_utils::is_leap_year(year) ? 366 : 365) * SECONDS_PER_DAY;
-  }
-  for (;;) {
-    const time_t in_year =
-        (time_utils::is_leap_year(year) ? 366 : 365) * SECONDS_PER_DAY;
-    if (remaining < in_year)
-      break;
-    remaining -= in_year;
-    ++year;
-  }
-  return year;
+  // Whole days, rounded towards the past so that a moment before the epoch
+  // lands in the day it belongs to rather than the one after.
+  int64_t days = static_cast<int64_t>(seconds) / SECONDS_PER_DAY;
+  if (seconds % SECONDS_PER_DAY < 0)
+    --days;
+
+  // The reverse of days_before_year, over the same cycle of 400 years.
+  const int64_t shifted = days + 719468;
+  const int64_t era = (shifted >= 0 ? shifted : shifted - 146096) / 146097;
+  const int64_t day_of_era = shifted - era * 146097;
+  const int64_t year_of_era =
+      (day_of_era - day_of_era / 1460 + day_of_era / 36524 -
+       day_of_era / 146096) /
+      365;
+  const int64_t day_of_year =
+      day_of_era - (365 * year_of_era + year_of_era / 4 - year_of_era / 100);
+  // The cycle counts from March, so the last two months of it belong to the
+  // year after the one the arithmetic above names.
+  const int64_t month = (5 * day_of_year + 2) / 153;
+  int64_t year = year_of_era + era * 400 + (month >= 10 ? 1 : 0);
+  return static_cast<int>(year);
 }
 
 } // anonymous namespace

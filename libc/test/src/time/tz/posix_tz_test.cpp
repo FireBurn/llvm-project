@@ -138,3 +138,37 @@ TEST(LlvmLibcPosixTz, TwoZonesAndNoDatesMeansDaylightAllYear) {
   ASSERT_TRUE(daylight_at(tz, 0));
   ASSERT_EQ(offset_at(tz, 0), -2 * 3600);
 }
+
+// The rules of a zone reach as far as time_t does. Working out which year a
+// moment falls in by counting the years from 1970 would take a moment of its
+// own at the far end of the range, and the count of days would not fit what
+// it was kept in.
+TEST(LlvmLibcPosixTz, FarYearsFollowTheSeasons) {
+  const char *tz = "EST5EDT,M3.2.0,M11.1.0";
+  // Year 54506600, whose months these are.
+  constexpr time_t JULY = 1720000010518984LL;
+  constexpr time_t NOVEMBER = 1720000021037968LL;
+  constexpr time_t JANUARY = 1720000026297460LL;
+
+  ASSERT_TRUE(daylight_at(tz, JULY));
+  ASSERT_EQ(offset_at(tz, JULY), -4 * 3600);
+  ASSERT_FALSE(daylight_at(tz, NOVEMBER));
+  ASSERT_EQ(offset_at(tz, NOVEMBER), -5 * 3600);
+  ASSERT_FALSE(daylight_at(tz, JANUARY));
+  ASSERT_EQ(offset_at(tz, JANUARY), -5 * 3600);
+}
+
+// A zone with no changes in it answers the same wherever it is asked, right
+// out to where a signed 64 bit count of seconds runs out.
+TEST(LlvmLibcPosixTz, TheEndsOfTimeAreAnswered) {
+  const char *fixed = "UTC0";
+  ASSERT_EQ(offset_at(fixed, 9223372036854775807LL), 0);
+  ASSERT_EQ(offset_at(fixed, -9223372036854775807LL), 0);
+
+  // A zone with changes gives one of its two offsets and nothing else.
+  const char *tz = "EST5EDT,M3.2.0,M11.1.0";
+  const int32_t far_future = offset_at(tz, 9223372036854775LL);
+  ASSERT_TRUE(far_future == -5 * 3600 || far_future == -4 * 3600);
+  const int32_t far_past = offset_at(tz, -9223372036854775LL);
+  ASSERT_TRUE(far_past == -5 * 3600 || far_past == -4 * 3600);
+}
