@@ -1,4 +1,8 @@
 header: sys/time.h
+public_includes:
+  # POSIX has this header define fd_set and the macros that go with it, and
+  # declare select, which is where a program that calls it often gets them.
+  - sys/select.h
 standards:
   - posix
 macros:
