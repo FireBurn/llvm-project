@@ -579,6 +579,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  ifaddrs
+  ../libc/include/ifaddrs.yaml
+  ifaddrs.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_ifaddrs
+)
+
+add_header_macro(
   signal
   ../libc/include/signal.yaml
   signal.h
