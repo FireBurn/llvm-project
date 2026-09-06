@@ -72,6 +72,7 @@ libc_startup_library(
         "//libc/src/__support/threads:thread_headers",
         "//libc/src/__support:elf_module",
         "//libc/src/__support:elf_passive_abi",
+        "//libc/src/compat:progname",
         "//libc/src/errno:program_invocation_name",
         "//libc/src/errno:program_invocation_short_name",
         "//libc/src/link:_r_debug",
