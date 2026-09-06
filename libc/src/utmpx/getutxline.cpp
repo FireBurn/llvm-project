@@ -37,7 +37,9 @@ bool same_line(const char *a, const char *b) {
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(struct utmpx *, getutxline, (const struct utmpx *line)) {
+namespace internal {
+
+struct utmpx *getutxline_impl(const struct utmpx *line) {
   if (line == nullptr)
     return nullptr;
   while (utmpx_db::read_next()) {
@@ -47,6 +49,12 @@ LLVM_LIBC_FUNCTION(struct utmpx *, getutxline, (const struct utmpx *line)) {
       return &utmpx_db::entry;
   }
   return nullptr;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct utmpx *, getutxline, (const struct utmpx *line)) {
+  return internal::getutxline_impl(line);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
