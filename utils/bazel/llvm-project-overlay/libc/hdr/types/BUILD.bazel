@@ -531,6 +531,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "hdr_types_dl_info",
+    hdrs = ["dl_info.h"],
+)
+
+libc_support_library(
     name = "cap_user_data_t",
     hdrs = ["cap_user_data_t.h"],
 )

@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_support_library")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -87,6 +87,20 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:elf_bind",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)
+
+libc_function(
+    name = "dladdr",
+    srcs = ["dladdr.cpp"],
+    hdrs = ["dladdr.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/types:hdr_types_dl_info",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/__support:elf_passive_abi",
     ],
 )
