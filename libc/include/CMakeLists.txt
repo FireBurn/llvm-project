@@ -1083,6 +1083,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_vt
+  ../libc/include/sys/vt.yaml
+  sys/vt.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_vt_macros
+)
+
+add_header_macro(
   sys_times
   ../libc/include/sys/times.yaml
   sys/times.h
