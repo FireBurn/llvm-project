@@ -29,7 +29,7 @@ LIBC_INLINE_VAR constexpr pthread_attr_t DEFAULT_PTHREAD_ATTR = {
     SCHED_OTHER,               // Default scheduling policy
     {},                        // Default scheduling parameters
     nullptr,                   // Let the thread manage its stack
-    Thread::DEFAULT_STACKSIZE, // stack size.
+    0,                         // The process default, see default_stacksize.
     Thread::DEFAULT_GUARDSIZE, // Default page size for the guard size.
 };
 
