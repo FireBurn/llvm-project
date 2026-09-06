@@ -34,13 +34,17 @@ add_integration_test(
     libc.include.signal
     libc.include.spawn
     libc.include.sys_wait
+    libc.src.fcntl.open
     libc.src.signal.raise
     libc.src.spawn.posix_spawn
     libc.src.spawn.posix_spawnp
+    libc.src.spawn.posix_spawn_file_actions_adddup2
     libc.src.spawn.posix_spawn_file_actions_addopen
     libc.src.spawn.posix_spawn_file_actions_destroy
     libc.src.spawn.posix_spawn_file_actions_init
     libc.src.sys.wait.waitpid
+    libc.src.unistd.close
+    libc.src.unistd.dup3
 )
 
 add_subdirectory(testdata)

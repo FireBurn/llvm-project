@@ -10,12 +10,16 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/stdint_proxy.h"
+#include "src/fcntl/open.h"
 #include "src/spawn/posix_spawn.h"
+#include "src/spawn/posix_spawn_file_actions_adddup2.h"
 #include "src/spawn/posix_spawn_file_actions_addopen.h"
 #include "src/spawn/posix_spawn_file_actions_destroy.h"
 #include "src/spawn/posix_spawn_file_actions_init.h"
 #include "src/spawn/posix_spawnp.h"
 #include "src/sys/wait/waitpid.h"
+#include "src/unistd/close.h"
+#include "src/unistd/dup3.h"
 #include "test/IntegrationTest/test.h"
 
 #include <fcntl.h>
@@ -45,6 +49,31 @@ void spawn_and_wait_for_normal_exit(char **envp) {
   ASSERT_TRUE(WIFEXITED(status));
   int exit_status = WEXITSTATUS(status);
   ASSERT_EQ(exit_status, 0);
+}
+
+// A dup2 of a descriptor onto itself leaves it open in the child, which is how
+// a caller hands one over that was opened close-on-exec.
+void keep_a_descriptor_open(char **envp) {
+  int fd = LIBC_NAMESPACE::open("testdata/posix_spawn.test", O_RDONLY);
+  ASSERT_TRUE(fd > 0);
+  ASSERT_EQ(LIBC_NAMESPACE::dup3(fd, CHILD_FD, O_CLOEXEC), CHILD_FD);
+  ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
+
+  pid_t cpid;
+  posix_spawn_file_actions_t file_actions;
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_init(&file_actions), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_adddup2(
+                &file_actions, CHILD_FD, CHILD_FD),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn(&cpid, arg0, &file_actions, nullptr,
+                                        argv, envp),
+            0);
+  int status;
+  ASSERT_EQ(LIBC_NAMESPACE::waitpid(cpid, &status, 0), cpid);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_destroy(&file_actions), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::close(CHILD_FD), 0);
+  ASSERT_TRUE(WIFEXITED(status));
+  ASSERT_EQ(WEXITSTATUS(status), 0);
 }
 
 // A child that cannot be run at all is reported to whoever asked, rather than
@@ -85,6 +114,7 @@ void search_the_path(char **envp) {
 TEST_MAIN([[maybe_unused]] int argc, [[maybe_unused]] char **argv,
           char **envp) {
   spawn_and_wait_for_normal_exit(envp);
+  keep_a_descriptor_open(envp);
   report_a_child_that_cannot_run(envp);
   search_the_path(envp);
   return 0;
