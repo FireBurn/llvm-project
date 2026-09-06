@@ -1,27 +1,5 @@
 add_libc_testsuite(libc-fcntl-tests)
 
-add_libc_test(
-  splice_test
-  SUITE
-    libc-fcntl-tests
-  SRCS
-    splice_test.cpp
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.hdr.fcntl_macros
-    libc.hdr.sys_stat_macros
-    libc.src.fcntl.open
-    libc.src.fcntl.splice
-    libc.src.string.memcmp
-    libc.src.unistd.close
-    libc.src.unistd.pipe
-    libc.src.unistd.read
-    libc.src.unistd.unlink
-    libc.src.unistd.write
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
-
 add_subdirectory(testdata)
 
 add_libc_test(
@@ -94,6 +72,47 @@ add_libc_test(
     libc.src.sys.stat.fstat
     libc.src.unistd.close
     libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  splice_test
+  SUITE
+    libc-fcntl-tests
+  SRCS
+    splice_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.fcntl.splice
+    libc.src.string.memcmp
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  sync_file_range_test
+  SUITE
+    libc-fcntl-tests
+  SRCS
+    sync_file_range_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.fcntl.sync_file_range
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
