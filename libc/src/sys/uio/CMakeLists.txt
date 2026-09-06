@@ -10,6 +10,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  process_vm_readv
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.process_vm_readv
+)
+
+add_entrypoint_object(
+  process_vm_writev
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.process_vm_writev
+)
+
+add_entrypoint_object(
   readv
   ALIAS
   DEPENDS
