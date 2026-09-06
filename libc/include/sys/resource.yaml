@@ -2,6 +2,14 @@ header: sys/resource.h
 standards:
   - posix
 macros:
+  - macro_name: rlimit64
+    macro_header: lfs64-macros.h
+  - macro_name: getrlimit64
+    macro_header: lfs64-macros.h
+  - macro_name: setrlimit64
+    macro_header: lfs64-macros.h
+  - macro_name: prlimit64
+    macro_header: lfs64-macros.h
   - macro_name: RLIM_INFINITY
     macro_header: sys-resource-macros.h
   - macro_name: RLIM_SAVED_CUR
@@ -25,6 +33,7 @@ macros:
   - macro_name: PRIO_USER
     macro_header: sys-resource-macros.h
 types:
+  - type_name: rlim64_t
   - type_name: pid_t
   - type_name: struct_rlimit
   - type_name: rlim_t

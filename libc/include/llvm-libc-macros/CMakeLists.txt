@@ -79,9 +79,17 @@ add_macro_header(
 )
 
 add_macro_header(
+  lfs64_macros
+  HDR
+    lfs64-macros.h
+)
+
+add_macro_header(
   dirent_macros
   HDR
     dirent-macros.h
+  DEPENDS
+    .lfs64_macros
 )
 
 add_macro_header(
@@ -673,6 +681,12 @@ add_macro_header(
   sys_quota_macros
   HDR
     sys-quota-macros.h
+)
+
+add_macro_header(
+  string_macros
+  HDR
+    string-macros.h
 )
 
 add_macro_header(
