@@ -16,6 +16,7 @@ add_libc_test(
     libc.src.termios.cfgetospeed
     libc.src.termios.cfsetispeed
     libc.src.termios.cfsetospeed
+    libc.src.termios.cfsetspeed
     libc.src.termios.tcgetattr
     libc.src.termios.tcgetsid
     libc.src.termios.tcsetattr
