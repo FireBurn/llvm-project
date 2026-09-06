@@ -21823,6 +21823,7 @@ libc_support_library(
         ":__support_elf_passive_abi",
         ":__support_macros_config",
         ":dlfcn_dl_internal",
+        ":hdr_stdint_proxy",
     ],
 )
 
