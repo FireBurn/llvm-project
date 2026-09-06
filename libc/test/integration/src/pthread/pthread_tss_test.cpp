@@ -78,8 +78,20 @@ static void null_value_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(key), 0);
 }
 
+// A process exiting is not a thread exiting: the destructor of a value the
+// main thread still holds is not run. The key is deliberately left in place
+// and the value left set, so that anything running it after main returns
+// fails the test.
+static void main_thread_exit_test() {
+  pthread_key_t exit_key;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_create(&exit_key, &dtor_failure), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setspecific(exit_key, &main_thread_data),
+            0);
+}
+
 TEST_MAIN() {
   standard_usage_test();
   null_value_test();
+  main_thread_exit_test();
   return 0;
 }
