@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -42,8 +42,9 @@ libc_function(
 libc_function(
     name = "lfs64",
     srcs = ["lfs64.cpp"],
-    hdrs = ["lfs64.h"],
+    hdrs = ["lfs64.h", "lfs64_undef.h"],
     deps = [
+        ":lfs64_undef",
         "//libc/hdr/types:DIR",
         "//libc/hdr/types:FILE",
         "//libc/hdr/types:mode_t",
@@ -103,4 +104,9 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
+)
+
+libc_support_library(
+    name = "lfs64_undef",
+    hdrs = ["lfs64_undef.h"],
 )
