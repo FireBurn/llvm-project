@@ -1216,6 +1216,16 @@ endif()
     libc.src.string.strlen
     libc.src.sys.utsname.uname
     libc.src.unistd.sethostname
+  vhangup_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    vhangup_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.unistd.geteuid
+    libc.src.unistd.vhangup
+    libc.test.UnitTest.ErrnoSetterMatcher
   close_range_test
   SUITE
     libc-unistd-tests
