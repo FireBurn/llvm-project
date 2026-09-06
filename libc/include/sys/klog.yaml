@@ -1,0 +1,38 @@
+header: sys/klog.h
+standards:
+  - linux
+macros:
+  - macro_name: KLOG_CLOSE
+    macro_value: 0
+  - macro_name: KLOG_OPEN
+    macro_value: 1
+  - macro_name: KLOG_READ
+    macro_value: 2
+  - macro_name: KLOG_READ_ALL
+    macro_value: 3
+  - macro_name: KLOG_READ_CLEAR
+    macro_value: 4
+  - macro_name: KLOG_CLEAR
+    macro_value: 5
+  - macro_name: KLOG_CONSOLE_OFF
+    macro_value: 6
+  - macro_name: KLOG_CONSOLE_ON
+    macro_value: 7
+  - macro_name: KLOG_CONSOLE_LEVEL
+    macro_value: 8
+  - macro_name: KLOG_SIZE_UNREAD
+    macro_value: 9
+  - macro_name: KLOG_SIZE_BUFFER
+    macro_value: 10
+types: []
+enums: []
+objects: []
+functions:
+  - name: klogctl
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: char *
+      - type: int
