@@ -162,8 +162,12 @@ ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr() {
   return &atexit_callback_mgr;
 }
 
-void call_atexit_callbacks(ThreadAttributes *attrib) {
+void call_thread_local_dtors(ThreadAttributes *attrib) {
   attrib->atexit_callback_mgr->call();
+}
+
+void call_atexit_callbacks(ThreadAttributes *attrib) {
+  call_thread_local_dtors(attrib);
   for (size_t i = 0; i < TSS_KEY_COUNT; ++i) {
     TSSValueUnit &unit = tss_values[i];
     // Both dtor and value need to nonnull to call dtor

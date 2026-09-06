@@ -174,8 +174,18 @@ namespace internal {
 // returned by this function.
 LIBC_SHARED_INTERNAL ThreadAtExitCallbackMgr *get_thread_atexit_callback_mgr();
 
-// Call the currently registered thread specific atexit callbacks. Useful for
-// implementing the thread_exit function.
+// Call the destructors registered for this thread's thread local objects.
+// These belong to the thread rather than to the process, but the main thread's
+// run when the process exits, so this is separate from the rest of the
+// teardown below.
+void call_thread_local_dtors(ThreadAttributes *attrib);
+
+// Call the currently registered thread specific atexit callbacks: the thread
+// local destructors above, and then the destructors of the values set with
+// pthread_setspecific. Useful for implementing the thread_exit function.
+//
+// Not for the exit path: a process exiting is not a thread exiting, and POSIX
+// does not have the key destructors run there.
 void call_atexit_callbacks(ThreadAttributes *attrib);
 
 // An inline variable gets a separate copy in every object that uses it, and
