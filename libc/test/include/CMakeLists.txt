@@ -432,6 +432,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netdb_netinet_in_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netdb_netinet_in_test.cpp
+  DEPENDS
+    libc.include.netdb
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
