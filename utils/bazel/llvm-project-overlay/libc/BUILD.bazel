@@ -28074,10 +28074,11 @@ libc_function(
 libc_function(
     name = "lfs64",
     srcs = ["src/compat/lfs64.cpp"],
-    hdrs = ["src/compat/lfs64.h"],
+    hdrs = ["src/compat/lfs64.h", "src/compat/lfs64_undef.h"],
     deps = [
         ":__support_common",
         ":__support_macros_config",
+        ":compat_lfs64_undef",
         ":creat",
         ":dirent_alphasort",
         ":dirent_readdir",
@@ -29188,6 +29189,11 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_statfs",
         ":sys_statvfs_linux_statfs_utils",
     ],
+)
+
+libc_support_library(
+    name = "compat_lfs64_undef",
+    hdrs = ["src/compat/lfs64_undef.h"],
 )
 
 libc_support_library(
