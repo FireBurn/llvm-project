@@ -359,6 +359,22 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdio.renameat
     libc.src.stdio.renameat2
 
+    # utmp.h entrypoints
+    libc.src.utmp.endutent
+    libc.src.utmp.getutent
+    libc.src.utmp.getutent_r
+    libc.src.utmp.getutid
+    libc.src.utmp.getutid_r
+    libc.src.utmp.getutline
+    libc.src.utmp.getutline_r
+    libc.src.utmp.login
+    libc.src.utmp.logout
+    libc.src.utmp.logwtmp
+    libc.src.utmp.pututline
+    libc.src.utmp.setutent
+    libc.src.utmp.updwtmp
+    libc.src.utmp.utmpname
+
     # utmpx.h entrypoints
     libc.src.utmpx.endutxent
     libc.src.utmpx.getutxent
