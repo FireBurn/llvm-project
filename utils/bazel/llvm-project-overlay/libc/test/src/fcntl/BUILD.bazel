@@ -48,6 +48,22 @@ libc_test(
 )
 
 libc_test(
+    name = "sync_file_range_test",
+    srcs = ["sync_file_range_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:fcntl_sync_file_range",
+        "//libc/src/fcntl:open",
+        "//libc/src/fcntl:sync_file_range",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "file_handle_test",
     srcs = ["file_handle_test.cpp"],
     deps = [
