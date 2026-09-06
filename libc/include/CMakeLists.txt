@@ -710,6 +710,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  netpacket_packet
+  ../libc/include/netpacket/packet.yaml
+  netpacket/packet.h
+  DEPENDS
+    .llvm-libc-macros.packet_macros
+    .llvm-libc-types.struct_sockaddr_ll
+)
+
+add_header_macro(
   pty
   ../libc/include/pty.yaml
   pty.h
