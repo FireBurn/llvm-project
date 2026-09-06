@@ -83,6 +83,7 @@ libc_support_library(
     hdrs = ["dlsym.h"],
     deps = [
         ":dl_internal",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
