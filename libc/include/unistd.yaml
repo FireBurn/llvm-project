@@ -2,6 +2,8 @@ header: unistd.h
 standards:
   - posix
 macros:
+  - macro_name: "NULL"
+    macro_header: null-macro.h
   - macro_name: _CS_PATH
     macro_header: unistd-macros.h
   - macro_name: SEEK_SET
@@ -286,6 +288,13 @@ functions:
   - name: dup2
     standards:
       - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: int
+  - name: daemon
+    standards:
+      - bsd
     return_type: int
     arguments:
       - type: int
