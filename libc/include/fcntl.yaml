@@ -2,6 +2,12 @@ header: fcntl.h
 standards:
   - posix
 macros:
+  - macro_name: open64
+    macro_header: lfs64-macros.h
+  - macro_name: openat64
+    macro_header: lfs64-macros.h
+  - macro_name: creat64
+    macro_header: lfs64-macros.h
   - macro_name: AT_FDCWD
     macro_header: fcntl-macros.h
   - macro_name: AT_REMOVEDIR
