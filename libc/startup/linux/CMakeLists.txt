@@ -138,6 +138,7 @@ add_object_library(
     libc.src.stdlib.exit
     libc.src.stdlib.atexit
     libc.src.unistd.environ
+    libc.src.compat.progname
     libc.src.errno.program_invocation_name
     libc.src.errno.program_invocation_short_name
   COMPILE_OPTIONS
