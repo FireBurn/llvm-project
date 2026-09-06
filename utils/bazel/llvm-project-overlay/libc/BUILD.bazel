@@ -30954,6 +30954,71 @@ libc_function(
 )
 
 libc_function(
+    name = "getsgent_r",
+    srcs = ["src/gshadow/getsgent_r.cpp"],
+    hdrs = ["src/gshadow/getsgent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":string_memory_utils",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "sgetsgent_r",
+    srcs = ["src/gshadow/sgetsgent_r.cpp"],
+    hdrs = ["src/gshadow/sgetsgent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":gshadow_gshadow_r_utils",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":string_utils",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "sgetsgent",
+    srcs = ["src/gshadow/sgetsgent.cpp"],
+    hdrs = ["src/gshadow/sgetsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":gshadow_gshadow_utils",
+        ":sgetsgent_r",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "fgetsgent_r",
+    srcs = ["src/gshadow/fgetsgent_r.cpp"],
+    hdrs = ["src/gshadow/fgetsgent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":fgets",
+        ":gshadow_gshadow_r_utils",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
     name = "putsgent",
     srcs = ["src/gshadow/putsgent.cpp"],
     hdrs = ["src/gshadow/putsgent.h"],
