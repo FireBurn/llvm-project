@@ -1,0 +1,35 @@
+header: sys/ttydefaults.h
+public_includes:
+  # The settings are built out of the flags and the speeds this states.
+  - termios.h
+standards:
+  - bsd
+macros:
+  - macro_name: TTYDEF_IFLAG
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: TTYDEF_OFLAG
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: TTYDEF_LFLAG
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: TTYDEF_CFLAG
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: TTYDEF_SPEED
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CTRL
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CEOF
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CERASE
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CINTR
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CKILL
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CQUIT
+    macro_header: sys-ttydefaults-macros.h
+  - macro_name: CSUSP
+    macro_header: sys-ttydefaults-macros.h
+types: []
+enums: []
+objects: []
+functions: []
