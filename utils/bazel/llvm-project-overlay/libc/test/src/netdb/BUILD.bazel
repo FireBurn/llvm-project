@@ -11,6 +11,20 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "getprotoent_test",
+    srcs = ["getprotoent_test.cpp"],
+    deps = [
+        "//libc:endprotoent",
+        "//libc:getprotobyname",
+        "//libc:getprotobynumber",
+        "//libc:getprotoent",
+        "//libc:setprotoent",
+        "//libc:strcmp",
+        "//libc:types_struct_protoent",
+    ],
+)
+
+libc_test(
     name = "getnameinfo_test",
     srcs = ["getnameinfo_test.cpp"],
     deps = [
