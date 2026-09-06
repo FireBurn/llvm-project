@@ -18,16 +18,15 @@
 #include "linux/dirent-macros.h"
 #endif
 
-// LLVM-libc has one set of interfaces, and they are already the wide ones,
-// so the names a program uses to ask for large file support name the same
-// things. musl does the same.
+#include "lfs64-macros.h"
+
+// The name large file support gave struct dirent. LLVM-libc's ordinary
+// record is already the wide one, so the two name the same thing. This lives
+// with its own record rather than with the rest of the large file names so
+// that a translation unit which does not ask for it is left free to use the
+// name itself, as <linux/dirent.h> does.
 #if defined(_LARGEFILE64_SOURCE) || defined(_GNU_SOURCE)
 #define dirent64 dirent
-#define readdir64 readdir
-#define readdir64_r readdir_r
-#define scandir64 scandir
-#define alphasort64 alphasort
-#define versionsort64 versionsort
 #endif
 
 #endif // LLVM_LIBC_MACROS_DIRENT_MACROS_H
