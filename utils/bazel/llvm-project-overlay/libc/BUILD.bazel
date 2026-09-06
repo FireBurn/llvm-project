@@ -19569,6 +19569,19 @@ libc_function(
 )
 
 libc_function(
+    name = "klogctl",
+    srcs = ["src/sys/klog/linux/klogctl.cpp"],
+    hdrs = ["src/sys/klog/klogctl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_syslog",
+        ":sys_klog_klogctl",
+    ],
+)
+
+libc_function(
     name = "lremovexattr",
     srcs = ["src/sys/xattr/linux/lremovexattr.cpp"],
     hdrs = ["src/sys/xattr/lremovexattr.h"],
@@ -26724,5 +26737,24 @@ libc_support_library(
         ":string_memory_utils",
         ":string_utils",
         ":types_struct_hostent",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_syslog",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/syslog.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_klog_klogctl",
+    hdrs = ["src/sys/klog/klogctl.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
