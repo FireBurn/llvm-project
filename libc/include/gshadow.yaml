@@ -1,6 +1,12 @@
 header: gshadow.h
+public_includes:
+  # The file the lookups read, under the name this header gives it.
+  - paths.h
 standards:
   - gnu
+macros:
+  - macro_name: GSHADOW
+    macro_header: gshadow-macros.h
 types:
   - type_name: struct_sgrp
   - type_name: FILE
