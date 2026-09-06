@@ -30,3 +30,21 @@ TEST(LlvmLibcLinuxSysMountMacrosTest,
   EXPECT_EQ(static_cast<long long>(MOUNT_ATTR_NOSYMFOLLOW), 0x200000LL);
   EXPECT_EQ(static_cast<long long>(MOUNT_ATTR_SIZE_VER0), 32LL);
 }
+
+TEST(LlvmLibcLinuxSysMountMacrosTest, GiveSysMountHTheBlockDeviceRequests) {
+  EXPECT_EQ(static_cast<long long>(BLKROSET), 0x125dLL);
+  EXPECT_EQ(static_cast<long long>(BLKROGET), 0x125eLL);
+  EXPECT_EQ(static_cast<long long>(BLKRRPART), 0x125fLL);
+  EXPECT_EQ(static_cast<long long>(BLKGETSIZE), 0x1260LL);
+  EXPECT_EQ(static_cast<long long>(BLKFLSBUF), 0x1261LL);
+  EXPECT_EQ(static_cast<long long>(BLKRASET), 0x1262LL);
+  EXPECT_EQ(static_cast<long long>(BLKRAGET), 0x1263LL);
+  EXPECT_EQ(static_cast<long long>(BLKFRASET), 0x1264LL);
+  EXPECT_EQ(static_cast<long long>(BLKFRAGET), 0x1265LL);
+  EXPECT_EQ(static_cast<long long>(BLKSECTSET), 0x1266LL);
+  EXPECT_EQ(static_cast<long long>(BLKSECTGET), 0x1267LL);
+  EXPECT_EQ(static_cast<long long>(BLKSSZGET), 0x1268LL);
+  EXPECT_EQ(static_cast<long long>(BLKBSZGET), 0x80081270LL);
+  EXPECT_EQ(static_cast<long long>(BLKBSZSET), 0x40081271LL);
+  EXPECT_EQ(static_cast<long long>(BLKGETSIZE64), 0x80081272LL);
+}
