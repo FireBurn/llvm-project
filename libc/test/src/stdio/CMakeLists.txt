@@ -181,7 +181,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
-
 add_libc_test(
   fileno_test
   SUITE
@@ -797,6 +796,31 @@ add_libc_test(
     libc.src.unistd.close
     libc.src.unistd.read
     libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
+  unlocked_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    unlocked_test.cpp
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.include.stdio_ext
+    libc.src.stdio.__fsetlocking
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fputc_unlocked
+    libc.src.stdio.fputs_unlocked
+    libc.src.stdio.fread
+    libc.src.stdio.putc_unlocked
+    libc.src.stdio.putchar_unlocked
+    libc.src.stdio.remove
+    libc.src.stdio.setbuffer
+    libc.src.stdio.setlinebuf
+    libc.src.stdio_ext.__flbf
+    libc.src.string.memcmp
 )
 
 add_libc_test(

@@ -1066,6 +1066,21 @@ add_libc_test(
 )
 
 add_libc_test(
+  nice_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    nice_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.sys_resource
+    libc.src.__support.libc_errno
+    libc.src.sys.resource.getpriority
+    libc.src.unistd.nice
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   sync_test
   SUITE
     libc_unistd_unittests
