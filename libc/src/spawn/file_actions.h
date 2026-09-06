@@ -20,6 +20,8 @@ struct BaseSpawnFileAction {
     OPEN = 111,
     CLOSE = 222,
     DUP2 = 333,
+    CHDIR = 444,
+    FCHDIR = 555,
   };
 
   ActionType type;
@@ -66,6 +68,24 @@ struct SpawnFileDup2Action : public BaseSpawnFileAction {
   SpawnFileDup2Action(int fdesc, int new_fdesc)
       : BaseSpawnFileAction(BaseSpawnFileAction::DUP2), fd(fdesc),
         newfd(new_fdesc) {}
+};
+
+// Where the child is to start. Without this a caller which wants the child in
+// a directory of its own has to fork and change directory itself, in a
+// process which may have other threads running, and no longer has the one
+// call that does the whole thing safely.
+struct SpawnFileChdirAction : public BaseSpawnFileAction {
+  const char *path;
+
+  explicit SpawnFileChdirAction(const char *p)
+      : BaseSpawnFileAction(BaseSpawnFileAction::CHDIR), path(p) {}
+};
+
+struct SpawnFileFchdirAction : public BaseSpawnFileAction {
+  int fd;
+
+  explicit SpawnFileFchdirAction(int fdesc)
+      : BaseSpawnFileAction(BaseSpawnFileAction::FCHDIR), fd(fdesc) {}
 };
 
 } // namespace LIBC_NAMESPACE_DECL

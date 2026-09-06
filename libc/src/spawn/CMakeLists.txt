@@ -48,6 +48,32 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  posix_spawn_file_actions_addchdir_np
+  SRCS
+    posix_spawn_file_actions_addchdir_np.cpp
+  HDRS
+    posix_spawn_file_actions_addchdir_np.h
+  DEPENDS
+    .file_actions
+    libc.include.spawn
+    libc.src.__support.CPP.new
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  posix_spawn_file_actions_addfchdir_np
+  SRCS
+    posix_spawn_file_actions_addfchdir_np.cpp
+  HDRS
+    posix_spawn_file_actions_addfchdir_np.h
+  DEPENDS
+    .file_actions
+    libc.include.spawn
+    libc.src.__support.CPP.new
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   posix_spawn_file_actions_addopen
   SRCS
     posix_spawn_file_actions_addopen.cpp
