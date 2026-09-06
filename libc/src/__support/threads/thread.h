@@ -56,9 +56,15 @@ bool set_tss_value(unsigned int key, void *value);
 void *get_tss_value(unsigned int key);
 
 struct Thread {
-  // NB: Default stacksize of 64kb is exceedingly small compared to the 2mb norm
-  // and will break many programs expecting the full 2mb.
-  static constexpr size_t DEFAULT_STACKSIZE = 1 << 16;
+  // How much stack a thread is given when the caller does not say. This
+  // follows the limit set on the process, as glibc does, and falls back to
+  // eight megabytes where no limit is set, which is what that limit usually
+  // is. Sixty four kilobytes, which this used to be, is far under what a
+  // thread doing real work needs: a linker or a compiler running in one
+  // overruns it and the process is killed.
+  static constexpr size_t FALLBACK_STACKSIZE = size_t(8) << 20;
+  static constexpr size_t MINIMUM_STACKSIZE = size_t(16) << 10;
+  static size_t default_stacksize();
   static constexpr size_t DEFAULT_GUARDSIZE = EXEC_PAGESIZE;
   static constexpr bool DEFAULT_DETACHED = false;
 
@@ -68,8 +74,7 @@ struct Thread {
   constexpr Thread(ThreadAttributes *attr) : attrib(attr) {}
 
   int run(ThreadRunnerPosix *func, void *arg, void *stack = nullptr,
-          size_t stacksize = DEFAULT_STACKSIZE,
-          size_t guardsize = DEFAULT_GUARDSIZE,
+          size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
           bool detached = DEFAULT_DETACHED) {
     ThreadRunner runner;
     runner.posix_runner = func;
@@ -78,8 +83,7 @@ struct Thread {
   }
 
   int run(ThreadRunnerStdc *func, void *arg, void *stack = nullptr,
-          size_t stacksize = DEFAULT_STACKSIZE,
-          size_t guardsize = DEFAULT_GUARDSIZE,
+          size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
           bool detached = DEFAULT_DETACHED) {
     ThreadRunner runner;
     runner.stdc_runner = func;
