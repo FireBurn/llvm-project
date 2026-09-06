@@ -600,6 +600,18 @@ libc_function(
 )
 
 libc_function(
+    name = "ctermid",
+    srcs = ["ctermid.cpp"],
+    hdrs = ["ctermid.h"],
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
     name = "fgetc",
     srcs = ["generic/fgetc.cpp"],
     hdrs = ["fgetc.h"],
@@ -859,6 +871,20 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setbuffer",
+    srcs = ["generic/setbuffer.cpp"],
+    hdrs = ["setbuffer.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
