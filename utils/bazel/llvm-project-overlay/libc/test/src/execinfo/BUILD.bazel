@@ -1,0 +1,37 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc execinfo.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "backtrace_test",
+    srcs = ["backtrace_test.cpp"],
+    deps = [
+        "//libc:backtrace",
+        "//libc:backtrace_symbols_fd",
+        "//libc:close",
+        "//libc:fstat",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:unlink",
+    ],
+)
+
+libc_test(
+    name = "backtrace_symbols_test",
+    srcs = ["backtrace_symbols_test.cpp"],
+    deps = [
+        "//libc:backtrace_symbols",
+        "//libc:strlen",
+        "//libc:strstr",
+        "//libc:types_size_t",
+    ],
+)
