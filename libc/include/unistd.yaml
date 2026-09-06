@@ -2,6 +2,8 @@ header: unistd.h
 standards:
   - posix
 macros:
+  - macro_name: "NULL"
+    macro_header: null-macro.h
   - macro_name: lseek64
     macro_header: lfs64-macros.h
   - macro_name: pread64
@@ -330,6 +332,13 @@ functions:
     arguments:
       - type: int
       - type: int
+  - name: daemon
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: int
+      - type: int
   - name: dup3
     standards:
       - posix
@@ -603,6 +612,12 @@ functions:
     return_type: int
     arguments:
       - type: void
+  - name: nice
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
   - name: pathconf
     standards:
       - posix

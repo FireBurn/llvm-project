@@ -407,6 +407,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  nice
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.nice
+)
+
+add_entrypoint_object(
+  daemon
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.daemon
+)
+
+add_entrypoint_object(
   setuid
   ALIAS
   DEPENDS
