@@ -1154,6 +1154,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_kd
+  ../libc/include/sys/kd.yaml
+  sys/kd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_kd_macros
+)
+
+add_header_macro(
   sys_times
   ../libc/include/sys/times.yaml
   sys/times.h
