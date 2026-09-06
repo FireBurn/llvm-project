@@ -1,6 +1,9 @@
 header: sys/sendfile.h
 standards:
   - linux
+macros:
+  - macro_name: sendfile64
+    macro_header: lfs64-macros.h
 functions:
   - name: sendfile
     return_type: ssize_t
