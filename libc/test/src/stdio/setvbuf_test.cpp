@@ -12,8 +12,10 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/stdio/clearerr.h"
+#include "hdr/errno_macros.h"
 #include "src/stdio/fclose.h"
 #include "src/stdio/fflush.h"
+#include "src/stdio/ferror.h"
 #include "src/stdio/fopen.h"
 #include "src/stdio/fread.h"
 #include "src/stdio/fwrite.h"
@@ -30,7 +32,7 @@ TEST_F(LlvmLibcSetvbufTest, SetNBFBuffer) {
   // then set a NBF buffer to the write handle. Since it is NBF, the data
   // written using the write handle should be immediately readable by the read
   // handle.
-  constexpr char FILENAME[] = "testdata/setvbuf_nbf.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_nbf.test");
 
   ::FILE *fw = LIBC_NAMESPACE::fopen(FILENAME, "w");
   ASSERT_FALSE(fw == nullptr);
@@ -66,7 +68,7 @@ TEST_F(LlvmLibcSetvbufTest, SetLBFBuffer) {
   // then set a LBF buffer to the write handle. Since it is LBF, the data
   // written using the write handle should be available right after a '\n' is
   // written.
-  constexpr char FILENAME[] = "testdata/setvbuf_lbf.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_lbf.test");
 
   ::FILE *fw = LIBC_NAMESPACE::fopen(FILENAME, "w");
   ASSERT_FALSE(fw == nullptr);
@@ -175,7 +177,7 @@ TEST_F(LlvmLibcSetvbufTest, NullBufferWithASizeStaysBuffered) {
 }
 
 TEST(LlvmLibcSetbufTest, InvalidBufferMode) {
-  constexpr char FILENAME[] = "testdata/setvbuf_invalid_bufmode.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_invalid_bufmode.test");
   ::FILE *f = LIBC_NAMESPACE::fopen(FILENAME, "w");
   ASSERT_FALSE(f == nullptr);
   char buf[BUFSIZ];
@@ -184,4 +186,16 @@ TEST(LlvmLibcSetbufTest, InvalidBufferMode) {
   ASSERT_ERRNO_EQ(EINVAL);
 
   ASSERT_EQ(0, LIBC_NAMESPACE::fclose(f));
+}
+
+TEST_F(LlvmLibcSetvbufTest, AnUnbufferedWriteThatFailsSaysWhy) {
+  ::FILE *f = LIBC_NAMESPACE::fopen("/dev/full", "w");
+  ASSERT_FALSE(f == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::setvbuf(f, nullptr, _IONBF, 0), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fwrite("x", 1, 1, f), size_t(0));
+  ASSERT_NE(LIBC_NAMESPACE::ferror(f), 0);
+  ASSERT_ERRNO_EQ(ENOSPC);
+  // The failed byte was let go of rather than kept, so closing has nothing
+  // left to fail on.
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
 }
