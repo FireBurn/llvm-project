@@ -41,3 +41,9 @@ TEST(LlvmLibcLinuxFcntlMacrosTest, FillInTheMissingFcntlStatxAndMountMacros) {
   EXPECT_EQ(static_cast<long long>(FALLOC_FL_UNSHARE_RANGE), 64LL);
   EXPECT_EQ(static_cast<long long>(FALLOC_FL_WRITE_ZEROES), 128LL);
 }
+
+TEST(LlvmLibcLinuxFcntlMacrosTest, StopAskingTheKernelForALockCommandItDoes) {
+  EXPECT_EQ(static_cast<long long>(F_GETLK64), 5LL);
+  EXPECT_EQ(static_cast<long long>(F_SETLK64), 6LL);
+  EXPECT_EQ(static_cast<long long>(F_SETLKW64), 7LL);
+}
