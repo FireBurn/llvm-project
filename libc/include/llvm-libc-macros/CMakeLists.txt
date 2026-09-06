@@ -716,3 +716,9 @@ add_macro_header(
   HDR
     sys-inotify-macros.h
 )
+
+add_macro_header(
+  packet_macros
+  HDR
+    packet-macros.h
+)
