@@ -1407,6 +1407,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getspecific
     libc.src.pthread.pthread_getstack_np
     libc.src.compat.__errno_location
+    libc.src.compat.gnu_get_libc_version
     libc.src.compat.syscall
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.lfs64
@@ -1613,6 +1614,7 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # spawn.h entrypoints
     libc.src.spawn.posix_spawn
+    libc.src.spawn.posix_spawnp
     libc.src.spawn.posix_spawnattr_init
     libc.src.spawn.posix_spawnattr_destroy
     libc.src.spawn.posix_spawnattr_getflags
