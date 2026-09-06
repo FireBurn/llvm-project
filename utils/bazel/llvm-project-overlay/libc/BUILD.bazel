@@ -18339,6 +18339,22 @@ libc_function(
 )
 
 libc_function(
+    name = "sigpending",
+    srcs = ["src/signal/linux/sigpending.cpp"],
+    hdrs = ["src/signal/sigpending.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigpending",
+        ":errno",
+        ":hdr_errno_macros",
+        ":signal_sigpending",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "sigqueue",
     srcs = ["src/signal/linux/sigqueue.cpp"],
     hdrs = ["src/signal/sigqueue.h"],
@@ -21030,5 +21046,26 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":types_pid_t",
         ":types_siginfo_t",
+    ],
+)
+
+libc_support_library(
+    name = "signal_sigpending",
+    hdrs = ["src/signal/sigpending.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigpending",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigpending.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_sigset_t",
     ],
 )
