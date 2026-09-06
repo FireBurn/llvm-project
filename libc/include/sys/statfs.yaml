@@ -2,6 +2,10 @@ header: sys/statfs.h
 standards:
   - linux
 macros:
+  - macro_name: statfs64
+    macro_header: lfs64-macros.h
+  - macro_name: fstatfs64
+    macro_header: lfs64-macros.h
   - macro_name: ADFS_SUPER_MAGIC
     macro_header: sys-statfs-macros.h
 types:
