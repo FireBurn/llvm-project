@@ -169,6 +169,12 @@ functions:
     return_type: int
     arguments:
       - type: const sigset_t *
+  - name: sigpending
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: sigset_t *
   - name: sigprocmask
     standards:
       - posix
