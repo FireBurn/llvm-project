@@ -66,11 +66,47 @@ TEST(LlvmLibcPwdTest, ParsePasswdLine_InvalidNumeric) {
   ASSERT_EQ(res4.error(), EINVAL);
 }
 
-TEST(LlvmLibcPwdTest, ParsePasswdLine_MissingFields) {
+TEST(LlvmLibcPwdTest, ParsePasswdLine_MissingTrailingFields) {
+  // A line may stop after the group number. What is not there reads as empty,
+  // which is how the file has always been read.
   char line[] = "root:x:0:0:root:/root";
+  auto res = LIBC_NAMESPACE::pwd::parse_passwd_line(line);
+  ASSERT_TRUE(res.has_value());
+  ASSERT_STREQ(res.value().pw_dir, "/root");
+  ASSERT_STREQ(res.value().pw_shell, "");
+
+  char shortest[] = "root:x:0:0";
+  auto res2 = LIBC_NAMESPACE::pwd::parse_passwd_line(shortest);
+  ASSERT_TRUE(res2.has_value());
+  ASSERT_STREQ(res2.value().pw_gecos, "");
+  ASSERT_STREQ(res2.value().pw_dir, "");
+  ASSERT_STREQ(res2.value().pw_shell, "");
+}
+
+TEST(LlvmLibcPwdTest, ParsePasswdLine_MissingRequiredFields) {
+  // The name, the password, and both numbers have to be there.
+  char line[] = "root:x:0";
   auto res = LIBC_NAMESPACE::pwd::parse_passwd_line(line);
   ASSERT_FALSE(res.has_value());
   ASSERT_EQ(res.error(), EINVAL);
+}
+
+TEST(LlvmLibcPwdTest, ParsePasswdLine_FromNetworkDatabase) {
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no numbers, and
+  // are read as zero rather than turned away.
+  char line[] = "+::::::";
+  auto res = LIBC_NAMESPACE::pwd::parse_passwd_line(line);
+  ASSERT_TRUE(res.has_value());
+  ASSERT_STREQ(res.value().pw_name, "+");
+  ASSERT_EQ(res.value().pw_uid, uid_t(0));
+  ASSERT_EQ(res.value().pw_gid, gid_t(0));
+
+  // An ordinary name with no number is still refused.
+  char ordinary[] = "user:x:::g:/h:/sh";
+  auto res2 = LIBC_NAMESPACE::pwd::parse_passwd_line(ordinary);
+  ASSERT_FALSE(res2.has_value());
+  ASSERT_EQ(res2.error(), EINVAL);
 }
 
 TEST(LlvmLibcPwdTest, ParsePasswdLine_NullInput) {
