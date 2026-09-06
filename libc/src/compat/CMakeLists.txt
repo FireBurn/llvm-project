@@ -49,6 +49,7 @@ add_entrypoint_object(
     lfs64.cpp
   HDRS
     lfs64.h
+    lfs64_undef.h
   DEPENDS
     libc.hdr.types.DIR
     libc.hdr.types.FILE
