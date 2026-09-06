@@ -1,4 +1,36 @@
 add_entrypoint_object(
+  process_vm_writev
+  SRCS
+    process_vm_writev.cpp
+  HDRS
+    ../process_vm_writev.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.pid_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.process_vm_writev
+    libc.src.__support.common
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  process_vm_readv
+  SRCS
+    process_vm_readv.cpp
+  HDRS
+    ../process_vm_readv.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.pid_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.process_vm_readv
+    libc.src.__support.common
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   writev
   SRCS
     writev.cpp
