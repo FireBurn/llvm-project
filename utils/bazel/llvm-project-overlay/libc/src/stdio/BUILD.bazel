@@ -629,6 +629,20 @@ libc_function(
 )
 
 libc_function(
+    name = "fileno",
+    srcs = ["generic/fileno.cpp"],
+    hdrs = ["fileno.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "flockfile",
     srcs = ["flockfile.cpp"],
     hdrs = ["flockfile.h"],
@@ -637,6 +651,28 @@ libc_function(
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fmemopen",
+    srcs = ["fmemopen.cpp"],
+    hdrs = ["fmemopen.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/string/memory_utils:memory_utils",
     ],
 )
 
@@ -868,6 +904,32 @@ libc_support_library(
     hdrs = ["fgets.h"],
     deps = [
         "//libc/hdr/types:FILE",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setvbuf",
+    srcs = ["setvbuf.cpp"],
+    hdrs = ["setvbuf.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "clearerr",
+    srcs = ["generic/clearerr.cpp"],
+    hdrs = ["clearerr.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
     ],
 )

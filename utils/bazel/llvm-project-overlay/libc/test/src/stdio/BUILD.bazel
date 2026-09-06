@@ -218,6 +218,23 @@ libc_test(
 )
 
 libc_test(
+    name = "setvbuf_test",
+    srcs = ["setvbuf_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/stdio:clearerr",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:setvbuf",
+    ],
+)
+
+libc_test(
     name = "fputc_test",
     srcs = ["fputc_test.cpp"],
     deps = [
@@ -347,9 +364,11 @@ libc_test(
         "//libc/hdr:stdio_macros",
         "//libc/src/__support/CPP:scope",
         "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdio:clearerr",
         "//libc/src/stdio:fclose",
         "//libc/src/stdio:feof",
         "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fmemopen",
         "//libc/src/stdio:fopen",
         "//libc/src/stdio:fwrite",
         "//libc/src/stdio:getdelim",
