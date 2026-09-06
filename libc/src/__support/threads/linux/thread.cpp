@@ -18,6 +18,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/mprotect.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/munmap.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/prlimit.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getparam.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getscheduler.h"
@@ -41,6 +42,7 @@
 #include "hdr/signal_macros.h"
 #include "hdr/stdint_proxy.h"
 #include "hdr/sys_mman_macros.h" // For PROT_* and MAP_* definitions.
+#include "hdr/sys_resource_macros.h"
 #include <linux/param.h>         // For EXEC_PAGESIZE.
 #include <linux/prctl.h>         // For PR_SET_NAME
 #include <sys/syscall.h>         // For syscall numbers.
@@ -166,6 +168,27 @@ static int start_thread(void *arg) {
   return 0;
 }
 
+size_t Thread::default_stacksize() {
+  static cpp::Atomic<size_t> cached(0);
+  size_t size = cached.load(cpp::MemoryOrder::RELAXED);
+  if (size != 0)
+    return size;
+
+  // The limit set on the process is what glibc gives a thread that asks for
+  // no particular size, so it is what is given here.
+  size = FALLBACK_STACKSIZE;
+  rlimit limit;
+  auto result = linux_syscalls::prlimit(0, RLIMIT_STACK, nullptr, &limit);
+  if (result.has_value() && limit.rlim_cur != RLIM_INFINITY &&
+      limit.rlim_cur != 0)
+    size = static_cast<size_t>(limit.rlim_cur);
+  if (size < MINIMUM_STACKSIZE)
+    size = MINIMUM_STACKSIZE;
+
+  cached.store(size, cpp::MemoryOrder::RELAXED);
+  return size;
+}
+
 int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
                 size_t stacksize, size_t guardsize, bool detached) {
   bool owned_stack = false;
@@ -173,7 +196,7 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
     // TODO: Should we return EINVAL here? Should we have a generic concept of a
     //       minimum stacksize (like 16384 for pthread).
     if (stacksize == 0)
-      stacksize = DEFAULT_STACKSIZE;
+      stacksize = default_stacksize();
     // Roundup stacksize/guardsize to page size.
     // TODO: Should be also add sizeof(ThreadAttribute) and other internal
     //       meta data?
