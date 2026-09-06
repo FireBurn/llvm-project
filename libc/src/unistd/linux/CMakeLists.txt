@@ -941,6 +941,24 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  daemon
+  SRCS
+    daemon.cpp
+  HDRS
+    ../daemon.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.unistd_macros
+    libc.src.fcntl.open
+    libc.src.stdlib._Exit
+    libc.src.unistd.chdir
+    libc.src.unistd.close
+    libc.src.unistd.dup2
+    libc.src.unistd.fork
+    libc.src.unistd.setsid
+)
+
+add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
