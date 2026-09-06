@@ -163,6 +163,24 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_stacksize_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_stacksize_test.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.sys_resource_macros
+    libc.hdr.types.struct_rlimit
+    libc.include.pthread
+    libc.src.pthread.pthread_attr_getstacksize
+    libc.src.pthread.pthread_attr_init
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.sys.resource.getrlimit
+)
+
+add_integration_test(
   pthread_equal_test
   SUITE
     libc-pthread-integration-tests
