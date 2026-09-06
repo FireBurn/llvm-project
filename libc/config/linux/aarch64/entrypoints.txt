@@ -721,6 +721,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/uio.h entrypoints
     libc.src.sys.uio.preadv
+    libc.src.sys.uio.process_vm_readv
+    libc.src.sys.uio.process_vm_writev
     libc.src.sys.uio.pwritev
     libc.src.sys.uio.writev
     libc.src.sys.uio.readv
