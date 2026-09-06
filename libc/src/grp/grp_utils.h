@@ -65,25 +65,37 @@ LIBC_INLINE bool parse_line_into(cpp::span<char> line, struct group *grp,
     return false;
   grp->gr_passwd = passwd->data();
 
-  auto gid_str = tokenizer.next_field();
-  if (!gid_str || gid_str->empty() || !internal::isdigit(gid_str->front()))
-    return false;
-  auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
-  if (gid_res.has_error() || gid_res.parsed_len <= 0 ||
-      static_cast<size_t>(gid_res.parsed_len) >= gid_str->size() ||
-      (*gid_str)[gid_res.parsed_len] != '\0')
-    return false;
-  grp->gr_gid = gid_res.value;
+  // A name opening with a plus or a minus is one of the lines that used to
+  // pull entries in from the network database. Those carry no number of their
+  // own, and are read as zero rather than turned away.
+  const bool from_network_database =
+      grp->gr_name[0] == '+' || grp->gr_name[0] == '-';
 
-  // The rest of the line is the member list, which is comma separated
-  // rather than colon separated and may be empty.
-  auto member_field = tokenizer.next_field();
-  if (!member_field)
+  auto gid_str = tokenizer.next_field();
+  if (!gid_str)
     return false;
+  if (gid_str->front() == '\0') {
+    if (!from_network_database)
+      return false;
+    grp->gr_gid = 0;
+  } else {
+    if (!internal::isdigit(gid_str->front()))
+      return false;
+    auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
+    if (gid_res.has_error() || gid_res.parsed_len <= 0 ||
+        static_cast<size_t>(gid_res.parsed_len) >= gid_str->size() ||
+        (*gid_str)[gid_res.parsed_len] != '\0')
+      return false;
+    grp->gr_gid = gid_res.value;
+  }
+
+  // The rest of the line is the member list, which is comma separated rather
+  // than colon separated. It may be empty, and may be missing altogether:
+  // a line that stops after the number names a group with nobody in it.
+  auto member_field = tokenizer.next_field();
 
   size_t count = 0;
-  char *p = member_field->data();
-  if (*p != '\0') {
+  if (member_field && member_field->front() != '\0') {
     internal::FieldTokenizer member_tokenizer(*member_field, ',');
     while (auto member = member_tokenizer.next_field()) {
       if (count + 1 >= max_members)
