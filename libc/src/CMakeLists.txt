@@ -22,6 +22,7 @@ add_subdirectory(stdio_ext)
 # target conditionally depends on unistd's environ target.
 add_subdirectory(unistd)
 add_subdirectory(execinfo)
+add_subdirectory(ifaddrs)
 add_subdirectory(utmp)
 add_subdirectory(utmpx)
 add_subdirectory(stdlib)
