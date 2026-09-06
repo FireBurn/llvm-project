@@ -21,6 +21,7 @@
 #define _PATH_CSHELL "/bin/csh"
 #define _PATH_CONSOLE "/dev/console"
 #define _PATH_DEVNULL "/dev/null"
+#define _PATH_DRUM "/dev/drum"
 #define _PATH_KLOG "/proc/kmsg"
 #define _PATH_KMEM "/dev/kmem"
 #define _PATH_MEM "/dev/mem"
@@ -46,6 +47,8 @@
 
 // The ones which name a directory rather than a file end in a slash.
 #define _PATH_DEV "/dev/"
+#define _PATH_DEVDB "/var/run/dev.db"
+#define _PATH_RWHODIR "/var/spool/rwho"
 #define _PATH_TMP "/tmp/"
 #define _PATH_VARDB "/var/db/"
 #define _PATH_VARRUN "/var/run/"
