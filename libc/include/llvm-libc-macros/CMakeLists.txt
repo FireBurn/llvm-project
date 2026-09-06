@@ -542,6 +542,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_vt_macros
+  HDR
+    sys-vt-macros.h
+)
+
+add_macro_header(
   nl_types_macros
   HDR
     nl_types-macros.h
