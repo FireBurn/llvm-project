@@ -49,4 +49,15 @@
 #define POSIX_MADV_DONTNEED MADV_DONTNEED
 #endif
 
+// The name BSD gave what the kernel calls MAP_ANONYMOUS, which a great deal
+// of code still uses.
+#ifndef MAP_ANON
+#define MAP_ANON MAP_ANONYMOUS
+#endif
+
+// Likewise the name a mapping which is not anonymous went by.
+#ifndef MAP_FILE
+#define MAP_FILE 0
+#endif
+
 #endif // LLVM_LIBC_MACROS_SYS_MMAN_MACROS_H
