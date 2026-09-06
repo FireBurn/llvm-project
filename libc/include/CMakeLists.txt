@@ -301,6 +301,7 @@ add_header_macro(
     .llvm-libc-types.struct_sgrp
     .llvm-libc-types.FILE
     .llvm-libc-types.size_t
+    .llvm-libc-macros.gshadow_macros
 )
 
 add_header_macro(
@@ -312,6 +313,7 @@ add_header_macro(
     .llvm-libc-types.struct_spwd
     .llvm-libc-types.FILE
     .llvm-libc-types.size_t
+    .llvm-libc-macros.shadow_macros
 )
 
 add_header_macro(

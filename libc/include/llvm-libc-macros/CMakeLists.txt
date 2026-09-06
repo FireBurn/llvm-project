@@ -79,6 +79,18 @@ add_macro_header(
 )
 
 add_macro_header(
+  shadow_macros
+  HDR
+    shadow-macros.h
+)
+
+add_macro_header(
+  gshadow_macros
+  HDR
+    gshadow-macros.h
+)
+
+add_macro_header(
   lfs64_macros
   HDR
     lfs64-macros.h
