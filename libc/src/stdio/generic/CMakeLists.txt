@@ -587,6 +587,7 @@ add_generic_entrypoint_object(
   HDRS
     ../fprintf.h
   DEPENDS
+    .vfprintf
     ${fprintf_deps}
 )
 
@@ -783,7 +784,20 @@ add_generic_entrypoint_object(
   DEPENDS
     libc.hdr.stdio_macros
     libc.hdr.types.FILE
-    libc.src.stdio.setvbuf
+    libc.src.__support.File.file
+)
+
+add_generic_entrypoint_object(
+  setbuffer
+  SRCS
+    setbuffer.cpp
+  HDRS
+    ../setbuffer.h
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.src.__support.File.file
 )
 
 add_generic_entrypoint_object(
