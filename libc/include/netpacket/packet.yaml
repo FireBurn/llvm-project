@@ -1,0 +1,11 @@
+header: netpacket/packet.h
+standards:
+  - linux
+macros:
+  - macro_name: PACKET_HOST
+    macro_header: packet-macros.h
+types:
+  - type_name: struct_sockaddr_ll
+enums: []
+objects: []
+functions: []
