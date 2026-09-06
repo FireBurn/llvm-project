@@ -1324,6 +1324,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  vhangup_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    vhangup_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.unistd.geteuid
+    libc.src.unistd.vhangup
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   sbrk_test
   SUITE
     libc-unistd-tests
