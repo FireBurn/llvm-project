@@ -120,6 +120,86 @@ add_entrypoint_object(
     libc.src.__support.common
 )
 
+add_object_library(
+  proto_storage
+  SRCS
+    proto_storage.cpp
+  HDRS
+    proto_storage.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
+add_entrypoint_object(
+  getprotobyname
+  SRCS
+    getprotobyname.cpp
+  HDRS
+    getprotobyname.h
+  DEPENDS
+    .proto_storage
+    libc.hdr.types.struct_protoent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
+add_entrypoint_object(
+  getprotobynumber
+  SRCS
+    getprotobynumber.cpp
+  HDRS
+    getprotobynumber.h
+  DEPENDS
+    .proto_storage
+    libc.hdr.types.struct_protoent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
+add_entrypoint_object(
+  getprotoent
+  SRCS
+    getprotoent.cpp
+  HDRS
+    getprotoent.h
+  DEPENDS
+    .proto_storage
+    libc.hdr.types.struct_protoent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
+add_entrypoint_object(
+  setprotoent
+  SRCS
+    setprotoent.cpp
+  HDRS
+    setprotoent.h
+  DEPENDS
+    libc.hdr.types.struct_protoent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
+add_entrypoint_object(
+  endprotoent
+  SRCS
+    endprotoent.cpp
+  HDRS
+    endprotoent.h
+  DEPENDS
+    libc.hdr.types.struct_protoent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.protocols
+)
+
 add_entrypoint_object(
   getservbyname
   SRCS
