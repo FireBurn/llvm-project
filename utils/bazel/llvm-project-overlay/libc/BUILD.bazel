@@ -173,6 +173,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("netinet/if_ether"),
     libc_header_info("netinet/ip"),
     libc_header_info("netinet/ip6"),
+    libc_header_info("netpacket/packet"),
     libc_header_info("paths"),
     libc_header_info("printf"),
     libc_header_info("shadow"),
@@ -27674,16 +27675,6 @@ libc_function(
 )
 
 libc_function(
-    name = "res_init",
-    srcs = ["src/compat/res_init.cpp"],
-    hdrs = ["src/compat/res_init.h"],
-    deps = [
-        ":__support_common",
-        ":__support_macros_config",
-    ],
-)
-
-libc_function(
     name = "progname",
     srcs = ["src/compat/progname.cpp"],
     hdrs = ["src/compat/progname.h"],
@@ -31324,6 +31315,16 @@ libc_function(
         ":__support_macros_null_check",
         ":func_free",
         ":types_regex_t",
+    ],
+)
+
+libc_function(
+    name = "res_init",
+    srcs = ["src/compat/res_init.cpp"],
+    hdrs = ["src/compat/res_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
