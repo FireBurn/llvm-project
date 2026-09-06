@@ -438,7 +438,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
-
 add_libc_test(
   mkstemps_test
   SUITE
@@ -701,6 +700,19 @@ add_libc_test(
     libc.src.unistd.close
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  environment_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    environment_test.cpp
+  DEPENDS
+    libc.src.stdlib.clearenv
+    libc.src.stdlib.getenv
+    libc.src.stdlib.secure_getenv
+    libc.src.stdlib.setenv
 )
 
 add_libc_test(
