@@ -5545,6 +5545,7 @@ libc_support_library(
         ":__support_threads_identifier",
         ":__support_threads_mutex_common",
         ":__support_threads_raw_mutex",
+        ":__support_threads_tcb",
         ":types_pid_t",
         ":types_size_t",
     ],
