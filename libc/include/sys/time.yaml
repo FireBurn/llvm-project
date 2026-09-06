@@ -23,6 +23,11 @@ functions:
     arguments:
       - type: const char*
       - type: const struct timeval*
+  - name: lutimes
+    return_type: int
+    arguments:
+      - type: const char*
+      - type: const struct timeval*
   - name: setitimer
     return_type: int
     arguments:
