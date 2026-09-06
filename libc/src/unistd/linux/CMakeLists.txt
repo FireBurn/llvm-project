@@ -748,6 +748,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vhangup
+  SRCS
+    vhangup.cpp
+  HDRS
+    ../vhangup.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.libc_errno
+)
+
+add_entrypoint_object(
   daemon
   SRCS
     daemon.cpp
