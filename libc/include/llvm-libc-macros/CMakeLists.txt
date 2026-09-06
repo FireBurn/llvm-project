@@ -726,6 +726,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_kd_macros
+  HDR
+    sys-kd-macros.h
+)
+
+add_macro_header(
   sys_ttydefaults_macros
   HDR
     sys-ttydefaults-macros.h
