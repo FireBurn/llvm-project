@@ -506,6 +506,14 @@ functions:
     arguments:
       - type: FILE *__restrict
       - type: char *__restrict
+  - name: setbuffer
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: FILE *
+      - type: char *
+      - type: size_t
   - name: setlinebuf
     standards:
       - bsd
