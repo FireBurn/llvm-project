@@ -1039,6 +1039,19 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "vhangup",
+    srcs = ["linux/vhangup.cpp"],
+    hdrs = ["vhangup.h"],
+    deps = [
+        ":unistd_vhangup",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:vhangup",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_support_library(
     name = "unistd_get_current_dir_name",
     hdrs = ["get_current_dir_name.h"],
@@ -1170,6 +1183,14 @@ libc_support_library(
 libc_support_library(
     name = "unistd_acct",
     hdrs = ["acct.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_vhangup",
+    hdrs = ["vhangup.h"],
     deps = [
         "//libc/src/__support/macros:config",
     ],
