@@ -29981,6 +29981,19 @@ libc_support_library(
 )
 
 libc_function(
+    name = "pthread_attr_init",
+    srcs = ["src/pthread/pthread_attr_init.cpp"],
+    hdrs = ["src/pthread/pthread_attr_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":pthread_pthread_attr",
+        ":types_pthread_attr_t",
+    ],
+)
+
+libc_function(
     name = "pthread_create",
     srcs = ["src/pthread/pthread_create.cpp"],
     hdrs = ["src/pthread/pthread_create.h"],
