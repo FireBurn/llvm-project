@@ -344,6 +344,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_klog_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_klog_test.cpp
+  DEPENDS
+    libc.include.sys_klog
+)
+
+add_libc_test(
   complex_test
   SUITE
     libc-include-tests
