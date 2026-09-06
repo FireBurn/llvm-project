@@ -54,8 +54,10 @@ LIBC_INLINE void flush_standard_stream(FILE *const *slot) {
 // TODO: use recursive mutex to protect this routine.
 [[noreturn]] LLVM_LIBC_FUNCTION(void, exit, (int status)) {
 #ifdef LIBC_COPT_SUPPORT_THREADS
-  // Call TLS destructors, if supported by the target.
-  internal::call_atexit_callbacks(current_thread().attrib);
+  // The main thread's thread local objects are destroyed when the process
+  // exits. The destructors of the values set with pthread_setspecific are not
+  // run here: those belong to a thread exiting, which is not what this is.
+  internal::call_thread_local_dtors(current_thread().attrib);
 #endif
   __cxa_finalize(nullptr);
 #ifdef LIBC_COPT_EXIT_FLUSHES_STREAMS
