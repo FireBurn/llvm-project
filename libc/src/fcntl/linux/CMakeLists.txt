@@ -119,3 +119,15 @@ add_entrypoint_object(
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
+
+add_entrypoint_object(
+  posix_fadvise
+  SRCS
+    posix_fadvise.cpp
+  HDRS
+    ../posix_fadvise.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+)
