@@ -99,9 +99,20 @@
 #define F_GETOWN 9
 #define F_SETSIG 10
 #define F_GETSIG 11
+// The wide forms of the locking commands. Where a file offset is already
+// sixty four bits wide, which it is on every target with sixty four bit
+// pointers, these are the ordinary commands: the numbered ones are how a
+// thirty two bit ABI asks the kernel for the wide struct, and a kernel built
+// for the wider one does not answer to them at all.
+#ifdef __LP64__
+#define F_GETLK64 F_GETLK
+#define F_SETLK64 F_SETLK
+#define F_SETLKW64 F_SETLKW
+#else
 #define F_GETLK64 12
 #define F_SETLK64 13
 #define F_SETLKW64 14
+#endif
 #define F_SETOWN_EX 15
 #define F_GETOWN_EX 16
 
@@ -155,8 +166,10 @@
 #define F_WRLCK 1
 #define F_UNLCK 2
 
-// For Large File Support
-#if defined(_LARGEFILE64_SOURCE)
+// For Large File Support. On a target whose offsets are already wide the
+// names above already say the same thing, and saying it again here would
+// leave the ordinary names standing for nothing.
+#if defined(_LARGEFILE64_SOURCE) && !defined(__LP64__)
 #define F_GETLK F_GETLK64
 #define F_SETLK F_SETLK64
 #define F_SETLKW F_SETLKW64
