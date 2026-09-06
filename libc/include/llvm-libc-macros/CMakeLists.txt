@@ -726,6 +726,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_ttydefaults_macros
+  HDR
+    sys-ttydefaults-macros.h
+)
+
+add_macro_header(
   sys_vt_macros
   HDR
     sys-vt-macros.h
