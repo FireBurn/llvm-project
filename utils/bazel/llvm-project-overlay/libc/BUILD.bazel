@@ -26865,6 +26865,74 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "endprotoent",
+    srcs = ["src/netdb/endprotoent.cpp"],
+    hdrs = ["src/netdb/endprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_endprotoent",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "getprotobynumber",
+    srcs = ["src/netdb/getprotobynumber.cpp"],
+    hdrs = ["src/netdb/getprotobynumber.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getprotobynumber",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "getprotoent",
+    srcs = ["src/netdb/getprotoent.cpp"],
+    hdrs = ["src/netdb/getprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getprotoent",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "getservbyname",
+    srcs = ["src/netdb/getservbyname.cpp"],
+    hdrs = ["src/netdb/getservbyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getservbyname",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "setprotoent",
+    srcs = ["src/netdb/setprotoent.cpp"],
+    hdrs = ["src/netdb/setprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_protocols",
+        ":netdb_setprotoent",
+        ":types_struct_protoent",
+    ],
+)
+
 libc_support_library(
     name = "netdb___h_errno_location",
     srcs = ["src/netdb/__h_errno_location.cpp"],
@@ -27269,5 +27337,109 @@ libc_support_library(
         ":types_pid_t",
         ":types_ssize_t",
         ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_protoent",
+    hdrs = ["include/llvm-libc-types/struct_protoent.h"],
+)
+
+libc_support_library(
+    name = "types_struct_protoent",
+    hdrs = ["hdr/types/struct_protoent.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_protoent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "netdb_resolv_protocols",
+    srcs = ["src/netdb/resolv/protocols.cpp"],
+    hdrs = ["src/netdb/resolv/protocols.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_str_to_integer",
+        ":netdb_resolv_file_lines",
+        ":string_memory_utils",
+        ":types_size_t",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_proto_storage",
+    srcs = ["src/netdb/proto_storage.cpp"],
+    hdrs = ["src/netdb/proto_storage.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_resolv_protocols",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_endprotoent",
+    srcs = ["src/netdb/endprotoent.cpp"],
+    hdrs = ["src/netdb/endprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getprotobyname",
+    srcs = ["src/netdb/getprotobyname.cpp"],
+    hdrs = ["src/netdb/getprotobyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getprotobynumber",
+    srcs = ["src/netdb/getprotobynumber.cpp"],
+    hdrs = ["src/netdb/getprotobynumber.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getprotoent",
+    srcs = ["src/netdb/getprotoent.cpp"],
+    hdrs = ["src/netdb/getprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_setprotoent",
+    srcs = ["src/netdb/setprotoent.cpp"],
+    hdrs = ["src/netdb/setprotoent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
     ],
 )
