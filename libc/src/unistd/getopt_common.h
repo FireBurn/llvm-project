@@ -94,6 +94,16 @@ LIBC_INLINE int getopt_r(int argc, char *const argv[], const char *optstring,
     return ret;
   };
 
+  // A caller which means to scan the arguments again says so by putting
+  // optind back to zero, which is not an index into anything: the first
+  // argument is the program's own name and was never an option. The scan
+  // starts again at the one after it, and whatever was half read is
+  // forgotten. Programs which parse their arguments twice rely on this.
+  if (ctx.optind == 0) {
+    ctx.optind.get() = 1;
+    ctx.optpos.get() = 0;
+  }
+
   if (ctx.optind >= argc || !argv[ctx.optind])
     return failure();
 
