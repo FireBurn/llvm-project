@@ -26965,6 +26965,93 @@ libc_support_library(
 )
 
 libc_function(
+    name = "cfgetispeed",
+    srcs = ["src/termios/linux/cfgetispeed.cpp"],
+    hdrs = ["src/termios/cfgetispeed.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_speed_t",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "cfsetispeed",
+    srcs = ["src/termios/linux/cfsetispeed.cpp"],
+    hdrs = ["src/termios/cfsetispeed.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":termios_linux_speed_utils",
+        ":types_speed_t",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "cfgetospeed",
+    srcs = ["src/termios/linux/cfgetospeed.cpp"],
+    hdrs = ["src/termios/cfgetospeed.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_speed_t",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "cfsetospeed",
+    srcs = ["src/termios/linux/cfsetospeed.cpp"],
+    hdrs = ["src/termios/cfsetospeed.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":termios_linux_speed_utils",
+        ":types_speed_t",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "cfsetspeed",
+    srcs = ["src/termios/linux/cfsetspeed.cpp"],
+    hdrs = ["src/termios/cfsetspeed.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":cfsetispeed",
+        ":cfsetospeed",
+        ":types_speed_t",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "tcgetsid",
+    srcs = ["src/termios/linux/tcgetsid.cpp"],
+    hdrs = ["src/termios/tcgetsid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":errno",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
     name = "tcdrain",
     srcs = ["src/termios/linux/tcdrain.cpp"],
     hdrs = ["src/termios/tcdrain.h"],
