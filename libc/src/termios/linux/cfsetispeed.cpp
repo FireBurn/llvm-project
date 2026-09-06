@@ -20,7 +20,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, cfsetispeed, (termios * t, speed_t speed)) {
+namespace internal {
+
+int cfsetispeed_impl(termios *t, speed_t speed) {
   LIBC_CRASH_ON_NULLPTR(t);
   constexpr speed_t NOT_SPEED_MASK = ~static_cast<speed_t>(CBAUD);
   speed_t encoded = encode_speed(speed);
@@ -32,6 +34,12 @@ LLVM_LIBC_FUNCTION(int, cfsetispeed, (termios * t, speed_t speed)) {
 
   t->c_ispeed = speed;
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, cfsetispeed, (termios * t, speed_t speed)) {
+  return internal::cfsetispeed_impl(t, speed);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
