@@ -31371,6 +31371,101 @@ libc_support_library(
 )
 
 libc_function(
+    name = "posix_spawn_file_actions_init",
+    srcs = ["src/spawn/posix_spawn_file_actions_init.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_destroy",
+    srcs = ["src/spawn/posix_spawn_file_actions_destroy.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_destroy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_adddup2",
+    srcs = ["src/spawn/posix_spawn_file_actions_adddup2.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_adddup2.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addchdir_np",
+    srcs = ["src/spawn/posix_spawn_file_actions_addchdir_np.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_addchdir_np.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addfchdir_np",
+    srcs = ["src/spawn/posix_spawn_file_actions_addfchdir_np.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_addfchdir_np.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addopen",
+    srcs = ["src/spawn/posix_spawn_file_actions_addopen.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_addopen.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addclose",
+    srcs = ["src/spawn/posix_spawn_file_actions_addclose.cpp"],
+    hdrs = ["src/spawn/posix_spawn_file_actions_addclose.h"],
+    deps = [
+        ":__support_alloc_checker",
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":spawn_file_actions",
+    ],
+)
+
+libc_function(
     name = "posix_spawnattr_init",
     srcs = ["src/spawn/posix_spawnattr_init.cpp"],
     hdrs = ["src/spawn/posix_spawnattr_init.h"],
