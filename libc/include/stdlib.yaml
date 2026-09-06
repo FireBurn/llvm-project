@@ -498,6 +498,12 @@ functions:
     return_type: int
     arguments:
       - type: const char *
+  - name: clearenv
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void
   - name: unsetenv
     standards:
       - posix
