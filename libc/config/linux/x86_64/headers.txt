@@ -151,6 +151,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.net_route
     libc.include.libintl
     libc.include.iconv
+    libc.include.lastlog
     libc.include.netdb
     libc.include.netinet_igmp
     libc.include.netinet_in_systm
