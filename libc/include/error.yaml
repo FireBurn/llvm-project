@@ -1,0 +1,35 @@
+header: error.h
+standards:
+  - gnu
+macros: []
+types:
+  - type_name: __error_progname_t
+enums: []
+objects:
+  - object_name: error_message_count
+    object_type: unsigned int
+  - object_name: error_one_per_line
+    object_type: int
+  - object_name: error_print_progname
+    object_type: __error_progname_t
+functions:
+  - name: error
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: int
+      - type: int
+      - type: const char *
+      - type: '...'
+  - name: error_at_line
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: int
+      - type: int
+      - type: const char *
+      - type: unsigned int
+      - type: const char *
+      - type: '...'

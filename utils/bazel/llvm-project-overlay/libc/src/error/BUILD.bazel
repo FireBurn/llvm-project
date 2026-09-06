@@ -1,0 +1,95 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "message_count",
+    srcs = ["error_message_count.cpp"],
+    hdrs = ["error_message_count.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "one_per_line",
+    srcs = ["error_one_per_line.cpp"],
+    hdrs = ["error_one_per_line.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "print_progname",
+    srcs = ["error_print_progname.cpp"],
+    hdrs = ["error_print_progname.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "report",
+    srcs = ["report.cpp"],
+    hdrs = ["report.h"],
+    deps = [
+        ":message_count",
+        ":print_progname",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_main",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/errno:program_invocation_name",
+    ],
+)
+
+libc_function(
+    name = "error",
+    srcs = ["error.cpp"],
+    hdrs = ["error.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support/OSUtil:exit_hdrs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "at_line",
+    srcs = ["error_at_line.cpp"],
+    hdrs = ["error_at_line.h"],
+    deps = [
+        ":one_per_line",
+        ":report",
+        "//libc/src/__support/OSUtil:exit_hdrs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)

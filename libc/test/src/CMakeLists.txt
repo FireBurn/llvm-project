@@ -33,6 +33,7 @@ add_subdirectory(inttypes)
 
 if(${LIBC_TARGET_OS} STREQUAL "linux")
   add_subdirectory(err)
+  add_subdirectory(error)
   add_subdirectory(fcntl)
   add_subdirectory(ftw)
   add_subdirectory(grp)
