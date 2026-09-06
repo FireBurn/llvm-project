@@ -20008,6 +20008,42 @@ libc_function(
 )
 
 libc_function(
+    name = "process_vm_readv",
+    srcs = ["src/sys/uio/linux/process_vm_readv.cpp"],
+    hdrs = ["src/sys/uio/process_vm_readv.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_process_vm_readv",
+        ":errno",
+        ":hdr_errno_macros",
+        ":sys_uio_process_vm_readv",
+        ":types_pid_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_function(
+    name = "process_vm_writev",
+    srcs = ["src/sys/uio/linux/process_vm_writev.cpp"],
+    hdrs = ["src/sys/uio/process_vm_writev.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_process_vm_writev",
+        ":errno",
+        ":hdr_errno_macros",
+        ":sys_uio_process_vm_writev",
+        ":types_pid_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_function(
     name = "pwritev",
     srcs = ["src/sys/uio/linux/pwritev.cpp"],
     hdrs = ["src/sys/uio/pwritev.h"],
@@ -27185,5 +27221,53 @@ libc_support_library(
         ":__support_macros_config",
         ":func_free",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_process_vm_readv",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/process_vm_readv.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_process_vm_writev",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/process_vm_writev.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "sys_uio_process_vm_readv",
+    hdrs = ["src/sys/uio/process_vm_readv.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "sys_uio_process_vm_writev",
+    hdrs = ["src/sys/uio/process_vm_writev.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
     ],
 )
