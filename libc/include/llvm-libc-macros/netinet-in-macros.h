@@ -147,6 +147,16 @@
         !__IN6_IS_ADDR_LOOPBACK(__a);                                          \
   }))
 
+#define IN6_ARE_ADDR_EQUAL(a, b)                                               \
+  (__extension__({                                                             \
+    const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
+    const struct in6_addr *__b = (const struct in6_addr *)(b);                 \
+    __a->s6_addr32[0] == __b->s6_addr32[0] &&                                  \
+        __a->s6_addr32[1] == __b->s6_addr32[1] &&                              \
+        __a->s6_addr32[2] == __b->s6_addr32[2] &&                              \
+        __a->s6_addr32[3] == __b->s6_addr32[3];                                \
+  }))
+
 #define IN6_IS_ADDR_MC_NODELOCAL(a)                                            \
   (__extension__({                                                             \
     const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
