@@ -323,6 +323,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  pthread_time_test
+  SUITE
+    libc-include-tests
+  SRCS
+    pthread_time_test.cpp
+  DEPENDS
+    libc.include.pthread
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
