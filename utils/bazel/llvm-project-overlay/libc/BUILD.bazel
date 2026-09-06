@@ -30394,6 +30394,18 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_getunique_np",
+    srcs = ["src/pthread/pthread_getunique_np.cpp"],
+    hdrs = ["src/pthread/pthread_getunique_np.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":llvm_libc_types_pthread_t",
+    ],
+)
+
+libc_function(
     name = "openpty",
     srcs = ["src/pty/openpty.cpp"],
     hdrs = ["src/pty/openpty.h"],
@@ -31735,6 +31747,18 @@ libc_function(
         ":__support_macros_config",
         ":hdr_termios_macros",
         ":types_struct_termios",
+    ],
+)
+
+libc_function(
+    name = "thrd_current",
+    srcs = ["src/threads/thrd_current.cpp"],
+    hdrs = ["src/threads/thrd_current.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
     ],
 )
 
