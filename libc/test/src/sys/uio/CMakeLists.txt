@@ -33,3 +33,30 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  pvec_test
+  SUITE
+    libc_sys_uio_unittests
+  SRCS
+    pvec_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_iovec
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.string.memcmp
+    libc.src.sys.uio.preadv
+    libc.src.sys.uio.process_vm_readv
+    libc.src.sys.uio.process_vm_writev
+    libc.src.sys.uio.pwritev
+    libc.src.unistd.close
+    libc.src.unistd.getpid
+    libc.src.unistd.lseek
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
