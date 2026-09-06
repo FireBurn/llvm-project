@@ -61,6 +61,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  string_strdupa_test
+  SUITE
+    libc-include-tests
+  SRCS
+    string_strdupa_test.cpp
+  DEPENDS
+    libc.include.string
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
