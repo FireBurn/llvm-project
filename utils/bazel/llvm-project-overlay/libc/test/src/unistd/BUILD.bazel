@@ -358,6 +358,59 @@ libc_test(
     ],
 )
 
+# TODO: add rules for functions modifying directories.
+
+#TODO: Enable once fullbuild is added to bazel, since this depends on a macro
+# definition in the public header
+
+# libc_test(
+#     name = "syscall_test",
+#     srcs = ["syscall_test.cpp"],
+#     deps = [
+#         "//libc:syscall",
+#     ],
+# )
+
+# TODO: add once sysconf is complete
+
+# libc_test(
+#     name = "sysconf_test",
+#     srcs = ["sysconf_test.cpp"],
+#     deps = [
+#         "//libc:sysconf",
+#     ],
+# )
+
+# TODO: add fopencookie and fflush
+
+# libc_test(
+#     name = "getopt_test",
+#     srcs = ["getopt_test.cpp"],
+#     deps = [
+#         "//libc:__support_cpp_array",
+#         "//libc:getopt",
+#         "//libc:fopencookie",
+#         "//libc:fflush",
+#     ],
+# )
+
+libc_test(
+    name = "usershell_test",
+    srcs = ["usershell_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:endusershell",
+        "//libc:getusershell",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:remove",
+        "//libc:setusershell",
+        "//libc:unistd_usershell",
+        "//libc:write",
+    ],
+)
+
 libc_test(
     name = "vhangup_test",
     srcs = ["vhangup_test.cpp"],
