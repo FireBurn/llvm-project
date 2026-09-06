@@ -30,6 +30,7 @@ libc_test(
         "//libc:fclose",
         "//libc:fputs",
         "//libc:getpid",
+        "//libc:gnu_get_libc_version",
         "//libc:hdr_errno_macros",
         "//libc:hdr_fcntl_macros",
         "//libc:hdr_stdio_macros",
