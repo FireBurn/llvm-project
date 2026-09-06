@@ -137,6 +137,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
   list(APPEND TARGET_PUBLIC_HEADERS
     libc.include.glob
     libc.include.iconv
+    libc.include.ifaddrs
     libc.include.lastlog
     libc.include.netdb
     libc.include.netpacket_packet
