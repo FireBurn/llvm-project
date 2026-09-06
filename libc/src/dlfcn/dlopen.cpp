@@ -8,6 +8,8 @@
 
 #include "dlopen.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/malloc.h"
 #include "src/__support/CPP/mutex.h"
 #include "src/__support/common.h"
 #include "src/__support/elf/bind.h"
@@ -39,6 +41,54 @@ bool already_loaded(const elf::ModuleSet &set, const char *name) {
         same_name(set.modules[i].soname(), name))
       return true;
   return false;
+}
+
+// Makes room for one more module, moving the set onto the heap once the fixed
+// block the startup linker filled in is full. The arrays are reached through
+// pointers precisely so that they can be replaced here; nothing may hold a
+// pointer into them across this call.
+bool make_room(elf::ModuleSet &set) {
+  if (set.count < set.capacity)
+    return true;
+
+  const size_t capacity = set.capacity * 2;
+  auto *modules =
+      static_cast<elf::Module *>(malloc(capacity * sizeof(elf::Module)));
+  auto *mappings = static_cast<elf::MappedModule *>(
+      malloc(capacity * sizeof(elf::MappedModule)));
+  auto *tls_offsets =
+      static_cast<intptr_t *>(malloc(capacity * sizeof(intptr_t)));
+  auto *references = static_cast<size_t *>(malloc(capacity * sizeof(size_t)));
+  if (modules == nullptr || mappings == nullptr || tls_offsets == nullptr ||
+      references == nullptr) {
+    free(modules);
+    free(mappings);
+    free(tls_offsets);
+    free(references);
+    return false;
+  }
+
+  for (size_t i = 0; i < set.count; ++i) {
+    modules[i] = set.modules[i];
+    mappings[i] = set.mappings[i];
+    tls_offsets[i] = set.tls_offsets[i];
+    references[i] = set.references[i];
+  }
+
+  if (set.grown) {
+    free(set.modules);
+    free(set.mappings);
+    free(set.tls_offsets);
+    free(set.references);
+  }
+
+  set.modules = modules;
+  set.mappings = mappings;
+  set.tls_offsets = tls_offsets;
+  set.references = references;
+  set.capacity = capacity;
+  set.grown = true;
+  return true;
 }
 
 void run_init_array(const elf::Module &module) {
@@ -82,8 +132,8 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
     }
   }
 
-  if (set.count >= set.capacity) {
-    dl::set_error("too many shared objects are open");
+  if (!make_room(set)) {
+    dl::set_error("cannot make room for another shared object");
     return nullptr;
   }
 
@@ -125,7 +175,7 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
     requester.for_each_needed([&](const char *name) {
       if (failed || already_loaded(set, name))
         return;
-      if (set.count >= set.capacity) {
+      if (!make_room(set)) {
         failed = true;
         missing = name;
         return;
