@@ -600,12 +600,6 @@ add_macro_header(
 )
 
 add_macro_header(
-  dlfcn_macros
-  HDR
-    dlfcn-macros.h
-)
-
-add_macro_header(
   elf_macros
   HDR
     elf-macros.h
