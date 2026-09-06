@@ -82,6 +82,21 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  sigpending
+  SRCS
+    sigpending.cpp
+  HDRS
+    ../sigpending.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.sigset_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   sigprocmask
   SRCS
     sigprocmask.cpp
