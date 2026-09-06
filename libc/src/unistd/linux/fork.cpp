@@ -53,6 +53,8 @@ ErrorOr<pid_t> fork_impl() {
 
   if (ret < 0) {
     // Error case, a child process was not created.
+    internal::force_set_tid(parent_tid);
+    release_atfork_lock();
     return Error(static_cast<int>(-ret));
   }
   // recover parent's tid.
