@@ -19893,6 +19893,18 @@ libc_function(
 )
 
 libc_function(
+    name = "ctermid",
+    srcs = ["src/stdio/ctermid.cpp"],
+    hdrs = ["src/stdio/ctermid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdio_macros",
+        ":string_memory_utils",
+    ],
+)
+
+libc_function(
     name = "fflush",
     srcs = ["src/stdio/fflush.cpp"],
     hdrs = ["src/stdio/fflush.h"],
