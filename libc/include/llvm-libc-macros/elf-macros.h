@@ -29,8 +29,11 @@
 #define ELF32_R_INFO(s, t) (((s) << 8) + (unsigned char)(t))
 
 #define ELF64_R_SYM(i) ((i) >> 32)
-#define ELF64_R_TYPE(i) ((i) & 0xffffffffL)
-#define ELF64_R_INFO(s, t) (((s) << 32) + ((t) & 0xffffffffL))
+#define ELF64_R_TYPE(i) ((i) & 0xffffffff)
+// The symbol index is widened before it is moved, since a caller holding it
+// in something 32 bits wide, which is where it came from, would otherwise be
+// shifting a value by its own width and losing all of it.
+#define ELF64_R_INFO(s, t) ((((__UINT64_TYPE__)(s)) << 32) + (t))
 
 // Per architecture relocation types.
 //
