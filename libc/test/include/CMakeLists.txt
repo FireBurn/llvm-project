@@ -371,6 +371,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netpacket_packet_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netpacket_packet_test.cpp
+  DEPENDS
+    libc.include.netpacket_packet
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
