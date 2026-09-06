@@ -176,3 +176,64 @@ TEST_F(LlvmLibcFlatFileDbTest, MalformedLineReturnsEinval) {
 
   db.enddb();
 }
+
+TEST_F(LlvmLibcFlatFileDbTest, ABlankLineIsNotTheEndOfTheFile) {
+  // A blank line reads as no bytes, the same as the end of the file does, so
+  // the two have to be told apart or the records after one are never seen.
+  const char *content = "user1:secret1\n\nuser2:secret2\n";
+  HermeticFile test_file(libc_make_test_file_path("flat_db_blank.test"),
+                         content);
+
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
+      test_file.get_path());
+  char buffer[128];
+  SimpleTestEntry entry;
+
+  auto first = db.getnext(&entry, buffer);
+  ASSERT_TRUE(first.has_value());
+  ASSERT_TRUE(first.value());
+  ASSERT_STREQ(entry.key, "user1");
+
+  auto second = db.getnext(&entry, buffer);
+  ASSERT_TRUE(second.has_value());
+  ASSERT_TRUE(second.value());
+  ASSERT_STREQ(entry.key, "user2");
+
+  auto end = db.getnext(&entry, buffer);
+  ASSERT_TRUE(end.has_value());
+  ASSERT_FALSE(end.value());
+
+  db.enddb();
+}
+
+TEST_F(LlvmLibcFlatFileDbTest, GetLineSaysWhichIsWhich) {
+  const char *content = "one\n\ntwo\n";
+  HermeticFile test_file(libc_make_test_file_path("flat_db_getline.test"),
+                         content);
+
+  LIBC_NAMESPACE::internal::FlatFileDatabase<SimpleTestEntry> db(
+      test_file.get_path());
+  char buffer[128];
+
+  auto first = db.getline(buffer);
+  ASSERT_TRUE(first.has_value());
+  ASSERT_TRUE(first.value().has_value());
+  ASSERT_EQ(*first.value(), size_t(3));
+
+  // The blank line reads as a line holding nothing, not as the end.
+  auto blank = db.getline(buffer);
+  ASSERT_TRUE(blank.has_value());
+  ASSERT_TRUE(blank.value().has_value());
+  ASSERT_EQ(*blank.value(), size_t(0));
+
+  auto third = db.getline(buffer);
+  ASSERT_TRUE(third.has_value());
+  ASSERT_TRUE(third.value().has_value());
+  ASSERT_EQ(*third.value(), size_t(3));
+
+  auto end = db.getline(buffer);
+  ASSERT_TRUE(end.has_value());
+  ASSERT_FALSE(end.value().has_value());
+
+  db.enddb();
+}
