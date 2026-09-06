@@ -130,6 +130,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_vt_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_vt_test.cpp
+  DEPENDS
+    libc.include.sys_vt
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
