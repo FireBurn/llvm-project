@@ -8,6 +8,8 @@
 
 #include "src/__support/OSUtil/syscall.h"
 #include "src/pthread/pthread_atfork.h"
+#include "src/pthread/pthread_create.h"
+#include "src/pthread/pthread_join.h"
 #include "src/signal/raise.h"
 #include "src/stdlib/exit.h"
 #include "src/sys/wait/wait.h"
@@ -143,6 +145,44 @@ void fork_with_atfork_callbacks() {
   ASSERT_NE(child, DONE);
 }
 
+// Two threads forking at the same time. One holding the at-fork lock while
+// the other forks used to leave that other one's child with the lock held by
+// a thread which is not in it, and waiting for it to be given back. The
+// prepare callback takes a while on purpose, so that the two overlap.
+static volatile unsigned busy = 0;
+
+static void slow_prepare_cb() {
+  for (unsigned i = 0; i < 100000; ++i)
+    busy += i;
+}
+
+static void *forking_thread(void *) {
+  for (int i = 0; i < 20; ++i) {
+    pid_t pid = LIBC_NAMESPACE::fork();
+    if (pid == 0)
+      LIBC_NAMESPACE::exit(0);
+    if (pid < 0)
+      return nullptr;
+    int status;
+    LIBC_NAMESPACE::waitpid(pid, &status, 0);
+  }
+  return nullptr;
+}
+
+void concurrent_forks() {
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_atfork(&slow_prepare_cb, nullptr, nullptr),
+            0);
+  constexpr int THREADS = 4;
+  pthread_t threads[THREADS];
+  for (int i = 0; i < THREADS; ++i)
+    ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&threads[i], nullptr,
+                                             forking_thread, nullptr),
+              0);
+  // Nothing to check but that this returns at all: the failure was a hang.
+  for (int i = 0; i < THREADS; ++i)
+    ASSERT_EQ(LIBC_NAMESPACE::pthread_join(threads[i], nullptr), 0);
+}
+
 void gettid_test() {
   // fork and verify tid is consistent with the syscall result.
   int pid = LIBC_NAMESPACE::fork();
@@ -169,5 +209,6 @@ TEST_MAIN([[maybe_unused]] int argc, [[maybe_unused]] char **argv,
   fork_and_wait4_signal_exit();
   fork_and_waitpid_signal_exit();
   fork_with_atfork_callbacks();
+  concurrent_forks();
   return 0;
 }
