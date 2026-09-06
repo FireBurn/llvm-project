@@ -1,0 +1,131 @@
+header: utmp.h
+standards:
+  - gnu
+macros:
+  - macro_name: UT_LINESIZE
+    macro_header: utmp-macros.h
+  - macro_name: UT_NAMESIZE
+    macro_header: utmp-macros.h
+  - macro_name: UT_HOSTSIZE
+    macro_header: utmp-macros.h
+  - macro_name: EMPTY
+    macro_header: utmp-macros.h
+  - macro_name: RUN_LVL
+    macro_header: utmp-macros.h
+  - macro_name: BOOT_TIME
+    macro_header: utmp-macros.h
+  - macro_name: NEW_TIME
+    macro_header: utmp-macros.h
+  - macro_name: OLD_TIME
+    macro_header: utmp-macros.h
+  - macro_name: INIT_PROCESS
+    macro_header: utmp-macros.h
+  - macro_name: LOGIN_PROCESS
+    macro_header: utmp-macros.h
+  - macro_name: USER_PROCESS
+    macro_header: utmp-macros.h
+  - macro_name: DEAD_PROCESS
+    macro_header: utmp-macros.h
+  - macro_name: UTMP_FILE
+    macro_header: utmp-macros.h
+  - macro_name: WTMP_FILE
+    macro_header: utmp-macros.h
+types:
+  - type_name: struct_utmp
+  - type_name: struct_lastlog
+  - type_name: pid_t
+enums: []
+objects: []
+functions:
+  - name: endutent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: getutent
+    standards:
+      - gnu
+    return_type: struct utmp *
+    arguments:
+      - type: void
+  - name: getutent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct utmp *
+      - type: struct utmp **
+  - name: getutid
+    standards:
+      - gnu
+    return_type: struct utmp *
+    arguments:
+      - type: const struct utmp *
+  - name: getutid_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct utmp *
+      - type: struct utmp *
+      - type: struct utmp **
+  - name: getutline
+    standards:
+      - gnu
+    return_type: struct utmp *
+    arguments:
+      - type: const struct utmp *
+  - name: getutline_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const struct utmp *
+      - type: struct utmp *
+      - type: struct utmp **
+  - name: login
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: const struct utmp *
+  - name: logout
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+  - name: logwtmp
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: const char *
+      - type: const char *
+      - type: const char *
+  - name: pututline
+    standards:
+      - gnu
+    return_type: struct utmp *
+    arguments:
+      - type: const struct utmp *
+  - name: setutent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: updwtmp
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: const char *
+      - type: const struct utmp *
+  - name: utmpname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
