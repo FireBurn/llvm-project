@@ -172,8 +172,19 @@ namespace internal {
 // Internal namespace containing utilities which are to be used by platform
 // implementations of threads.
 
-// Call the currently registered thread specific atexit callbacks. Useful for
-// implementing the thread_exit function.
+// Call the destructors registered for this thread's thread local objects.
+// These belong to the thread rather than to the process, but the main thread's
+// run when the process exits, so this is separate from the rest of the
+// teardown below.
+void call_thread_local_dtors();
+
+// Call the currently registered thread specific atexit callbacks: the cleanup
+// handlers, the thread local destructors above, and then the destructors of
+// the values set with pthread_setspecific. Useful for implementing the
+// thread_exit function.
+//
+// Not for the exit path: a process exiting is not a thread exiting, and POSIX
+// has neither the cleanup handlers nor the key destructors run there.
 void call_atexit_callbacks();
 
 } // namespace internal
