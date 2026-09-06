@@ -44,6 +44,9 @@
 
 #include <stdarg.h>
 
+// Brought back by the headers included above.
+#include "src/compat/lfs64_undef.h"
+
 // dirent.h states these as macros onto the calls they name, which serves
 // anything compiled against it. The symbols themselves still have to be here
 // for anything already built, so the macros are set aside to define them.
