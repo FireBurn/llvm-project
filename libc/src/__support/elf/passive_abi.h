@@ -19,9 +19,14 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace elf {
 
-// How many objects a process may have loaded at once, startup and dlopen
-// together.
-constexpr size_t MAX_PROCESS_MODULES = 64;
+// How many objects the startup linker can load. It runs before there is an
+// allocator to ask, so its storage is fixed and lives on the stack the
+// kernel handed the process. dlopen grows the set past this onto the heap.
+//
+// A Qt program is already past sixty libraries before any of its own are
+// counted, and a desktop built on it goes further, so the room here is for
+// that rather than for the handful a small program needs.
+constexpr size_t MAX_PROCESS_MODULES = 256;
 
 // The description of the loaded module set.
 //
@@ -50,6 +55,9 @@ struct ModuleSet {
   // for an index made before then was made for a module that is gone.
   size_t generation;
   size_t capacity;
+  // Whether the arrays above were allocated rather than being the fixed block
+  // libc starts with, so a further growth knows what it may release.
+  bool grown;
   size_t page_size;
   // Set once the startup linker has finished, so a caller can tell a linked
   // process from one that was started some other way.
