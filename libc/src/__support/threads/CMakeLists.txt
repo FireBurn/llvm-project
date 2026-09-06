@@ -153,6 +153,7 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.thread)
     DEPENDS
       .mutex
       .${LIBC_TARGET_OS}.thread
+      libc.hdr.limits_macros
       libc.hdr.stdint_proxy
       libc.src.__support.common
       libc.src.__support.fixedvector
