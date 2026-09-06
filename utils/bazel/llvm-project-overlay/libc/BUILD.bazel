@@ -27604,6 +27604,16 @@ libc_function(
 )
 
 libc_function(
+    name = "gnu_get_libc_version",
+    srcs = ["src/compat/gnu_get_libc_version.cpp"],
+    hdrs = ["src/compat/gnu_get_libc_version.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "lfs64",
     srcs = ["src/compat/lfs64.cpp"],
     hdrs = ["src/compat/lfs64.h"],
@@ -31841,7 +31851,7 @@ libc_function(
 libc_function(
     name = "posix_spawn",
     srcs = ["src/spawn/linux/posix_spawn.cpp"],
-    hdrs = ["src/spawn/posix_spawn.h"],
+    hdrs = ["src/spawn/posix_spawn.h", "src/spawn/posix_spawnp.h"],
     deps = [
         ":__signal_utils",
         ":__support_common",

@@ -14,6 +14,8 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/getgid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/pipe2.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigaction.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigprocmask.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_setparam.h"
@@ -22,10 +24,15 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/setpgid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/setsid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/setuid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/wait4.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/spawn/file_actions.h"
+#include "src/spawn/posix_spawnp.h"
+#include "src/unistd/linux/exec_utils.h"
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/signal_macros.h" // For SIGCHLD
@@ -57,9 +64,20 @@ pid_t fork() {
 #endif
 }
 
-// All exits from child_process are error exits. So, we use a simple
-// exit implementation which exits with code 127.
-[[noreturn]] void exit() { linux_syscalls::exit_group(127); }
+// Where the child says why it could not run. Set once, in the child, before
+// anything that can fail, and read by nothing else: after the fork the two
+// processes no longer share it.
+int notify_fd = -1;
+
+// Every way out of child_process is a failure. The reason goes back up the
+// pipe first, so the parent can answer with it, and then the child stops.
+// Anything that goes wrong writing it is not worth reporting: the exit status
+// is left saying the child did not run.
+[[noreturn]] void exit(int error = 0) {
+  if (notify_fd >= 0 && error != 0)
+    linux_syscalls::write(notify_fd, &error, sizeof(error));
+  linux_syscalls::exit_group(127);
+}
 
 // Puts into effect the parts of |attr| the flags asked for. This runs in
 // the child, between the fork and the exec, so anything it does is undone
@@ -71,13 +89,15 @@ void apply_attributes(const posix_spawnattr_t *attr) {
   const short flags = attr->__flags;
 
   if (flags & POSIX_SPAWN_SETSID) {
-    if (!linux_syscalls::setsid())
-      exit();
+    ErrorOr<pid_t> result = linux_syscalls::setsid();
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_SETPGROUP) {
-    if (!linux_syscalls::setpgid(0, attr->__pgroup))
-      exit();
+    ErrorOr<int> result = linux_syscalls::setpgid(0, attr->__pgroup);
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_RESETIDS) {
@@ -85,8 +105,11 @@ void apply_attributes(const posix_spawnattr_t *attr) {
     // as whoever asked for it.
     gid_t gid = linux_syscalls::getgid();
     uid_t uid = linux_syscalls::getuid();
-    if (!linux_syscalls::setgid(gid) || !linux_syscalls::setuid(uid))
-      exit();
+    ErrorOr<int> result = linux_syscalls::setgid(gid);
+    if (result)
+      result = linux_syscalls::setuid(uid);
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_SETSIGDEF) {
@@ -107,26 +130,32 @@ void apply_attributes(const posix_spawnattr_t *attr) {
   }
 
   if (flags & POSIX_SPAWN_SETSCHEDULER) {
-    if (!linux_syscalls::sched_setscheduler(0, attr->__policy,
-                                            &attr->__schedparam))
-      exit();
+    ErrorOr<int> result = linux_syscalls::sched_setscheduler(
+        0, attr->__policy, &attr->__schedparam);
+    if (!result)
+      exit(result.error());
   } else if (flags & POSIX_SPAWN_SETSCHEDPARAM) {
-    if (!linux_syscalls::sched_setparam(0, &attr->__schedparam))
-      exit();
+    ErrorOr<int> result =
+        linux_syscalls::sched_setparam(0, &attr->__schedparam);
+    if (!result)
+      exit(result.error());
   }
 
   // The mask goes last, so that anything above which needed a signal
   // through still had one.
   if (flags & POSIX_SPAWN_SETSIGMASK) {
-    if (!linux_syscalls::rt_sigprocmask(SIG_SETMASK, &attr->__sigmask, nullptr))
-      exit();
+    ErrorOr<int> result =
+        linux_syscalls::rt_sigprocmask(SIG_SETMASK, &attr->__sigmask, nullptr);
+    if (!result)
+      exit(result.error());
   }
 }
 
 void child_process(const char *__restrict path,
                    const posix_spawn_file_actions_t *file_actions,
                    const posix_spawnattr_t *__restrict attr,
-                   char *const *__restrict argv, char *const *__restrict envp) {
+                   char *const *__restrict argv, char *const *__restrict envp,
+                   bool search_path) {
   // TODO: In the code below, the child_process just exits on error during
   // processing |file_actions| and |attr|. The correct way would be to exit
   // after conveying the information about the failure to the parent process
@@ -143,14 +172,13 @@ void child_process(const char *__restrict path,
         ErrorOr<int> fd = linux_syscalls::open(open_act->path, open_act->oflag,
                                                open_act->mode);
         if (!fd)
-          exit();
+          exit(fd.error());
         int actual_fd = *fd;
         if (actual_fd != open_act->fd) {
-          bool dup2_result =
-              linux_syscalls::dup2(actual_fd, open_act->fd).has_value();
+          auto dup2_result = linux_syscalls::dup2(actual_fd, open_act->fd);
           linux_syscalls::close(actual_fd); // The old fd is not needed anymore.
           if (!dup2_result)
-            exit();
+            exit(dup2_result.error());
         }
         break;
       }
@@ -161,8 +189,9 @@ void child_process(const char *__restrict path,
       }
       case BaseSpawnFileAction::DUP2: {
         auto *dup2_act = reinterpret_cast<SpawnFileDup2Action *>(act);
-        if (!linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd).has_value())
-          exit();
+        auto result = linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd);
+        if (!result)
+          exit(result.error());
         break;
       }
       }
@@ -170,8 +199,78 @@ void child_process(const char *__restrict path,
     }
   }
 
-  if (!linux_syscalls::execve(path, argv, envp))
-    exit();
+  // posix_spawnp looks along PATH for a name with no directory in it, which
+  // is the only thing that sets it apart from posix_spawn.
+  if (search_path) {
+    auto result = internal::execvpe(path, argv, envp);
+    exit(result ? 0 : result.error());
+  }
+
+  ErrorOr<int> result = linux_syscalls::execve(path, argv, envp);
+  exit(result.error());
+}
+
+} // anonymous namespace
+
+namespace {
+
+int spawn(pid_t *__restrict pid, const char *__restrict path,
+          const posix_spawn_file_actions_t *file_actions,
+          const posix_spawnattr_t *__restrict attr,
+          char *const *__restrict argv, char *const *__restrict envp,
+          bool search_path) {
+  // A pipe the child says why it could not run down. It is closed on exec, so
+  // a child that got as far as running leaves the read end at end of file and
+  // says nothing. Without this the caller is told a child started and only
+  // finds out otherwise from its exit status, which is too late to tell a
+  // program that is not there from one that ran and failed.
+  int notify[2];
+  ErrorOr<int> piped = linux_syscalls::pipe2(notify, O_CLOEXEC);
+  if (!piped)
+    return piped.error();
+
+  pid_t cpid = fork();
+  if (cpid == 0) {
+    linux_syscalls::close(notify[0]);
+    notify_fd = notify[1];
+    child_process(path, file_actions, attr, argv, envp, search_path);
+  }
+
+  linux_syscalls::close(notify[1]);
+  if (cpid < 0) {
+    linux_syscalls::close(notify[0]);
+    return -cpid;
+  }
+
+  int error = 0;
+  for (;;) {
+    ErrorOr<ssize_t> got =
+        linux_syscalls::read(notify[0], &error, sizeof(error));
+    if (!got && got.error() == EINTR)
+      continue;
+    // Anything other than the whole of an error number means the child said
+    // nothing, which is what a child that ran does.
+    if (!got || *got != static_cast<ssize_t>(sizeof(error)))
+      error = 0;
+    break;
+  }
+  linux_syscalls::close(notify[0]);
+
+  if (error != 0) {
+    // The child is already on its way out. It is reaped here so that a
+    // failure leaves nothing behind for the caller to wait on.
+    int status;
+    for (;;) {
+      ErrorOr<pid_t> waited = linux_syscalls::wait4(cpid, &status, 0, nullptr);
+      if (waited || waited.error() != EINTR)
+        break;
+    }
+    return error;
+  }
+
+  if (pid != nullptr)
+    *pid = cpid;
+  return 0;
 }
 
 } // anonymous namespace
@@ -182,20 +281,18 @@ LLVM_LIBC_FUNCTION(int, posix_spawn,
                     const posix_spawnattr_t *__restrict attr,
                     char *const *__restrict argv,
                     char *const *__restrict envp)) {
-  pid_t cpid = fork();
-  if (cpid == 0)
-    child_process(path, file_actions, attr, argv, envp);
-  else if (cpid < 0)
-    return -cpid;
+  return spawn(pid, path, file_actions, attr, argv, envp,
+               /*search_path=*/false);
+}
 
-  if (pid != nullptr)
-    *pid = cpid;
-
-  // TODO: Before returning, one should wait for the child_process to startup
-  // successfully. For now, we will just return. Future changes will add proper
-  // wait (using pipes for example).
-
-  return 0;
+LLVM_LIBC_FUNCTION(int, posix_spawnp,
+                   (pid_t *__restrict pid, const char *__restrict file,
+                    const posix_spawn_file_actions_t *file_actions,
+                    const posix_spawnattr_t *__restrict attr,
+                    char *const *__restrict argv,
+                    char *const *__restrict envp)) {
+  return spawn(pid, file, file_actions, attr, argv, envp,
+               /*search_path=*/true);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
