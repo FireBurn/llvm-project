@@ -50,6 +50,8 @@ LLVM_LIBC_FUNCTION(pid_t, fork, (void)) {
 
   if (ret < 0) {
     // Error case, a child process was not created.
+    internal::force_set_tid(parent_tid);
+    release_atfork_lock();
     libc_errno = static_cast<int>(-ret);
     return -1;
   }
