@@ -17,6 +17,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int cfsetispeed(termios *t, speed_t speed);
 
+namespace internal {
+int cfsetispeed_impl(termios *t, speed_t speed);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_TERMIOS_CFSETISPEED_H
