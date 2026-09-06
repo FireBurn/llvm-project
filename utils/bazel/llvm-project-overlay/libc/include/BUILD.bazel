@@ -121,6 +121,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("sys/types"),
     libc_header_info("sys/utsname"),
+    libc_header_info("sys/vt"),
     libc_header_info("sys/wait"),
     libc_header_info("sysexits"),
     libc_header_info("termios"),
