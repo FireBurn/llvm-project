@@ -31,6 +31,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "errno",
         has_def_template = True,
     ),
+    libc_header_info("execinfo"),
     libc_header_info(
         "link",
     ),
