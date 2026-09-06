@@ -9,8 +9,10 @@
 #include "hdr/errno_macros.h"
 #include "hdr/stdint_proxy.h"
 #include "src/spawn/file_actions.h"
+#include "src/spawn/posix_spawn_file_actions_addchdir_np.h"
 #include "src/spawn/posix_spawn_file_actions_addclose.h"
 #include "src/spawn/posix_spawn_file_actions_adddup2.h"
+#include "src/spawn/posix_spawn_file_actions_addfchdir_np.h"
 #include "src/spawn/posix_spawn_file_actions_addopen.h"
 #include "src/spawn/posix_spawn_file_actions_destroy.h"
 #include "src/spawn/posix_spawn_file_actions_init.h"
@@ -75,6 +77,53 @@ TEST(LlvmLibcPosixSpawnFileActionsTest, InvalidActions) {
             EBADF);
   ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_addopen(&actions, -1,
                                                              nullptr, 0, 0),
+            EBADF);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_destroy(&actions), 0);
+}
+
+// The child can be told to change directory before it runs, either by name
+// or by a descriptor it already holds.
+TEST(LlvmLibcPosixSpawnFileActionsTest, ChangingDirectory) {
+  posix_spawn_file_actions_t actions;
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_init(&actions), 0);
+
+  ASSERT_EQ(
+      LIBC_NAMESPACE::posix_spawn_file_actions_addchdir_np(&actions, "/tmp"),
+      0);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_addfchdir_np(&actions, 1),
+            0);
+
+  int action_count = 0;
+  auto *act =
+      reinterpret_cast<LIBC_NAMESPACE::BaseSpawnFileAction *>(actions.__front);
+  while (act != nullptr) {
+    ++action_count;
+    if (action_count == 1)
+      ASSERT_EQ(int(act->type),
+                int(LIBC_NAMESPACE::BaseSpawnFileAction::CHDIR));
+    if (action_count == 2)
+      ASSERT_EQ(int(act->type),
+                int(LIBC_NAMESPACE::BaseSpawnFileAction::FCHDIR));
+    act = act->next;
+  }
+  ASSERT_EQ(action_count, 2);
+
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_destroy(&actions), 0);
+}
+
+TEST(LlvmLibcPosixSpawnFileActionsTest, InvalidDirectoryActions) {
+  ASSERT_EQ(
+      LIBC_NAMESPACE::posix_spawn_file_actions_addchdir_np(nullptr, "/tmp"),
+      EINVAL);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_addfchdir_np(nullptr, 1),
+            EINVAL);
+
+  posix_spawn_file_actions_t actions;
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_init(&actions), 0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::posix_spawn_file_actions_addchdir_np(&actions, nullptr),
+      EINVAL);
+  ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_addfchdir_np(&actions, -1),
             EBADF);
   ASSERT_EQ(LIBC_NAMESPACE::posix_spawn_file_actions_destroy(&actions), 0);
 }
