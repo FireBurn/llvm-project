@@ -939,6 +939,14 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_klog
+  ../libc/include/sys/klog.yaml
+  sys/klog.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header_macro(
   sys_ipc
   ../libc/include/sys/ipc.yaml
   sys/ipc.h
