@@ -1,7 +1,12 @@
 header: dirent.h
+public_includes:
+  # MAXNAMLEN stands for NAME_MAX, which this brings in.
+  - limits.h
 standards:
   - posix
 macros:
+  - macro_name: MAXNAMLEN
+    macro_header: dirent-macros.h
   - macro_name: DT_UNKNOWN
     macro_header: dirent-macros.h
   - macro_name: DT_FIFO
