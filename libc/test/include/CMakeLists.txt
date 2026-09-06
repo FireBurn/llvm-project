@@ -541,6 +541,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  lastlog_utmp_test
+  SUITE
+    libc-include-tests
+  SRCS
+    lastlog_utmp_test.cpp
+  DEPENDS
+    libc.include.lastlog
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
