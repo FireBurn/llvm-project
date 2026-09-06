@@ -2,6 +2,12 @@ header: fcntl.h
 standards:
   - posix
 macros:
+  - macro_name: SYNC_FILE_RANGE_WAIT_AFTER
+    macro_header: fcntl-macros.h
+  - macro_name: SYNC_FILE_RANGE_WRITE
+    macro_header: fcntl-macros.h
+  - macro_name: SYNC_FILE_RANGE_WAIT_BEFORE
+    macro_header: fcntl-macros.h
   - macro_name: POSIX_FADV_NOREUSE
     macro_header: fcntl-macros.h
   - macro_name: POSIX_FADV_DONTNEED
@@ -57,6 +63,15 @@ functions:
       - type: int
       - type: struct file_handle *
       - type: int
+  - name: sync_file_range
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: off_t
+      - type: off_t
+      - type: unsigned int
   - name: posix_fadvise
     standards:
       - posix
