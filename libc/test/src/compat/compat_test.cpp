@@ -27,6 +27,11 @@
 
 #include <sys/syscall.h>
 
+// The headers included above state the sixty four names as macros onto the
+// calls they name. This reaches the symbols themselves, which is what the
+// tests below are for.
+#include "src/compat/lfs64_undef.h"
+
 // unistd.h states syscall as a macro that dispatches to a fixed seven
 // arguments. The function of the same name is what anything already built
 // reaches for, so the macro is set aside to get at it.
@@ -104,11 +109,6 @@ TEST(LlvmLibcCompat, TheSixtyFourNamesAreTheOrdinaryCalls) {
   ASSERT_EQ(LIBC_NAMESPACE::lseek64(fd, 0, SEEK_END), static_cast<off_t>(10));
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
 }
-
-// The dirent names are stated as macros onto the calls they name, for the
-// sake of anything compiled against the header. The symbols have to be there
-// as well, for anything already built, and this reaches them the same way.
-#undef readdir64
 
 TEST(LlvmLibcCompat, TheSixtyFourNamesReachTheSameDirectoryCalls) {
   DIR *dir = LIBC_NAMESPACE::opendir(".");

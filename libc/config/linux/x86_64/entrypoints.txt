@@ -74,11 +74,15 @@ set(TARGET_LIBC_ENTRYPOINTS
     # gshadow.h entrypoints
     libc.src.gshadow.endsgent
     libc.src.gshadow.fgetsgent
+    libc.src.gshadow.fgetsgent_r
     libc.src.gshadow.getsgent
+    libc.src.gshadow.getsgent_r
     libc.src.gshadow.getsgnam
     libc.src.gshadow.getsgnam_r
     libc.src.gshadow.putsgent
     libc.src.gshadow.setsgent
+    libc.src.gshadow.sgetsgent
+    libc.src.gshadow.sgetsgent_r
 
     # shadow.h entrypoints
     libc.src.shadow.endspent
@@ -1655,6 +1659,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.compat.syscall
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.lfs64
+    libc.src.compat.progname
     libc.src.pthread.pthread_getthreadid_np
     libc.src.pthread.pthread_getunique_np
     libc.src.pthread.pthread_join
