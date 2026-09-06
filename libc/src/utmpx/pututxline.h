@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 struct utmpx *pututxline(const struct utmpx *utmpx);
 
+namespace internal {
+struct utmpx *pututxline_impl(const struct utmpx *utmpx);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_UTMPX_PUTUTXLINE_H
