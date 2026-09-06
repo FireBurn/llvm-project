@@ -1,0 +1,62 @@
+add_entrypoint_object(
+  openpty
+  SRCS
+    openpty.cpp
+  HDRS
+    openpty.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+    libc.hdr.types.struct_winsize
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.stdlib.linux.pty_utils
+    libc.src.string.string_utils
+    libc.src.termios.tcsetattr
+)
+
+add_entrypoint_object(
+  login_tty
+  SRCS
+    login_tty.cpp
+  HDRS
+    login_tty.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setsid
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  forkpty
+  SRCS
+    forkpty.cpp
+  HDRS
+    forkpty.h
+  DEPENDS
+    .login_tty
+    .openpty
+    libc.hdr.types.pid_t
+    libc.hdr.types.struct_termios
+    libc.hdr.types.struct_winsize
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.unistd.fork
+)
