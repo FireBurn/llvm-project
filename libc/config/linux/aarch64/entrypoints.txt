@@ -1432,6 +1432,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getstack_np
     libc.src.compat.__errno_location
     libc.src.compat.__xpg_strerror_r
+    libc.src.compat.gnu_get_libc_version
     libc.src.compat.lfs64
     libc.src.compat.syscall
     libc.src.pthread.pthread_getthreadid_np
@@ -1676,6 +1677,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.spawn.posix_spawnattr_setschedpolicy
     libc.src.spawn.posix_spawnattr_setsigdefault
     libc.src.spawn.posix_spawnattr_setsigmask
+    libc.src.spawn.posix_spawnp
 
     # search.h entrypoints
     libc.src.search.hcreate
