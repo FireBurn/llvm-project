@@ -18,6 +18,7 @@
 #include "hdr/stdio_macros.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/functional.h"
+#include "src/__support/CPP/optional.h"
 #include "src/__support/CPP/span.h"
 #include "src/__support/File/file.h"
 #include "src/__support/error_or.h"
@@ -30,6 +31,10 @@ namespace internal {
 struct ReadLineResult {
   size_t bytes_read;
   bool truncated;
+  // Nothing at all was there to read. A line holding only its newline reads
+  // as no bytes too, so the two have to be told apart: a blank line in the
+  // middle of a file is not the end of it.
+  bool at_end;
 };
 
 // Forward declaration of record parser for flat database files.
@@ -87,12 +92,14 @@ private:
     if (f->error_unlocked())
       return Error(EIO);
 
+    const bool at_end = bytes_read == 0;
+
     // If the line ended with a newline, strip it.
     if (!read_span.empty() && read_span.back() == '\n')
       --bytes_read;
 
     buf[bytes_read] = '\0';
-    return ReadLineResult{bytes_read, truncated};
+    return ReadLineResult{bytes_read, truncated, at_end};
   }
 
 public:
@@ -140,10 +147,11 @@ public:
   }
 
   // Reads the next line into |buffer|, without parsing it. Returns how many
-  // bytes it holds, or zero at the end of the file. This is for a caller
-  // which parses with something of its own, such as one which has to be
-  // reentrant and cannot use a parse which writes anywhere shared.
-  LIBC_INLINE ErrorOr<size_t> getline(cpp::span<char> buffer) {
+  // bytes it holds, or nothing at the end of the file. A line of its own
+  // holds no bytes either, which is why the end is reported separately. This
+  // is for a caller which parses with something of its own, such as one which
+  // has to be reentrant and cannot use a parse which writes anywhere shared.
+  LIBC_INLINE ErrorOr<cpp::optional<size_t>> getline(cpp::span<char> buffer) {
     if (!file) {
       auto res = setdb();
       if (!res.has_value())
@@ -155,9 +163,11 @@ public:
       return Error(result.error());
 
     ReadLineResult res = result.value();
+    if (res.at_end)
+      return cpp::optional<size_t>();
     if (res.truncated)
       return Error(ERANGE);
-    return res.bytes_read;
+    return cpp::optional<size_t>(res.bytes_read);
   }
 
   // Reads and parses the next record from the database. Returns true if an
@@ -177,11 +187,15 @@ public:
       return Error(result.error());
 
     ReadLineResult res = result.value();
-    if (res.bytes_read == 0)
-      return false; // EOF
+    if (res.at_end)
+      return false;
 
     if (res.truncated)
       return Error(ERANGE);
+
+    // A blank line is not a record and is not the end of the file either.
+    if (res.bytes_read == 0)
+      return getnext(entry, buffer);
 
     if (parse_line(buffer.first(res.bytes_read + 1), entry))
       return true;
