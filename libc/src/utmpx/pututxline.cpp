@@ -47,7 +47,9 @@ bool write_at(int fd, long offset, const struct utmpx *rec) {
 // appended otherwise. The search starts from where the iteration is, so a
 // caller which has just found the record it means to replace does not have
 // to go back to the start.
-LLVM_LIBC_FUNCTION(struct utmpx *, pututxline, (const struct utmpx *utmpx)) {
+namespace internal {
+
+struct utmpx *pututxline_impl(const struct utmpx *utmpx) {
   if (utmpx == nullptr) {
     libc_errno = EINVAL;
     return nullptr;
@@ -61,7 +63,7 @@ LLVM_LIBC_FUNCTION(struct utmpx *, pututxline, (const struct utmpx *utmpx)) {
     return nullptr;
 
   long offset = -1;
-  if (LIBC_NAMESPACE::getutxid(utmpx) != nullptr) {
+  if (internal::getutxid_impl(utmpx) != nullptr) {
     ErrorOr<off_t> after = linux_syscalls::lseek(utmpx_db::fd, 0, SEEK_CUR);
     if (after && *after >= static_cast<off_t>(sizeof(*utmpx)))
       offset = *after - static_cast<off_t>(sizeof(*utmpx));
@@ -84,6 +86,12 @@ LLVM_LIBC_FUNCTION(struct utmpx *, pututxline, (const struct utmpx *utmpx)) {
   linux_syscalls::lseek(utmpx_db::fd,
                         offset + static_cast<long>(sizeof(*utmpx)), SEEK_SET);
   return &utmpx_db::entry;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct utmpx *, pututxline, (const struct utmpx *utmpx)) {
+  return internal::pututxline_impl(utmpx);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
