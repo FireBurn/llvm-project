@@ -26,6 +26,41 @@ functions:
     return_type: struct sgrp *
     arguments:
       - type: void
+  - name: getsgent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct sgrp *
+      - type: char *
+      - type: size_t
+      - type: struct sgrp **
+  - name: fgetsgent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+      - type: struct sgrp *
+      - type: char *
+      - type: size_t
+      - type: struct sgrp **
+  - name: sgetsgent
+    standards:
+      - gnu
+    return_type: struct sgrp *
+    arguments:
+      - type: const char *
+  - name: sgetsgent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct sgrp *
+      - type: char *
+      - type: size_t
+      - type: struct sgrp **
   - name: getsgnam
     standards:
       - gnu
