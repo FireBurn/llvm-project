@@ -77,8 +77,18 @@ char **EnvironmentManager::get_array() {
 #ifdef LIBC_COPT_SUPPORT_ENVIRON
   // A program is allowed to point `environ` at an array of its own, and from
   // then on that is the environment.
-  if (environ != last_seen)
+  if (environ != last_seen) {
     adopt(environ);
+    return environ;
+  }
+  // It is also allowed to edit the array in place without moving it, which is
+  // what a program that drops variables it will not pass on does. The array
+  // ends where its null does, not where it ended last time, so the length is
+  // taken again rather than remembered.
+  count = 0;
+  if (environ != nullptr)
+    while (environ[count] != nullptr)
+      ++count;
   return environ;
 #else
   if (is_ours)
