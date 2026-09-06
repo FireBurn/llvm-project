@@ -10,6 +10,17 @@ target_compile_options(libc-test-dl-object PRIVATE
   -fPIC -fno-exceptions -fno-rtti)
 target_link_options(libc-test-dl-object PRIVATE -nostdlib)
 
+# Takes a mutex from a constructor, so it needs the library.
+add_library(libc-test-dl-lock-object SHARED dl_lock_object.cpp)
+target_include_directories(libc-test-dl-lock-object SYSTEM PRIVATE
+  ${LIBC_INCLUDE_DIR})
+target_compile_options(libc-test-dl-lock-object PRIVATE
+  -fPIC -ffreestanding -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-lock-object PRIVATE -nostdlib
+  -Wl,--dynamic-linker=$<TARGET_FILE:libc-loader>)
+target_link_libraries(libc-test-dl-lock-object PRIVATE libc-shared)
+add_dependencies(libc-test-dl-lock-object libc-headers)
+
 # DT_INIT and DT_FINI come from -init and -fini; nothing else asks for them.
 add_library(libc-test-dl-init-object SHARED dl_init_object.cpp)
 target_compile_options(libc-test-dl-init-object PRIVATE
@@ -119,4 +130,14 @@ add_libc_dynamic_test(
     -Wl,--export-dynamic
   DEPENDS
     libc-test-dl-init-object
+)
+
+add_libc_dynamic_test(
+  lock_in_init_test
+  SRCS
+    lock_in_init_test.cpp
+  LINK_LIBRARIES
+    libc-test-dl-lock-object
+  DEPENDS
+    libc-test-dl-lock-object
 )
