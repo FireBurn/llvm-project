@@ -67,6 +67,7 @@ libc_function(
     full_build_only = True,
     deps = [
         "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/OSUtil:exit_hdrs",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:thread_headers",
         "//libc/src/__support:common",
