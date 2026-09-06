@@ -18,4 +18,13 @@
 #include "linux/sys-statvfs-macros.h"
 #endif
 
+// The name large file support gave struct statvfs. LLVM-libc's ordinary
+// record is already the wide one, so the two name the same thing. This lives
+// with its own record rather than with the rest of the large file names so
+// that a translation unit which does not ask for it is left free to use the
+// name itself, as the kernel headers does.
+#if defined(_LARGEFILE64_SOURCE) || defined(_GNU_SOURCE)
+#define statvfs64 statvfs
+#endif
+
 #endif // LLVM_LIBC_MACROS_SYS_STATVFS_MACROS_H
