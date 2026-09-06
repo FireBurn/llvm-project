@@ -3,6 +3,13 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
 endif()
 
 add_entrypoint_object(
+  lutimes
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.lutimes
+)
+
+add_entrypoint_object(
   utimes
   ALIAS
   DEPENDS
