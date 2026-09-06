@@ -141,6 +141,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.netpacket_packet
     libc.include.pty
     libc.include.regex
+    libc.include.sys_klog
     libc.include.sys_ptrace
     libc.include.sys_vt
     libc.include.utmp
