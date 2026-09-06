@@ -232,6 +232,40 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
     return _POSIX_JOB_CONTROL;
   case _SC_SAVED_IDS:
     return _POSIX_SAVED_IDS;
+  case _SC_TIMERS:
+    return _POSIX_TIMERS;
+  case _SC_MONOTONIC_CLOCK:
+    return _POSIX_MONOTONIC_CLOCK;
+  case _SC_CLOCK_SELECTION:
+    return _POSIX_CLOCK_SELECTION;
+  case _SC_SEMAPHORES:
+    return _POSIX_SEMAPHORES;
+  case _SC_MAPPED_FILES:
+    return _POSIX_MAPPED_FILES;
+  case _SC_MEMORY_PROTECTION:
+    return _POSIX_MEMORY_PROTECTION;
+  case _SC_FSYNC:
+    return _POSIX_FSYNC;
+  case _SC_SYNCHRONIZED_IO:
+    return _POSIX_SYNCHRONIZED_IO;
+  case _SC_THREAD_SAFE_FUNCTIONS:
+    return _POSIX_THREAD_SAFE_FUNCTIONS;
+  case _SC_SHELL:
+    return _POSIX_SHELL;
+  case _SC_2_VERSION:
+    return _POSIX2_VERSION;
+  case _SC_XOPEN_VERSION:
+    return _XOPEN_VERSION;
+
+  // Limits which are fixed, and whose values <limits.h> already states.
+  case _SC_THREAD_DESTRUCTOR_ITERATIONS:
+    return PTHREAD_DESTRUCTOR_ITERATIONS;
+  case _SC_SEM_VALUE_MAX:
+    return SEM_VALUE_MAX;
+  case _SC_DELAYTIMER_MAX:
+    return DELAYTIMER_MAX;
+  case _SC_MQ_PRIO_MAX:
+    return MQ_PRIO_MAX;
 
   case _SC_AVPHYS_PAGES:
     return get_avphys_pages();
