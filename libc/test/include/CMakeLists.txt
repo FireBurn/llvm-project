@@ -210,6 +210,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_ipc_carried_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_ipc_carried_test.cpp
+  DEPENDS
+    libc.include.sys_msg
+    libc.include.sys_sem
+    libc.include.sys_shm
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
