@@ -100,4 +100,56 @@
 #define MOVE_MOUNT_SET_GROUP 0x00000100
 #define MOVE_MOUNT_BENEATH 0x00000200
 
+// The requests a block device takes. They are the kernel's, given here under
+// the names <sys/mount.h> is expected to carry rather than only in
+// <linux/fs.h>, and built from the same _IO macros the kernel builds them
+// from so that the numbers cannot drift apart.
+#include <linux/ioctl.h>
+
+#ifndef BLKROSET
+#define BLKROSET _IO(0x12, 93) // Set the device read only.
+#endif
+#ifndef BLKROGET
+#define BLKROGET _IO(0x12, 94) // Whether it is read only.
+#endif
+#ifndef BLKRRPART
+#define BLKRRPART _IO(0x12, 95) // Read the partition table again.
+#endif
+#ifndef BLKGETSIZE
+#define BLKGETSIZE _IO(0x12, 96) // The size in 512 byte sectors.
+#endif
+#ifndef BLKFLSBUF
+#define BLKFLSBUF _IO(0x12, 97) // Write back and drop the buffers.
+#endif
+#ifndef BLKRASET
+#define BLKRASET _IO(0x12, 98) // Set the read ahead.
+#endif
+#ifndef BLKRAGET
+#define BLKRAGET _IO(0x12, 99)
+#endif
+#ifndef BLKFRASET
+#define BLKFRASET _IO(0x12, 100) // Set the file system read ahead.
+#endif
+#ifndef BLKFRAGET
+#define BLKFRAGET _IO(0x12, 101)
+#endif
+#ifndef BLKSECTSET
+#define BLKSECTSET _IO(0x12, 102) // Set the maximum sectors per request.
+#endif
+#ifndef BLKSECTGET
+#define BLKSECTGET _IO(0x12, 103)
+#endif
+#ifndef BLKSSZGET
+#define BLKSSZGET _IO(0x12, 104) // The logical sector size.
+#endif
+#ifndef BLKBSZGET
+#define BLKBSZGET _IOR(0x12, 112, __SIZE_TYPE__)
+#endif
+#ifndef BLKBSZSET
+#define BLKBSZSET _IOW(0x12, 113, __SIZE_TYPE__)
+#endif
+#ifndef BLKGETSIZE64
+#define BLKGETSIZE64 _IOR(0x12, 114, __SIZE_TYPE__) // The size in bytes.
+#endif
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_MOUNT_MACROS_H
