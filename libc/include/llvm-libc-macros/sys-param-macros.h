@@ -53,4 +53,50 @@
 #endif
 #endif
 
+#ifndef MAXSYMLINKS
+#define MAXSYMLINKS 20
+#endif
+
+#ifndef MAXHOSTNAMELEN
+#define MAXHOSTNAMELEN 64
+#endif
+
+#ifndef NGROUPS
+#define NGROUPS 65536
+#endif
+
+#ifndef NOFILE
+#define NOFILE 256
+#endif
+
+#ifndef NCARGS
+#define NCARGS 131072
+#endif
+
+#ifndef CANBSIZ
+#define CANBSIZ 255
+#endif
+
+#ifndef DEV_BSIZE
+#define DEV_BSIZE 512
+#endif
+
+// Bit array operations, on an array of any type whose elements are NBBY bits
+// wide.
+#ifndef setbit
+#define setbit(a, i) ((a)[(i) / NBBY] |= 1 << ((i) % NBBY))
+#endif
+
+#ifndef clrbit
+#define clrbit(a, i) ((a)[(i) / NBBY] &= ~(1 << ((i) % NBBY)))
+#endif
+
+#ifndef isset
+#define isset(a, i) ((a)[(i) / NBBY] & (1 << ((i) % NBBY)))
+#endif
+
+#ifndef isclr
+#define isclr(a, i) (((a)[(i) / NBBY] & (1 << ((i) % NBBY))) == 0)
+#endif
+
 #endif // LLVM_LIBC_MACROS_SYS_PARAM_MACROS_H
