@@ -16,6 +16,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int tcsetattr(int fd, int actions, const termios *t);
 
+namespace internal {
+int tcsetattr_impl(int fd, int actions, const termios *t);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_TERMIOS_TCSETATTR_H
