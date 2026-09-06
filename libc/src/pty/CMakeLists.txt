@@ -1,0 +1,59 @@
+add_entrypoint_object(
+  openpty
+  SRCS
+    openpty.cpp
+  HDRS
+    openpty.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_termios
+    libc.hdr.types.struct_winsize
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.stdlib.grantpt
+    libc.src.stdlib.posix_openpt
+    libc.src.stdlib.ptsname_r
+    libc.src.stdlib.unlockpt
+    libc.src.string.string_utils
+    libc.src.sys.ioctl.ioctl
+    libc.src.termios.tcsetattr
+    libc.src.unistd.close
+)
+
+add_entrypoint_object(
+  login_tty
+  SRCS
+    login_tty.cpp
+  HDRS
+    login_tty.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.sys.ioctl.ioctl
+    libc.src.unistd.close
+    libc.src.unistd.dup2
+    libc.src.unistd.setsid
+)
+
+add_entrypoint_object(
+  forkpty
+  SRCS
+    forkpty.cpp
+  HDRS
+    forkpty.h
+  DEPENDS
+    .login_tty
+    .openpty
+    libc.hdr.types.pid_t
+    libc.hdr.types.struct_termios
+    libc.hdr.types.struct_winsize
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.unistd._exit
+    libc.src.unistd.close
+    libc.src.unistd.fork
+)
