@@ -676,6 +676,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  utmp_macros
+  HDR
+    utmp-macros.h
+)
+
+add_macro_header(
   utmpx_macros
   HDR
     utmpx-macros.h
