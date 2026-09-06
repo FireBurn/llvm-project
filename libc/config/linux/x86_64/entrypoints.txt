@@ -595,6 +595,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.times.times
 
     # sys/time.h entrypoints
+    libc.src.sys.time.lutimes
     libc.src.sys.time.utimes
 
     # sys/sysinfo.h entrypoints
