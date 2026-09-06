@@ -24493,6 +24493,42 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "termios_tcgetattr",
+    srcs = ["src/termios/linux/tcgetattr.cpp"],
+    hdrs = ["src/termios/tcgetattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_algorithm",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":hdr_termios_macros",
+        ":termios_kernel_termios",
+        ":termios_linux_speed_utils",
+        ":types_struct_termios",
+    ],
+)
+
+libc_support_library(
+    name = "termios_tcsetattr",
+    srcs = ["src/termios/linux/tcsetattr.cpp"],
+    hdrs = ["src/termios/tcsetattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_algorithm",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":hdr_termios_macros",
+        ":termios_kernel_termios",
+        ":termios_linux_speed_utils",
+        ":types_struct_termios",
+    ],
+)
+
+libc_support_library(
     name = "__support_time_units",
     hdrs = ["src/__support/time/units.h"],
     deps = [
@@ -24719,6 +24755,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_speed_t",
+    hdrs = ["include/llvm-libc-types/speed_t.h"],
+)
+
+libc_support_library(
+    name = "types_speed_t",
+    hdrs = ["hdr/types/speed_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_speed_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dirent",
     hdrs = ["include/llvm-libc-types/struct_dirent.h"],
 )
@@ -24784,6 +24834,20 @@ libc_support_library(
     hdrs = ["hdr/types/struct_utimbuf.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_utimbuf"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_winsize",
+    hdrs = ["include/llvm-libc-types/struct_winsize.h"],
+)
+
+libc_support_library(
+    name = "types_struct_winsize",
+    hdrs = ["hdr/types/struct_winsize.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_winsize"],
         "//conditions:default": [],
     }),
 )
@@ -26399,6 +26463,69 @@ libc_function(
 )
 
 libc_function(
+    name = "openpty",
+    srcs = ["src/pty/openpty.cpp"],
+    hdrs = ["src/pty/openpty.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_termios_macros",
+        ":stdlib_linux_pty_utils",
+        ":string_utils",
+        ":termios_tcsetattr",
+        ":types_struct_termios",
+        ":types_struct_winsize",
+    ],
+)
+
+libc_function(
+    name = "login_tty",
+    srcs = ["src/pty/login_tty.cpp"],
+    hdrs = ["src/pty/login_tty.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_dup2",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_osutil_linux_syscall_wrappers_setsid",
+        ":errno",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "forkpty",
+    srcs = ["src/pty/forkpty.cpp"],
+    hdrs = ["src/pty/forkpty.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_exit_hdrs",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":errno",
+        ":fork",
+        ":login_tty",
+        ":openpty",
+        ":types_pid_t",
+        ":types_struct_termios",
+        ":types_struct_winsize",
+    ],
+)
+
+libc_function(
     name = "regcomp",
     srcs = ["src/regex/regcomp.cpp"],
     hdrs = ["src/regex/regcomp.h", "src/regex/regex_engine.h", "src/regex/regex_parser.h"],
@@ -26822,6 +26949,17 @@ libc_function(
         ":types_id_t",
         ":types_idtype_t",
         ":types_siginfo_t",
+    ],
+)
+
+libc_support_library(
+    name = "termios_linux_speed_utils",
+    hdrs = ["src/termios/linux/speed_utils.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_termios_macros",
+        ":types_speed_t",
     ],
 )
 
