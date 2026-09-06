@@ -20686,6 +20686,19 @@ libc_function(
 )
 
 libc_function(
+    name = "vhangup",
+    srcs = ["src/unistd/linux/vhangup.cpp"],
+    hdrs = ["src/unistd/vhangup.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_vhangup",
+        ":unistd_vhangup",
+    ],
+)
+
+libc_function(
     name = "write",
     srcs = ["src/unistd/linux/write.cpp"],
     hdrs = ["src/unistd/write.h"],
@@ -24436,6 +24449,25 @@ libc_support_library(
     hdrs = ["src/stdlib/unlockpt.h"],
     deps = [
         ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_vhangup",
+    hdrs = ["src/unistd/vhangup.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_vhangup",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/vhangup.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
