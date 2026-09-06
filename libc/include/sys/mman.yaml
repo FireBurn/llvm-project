@@ -2,6 +2,10 @@ header: sys/mman.h
 standards:
   - posix
 macros:
+  - macro_name: MAP_FILE
+    macro_header: sys-mman-macros.h
+  - macro_name: MAP_ANON
+    macro_header: sys-mman-macros.h
   - macro_name: mmap64
     macro_header: lfs64-macros.h
   - macro_name: MAP_FAILED
