@@ -88,10 +88,13 @@ FileIOResult File::write_unlocked_impl(const void *data, size_t len) {
   prev_op = FileOp::WRITE;
 
   if (bufmode == _IONBF) { // unbuffered.
-    size_t ret_val =
+    // The whole result is kept rather than just the count: narrowing it to a
+    // size_t here threw the error away, so a write that failed came back
+    // looking like a short one with nothing said about why.
+    FileIOResult result =
         write_unlocked_nbf(static_cast<const uint8_t *>(data), len);
     flush_unlocked();
-    return ret_val;
+    return result;
   }
   if (bufmode == _IOFBF) // fully buffered
     return write_unlocked_fbf(static_cast<const uint8_t *>(data), len);
@@ -452,6 +455,10 @@ int File::flush_unlocked() {
     FileIOResult buf_result = platform_write(this, buf, pos);
     if (buf_result.has_error() || buf_result.value < pos) {
       err = true;
+      // What could not be written is let go of rather than kept to be tried
+      // again. A second attempt would write whatever the first one did manage
+      // a second time, and the error is already recorded for the caller.
+      pos = 0;
       return buf_result.error;
     }
     pos = 0;
