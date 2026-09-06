@@ -21838,6 +21838,11 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "hdr_types_dl_info",
+    hdrs = ["hdr/types/dl_info.h"],
+)
+
 libc_function(
     name = "__tls_get_addr",
     srcs = ["src/tls/tls_get_addr.cpp"],
@@ -21867,5 +21872,19 @@ libc_function(
         ":dlfcn_dl_internal",
         ":hdr_stdint_proxy",
         ":types_struct_dl_phdr_info",
+    ],
+)
+
+libc_function(
+    name = "dladdr",
+    srcs = ["src/dlfcn/dladdr.cpp"],
+    hdrs = ["src/dlfcn/dladdr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":hdr_types_dl_info",
     ],
 )
