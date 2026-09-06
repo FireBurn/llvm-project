@@ -203,7 +203,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
-
 add_libc_test(
   fileno_test
   SUITE
@@ -841,6 +840,9 @@ add_libc_test(
     libc.src.stdio.putc_unlocked
     libc.src.stdio.putchar_unlocked
     libc.src.stdio.remove
+    libc.src.stdio.setbuffer
+    libc.src.stdio.setlinebuf
+    libc.src.stdio_ext.__flbf
     libc.src.string.memcmp
 )
 
