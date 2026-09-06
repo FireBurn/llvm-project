@@ -96,6 +96,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "lstat",
+    srcs = ["linux/lstat.cpp"],
+    hdrs = ["lstat.h"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
     name = "sys_stat_stat",
     hdrs = ["stat.h"],
     deps = [
