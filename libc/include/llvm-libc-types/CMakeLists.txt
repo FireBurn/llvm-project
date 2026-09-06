@@ -435,6 +435,7 @@ add_header(uint_ur_t HDR uint_ur_t.h)
 # ELF
 add_header(Elf32_Addr HDR Elf32_Addr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf32_Half HDR Elf32_Half.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(Elf32_Section HDR Elf32_Section.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf32_Lword HDR Elf32_Lword.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf32_Off HDR Elf32_Off.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf32_Sword HDR Elf32_Sword.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
@@ -553,6 +554,7 @@ add_header(
 
 add_header(Elf64_Addr HDR Elf64_Addr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf64_Half HDR Elf64_Half.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(Elf64_Section HDR Elf64_Section.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf64_Lword HDR Elf64_Lword.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf64_Off HDR Elf64_Off.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(Elf64_Sword HDR Elf64_Sword.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
@@ -589,6 +591,12 @@ add_header(
     .Elf64_Word
 )
 add_header(Elf64_Nhdr HDR Elf64_Nhdr.h DEPENDS .Elf64_Word)
+add_header(Elf32_Move HDR Elf32_Move.h DEPENDS .Elf32_Xword .Elf32_Word .Elf32_Half)
+add_header(Elf32_Lib HDR Elf32_Lib.h DEPENDS .Elf32_Word)
+add_header(Elf32_Syminfo HDR Elf32_Syminfo.h DEPENDS .Elf32_Half)
+add_header(Elf64_Move HDR Elf64_Move.h DEPENDS .Elf64_Xword .Elf64_Half)
+add_header(Elf64_Lib HDR Elf64_Lib.h DEPENDS .Elf64_Word)
+add_header(Elf64_Syminfo HDR Elf64_Syminfo.h DEPENDS .Elf64_Half)
 add_header(
   Elf64_Phdr
   HDR
