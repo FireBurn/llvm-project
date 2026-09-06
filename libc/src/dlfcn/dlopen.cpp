@@ -193,6 +193,9 @@ void run_init_array(const elf::Module &module) {
 
 } // anonymous namespace
 
+namespace internal {
+
+void *dlopen_impl(const char *path, int mode) {
 LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
   // The run path that applies is the one belonging to whatever called, which
   // is found from where the call is returning to. Taken before anything else,
@@ -338,6 +341,12 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
   for (size_t i = set.count; i > first; --i)
     run_init_array(set.modules[i - 1]);
   return dl::handle_for(first);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int mode)) {
+  return internal::dlopen_impl(path, mode);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
