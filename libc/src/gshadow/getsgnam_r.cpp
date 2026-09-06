@@ -60,7 +60,7 @@ LLVM_LIBC_FUNCTION(int, getsgnam_r,
     if (!read.value())
       break; // The end of the file, and no match is not an error.
 
-    if (!gshadow::parse_line_into(split.line.first(read.value() + 1), sgbuf,
+    if (!gshadow::parse_line_into(split.line.first(*read.value() + 1), sgbuf,
                                   split.admins, split.max_admins, split.members,
                                   split.max_members))
       continue; // A line which will not parse is passed over.
