@@ -7,6 +7,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/__support/threads/thread.h"
+#include "hdr/limits_macros.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/mutex.h"
 
@@ -168,11 +169,27 @@ void call_thread_local_dtors(ThreadAttributes *attrib) {
 
 void call_atexit_callbacks(ThreadAttributes *attrib) {
   call_thread_local_dtors(attrib);
-  for (size_t i = 0; i < TSS_KEY_COUNT; ++i) {
-    TSSValueUnit &unit = tss_values[i];
-    // Both dtor and value need to nonnull to call dtor
-    if (unit.dtor != nullptr && unit.payload != nullptr)
-      unit.dtor(unit.payload);
+
+  // POSIX has the value set to null before its destructor is called, and the
+  // whole sweep repeated while any destructor has set a value again, up to
+  // PTHREAD_DESTRUCTOR_ITERATIONS times. A destructor which has to run after
+  // the others relies on exactly that: it puts its value back and waits to be
+  // called again. Sweeping once, and leaving the value in place while doing
+  // it, never calls such a destructor's real work at all.
+  for (unsigned round = 0; round < PTHREAD_DESTRUCTOR_ITERATIONS; ++round) {
+    bool called_any = false;
+    for (size_t i = 0; i < TSS_KEY_COUNT; ++i) {
+      TSSValueUnit &unit = tss_values[i];
+      // Both the value and the destructor have to be there.
+      if (unit.dtor == nullptr || unit.payload == nullptr)
+        continue;
+      void *payload = unit.payload;
+      unit.payload = nullptr;
+      unit.dtor(payload);
+      called_any = true;
+    }
+    if (!called_any)
+      break;
   }
 }
 
