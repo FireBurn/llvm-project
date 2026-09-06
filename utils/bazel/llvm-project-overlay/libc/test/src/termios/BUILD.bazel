@@ -11,6 +11,25 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "termios_test",
+    srcs = ["termios_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr:termios_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/termios:cfgetispeed",
+        "//libc/src/termios:cfgetospeed",
+        "//libc/src/termios:cfsetispeed",
+        "//libc/src/termios:cfsetospeed",
+        "//libc/src/termios:cfsetspeed",
+        "//libc/src/termios:tcgetattr",
+        "//libc/src/termios:tcgetsid",
+        "//libc/src/termios:tcsetattr",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_test(
     name = "cfmakeraw_test",
     srcs = ["cfmakeraw_test.cpp"],
     deps = [
