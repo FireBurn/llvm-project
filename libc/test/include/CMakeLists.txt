@@ -150,6 +150,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_kd_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_kd_test.cpp
+  DEPENDS
+    libc.include.sys_kd
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
