@@ -19,6 +19,10 @@ bool register_atfork_callbacks(ForkCallback *prepare_cd,
                                ForkCallback *parent_cb, ForkCallback *child_cb);
 void invoke_prepare_callbacks();
 void invoke_parent_callbacks();
+
+// Gives back the lock invoke_prepare_callbacks took, where the fork it was
+// taken for did not happen.
+void release_atfork_lock();
 void invoke_child_callbacks();
 
 } // namespace LIBC_NAMESPACE_DECL
