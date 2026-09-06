@@ -1353,6 +1353,7 @@ add_header_macro(
     .llvm-libc-types.pthread_rwlock_t
     .llvm-libc-types.pthread_rwlockattr_t
     .llvm-libc-types.pthread_t
+    .llvm-libc-types.quad_t
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
     .llvm-libc-types.suseconds_t
@@ -1362,8 +1363,10 @@ add_header_macro(
     .llvm-libc-types.u_int
     .llvm-libc-types.u_int16_t
     .llvm-libc-types.u_int32_t
+    .llvm-libc-types.u_int64_t
     .llvm-libc-types.u_int8_t
     .llvm-libc-types.u_long
+    .llvm-libc-types.u_quad_t
     .llvm-libc-types.u_short
     .llvm-libc-types.uid_t
     .llvm-libc-types.uint
