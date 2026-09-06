@@ -120,6 +120,75 @@ libc_function(
 )
 
 libc_function(
+    name = "getsgent_r",
+    srcs = ["getsgent_r.cpp"],
+    hdrs = ["getsgent_r.h"],
+    deps = [
+        ":gshadow_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_sgrp",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "sgetsgent_r",
+    srcs = ["sgetsgent_r.cpp"],
+    hdrs = ["sgetsgent_r.h"],
+    deps = [
+        ":gshadow_r_utils",
+        ":gshadow_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_sgrp",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "sgetsgent",
+    srcs = ["sgetsgent.cpp"],
+    hdrs = ["sgetsgent.h"],
+    deps = [
+        ":gshadow_utils",
+        ":sgetsgent_r",
+        "//libc/hdr/types:struct_sgrp",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "fgetsgent_r",
+    srcs = ["fgetsgent_r.cpp"],
+    hdrs = ["fgetsgent_r.h"],
+    deps = [
+        ":gshadow_r_utils",
+        ":gshadow_utils",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_sgrp",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdio:fgets",
+        "//libc/src/stdio:stdio_fgets",
+    ],
+)
+
+libc_function(
     name = "putsgent",
     srcs = ["putsgent.cpp"],
     hdrs = ["putsgent.h"],
