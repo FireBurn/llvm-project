@@ -123,6 +123,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  ctermid_test
+  SUITE
+    libc-stdio-tests
+  SRCS
+    ctermid_test.cpp
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.src.stdio.ctermid
+)
+
+add_libc_test(
   unlocked_fileop_test
   SUITE
     libc-stdio-tests
