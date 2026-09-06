@@ -57,3 +57,13 @@ add_libc_dynamic_test(
   DEPENDS
     libc-test-dl-object
 )
+
+add_libc_dynamic_test(
+  dladdr_test
+  SRCS
+    dladdr_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
+  DEPENDS
+    libc-test-dl-object
+)
