@@ -125,6 +125,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  error
+  ../libc/include/error.yaml
+  error.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.__error_progname_t
+)
+
+add_header_macro(
   features
   ../libc/include/features.yaml
   features.h
