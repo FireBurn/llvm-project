@@ -90,6 +90,13 @@ functions:
     arguments:
       - type: struct termios *
       - type: speed_t
+  - name: cfsetspeed
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: struct termios *
+      - type: speed_t
   - name: cfsetospeed
     standards:
       - posix
