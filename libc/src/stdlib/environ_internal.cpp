@@ -257,6 +257,38 @@ int EnvironmentManager::set(cpp::string_view name, cpp::string_view value,
   return 0;
 }
 
+int EnvironmentManager::clear() {
+  // The array has to become ours before anything in it can be freed, since
+  // nothing may be freed which the startup code or the program provided.
+  if (!ensure_capacity(count))
+    return -1;
+
+  char **env_array = get_array();
+  for (size_t i = 0; i < count; ++i) {
+    if (ownership[i].can_free())
+      delete[] env_array[i];
+    env_array[i] = nullptr;
+    ownership[i] = EnvStringOwnership();
+  }
+
+  delete[] storage;
+  delete[] ownership;
+  storage = nullptr;
+  ownership = nullptr;
+  capacity = 0;
+  count = 0;
+  is_ours = false;
+
+  // There is no environment at all afterwards, rather than an empty one,
+  // which is what a program which looks at `environ` itself expects to see.
+  app.env_ptr = nullptr;
+#ifdef LIBC_COPT_SUPPORT_ENVIRON
+  environ = nullptr;
+#endif
+  last_seen = nullptr;
+  return 0;
+}
+
 int EnvironmentManager::unset(cpp::string_view name) {
   cpp::optional<size_t> idx = find_var(name);
   if (!idx)
