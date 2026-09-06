@@ -220,6 +220,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
     libc_header_info("utime"),
+    libc_header_info("utmp"),
     libc_header_info("utmpx"),
     libc_header_info(
         "wait",
@@ -29001,6 +29002,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_utmp",
+    hdrs = ["include/llvm-libc-types/struct_utmp.h"],
+)
+
+libc_support_library(
+    name = "types_struct_utmp",
+    hdrs = ["hdr/types/struct_utmp.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_utmp"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_utmpx",
     hdrs = ["include/llvm-libc-types/struct_utmpx.h"],
 )
@@ -34251,6 +34266,218 @@ libc_function(
         ":hdr_fcntl_macros",
         ":types_struct_timespec",
         ":types_struct_utimbuf",
+    ],
+)
+
+libc_support_library(
+    name = "utmp_utmp_record",
+    hdrs = ["src/utmp/utmp_record.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":types_struct_utmpx",
+    ],
+)
+
+libc_support_library(
+    name = "utmp_utmp_fill",
+    hdrs = ["src/utmp/utmp_fill.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":hdr_time_macros",
+        ":types_size_t",
+        ":types_struct_utmp",
+    ],
+)
+
+libc_function(
+    name = "setutent",
+    srcs = ["src/utmp/setutent.cpp"],
+    hdrs = ["src/utmp/setutent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "endutent",
+    srcs = ["src/utmp/endutent.cpp"],
+    hdrs = ["src/utmp/endutent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "getutent",
+    srcs = ["src/utmp/getutent.cpp"],
+    hdrs = ["src/utmp/getutent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":utmp_utmp_record",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "getutid",
+    srcs = ["src/utmp/getutid.cpp"],
+    hdrs = ["src/utmp/getutid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutxid",
+        ":types_struct_utmp",
+        ":utmp_utmp_record",
+    ],
+)
+
+libc_function(
+    name = "getutline",
+    srcs = ["src/utmp/getutline.cpp"],
+    hdrs = ["src/utmp/getutline.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutxline",
+        ":types_struct_utmp",
+        ":utmp_utmp_record",
+    ],
+)
+
+libc_function(
+    name = "pututline",
+    srcs = ["src/utmp/pututline.cpp"],
+    hdrs = ["src/utmp/pututline.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pututxline",
+        ":types_struct_utmp",
+        ":utmp_utmp_record",
+    ],
+)
+
+libc_function(
+    name = "utmpname",
+    srcs = ["src/utmp/utmpname.cpp"],
+    hdrs = ["src/utmp/utmpname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "updwtmp",
+    srcs = ["src/utmp/updwtmp.cpp"],
+    hdrs = ["src/utmp/updwtmp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_struct_utmp",
+        ":updwtmpx",
+        ":utmp_utmp_record",
+    ],
+)
+
+libc_function(
+    name = "getutent_r",
+    srcs = ["src/utmp/getutent_r.cpp"],
+    hdrs = ["src/utmp/getutent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutent",
+        ":string_memory_utils",
+        ":types_struct_utmp",
+    ],
+)
+
+libc_function(
+    name = "getutid_r",
+    srcs = ["src/utmp/getutid_r.cpp"],
+    hdrs = ["src/utmp/getutid_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutid",
+        ":string_memory_utils",
+        ":types_struct_utmp",
+    ],
+)
+
+libc_function(
+    name = "getutline_r",
+    srcs = ["src/utmp/getutline_r.cpp"],
+    hdrs = ["src/utmp/getutline_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutline",
+        ":string_memory_utils",
+        ":types_struct_utmp",
+    ],
+)
+
+libc_function(
+    name = "logwtmp",
+    srcs = ["src/utmp/logwtmp.cpp"],
+    hdrs = ["src/utmp/logwtmp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":types_struct_utmp",
+        ":updwtmp",
+        ":utmp_utmp_fill",
+    ],
+)
+
+libc_function(
+    name = "login",
+    srcs = ["src/utmp/login.cpp"],
+    hdrs = ["src/utmp/login.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":pututline",
+        ":string_memory_utils",
+        ":ttyname_r",
+        ":types_struct_utmp",
+        ":updwtmp",
+        ":utmp_utmp_fill",
+        ":utmpx_utmpx_db",
+    ],
+)
+
+libc_function(
+    name = "logout",
+    srcs = ["src/utmp/logout.cpp"],
+    hdrs = ["src/utmp/logout.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getutline",
+        ":pututline",
+        ":string_memory_utils",
+        ":types_struct_utmp",
+        ":utmp_utmp_fill",
+        ":utmpx_utmpx_db",
     ],
 )
 
