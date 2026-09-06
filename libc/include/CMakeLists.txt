@@ -1120,6 +1120,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_ttydefaults
+  ../libc/include/sys/ttydefaults.yaml
+  sys/ttydefaults.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_ttydefaults_macros
+)
+
+add_header_macro(
   sys_times
   ../libc/include/sys/times.yaml
   sys/times.h
