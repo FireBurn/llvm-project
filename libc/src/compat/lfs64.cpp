@@ -41,6 +41,8 @@
 #include "src/sys/statfs/statfs.h"
 #include "src/sys/statvfs/fstatvfs.h"
 #include "src/sys/statvfs/statvfs.h"
+#include "src/sys/uio/preadv.h"
+#include "src/sys/uio/pwritev.h"
 #include "src/unistd/ftruncate.h"
 #include "src/unistd/lseek.h"
 #include "src/unistd/pread.h"
@@ -48,6 +50,9 @@
 #include "src/unistd/truncate.h"
 
 #include <stdarg.h>
+
+// Brought back by the headers included above.
+#include "src/compat/lfs64_undef.h"
 
 // dirent.h states these as macros onto the calls they name, which serves
 // anything compiled against it. The symbols themselves still have to be here
@@ -133,6 +138,18 @@ LLVM_LIBC_FUNCTION(ssize_t, pread64,
 LLVM_LIBC_FUNCTION(ssize_t, pwrite64,
                    (int fd, const void *buf, size_t count, off_t offset)) {
   return LIBC_NAMESPACE::pwrite(fd, buf, count, offset);
+}
+
+LLVM_LIBC_FUNCTION(ssize_t, preadv64,
+                   (int fd, const struct iovec *iov, int iovcnt,
+                    off_t offset)) {
+  return LIBC_NAMESPACE::preadv(fd, iov, iovcnt, offset);
+}
+
+LLVM_LIBC_FUNCTION(ssize_t, pwritev64,
+                   (int fd, const struct iovec *iov, int iovcnt,
+                    off_t offset)) {
+  return LIBC_NAMESPACE::pwritev(fd, iov, iovcnt, offset);
 }
 
 LLVM_LIBC_FUNCTION(struct dirent *, readdir64, (DIR * dir)) {
