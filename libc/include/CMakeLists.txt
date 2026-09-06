@@ -320,6 +320,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  lastlog
+  ../libc/include/lastlog.yaml
+  lastlog.h
+  DEPENDS
+    .llvm_libc_common_h
+    .utmp
+)
+
+add_header_macro(
   utmpx
   ../libc/include/utmpx.yaml
   utmpx.h
