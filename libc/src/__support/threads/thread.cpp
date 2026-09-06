@@ -144,14 +144,18 @@ int add_thread_atexit_callback(AtExitCallback *callback, void *obj) {
 }
 namespace internal {
 
+void call_thread_local_dtors() {
+  // thread exit callbacks (__cxa_thread_atexit).
+  atexit_callback_mgr.call();
+}
+
 void call_atexit_callbacks() {
   // Cancellation cleanup handlers (pthread_cleanup_push).
   __pthread_cleanup_frame *frame;
   while ((frame = current_thread().attrib->cleanup_stack.pop()) != nullptr)
     frame->__routine(frame->__arg);
 
-  // thread exit callbacks (__cxa_thread_atexit).
-  atexit_callback_mgr.call();
+  call_thread_local_dtors();
 
   // Thread-specific keys (pthread_key_create).
   for (size_t iter = 0; iter < PTHREAD_DESTRUCTOR_ITERATIONS; ++iter) {
