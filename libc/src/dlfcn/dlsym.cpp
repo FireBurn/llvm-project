@@ -8,6 +8,7 @@
 
 #include "dlsym.h"
 
+#include "hdr/stdint_proxy.h"
 #include "src/__support/CPP/mutex.h"
 #include "src/__support/common.h"
 #include "src/__support/elf/bind.h"
@@ -19,13 +20,21 @@ namespace LIBC_NAMESPACE_DECL {
 
 namespace {
 
-// The first definition of name in the program's scope, in load order.
-void *search_scope(const elf::ModuleSet &set, const char *name) {
-  for (size_t i = 0; i < set.count; ++i) {
+// <dlfcn.h> states the two of these as values rather than in a header this
+// can include, so they are named here rather than spelled out at the tests
+// below.
+constexpr void *DEFAULT_HANDLE = nullptr;
+constexpr uintptr_t NEXT_HANDLE = static_cast<uintptr_t>(-1l);
+
+// The first module at or after `from` which defines `name`. Returns nothing
+// when none does.
+void *search_from(const elf::ModuleSet &set, size_t from, const char *name) {
+  for (size_t i = from; i < set.count; ++i) {
     const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name);
-    if (symbol != nullptr && symbol->st_shndx != SHN_UNDEF)
-      return reinterpret_cast<void *>(set.modules[i].load_bias() +
-                                      symbol->st_value);
+    if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
+      continue;
+    return reinterpret_cast<void *>(set.modules[i].load_bias() +
+                                    symbol->st_value);
   }
   return nullptr;
 }
@@ -34,6 +43,11 @@ void *search_scope(const elf::ModuleSet &set, const char *name) {
 
 LLVM_LIBC_FUNCTION(void *, dlsym,
                    (void *__restrict handle, const char *__restrict name)) {
+  // Which module the call is returning to, for RTLD_NEXT. Taken before
+  // anything else, so nothing stands between this and the caller.
+  const ElfW(Addr) caller =
+      reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
+
   elf::ModuleSet *modules = elf::process_modules();
   cpp::lock_guard lock(dl::dl_mutex);
 
@@ -47,6 +61,31 @@ LLVM_LIBC_FUNCTION(void *, dlsym,
     return nullptr;
   }
 
+  // Every module, in the order they were loaded, which is the order a lookup
+  // through the program's own scope goes in.
+  if (handle == DEFAULT_HANDLE) {
+    if (void *found = search_from(set, 0, name))
+      return found;
+    dl::set_error("symbol not found");
+    return nullptr;
+  }
+
+  // Everything after whatever called, which is how a wrapper reaches the
+  // definition it is standing in front of.
+  if (reinterpret_cast<uintptr_t>(handle) == NEXT_HANDLE) {
+    size_t after = set.count;
+    for (size_t i = 0; i < set.count; ++i) {
+      if (set.modules[i].contains(caller)) {
+        after = i + 1;
+        break;
+      }
+    }
+    if (void *found = search_from(set, after, name))
+      return found;
+    dl::set_error("symbol not found");
+    return nullptr;
+  }
+
   size_t index = 0;
   if (!dl::index_for(handle, index)) {
     dl::set_error("dlsym was given a handle that dlopen did not return");
@@ -57,7 +96,7 @@ LLVM_LIBC_FUNCTION(void *, dlsym,
   // program, and a lookup through that is a lookup through the whole of the
   // program's scope rather than the executable on its own.
   if (index == 0) {
-    if (void *found = search_scope(set, name))
+    if (void *found = search_from(set, 0, name))
       return found;
     dl::set_error("symbol not found");
     return nullptr;
