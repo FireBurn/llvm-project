@@ -1108,6 +1108,8 @@ add_header_macro(
     .llvm-libc-macros.time_macros
     .llvm-libc-types.struct_timespec
     .llvm-libc-types.struct_timezone
+    .llvm-libc-types.suseconds_t
+    .llvm-libc-types.time_t
 )
 
 add_header_macro(
