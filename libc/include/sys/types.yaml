@@ -17,6 +17,9 @@ types:
   - type_name: id_t
   - type_name: ino_t
   - type_name: ino64_t
+  - type_name: blkcnt64_t
+  - type_name: fsblkcnt64_t
+  - type_name: fsfilcnt64_t
   - type_name: key_t
   - type_name: loff_t
   - type_name: mode_t

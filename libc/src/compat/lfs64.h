@@ -22,13 +22,7 @@
 #include "include/llvm-libc-types/struct_statvfs.h"
 #include "src/__support/macros/config.h"
 
-// dirent.h states these as macros onto the calls they name, which serves
-// anything compiled against it. The symbols themselves still have to be here
-// for anything already built, so the macros are set aside to define them.
-#undef readdir64
-#undef scandir64
-#undef alphasort64
-#undef versionsort64
+#include "src/compat/lfs64_undef.h"
 
 namespace LIBC_NAMESPACE_DECL {
 

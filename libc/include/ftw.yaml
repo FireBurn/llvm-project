@@ -2,6 +2,10 @@ header: ftw.h
 standards:
   - posix
 macros:
+  - macro_name: ftw64
+    macro_header: lfs64-macros.h
+  - macro_name: nftw64
+    macro_header: lfs64-macros.h
   - macro_name: FTW_F
     macro_header: ftw-macros.h
   - macro_name: FTW_D
