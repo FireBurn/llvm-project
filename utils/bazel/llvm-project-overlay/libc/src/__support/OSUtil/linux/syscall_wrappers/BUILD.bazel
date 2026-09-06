@@ -2770,6 +2770,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "syslog",
+    hdrs = ["syslog.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "setgid",
     hdrs = ["setgid.h"],
     deps = [
