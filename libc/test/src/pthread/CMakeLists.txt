@@ -117,3 +117,21 @@ add_libc_test(
     libc.src.sched.__sched_setcpuset
     libc.src.string.memset
 )
+
+add_libc_test(
+  pthread_kill_test
+  SUITE
+    libc_pthread_unittests
+  SRCS
+    pthread_kill_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.include.pthread
+    libc.src.pthread.pthread_attr_destroy
+    libc.src.pthread.pthread_attr_getstack
+    libc.src.pthread.pthread_getattr_np
+    libc.src.pthread.pthread_kill
+    libc.src.pthread.pthread_self
+    libc.src.signal.signal
+)
