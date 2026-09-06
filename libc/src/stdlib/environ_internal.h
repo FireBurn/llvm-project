@@ -150,6 +150,11 @@ public:
   // compacts the array. Returns 0 on success (including if the variable
   // was not found), -1 on allocation failure during array transition.
   int unset(cpp::string_view name);
+
+  // Removes everything, freeing what is ours, and leaves the environment as
+  // an empty array rather than as no array at all, so that anything holding
+  // `environ` still has something to read.
+  int clear();
 };
 
 } // namespace internal
