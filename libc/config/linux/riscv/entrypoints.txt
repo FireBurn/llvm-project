@@ -44,6 +44,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.err.vwarn
     libc.src.err.warnx
     libc.src.err.vwarnx
+    libc.src.error.error
+    libc.src.error.error_at_line
+    libc.src.error.error_message_count
+    libc.src.error.error_one_per_line
+    libc.src.error.error_print_progname
 
     # errno.h entrypoints
     libc.src.errno.errno
