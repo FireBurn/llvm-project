@@ -97,8 +97,12 @@ static TLSDescriptor tls;
   while (*env_end_marker)
     ++env_end_marker;
 
-  // Initialize the POSIX global declared in unistd.h
-  environ = reinterpret_cast<char **>(env_ptr);
+  // The POSIX global declared in unistd.h. Where there is a loader it has
+  // already set this, before running the initialisers of everything it
+  // loaded, so that they could read the environment and change it. Whatever
+  // they made of it stands.
+  if (environ == nullptr)
+    environ = reinterpret_cast<char **>(env_ptr);
 
   if (app.args->argc > 0 && app.args->argv[0] != 0) {
     program_invocation_name = reinterpret_cast<char *>(app.args->argv[0]);
