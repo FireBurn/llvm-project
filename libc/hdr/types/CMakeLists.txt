@@ -1568,6 +1568,15 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_utmp
+  HDRS
+    struct_utmp.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_utmp
+    libc.include.llvm-libc-macros.utmp_macros
+)
+
+add_proxy_header_library(
   struct_timex
   HDRS
     struct_timex.h
