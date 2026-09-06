@@ -672,6 +672,22 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_kill
+  SRCS
+    pthread_kill.cpp
+  HDRS
+    pthread_kill.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.include.pthread
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
   pthread_self
   SRCS
     pthread_self.cpp
