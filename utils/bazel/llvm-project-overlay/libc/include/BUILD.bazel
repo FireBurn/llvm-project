@@ -41,6 +41,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("getopt"),
     libc_header_info("gshadow"),
     libc_header_info("iconv"),
+    libc_header_info("ifaddrs"),
     libc_header_info(
         "link",
     ),
@@ -1038,6 +1039,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_group_source_req",
     hdrs = ["llvm-libc-types/struct_group_source_req.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ifaddrs",
+    hdrs = ["llvm-libc-types/struct_ifaddrs.h"],
 )
 
 libc_support_library(
