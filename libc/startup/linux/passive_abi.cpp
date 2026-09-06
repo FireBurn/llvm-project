@@ -36,6 +36,7 @@ LIBC_NAMESPACE::elf::ModuleSet __llvm_libc_process_modules = {
     /*static_count=*/0,
     /*generation=*/1,
     LIBC_NAMESPACE::elf::MAX_PROCESS_MODULES,
+    /*grown=*/false,
     /*page_size=*/4096,
     /*linked=*/false};
 
