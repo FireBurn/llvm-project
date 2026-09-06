@@ -30349,6 +30349,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_posix_fadvise",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/posix_fadvise.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_bit",
+        ":__support_cpp_limits",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_setgroups",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgroups.h"],
     deps = [
@@ -30793,6 +30808,18 @@ libc_function(
         ":error_one_per_line",
         ":error_report",
         ":string_memory_utils",
+    ],
+)
+
+libc_function(
+    name = "posix_fadvise",
+    srcs = ["src/fcntl/linux/posix_fadvise.cpp"],
+    hdrs = ["src/fcntl/posix_fadvise.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_posix_fadvise",
+        ":types_off_t",
     ],
 )
 
