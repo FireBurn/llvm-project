@@ -72,6 +72,16 @@ public:
         recursive(is_recursive), robust(is_robust), pshared(is_pshared),
         error_checking(is_error_checking), owner(0), lock_count(0) {}
 
+  // Puts the lock back to how it started, for the one thread of a process
+  // which inherited it locked by a thread the fork did not carry over. Not
+  // for anything else: it does not wake whoever was waiting, because in a
+  // freshly forked child there is nobody to wake.
+  LIBC_INLINE static void init(Mutex *lock) {
+    RawMutex::init(lock);
+    lock->owner.store(0);
+    lock->lock_count = 0;
+  }
+
   LIBC_INLINE static MutexError destroy(Mutex *lock) {
     LIBC_ASSERT(lock->owner == 0 && lock->lock_count == 0 &&
                 "Mutex destroyed while being locked.");
