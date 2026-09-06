@@ -408,6 +408,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.syslog.vsyslog
     libc.src.stdio.renameat2
 
+    # execinfo.h entrypoints
+    libc.src.execinfo.backtrace
+    libc.src.execinfo.backtrace_symbols
+    libc.src.execinfo.backtrace_symbols_fd
+
     # utmp.h entrypoints
     libc.src.utmp.endutent
     libc.src.utmp.getutent
@@ -742,6 +747,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.dup
     libc.src.unistd.dup2
     libc.src.unistd.dup3
+    libc.src.unistd.endusershell
     libc.src.unistd.execle
     libc.src.unistd.execve
     libc.src.unistd.faccessat
@@ -775,6 +781,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.gettid
     libc.src.unistd.getgid
     libc.src.unistd.getuid
+    libc.src.unistd.getusershell
     libc.src.unistd.isatty
     libc.src.unistd.issetugid
     libc.src.unistd.lchown
@@ -799,6 +806,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.setpgid
     libc.src.unistd.setpgrp
     libc.src.unistd.setsid
+    libc.src.unistd.setusershell
     libc.src.unistd.sleep
     libc.src.unistd.symlink
     libc.src.unistd.symlinkat
