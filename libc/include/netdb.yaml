@@ -1,4 +1,9 @@
 header: netdb.h
+public_includes:
+  # The addresses the lookups answer with are the ones this declares, and a
+  # program that includes only this to reach them finds them here as it does
+  # elsewhere.
+  - netinet/in.h
 standards:
   - posix
 macros:
