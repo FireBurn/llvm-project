@@ -850,6 +850,12 @@ functions:
     return_type: int
     arguments:
       - type: useconds_t
+  - name: vhangup
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: void
   - name: write
     standards:
       - posix

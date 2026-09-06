@@ -777,6 +777,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.unlink
     libc.src.unistd.unlinkat
     libc.src.unistd.usleep
+    libc.src.unistd.vhangup
     libc.src.unistd.write
 
     # uchar.h entrypoints
