@@ -59,12 +59,24 @@ bool parse_group_fields(cpp::span<char> line, struct group *grp,
     return false;
   grp->gr_name = name->data();
 
-  const auto passwd = tokenizer.next_field();
-  if (!passwd)
-    return false;
-  grp->gr_passwd = passwd->data();
+  // A line opening with a plus or a minus once pulled entries in from the
+  // network database, and carries no number of its own; it reads as zero.
+  // A field the line stops before reads as empty.
+  const bool compat = name->front() == '+' || name->front() == '-';
+  char *empty = &line.back();
 
-  const auto gid_str = tokenizer.next_field();
+  const auto passwd = tokenizer.next_field();
+  if (!passwd && !compat)
+    return false;
+  grp->gr_passwd = passwd ? passwd->data() : empty;
+
+  const auto gid_str = passwd ? tokenizer.next_field() : cpp::nullopt;
+  if (compat && (!gid_str || gid_str->front() == '\0')) {
+    grp->gr_gid = 0;
+    const auto members = gid_str ? tokenizer.next_field() : cpp::nullopt;
+    *members_out = members ? *members : cpp::span<char>(empty, 1);
+    return true;
+  }
   if (!gid_str || gid_str->empty() || !internal::isdigit(gid_str->front()))
     return false;
   auto gid_res = internal::strtointeger<gid_t>(gid_str->data(), 10);
@@ -74,9 +86,12 @@ bool parse_group_fields(cpp::span<char> line, struct group *grp,
     return false;
   grp->gr_gid = gid_res.value;
 
+  // A line that stops after the number names a group with nobody in it.
   const auto members_field = tokenizer.next_field();
-  if (!members_field)
-    return false;
+  if (!members_field) {
+    *members_out = cpp::span<char>(empty, 1);
+    return true;
+  }
 
   // Trailing delimiters or fields are invalid.
   if (tokenizer.next_field())
