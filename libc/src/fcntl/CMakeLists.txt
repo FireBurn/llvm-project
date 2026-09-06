@@ -71,3 +71,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.posix_fadvise
 )
+
+add_entrypoint_object(
+  sync_file_range
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sync_file_range
+)
