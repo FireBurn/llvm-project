@@ -19,8 +19,9 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace elf {
 
-// How many objects a process may have loaded at once, startup and dlopen
-// together.
+// How many objects the startup linker can load. It runs before there is an
+// allocator to ask, so its storage is fixed. dlopen grows the set past this
+// onto the heap.
 constexpr size_t MAX_PROCESS_MODULES = 64;
 
 // The description of the loaded module set.
@@ -51,6 +52,9 @@ struct ModuleSet {
   // belongs to something that is no longer there.
   size_t generation;
   size_t capacity;
+  // Whether the arrays above were allocated rather than being the fixed block
+  // libc starts with, so a further growth knows what it may release.
+  bool grown;
   size_t page_size;
   // Set once the startup linker has finished, so a caller can tell a linked
   // process from one that was started some other way.
