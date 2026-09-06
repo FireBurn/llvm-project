@@ -62,13 +62,21 @@ bool matches(const struct utmpx *entry, const struct utmpx *id) {
 
 // The search carries on from where the iteration is, rather than starting
 // over, which is what lets a caller walk every record with the same id.
-LLVM_LIBC_FUNCTION(struct utmpx *, getutxid, (const struct utmpx *id)) {
+namespace internal {
+
+struct utmpx *getutxid_impl(const struct utmpx *id) {
   if (id == nullptr)
     return nullptr;
   while (utmpx_db::read_next())
     if (matches(&utmpx_db::entry, id))
       return &utmpx_db::entry;
   return nullptr;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct utmpx *, getutxid, (const struct utmpx *id)) {
+  return internal::getutxid_impl(id);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

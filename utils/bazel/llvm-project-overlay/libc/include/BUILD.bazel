@@ -182,6 +182,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("ucontext"),
     libc_header_info("unistd"),
     libc_header_info("utime"),
+    libc_header_info("utmp"),
     libc_header_info("utmpx"),
     libc_header_info(
         "wait",
@@ -1204,6 +1205,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_utimbuf",
     hdrs = ["llvm-libc-types/struct_utimbuf.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_utmp",
+    hdrs = ["llvm-libc-types/struct_utmp.h"],
 )
 
 libc_support_library(
