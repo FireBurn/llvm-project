@@ -829,7 +829,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoSetterMatcher
 )
 
-
 add_libc_test(
   confstr_test
   SUITE
