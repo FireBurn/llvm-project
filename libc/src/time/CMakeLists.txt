@@ -303,17 +303,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
-  clock_gettime
-  ALIAS
-  DEPENDS
-    .${LIBC_TARGET_OS}.clock_gettime
-)
-
-add_entrypoint_object(
   clock_getres
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.clock_getres
+)
+
+add_entrypoint_object(
+  clock_gettime
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.clock_gettime
 )
 
 add_entrypoint_object(
