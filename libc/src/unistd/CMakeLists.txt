@@ -469,6 +469,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vhangup
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.vhangup
+)
+
+add_entrypoint_object(
   setuid
   ALIAS
   DEPENDS
