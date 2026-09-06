@@ -11,6 +11,21 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "grp_utils_test",
+    srcs = ["grp_utils_test.cpp"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support:pwd_flat_file_db",
+        "//libc/src/grp:grp_utils",
+    ],
+)
+
+libc_test(
     name = "fgetgrent_test",
     srcs = ["fgetgrent_test.cpp"],
     deps = [
