@@ -428,6 +428,12 @@ functions:
     return_type: pid_t
     arguments:
       - type: void
+  - name: fdatasync
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
   - name: fsync
     standards:
       - posix
