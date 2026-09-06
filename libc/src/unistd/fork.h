@@ -11,11 +11,16 @@
 
 #include "hdr/types/pid_t.h"
 #include "hdr/unistd_macros.h"
+#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 pid_t fork();
+
+namespace internal {
+ErrorOr<pid_t> fork_impl();
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
