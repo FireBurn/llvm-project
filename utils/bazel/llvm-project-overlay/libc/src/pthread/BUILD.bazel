@@ -188,3 +188,15 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "getunique_np",
+    srcs = ["pthread_getunique_np.cpp"],
+    hdrs = ["pthread_getunique_np.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/include:llvm_libc_types_pthread_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
