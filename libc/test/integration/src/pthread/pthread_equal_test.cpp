@@ -26,6 +26,12 @@
 
 #include <pthread.h>
 
+// A pthread_t is a scalar as it is everywhere else, so software may compare
+// two directly, test one against zero or print one.
+static_assert(__is_scalar(pthread_t), "pthread_t must be a scalar");
+static_assert(sizeof(pthread_t) == sizeof(void *),
+              "pthread_t must be as wide as the pointer it holds");
+
 pthread_t child_thread;
 pthread_id_np_t child_self_thread_id;
 pthread_mutex_t mutex;
@@ -54,6 +60,10 @@ TEST_MAIN() {
   ASSERT_NE(LIBC_NAMESPACE::pthread_equal(main_thread, main_thread), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(main_thread, null_thread), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(null_thread, main_thread), 0);
+  ASSERT_TRUE(main_thread == main_thread);
+  ASSERT_TRUE(main_thread != null_thread);
+  ASSERT_TRUE(main_thread != 0);
+  ASSERT_TRUE(!null_thread);
 
   // The idea here is that, we start a child thread which will immediately
   // wait on |mutex|. The main thread will update the global |child_thread| var
@@ -69,6 +79,7 @@ TEST_MAIN() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(th, main_thread), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(th, null_thread), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(null_thread, th), 0);
+  ASSERT_TRUE(th != main_thread);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_getunique_np(&th, &th_id), 0);
   ASSERT_NE(th_id, main_thread_id);
 
