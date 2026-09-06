@@ -753,6 +753,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vhangup
+  SRCS
+    vhangup.cpp
+  HDRS
+    ../vhangup.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vhangup
+    libc.src.__support.libc_errno
+)
+
+add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
   pathconf
   SRCS
