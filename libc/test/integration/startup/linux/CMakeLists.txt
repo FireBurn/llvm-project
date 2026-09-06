@@ -6,6 +6,17 @@ endif()
 add_libc_testsuite(libc-startup-tests PARENT libc-integration-tests)
 
 add_integration_test(
+  progname_test
+  SUITE libc-startup-tests
+  SRCS
+    progname_test.cpp
+  DEPENDS
+    libc.src.compat.progname
+    libc.src.errno.program_invocation_name
+    libc.src.errno.program_invocation_short_name
+)
+
+add_integration_test(
   startup_args_test
   SUITE libc-startup-tests
   SRCS
