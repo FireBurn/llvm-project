@@ -84,3 +84,13 @@ libc_function(
         "//libc/src/unistd:truncate",
     ],
 )
+
+libc_function(
+    name = "progname",
+    srcs = ["progname.cpp"],
+    hdrs = ["progname.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
