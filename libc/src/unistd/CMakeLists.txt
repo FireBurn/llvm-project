@@ -183,6 +183,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  fdatasync
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.fdatasync
+)
+
+add_entrypoint_object(
   fsync
   ALIAS
   DEPENDS
