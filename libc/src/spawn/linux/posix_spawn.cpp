@@ -180,6 +180,23 @@ void child_process(const char *__restrict path,
       }
       case BaseSpawnFileAction::DUP2: {
         auto *dup2_act = reinterpret_cast<SpawnFileDup2Action *>(act);
+        // Where the two are the same descriptor there is nothing to
+        // duplicate, and dup2 would do nothing at all. What POSIX asks for
+        // here is that the descriptor be left open across the exec, so the
+        // close-on-exec flag is what actually has to be cleared. A caller
+        // handing a descriptor to a child it is about to start says so this
+        // way.
+        if (dup2_act->fd == dup2_act->newfd) {
+          long flags = LIBC_NAMESPACE::syscall_impl<long>(
+              SYS_fcntl, dup2_act->fd, F_GETFD, 0);
+          if (flags < 0)
+            exit(static_cast<int>(-flags));
+          long set = LIBC_NAMESPACE::syscall_impl<long>(
+              SYS_fcntl, dup2_act->fd, F_SETFD, flags & ~FD_CLOEXEC);
+          if (set < 0)
+            exit(static_cast<int>(-set));
+          break;
+        }
         auto result = linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd);
         if (!result)
           exit(result.error());
