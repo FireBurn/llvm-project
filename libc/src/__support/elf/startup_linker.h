@@ -89,9 +89,17 @@ public:
     if (!install_thread_pointer())
       return false;
 
-    run_initialisers();
-
+    // What was loaded is recorded before any of it runs, so that an
+    // initialiser which opens something else finds a module set to add to.
     publish(order);
+
+    // The environment likewise: an initialiser is entitled to read it, and to
+    // change it, and what it does has to still be there when the program's
+    // own startup code runs. That code therefore leaves `environ` alone if it
+    // finds it already set.
+    publish_environ(order, stack);
+
+    run_initialisers();
     return true;
   }
 
@@ -202,6 +210,17 @@ private:
 
   LIBC_INLINE static void report(const char *message) {
     write_to_stderr(message);
+  }
+
+  // Points libc's `environ` at the environment the kernel left on the stack.
+  // Found by symbol lookup, the same way the module set is: the loader cannot
+  // link against the library it loads.
+  LIBC_INLINE void publish_environ(const SearchOrder &order,
+                                   const StartupStack &stack) {
+    auto address = order.resolve("environ");
+    if (!address)
+      return; // Nothing in the process has one.
+    *reinterpret_cast<char ***>(*address) = stack.envp();
   }
 
   // Copies what was loaded into libc's storage, found by symbol lookup since
