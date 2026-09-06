@@ -356,6 +356,7 @@ libc_test(
         "//libc:putc_unlocked",
         "//libc:putchar_unlocked",
         "//libc:remove",
+        "//libc:setbuffer",
         "//libc:setlinebuf",
         "//libc:types_FILE",
     ],
