@@ -361,6 +361,19 @@ add_libc_test(
 )
 
 add_libc_test(
+  lfs64_test
+  SUITE
+    libc-include-tests
+  SRCS
+    lfs64_test.cpp
+  DEPENDS
+    libc.include.fcntl
+    libc.include.sys_stat
+    libc.include.sys_types
+    libc.include.unistd
+)
+
+add_libc_test(
   wait_sys_wait_test
   SUITE
     libc-include-tests
