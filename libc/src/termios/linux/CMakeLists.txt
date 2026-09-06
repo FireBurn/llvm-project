@@ -65,6 +65,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  cfsetspeed
+  SRCS
+    cfsetspeed.cpp
+  HDRS
+    ../cfsetspeed.h
+  DEPENDS
+    libc.hdr.types.speed_t
+    libc.hdr.types.struct_termios
+    libc.src.termios.cfsetispeed
+    libc.src.termios.cfsetospeed
+    libc.src.__support.macros.null_check
+)
+
+add_entrypoint_object(
   tcgetsid
   SRCS
     tcgetsid.cpp
