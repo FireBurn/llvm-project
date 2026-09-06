@@ -169,6 +169,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("monetary"),
     libc_header_info("printf"),
     libc_header_info("stdio_ext"),
+    libc_header_info("sys/kd"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/vt"),
     libc_header_info("utime"),
