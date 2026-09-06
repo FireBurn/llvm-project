@@ -249,6 +249,19 @@ add_entrypoint_object(
 add_subdirectory(scanf_core)
 
 add_entrypoint_object(
+  ctermid
+  SRCS
+    ctermid.cpp
+  HDRS
+    ctermid.h
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
   remove
   ALIAS
   DEPENDS
