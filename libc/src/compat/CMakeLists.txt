@@ -109,6 +109,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  res_init
+  SRCS
+    res_init.cpp
+  HDRS
+    res_init.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   progname
   SRCS
     progname.cpp
