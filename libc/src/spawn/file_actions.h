@@ -29,6 +29,8 @@ struct BaseSpawnFileAction {
     OPEN = 111,
     CLOSE = 222,
     DUP2 = 333,
+    CHDIR = 444,
+    FCHDIR = 555,
   };
 
   ActionType type;
@@ -112,6 +114,45 @@ struct SpawnFileDup2Action : public BaseSpawnFileAction {
   SpawnFileDup2Action(int fdesc, int new_fdesc)
       : BaseSpawnFileAction(BaseSpawnFileAction::DUP2), fd(fdesc),
         newfd(new_fdesc) {}
+};
+
+// Where the child is to start. Without this a caller which wants the child in
+// a directory of its own has to fork and change directory itself, in a
+// process which may have other threads running, and no longer has the one
+// call that does the whole thing safely.
+struct SpawnFileChdirAction : public BaseSpawnFileAction {
+  // A copy of the path passed to posix_spawn_file_actions_addchdir_np. It is
+  // allocated together with the action (see create()).
+  char path[];
+
+  /// Allocates a chdir action, together with a copy of `p`. Returns a null
+  /// CheckedPtr if the allocation fails.
+  LIBC_INLINE static CheckedPtr<SpawnFileChdirAction> create(const char *p) {
+    size_t path_size = internal::string_length(p) + 1;
+    AllocChecker ac;
+    void *mem = ::operator new(sizeof(SpawnFileChdirAction) + path_size, ac);
+    if (!ac)
+      return nullptr;
+    return CheckedPtr<SpawnFileChdirAction>(
+        new (mem) SpawnFileChdirAction(p, path_size));
+  }
+
+  // A copy would not include the path.
+  SpawnFileChdirAction(const SpawnFileChdirAction &) = delete;
+  SpawnFileChdirAction &operator=(const SpawnFileChdirAction &) = delete;
+
+private:
+  LIBC_INLINE SpawnFileChdirAction(const char *p, size_t path_size)
+      : BaseSpawnFileAction(BaseSpawnFileAction::CHDIR) {
+    inline_memcpy(path, p, path_size);
+  }
+};
+
+struct SpawnFileFchdirAction : public BaseSpawnFileAction {
+  int fd;
+
+  explicit SpawnFileFchdirAction(int fdesc)
+      : BaseSpawnFileAction(BaseSpawnFileAction::FCHDIR), fd(fdesc) {}
 };
 
 } // namespace LIBC_NAMESPACE_DECL
