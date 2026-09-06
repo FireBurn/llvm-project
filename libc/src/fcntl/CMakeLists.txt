@@ -45,6 +45,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  sync_file_range
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sync_file_range
+)
+
+add_entrypoint_object(
   posix_fadvise64
   ALIAS
   DEPENDS
