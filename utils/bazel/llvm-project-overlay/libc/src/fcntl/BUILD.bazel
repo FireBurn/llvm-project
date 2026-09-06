@@ -135,6 +135,20 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "sync_file_range",
+    srcs = ["linux/sync_file_range.cpp"],
+    hdrs = ["sync_file_range.h"],
+    deps = [
+        ":fcntl_sync_file_range",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sync_file_range",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_support_library(
     name = "fcntl_splice",
     hdrs = ["splice.h"],
@@ -160,6 +174,15 @@ libc_support_library(
     hdrs = ["open_by_handle_at.h"],
     deps = [
         "//libc/hdr/types:struct_file_handle",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_sync_file_range",
+    hdrs = ["sync_file_range.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
         "//libc/src/__support/macros:config",
     ],
 )

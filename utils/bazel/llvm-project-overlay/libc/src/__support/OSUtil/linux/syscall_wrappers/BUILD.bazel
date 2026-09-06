@@ -2803,6 +2803,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sync_file_range",
+    hdrs = ["sync_file_range.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "setgid",
     hdrs = ["setgid.h"],
     deps = [
