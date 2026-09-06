@@ -300,6 +300,23 @@ libc_test(
 )
 
 libc_test(
+    name = "setvbuf_test",
+    srcs = ["setvbuf_test.cpp"],
+    deps = [
+        "//libc:clearerr",
+        "//libc:fclose",
+        "//libc:ferror",
+        "//libc:fflush",
+        "//libc:fopen",
+        "//libc:fread",
+        "//libc:fwrite",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:setvbuf",
+    ],
+)
+
+libc_test(
     name = "fputc_test",
     srcs = ["fputc_test.cpp"],
     deps = [
