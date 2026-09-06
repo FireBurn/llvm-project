@@ -782,6 +782,7 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
 )
 
+
 add_entrypoint_object(
   pthread_self
   SRCS
