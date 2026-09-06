@@ -18,6 +18,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.execve
     libc.src.__support.OSUtil.linux.syscall_wrappers.exit_group
     libc.src.__support.OSUtil.linux.syscall_wrappers.fchdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fcntl
     libc.src.__support.OSUtil.linux.syscall_wrappers.getgid
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
