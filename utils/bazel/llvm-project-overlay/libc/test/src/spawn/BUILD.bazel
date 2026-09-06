@@ -11,6 +11,22 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "posix_spawn_file_actions_test",
+    srcs = ["posix_spawn_file_actions_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:posix_spawn_file_actions_addchdir_np",
+        "//libc:posix_spawn_file_actions_addclose",
+        "//libc:posix_spawn_file_actions_adddup2",
+        "//libc:posix_spawn_file_actions_addfchdir_np",
+        "//libc:posix_spawn_file_actions_addopen",
+        "//libc:posix_spawn_file_actions_destroy",
+        "//libc:posix_spawn_file_actions_init",
+        "//libc:spawn_file_actions",
+    ],
+)
+
+libc_test(
     name = "posix_spawnattr_test",
     srcs = ["posix_spawnattr_test.cpp"],
     deps = [
