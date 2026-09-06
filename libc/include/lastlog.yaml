@@ -1,0 +1,12 @@
+header: lastlog.h
+public_includes:
+  # Where struct lastlog is defined. This header exists only because 4.3BSD
+  # put it here, and nothing else is in it.
+  - utmp.h
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
