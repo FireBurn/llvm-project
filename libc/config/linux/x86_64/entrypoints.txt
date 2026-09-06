@@ -607,6 +607,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.times.times
 
     # sys/time.h entrypoints
+    libc.src.sys.time.lutimes
     libc.src.sys.time.utimes
 
     # sys/sysinfo.h entrypoints
@@ -1616,6 +1617,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getspecific
     libc.src.pthread.pthread_getstack_np
     libc.src.compat.__errno_location
+    libc.src.compat.res_init
     libc.src.compat.gnu_get_libc_version
     libc.src.compat.syscall
     libc.src.compat.__xpg_strerror_r
