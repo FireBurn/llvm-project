@@ -14,4 +14,6 @@ add_libc_test(
     libc.hdr.types.struct_sgrp
     libc.src.__support.CPP.span
     libc.src.gshadow.gshadow_utils
+    libc.src.gshadow.sgetsgent
+    libc.src.gshadow.sgetsgent_r
 )
