@@ -185,6 +185,22 @@ void child_process(const char *__restrict path,
           exit(result.error());
         break;
       }
+      case BaseSpawnFileAction::CHDIR: {
+        auto *chdir_act = reinterpret_cast<SpawnFileChdirAction *>(act);
+        long result =
+            LIBC_NAMESPACE::syscall_impl<long>(SYS_chdir, chdir_act->path);
+        if (result < 0)
+          exit(static_cast<int>(-result));
+        break;
+      }
+      case BaseSpawnFileAction::FCHDIR: {
+        auto *fchdir_act = reinterpret_cast<SpawnFileFchdirAction *>(act);
+        long result =
+            LIBC_NAMESPACE::syscall_impl<long>(SYS_fchdir, fchdir_act->fd);
+        if (result < 0)
+          exit(static_cast<int>(-result));
+        break;
+      }
       }
       act = act->next;
     }
