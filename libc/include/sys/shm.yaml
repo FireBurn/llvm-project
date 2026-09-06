@@ -1,6 +1,10 @@
 header: sys/shm.h
 public_includes:
   - sys/ipc.h
+public_includes:
+  # glibc's <sys/shm.h> carries the general IPC macros too, and code that uses
+  # them includes only this one.
+  - sys/ipc.h
 standards:
   - posix
 macros:
