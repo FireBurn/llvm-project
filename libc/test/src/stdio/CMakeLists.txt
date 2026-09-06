@@ -145,10 +145,12 @@ add_libc_test(
   SRCS
     setvbuf_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
     libc.include.stdio
     libc.src.stdio.clearerr
     libc.src.stdio.fclose
     libc.src.stdio.fflush
+    libc.src.stdio.ferror
     libc.src.stdio.fopen
     libc.src.stdio.fread
     libc.src.stdio.fwrite
