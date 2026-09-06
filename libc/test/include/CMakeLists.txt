@@ -21,6 +21,23 @@ add_libc_test(
 )
 
 add_libc_test(
+  features_test
+  SUITE
+    libc-include-tests
+  SRCS
+    features_test.cpp
+)
+
+add_libc_test(
+  features_c_test
+  C_TEST
+  SUITE
+    libc-include-tests
+  SRCS
+    features_test.c
+)
+
+add_libc_test(
   sys_param_test
   SUITE
     libc-include-tests
