@@ -699,6 +699,7 @@ add_header_macro(
     .llvm-libc-types.__getoptargv_t
     .llvm-libc-types.intptr_t
     .llvm-libc-macros.lfs64_macros
+    .llvm-libc-macros.null_macro
 )
 
 add_header_macro(
