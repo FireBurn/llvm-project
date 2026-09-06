@@ -119,6 +119,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/time",
         other_srcs = ["sys/select-time.yaml"],
     ),
+    libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/types"),
     libc_header_info("sys/utsname"),
     libc_header_info("sys/vt"),
