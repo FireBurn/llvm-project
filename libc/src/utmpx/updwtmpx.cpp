@@ -25,8 +25,9 @@ namespace LIBC_NAMESPACE_DECL {
 // This appends to a log of records rather than to the table of who is
 // logged in, so it opens the file for itself and leaves any iteration
 // alone. There is no way to report a failure.
-LLVM_LIBC_FUNCTION(void, updwtmpx,
-                   (const char *wtmpx_file, const struct utmpx *utmpx)) {
+namespace internal {
+
+void updwtmpx_impl(const char *wtmpx_file, const struct utmpx *utmpx) {
   if (wtmpx_file == nullptr || utmpx == nullptr)
     return;
 
@@ -46,6 +47,13 @@ LLVM_LIBC_FUNCTION(void, updwtmpx,
     done += static_cast<size_t>(*n);
   }
   linux_syscalls::close(fd);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void, updwtmpx,
+                   (const char *wtmpx_file, const struct utmpx *utmpx)) {
+  internal::updwtmpx_impl(wtmpx_file, utmpx);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

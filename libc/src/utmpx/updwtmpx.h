@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 void updwtmpx(const char *wtmpx_file, const struct utmpx *utmpx);
 
+namespace internal {
+void updwtmpx_impl(const char *wtmpx_file, const struct utmpx *utmpx);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_UTMPX_UPDWTMPX_H
