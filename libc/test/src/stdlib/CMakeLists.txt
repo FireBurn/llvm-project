@@ -514,7 +514,6 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
-
 add_libc_test(
   mbtowc_test
   SUITE
@@ -768,6 +767,19 @@ add_libc_test(
     libc.src.unistd.close
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  environment_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    environment_test.cpp
+  DEPENDS
+    libc.src.stdlib.clearenv
+    libc.src.stdlib.getenv
+    libc.src.stdlib.secure_getenv
+    libc.src.stdlib.setenv
 )
 
 # Handing memory back needs an allocator that can be asked, which is the
