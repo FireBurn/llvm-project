@@ -680,6 +680,10 @@ types:
   - type_name: Elf32_Dyn
   - type_name: Elf32_Ehdr
   - type_name: Elf32_Half
+  - type_name: Elf32_Section
+  - type_name: Elf32_Move
+  - type_name: Elf32_Lib
+  - type_name: Elf32_Syminfo
   - type_name: Elf32_Lword
   - type_name: Elf32_Nhdr
   - type_name: Elf32_Off
@@ -702,6 +706,10 @@ types:
   - type_name: Elf64_Dyn
   - type_name: Elf64_Ehdr
   - type_name: Elf64_Half
+  - type_name: Elf64_Section
+  - type_name: Elf64_Move
+  - type_name: Elf64_Lib
+  - type_name: Elf64_Syminfo
   - type_name: Elf64_Lword
   - type_name: Elf64_Nhdr
   - type_name: Elf64_Off
