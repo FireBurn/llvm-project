@@ -672,6 +672,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.termios.cfgetospeed
     libc.src.termios.cfsetispeed
     libc.src.termios.cfsetospeed
+    libc.src.termios.cfsetspeed
     libc.src.termios.tcdrain
     libc.src.termios.tcflow
     libc.src.termios.tcflush
