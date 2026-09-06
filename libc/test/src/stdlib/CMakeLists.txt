@@ -509,27 +509,6 @@ add_libc_test(
 )
 
 add_libc_test(
-  mkstemps_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    mkstemps_test.cpp
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.hdr.fcntl_macros
-    libc.hdr.unistd_macros
-    libc.src.stdlib.mkostemps
-    libc.src.stdlib.mkstemps
-    libc.src.string.strdup
-    libc.src.string.strlen
-    libc.src.unistd.access
-    libc.src.unistd.close
-    libc.src.unistd.unlink
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-
-
-add_libc_test(
   mbtowc_test
   SUITE
     libc-stdlib-tests
@@ -751,6 +730,26 @@ add_libc_test(
 )
 
 add_libc_test(
+  mkstemps_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mkstemps_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.unistd_macros
+    libc.src.stdlib.mkostemps
+    libc.src.stdlib.mkstemps
+    libc.src.string.strdup
+    libc.src.string.strlen
+    libc.src.unistd.access
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   reallocarray_test
   SUITE
     libc-stdlib-tests
@@ -820,6 +819,19 @@ add_libc_test(
     libc.src.unistd.close
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  environment_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    environment_test.cpp
+  DEPENDS
+    libc.src.stdlib.clearenv
+    libc.src.stdlib.getenv
+    libc.src.stdlib.secure_getenv
+    libc.src.stdlib.setenv
 )
   add_libc_test(
     malloc_trim_test
