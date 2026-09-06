@@ -1,5 +1,28 @@
 add_libc_testsuite(libc-unistd-integration-tests PARENT libc-integration-tests)
 
+add_integration_test(
+  daemon_test
+  SUITE
+    libc-unistd-integration-tests
+  SRCS
+    daemon_test.cpp
+  DEPENDS
+    libc.include.sys_wait
+    libc.include.unistd
+    libc.src.string.strcmp
+    libc.src.sys.wait.waitpid
+    libc.src.unistd._exit
+    libc.src.unistd.close
+    libc.src.unistd.daemon
+    libc.src.unistd.fork
+    libc.src.unistd.getcwd
+    libc.src.unistd.getpid
+    libc.src.unistd.getsid
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+    libc.src.unistd.write
+)
+
 add_subdirectory(testdata)
 
 add_integration_test(
