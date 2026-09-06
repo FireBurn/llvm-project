@@ -391,6 +391,16 @@ libc_test(
 )
 
 libc_test(
+    name = "vhangup_test",
+    srcs = ["vhangup_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:geteuid",
+        "//libc/src/unistd:vhangup",
+    ],
+)
+
+libc_test(
     name = "syscall_test",
     srcs = ["syscall_test.cpp"],
     deps = [
