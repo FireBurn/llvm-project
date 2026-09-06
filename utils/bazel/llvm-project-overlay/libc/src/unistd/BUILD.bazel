@@ -790,6 +790,17 @@ libc_function(
 )
 
 libc_function(
+    name = "endusershell",
+    srcs = ["endusershell.cpp"],
+    hdrs = ["endusershell.h"],
+    deps = [
+        ":usershell",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "get_current_dir_name",
     srcs = ["linux/get_current_dir_name.cpp"],
     hdrs = ["get_current_dir_name.h"],
@@ -966,6 +977,17 @@ libc_function(
 )
 
 libc_function(
+    name = "getusershell",
+    srcs = ["getusershell.cpp"],
+    hdrs = ["getusershell.h"],
+    deps = [
+        ":usershell",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "issetugid",
     srcs = ["linux/issetugid.cpp"],
     hdrs = ["issetugid.h"],
@@ -1035,6 +1057,17 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setusershell",
+    srcs = ["setusershell.cpp"],
+    hdrs = ["setusershell.h"],
+    deps = [
+        ":usershell",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -1252,6 +1285,19 @@ libc_support_library(
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "usershell",
+    srcs = ["usershell.cpp"],
+    hdrs = ["usershell.h"],
+    deps = [
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:pwd_flat_file_db",
     ],
 )
 

@@ -424,6 +424,23 @@ libc_test(
 )
 
 libc_test(
+    name = "usershell_test",
+    srcs = ["usershell_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:remove",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:endusershell",
+        "//libc/src/unistd:getusershell",
+        "//libc/src/unistd:setusershell",
+        "//libc/src/unistd:usershell",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "vhangup_test",
     srcs = ["vhangup_test.cpp"],
     deps = [
