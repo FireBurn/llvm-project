@@ -3,6 +3,10 @@ standards:
   - posix
 public_includes:
   - endian.h
+  # glibc's <sys/types.h> carries fd_set and the macros that go with it, and
+  # a good deal of code counts on finding them there rather than including
+  # <sys/select.h> for itself.
+  - sys/select.h
 types:
   - type_name: blkcnt_t
   - type_name: blksize_t
