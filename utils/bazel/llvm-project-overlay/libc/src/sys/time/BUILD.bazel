@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -32,6 +32,30 @@ libc_function(
         "//libc/src/__support:error_or",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "lutimes",
+    srcs = ["linux/lutimes.cpp"],
+    hdrs = ["lutimes.h"],
+    deps = [
+        ":sys_time_lutimes",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:utimensat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_time_lutimes",
+    hdrs = ["lutimes.h"],
+    deps = [
+        "//libc/hdr/types:struct_timeval",
+        "//libc/src/__support/macros:config",
     ],
 )
 

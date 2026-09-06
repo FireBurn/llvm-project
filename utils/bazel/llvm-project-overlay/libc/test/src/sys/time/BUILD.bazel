@@ -21,3 +21,23 @@ libc_test(
         "//libc/src/sys/time:settimeofday",
     ],
 )
+
+libc_test(
+    name = "lutimes_test",
+    srcs = ["lutimes_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/stat:lstat",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/stat:sys_stat_stat",
+        "//libc/src/sys/time:lutimes",
+        "//libc/src/sys/time:sys_time_lutimes",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:symlink",
+        "//libc/src/unistd:unlink",
+    ],
+)
