@@ -21,6 +21,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  elf_test
+  SUITE
+    libc-include-tests
+  SRCS
+    elf_test.cpp
+  DEPENDS
+    libc.hdr.elf_proxy
+)
+
+add_libc_test(
   complex_test
   SUITE
     libc-include-tests
