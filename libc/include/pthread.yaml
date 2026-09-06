@@ -478,6 +478,13 @@ functions:
     arguments:
       - type: pthread_rwlockattr_t *
       - type: int
+  - name: pthread_kill
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: int
   - name: pthread_self
     return_type: pthread_t
     arguments:
