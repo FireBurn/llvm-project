@@ -267,6 +267,7 @@ libc_test(
         "//libc:hdr_stdio_macros",
         "//libc:memcmp",
         "//libc:remove",
+        "//libc:setbuffer",
         "//libc:setlinebuf",
         "//libc:types_FILE",
     ],
