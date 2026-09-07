@@ -15,3 +15,26 @@ libc_test(
     srcs = ["tcp_test.cpp"],
     deps = ["//libc:llvm_libc_types_struct_tcphdr"],
 )
+
+libc_test(
+    name = "in_test",
+    srcs = ["in_test.cpp"],
+    deps = [
+        "//libc:hdr_netinet_in_macros",
+        "//libc:htonl",
+        "//libc:htons",
+        "//libc:in6addr_any",
+        "//libc:in6addr_loopback",
+        "//libc:memcmp",
+        "//libc:types_struct_group_req",
+        "//libc:types_struct_group_source_req",
+        "//libc:types_struct_in6_addr",
+        "//libc:types_struct_ip_mreq",
+        "//libc:types_struct_ip_mreq_source",
+        "//libc:types_struct_ip_mreqn",
+        "//libc:types_struct_ip_msfilter",
+        "//libc:types_struct_ip_opts",
+        "//libc:types_struct_ipv6_mreq",
+        "//libc:types_struct_sockaddr_in6",
+    ],
+)

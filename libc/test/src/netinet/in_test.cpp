@@ -78,6 +78,40 @@ TEST(LlvmLibcNetinetInTest, IN6AddrInitMacros) {
   EXPECT_TRUE(IN6_IS_ADDR_LOOPBACK(&loopback));
 }
 
+// Like the others in the set, this takes anything that points at the sixteen
+// octets of an address: a struct in6_addr, four words as netlink hands them
+// over, or plain bytes.
+TEST(LlvmLibcNetinetInTest, IN6IsAddrMulticastTakesAnyPointer) {
+  const uint8_t MULTICAST[16] = {0xff, 0x02, 0, 0, 0, 0, 0, 0,
+                                 0,    0,    0, 0, 0, 0, 0, 1};
+  const uint8_t UNICAST[16] = {0xfe, 0x80, 0, 0, 0, 0, 0, 0,
+                               0,    0,    0, 0, 0, 0, 0, 1};
+
+  struct in6_addr group;
+  struct in6_addr host;
+  for (int i = 0; i < 16; ++i) {
+    group.s6_addr[i] = MULTICAST[i];
+    host.s6_addr[i] = UNICAST[i];
+  }
+  EXPECT_TRUE(IN6_IS_ADDR_MULTICAST(&group));
+  EXPECT_FALSE(IN6_IS_ADDR_MULTICAST(&host));
+
+  alignas(uint32_t) uint8_t group_storage[16];
+  alignas(uint32_t) uint8_t host_storage[16];
+  for (int i = 0; i < 16; ++i) {
+    group_storage[i] = MULTICAST[i];
+    host_storage[i] = UNICAST[i];
+  }
+  const uint32_t *group_words =
+      reinterpret_cast<const uint32_t *>(group_storage);
+  const uint32_t *host_words = reinterpret_cast<const uint32_t *>(host_storage);
+  EXPECT_TRUE(IN6_IS_ADDR_MULTICAST(group_words));
+  EXPECT_FALSE(IN6_IS_ADDR_MULTICAST(host_words));
+
+  EXPECT_TRUE(IN6_IS_ADDR_MULTICAST(MULTICAST));
+  EXPECT_FALSE(IN6_IS_ADDR_MULTICAST(UNICAST));
+}
+
 TEST(LlvmLibcNetinetInTest, IN6AddrConstants) {
   const uint8_t ANY_CONTENT[16] = {0};
   EXPECT_EQ(
