@@ -111,6 +111,13 @@ functions:
       - type: int
       - type: const struct sigaction *__restrict
       - type: struct sigaction *__restrict
+  - name: siginterrupt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: int
   - name: sigaddset
     standards:
       - posix
