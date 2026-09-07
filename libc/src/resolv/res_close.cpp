@@ -7,20 +7,28 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation header for res_init
+/// Implementation of res_close
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_COMPAT_RES_INIT_H
-#define LLVM_LIBC_SRC_COMPAT_RES_INIT_H
+#include "src/resolv/res_close.h"
 
+#include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/resolv/res_state.h"
+#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-int res_init(void);
-int __res_init(void);
+// Lets go of whatever the resolver was holding open. Each question is asked
+// over a socket of its own here, so there is only ever the connection
+// RES_STAYOPEN asked to be kept.
+LLVM_LIBC_FUNCTION(void, res_close, (void)) {
+  struct __res_state *state = LIBC_NAMESPACE::__res_state();
+  if (state->_vcsock >= 0) {
+    LIBC_NAMESPACE::close(state->_vcsock);
+    state->_vcsock = -1;
+  }
+}
 
 } // namespace LIBC_NAMESPACE_DECL
-
-#endif // LLVM_LIBC_SRC_COMPAT_RES_INIT_H
