@@ -22,6 +22,8 @@ macros:
     macro_header: netinet-in-macros.h
   - macro_name: IPPROTO_RAW
     macro_header: netinet-in-macros.h
+  - macro_name: IPPROTO_MAX
+    macro_header: netinet-in-macros.h
   - macro_name: IN6ADDR_ANY_INIT
     macro_header: netinet-in-macros.h
   - macro_name: IN6ADDR_LOOPBACK_INIT
