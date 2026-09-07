@@ -16,6 +16,26 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "gethostbyaddr",
+    srcs = ["gethostbyaddr.cpp"],
+    hdrs = ["gethostbyaddr.h"],
+    deps = [
+        ":__h_errno_location",
+        ":hostent_storage",
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr/types:struct_sockaddr_in",
+        "//libc/hdr/types:struct_sockaddr_in6",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
     name = "gethostbyname",
     srcs = ["gethostbyname.cpp"],
     hdrs = ["gethostbyname.h"],
@@ -41,10 +61,10 @@ libc_function(
     ],
 )
 
-libc_function(
-    name = "getnameinfo",
-    srcs = ["getnameinfo.cpp"],
-    hdrs = ["getnameinfo.h"],
+libc_support_library(
+    name = "getnameinfo_utils",
+    srcs = ["getnameinfo_utils.cpp"],
+    hdrs = ["getnameinfo_utils.h"],
     deps = [
         ":resolv_lookup",
         "//libc/hdr/types:socklen_t",
@@ -60,6 +80,19 @@ libc_function(
         "//libc/src/net:if_if_indextoname",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "getnameinfo",
+    srcs = ["getnameinfo.cpp"],
+    hdrs = ["getnameinfo.h"],
+    deps = [
+        ":getnameinfo_utils",
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_sockaddr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -120,13 +153,8 @@ libc_support_library(
         "//libc/src/__support:libc_errno",
         "//libc/src/arpa/inet:inet_pton",
         "//libc/src/net:if_if_nametoindex",
-        "//libc/src/poll:poll",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/string:utils",
-        "//libc/src/sys/socket:recvfrom",
-        "//libc/src/sys/socket:sendto",
-        "//libc/src/sys/socket:socket",
-        "//libc/src/unistd:close",
     ],
 )
 
