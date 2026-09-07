@@ -20320,6 +20320,27 @@ libc_function(
 )
 
 libc_function(
+    name = "getpass",
+    srcs = ["src/unistd/linux/getpass.cpp"],
+    hdrs = ["src/unistd/getpass.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":errno",
+        ":hdr_fcntl_macros",
+        ":hdr_termios_macros",
+        ":termios_tcgetattr",
+        ":termios_tcsetattr",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
     name = "getpid",
     srcs = ["src/unistd/linux/getpid.cpp"],
     hdrs = ["src/unistd/getpid.h"],
@@ -22108,6 +22129,21 @@ libc_function(
         ":hdr_unistd_macros",
         ":types_struct_rlimit",
         ":types_struct_sysinfo",
+    ],
+)
+
+libc_function(
+    name = "usleep",
+    srcs = ["src/unistd/linux/usleep.cpp"],
+    hdrs = ["src/unistd/usleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_nanosleep",
+        ":errno",
+        ":types_struct_timespec",
+        ":types_useconds_t",
     ],
 )
 
@@ -29326,6 +29362,20 @@ libc_support_library(
     hdrs = ["hdr/types/timer_t.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_timer_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_useconds_t",
+    hdrs = ["include/llvm-libc-types/useconds_t.h"],
+)
+
+libc_support_library(
+    name = "types_useconds_t",
+    hdrs = ["hdr/types/useconds_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_useconds_t"],
         "//conditions:default": [],
     }),
 )
