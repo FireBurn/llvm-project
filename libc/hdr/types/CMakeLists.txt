@@ -1604,6 +1604,22 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct___res_state
+  HDRS
+    struct___res_state.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct___res_state
+)
+
+add_proxy_header_library(
+  res_state
+  HDRS
+    res_state.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.res_state
+)
+
+add_proxy_header_library(
   struct_hostent
   HDRS
     struct_hostent.h
