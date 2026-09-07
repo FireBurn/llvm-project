@@ -1128,6 +1128,29 @@ add_libc_test(
 )
 
 add_libc_test(
+  getpass_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    getpass_test.cpp
+  DEPENDS
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+    libc.include.sys_wait
+    libc.src.__support.libc_errno
+    libc.src.pty.forkpty
+    libc.src.stdlib._Exit
+    libc.src.string.strcmp
+    libc.src.sys.wait.waitpid
+    libc.src.termios.tcgetattr
+    libc.src.unistd.close
+    libc.src.unistd.getpass
+    libc.src.unistd.usleep
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   getopt_test
   SUITE
     libc-unistd-tests
@@ -1198,74 +1221,6 @@ if(LLVM_LIBC_FULL_BUILD)
       libc.src.unistd._exit
   )
 endif()
-
-add_libc_test(
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.src.errno.errno
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.src.errno.errno
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.src.errno.errno
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-)
-  SUITE
-    libc-unistd-tests
-  SRCS
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
-)
 
 add_libc_test(
   ttyname_test

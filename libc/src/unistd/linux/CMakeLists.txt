@@ -776,7 +776,27 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getpass
+  SRCS
+    getpass.cpp
+  HDRS
+    ../getpass.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.termios.tcgetattr
+    libc.src.termios.tcsetattr
+)
+
+add_entrypoint_object(
   pathconf
   SRCS
     pathconf.cpp
@@ -1063,16 +1083,6 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.fcntl_macros
     libc.hdr.unistd_macros
-    libc.src.fcntl.open
-    libc.src.stdlib._Exit
-    libc.src.unistd.chdir
-    libc.src.unistd.close
-    libc.src.unistd.dup2
-    libc.src.unistd.fork
-    libc.src.unistd.setsid
-)
-
-add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
@@ -1081,6 +1091,10 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.__support.error_or
     libc.src.errno.errno
+    libc.src.unistd.fork
+)
+
+add_entrypoint_object(
   setuid
   SRCS
     setuid.cpp
@@ -1439,9 +1453,7 @@ add_entrypoint_object(
     libc.hdr.limits_macros
     libc.hdr.sys_resource_macros
     libc.hdr.types.struct_rlimit
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
-    libc.src.sys.resource.getrlimit
+    libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64
 )
 
 add_entrypoint_object(
@@ -1454,4 +1466,3 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.close_range
     libc.src.errno.errno
 )
-    libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit64

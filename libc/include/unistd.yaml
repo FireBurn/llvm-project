@@ -136,6 +136,12 @@ functions:
   - name: getlogin
     return_type: char *
       - type: void
+  - name: getpass
+    standards:
+      - bsd
+    return_type: char *
+    arguments:
+      - type: const char *
   - name: getlogin_r
       - type: char *
       - type: size_t
