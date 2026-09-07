@@ -7,8 +7,10 @@ add_libc_test(
   SRCS
     gai_strerror_test.cpp
   DEPENDS
+    libc.src.netdb.__h_errno_location
     libc.hdr.netdb_macros
     libc.src.netdb.gai_strerror
+    libc.src.netdb.herror
 )
 
 add_libc_test(
@@ -89,3 +91,14 @@ add_libc_test(
 )
 
 add_subdirectory(resolv)
+
+add_libc_test(
+  hstrerror_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    hstrerror_test.cpp
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.src.netdb.hstrerror
+)
