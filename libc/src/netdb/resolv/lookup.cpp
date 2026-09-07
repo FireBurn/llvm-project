@@ -238,6 +238,7 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
         struct sockaddr_in6 to = {};
         to.sin6_family = AF_INET6;
         to.sin6_port = server.port;
+        to.sin6_scope_id = server.scope;
         inline_memcpy(&to.sin6_addr, server.bytes, 16);
         sent = linux_syscalls::sendto(fd, query.message, query.length, 0,
                                       reinterpret_cast<struct sockaddr *>(&to),
@@ -286,7 +287,8 @@ Status from_dns_one(const ResolvConf &conf, const char *name, uint16_t type,
   Query query;
   query.id = id;
   query.type = type;
-  query.length = build_query(name, type, id, query.message, MAX_MESSAGE);
+  query.length =
+      build_query(name, type, CLASS_IN, id, query.message, MAX_MESSAGE);
   if (query.length == 0)
     return Status::Failed;
 
@@ -426,7 +428,8 @@ bool lookup_address(const unsigned char *bytes, int family, char *out,
   Query query;
   query.id = id;
   query.type = TYPE_PTR;
-  query.length = build_query(arpa, TYPE_PTR, id, query.message, MAX_MESSAGE);
+  query.length =
+      build_query(arpa, TYPE_PTR, CLASS_IN, id, query.message, MAX_MESSAGE);
   if (query.length == 0)
     return false;
 
