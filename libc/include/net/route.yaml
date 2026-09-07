@@ -1,0 +1,48 @@
+header: net/route.h
+standards:
+  - bsd
+public_includes:
+  # Where struct sockaddr and struct in6_addr are defined.
+  - sys/socket.h
+  - netinet/in.h
+macros:
+  - macro_name: RTF_UP
+    macro_header: net-route-macros.h
+  - macro_name: RTF_GATEWAY
+    macro_header: net-route-macros.h
+  - macro_name: RTF_HOST
+    macro_header: net-route-macros.h
+  - macro_name: RTF_REINSTATE
+    macro_header: net-route-macros.h
+  - macro_name: RTF_DYNAMIC
+    macro_header: net-route-macros.h
+  - macro_name: RTF_MODIFIED
+    macro_header: net-route-macros.h
+  - macro_name: RTF_MTU
+    macro_header: net-route-macros.h
+  - macro_name: RTF_WINDOW
+    macro_header: net-route-macros.h
+  - macro_name: RTF_IRTT
+    macro_header: net-route-macros.h
+  - macro_name: RTF_REJECT
+    macro_header: net-route-macros.h
+  - macro_name: RTF_STATIC
+    macro_header: net-route-macros.h
+  - macro_name: RTF_XRESOLVE
+    macro_header: net-route-macros.h
+  - macro_name: RTF_DEFAULT
+    macro_header: net-route-macros.h
+  - macro_name: RTF_ADDRCONF
+    macro_header: net-route-macros.h
+  - macro_name: RTF_NONEXTHOP
+    macro_header: net-route-macros.h
+  - macro_name: RTF_CACHE
+    macro_header: net-route-macros.h
+  - macro_name: RT_CLASS_MAIN
+    macro_header: net-route-macros.h
+types:
+  - type_name: struct_rtentry
+  - type_name: struct_in6_rtmsg
+enums: []
+objects: []
+functions: []
