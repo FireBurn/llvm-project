@@ -26035,7 +26035,6 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_open",
         ":__support_osutil_linux_syscall_wrappers_read",
         ":__support_str_to_integer",
-        ":close",
         ":hdr_fcntl_macros",
         ":hdr_stdint_proxy",
         ":hdr_sys_socket_macros",
