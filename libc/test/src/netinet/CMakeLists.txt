@@ -36,3 +36,5 @@ add_libc_test(
     libc.src.arpa.inet.htons
     libc.src.string.memcmp
 )
+
+add_subdirectory(ether)
