@@ -2098,6 +2098,10 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.getprotoent
     libc.src.netdb.setprotoent
     libc.src.netdb.endprotoent
+    libc.src.netdb.getservbyport
+    libc.src.netdb.getservent
+    libc.src.netdb.setservent
+    libc.src.netdb.endservent
     libc.src.netdb.getservbyname
 
       # regex.h entrypoints
