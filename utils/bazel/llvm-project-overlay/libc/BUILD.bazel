@@ -26879,6 +26879,20 @@ libc_function(
 )
 
 libc_function(
+    name = "getprotobyname",
+    srcs = ["src/netdb/getprotobyname.cpp"],
+    hdrs = ["src/netdb/getprotobyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getprotobyname",
+        ":netdb_proto_storage",
+        ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
     name = "getprotobynumber",
     srcs = ["src/netdb/getprotobynumber.cpp"],
     hdrs = ["src/netdb/getprotobynumber.h"],
