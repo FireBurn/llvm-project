@@ -38,3 +38,13 @@ add_libc_test(
     libc.src.arpa.inet.htons
     libc.src.string.memcmp
 )
+
+add_libc_test(
+  tcp_test
+  SUITE
+    libc-netinet-tests
+  SRCS
+    tcp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_tcphdr
+)
