@@ -173,6 +173,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("mntent"),
     libc_header_info("monetary"),
     libc_header_info("mqueue"),
+    libc_header_info("net/if_arp"),
     libc_header_info("netinet/icmp6"),
     libc_header_info("netinet/if_ether"),
     libc_header_info("netinet/ip"),
