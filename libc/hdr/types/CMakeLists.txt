@@ -1675,6 +1675,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_netent
+  HDRS
+    struct_netent.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_netent
+)
+
+add_proxy_header_library(
   struct_protoent
   HDRS
     struct_protoent.h
