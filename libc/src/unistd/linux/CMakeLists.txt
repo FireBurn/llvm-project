@@ -417,6 +417,35 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getdomainname
+  SRCS
+    getdomainname.cpp
+  HDRS
+    ../getdomainname.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_utsname
+    libc.src.__support.OSUtil.linux.syscall_wrappers.uname
+    libc.src.__support.libc_errno
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  setdomainname
+  SRCS
+    setdomainname.cpp
+  HDRS
+    ../setdomainname.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setdomainname
+    libc.src.__support.libc_errno
+)
+
+add_entrypoint_object(
   gethostname
   SRCS
     gethostname.cpp
