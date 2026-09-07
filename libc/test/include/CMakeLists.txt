@@ -21,6 +21,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  link_dynamic_tags_test
+  SUITE
+    libc-include-tests
+  SRCS
+    link_dynamic_tags_test.cpp
+  DEPENDS
+    libc.include.link
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
