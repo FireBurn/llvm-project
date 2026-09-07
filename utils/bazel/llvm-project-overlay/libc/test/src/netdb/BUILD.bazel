@@ -97,6 +97,19 @@ libc_test(
 )
 
 libc_test(
+    name = "getservent_test",
+    srcs = ["getservent_test.cpp"],
+    deps = [
+        "//libc:endservent",
+        "//libc:getservbyname",
+        "//libc:getservbyport",
+        "//libc:getservent",
+        "//libc:setservent",
+        "//libc:types_struct_servent",
+    ],
+)
+
+libc_test(
     name = "gai_strerror_test",
     srcs = ["gai_strerror_test.cpp"],
     deps = [
