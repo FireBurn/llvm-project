@@ -1627,6 +1627,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  netinet_ether
+  ../libc/include/netinet/ether.yaml
+  netinet/ether.h
+  DEPENDS
+    .netinet_if_ether
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_ether_addr
+)
+
+add_header_macro(
   netinet_ip
   ../libc/include/netinet/ip.yaml
   netinet/ip.h
