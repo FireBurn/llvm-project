@@ -2533,6 +2533,7 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_close",
         ":__support_osutil_linux_syscall_wrappers_dup3",
         ":__support_osutil_linux_syscall_wrappers_fcntl",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
         ":__support_osutil_linux_syscall_wrappers_lseek",
         ":__support_osutil_linux_syscall_wrappers_open",
         ":__support_osutil_linux_syscall_wrappers_read",
@@ -2543,6 +2544,7 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":hdr_stdio_macros",
         ":hdr_sys_stat_macros",
+        ":termios_linux_kernel_termios",
         ":types_mode_t",
         ":types_off_t",
     ],
@@ -21423,5 +21425,13 @@ libc_support_library(
         ":__support_macros_config",
         ":hdr_stdio_macros",
         ":string_memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "termios_linux_kernel_termios",
+    hdrs = ["src/termios/linux/kernel_termios.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
