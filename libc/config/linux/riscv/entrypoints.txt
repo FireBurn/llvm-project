@@ -2189,6 +2189,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.net.if.if_freenameindex
       libc.src.net.if.if_nameindex
     libc.src.netdb.endprotoent
+    libc.src.netdb.gethostbyaddr
     libc.src.netdb.getnetbyaddr
     libc.src.netdb.getnetbyname
     libc.src.netdb.getnetent
