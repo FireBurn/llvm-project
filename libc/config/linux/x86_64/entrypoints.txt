@@ -1683,6 +1683,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getstack_np
     libc.src.compat.__errno_location
     libc.src.compat.gnu_get_libc_version
+    libc.src.compat.gnu_get_libc_release
     libc.src.compat.syscall
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.lfs64
