@@ -27351,6 +27351,18 @@ libc_function(
 )
 
 libc_function(
+    name = "endservent",
+    srcs = ["src/netdb/endservent.cpp"],
+    hdrs = ["src/netdb/endservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
     name = "getnetbyaddr",
     srcs = ["src/netdb/getnetbyaddr.cpp"],
     hdrs = ["src/netdb/getnetbyaddr.h"],
@@ -27437,11 +27449,9 @@ libc_function(
     hdrs = ["src/netdb/getservbyname.h"],
     deps = [
         ":__support_common",
-        ":__support_macros_attributes",
         ":__support_macros_config",
         ":netdb_resolv_services",
-        ":string_memory_utils",
-        ":string_utils",
+        ":netdb_serv_storage",
         ":types_struct_servent",
     ],
 )
@@ -27473,6 +27483,32 @@ libc_function(
 )
 
 libc_function(
+    name = "getservbyport",
+    srcs = ["src/netdb/getservbyport.cpp"],
+    hdrs = ["src/netdb/getservbyport.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "getservent",
+    srcs = ["src/netdb/getservent.cpp"],
+    hdrs = ["src/netdb/getservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
     name = "setnetent",
     srcs = ["src/netdb/setnetent.cpp"],
     hdrs = ["src/netdb/setnetent.h"],
@@ -27494,6 +27530,18 @@ libc_function(
         ":__support_macros_config",
         ":netdb_resolv_protocols",
         ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "setservent",
+    srcs = ["src/netdb/setservent.cpp"],
+    hdrs = ["src/netdb/setservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":types_struct_servent",
     ],
 )
 
@@ -27569,6 +27617,17 @@ libc_support_library(
         ":full_build": [":llvm_libc_types_struct_hostent"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "netdb_serv_storage",
+    srcs = ["src/netdb/serv_storage.cpp"],
+    hdrs = ["src/netdb/serv_storage.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+    ],
 )
 
 libc_support_library(

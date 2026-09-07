@@ -1966,6 +1966,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.resolv.dn_expand
     libc.src.netdb.endnetent
     libc.src.netdb.endprotoent
+    libc.src.netdb.endservent
     libc.src.netdb.gethostbyaddr
     libc.src.netdb.getnetbyaddr
     libc.src.netdb.getnetbyname
@@ -1974,10 +1975,13 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getprotoent
       libc.src.netdb.getservbyname
+      libc.src.netdb.getservbyport
+      libc.src.netdb.getservent
       libc.src.netdb.herror
       libc.src.netdb.hstrerror
       libc.src.netdb.setnetent
       libc.src.netdb.setprotoent
+      libc.src.netdb.setservent
 
       # regex.h entrypoints
       libc.src.regex.regcomp
