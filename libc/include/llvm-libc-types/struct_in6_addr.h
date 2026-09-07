@@ -18,13 +18,22 @@
 // guard says the definition is the kernel's.
 #if !(defined(__UAPI_DEF_IN6_ADDR) && __UAPI_DEF_IN6_ADDR &&                   \
       defined(_LINUX_IN6_H))
+// The three ways of looking at the same sixteen octets. They are reached
+// through macros rather than named directly, which is how every other library
+// and the kernel's own header spell them: code that has to work where one of
+// the wider two is missing tests for it with #ifndef, and a plain member
+// cannot be tested for that way.
 struct in6_addr {
-  __extension__ union {
-    uint8_t s6_addr[16];
-    uint16_t s6_addr16[8];
-    uint32_t s6_addr32[4];
-  };
+  union {
+    uint8_t __u6_addr8[16];
+    uint16_t __u6_addr16[8];
+    uint32_t __u6_addr32[4];
+  } __in6_u;
 };
+
+#define s6_addr __in6_u.__u6_addr8
+#define s6_addr16 __in6_u.__u6_addr16
+#define s6_addr32 __in6_u.__u6_addr32
 
 // Say the definition here is the one, so <linux/in6.h> skips its own if it
 // is read after this.
