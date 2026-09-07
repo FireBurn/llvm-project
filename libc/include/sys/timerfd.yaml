@@ -1,4 +1,8 @@
 header: sys/timerfd.h
+# The interface takes a clock, so the names of the clocks come with it, the
+# way the GNU library hands them over here too.
+public_includes:
+  - time.h
 standards:
   - linux
 macros:
