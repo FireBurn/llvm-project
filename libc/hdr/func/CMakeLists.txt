@@ -40,3 +40,11 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm_libc_common_h
 )
+
+add_proxy_header_library(
+  mallopt
+  HDRS
+    mallopt.h
+  FULL_BUILD_DEPENDS
+    libc.include.malloc
+)

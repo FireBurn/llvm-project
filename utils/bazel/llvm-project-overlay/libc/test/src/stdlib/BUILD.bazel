@@ -129,6 +129,15 @@ libc_test_library(
 )
 
 libc_test(
+    name = "malloc_trim_test",
+    srcs = ["malloc_trim_test.cpp"],
+    deps = [
+        "//libc:func_mallopt",
+        "//libc:malloc_trim",
+    ],
+)
+
+libc_test(
     name = "mkstemps_test",
     srcs = ["mkstemps_test.cpp"],
     deps = [
