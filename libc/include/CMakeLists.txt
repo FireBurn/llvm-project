@@ -1609,6 +1609,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  netinet_ip_icmp
+  ../libc/include/netinet/ip_icmp.yaml
+  netinet/ip_icmp.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.netinet_ip_icmp_macros
+    .llvm-libc-types.struct_icmphdr
+    .netinet_ip
+)
+
+add_header_macro(
   netinet_ip6
   ../libc/include/netinet/ip6.yaml
   netinet/ip6.h
