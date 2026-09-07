@@ -118,6 +118,7 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.__support.str_to_integer
     libc.src.arpa.inet.inet_pton
+    libc.src.net.if.if_nametoindex
     libc.src.string.memory_utils.inline_memcpy
 )
 
