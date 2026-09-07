@@ -1629,6 +1629,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  arpa_nameser
+  ../libc/include/arpa/nameser.yaml
+  arpa/nameser.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.arpa_nameser_macros
+    .llvm-libc-types.HEADER
+)
+
+add_header_macro(
   net_if_arp
   ../libc/include/net/if_arp.yaml
   net/if_arp.h
