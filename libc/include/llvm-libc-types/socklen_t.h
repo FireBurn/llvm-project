@@ -9,10 +9,9 @@
 #ifndef LLVM_LIBC_TYPES_SOCKLEN_T_H
 #define LLVM_LIBC_TYPES_SOCKLEN_T_H
 
-// The posix standard only says of socklen_t that it must be an integer type of
-// width of at least 32 bits. The long type is defined as being at least 32
-// bits, so an unsigned long should be fine.
-
-typedef unsigned long socklen_t;
+// POSIX only requires an integer type of at least 32 bits, but socklen_t is
+// passed to and written by the kernel, which uses a 32 bit int, and it is 32
+// bits in every other Linux libc.
+typedef unsigned int socklen_t;
 
 #endif // LLVM_LIBC_TYPES_SOCKLEN_T_H
