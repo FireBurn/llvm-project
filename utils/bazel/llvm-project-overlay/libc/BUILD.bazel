@@ -19386,6 +19386,27 @@ libc_function(
 )
 
 libc_function(
+    name = "getpass",
+    srcs = ["src/unistd/linux/getpass.cpp"],
+    hdrs = ["src/unistd/getpass.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_osutil_linux_syscall_wrappers_write",
+        ":errno",
+        ":hdr_fcntl_macros",
+        ":hdr_termios_macros",
+        ":termios_tcgetattr",
+        ":termios_tcsetattr",
+        ":types_struct_termios",
+    ],
+)
+
+libc_function(
     name = "getpid",
     srcs = ["src/unistd/linux/getpid.cpp"],
     hdrs = ["src/unistd/getpid.h"],
@@ -28463,5 +28484,58 @@ libc_support_library(
         ":types_off_t",
         ":types_size_t",
         ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_termios",
+    hdrs = ["include/llvm-libc-types/struct_termios.h"],
+)
+
+libc_support_library(
+    name = "types_struct_termios",
+    hdrs = ["hdr/types/struct_termios.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_termios"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_termios_macros",
+    hdrs = ["include/llvm-libc-macros/linux/termios-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_termios_macros",
+    hdrs = ["include/llvm-libc-macros/termios-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_termios_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_termios_macros",
+    hdrs = ["hdr/termios_macros.h"],
+    deps = [
+        ":llvm_libc_macros_termios_macros",
+    ],
+)
+
+libc_support_library(
+    name = "termios_tcgetattr",
+    hdrs = ["src/termios/tcgetattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_termios",
+    ],
+)
+
+libc_support_library(
+    name = "termios_tcsetattr",
+    hdrs = ["src/termios/tcsetattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_termios",
     ],
 )
