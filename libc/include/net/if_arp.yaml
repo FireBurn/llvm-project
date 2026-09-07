@@ -1,0 +1,36 @@
+header: net/if_arp.h
+standards:
+  - bsd
+public_includes:
+  # Where the ARP message itself, and the names for the kinds of hardware and
+  # the operations, are defined.
+  - netinet/if_ether.h
+macros:
+  - macro_name: ATF_COM
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_PERM
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_PUBL
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_USETRAILERS
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_NETMASK
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_DONTPUB
+    macro_header: net-if-arp-macros.h
+  - macro_name: ATF_MAGIC
+    macro_header: net-if-arp-macros.h
+  - macro_name: ARPD_UPDATE
+    macro_header: net-if-arp-macros.h
+  - macro_name: ARPD_LOOKUP
+    macro_header: net-if-arp-macros.h
+  - macro_name: ARPD_FLUSH
+    macro_header: net-if-arp-macros.h
+  - macro_name: MAX_ADDR_LEN
+    macro_header: net-if-arp-macros.h
+types:
+  - type_name: struct_arpreq
+  - type_name: struct_arpreq_old
+enums: []
+objects: []
+functions: []
