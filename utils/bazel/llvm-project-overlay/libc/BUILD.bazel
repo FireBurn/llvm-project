@@ -27324,6 +27324,17 @@ libc_function(
 )
 
 libc_function(
+    name = "endhostent",
+    srcs = ["src/netdb/endhostent.cpp"],
+    hdrs = ["src/netdb/endhostent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_hosts",
+    ],
+)
+
+libc_function(
     name = "endnetent",
     srcs = ["src/netdb/endnetent.cpp"],
     hdrs = ["src/netdb/endnetent.h"],
@@ -27357,6 +27368,19 @@ libc_function(
         ":__support_macros_config",
         ":netdb_resolv_services",
         ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "gethostent",
+    srcs = ["src/netdb/gethostent.cpp"],
+    hdrs = ["src/netdb/gethostent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_hosts_storage",
+        ":netdb_resolv_hosts",
+        ":types_struct_hostent",
     ],
 )
 
@@ -27503,6 +27527,17 @@ libc_function(
         ":netdb_resolv_services",
         ":netdb_serv_storage",
         ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "sethostent",
+    srcs = ["src/netdb/sethostent.cpp"],
+    hdrs = ["src/netdb/sethostent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_hosts",
     ],
 )
 
@@ -27791,6 +27826,34 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":netdb_resolv_networks",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_resolv_hosts",
+    srcs = ["src/netdb/resolv/hosts.cpp"],
+    hdrs = ["src/netdb/resolv/hosts.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_sys_socket_macros",
+        ":inet_pton",
+        ":netdb_resolv_file_lines",
+        ":string_memory_utils",
+        ":types_size_t",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_hosts_storage",
+    srcs = ["src/netdb/hosts_storage.cpp"],
+    hdrs = ["src/netdb/hosts_storage.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_resolv_hosts",
     ],
 )
 
