@@ -23,8 +23,9 @@ namespace {
 
 constexpr const char *NETWORKS_PATH = "/etc/networks";
 
-LIBC_CONSTINIT LIBC_THREAD_LOCAL FileLines enumeration;
-LIBC_CONSTINIT LIBC_THREAD_LOCAL bool keep_open = false;
+// Where the enumeration has got to. setnetent asks for the file to be held
+// open across lookups, which is what the enumeration records.
+LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration enumeration;
 
 char *keep(cpp::string_view field, NetStorage &storage) {
   if (storage.used + field.size() + 1 > NetStorage::POOL_SIZE)
@@ -151,24 +152,16 @@ struct netent *net_by_addr(uint32_t net, int type, NetStorage &storage) {
 }
 
 void rewind_networks(bool stay_open) {
-  keep_open = stay_open;
-  enumeration.open(NETWORKS_PATH);
+  enumeration.rewind(NETWORKS_PATH, stay_open);
 }
 
-void stop_networks() {
-  keep_open = false;
-  enumeration.close_file();
-}
+void stop_networks() { enumeration.stop(); }
 
 struct netent *next_network(NetStorage &storage) {
-  if (!enumeration.is_open() && !enumeration.open(NETWORKS_PATH))
-    return nullptr;
   char line[512];
-  while (enumeration.next_line(line, sizeof(line)))
+  while (enumeration.next(NETWORKS_PATH, line, sizeof(line)))
     if (parse(line, storage))
       return &storage.entry;
-  if (!keep_open)
-    enumeration.close_file();
   return nullptr;
 }
 
