@@ -80,6 +80,10 @@ public:
       if (result.unresolved != 0) {
         report("symbol not found while linking ");
         report(modules_[i].name());
+        if (result.missing != nullptr) {
+          report(": ");
+          report(result.missing);
+        }
         report("\n");
         return false;
       }
