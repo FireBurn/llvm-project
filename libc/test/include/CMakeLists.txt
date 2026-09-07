@@ -54,6 +54,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  netinet_ip_icmp_test
+  SUITE
+    libc_include_tests
+  SRCS
+    netinet_ip_icmp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.netinet_ip_icmp_macros
+    libc.include.llvm-libc-types.struct_icmphdr
+)
+
+add_libc_test(
   net_route_test
   SUITE
     libc_include_tests
