@@ -940,6 +940,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_group_req",
+    hdrs = ["struct_group_req.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_group_req"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_group_source_req",
+    hdrs = ["struct_group_source_req.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_group_source_req"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_ifaddrs",
     hdrs = ["struct_ifaddrs.h"],
     deps = select({
@@ -953,6 +971,60 @@ libc_support_library(
     hdrs = ["struct_ifreq.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ifreq"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ip_mreq",
+    hdrs = ["struct_ip_mreq.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ip_mreq"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ip_mreq_source",
+    hdrs = ["struct_ip_mreq_source.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ip_mreq_source"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ip_mreqn",
+    hdrs = ["struct_ip_mreqn.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ip_mreqn"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ip_msfilter",
+    hdrs = ["struct_ip_msfilter.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ip_msfilter"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ip_opts",
+    hdrs = ["struct_ip_opts.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ip_opts"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_ipv6_mreq",
+    hdrs = ["struct_ipv6_mreq.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ipv6_mreq"],
         "//conditions:default": [],
     }),
 )
