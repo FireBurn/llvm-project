@@ -58,6 +58,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  vmsplice_test
+  SUITE
+    libc_fcntl_unittests
+  SRCS
+    vmsplice_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_iovec
+    libc.src.fcntl.tee
+    libc.src.fcntl.vmsplice
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   allocate_test
   SUITE
     libc_fcntl_unittests
