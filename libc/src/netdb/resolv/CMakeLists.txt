@@ -65,6 +65,24 @@ add_object_library(
 )
 
 add_object_library(
+  hosts
+  SRCS
+    hosts.cpp
+  HDRS
+    hosts.h
+  DEPENDS
+    .file_lines
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_hostent
+    libc.src.__support.CPP.string_view
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.arpa.inet.inet_pton
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_object_library(
   protocols
   SRCS
     protocols.cpp
