@@ -80,6 +80,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.posix_fallocate
     libc.src.fcntl.splice
     libc.src.fcntl.sync_file_range
+    libc.src.fcntl.tee
+    libc.src.fcntl.vmsplice
 
     # grp.h entrypoints
     libc.src.grp.endgrent
