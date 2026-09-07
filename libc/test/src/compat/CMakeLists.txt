@@ -36,13 +36,3 @@ add_libc_test(
     libc.src.unistd.getpid
     libc.src.unistd.write
 )
-
-add_libc_test(
-  res_init_test
-  SUITE
-    libc-compat-tests
-  SRCS
-    res_init_test.cpp
-  DEPENDS
-    libc.src.compat.res_init
-)

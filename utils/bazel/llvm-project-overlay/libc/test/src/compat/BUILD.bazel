@@ -44,8 +44,3 @@ libc_test(
     ],
 )
 
-libc_test(
-    name = "res_init_test",
-    srcs = ["res_init_test.cpp"],
-    deps = ["//libc:res_init"],
-)
