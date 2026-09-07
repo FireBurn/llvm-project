@@ -489,6 +489,20 @@ functions:
     arguments:
       - type: int
       - type: gid_t *
+  - name: getdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char *
+      - type: size_t
+  - name: setdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: size_t
   - name: gethostname
     standards:
       - posix
