@@ -68,6 +68,7 @@ macros:
   - macro_name: NO_ADDRESS
     macro_header: netdb-macros.h
 types:
+  - type_name: struct_netent
   - type_name: struct_protoent
   - type_name: struct_hostent
   - type_name: struct_servent
@@ -102,6 +103,37 @@ functions:
     return_type: const char *
     arguments:
       - type: int
+  - name: getnetbyname
+    standards:
+      - posix
+    return_type: struct netent *
+    arguments:
+      - type: const char *
+  - name: getnetbyaddr
+    standards:
+      - posix
+    return_type: struct netent *
+    arguments:
+      - type: uint32_t
+      - type: int
+  - name: getnetent
+    standards:
+      - posix
+    return_type: struct netent *
+    arguments:
+      - type: void
+  - name: setnetent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: int
+  - name: endnetent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
   - name: getprotobyname
     standards:
       - posix
