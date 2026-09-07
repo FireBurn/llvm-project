@@ -506,6 +506,7 @@ add_header_macro(
   netdb.h
   DEPENDS
     .llvm-libc-types.struct_hostent
+    .llvm-libc-types.struct_netent
     .llvm-libc-types.struct_protoent
     .llvm-libc-types.struct_servent
     .llvm_libc_common_h
