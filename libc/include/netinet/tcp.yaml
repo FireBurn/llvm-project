@@ -82,7 +82,98 @@ macros:
     macro_value: 0
   - macro_name: TCP_MD5SIG_MAXKEYLEN
     macro_value: 80
-types: []
-enums: []
+  # The flag octet of the header.
+  - macro_name: TH_FIN
+    macro_value: '0x01'
+  - macro_name: TH_SYN
+    macro_value: '0x02'
+  - macro_name: TH_RST
+    macro_value: '0x04'
+  - macro_name: TH_PUSH
+    macro_value: '0x08'
+  - macro_name: TH_ACK
+    macro_value: '0x10'
+  - macro_name: TH_URG
+    macro_value: '0x20'
+  # The options a header can carry, and how long each one is.
+  - macro_name: TCPOPT_EOL
+    macro_value: 0
+  - macro_name: TCPOPT_NOP
+    macro_value: 1
+  - macro_name: TCPOPT_MAXSEG
+    macro_value: 2
+  - macro_name: TCPOLEN_MAXSEG
+    macro_value: 4
+  - macro_name: TCPOPT_WINDOW
+    macro_value: 3
+  - macro_name: TCPOLEN_WINDOW
+    macro_value: 3
+  - macro_name: TCPOPT_SACK_PERMITTED
+    macro_value: 4
+  - macro_name: TCPOLEN_SACK_PERMITTED
+    macro_value: 2
+  - macro_name: TCPOPT_SACK
+    macro_value: 5
+  - macro_name: TCPOPT_TIMESTAMP
+    macro_value: 8
+  - macro_name: TCPOLEN_TIMESTAMP
+    macro_value: 10
+  - macro_name: TCPOLEN_TSTAMP_APPA
+    macro_value: (TCPOLEN_TIMESTAMP + 2)
+  - macro_name: TCPOPT_TSTAMP_HDR
+    macro_value: '(TCPOPT_NOP << 24 | TCPOPT_NOP << 16 | TCPOPT_TIMESTAMP << 8 | TCPOLEN_TIMESTAMP)'
+  # The largest segment to send where nothing better is known, and the largest
+  # window that fits in the header without scaling.
+  - macro_name: TCP_MSS
+    macro_value: 512
+  - macro_name: TCP_MAXWIN
+    macro_value: 65535
+  - macro_name: TCP_MAX_WINSHIFT
+    macro_value: 14
+  - macro_name: SOL_TCP
+    macro_value: 6
+  # What the far end agreed to, as reported in tcpi_options.
+  - macro_name: TCPI_OPT_TIMESTAMPS
+    macro_value: 1
+  - macro_name: TCPI_OPT_SACK
+    macro_value: 2
+  - macro_name: TCPI_OPT_WSCALE
+    macro_value: 4
+  - macro_name: TCPI_OPT_ECN
+    macro_value: 8
+  - macro_name: TCPI_OPT_ECN_SEEN
+    macro_value: 16
+  - macro_name: TCPI_OPT_SYN_DATA
+    macro_value: 32
+  - macro_name: TCPI_OPT_USEC_TS
+    macro_value: 64
+  - macro_name: TCPI_OPT_TFO_CHILD
+    macro_value: 128
+types:
+  - type_name: struct_tcphdr
+  - type_name: tcp_seq
+enums:
+  - name: TCP_ESTABLISHED
+    value: 1
+  - name: TCP_SYN_SENT
+    value: 2
+  - name: TCP_SYN_RECV
+    value: 3
+  - name: TCP_FIN_WAIT1
+    value: 4
+  - name: TCP_FIN_WAIT2
+    value: 5
+  - name: TCP_TIME_WAIT
+    value: 6
+  - name: TCP_CLOSE
+    value: 7
+  - name: TCP_CLOSE_WAIT
+    value: 8
+  - name: TCP_LAST_ACK
+    value: 9
+  - name: TCP_LISTEN
+    value: 10
+  - name: TCP_CLOSING
+    value: 11
 objects: []
 functions: []
