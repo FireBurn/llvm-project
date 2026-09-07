@@ -336,6 +336,8 @@ add_type_header(
   HDR
     struct_ifreq.h
 )
+add_header(tcp_seq HDR tcp_seq.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct_tcphdr HDR struct_tcphdr.h DEPENDS libc.include.llvm-libc-types.tcp_seq libc.include.llvm-libc-macros.endian_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_arphdr HDR struct_arphdr.h)
 add_header(struct_mallinfo HDR struct_mallinfo.h DEPENDS .size_t)
