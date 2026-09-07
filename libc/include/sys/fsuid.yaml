@@ -1,0 +1,22 @@
+header: sys/fsuid.h
+standards:
+  - linux
+macros: []
+types:
+  - type_name: uid_t
+  - type_name: gid_t
+enums: []
+objects: []
+functions:
+  - name: setfsuid
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: uid_t
+  - name: setfsgid
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: gid_t
