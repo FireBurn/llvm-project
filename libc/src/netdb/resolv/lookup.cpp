@@ -238,6 +238,7 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
         struct sockaddr_in6 to = {};
         to.sin6_family = AF_INET6;
         to.sin6_port = server.port;
+        to.sin6_scope_id = server.scope;
         inline_memcpy(&to.sin6_addr, server.bytes, 16);
         sent = linux_syscalls::sendto(fd, query.message, query.length, 0,
                                       reinterpret_cast<struct sockaddr *>(&to),

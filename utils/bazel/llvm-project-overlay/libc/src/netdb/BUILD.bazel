@@ -115,7 +115,6 @@ libc_support_library(
         "//libc/src/arpa/inet:inet_pton",
         "//libc/src/net:if_if_nametoindex",
         "//libc/src/string/memory_utils:memory_utils",
-        "//libc/src/unistd:close",
     ],
 )
 
