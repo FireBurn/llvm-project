@@ -152,7 +152,10 @@
     __IN6_IS_ADDR_LOOPBACK(__a);                                               \
   }))
 
-#define IN6_IS_ADDR_MULTICAST(a) ((a)->s6_addr[0] == 0xff)
+// Every one of these takes something that points at the sixteen octets of an
+// address, not necessarily a struct in6_addr: netlink code has them as four
+// words, and packet code has them as bytes. The cast is what lets it.
+#define IN6_IS_ADDR_MULTICAST(a) (((const unsigned char *)(a))[0] == 0xff)
 
 #define IN6_IS_ADDR_LINKLOCAL(a)                                               \
   (__extension__({                                                             \
