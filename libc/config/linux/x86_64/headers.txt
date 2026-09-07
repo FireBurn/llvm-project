@@ -135,6 +135,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.lastlog
     libc.include.mntent
     libc.include.net_if_arp
+    libc.include.net_route
     libc.include.utime
     libc.include.wchar
     libc.include.wctype
