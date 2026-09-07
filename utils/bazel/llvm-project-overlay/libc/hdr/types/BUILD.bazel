@@ -688,6 +688,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_netent",
+    hdrs = ["struct_netent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_netent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_termios",
     hdrs = ["struct_termios.h"],
     deps = select({
