@@ -296,6 +296,56 @@ add_entrypoint_object(
 )
 
 add_object_library(
+  hosts_storage
+  SRCS
+    hosts_storage.cpp
+  HDRS
+    hosts_storage.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.hosts
+)
+
+add_entrypoint_object(
+  sethostent
+  SRCS
+    sethostent.cpp
+  HDRS
+    sethostent.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.hosts
+)
+
+add_entrypoint_object(
+  endhostent
+  SRCS
+    endhostent.cpp
+  HDRS
+    endhostent.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.hosts
+)
+
+add_entrypoint_object(
+  gethostent
+  SRCS
+    gethostent.cpp
+  HDRS
+    gethostent.h
+  DEPENDS
+    .hosts_storage
+    libc.hdr.types.struct_hostent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.hosts
+)
+
+add_object_library(
   proto_storage
   SRCS
     proto_storage.cpp
