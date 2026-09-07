@@ -357,7 +357,7 @@ public:
     {
       FileLock lock(this);
       if (prev_op == FileOp::WRITE && pos > 0) {
-        auto buf_result = platform_write(this, buf, pos);
+        auto buf_result = write_all(static_cast<const uint8_t *>(buf), pos);
         if (buf_result.has_error() || buf_result.value < pos) {
           err = true;
           return buf_result.error;
@@ -471,6 +471,22 @@ private:
   FileIOResult write_unlocked_lbf(const uint8_t *data, size_t len);
   FileIOResult write_unlocked_fbf(const uint8_t *data, size_t len);
   FileIOResult write_unlocked_nbf(const uint8_t *data, size_t len);
+
+  // Hands the whole of |data| over, asking the platform again for as long as
+  // it keeps taking some. A write to a pipe, a socket or a terminal takes only
+  // what it has room for at that moment, and Linux stops a single write at
+  // 0x7ffff000 bytes however much was asked of it. Neither is a failure, so
+  // stopping at the first short write would throw the rest away.
+  LIBC_INLINE FileIOResult write_all(const uint8_t *data, size_t len) {
+    size_t written = 0;
+    while (written < len) {
+      FileIOResult result = platform_write(this, data + written, len - written);
+      if (result.has_error() || result.value == 0)
+        return {written, result.error};
+      written += result.value;
+    }
+    return written;
+  }
 
   FileIOResult read_unlocked_fbf(uint8_t *data, size_t len);
   FileIOResult read_unlocked_nbf(uint8_t *data, size_t len);
