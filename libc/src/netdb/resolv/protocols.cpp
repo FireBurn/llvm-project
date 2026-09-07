@@ -22,10 +22,9 @@ namespace {
 
 constexpr const char *PROTOCOLS_PATH = "/etc/protocols";
 
-// The file the enumeration is partway through. setprotoent asks for it to be
-// held open across lookups, which is what `keep_open` records.
-LIBC_CONSTINIT LIBC_THREAD_LOCAL FileLines enumeration;
-LIBC_CONSTINIT LIBC_THREAD_LOCAL bool keep_open = false;
+// Where the enumeration has got to. setprotoent asks for the file to be held
+// open across lookups, which is what the enumeration records.
+LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration enumeration;
 
 // Copies a field into the storage's pool and hands back a pointer to it, or
 // null where there is no room left.
@@ -129,26 +128,16 @@ struct protoent *by_number(int number, ProtoStorage &storage) {
 }
 
 void rewind_entries(bool stay_open) {
-  keep_open = stay_open;
-  enumeration.open(PROTOCOLS_PATH);
+  enumeration.rewind(PROTOCOLS_PATH, stay_open);
 }
 
-void stop_entries() {
-  keep_open = false;
-  enumeration.close_file();
-}
+void stop_entries() { enumeration.stop(); }
 
 struct protoent *next_entry(ProtoStorage &storage) {
-  if (!enumeration.is_open() && !enumeration.open(PROTOCOLS_PATH))
-    return nullptr;
   char line[512];
-  while (enumeration.next_line(line, sizeof(line)))
+  while (enumeration.next(PROTOCOLS_PATH, line, sizeof(line)))
     if (parse(line, storage))
       return &storage.entry;
-  // The end of the file. Unless the caller asked for it to be held open, it
-  // is closed here so that reading again starts from the front.
-  if (!keep_open)
-    enumeration.close_file();
   return nullptr;
 }
 
