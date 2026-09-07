@@ -1629,6 +1629,18 @@ add_header_macro(
 )
 
 add_header_macro(
+  net_if_arp
+  ../libc/include/net/if_arp.yaml
+  net/if_arp.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.net_if_arp_macros
+    .llvm-libc-types.struct_arpreq
+    .llvm-libc-types.struct_arpreq_old
+    .netinet_if_ether
+)
+
+add_header_macro(
   net_if
   ../libc/include/net/if.yaml
   net/if.h
