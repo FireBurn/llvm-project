@@ -742,6 +742,7 @@ if(LLVM_LIBC_INCLUDE_SCUDO)
     libc.src.stdlib.mallinfo
     libc.src.stdlib.mallinfo2
     libc.src.stdlib.malloc_info
+    libc.src.stdlib.malloc_trim
     libc.src.stdlib.malloc_usable_size
     libc.src.stdlib.mallopt
     libc.src.stdlib.memalign
