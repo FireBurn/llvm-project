@@ -51,14 +51,29 @@ LIBC_INLINE bool join_path(const char *dir, const char *name, char *out,
   return true;
 }
 
-// DT_RUNPATH, or the older DT_RPATH when a module still carries one.
-LIBC_INLINE const char *run_path_of(const Module &module) {
+// The older DT_RPATH, which is looked at before LD_LIBRARY_PATH and so cannot
+// be overridden. A module carrying DT_RUNPATH is not using DT_RPATH at all,
+// even where both are present, so the newer one turns the older one off.
+LIBC_INLINE const char *rpath_of(const Module &module) {
+  const char *strings = module.strtab();
+  if (strings == nullptr)
+    return nullptr;
+  if (module.dynamic().value(DT_RUNPATH))
+    return nullptr;
+  if (auto offset = module.dynamic().value(DT_RPATH))
+    return strings + *offset;
+  return nullptr;
+}
+
+// DT_RUNPATH, which is looked at after LD_LIBRARY_PATH. Being overridable is
+// the whole reason it was added: a program built against libraries that are
+// not installed yet is run with LD_LIBRARY_PATH naming where they actually
+// are, and that has to win over the path recorded for where they will end up.
+LIBC_INLINE const char *runpath_of(const Module &module) {
   const char *strings = module.strtab();
   if (strings == nullptr)
     return nullptr;
   if (auto offset = module.dynamic().value(DT_RUNPATH))
-    return strings + *offset;
-  if (auto offset = module.dynamic().value(DT_RPATH))
     return strings + *offset;
   return nullptr;
 }
@@ -93,8 +108,10 @@ load_from_path_list(const char *list, const char *name, size_t page_size,
 
 // Loads the object `name` stands for, in the order a loader is expected to
 // look: a name with a directory in it is taken as it is, and a bare one is
-// looked for under the run path of the object asking, then under
-// `library_path`, then under the system directories.
+// looked for under the asking object's DT_RPATH, then under `library_path`,
+// then under its DT_RUNPATH, then under the system directories. The two run
+// paths sit on either side of LD_LIBRARY_PATH, which is what tells them
+// apart.
 //
 // `requester` is the module whose run path applies, or null where none does.
 LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
@@ -113,13 +130,19 @@ LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
     }
 
   if (requester != nullptr) {
-    auto loaded = load_from_path_list(run_path_of(*requester), name, page_size,
+    auto loaded = load_from_path_list(rpath_of(*requester), name, page_size,
                                       requester->name());
     if (loaded.has_value())
       return loaded;
   }
   if (auto loaded = load_from_path_list(library_path, name, page_size))
     return loaded;
+  if (requester != nullptr) {
+    auto loaded = load_from_path_list(runpath_of(*requester), name, page_size,
+                                      requester->name());
+    if (loaded.has_value())
+      return loaded;
+  }
   for (const char *dir : DEFAULT_SEARCH_PATHS) {
     char path[MAX_SEARCH_PATH];
     if (!join_path(dir, name, path, sizeof(path)))
