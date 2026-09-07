@@ -28,6 +28,12 @@ functions:
     arguments:
       - type: int
       - type: FILE *
+  - name: malloc_trim
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: size_t
   - name: malloc_usable_size
     standards:
       - gnu
