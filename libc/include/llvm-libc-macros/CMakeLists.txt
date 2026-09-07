@@ -394,6 +394,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  net_if_arp_macros
+  HDR
+    net-if-arp-macros.h
+)
+
+add_macro_header(
   netdb_macros
   HDR
     netdb-macros.h
