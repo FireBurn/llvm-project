@@ -1,0 +1,27 @@
+add_entrypoint_object(
+  setfsuid
+  SRCS
+    setfsuid.cpp
+  HDRS
+    ../setfsuid.h
+  DEPENDS
+    libc.hdr.types.uid_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  setfsgid
+  SRCS
+    setfsgid.cpp
+  HDRS
+    ../setfsgid.h
+  DEPENDS
+    libc.hdr.types.gid_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
