@@ -82,6 +82,35 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vmsplice
+  SRCS
+    vmsplice.cpp
+  HDRS
+    ../vmsplice.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  tee
+  SRCS
+    tee.cpp
+  HDRS
+    ../tee.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   name_to_handle_at
   SRCS
     name_to_handle_at.cpp
