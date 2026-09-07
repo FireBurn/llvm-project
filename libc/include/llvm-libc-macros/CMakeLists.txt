@@ -400,6 +400,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  arpa_nameser_macros
+  HDR
+    arpa-nameser-macros.h
+)
+
+add_macro_header(
   netdb_macros
   HDR
     netdb-macros.h
