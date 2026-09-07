@@ -1704,6 +1704,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  resolv
+  ../libc/include/resolv.yaml
+  resolv.h
+  DEPENDS
+    .llvm_libc_common_h
+    .arpa_nameser
+)
+
+add_header_macro(
   net_route
   ../libc/include/net/route.yaml
   net/route.h
