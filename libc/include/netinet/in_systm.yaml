@@ -1,0 +1,11 @@
+header: netinet/in_systm.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: n_short
+  - type_name: n_long
+  - type_name: n_time
+enums: []
+objects: []
+functions: []
