@@ -73,6 +73,20 @@ libc_test(
 )
 
 libc_test(
+    name = "getnetent_test",
+    srcs = ["getnetent_test.cpp"],
+    deps = [
+        "//libc:endnetent",
+        "//libc:getnetbyaddr",
+        "//libc:getnetbyname",
+        "//libc:getnetent",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:setnetent",
+        "//libc:types_struct_netent",
+    ],
+)
+
+libc_test(
     name = "gai_strerror_test",
     srcs = ["gai_strerror_test.cpp"],
     deps = [
