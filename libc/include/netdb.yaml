@@ -164,6 +164,24 @@ functions:
     return_type: struct protoent *
     arguments:
       - type: void
+  - name: sethostent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: int
+  - name: endhostent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
+  - name: gethostent
+    standards:
+      - posix
+    return_type: struct hostent *
+    arguments:
+      - type: void
   - name: setprotoent
     standards:
       - posix
