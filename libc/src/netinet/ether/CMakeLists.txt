@@ -40,3 +40,91 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
 )
+
+add_object_library(
+  ethers
+  SRCS
+    ethers.cpp
+  HDRS
+    ethers.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.include.llvm-libc-macros.net_ethernet_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.ctype_utils
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.file_lines
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  ether_aton
+  SRCS
+    ether_aton.cpp
+  HDRS
+    ether_aton.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.common
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netinet.ether.ethers
+)
+
+add_entrypoint_object(
+  ether_aton_r
+  SRCS
+    ether_aton_r.cpp
+  HDRS
+    ether_aton_r.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netinet.ether.ethers
+)
+
+add_entrypoint_object(
+  ether_line
+  SRCS
+    ether_line.cpp
+  HDRS
+    ether_line.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netinet.ether.ethers
+)
+
+add_entrypoint_object(
+  ether_ntohost
+  SRCS
+    ether_ntohost.cpp
+  HDRS
+    ether_ntohost.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netinet.ether.ethers
+)
+
+add_entrypoint_object(
+  ether_hostton
+  SRCS
+    ether_hostton.cpp
+  HDRS
+    ether_hostton.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netinet.ether.ethers
+)
