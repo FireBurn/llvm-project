@@ -27,6 +27,18 @@ TEST(LlvmLibcCtermidTest, WithoutABuffer) {
   ASSERT_STREQ(result, "/dev/tty");
 }
 
+// A temporary file goes under the directory this names unless something
+// says otherwise.
+TEST(LlvmLibcCtermidTest, TmpdirIsNamed) {
+  const char *expected = "/tmp";
+  const char *actual = P_tmpdir;
+  for (size_t i = 0;; ++i) {
+    ASSERT_EQ(actual[i], expected[i]);
+    if (expected[i] == '\0')
+      break;
+  }
+}
+
 // The name fits in an array of the size the macro states.
 TEST(LlvmLibcCtermidTest, NameFitsTheStatedSize) {
   char buffer[L_ctermid];
