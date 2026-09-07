@@ -1,3 +1,4 @@
+add_subdirectory(fsuid)
 add_subdirectory(msg)
 add_subdirectory(mman)
 add_subdirectory(mount)
