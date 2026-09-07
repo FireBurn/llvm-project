@@ -25,6 +25,10 @@
 #define EAI_SYSTEM -11
 #define EAI_OVERFLOW -12
 
+// Two the GNU library added, which code written against it uses.
+#define EAI_NODATA -5
+#define EAI_ADDRFAMILY -9
+
 // Flags for the ai_flags field of struct addrinfo. The values are the ones
 // Linux uses, which is what anything already built expects to see.
 #define AI_PASSIVE 0x0001
