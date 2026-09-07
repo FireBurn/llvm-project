@@ -742,6 +742,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_endian_macros",
+    hdrs = ["llvm-libc-macros/endian-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_cc_t",
     hdrs = ["llvm-libc-types/cc_t.h"],
 )
@@ -1144,6 +1149,21 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_statfs",
     hdrs = ["llvm-libc-types/struct_statfs.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_tcp_seq",
+    hdrs = ["llvm-libc-types/tcp_seq.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_tcphdr",
+    hdrs = ["llvm-libc-types/struct_tcphdr.h"],
+    deps = [
+        ":llvm_libc_macros_endian_macros",
+        ":llvm_libc_macros_stdint_macros",
+        ":llvm_libc_types_tcp_seq",
+    ],
 )
 
 libc_support_library(
