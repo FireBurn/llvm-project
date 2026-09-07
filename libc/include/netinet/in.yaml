@@ -182,7 +182,63 @@ types:
   # Type also defined by sys/socket.h, but listing it explicitly as it is
   # required by POSIX.
   - type_name: sa_family_t
-enums: []
+# The ports the well known services were given, and the two boundaries
+# that say who may bind what: below IPPORT_RESERVED is for privileged
+# processes, and above IPPORT_USERRESERVED is left to servers nobody
+# privileged runs.
+enums:
+  - name: IPPORT_ECHO
+    value: 7
+  - name: IPPORT_DISCARD
+    value: 9
+  - name: IPPORT_SYSTAT
+    value: 11
+  - name: IPPORT_DAYTIME
+    value: 13
+  - name: IPPORT_NETSTAT
+    value: 15
+  - name: IPPORT_FTP
+    value: 21
+  - name: IPPORT_TELNET
+    value: 23
+  - name: IPPORT_SMTP
+    value: 25
+  - name: IPPORT_TIMESERVER
+    value: 37
+  - name: IPPORT_NAMESERVER
+    value: 42
+  - name: IPPORT_WHOIS
+    value: 43
+  - name: IPPORT_MTP
+    value: 57
+  - name: IPPORT_TFTP
+    value: 69
+  - name: IPPORT_RJE
+    value: 77
+  - name: IPPORT_FINGER
+    value: 79
+  - name: IPPORT_TTYLINK
+    value: 87
+  - name: IPPORT_SUPDUP
+    value: 95
+  - name: IPPORT_EXECSERVER
+    value: 512
+  - name: IPPORT_LOGINSERVER
+    value: 513
+  - name: IPPORT_CMDSERVER
+    value: 514
+  - name: IPPORT_EFSSERVER
+    value: 520
+  - name: IPPORT_BIFFUDP
+    value: 512
+  - name: IPPORT_WHOSERVER
+    value: 513
+  - name: IPPORT_ROUTESERVER
+    value: 520
+  - name: IPPORT_RESERVED
+    value: 1024
+  - name: IPPORT_USERRESERVED
+    value: 5000
 objects:
   - object_name: in6addr_any
     object_type: const struct in6_addr
