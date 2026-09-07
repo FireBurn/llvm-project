@@ -10,3 +10,16 @@ add_libc_test(
     libc.src.netdb.resolv.dns_message
     libc.src.string.strcmp
 )
+
+add_libc_test(
+  resolv_conf_test
+  SUITE
+    libc-netdb-resolv-tests
+  SRCS
+    resolv_conf_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.src.__support.CPP.string_view
+    libc.src.netdb.resolv.resolv_conf
+    libc.src.string.strcmp
+)
