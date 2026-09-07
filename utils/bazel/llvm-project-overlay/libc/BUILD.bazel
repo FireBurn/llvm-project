@@ -26914,6 +26914,19 @@ libc_function(
 )
 
 libc_function(
+    name = "endservent",
+    srcs = ["src/netdb/endservent.cpp"],
+    hdrs = ["src/netdb/endservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_endservent",
+        ":netdb_resolv_services",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
     name = "getnetbyaddr",
     srcs = ["src/netdb/getnetbyaddr.cpp"],
     hdrs = ["src/netdb/getnetbyaddr.h"],
@@ -27041,6 +27054,34 @@ libc_function(
 )
 
 libc_function(
+    name = "getservbyport",
+    srcs = ["src/netdb/getservbyport.cpp"],
+    hdrs = ["src/netdb/getservbyport.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getservbyport",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "getservent",
+    srcs = ["src/netdb/getservent.cpp"],
+    hdrs = ["src/netdb/getservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getservent",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
     name = "setnetent",
     srcs = ["src/netdb/setnetent.cpp"],
     hdrs = ["src/netdb/setnetent.h"],
@@ -27064,6 +27105,19 @@ libc_function(
         ":netdb_resolv_protocols",
         ":netdb_setprotoent",
         ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "setservent",
+    srcs = ["src/netdb/setservent.cpp"],
+    hdrs = ["src/netdb/setservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":netdb_setservent",
+        ":types_struct_servent",
     ],
 )
 
@@ -27686,5 +27740,55 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":netdb_resolv_networks",
         ":types_struct_netent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_endservent",
+    srcs = ["src/netdb/endservent.cpp"],
+    hdrs = ["src/netdb/endservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getservbyport",
+    srcs = ["src/netdb/getservbyport.cpp"],
+    hdrs = ["src/netdb/getservbyport.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getservent",
+    srcs = ["src/netdb/getservent.cpp"],
+    hdrs = ["src/netdb/getservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_setservent",
+    srcs = ["src/netdb/setservent.cpp"],
+    hdrs = ["src/netdb/setservent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_services",
+        ":types_struct_servent",
     ],
 )
