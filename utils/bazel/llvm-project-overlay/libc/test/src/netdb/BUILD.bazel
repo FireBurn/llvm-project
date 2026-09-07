@@ -73,6 +73,18 @@ libc_test(
 )
 
 libc_test(
+    name = "gethostent_test",
+    srcs = ["gethostent_test.cpp"],
+    deps = [
+        "//libc:endhostent",
+        "//libc:gethostent",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:sethostent",
+        "//libc:types_struct_hostent",
+    ],
+)
+
+libc_test(
     name = "getnetent_test",
     srcs = ["getnetent_test.cpp"],
     deps = [
