@@ -646,6 +646,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  getdomainname_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getdomainname_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
+    libc.src.unistd.getdomainname
+    libc.src.unistd.setdomainname
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   gethostname_test
   SUITE
     libc_unistd_unittests
