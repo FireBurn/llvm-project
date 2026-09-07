@@ -374,6 +374,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.malloc
     libc.src.stdlib.mallinfo
     libc.src.stdlib.mallinfo2
+    libc.src.stdlib.malloc_trim
     libc.src.stdlib.malloc_info
     libc.src.stdlib.malloc_usable_size
     libc.src.stdlib.memalign
