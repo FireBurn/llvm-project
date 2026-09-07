@@ -121,6 +121,91 @@ add_entrypoint_object(
 )
 
 add_object_library(
+  net_storage
+  SRCS
+    net_storage.cpp
+  HDRS
+    net_storage.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_entrypoint_object(
+  getnetbyname
+  SRCS
+    getnetbyname.cpp
+  HDRS
+    getnetbyname.h
+  DEPENDS
+    .net_storage
+    libc.hdr.stdint_proxy
+    libc.hdr.types.struct_netent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_entrypoint_object(
+  getnetbyaddr
+  SRCS
+    getnetbyaddr.cpp
+  HDRS
+    getnetbyaddr.h
+  DEPENDS
+    .net_storage
+    libc.hdr.stdint_proxy
+    libc.hdr.types.struct_netent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_entrypoint_object(
+  getnetent
+  SRCS
+    getnetent.cpp
+  HDRS
+    getnetent.h
+  DEPENDS
+    .net_storage
+    libc.hdr.stdint_proxy
+    libc.hdr.types.struct_netent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_entrypoint_object(
+  setnetent
+  SRCS
+    setnetent.cpp
+  HDRS
+    setnetent.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.struct_netent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_entrypoint_object(
+  endnetent
+  SRCS
+    endnetent.cpp
+  HDRS
+    endnetent.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.struct_netent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.networks
+)
+
+add_object_library(
   proto_storage
   SRCS
     proto_storage.cpp
