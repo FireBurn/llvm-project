@@ -21,6 +21,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  gethostbyaddr_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    gethostbyaddr_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.netdb.gethostbyaddr
+)
+
+add_libc_test(
   getnetent_test
   SUITE
     libc_netdb_unittests
