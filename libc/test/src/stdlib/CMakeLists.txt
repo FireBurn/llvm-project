@@ -1,6 +1,7 @@
 add_libc_testsuite(libc-stdlib-tests)
 
 add_libc_test(
+  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
@@ -844,4 +845,14 @@ add_libc_test(
     libc.src.unistd.close
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
+)
+add_libc_test(
+  malloc_trim_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    malloc_trim_test.cpp
+  DEPENDS
+    libc.hdr.func.mallopt
+    libc.src.stdlib.malloc_trim
 )
