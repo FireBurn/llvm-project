@@ -26,6 +26,46 @@
 #define AF_ALG 38     // Kernel crypto
 #define AF_XDP 44     // Express data path
 
+// The rest of the families the kernel knows, at the numbers it gives them.
+// AF_FILE and AF_ROUTE are the names 4.4BSD used for two of them.
+#define AF_AX25 3
+#define AF_IPX 4
+#define AF_APPLETALK 5
+#define AF_NETROM 6
+#define AF_ATMPVC 8
+#define AF_X25 9
+#define AF_ROSE 11
+#define AF_DECnet 12
+#define AF_NETBEUI 13
+#define AF_SECURITY 14
+#define AF_KEY 15
+#define AF_ASH 18
+#define AF_ECONET 19
+#define AF_ATMSVC 20
+#define AF_RDS 21
+#define AF_SNA 22
+#define AF_IRDA 23
+#define AF_PPPOX 24
+#define AF_WANPIPE 25
+#define AF_LLC 26
+#define AF_IB 27
+#define AF_TIPC 30
+#define AF_BLUETOOTH 31
+#define AF_IUCV 32
+#define AF_RXRPC 33
+#define AF_ISDN 34
+#define AF_PHONET 35
+#define AF_IEEE802154 36
+#define AF_CAIF 37
+#define AF_NFC 39
+#define AF_KCM 41
+#define AF_QIPCRTR 42
+#define AF_SMC 43
+#define AF_MCTP 45
+#define AF_MAX 46
+#define AF_FILE AF_LOCAL
+#define AF_ROUTE AF_NETLINK
+
 // 4.2BSD protocol families
 #define PF_UNSPEC AF_UNSPEC
 #define PF_UNIX AF_UNIX
@@ -40,6 +80,43 @@
 #define PF_CAN AF_CAN
 #define PF_ALG AF_ALG
 #define PF_XDP AF_XDP
+#define PF_AX25 AF_AX25
+#define PF_IPX AF_IPX
+#define PF_APPLETALK AF_APPLETALK
+#define PF_NETROM AF_NETROM
+#define PF_ATMPVC AF_ATMPVC
+#define PF_X25 AF_X25
+#define PF_ROSE AF_ROSE
+#define PF_DECnet AF_DECnet
+#define PF_NETBEUI AF_NETBEUI
+#define PF_SECURITY AF_SECURITY
+#define PF_KEY AF_KEY
+#define PF_ASH AF_ASH
+#define PF_ECONET AF_ECONET
+#define PF_ATMSVC AF_ATMSVC
+#define PF_RDS AF_RDS
+#define PF_SNA AF_SNA
+#define PF_IRDA AF_IRDA
+#define PF_PPPOX AF_PPPOX
+#define PF_WANPIPE AF_WANPIPE
+#define PF_LLC AF_LLC
+#define PF_IB AF_IB
+#define PF_TIPC AF_TIPC
+#define PF_BLUETOOTH AF_BLUETOOTH
+#define PF_IUCV AF_IUCV
+#define PF_RXRPC AF_RXRPC
+#define PF_ISDN AF_ISDN
+#define PF_PHONET AF_PHONET
+#define PF_IEEE802154 AF_IEEE802154
+#define PF_CAIF AF_CAIF
+#define PF_NFC AF_NFC
+#define PF_KCM AF_KCM
+#define PF_QIPCRTR AF_QIPCRTR
+#define PF_SMC AF_SMC
+#define PF_MCTP AF_MCTP
+#define PF_MAX AF_MAX
+#define PF_FILE AF_FILE
+#define PF_ROUTE AF_ROUTE
 
 #define SOCK_STREAM 1
 #define SOCK_DGRAM 2
