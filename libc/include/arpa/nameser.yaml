@@ -1,0 +1,255 @@
+header: arpa/nameser.h
+standards:
+  - bsd
+macros:
+  - macro_name: NS_PACKETSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXDNAME
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXMSG
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXCDNAME
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXLABEL
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_HFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_QFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_RRFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT32SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT16SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT8SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INADDRSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_IN6ADDRSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_CMPRSFLGS
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_DEFAULTPORT
+    macro_header: arpa-nameser-macros.h
+types:
+  - type_name: HEADER
+enums:
+  - name: ns_s_qd
+    value: 0
+  - name: ns_s_zn
+    value: 0
+  - name: ns_s_an
+    value: 1
+  - name: ns_s_pr
+    value: 1
+  - name: ns_s_ns
+    value: 2
+  - name: ns_s_ud
+    value: 2
+  - name: ns_s_ar
+    value: 3
+  - name: ns_s_max
+    value: 4
+  - name: ns_o_query
+    value: 0
+  - name: ns_o_iquery
+    value: 1
+  - name: ns_o_status
+    value: 2
+  - name: ns_o_notify
+    value: 4
+  - name: ns_o_update
+    value: 5
+  - name: ns_r_noerror
+    value: 0
+  - name: ns_r_formerr
+    value: 1
+  - name: ns_r_servfail
+    value: 2
+  - name: ns_r_nxdomain
+    value: 3
+  - name: ns_r_notimpl
+    value: 4
+  - name: ns_r_refused
+    value: 5
+  - name: ns_c_in
+    value: 1
+  - name: ns_c_chaos
+    value: 3
+  - name: ns_c_hs
+    value: 4
+  - name: ns_c_none
+    value: 254
+  - name: ns_c_any
+    value: 255
+  - name: ns_t_a
+    value: 1
+  - name: ns_t_ns
+    value: 2
+  - name: ns_t_cname
+    value: 5
+  - name: ns_t_soa
+    value: 6
+  - name: ns_t_ptr
+    value: 12
+  - name: ns_t_mx
+    value: 15
+  - name: ns_t_txt
+    value: 16
+  - name: ns_t_aaaa
+    value: 28
+  - name: ns_t_srv
+    value: 33
+  - name: ns_t_opt
+    value: 41
+  - name: ns_t_md
+    value: 3
+  - name: ns_t_mf
+    value: 4
+  - name: ns_t_mb
+    value: 7
+  - name: ns_t_mg
+    value: 8
+  - name: ns_t_mr
+    value: 9
+  - name: ns_t_null
+    value: 10
+  - name: ns_t_wks
+    value: 11
+  - name: ns_t_hinfo
+    value: 13
+  - name: ns_t_minfo
+    value: 14
+  - name: ns_t_rp
+    value: 17
+  - name: ns_t_afsdb
+    value: 18
+  - name: ns_t_x25
+    value: 19
+  - name: ns_t_isdn
+    value: 20
+  - name: ns_t_rt
+    value: 21
+  - name: ns_t_nsap
+    value: 22
+  - name: ns_t_nsap_ptr
+    value: 23
+  - name: ns_t_sig
+    value: 24
+  - name: ns_t_key
+    value: 25
+  - name: ns_t_px
+    value: 26
+  - name: ns_t_gpos
+    value: 27
+  - name: ns_t_loc
+    value: 29
+  - name: ns_t_nxt
+    value: 30
+  - name: ns_t_eid
+    value: 31
+  - name: ns_t_nimloc
+    value: 32
+  - name: ns_t_atma
+    value: 34
+  - name: ns_t_naptr
+    value: 35
+  - name: ns_t_kx
+    value: 36
+  - name: ns_t_cert
+    value: 37
+  - name: ns_t_a6
+    value: 38
+  - name: ns_t_dname
+    value: 39
+  - name: ns_t_sink
+    value: 40
+  - name: ns_t_apl
+    value: 42
+  - name: ns_t_ds
+    value: 43
+  - name: ns_t_sshfp
+    value: 44
+  - name: ns_t_ipseckey
+    value: 45
+  - name: ns_t_rrsig
+    value: 46
+  - name: ns_t_nsec
+    value: 47
+  - name: ns_t_dnskey
+    value: 48
+  - name: ns_t_dhcid
+    value: 49
+  - name: ns_t_nsec3
+    value: 50
+  - name: ns_t_nsec3param
+    value: 51
+  - name: ns_t_tlsa
+    value: 52
+  - name: ns_t_smimea
+    value: 53
+  - name: ns_t_hip
+    value: 55
+  - name: ns_t_ninfo
+    value: 56
+  - name: ns_t_rkey
+    value: 57
+  - name: ns_t_talink
+    value: 58
+  - name: ns_t_cds
+    value: 59
+  - name: ns_t_cdnskey
+    value: 60
+  - name: ns_t_openpgpkey
+    value: 61
+  - name: ns_t_csync
+    value: 62
+  - name: ns_t_spf
+    value: 99
+  - name: ns_t_uinfo
+    value: 100
+  - name: ns_t_uid
+    value: 101
+  - name: ns_t_gid
+    value: 102
+  - name: ns_t_unspec
+    value: 103
+  - name: ns_t_nid
+    value: 104
+  - name: ns_t_l32
+    value: 105
+  - name: ns_t_l64
+    value: 106
+  - name: ns_t_lp
+    value: 107
+  - name: ns_t_eui48
+    value: 108
+  - name: ns_t_eui64
+    value: 109
+  - name: ns_t_tkey
+    value: 249
+  - name: ns_t_tsig
+    value: 250
+  - name: ns_t_ixfr
+    value: 251
+  - name: ns_t_axfr
+    value: 252
+  - name: ns_t_mailb
+    value: 253
+  - name: ns_t_maila
+    value: 254
+  - name: ns_t_uri
+    value: 256
+  - name: ns_t_caa
+    value: 257
+  - name: ns_t_avc
+    value: 258
+  - name: ns_t_ta
+    value: 32768
+  - name: ns_t_dlv
+    value: 32769
+  - name: ns_t_any
+    value: 255
+objects: []
+functions: []
