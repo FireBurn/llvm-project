@@ -1,4 +1,5 @@
 add_subdirectory(file)
+add_subdirectory(fsuid)
 add_subdirectory(mount)
 add_subdirectory(msg)
 add_subdirectory(inotify)
