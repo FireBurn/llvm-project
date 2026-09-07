@@ -2,6 +2,14 @@ header: fcntl.h
 standards:
   - posix
 macros:
+  - macro_name: F_OK
+    macro_header: access-mode-macros.h
+  - macro_name: X_OK
+    macro_header: access-mode-macros.h
+  - macro_name: W_OK
+    macro_header: access-mode-macros.h
+  - macro_name: R_OK
+    macro_header: access-mode-macros.h
   - macro_name: SYNC_FILE_RANGE_WAIT_AFTER
     macro_header: fcntl-macros.h
   - macro_name: SYNC_FILE_RANGE_WRITE
