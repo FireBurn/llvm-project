@@ -131,6 +131,10 @@ private:
 struct BindResult {
   size_t bound = 0;
   size_t unresolved = 0;
+  // The first symbol that could not be found, so that whoever gives up can
+  // say which one it was. A count on its own leaves the reader to work that
+  // out with a disassembler.
+  const char *missing = nullptr;
 };
 
 // Applies one table of symbol relocations against the search order.
@@ -172,6 +176,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
         auto defined = order.find(name);
         if (!defined) {
           ++result.unresolved;
+          if (result.missing == nullptr)
+            result.missing = name;
           continue;
         }
         module = defined->module;
@@ -194,6 +200,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       const intptr_t *offsets = order.tls_offsets();
       if (offsets == nullptr) {
         ++result.unresolved;
+        if (result.missing == nullptr)
+          result.missing = name;
         continue;
       }
       intptr_t block = 0;
@@ -210,6 +218,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
         value = defined->value;
       } else {
         ++result.unresolved;
+        if (result.missing == nullptr)
+          result.missing = name;
         continue;
       }
       auto *slot =
@@ -229,6 +239,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       value = *found;
     } else if (symbol_binding(symbol.st_info) != STB_WEAK) {
       ++result.unresolved;
+      if (result.missing == nullptr)
+        result.missing = name;
       continue;
     }
 
@@ -251,7 +263,8 @@ LIBC_INLINE BindResult bind_module(const Module &target, size_t target_index,
       bind_relocations(target, target_index, target.relocations(), order);
   BindResult b =
       bind_relocations(target, target_index, target.plt_relocations(), order);
-  return BindResult{a.bound + b.bound, a.unresolved + b.unresolved};
+  return BindResult{a.bound + b.bound, a.unresolved + b.unresolved,
+                    a.missing != nullptr ? a.missing : b.missing};
 }
 
 } // namespace elf
