@@ -54,6 +54,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  net_route_test
+  SUITE
+    libc_include_tests
+  SRCS
+    net_route_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.net_route_macros
+    libc.include.llvm-libc-types.struct_rtentry
+    libc.include.llvm-libc-types.struct_in6_rtmsg
+)
+
+add_libc_test(
   net_if_arp_test
   SUITE
     libc_include_tests
