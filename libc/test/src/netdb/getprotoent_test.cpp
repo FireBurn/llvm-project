@@ -79,6 +79,11 @@ TEST(LlvmLibcGetProtoEntTest, EnumerationStartsAgainFromTheFront) {
   while (LIBC_NAMESPACE::getprotoent() != nullptr && seen < 4096)
     ++seen;
   ASSERT_LT(seen, 4096);
+
+  // The end stays reached. Reading again says there is nothing rather than
+  // quietly starting over, which would leave a caller looping forever.
+  ASSERT_TRUE(LIBC_NAMESPACE::getprotoent() == nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::getprotoent() == nullptr);
   LIBC_NAMESPACE::endprotoent();
 
   LIBC_NAMESPACE::setprotoent(0);
