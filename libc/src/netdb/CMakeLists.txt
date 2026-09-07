@@ -145,6 +145,72 @@ add_entrypoint_object(
 )
 
 add_object_library(
+  serv_storage
+  SRCS
+    serv_storage.cpp
+  HDRS
+    serv_storage.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_entrypoint_object(
+  getservbyport
+  SRCS
+    getservbyport.cpp
+  HDRS
+    getservbyport.h
+  DEPENDS
+    .serv_storage
+    libc.hdr.types.struct_servent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_entrypoint_object(
+  getservent
+  SRCS
+    getservent.cpp
+  HDRS
+    getservent.h
+  DEPENDS
+    .serv_storage
+    libc.hdr.types.struct_servent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_entrypoint_object(
+  setservent
+  SRCS
+    setservent.cpp
+  HDRS
+    setservent.h
+  DEPENDS
+    libc.hdr.types.struct_servent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_entrypoint_object(
+  endservent
+  SRCS
+    endservent.cpp
+  HDRS
+    endservent.h
+  DEPENDS
+    libc.hdr.types.struct_servent
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_object_library(
   net_storage
   SRCS
     net_storage.cpp
@@ -343,10 +409,9 @@ add_entrypoint_object(
   HDRS
     getservbyname.h
   DEPENDS
+    .serv_storage
     libc.hdr.types.struct_servent
     libc.src.__support.common
-    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
     libc.src.netdb.resolv.services
-    libc.src.string.memory_utils.inline_memcpy
-    libc.src.string.string_utils
 )
