@@ -632,6 +632,24 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
 endif()
 
+# Handing memory back is the allocator's to do, so this is only offered where
+# there is an allocator that can be asked.
+if(TARGET libc.src.stdlib.mallopt)
+  add_entrypoint_object(
+    malloc_trim
+    SRCS
+      malloc_trim.cpp
+    HDRS
+      malloc_trim.h
+    DEPENDS
+      libc.hdr.func.mallopt
+      libc.hdr.types.size_t
+      libc.include.llvm-libc-macros.malloc_macros
+      libc.src.__support.common
+      libc.src.__support.macros.config
+  )
+endif()
+
 add_entrypoint_object(
   realpath
   ALIAS
