@@ -26,7 +26,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, tcgetattr, (int fd, termios *t)) {
+namespace internal {
+
+int tcgetattr_impl(int fd, termios *t) {
   LIBC_CRASH_ON_NULLPTR(t);
   LIBC_NAMESPACE::kernel_termios kt;
   auto ret = linux_syscalls::ioctl(fd, TCGETS, &kt);
@@ -56,6 +58,12 @@ LLVM_LIBC_FUNCTION(int, tcgetattr, (int fd, termios *t)) {
       t->c_cc[i] = 0;
   }
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, tcgetattr, (int fd, termios *t)) {
+  return internal::tcgetattr_impl(fd, t);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
