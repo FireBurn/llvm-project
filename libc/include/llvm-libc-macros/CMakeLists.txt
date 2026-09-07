@@ -73,6 +73,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  access_mode_macros
+  HDR
+    access-mode-macros.h
+)
+
+add_macro_header(
   resolv_macros
   HDR
     resolv-macros.h
@@ -132,6 +138,8 @@ add_macro_header(
   fcntl_macros
   HDR
     fcntl-macros.h
+  DEPENDS
+    .access_mode_macros
 )
 
 add_macro_header(
@@ -661,6 +669,8 @@ add_macro_header(
   unistd_macros
   HDR
     unistd-macros.h
+  DEPENDS
+    .access_mode_macros
 )
 
 add_macro_header(
