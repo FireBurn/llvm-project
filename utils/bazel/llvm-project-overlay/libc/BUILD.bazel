@@ -199,6 +199,7 @@ LLVM_LIBC_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("sys/fanotify"),
+    libc_header_info("sys/fsuid"),
     libc_header_info(
         "sys/io",
         has_def_template = True,
@@ -20950,6 +20951,32 @@ libc_function(
 )
 
 libc_function(
+    name = "setfsgid",
+    srcs = ["src/sys/fsuid/linux/setfsgid.cpp"],
+    hdrs = ["src/sys/fsuid/setfsgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setfsgid",
+        ":sys_fsuid_setfsgid",
+        ":types_gid_t",
+    ],
+)
+
+libc_function(
+    name = "setfsuid",
+    srcs = ["src/sys/fsuid/linux/setfsuid.cpp"],
+    hdrs = ["src/sys/fsuid/setfsuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setfsuid",
+        ":sys_fsuid_setfsuid",
+        ":types_uid_t",
+    ],
+)
+
+libc_function(
     name = "shmat",
     srcs = ["src/sys/shm/linux/shmat.cpp"],
     hdrs = ["src/sys/shm/shmat.h"],
@@ -27826,6 +27853,46 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_pwd_flat_file_db",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setfsgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setfsgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setfsuid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setfsuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_fsuid_setfsgid",
+    hdrs = ["src/sys/fsuid/setfsgid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_fsuid_setfsuid",
+    hdrs = ["src/sys/fsuid/setfsuid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_uid_t",
     ],
 )
 
