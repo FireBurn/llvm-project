@@ -1097,6 +1097,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_ip_opts",
+    hdrs = ["llvm-libc-types/struct_ip_opts.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ipv6_mreq",
     hdrs = ["llvm-libc-types/struct_ipv6_mreq.h"],
 )
