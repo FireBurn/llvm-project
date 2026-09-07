@@ -73,6 +73,41 @@
 #define __UAPI_DEF_IPPROTO_V6 0
 #endif
 
+// The classes addresses were once divided into. Subnetting replaced them
+// long ago, but the names are still how a program asks whether an address is
+// a multicast one.
+#define IN_CLASSA(a)                                                           \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0x80000000) == 0)
+#define IN_CLASSA_NET 0xff000000
+#define IN_CLASSA_NSHIFT 24
+#define IN_CLASSA_HOST (0xffffffff & ~IN_CLASSA_NET)
+#define IN_CLASSA_MAX 128
+
+#define IN_CLASSB(a)                                                           \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0xc0000000) == 0x80000000)
+#define IN_CLASSB_NET 0xffff0000
+#define IN_CLASSB_NSHIFT 16
+#define IN_CLASSB_HOST (0xffffffff & ~IN_CLASSB_NET)
+#define IN_CLASSB_MAX 65536
+
+#define IN_CLASSC(a)                                                           \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0xe0000000) == 0xc0000000)
+#define IN_CLASSC_NET 0xffffff00
+#define IN_CLASSC_NSHIFT 8
+#define IN_CLASSC_HOST (0xffffffff & ~IN_CLASSC_NET)
+
+#define IN_CLASSD(a)                                                           \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0xf0000000) == 0xe0000000)
+#define IN_MULTICAST(a) IN_CLASSD(a)
+
+#define IN_EXPERIMENTAL(a)                                                     \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0xe0000000) == 0xe0000000)
+#define IN_BADCLASS(a)                                                         \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0xf0000000) == 0xf0000000)
+
+// The network the loopback address belongs to.
+#define IN_LOOPBACKNET 127
+
 #define INADDR_ANY __LLVM_LIBC_CAST(static_cast, in_addr_t, 0x00000000)
 #define INADDR_BROADCAST __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
 #define INADDR_NONE __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
