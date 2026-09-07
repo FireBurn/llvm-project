@@ -2206,10 +2206,12 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.resolv.dn_expand
 
     # netdb.h entrypoints
+    libc.src.netdb.endhostent
     libc.src.netdb.endnetent
     libc.src.netdb.endprotoent
     libc.src.netdb.endservent
     libc.src.netdb.gethostbyaddr
+    libc.src.netdb.gethostent
     libc.src.netdb.getnetbyaddr
     libc.src.netdb.getnetbyname
     libc.src.netdb.getnetent
@@ -2221,6 +2223,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.getservent
     libc.src.netdb.herror
     libc.src.netdb.hstrerror
+    libc.src.netdb.sethostent
     libc.src.netdb.setnetent
     libc.src.netdb.setprotoent
     libc.src.netdb.setservent
