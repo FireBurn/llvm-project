@@ -927,6 +927,29 @@ add_libc_test(
 )
 
 add_libc_test(
+  getpass_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    getpass_test.cpp
+  DEPENDS
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+    libc.include.sys_wait
+    libc.src.__support.libc_errno
+    libc.src.pty.forkpty
+    libc.src.stdlib._Exit
+    libc.src.string.strcmp
+    libc.src.sys.wait.waitpid
+    libc.src.termios.tcgetattr
+    libc.src.unistd.close
+    libc.src.unistd.getpass
+    libc.src.unistd.usleep
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   getopt_test
   SUITE
     libc_unistd_unittests
