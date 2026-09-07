@@ -37,4 +37,14 @@ add_libc_test(
     libc.src.string.memcmp
 )
 
+add_libc_test(
+  tcp_test
+  SUITE
+    libc_netinet_unittests
+  SRCS
+    tcp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_tcphdr
+)
+
 add_subdirectory(ether)
