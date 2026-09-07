@@ -106,7 +106,8 @@ FileIOResult File::write_unlocked_nbf(const uint8_t *data, size_t len) {
   if (pos > 0) { // If the buffer is not empty
     // Flush the buffer
     const size_t write_size = pos;
-    FileIOResult write_result = platform_write(this, buf, write_size);
+    FileIOResult write_result =
+        write_all(static_cast<const uint8_t *>(buf), write_size);
     pos = 0; // Buffer is now empty so reset pos to the beginning.
     // If less bytes were written than expected, then an error occurred.
     if (write_result < write_size) {
@@ -116,7 +117,7 @@ FileIOResult File::write_unlocked_nbf(const uint8_t *data, size_t len) {
     }
   }
 
-  FileIOResult write_result = platform_write(this, data, len);
+  FileIOResult write_result = write_all(data, len);
   if (write_result < len)
     err = true;
   return write_result;
@@ -161,7 +162,8 @@ FileIOResult File::write_unlocked_fbf(const uint8_t *data, size_t len) {
   // is full.
   const size_t write_size = pos;
 
-  FileIOResult buf_result = platform_write(this, buf, write_size);
+  FileIOResult buf_result =
+      write_all(static_cast<const uint8_t *>(buf), write_size);
   size_t bytes_written = buf_result.value;
 
   pos = 0; // Buffer is now empty so reset pos to the beginning.
@@ -181,8 +183,7 @@ FileIOResult File::write_unlocked_fbf(const uint8_t *data, size_t len) {
     pos = remainder.size();
   } else {
 
-    FileIOResult result =
-        platform_write(this, remainder.data(), remainder.size());
+    FileIOResult result = write_all(remainder.data(), remainder.size());
     bytes_written = result.value;
 
     // If less bytes were written than expected, then an error occurred. Return
@@ -433,7 +434,7 @@ ErrorOr<int> File::seek(off_t offset, int whence) {
   FileLock lock(this);
   if (prev_op == FileOp::WRITE && pos > 0) {
 
-    FileIOResult buf_result = platform_write(this, buf, pos);
+    FileIOResult buf_result = write_all(static_cast<const uint8_t *>(buf), pos);
     if (buf_result.has_error() || buf_result.value < pos) {
       err = true;
       return Error(buf_result.error);
@@ -476,7 +477,7 @@ ErrorOr<off_t> File::tell() {
 
 int File::flush_unlocked() {
   if (prev_op == FileOp::WRITE && pos > 0) {
-    FileIOResult buf_result = platform_write(this, buf, pos);
+    FileIOResult buf_result = write_all(static_cast<const uint8_t *>(buf), pos);
     if (buf_result.has_error() || buf_result.value < pos) {
       err = true;
       // What could not be written is let go of rather than kept to be tried
