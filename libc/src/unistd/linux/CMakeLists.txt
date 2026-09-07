@@ -791,6 +791,27 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getpass
+  SRCS
+    getpass.cpp
+  HDRS
+    ../getpass.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.termios_macros
+    libc.hdr.types.struct_termios
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+    libc.src.termios.tcgetattr
+    libc.src.termios.tcsetattr
+    libc.src.unistd.close
+)
+
+add_entrypoint_object(
   daemon
   SRCS
     daemon.cpp
