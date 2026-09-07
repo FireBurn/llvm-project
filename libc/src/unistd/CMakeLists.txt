@@ -787,6 +787,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getpass
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getpass
+)
+
+add_entrypoint_object(
   getlogin
   SRCS
     getlogin.cpp

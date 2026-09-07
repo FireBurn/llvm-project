@@ -744,6 +744,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.fsuid.setfsuid
     libc.src.sys.fsuid.setfsgid
     libc.src.unistd.getdomainname
+    libc.src.unistd.getpass
     libc.src.unistd.setdomainname
     libc.src.unistd.gethostname
     libc.src.unistd.getpagesize
