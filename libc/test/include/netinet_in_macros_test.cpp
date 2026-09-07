@@ -119,3 +119,7 @@ TEST(LlvmLibcNetinetInMacrosTest, FillInTheMissingSocketAndIpOptionMacros) {
   EXPECT_EQ(static_cast<long long>(IPV6_PMTUDISC_INTERFACE), 4LL);
   EXPECT_EQ(static_cast<long long>(IPV6_PMTUDISC_OMIT), 5LL);
 }
+
+TEST(LlvmLibcNetinetInMacrosTest, AddIpproto_Max) {
+  EXPECT_EQ(static_cast<long long>(IPPROTO_MAX), 263LL);
+}
