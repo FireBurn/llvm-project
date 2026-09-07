@@ -2,10 +2,6 @@ header: unistd.h
 standards:
   - posix
 macros:
-  - macro_name: "NULL"
-    macro_header: null-macro.h
-  - macro_name: _CS_PATH
-    macro_header: unistd-macros.h
   - macro_name: SEEK_SET
     macro_header: file-seek-macros.h
   - macro_name: SEEK_CUR
@@ -26,12 +22,6 @@ macros:
     macro_header: unistd-macros.h
   - macro_name: _SC_VERSION
     macro_header: unistd-macros.h
-  - macro_name: _SC_LINE_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_RE_DUP_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_IOV_MAX
-    macro_header: unistd-macros.h
   - macro_name: _SC_PAGESIZE
     macro_header: unistd-macros.h
   - macro_name: _SC_PAGE_SIZE
@@ -45,24 +35,6 @@ macros:
   - macro_name: _SC_GETPW_R_SIZE_MAX
     macro_header: unistd-macros.h
   - macro_name: _SC_THREAD_DESTRUCTOR_ITERATIONS
-    macro_header: unistd-macros.h
-  - macro_name: _SC_LOGIN_NAME_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_TTY_NAME_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_THREAD_STACK_MIN
-    macro_header: unistd-macros.h
-  - macro_name: _SC_THREAD_THREADS_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_THREAD_KEYS_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_ATEXIT_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_SYMLOOP_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_HOST_NAME_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_AVPHYS_PAGES
     macro_header: unistd-macros.h
   - macro_name: _SC_THREAD_ATTR_STACKADDR
     macro_header: unistd-macros.h
@@ -92,47 +64,9 @@ macros:
     macro_header: unistd-macros.h
   - macro_name: _POSIX_VERSION
     macro_header: unistd-macros.h
-  - macro_name: _POSIX2_VERSION
-    macro_header: unistd-macros.h
-  - macro_name: _XOPEN_VERSION
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_JOB_CONTROL
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_SAVED_IDS
-    macro_header: unistd-macros.h
   - macro_name: _POSIX_THREADS
     macro_header: unistd-macros.h
   - macro_name: _POSIX_THREAD_SAFE_FUNCTIONS
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_MAPPED_FILES
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_MEMORY_PROTECTION
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_FSYNC
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_SYNCHRONIZED_IO
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_TIMERS
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_MONOTONIC_CLOCK
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_CLOCK_SELECTION
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_SEMAPHORES
-    macro_header: unistd-macros.h
-  - macro_name: _POSIX_SHELL
-    macro_header: unistd-macros.h
-  - macro_name: _SC_CHILD_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_NGROUPS_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_STREAM_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_TZNAME_MAX
-    macro_header: unistd-macros.h
-  - macro_name: _SC_JOB_CONTROL
-    macro_header: unistd-macros.h
-  - macro_name: _SC_SAVED_IDS
     macro_header: unistd-macros.h
   - macro_name: _POSIX_THREAD_ATTR_STACKADDR
     macro_header: unistd-macros.h
@@ -163,7 +97,6 @@ macros:
   - macro_name: F_TEST
     macro_header: unistd-macros.h
 types:
-  - type_name: intptr_t
   - type_name: uid_t
   - type_name: gid_t
   - type_name: ssize_t
@@ -187,13 +120,6 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
-  - name: getgroups
-    standards:
-      - posix
-    return_type: int
-    arguments:
-      - type: int
-      - type: gid_t *
   - name: __llvm_libc_syscall
     standards:
       - posix
@@ -225,18 +151,6 @@ functions:
     arguments:
       - type: const char *
       - type: int
-  - name: brk
-    standards:
-      - gnu
-    return_type: int
-    arguments:
-      - type: void *
-  - name: sbrk
-    standards:
-      - gnu
-    return_type: void *
-    arguments:
-      - type: intptr_t
   - name: chdir
     standards:
       - posix
@@ -265,14 +179,6 @@ functions:
       - type: int
       - type: char *
       - type: size_t
-  - name: close_range
-    standards:
-      - linux
-    return_type: int
-    arguments:
-      - type: unsigned int
-      - type: unsigned int
-      - type: int
   - name: close
     standards:
       - posix
@@ -288,13 +194,6 @@ functions:
   - name: dup2
     standards:
       - posix
-    return_type: int
-    arguments:
-      - type: int
-      - type: int
-  - name: daemon
-    standards:
-      - bsd
     return_type: int
     arguments:
       - type: int
@@ -434,12 +333,6 @@ functions:
     arguments:
       - type: int
       - type: off_t
-  - name: get_current_dir_name
-    standards:
-      - gnu
-    return_type: char *
-    arguments:
-      - type: void
   - name: getcwd
     standards:
       - posix
@@ -447,12 +340,6 @@ functions:
     arguments:
       - type: char *
       - type: size_t
-  - name: getdtablesize
-    standards:
-      - bsd
-    return_type: int
-    arguments:
-      - type: void
   - name: getegid
     standards:
       - posix
@@ -472,15 +359,27 @@ functions:
     return_type: uid_t
     arguments:
       - type: void
-    standards:
-    return_type: int
-    arguments:
-    standards:
-    return_type: int
-    arguments:
+  - name: getgroups
     standards:
       - posix
+    return_type: int
     arguments:
+      - type: int
+      - type: gid_t *
+  - name: getdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char *
+      - type: size_t
+  - name: setdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: size_t
   - name: gethostname
     standards:
       - posix
@@ -716,13 +615,6 @@ functions:
     return_type: int
     arguments:
       - type: uid_t
-  - name: sethostname
-    standards:
-      - gnu
-    return_type: int
-    arguments:
-      - type: const char *
-      - type: size_t
   - name: setgid
     standards:
       - posix

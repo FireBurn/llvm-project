@@ -246,6 +246,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getdomainname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getdomainname
+)
+
+add_entrypoint_object(
+  setdomainname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setdomainname
+)
+
+add_entrypoint_object(
   gethostname
   ALIAS
   DEPENDS
@@ -741,8 +755,10 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getgroups
   ALIAS
   DEPENDS
+    .${LIBC_TARGET_OS}.getgroups
 )
   ALIAS
   DEPENDS
@@ -750,7 +766,6 @@ add_entrypoint_object(
   ALIAS
   DEPENDS
 )
-  DEPENDS
 
 add_entrypoint_object(
   brk
