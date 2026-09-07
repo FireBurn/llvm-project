@@ -16,6 +16,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int tcgetattr(int fd, termios *t);
 
+namespace internal {
+int tcgetattr_impl(int fd, termios *t);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_TERMIOS_TCGETATTR_H
