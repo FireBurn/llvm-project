@@ -1245,6 +1245,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_useconds_t",
+    hdrs = ["llvm-libc-types/useconds_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_wordexp_t",
     hdrs = ["llvm-libc-types/wordexp_t.h"],
 )
