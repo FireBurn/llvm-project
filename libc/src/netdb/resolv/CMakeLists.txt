@@ -65,6 +65,31 @@ add_object_library(
 )
 
 add_object_library(
+  exchange
+  SRCS
+    exchange.cpp
+  HDRS
+    exchange.h
+  DEPENDS
+    .resolv_conf
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_pollfd
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.time_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ppoll
+    libc.src.__support.OSUtil.linux.syscall_wrappers.recvfrom
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sendto
+    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_object_library(
   hosts
   SRCS
     hosts.cpp
@@ -83,14 +108,6 @@ add_object_library(
 )
 
 add_object_library(
-    libc.hdr.types.struct_timespec
-    libc.hdr.types.time_t
-    libc.src.__support.OSUtil.linux.syscall_wrappers.close
-    libc.src.__support.OSUtil.linux.syscall_wrappers.ppoll
-    libc.src.__support.OSUtil.linux.syscall_wrappers.recvfrom
-    libc.src.__support.OSUtil.linux.syscall_wrappers.sendto
-    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
-    libc.src.__support.error_or
   protocols
   SRCS
     protocols.cpp
@@ -126,6 +143,7 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.__support.str_to_integer
     libc.src.arpa.inet.inet_pton
+    libc.src.net.if.if_nametoindex
     libc.src.string.memory_utils.inline_memcpy
 )
 
