@@ -150,6 +150,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
   list(APPEND TARGET_PUBLIC_HEADERS
     libc.include.glob
     libc.include.libintl
+    libc.include.gnu_libc_version
     libc.include.iconv
     libc.include.lastlog
     libc.include.ifaddrs
