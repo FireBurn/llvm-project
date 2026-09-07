@@ -20,6 +20,9 @@ namespace LIBC_NAMESPACE_DECL {
 
 int inet_pton(int af, const char *__restrict src, void *__restrict dst);
 
+namespace internal {
+int inet_pton_impl(int af, const char *__restrict src, void *__restrict dst);
+} // namespace internal
 }
 
 #endif

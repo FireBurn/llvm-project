@@ -1964,6 +1964,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.resolv.dn_expand
     libc.src.netdb.endnetent
     libc.src.netdb.endprotoent
+    libc.src.netdb.gethostbyaddr
     libc.src.netdb.getnetbyaddr
     libc.src.netdb.getnetbyname
     libc.src.netdb.getnetent
