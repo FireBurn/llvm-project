@@ -777,6 +777,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.getlogin
     libc.src.unistd.getlogin_r
     libc.src.unistd.getpagesize
+    libc.src.unistd.getpass
     libc.src.unistd.getpgid
     libc.src.unistd.getpgrp
     libc.src.unistd.getpid
