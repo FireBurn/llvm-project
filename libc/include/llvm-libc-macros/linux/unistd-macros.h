@@ -14,16 +14,13 @@
 #ifndef LLVM_LIBC_MACROS_LINUX_UNISTD_MACROS_H
 #define LLVM_LIBC_MACROS_LINUX_UNISTD_MACROS_H
 
+#include "../access-mode-macros.h"
+
 // Whence values for lseek beyond the three the standard defines. These find
 // where a sparse file's data and its holes begin.
 #define SEEK_DATA 3
 #define SEEK_HOLE 4
 
-// Values for mode argument to the access(...) function.
-#define F_OK 0
-#define X_OK 1
-#define W_OK 2
-#define R_OK 4
 
 // Values for command argument to the lockf(...) function.
 #define F_ULOCK 0
