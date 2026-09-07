@@ -17,6 +17,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/fcntl.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/ioctl.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/lseek.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
@@ -24,6 +25,9 @@
 #include "src/__support/alloc-checker.h"
 #include "src/__support/libc_errno.h" // For error macros
 #include "src/__support/macros/config.h"
+#include "src/termios/linux/kernel_termios.h"
+
+#include <asm/ioctls.h> // Safe to include without the risk of name pollution.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -48,6 +52,16 @@ FileIOResult linux_file_read(File *f, void *buf, size_t size) {
 ErrorOr<off_t> linux_file_seek(File *f, off_t offset, int whence) {
   auto *lf = reinterpret_cast<LinuxFile *>(f);
   return linux_syscalls::lseek(lf->get_fd(), offset, whence);
+}
+
+// The kernel answers TCGETS only for a terminal, which is how every library
+// asks this question.
+bool linux_file_isatty(File *f) {
+  auto *lf = reinterpret_cast<LinuxFile *>(f);
+  if (lf->get_fd() < 0)
+    return false;
+  kernel_termios unused;
+  return linux_syscalls::ioctl(lf->get_fd(), TCGETS, &unused).has_value();
 }
 
 int linux_file_close(File *f) {
