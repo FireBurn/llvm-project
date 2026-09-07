@@ -11,6 +11,21 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "vmsplice_test",
+    srcs = ["vmsplice_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:fcntl_tee",
+        "//libc:fcntl_vmsplice",
+        "//libc:pipe",
+        "//libc:read",
+        "//libc:tee",
+        "//libc:types_struct_iovec",
+        "//libc:vmsplice",
+    ],
+)
+
+libc_test(
     name = "allocate_test",
     srcs = ["allocate_test.cpp"],
     deps = [
