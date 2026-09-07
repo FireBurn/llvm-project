@@ -1547,7 +1547,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.gnu_get_libc_version
     libc.src.compat.lfs64
-    libc.src.compat.res_init
     libc.src.compat.progname
     libc.src.compat.syscall
     libc.src.pthread.pthread_getthreadid_np
@@ -1964,7 +1963,15 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.netdb.gethostbyname
       libc.src.netdb.gethostbyname2
     libc.src.netdb.getnameinfo
+    libc.src.resolv.__res_state
+    libc.src.resolv.dn_comp
     libc.src.resolv.dn_expand
+    libc.src.resolv.res_close
+    libc.src.resolv.res_init
+    libc.src.resolv.res_mkquery
+    libc.src.resolv.res_query
+    libc.src.resolv.res_search
+    libc.src.resolv.res_send
     libc.src.netdb.endhostent
     libc.src.netdb.endnetent
     libc.src.netdb.endprotoent
