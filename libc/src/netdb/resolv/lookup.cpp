@@ -275,7 +275,147 @@ Status from_dns_one(const ResolvConf &conf, const char *name, uint16_t type,
       });
 }
 
+// Writes the name an address is asked about under: the bytes backwards, one
+// per label for a version four address and one per nibble for a version six
+// one, under the domain set aside for the purpose.
+bool build_arpa_name(const unsigned char *bytes, int family, char *out,
+                     size_t capacity) {
+  constexpr char DIGITS[] = "0123456789abcdef";
+  size_t at = 0;
+
+  auto put = [&](const char *text, size_t length) {
+    if (at + length >= capacity)
+      return false;
+    for (size_t i = 0; i < length; ++i)
+      out[at++] = text[i];
+    return true;
+  };
+
+  if (family == AF_INET) {
+    for (int i = 3; i >= 0; --i) {
+      unsigned value = bytes[i];
+      char number[3];
+      size_t length = 0;
+      do {
+        number[length++] = DIGITS[value % 10];
+        value /= 10;
+      } while (value != 0);
+      for (size_t j = 0; j < length; ++j)
+        if (!put(&number[length - 1 - j], 1))
+          return false;
+      if (!put(".", 1))
+        return false;
+    }
+    return put("in-addr.arpa", 13);
+  }
+
+  if (family == AF_INET6) {
+    for (int i = 15; i >= 0; --i) {
+      const char low = DIGITS[bytes[i] & 0xF];
+      const char high = DIGITS[(bytes[i] >> 4) & 0xF];
+      if (!put(&low, 1) || !put(".", 1) || !put(&high, 1) || !put(".", 1))
+        return false;
+    }
+    return put("ip6.arpa", 9);
+  }
+
+  return false;
+}
+
+// Looks for the address in /etc/hosts, and takes the first name on the line
+// that carries it.
+bool name_from_hosts(const unsigned char *bytes, int family, char *out,
+                     size_t capacity) {
+  HostsFile hosts;
+  if (!hosts.open())
+    return false;
+
+  const size_t size = family == AF_INET ? 4 : 16;
+  char line[512];
+  while (hosts.next_line(line, sizeof(line))) {
+    cpp::string_view rest(line);
+    cpp::string_view address = hosts.take_field(rest);
+    if (address.empty() || address.size() > MAX_NAME)
+      continue;
+
+    char text[MAX_NAME + 1];
+    inline_memcpy(text, address.data(), address.size());
+    text[address.size()] = '\0';
+
+    unsigned char parsed[16];
+    if (LIBC_NAMESPACE::inet_pton(family, text, parsed) != 1)
+      continue;
+    bool same = true;
+    for (size_t i = 0; i < size; ++i)
+      if (parsed[i] != bytes[i]) {
+        same = false;
+        break;
+      }
+    if (!same)
+      continue;
+
+    cpp::string_view name = hosts.take_field(rest);
+    if (name.empty() || name.size() >= capacity)
+      continue;
+    inline_memcpy(out, name.data(), name.size());
+    out[name.size()] = '\0';
+    return true;
+  }
+  return false;
+}
+
 } // anonymous namespace
+
+bool lookup_address(const unsigned char *bytes, int family, char *out,
+                    size_t capacity) {
+  if (bytes == nullptr || out == nullptr || capacity == 0)
+    return false;
+  if (family != AF_INET && family != AF_INET6)
+    return false;
+
+  if (name_from_hosts(bytes, family, out, capacity))
+    return true;
+
+  ResolvConf conf;
+  if (!conf.read())
+    return false;
+
+  char arpa[MAX_NAME + 1];
+  if (!build_arpa_name(bytes, family, arpa, sizeof(arpa)))
+    return false;
+
+  uint16_t id = 0;
+  if (!linux_syscalls::getrandom(&id, sizeof(id), 0).has_value())
+    return false;
+
+  Query query;
+  query.id = id;
+  query.type = TYPE_PTR;
+  query.length = build_query(arpa, TYPE_PTR, id, query.message, MAX_MESSAGE);
+  if (query.length == 0)
+    return false;
+
+  bool found = false;
+  ask(conf, query,
+      [&](const unsigned char *message, ssize_t length, const Record &record) {
+        if (found || record.type != TYPE_PTR)
+          return;
+        char name[MAX_NAME + 1];
+        name[0] = '\0';
+        if (read_name(message, static_cast<size_t>(length),
+                      static_cast<size_t>(record.data - message), name,
+                      sizeof(name)) == 0)
+          return;
+        size_t written = 0;
+        while (name[written] != '\0')
+          ++written;
+        if (written >= capacity)
+          return;
+        inline_memcpy(out, name, written + 1);
+        found = true;
+      });
+  return found;
+}
 
 int lookup_name(const char *name, int family, int flags, Address *out,
                 size_t capacity, char *canonical) {

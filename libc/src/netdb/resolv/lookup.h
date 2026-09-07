@@ -46,6 +46,15 @@ struct Address {
 int lookup_name(const char *name, int family, int flags, Address *out,
                 size_t capacity, char *canonical);
 
+// Fills `out` with the name the address in `bytes` is known by, looking first
+// in /etc/hosts and then asking the name servers. `family` says whether there
+// are four bytes or sixteen. `out` must hold MAX_NAME + 1 bytes.
+//
+// Returns true where a name was found. An address with no name is not an
+// error: it simply has none.
+bool lookup_address(const unsigned char *bytes, int family, char *out,
+                    size_t capacity);
+
 // Puts the addresses of the newer kind first, which is what a machine with
 // both should try first.
 void prefer_newer_addresses(Address *out, size_t count);
