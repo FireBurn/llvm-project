@@ -620,6 +620,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  fcntl_access_modes_test
+  SUITE
+    libc-include-tests
+  SRCS
+    fcntl_access_modes_test.cpp
+  DEPENDS
+    libc.include.fcntl
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
