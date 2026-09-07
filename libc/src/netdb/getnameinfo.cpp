@@ -17,6 +17,8 @@
 #include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_ntop.h"
 #include "src/arpa/inet/ntohs.h"
+#include "src/netdb/resolv/lookup.h"
+#include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
 
 #include <sys/socket.h>
@@ -44,10 +46,9 @@ size_t write_number(unsigned value, char *out, size_t outlen) {
 
 } // anonymous namespace
 
-// There is no resolver here to ask for the name an address belongs to, so
-// this always reports the numeric form. That is the behaviour POSIX
-// describes for a lookup which found nothing, and a caller which insists on
-// a name by passing NI_NAMEREQD is told so.
+// Asks what the host and the service at an address are called, and falls
+// back to the numeric form of either where there is no name for it. A caller
+// which will not accept the numeric form says so with NI_NAMEREQD.
 LLVM_LIBC_FUNCTION(int, getnameinfo,
                    (const struct sockaddr *__restrict addr, socklen_t addrlen,
                     char *__restrict host, socklen_t hostlen,
@@ -78,12 +79,29 @@ LLVM_LIBC_FUNCTION(int, getnameinfo,
   }
 
   if (host != nullptr && hostlen > 0) {
-    // Only the numeric form can be produced, so a caller which will not
-    // accept it gets nothing.
-    if (flags & NI_NAMEREQD)
-      return EAI_NONAME;
-    if (LIBC_NAMESPACE::inet_ntop(family, address, host, hostlen) == nullptr)
-      return EAI_OVERFLOW;
+    bool named = false;
+    if (!(flags & NI_NUMERICHOST)) {
+      char name[resolv::MAX_NAME + 1];
+      if (resolv::lookup_address(
+              reinterpret_cast<const unsigned char *>(address), family, name,
+              sizeof(name))) {
+        size_t written = 0;
+        while (name[written] != '\0')
+          ++written;
+        if (written >= hostlen)
+          return EAI_OVERFLOW;
+        inline_memcpy(host, name, written + 1);
+        named = true;
+      }
+    }
+    if (!named) {
+      // Nothing names it, so the numeric form is all there is to report, and
+      // a caller which insisted on a name is told there is none.
+      if (flags & NI_NAMEREQD)
+        return EAI_NONAME;
+      if (LIBC_NAMESPACE::inet_ntop(family, address, host, hostlen) == nullptr)
+        return EAI_OVERFLOW;
+    }
   }
 
   if (serv != nullptr && servlen > 0) {
