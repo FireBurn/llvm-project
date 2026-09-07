@@ -28420,8 +28420,26 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "types_struct_group_req",
+    hdrs = ["hdr/types/struct_group_req.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_group_req"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_group_source_req",
     hdrs = ["include/llvm-libc-types/struct_group_source_req.h"],
+)
+
+libc_support_library(
+    name = "types_struct_group_source_req",
+    hdrs = ["hdr/types/struct_group_source_req.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_group_source_req"],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
@@ -28458,8 +28476,26 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "types_struct_ip_mreq",
+    hdrs = ["hdr/types/struct_ip_mreq.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ip_mreq"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ip_mreq_source",
     hdrs = ["include/llvm-libc-types/struct_ip_mreq_source.h"],
+)
+
+libc_support_library(
+    name = "types_struct_ip_mreq_source",
+    hdrs = ["hdr/types/struct_ip_mreq_source.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ip_mreq_source"],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
@@ -28468,13 +28504,54 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "types_struct_ip_mreqn",
+    hdrs = ["hdr/types/struct_ip_mreqn.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ip_mreqn"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ip_msfilter",
     hdrs = ["include/llvm-libc-types/struct_ip_msfilter.h"],
 )
 
 libc_support_library(
+    name = "types_struct_ip_msfilter",
+    hdrs = ["hdr/types/struct_ip_msfilter.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ip_msfilter"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ip_opts",
+    hdrs = ["include/llvm-libc-types/struct_ip_opts.h"],
+)
+
+libc_support_library(
+    name = "types_struct_ip_opts",
+    hdrs = ["hdr/types/struct_ip_opts.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ip_opts"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ipv6_mreq",
     hdrs = ["include/llvm-libc-types/struct_ipv6_mreq.h"],
+)
+
+libc_support_library(
+    name = "types_struct_ipv6_mreq",
+    hdrs = ["hdr/types/struct_ipv6_mreq.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ipv6_mreq"],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
@@ -31226,6 +31303,30 @@ libc_function(
         ":types_struct_addrinfo",
         ":types_struct_sockaddr_in",
         ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_function(
+    name = "in6addr_any",
+    srcs = ["src/netinet/in6addr_any.cpp"],
+    hdrs = ["src/netinet/in6addr_any.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_netinet_in_macros",
+        ":types_struct_in6_addr",
+    ],
+)
+
+libc_function(
+    name = "in6addr_loopback",
+    srcs = ["src/netinet/in6addr_loopback.cpp"],
+    hdrs = ["src/netinet/in6addr_loopback.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_netinet_in_macros",
+        ":types_struct_in6_addr",
     ],
 )
 
