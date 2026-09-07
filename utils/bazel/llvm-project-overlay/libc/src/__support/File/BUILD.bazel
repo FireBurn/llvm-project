@@ -98,6 +98,7 @@ libc_support_library(
         "//libc/src/__support:alloc_checker",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
+        "//libc/src/termios:kernel_termios",
         "//libc/src/termios:linux_kernel_termios",
     ],
 )

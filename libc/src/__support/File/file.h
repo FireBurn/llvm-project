@@ -70,6 +70,11 @@ public:
   LIBC_INLINE SeekFunc *get_seek_func() const { return platform_seek; }
   LIBC_INLINE CloseFunc *get_close_func() const { return platform_close; }
 
+  // Whether the descriptor behind the stream is a terminal. It is used once,
+  // to settle how stdout is buffered; a stream over something else has no
+  // need of it and leaves it null.
+  using IsattyFunc = bool(File *);
+
   // This is a convenience RAII class to lock and unlock file objects.
   class FileLock {
     File *file;
@@ -93,6 +98,7 @@ private:
   ReadFunc *platform_read;
   SeekFunc *platform_seek;
   CloseFunc *platform_close;
+  IsattyFunc *platform_isatty;
 
   uint8_t *buf;   // Pointer to the stream buffer for buffered streams
   size_t bufsize; // Size of the buffer pointed to by |buf|.
@@ -126,6 +132,13 @@ private:
   // Represents the previous operation that was performed.
   FileOp prev_op : 2;
   Orientation orientation : 2;
+
+  // C leaves stdout fully buffered unless it is over an interactive device,
+  // which cannot be known before the program runs. Asking at startup would
+  // cost every program a call, including those that never print, so the
+  // question is put off until the first write and this records that it is
+  // still owed.
+  bool bufmode_unsettled;
 
   // If own_buf is true, the |buf| is owned by the stream and will be
   // free-ed when close method is called on the stream.
@@ -175,15 +188,21 @@ public:
   LIBC_INLINE constexpr File(WriteFunc *wf, ReadFunc *rf, SeekFunc *sf,
                              CloseFunc *cf, uint8_t *buffer, size_t buffer_size,
                              int buffer_mode, bool owned, FileMode mode,
-                             bool static_stream = false)
+                             bool static_stream = false,
+                             IsattyFunc *tf = nullptr,
+                             bool settle_buffer_mode = false)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
+        platform_close(cf), platform_isatty(tf), buf(buffer),
+        bufsize(buffer_size), pos(0), read_limit(0), prev(nullptr),
+        next(nullptr), mbstate(), mode(mode), ungetc_buf{},
         // POSIX requires the lock a stream is held under to be recursive:
         // flockfile may be called more than once by the same thread, and
         // anything called while it is held takes it again.
         mutex(/*timed=*/false, /*recursive=*/true,
               /*robust=*/false, /*pshared=*/false),
         bufmode(static_cast<int8_t>(buffer_mode)), prev_op(FileOp::NONE),
-        orientation(Orientation::UNORIENTED), own_buf(owned),
+        orientation(Orientation::UNORIENTED),
+        bufmode_unsettled(settle_buffer_mode), own_buf(owned),
         static_storage(static_stream), eof(false), err(false) {
     adjust_buf();
   }
