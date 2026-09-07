@@ -11,6 +11,7 @@
 
 #include "hdr/stdint_proxy.h"
 #include "hdr/types/size_t.h"
+#include "hdr/types/struct_servent.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -23,6 +24,30 @@ namespace resolv {
 bool port_for_service(const char *name, const char *protocol, uint16_t &port,
                       char *found_protocol = nullptr,
                       size_t found_capacity = 0);
+
+// Where a service entry and the strings it points at are kept, one per
+// thread, since each lookup replaces what the last handed back.
+struct ServStorage {
+  static constexpr size_t MAX_ALIASES = 15;
+  static constexpr size_t POOL_SIZE = 256;
+
+  struct servent entry;
+  char *aliases[MAX_ALIASES + 1];
+  char pool[POOL_SIZE];
+  size_t used;
+};
+
+// Fills `storage` from the line naming `name`, or carrying `port`, for
+// `protocol` where one is named. Returns null where the file says nothing.
+struct servent *serv_by_name(const char *name, const char *protocol,
+                             ServStorage &storage);
+struct servent *serv_by_port(int port, const char *protocol,
+                             ServStorage &storage);
+
+// Reads the entries one after another.
+void rewind_services(bool stay_open);
+void stop_services();
+struct servent *next_service(ServStorage &storage);
 
 } // namespace resolv
 } // namespace LIBC_NAMESPACE_DECL
