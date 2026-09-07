@@ -14,8 +14,8 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace resolv {
 
-size_t build_query(const char *name, uint16_t type, uint16_t id,
-                   unsigned char *out, size_t capacity) {
+size_t build_query(const char *name, uint16_t type, uint16_t rr_class,
+                   uint16_t id, unsigned char *out, size_t capacity) {
   if (name == nullptr || out == nullptr)
     return 0;
   const size_t name_length = internal::string_length(name);
@@ -63,8 +63,8 @@ size_t build_query(const char *name, uint16_t type, uint16_t id,
 
   out[at++] = static_cast<unsigned char>(type >> 8);
   out[at++] = static_cast<unsigned char>(type);
-  out[at++] = static_cast<unsigned char>(CLASS_IN >> 8);
-  out[at++] = static_cast<unsigned char>(CLASS_IN);
+  out[at++] = static_cast<unsigned char>(rr_class >> 8);
+  out[at++] = static_cast<unsigned char>(rr_class);
   return at;
 }
 
