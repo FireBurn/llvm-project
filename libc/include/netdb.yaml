@@ -55,6 +55,8 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: NI_DGRAM
     macro_header: netdb-macros.h
+  - macro_name: NI_NUMERICSCOPE
+    macro_header: netdb-macros.h
   - macro_name: NI_MAXHOST
     macro_header: netdb-macros.h
   - macro_name: NI_MAXSERV
@@ -106,6 +108,14 @@ functions:
       - bsd
     return_type: const char *
     arguments:
+      - type: int
+  - name: gethostbyaddr
+    standards:
+      - posix
+    return_type: struct hostent *
+    arguments:
+      - type: const void *
+      - type: socklen_t
       - type: int
   - name: getnetbyname
     standards:
