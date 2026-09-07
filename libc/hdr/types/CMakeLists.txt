@@ -1679,6 +1679,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_ether_addr
+  HDRS
+    struct_ether_addr.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_ether_addr
+)
+
+add_proxy_header_library(
   struct_hostent
   HDRS
     struct_hostent.h
