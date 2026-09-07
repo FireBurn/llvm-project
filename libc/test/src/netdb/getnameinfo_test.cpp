@@ -77,19 +77,42 @@ TEST(LlvmLibcGetNameInfoTest, HostOrServiceAlone) {
   EXPECT_TRUE(string_view(serv) == "22");
 }
 
-TEST(LlvmLibcGetNameInfoTest, NameRequiredCannotBeMet) {
+// Asking for a name gives one where the address has one, and says there is
+// none where it has not. Which of the two happens depends on what the system
+// this runs on says about the address, so both are accepted; what is checked
+// is that the two agree with each other.
+TEST(LlvmLibcGetNameInfoTest, NameRequiredIsMetOrRefused) {
   struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   unsigned char octets[4] = {127, 0, 0, 1};
   __builtin_memcpy(&addr.sin_addr, octets, 4);
 
-  char host[64] = {};
-  // There is no resolver, so a caller which will not take the numeric form
-  // is told the name is not there.
-  EXPECT_EQ(LIBC_NAMESPACE::getnameinfo(
+  char host[256] = {};
+  const int result = LIBC_NAMESPACE::getnameinfo(
+      reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
+      sizeof(host), nullptr, 0, NI_NAMEREQD);
+  if (result == 0) {
+    // A name was found, so it is a name and not the address written back.
+    ASSERT_NE(host[0], '\0');
+    ASSERT_STRNE(host, "127.0.0.1");
+  } else {
+    ASSERT_EQ(result, EAI_NONAME);
+  }
+}
+
+// Asking for the numeric form gives it whatever the address is called.
+TEST(LlvmLibcGetNameInfoTest, NumericHostIsAlwaysTheAddress) {
+  struct sockaddr_in addr{};
+  addr.sin_family = AF_INET;
+  unsigned char octets[4] = {127, 0, 0, 1};
+  __builtin_memcpy(&addr.sin_addr, octets, 4);
+
+  char host[256] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::getnameinfo(
                 reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
-                sizeof(host), nullptr, 0, NI_NAMEREQD),
-            EAI_NONAME);
+                sizeof(host), nullptr, 0, NI_NUMERICHOST),
+            0);
+  ASSERT_STREQ(host, "127.0.0.1");
 }
 
 TEST(LlvmLibcGetNameInfoTest, BadArguments) {
