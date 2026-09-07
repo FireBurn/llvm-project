@@ -1289,6 +1289,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_fsuid
+  ../libc/include/sys/fsuid.yaml
+  sys/fsuid.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.uid_t
+    .llvm-libc-types.gid_t
+)
+
+add_header_macro(
   sys_errno
   ../libc/include/sys/errno.yaml
   sys/errno.h
