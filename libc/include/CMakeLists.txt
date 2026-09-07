@@ -1696,6 +1696,19 @@ add_header_macro(
 )
 
 add_header_macro(
+  net_route
+  ../libc/include/net/route.yaml
+  net/route.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.net_route_macros
+    .llvm-libc-types.struct_rtentry
+    .llvm-libc-types.struct_in6_rtmsg
+    .sys_socket
+    .netinet_in
+)
+
+add_header_macro(
   netinet_tcp
   ../libc/include/netinet/tcp.yaml
   netinet/tcp.h
