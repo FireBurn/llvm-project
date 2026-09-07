@@ -62,6 +62,10 @@ struct ifreq {
 #define ifr_qlen ifr_ifru.ifru_ivalue
 #define ifr_newname ifr_ifru.ifru_newname
 
+#ifndef IFHWADDRLEN
+#define IFHWADDRLEN 6
+#endif
+
 // Say the definition here is the one, so <linux/if.h> skips its own if it
 // is read after this.
 #undef __UAPI_DEF_IF_IFREQ
