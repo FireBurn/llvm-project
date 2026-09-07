@@ -77,6 +77,18 @@ libc_test(
 )
 
 libc_test(
+    name = "siginterrupt_test",
+    srcs = ["siginterrupt_test.cpp"],
+    deps = [
+        "//libc:hdr_signal_macros",
+        "//libc:sigaction",
+        "//libc:sigemptyset",
+        "//libc:siginterrupt",
+        "//libc:types_struct_sigaction",
+    ],
+)
+
+libc_test(
     name = "sigwait_test",
     srcs = ["sigwait_test.cpp"],
     deps = [
