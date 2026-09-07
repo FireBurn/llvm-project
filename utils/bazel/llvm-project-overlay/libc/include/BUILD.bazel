@@ -62,6 +62,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("netpacket/packet"),
     libc_header_info("paths"),
     libc_header_info("printf"),
+    libc_header_info("resolv"),
     libc_header_info("shadow"),
     libc_header_info(
         "stdbit",
