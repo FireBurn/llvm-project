@@ -220,6 +220,13 @@ functions:
     return_type: char *
     arguments:
       - type: char *
+  - name: getloadavg
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: double *
+      - type: int
   - name: mkdtemp
     standards:
       - posix
