@@ -60,7 +60,7 @@ public:
       : File(&stream_write, &stream_read, &MemStream::stream_seek,
              &stream_close, buffer, bufsize, _IONBF,
              true /* File owns the buffer */,
-             static_cast<File::ModeFlags>(File::OpenMode::WRITE)),
+             FileMode::WRITE_MODE),
         user_buf(bufp), user_size(sizep) {}
 
   bool start();
