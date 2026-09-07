@@ -19558,6 +19558,39 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "tee",
+    srcs = ["src/fcntl/linux/tee.cpp"],
+    hdrs = ["src/fcntl/tee.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_tee",
+        ":errno",
+        ":fcntl_tee",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
+    name = "vmsplice",
+    srcs = ["src/fcntl/linux/vmsplice.cpp"],
+    hdrs = ["src/fcntl/vmsplice.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_vmsplice",
+        ":errno",
+        ":fcntl_vmsplice",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
 ################################ time targets ##################################
 
 libc_function(
@@ -28195,6 +28228,51 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_off_t",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_tee",
+    hdrs = ["src/fcntl/tee.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_vmsplice",
+    hdrs = ["src/fcntl/vmsplice.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_tee",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/tee.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_vmsplice",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/vmsplice.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_ssize_t",
     ],
 )
 
