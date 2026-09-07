@@ -21,6 +21,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  hstrerror_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    hstrerror_test.cpp
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.src.netdb.hstrerror
+)
+
+add_libc_test(
   getprotoent_test
   SUITE
     libc_netdb_unittests
@@ -84,11 +95,13 @@ add_libc_test(
 add_libc_test(
   gai_strerror_test
   SUITE
-    libc-netdb-tests
+    libc_netdb_unittests
   SRCS
     gai_strerror_test.cpp
   DEPENDS
     libc.include.netdb
+    libc.src.netdb.__h_errno_location
     libc.src.netdb.gai_strerror
+    libc.src.netdb.herror
     libc.src.string.strlen
 )

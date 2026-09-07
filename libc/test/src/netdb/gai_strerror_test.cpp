@@ -1,4 +1,4 @@
-//===-- Unittests for gai_strerror ----------------------------------------===//
+//===-- Unittests for gai_strerror and herror -----------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,7 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "src/netdb/__h_errno_location.h"
 #include "src/netdb/gai_strerror.h"
+#include "src/netdb/herror.h"
 #include "src/string/strlen.h"
 #include "test/UnitTest/Test.h"
 
@@ -31,4 +33,18 @@ TEST(LlvmLibcGaiStrerrorTest, NamesEveryCode) {
   const char *unknown = LIBC_NAMESPACE::gai_strerror(12345);
   ASSERT_FALSE(unknown == nullptr);
   ASSERT_GT(LIBC_NAMESPACE::strlen(unknown), size_t(0));
+}
+
+// herror writes to standard error and reports nothing back, so what a test
+// can say is that it runs over every value h_errno takes, and over a null
+// prefix, without reaching for anything that is not there.
+TEST(LlvmLibcHerrorTest, WritesAMessageForEveryValue) {
+  constexpr int VALUES[] = {0,           HOST_NOT_FOUND, TRY_AGAIN,
+                            NO_RECOVERY, NO_DATA,        12345};
+  for (int value : VALUES) {
+    *LIBC_NAMESPACE::__h_errno_location() = value;
+    LIBC_NAMESPACE::herror("llvm-libc test");
+    LIBC_NAMESPACE::herror(nullptr);
+  }
+  *LIBC_NAMESPACE::__h_errno_location() = 0;
 }
