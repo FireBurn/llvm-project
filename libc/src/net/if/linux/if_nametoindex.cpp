@@ -28,7 +28,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(unsigned int, if_nametoindex, (const char *ifname)) {
+namespace internal {
+
+unsigned int if_nametoindex_impl(const char *ifname) {
   LIBC_CRASH_ON_NULLPTR(ifname);
 
   cpp::string_view name(ifname);
@@ -60,6 +62,12 @@ LLVM_LIBC_FUNCTION(unsigned int, if_nametoindex, (const char *ifname)) {
   }
 
   return static_cast<unsigned int>(ifr.ifr_ifindex);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(unsigned int, if_nametoindex, (const char *ifname)) {
+  return internal::if_nametoindex_impl(ifname);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
