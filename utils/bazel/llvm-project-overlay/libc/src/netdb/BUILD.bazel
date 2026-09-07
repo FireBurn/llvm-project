@@ -195,6 +195,18 @@ libc_function(
 )
 
 libc_function(
+    name = "endservent",
+    srcs = ["endservent.cpp"],
+    hdrs = ["endservent.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getnetbyaddr",
     srcs = ["getnetbyaddr.cpp"],
     hdrs = ["getnetbyaddr.h"],
@@ -281,12 +293,10 @@ libc_function(
     hdrs = ["getservbyname.h"],
     deps = [
         ":resolv_services",
+        ":serv_storage",
         "//libc/hdr/types:struct_servent",
-        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
-        "//libc/src/string/memory_utils:memory_utils",
-        "//libc/src/string:utils",
     ],
 )
 
@@ -317,6 +327,32 @@ libc_function(
 )
 
 libc_function(
+    name = "getservbyport",
+    srcs = ["getservbyport.cpp"],
+    hdrs = ["getservbyport.h"],
+    deps = [
+        ":resolv_services",
+        ":serv_storage",
+        "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getservent",
+    srcs = ["getservent.cpp"],
+    hdrs = ["getservent.h"],
+    deps = [
+        ":resolv_services",
+        ":serv_storage",
+        "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "setnetent",
     srcs = ["setnetent.cpp"],
     hdrs = ["setnetent.h"],
@@ -336,6 +372,18 @@ libc_function(
     deps = [
         ":resolv_protocols",
         "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "setservent",
+    srcs = ["setservent.cpp"],
+    hdrs = ["setservent.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/hdr/types:struct_servent",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -384,6 +432,17 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:str_to_integer",
         "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "serv_storage",
+    srcs = ["serv_storage.cpp"],
+    hdrs = ["serv_storage.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
     ],
 )
 
