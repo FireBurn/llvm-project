@@ -1,6 +1,10 @@
 header: netinet/ether.h
 standards:
   - bsd
+public_includes:
+  # Where the rest of what code handling an Ethernet address reaches for comes
+  # from, as with glibc.
+  - netinet/if_ether.h
 macros: []
 types: []
 enums: []
@@ -19,3 +23,38 @@ functions:
     arguments:
       - type: const struct ether_addr *
       - type: char *
+  - name: ether_aton
+    standards:
+      - bsd
+    return_type: struct ether_addr *
+    arguments:
+      - type: const char *
+  - name: ether_aton_r
+    standards:
+      - bsd
+    return_type: struct ether_addr *
+    arguments:
+      - type: const char *
+      - type: struct ether_addr *
+  - name: ether_hostton
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct ether_addr *
+  - name: ether_line
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct ether_addr *
+      - type: char *
+  - name: ether_ntohost
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: char *
+      - type: const struct ether_addr *
