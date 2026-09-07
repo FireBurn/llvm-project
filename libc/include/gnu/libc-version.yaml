@@ -1,0 +1,20 @@
+header: gnu/libc-version.h
+standards:
+  - gnu
+macros: []
+types: []
+enums: []
+objects: []
+functions:
+  - name: gnu_get_libc_version
+    standards:
+      - gnu
+    return_type: const char *
+    arguments:
+      - type: void
+  - name: gnu_get_libc_release
+    standards:
+      - gnu
+    return_type: const char *
+    arguments:
+      - type: void
