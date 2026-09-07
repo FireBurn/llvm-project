@@ -43,6 +43,7 @@ macros:
   - macro_name: AT_EACCESS
     macro_header: fcntl-macros.h
 types:
+  - type_name: struct_iovec
   - type_name: struct_file_handle
   - type_name: mode_t
   - type_name: off_t
@@ -106,6 +107,24 @@ functions:
       - type: off_t *
       - type: int
       - type: off_t *
+      - type: size_t
+      - type: unsigned int
+  - name: vmsplice
+    standards:
+      - gnu
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: const struct iovec *
+      - type: size_t
+      - type: unsigned int
+  - name: tee
+    standards:
+      - gnu
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: int
       - type: size_t
       - type: unsigned int
   - name: fallocate
