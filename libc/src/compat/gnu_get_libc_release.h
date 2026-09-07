@@ -1,4 +1,4 @@
-//===-- Implementation header for gnu_get_libc_version ----------*- C++ -*-===//
+//===-- Implementation header for gnu_get_libc_release ----------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,15 +6,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_VERSION_H
-#define LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_VERSION_H
+#ifndef LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_RELEASE_H
+#define LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_RELEASE_H
 
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-const char *gnu_get_libc_version(void);
+const char *gnu_get_libc_release(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_VERSION_H
+#endif // LLVM_LIBC_SRC_COMPAT_GNU_GET_LIBC_RELEASE_H
