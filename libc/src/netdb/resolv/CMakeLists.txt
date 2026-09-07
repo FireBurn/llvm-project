@@ -33,6 +33,8 @@ add_object_library(
   HDRS
     services.h
   DEPENDS
+    libc.hdr.types.struct_servent
+    libc.src.__support.macros.attributes
     .file_lines
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
