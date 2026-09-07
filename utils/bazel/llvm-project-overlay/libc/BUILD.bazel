@@ -18600,6 +18600,24 @@ libc_function(
 )
 
 libc_function(
+    name = "getdomainname",
+    srcs = ["src/unistd/linux/getdomainname.cpp"],
+    hdrs = ["src/unistd/getdomainname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_uname",
+        ":hdr_errno_macros",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_size_t",
+        ":types_struct_utsname",
+        ":unistd_getdomainname",
+    ],
+)
+
+libc_function(
     name = "getdtablesize",
     srcs = ["src/unistd/linux/getdtablesize.cpp"],
     hdrs = ["src/unistd/getdtablesize.h"],
@@ -19314,6 +19332,21 @@ libc_function(
         ":hdr_errno_macros",
         ":hdr_stdint_proxy",
         ":unistd_linux_brk_utils",
+    ],
+)
+
+libc_function(
+    name = "setdomainname",
+    srcs = ["src/unistd/linux/setdomainname.cpp"],
+    hdrs = ["src/unistd/setdomainname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setdomainname",
+        ":hdr_errno_macros",
+        ":types_size_t",
+        ":unistd_setdomainname",
     ],
 )
 
@@ -23331,5 +23364,60 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_utsname",
+    hdrs = ["include/llvm-libc-types/struct_utsname.h"],
+)
+
+libc_support_library(
+    name = "types_struct_utsname",
+    hdrs = ["hdr/types/struct_utsname.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_utsname"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "unistd_getdomainname",
+    hdrs = ["src/unistd/getdomainname.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setdomainname",
+    hdrs = ["src/unistd/setdomainname.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_uname",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/uname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_utsname",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setdomainname",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setdomainname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
