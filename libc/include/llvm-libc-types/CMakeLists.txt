@@ -170,6 +170,7 @@ add_header(struct_dirent HDR struct_dirent.h DEPENDS .ino_t .off_t .reclen_t lib
 add_header(struct_hostent HDR struct_hostent.h)
 add_header(struct_ar_hdr HDR struct_ar_hdr.h)
 add_header(HEADER HDR HEADER.h)
+add_header(struct_netent HDR struct_netent.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_protoent HDR struct_protoent.h)
 add_header(struct_servent HDR struct_servent.h)
 add_header(struct__pthread_cleanup_buffer HDR struct__pthread_cleanup_buffer.h)
