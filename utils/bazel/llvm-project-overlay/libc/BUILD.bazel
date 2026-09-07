@@ -19043,6 +19043,22 @@ libc_function(
 )
 
 libc_function(
+    name = "siginterrupt",
+    srcs = ["src/signal/siginterrupt.cpp"],
+    hdrs = ["src/signal/siginterrupt.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_signal_macros",
+        ":types_struct_sigaction",
+    ],
+)
+
+libc_function(
     name = "sigisemptyset",
     srcs = ["src/signal/linux/sigisemptyset.cpp"],
     hdrs = ["src/signal/sigisemptyset.h"],
