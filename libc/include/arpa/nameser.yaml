@@ -1,0 +1,109 @@
+header: arpa/nameser.h
+standards:
+  - bsd
+macros:
+  - macro_name: NS_PACKETSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXDNAME
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXMSG
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXCDNAME
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXLABEL
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_HFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_QFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_RRFIXEDSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT32SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT16SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INT8SZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_INADDRSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_IN6ADDRSZ
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_CMPRSFLGS
+    macro_header: arpa-nameser-macros.h
+  - macro_name: NS_DEFAULTPORT
+    macro_header: arpa-nameser-macros.h
+types:
+  - type_name: HEADER
+enums:
+  - name: ns_s_qd
+    value: 0
+  - name: ns_s_zn
+    value: 0
+  - name: ns_s_an
+    value: 1
+  - name: ns_s_pr
+    value: 1
+  - name: ns_s_ns
+    value: 2
+  - name: ns_s_ud
+    value: 2
+  - name: ns_s_ar
+    value: 3
+  - name: ns_s_max
+    value: 4
+  - name: ns_o_query
+    value: 0
+  - name: ns_o_iquery
+    value: 1
+  - name: ns_o_status
+    value: 2
+  - name: ns_o_notify
+    value: 4
+  - name: ns_o_update
+    value: 5
+  - name: ns_r_noerror
+    value: 0
+  - name: ns_r_formerr
+    value: 1
+  - name: ns_r_servfail
+    value: 2
+  - name: ns_r_nxdomain
+    value: 3
+  - name: ns_r_notimpl
+    value: 4
+  - name: ns_r_refused
+    value: 5
+  - name: ns_c_in
+    value: 1
+  - name: ns_c_chaos
+    value: 3
+  - name: ns_c_hs
+    value: 4
+  - name: ns_c_none
+    value: 254
+  - name: ns_c_any
+    value: 255
+  - name: ns_t_a
+    value: 1
+  - name: ns_t_ns
+    value: 2
+  - name: ns_t_cname
+    value: 5
+  - name: ns_t_soa
+    value: 6
+  - name: ns_t_ptr
+    value: 12
+  - name: ns_t_mx
+    value: 15
+  - name: ns_t_txt
+    value: 16
+  - name: ns_t_aaaa
+    value: 28
+  - name: ns_t_srv
+    value: 33
+  - name: ns_t_opt
+    value: 41
+  - name: ns_t_any
+    value: 255
+objects: []
+functions: []
