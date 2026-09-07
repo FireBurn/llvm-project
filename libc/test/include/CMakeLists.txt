@@ -32,6 +32,28 @@ add_libc_test(
 )
 
 add_libc_test(
+  net_if_test
+  SUITE
+    libc_include_tests
+  SRCS
+    net_if_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_ifreq
+)
+
+add_libc_test(
+  net_if_arp_test
+  SUITE
+    libc_include_tests
+  SRCS
+    net_if_arp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.net_if_arp_macros
+    libc.include.llvm-libc-types.struct_arpreq
+    libc.include.llvm-libc-types.struct_arpreq_old
+)
+
+add_libc_test(
   features_test
   SUITE
     libc_include_tests
