@@ -50,6 +50,10 @@
 #define IPPROTO_SMC 256
 #define IPPROTO_MPTCP 262
 
+// One past the last of them, which is what a table indexed by protocol needs
+// to be as large as.
+#define IPPROTO_MAX 263
+
 // Say the definitions here are the ones, so <linux/in.h> skips its own if
 // it is read after this.
 #undef __UAPI_DEF_IN_IPPROTO
