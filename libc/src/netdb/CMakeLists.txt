@@ -56,6 +56,8 @@ add_entrypoint_object(
   HDRS
     getnameinfo.h
   DEPENDS
+    libc.src.netdb.resolv.lookup
+    libc.src.string.memory_utils.inline_memcpy
     libc.hdr.netdb_macros
     libc.hdr.types.socklen_t
     libc.hdr.types.struct_sockaddr
@@ -118,6 +120,28 @@ add_entrypoint_object(
     libc.hdr.sys_socket_macros
     libc.hdr.types.struct_hostent
     libc.src.__support.common
+)
+
+add_entrypoint_object(
+  gethostbyaddr
+  SRCS
+    gethostbyaddr.cpp
+  HDRS
+    gethostbyaddr.h
+  DEPENDS
+    .getnameinfo
+    .hostent_storage
+    .__h_errno_location
+    libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_hostent
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
 )
 
 add_object_library(
