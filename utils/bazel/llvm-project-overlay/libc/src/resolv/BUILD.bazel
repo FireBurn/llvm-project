@@ -37,11 +37,102 @@ libc_function(
 )
 
 libc_function(
-    name = "res_init",
-    srcs = ["../compat/res_init.cpp"],
-    hdrs = ["../compat/res_init.h"],
+    name = "__res_state",
+    srcs = ["res_state.cpp"],
+    hdrs = ["res_state.h"],
     deps = [
+        "//libc/hdr/types:struct___res_state",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+        "//libc/src/netdb:resolv_resolv_conf",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "res_init",
+    srcs = ["res_init.cpp"],
+    hdrs = ["res_init.h"],
+    deps = [
+        ":__res_state",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_close",
+    srcs = ["res_close.cpp"],
+    hdrs = ["res_close.h"],
+    deps = [
+        ":__res_state",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_function(
+    name = "res_mkquery",
+    srcs = ["res_mkquery.cpp"],
+    hdrs = ["res_mkquery.h"],
+    deps = [
+        ":__res_state",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/netdb:resolv_dns_message",
+    ],
+)
+
+libc_function(
+    name = "res_send",
+    srcs = ["res_send.cpp"],
+    hdrs = ["res_send.h"],
+    deps = [
+        ":__res_state",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/netdb:resolv_exchange",
+        "//libc/src/netdb:resolv_resolv_conf",
+    ],
+)
+
+libc_function(
+    name = "res_query",
+    srcs = ["res_query.cpp"],
+    hdrs = ["res_query.h"],
+    deps = [
+        ":__res_state",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/netdb:__h_errno_location",
+        "//libc/src/netdb:resolv_dns_message",
+        "//libc/src/netdb:resolv_exchange",
+        "//libc/src/netdb:resolv_resolv_conf",
+    ],
+)
+
+libc_function(
+    name = "res_search",
+    srcs = ["res_search.cpp"],
+    hdrs = ["res_search.h"],
+    deps = [
+        ":__res_state",
+        ":res_query",
+        "//libc/hdr:netdb_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/netdb:__h_errno_location",
+        "//libc/src/netdb:resolv_dns_message",
+        "//libc/src/string/memory_utils:memory_utils",
     ],
 )

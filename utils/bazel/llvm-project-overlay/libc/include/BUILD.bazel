@@ -1023,6 +1023,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_res_state",
+    hdrs = ["llvm-libc-types/res_state.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_speed_t",
     hdrs = ["llvm-libc-types/speed_t.h"],
 )
@@ -1030,6 +1035,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_FTW",
     hdrs = ["llvm-libc-types/struct_FTW.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct___res_state",
+    hdrs = ["llvm-libc-types/struct___res_state.h"],
 )
 
 libc_support_library(

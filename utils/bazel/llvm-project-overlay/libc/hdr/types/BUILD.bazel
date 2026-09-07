@@ -877,6 +877,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "res_state",
+    hdrs = ["res_state.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_res_state"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "speed_t",
     hdrs = ["speed_t.h"],
     deps = select({
@@ -890,6 +899,15 @@ libc_support_library(
     hdrs = ["struct_FTW.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_struct_FTW"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct___res_state",
+    hdrs = ["struct___res_state.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct___res_state"],
         "//conditions:default": [],
     }),
 )

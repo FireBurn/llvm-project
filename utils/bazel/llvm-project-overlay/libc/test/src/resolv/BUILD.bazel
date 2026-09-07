@@ -19,3 +19,25 @@ libc_test(
         "//libc/src/string/memory_utils:memory_utils",
     ],
 )
+
+libc_test(
+    name = "res_query_test",
+    srcs = ["res_query_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct___res_state",
+        "//libc/src/netdb:resolv_dns_message",
+        "//libc/src/resolv:__res_state",
+        "//libc/src/resolv:res_close",
+        "//libc/src/resolv:res_init",
+        "//libc/src/resolv:res_mkquery",
+        "//libc/src/resolv:res_query",
+        "//libc/src/resolv:res_search",
+        "//libc/src/resolv:res_send",
+    ],
+)
+
+libc_test(
+    name = "res_init_test",
+    srcs = ["res_init_test.cpp"],
+    deps = ["//libc/src/resolv:res_init"],
+)
