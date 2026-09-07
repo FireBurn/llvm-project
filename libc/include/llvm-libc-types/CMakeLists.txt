@@ -335,6 +335,8 @@ add_header(
 add_header(struct_sockaddr_un HDR struct_sockaddr_un.h DEPENDS .sa_family_t)
 add_header(struct_ether_addr HDR struct_ether_addr.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(tcp_seq HDR tcp_seq.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_header(struct___res_state HDR struct___res_state.h DEPENDS libc.include.llvm-libc-macros.resolv_macros libc.include.llvm-libc-macros.stdint_macros libc.include.llvm-libc-types.struct_in_addr libc.include.llvm-libc-types.struct_sockaddr_in)
+add_header(res_state HDR res_state.h DEPENDS libc.include.llvm-libc-types.struct___res_state)
 add_header(n_short HDR n_short.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(n_long HDR n_long.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(n_time HDR n_time.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)

@@ -29,6 +29,10 @@ constexpr size_t MAX_MESSAGE = 512;
 // A header is twelve bytes: an identifier, the flags, and four counts.
 constexpr size_t HEADER_SIZE = 12;
 
+// The only opcode a question is ever asked with. The others belong to
+// interfaces this does not offer.
+constexpr uint16_t OPCODE_QUERY = 0;
+
 // What a name server said about a question it was asked.
 enum class Status {
   Ok,
@@ -42,8 +46,11 @@ enum class Status {
 
 // Writes a query for `name` of type `type` into `out`, and returns how long
 // it is, or zero if the name will not fit or is not a name.
-size_t build_query(const char *name, uint16_t type, uint16_t id,
-                   unsigned char *out, size_t capacity);
+// Writes the question asking for |type| records of |name| in |rr_class|.
+// Returns how long the message is, or zero where it would not fit or the
+// name cannot be written.
+size_t build_query(const char *name, uint16_t type, uint16_t rr_class,
+                   uint16_t id, unsigned char *out, size_t capacity);
 
 // What one record in an answer holds, for the types this asks about.
 struct Record {
