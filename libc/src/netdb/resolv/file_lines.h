@@ -86,6 +86,50 @@ private:
   bool ended_ = false;
 };
 
+// Walking a database from the front, which is what the set, get and end
+// triple does between them. The file is opened on the first read; the end of
+// it stays reached until the caller asks to start again, so a read past the
+// end says there is nothing rather than quietly starting over.
+class Enumeration {
+public:
+  LIBC_INLINE void rewind(const char *path, bool stay_open) {
+    keep_open_ = stay_open;
+    ended_ = false;
+    lines_.open(path);
+  }
+
+  // Closes the file. A read after this opens it again from the front, which
+  // is what closing the connection to a database has always meant.
+  LIBC_INLINE void stop() {
+    keep_open_ = false;
+    ended_ = false;
+    lines_.close_file();
+  }
+
+  // The next line that holds anything, or null at the end of the file.
+  LIBC_INLINE char *next(const char *path, char *line, size_t capacity) {
+    if (ended_)
+      return nullptr;
+    if (!lines_.is_open() && !lines_.open(path)) {
+      ended_ = true;
+      return nullptr;
+    }
+    if (lines_.next_line(line, capacity))
+      return line;
+    ended_ = true;
+    if (!keep_open_)
+      lines_.close_file();
+    return nullptr;
+  }
+
+private:
+  // Every member is given a value here so that one of these can be a variable
+  // with static storage, which the enumeration of a database needs.
+  FileLines lines_;
+  bool keep_open_ = false;
+  bool ended_ = false;
+};
+
 // The next run of characters that is not blank, and what follows it.
 LIBC_INLINE cpp::string_view next_field(cpp::string_view &rest) {
   size_t start = 0;
