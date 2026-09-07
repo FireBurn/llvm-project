@@ -139,6 +139,13 @@ macros:
     macro_value: 252
   - macro_name: EM_LOONGARCH
     macro_value: 258
+  # Alpha was never given a number by the registry. 41 was written into the
+  # early objects and is kept under the name glibc gives it; 0x9026 is what
+  # everything since uses.
+  - macro_name: EM_FAKE_ALPHA
+    macro_value: 41
+  - macro_name: EM_ALPHA
+    macro_value: '0x9026'
   - macro_name: EV_NONE
     macro_value: 0
   - macro_name: EV_CURRENT
@@ -555,6 +562,69 @@ macros:
     macro_value: '0x8'
   - macro_name: DF_STATIC_TLS
     macro_value: '0x10'
+  # The word DT_FLAGS_1 holds.
+  - macro_name: DF_1_NOW
+    macro_value: '0x00000001'
+  - macro_name: DF_1_GLOBAL
+    macro_value: '0x00000002'
+  - macro_name: DF_1_GROUP
+    macro_value: '0x00000004'
+  - macro_name: DF_1_NODELETE
+    macro_value: '0x00000008'
+  - macro_name: DF_1_LOADFLTR
+    macro_value: '0x00000010'
+  - macro_name: DF_1_INITFIRST
+    macro_value: '0x00000020'
+  - macro_name: DF_1_NOOPEN
+    macro_value: '0x00000040'
+  - macro_name: DF_1_ORIGIN
+    macro_value: '0x00000080'
+  - macro_name: DF_1_DIRECT
+    macro_value: '0x00000100'
+  - macro_name: DF_1_TRANS
+    macro_value: '0x00000200'
+  - macro_name: DF_1_INTERPOSE
+    macro_value: '0x00000400'
+  - macro_name: DF_1_NODEFLIB
+    macro_value: '0x00000800'
+  - macro_name: DF_1_NODUMP
+    macro_value: '0x00001000'
+  - macro_name: DF_1_CONFALT
+    macro_value: '0x00002000'
+  - macro_name: DF_1_ENDFILTEE
+    macro_value: '0x00004000'
+  - macro_name: DF_1_DISPRELDNE
+    macro_value: '0x00008000'
+  - macro_name: DF_1_DISPRELPND
+    macro_value: '0x00010000'
+  - macro_name: DF_1_NODIRECT
+    macro_value: '0x00020000'
+  - macro_name: DF_1_IGNMULDEF
+    macro_value: '0x00040000'
+  - macro_name: DF_1_NOKSYMS
+    macro_value: '0x00080000'
+  - macro_name: DF_1_NOHDR
+    macro_value: '0x00100000'
+  - macro_name: DF_1_EDITED
+    macro_value: '0x00200000'
+  - macro_name: DF_1_NORELOC
+    macro_value: '0x00400000'
+  - macro_name: DF_1_SYMINTPOSE
+    macro_value: '0x00800000'
+  - macro_name: DF_1_GLOBAUDIT
+    macro_value: '0x01000000'
+  - macro_name: DF_1_SINGLETON
+    macro_value: '0x02000000'
+  - macro_name: DF_1_STUB
+    macro_value: '0x04000000'
+  - macro_name: DF_1_PIE
+    macro_value: '0x08000000'
+  - macro_name: DF_1_KMOD
+    macro_value: '0x10000000'
+  - macro_name: DF_1_WEAKFILTER
+    macro_value: '0x20000000'
+  - macro_name: DF_1_NOCOMMON
+    macro_value: '0x40000000'
   # Notes used in ET_CORE.
   - macro_name: NN_PRSTATUS
     macro_value: '"CORE"'
@@ -676,6 +746,14 @@ macros:
     macro_header: elf-macros.h
   - macro_name: PT_AARCH64_MEMTAG_MTE
     macro_value: '0x70000002'
+  - macro_name: PT_MIPS_REGINFO
+    macro_value: '0x70000000'
+  - macro_name: PT_MIPS_RTPROC
+    macro_value: '0x70000001'
+  - macro_name: PT_MIPS_OPTIONS
+    macro_value: '0x70000002'
+  - macro_name: PT_MIPS_ABIFLAGS
+    macro_value: '0x70000003'
   - macro_name: PN_XNUM
     macro_value: '0xffff'
   - macro_name: ELFCLASSNUM
