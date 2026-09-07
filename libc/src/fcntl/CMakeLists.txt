@@ -45,6 +45,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vmsplice
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.vmsplice
+)
+
+add_entrypoint_object(
+  tee
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.tee
+)
+
+add_entrypoint_object(
   name_to_handle_at
   ALIAS
   DEPENDS
