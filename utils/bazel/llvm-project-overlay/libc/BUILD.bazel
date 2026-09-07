@@ -27107,6 +27107,32 @@ libc_function(
 )
 
 libc_function(
+    name = "herror",
+    srcs = ["src/netdb/herror.cpp"],
+    hdrs = ["src/netdb/herror.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":__support_osutil_io",
+        ":__support_osutil_syscall",
+        ":hstrerror",
+        ":__h_errno_location",
+    ],
+)
+
+libc_function(
+    name = "hstrerror",
+    srcs = ["src/netdb/hstrerror.cpp"],
+    hdrs = ["src/netdb/hstrerror.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_netdb_macros",
+    ],
+)
+
+libc_function(
     name = "setprotoent",
     srcs = ["src/netdb/setprotoent.cpp"],
     hdrs = ["src/netdb/setprotoent.h"],
@@ -30685,6 +30711,17 @@ libc_function(
         ":__support_macros_config",
         ":func_free",
         ":types_struct_addrinfo",
+    ],
+)
+
+libc_function(
+    name = "gai_strerror",
+    srcs = ["src/netdb/gai_strerror.cpp"],
+    hdrs = ["src/netdb/gai_strerror.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_netdb_macros",
     ],
 )
 
