@@ -406,6 +406,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  net_route_macros
+  HDR
+    net-route-macros.h
+)
+
+add_macro_header(
   netdb_macros
   HDR
     netdb-macros.h
