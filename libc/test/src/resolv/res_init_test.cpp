@@ -6,13 +6,12 @@
 //
 //===----------------------------------------------------------------------===//
 ///
-///
 /// \file
 /// Tests for res_init.
 ///
 //===----------------------------------------------------------------------===//
 
-#include "src/compat/res_init.h"
+#include "src/resolv/res_init.h"
 #include "test/UnitTest/Test.h"
 
 // Nothing is held between lookups, so asking for the configuration to be read
