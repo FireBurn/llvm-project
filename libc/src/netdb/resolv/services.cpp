@@ -96,8 +96,9 @@ bool port_for_service(const char *name, const char *protocol, uint16_t &port,
 
 namespace {
 
-LIBC_CONSTINIT LIBC_THREAD_LOCAL FileLines service_enumeration;
-LIBC_CONSTINIT LIBC_THREAD_LOCAL bool services_keep_open = false;
+// Where the enumeration has got to. setservent asks for the file to be held
+// open across lookups, which is what the enumeration records.
+LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration service_enumeration;
 
 char *keep_service(cpp::string_view field, ServStorage &storage) {
   if (storage.used + field.size() + 1 > ServStorage::POOL_SIZE)
@@ -216,25 +217,16 @@ struct servent *serv_by_port(int port, const char *protocol,
 }
 
 void rewind_services(bool stay_open) {
-  services_keep_open = stay_open;
-  service_enumeration.open(SERVICES_PATH);
+  service_enumeration.rewind(SERVICES_PATH, stay_open);
 }
 
-void stop_services() {
-  services_keep_open = false;
-  service_enumeration.close_file();
-}
+void stop_services() { service_enumeration.stop(); }
 
 struct servent *next_service(ServStorage &storage) {
-  if (!service_enumeration.is_open() &&
-      !service_enumeration.open(SERVICES_PATH))
-    return nullptr;
   char line[512];
-  while (service_enumeration.next_line(line, sizeof(line)))
+  while (service_enumeration.next(SERVICES_PATH, line, sizeof(line)))
     if (parse_service(line, storage))
       return &storage.entry;
-  if (!services_keep_open)
-    service_enumeration.close_file();
   return nullptr;
 }
 
