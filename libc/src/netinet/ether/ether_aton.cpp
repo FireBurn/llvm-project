@@ -7,28 +7,27 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of ether_aton function.
+/// Implementation of ether_aton
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/netinet/ether/ether_aton.h"
-#include "hdr/types/struct_ether_addr.h"
-#include "src/__support/CPP/optional.h"
+
 #include "src/__support/common.h"
+#include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/macros/null_check.h"
-#include "src/netinet/ether/ether_utils.h"
+#include "src/netinet/ether/ethers.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace {
+LIBC_CONSTINIT LIBC_THREAD_LOCAL struct ether_addr result = {};
+} // namespace
+
+// The answer is kept in storage the library owns, which the next call from
+// this thread overwrites.
 LLVM_LIBC_FUNCTION(struct ether_addr *, ether_aton, (const char *asc)) {
-  LIBC_CRASH_ON_NULLPTR(asc);
-  static LIBC_THREAD_LOCAL struct ether_addr buffer;
-  cpp::optional<struct ether_addr> addr = net::ether_aton(asc);
-  if (!addr)
-    return nullptr;
-  buffer = *addr;
-  return &buffer;
+  return ether::from_text(asc, &result) ? &result : nullptr;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

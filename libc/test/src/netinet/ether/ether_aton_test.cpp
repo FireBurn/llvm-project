@@ -7,53 +7,101 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Unittests for ether_aton.
+/// Unittests for the Ethernet address conversions
 ///
 //===----------------------------------------------------------------------===//
 
-#include "hdr/stdint_proxy.h"
-#include "hdr/types/struct_ether_addr.h"
 #include "src/netinet/ether/ether_aton.h"
+#include "src/netinet/ether/ether_aton_r.h"
+#include "src/netinet/ether/ether_line.h"
+#include "src/netinet/ether/ether_ntoa.h"
+#include "src/netinet/ether/ether_ntoa_r.h"
+#include "src/string/strcmp.h"
 #include "test/UnitTest/Test.h"
 
 namespace {
 
-// Packs the address into an integer to get readable test failure messages.
-uint64_t to_u64(const struct ether_addr &addr) {
-  uint64_t result = 0;
-  for (uint8_t octet : addr.ether_addr_octet)
-    result = result << 8 | octet;
-  return result;
+bool same(const struct ether_addr *addr, const unsigned char (&want)[6]) {
+  for (int i = 0; i < 6; ++i)
+    if (addr->ether_addr_octet[i] != want[i])
+      return false;
+  return true;
 }
 
 } // namespace
 
-TEST(LlvmLibcEtherAtonTest, BasicConversion) {
-  struct ether_addr *addr = LIBC_NAMESPACE::ether_aton("01:23:45:67:89:ab");
-  ASSERT_NE(static_cast<struct ether_addr *>(nullptr), addr);
-  EXPECT_EQ(uint64_t{0x0123456789ab}, to_u64(*addr));
-
-  addr = LIBC_NAMESPACE::ether_aton("cd:ef:a:10:0:9F");
-  ASSERT_NE(static_cast<struct ether_addr *>(nullptr), addr);
-  EXPECT_EQ(uint64_t{0xcdef0a10009f}, to_u64(*addr));
-
-  EXPECT_EQ(static_cast<struct ether_addr *>(nullptr),
-            LIBC_NAMESPACE::ether_aton("01:23:45:67:89"));
-  EXPECT_EQ(static_cast<struct ether_addr *>(nullptr),
-            LIBC_NAMESPACE::ether_aton("01:23:45:67:89:abc"));
+TEST(LlvmLibcEtherTest, ReadsAnAddress) {
+  struct ether_addr addr;
+  const unsigned char want[6] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("00:11:22:33:44:55", &addr) ==
+              &addr);
+  ASSERT_TRUE(same(&addr, want));
 }
 
-TEST(LlvmLibcEtherAtonTest, BufferReuseAndOverwrite) {
-  struct ether_addr *ptr1 = LIBC_NAMESPACE::ether_aton("11:22:33:44:55:66");
-  ASSERT_NE(static_cast<struct ether_addr *>(nullptr), ptr1);
-  EXPECT_EQ(uint64_t{0x112233445566}, to_u64(*ptr1));
+TEST(LlvmLibcEtherTest, ReadsUpperCaseAndSingleDigits) {
+  struct ether_addr addr;
+  const unsigned char want[6] = {0xaa, 0xbb, 0x00, 0x01, 0x02, 0x03};
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("AA:bB:0:1:2:3", &addr) == &addr);
+  ASSERT_TRUE(same(&addr, want));
+}
 
-  struct ether_addr *ptr2 = LIBC_NAMESPACE::ether_aton("1:2:3:4:5:6");
-  EXPECT_EQ(ptr1, ptr2);
-  EXPECT_EQ(uint64_t{0x010203040506}, to_u64(*ptr1));
+// Everything after the sixth part is left alone, which is what lets a whole
+// line of the ethers database be handed over.
+TEST(LlvmLibcEtherTest, IgnoresWhatFollowsTheAddress) {
+  struct ether_addr addr;
+  const unsigned char want[6] = {0x08, 0x00, 0x20, 0x00, 0x61, 0xca};
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("08:00:20:00:61:CA hoot", &addr) ==
+              &addr);
+  ASSERT_TRUE(same(&addr, want));
+}
 
-  // A failed conversion leaves the buffer untouched.
-  EXPECT_EQ(static_cast<struct ether_addr *>(nullptr),
-            LIBC_NAMESPACE::ether_aton("a:b:c:d:e:g"));
-  EXPECT_EQ(uint64_t{0x010203040506}, to_u64(*ptr1));
+TEST(LlvmLibcEtherTest, RefusesWhatIsNotAnAddress) {
+  struct ether_addr addr;
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("", &addr) == nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("1:2:3:4:5", &addr) == nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("00-11-22-33-44-55", &addr) ==
+              nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("00:11:22:33:44:5g", &addr) ==
+              nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("100:11:22:33:44:55", &addr) ==
+              nullptr);
+}
+
+// A part below sixteen is written with one digit, so what comes back is not
+// always what went in.
+TEST(LlvmLibcEtherTest, WritesAnAddress) {
+  struct ether_addr addr;
+  char buf[18];
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_aton_r("08:00:20:00:61:ca", &addr) !=
+              nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::ether_ntoa_r(&addr, buf) == buf);
+  ASSERT_STREQ(buf, "8:0:20:0:61:ca");
+}
+
+TEST(LlvmLibcEtherTest, TheAnswerSurvivesUntilTheNextCall) {
+  struct ether_addr *first = LIBC_NAMESPACE::ether_aton("1:2:3:4:5:6");
+  ASSERT_TRUE(first != nullptr);
+  const unsigned char want[6] = {1, 2, 3, 4, 5, 6};
+  ASSERT_TRUE(same(first, want));
+  ASSERT_STREQ(LIBC_NAMESPACE::ether_ntoa(first), "1:2:3:4:5:6");
+}
+
+TEST(LlvmLibcEtherTest, ReadsALineOfTheDatabase) {
+  struct ether_addr addr;
+  char hostname[256];
+  const unsigned char want[6] = {0x08, 0x00, 0x20, 0x00, 0x61, 0xca};
+
+  ASSERT_EQ(LIBC_NAMESPACE::ether_line("08:00:20:00:61:CA  hoot # a comment",
+                                       &addr, hostname),
+            0);
+  ASSERT_TRUE(same(&addr, want));
+  ASSERT_STREQ(hostname, "hoot");
+
+  // A line with no name on it, a line that is all comment and an empty line
+  // each name nothing.
+  ASSERT_EQ(LIBC_NAMESPACE::ether_line("08:00:20:00:61:CA", &addr, hostname),
+            -1);
+  ASSERT_EQ(LIBC_NAMESPACE::ether_line("# just a comment", &addr, hostname),
+            -1);
+  ASSERT_EQ(LIBC_NAMESPACE::ether_line("", &addr, hostname), -1);
 }
