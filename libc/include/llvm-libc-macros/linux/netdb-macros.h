@@ -43,6 +43,7 @@
 #define NI_NOFQDN 4
 #define NI_NAMEREQD 8
 #define NI_DGRAM 16
+#define NI_NUMERICSCOPE 256
 
 // How much room getnameinfo may need for what it writes.
 #define NI_MAXHOST 1025
