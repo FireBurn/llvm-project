@@ -131,3 +131,18 @@ add_libc_test(
     libc.hdr.types.struct_hostent
     libc.src.netdb.gethostbyaddr
 )
+
+add_libc_test(
+  getservent_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    getservent_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_servent
+    libc.src.netdb.endservent
+    libc.src.netdb.getservbyname
+    libc.src.netdb.getservbyport
+    libc.src.netdb.getservent
+    libc.src.netdb.setservent
+)
