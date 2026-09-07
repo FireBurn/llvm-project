@@ -87,6 +87,16 @@ FileIOResult File::write_unlocked_impl(const void *data, size_t len) {
 
   prev_op = FileOp::WRITE;
 
+  // C leaves a standard stream fully buffered unless it is over an
+  // interactive device. Which it is over is settled here, on the first write,
+  // rather than at startup, where the call would be made by every program
+  // including those that never print.
+  if (bufmode_unsettled) {
+    bufmode_unsettled = false;
+    if (platform_isatty != nullptr && platform_isatty(this))
+      bufmode = _IOLBF;
+  }
+
   if (bufmode == _IONBF) { // unbuffered.
     // The whole result is kept rather than just the count: narrowing it to a
     // size_t here threw the error away, so a write that failed came back
@@ -547,6 +557,8 @@ int File::set_buffer(void *buffer, size_t size, int buffer_mode) {
     own_buf = false;
   }
   bufmode = buffer_mode;
+  // A caller who says how the stream is to be buffered has settled it.
+  bufmode_unsettled = false;
   adjust_buf();
   return 0;
 }

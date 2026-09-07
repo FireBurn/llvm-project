@@ -16,6 +16,7 @@ FileIOResult linux_file_write(File *, const void *, size_t);
 FileIOResult linux_file_read(File *, void *, size_t);
 ErrorOr<off_t> linux_file_seek(File *, off_t, int);
 int linux_file_close(File *);
+bool linux_file_isatty(File *);
 
 class LinuxFile : public File {
   int fd;
@@ -23,10 +24,12 @@ class LinuxFile : public File {
 public:
   constexpr LinuxFile(int file_descriptor, uint8_t *buffer, size_t buffer_size,
                       int buffer_mode, bool owned, File::ModeFlags modeflags,
-                      bool static_stream = false)
+                      bool static_stream = false,
+                      bool settle_buffer_mode = false)
       : File(&linux_file_write, &linux_file_read, &linux_file_seek,
              &linux_file_close, buffer, buffer_size, buffer_mode, owned,
-             modeflags, static_stream, /*has_file_descriptor=*/true),
+             modeflags, static_stream, /*has_file_descriptor=*/true,
+             &linux_file_isatty, settle_buffer_mode),
         fd(file_descriptor) {}
 
   int get_fd() const { return fd; }

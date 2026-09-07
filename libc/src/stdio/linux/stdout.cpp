@@ -20,9 +20,12 @@ namespace LIBC_NAMESPACE_DECL {
 
 constexpr size_t STDOUT_BUFFER_SIZE = 1024;
 uint8_t stdout_buffer[STDOUT_BUFFER_SIZE];
-static LinuxFile StdOut(1, stdout_buffer, STDOUT_BUFFER_SIZE, _IOLBF, false,
+// C leaves this fully buffered unless it is over an interactive device. Which
+// it is over cannot be known here, so the mode is settled on the first write.
+static LinuxFile StdOut(1, stdout_buffer, STDOUT_BUFFER_SIZE, _IOFBF, false,
                         File::ModeFlags(File::OpenMode::APPEND),
-                        /*static_stream=*/true);
+                        /*static_stream=*/true,
+                        /*settle_buffer_mode=*/true);
 
 LLVM_LIBC_VARIABLE(FILE *, stdout) = reinterpret_cast<FILE *>(&StdOut);
 
