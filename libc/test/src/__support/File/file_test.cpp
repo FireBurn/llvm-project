@@ -783,18 +783,23 @@ TEST(LlvmLibcFileTest, UngetwcWEOF) {
 
 // A File subclass with a platform_write that simulates short writes.
 // This models the behavior of write(2) on pipes, sockets, or FIFOs where
-// the kernel may write fewer bytes than requested.
+// the kernel may write fewer bytes than requested. |accept_total| is how much
+// it will ever take, after which it takes nothing at all.
 class ShortWriteFile : public File {
   static constexpr size_t SIZE = 512;
   size_t pos;
   char str[SIZE] = {0};
   size_t max_write;
+  size_t accept_total;
 
   static FileIOResult short_write(LIBC_NAMESPACE::File *f, const void *data,
                                   size_t len) {
     ShortWriteFile *sf = static_cast<ShortWriteFile *>(f);
     // Simulate a short write: write at most max_write bytes per call.
     size_t to_write = len < sf->max_write ? len : sf->max_write;
+    size_t room = sf->pos < sf->accept_total ? sf->accept_total - sf->pos : 0;
+    if (to_write > room)
+      to_write = room;
     for (size_t i = 0; i < to_write && sf->pos < SIZE; ++i, ++sf->pos)
       sf->str[sf->pos] = reinterpret_cast<const char *>(data)[i];
     return to_write;
@@ -829,22 +834,22 @@ class ShortWriteFile : public File {
 
 public:
   explicit ShortWriteFile(char *buffer, size_t buflen, int bufmode, bool owned,
-                          ModeFlags modeflags, size_t max_write_bytes)
+                          ModeFlags modeflags, size_t max_write_bytes,
+                          size_t accept_total_bytes = SIZE)
       : LIBC_NAMESPACE::File(&short_write, &short_read, &short_seek,
                              &short_close, reinterpret_cast<uint8_t *>(buffer),
                              buflen, bufmode, owned, modeflags),
-        pos(0), max_write(max_write_bytes) {}
+        pos(0), max_write(max_write_bytes), accept_total(accept_total_bytes) {}
 
   void reset() { pos = 0; }
   size_t get_pos() const { return pos; }
   char *get_str() { return str; }
 };
 
-// Verify that a short platform_write of a multi-byte UTF-8 character is
-// detected and reported as a failure. POSIX write(2) may perform short
-// writes on pipes, sockets, and FIFOs, so a 3-byte character could have
-// only 2 bytes accepted by the kernel.
-TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
+// A platform that takes only part of what it was given is asked again, so a
+// multi-byte character split across two calls still arrives whole. POSIX
+// write(2) does this on pipes, sockets and FIFOs.
+TEST(LlvmLibcFileTest, ShortWritesAreRetried) {
   LIBC_NAMESPACE::AllocChecker ac;
   // Unbuffered so writes go directly to platform_write, limited to 2 bytes.
   ShortWriteFile *f = new (ac) ShortWriteFile(
@@ -853,12 +858,32 @@ TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
   ASSERT_FALSE(f == nullptr);
 
   // € (U+20AC) encodes to 3 UTF-8 bytes: 0xE2 0x82 0xAC.
-  // With max_write=2, only 2 of the 3 bytes will be accepted.
+  const wchar_t euro = L'€';
+  auto result = f->write(&euro, 1);
+
+  EXPECT_FALSE(result.has_error());
+  EXPECT_EQ(result.value, size_t(1));
+  EXPECT_FALSE(f->error());
+  EXPECT_EQ(f->get_pos(), size_t(3));
+
+  ASSERT_EQ(f->close(), 0);
+}
+
+// A platform that stops taking anything at all is a different matter: the
+// character is left incomplete, and that must be reported rather than counted
+// as written.
+TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
+  LIBC_NAMESPACE::AllocChecker ac;
+  // Two of the three bytes are taken, and then nothing more ever is.
+  ShortWriteFile *f = new (ac) ShortWriteFile(
+      nullptr, 0, _IONBF, true, LIBC_NAMESPACE::File::mode_flags("w"),
+      /*max_write_bytes=*/2, /*accept_total_bytes=*/2);
+  ASSERT_FALSE(f == nullptr);
+
   const wchar_t euro = L'€';
   auto result = f->write(&euro, 1);
 
   // The incomplete character must not be counted as written.
-  EXPECT_TRUE(result.has_error());
   EXPECT_EQ(result.value, size_t(0));
 
   // The error indicator on the stream should be set.
