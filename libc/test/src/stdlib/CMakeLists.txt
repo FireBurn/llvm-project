@@ -1,6 +1,7 @@
 add_custom_target(libc-stdlib-tests)
 
 add_libc_test(
+  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
@@ -851,3 +852,16 @@ add_libc_test(
       libc.src.stdlib.malloc
       libc.src.stdlib.malloc_trim
   )
+
+add_libc_test(
+  environment_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    environment_test.cpp
+  DEPENDS
+    libc.src.stdlib.clearenv
+    libc.src.stdlib.getenv
+    libc.src.stdlib.secure_getenv
+    libc.src.stdlib.setenv
+)
