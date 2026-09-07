@@ -64,8 +64,7 @@ public:
   MemStream(char **bufp, size_t *sizep, uint8_t *buffer, size_t bufsize)
       : File(&stream_write, &stream_read, &MemStream::stream_seek,
              &stream_close, buffer, bufsize, _IONBF,
-             true /* File owns the buffer */,
-             static_cast<File::ModeFlags>(File::OpenMode::WRITE)),
+             true /* File owns the buffer */, FileMode::WRITE_MODE),
         user_buf(bufp), user_size(sizep) {}
 
   bool start();
