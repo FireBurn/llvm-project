@@ -25241,6 +25241,27 @@ libc_support_library(
 )
 
 libc_function(
+    name = "gethostbyaddr",
+    srcs = ["src/netdb/gethostbyaddr.cpp"],
+    hdrs = ["src/netdb/gethostbyaddr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getnameinfo",
+        ":hdr_netdb_macros",
+        ":hdr_sys_socket_macros",
+        ":netdb___h_errno_location",
+        ":netdb_hostent_storage",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_socklen_t",
+        ":types_struct_hostent",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_function(
     name = "gethostbyname",
     srcs = ["src/netdb/gethostbyname.cpp"],
     hdrs = ["src/netdb/gethostbyname.h"],
