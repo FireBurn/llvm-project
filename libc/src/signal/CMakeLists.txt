@@ -24,6 +24,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  siginterrupt
+  SRCS
+    siginterrupt.cpp
+  HDRS
+    siginterrupt.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.struct_sigaction
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigaction
+)
+
+add_entrypoint_object(
   sigaltstack
   ALIAS
   DEPENDS

@@ -26,6 +26,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  siginterrupt_test
+  SUITE
+    libc_signal_unittests
+  SRCS
+    siginterrupt_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.struct_sigaction
+    libc.src.__support.libc_errno
+    libc.src.signal.sigaction
+    libc.src.signal.sigemptyset
+    libc.src.signal.siginterrupt
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   sigaction_test
   SUITE
     libc_signal_unittests
