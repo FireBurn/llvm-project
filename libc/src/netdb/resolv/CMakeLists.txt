@@ -65,6 +65,28 @@ add_object_library(
 )
 
 add_object_library(
+  exchange
+  SRCS
+    exchange.cpp
+  HDRS
+    exchange.h
+  DEPENDS
+    .resolv_conf
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_pollfd
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.src.__support.macros.config
+    libc.src.poll.poll
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.sys.socket.recvfrom
+    libc.src.sys.socket.sendto
+    libc.src.sys.socket.socket
+    libc.src.unistd.close
+)
+
+add_object_library(
   hosts
   SRCS
     hosts.cpp
@@ -117,6 +139,7 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.__support.str_to_integer
     libc.src.arpa.inet.inet_pton
+    libc.src.net.if_nametoindex
     libc.src.string.memory_utils.inline_memcpy
     libc.src.unistd.close
 )
