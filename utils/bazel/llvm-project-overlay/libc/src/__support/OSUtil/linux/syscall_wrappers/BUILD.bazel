@@ -2815,6 +2815,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "tee",
+    hdrs = ["tee.h"],
+    deps = [
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "vmsplice",
+    hdrs = ["vmsplice.h"],
+    deps = [
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "setgid",
     hdrs = ["setgid.h"],
     deps = [
