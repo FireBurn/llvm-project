@@ -1765,6 +1765,9 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .arpa_nameser
+    .llvm-libc-macros.resolv_macros
+    .llvm-libc-types.res_state
+    .llvm-libc-types.struct___res_state
 )
 
 add_header_macro(
