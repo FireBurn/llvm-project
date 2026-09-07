@@ -27289,6 +27289,19 @@ libc_function(
 )
 
 libc_function(
+    name = "endnetent",
+    srcs = ["src/netdb/endnetent.cpp"],
+    hdrs = ["src/netdb/endnetent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":netdb_resolv_networks",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
     name = "endprotoent",
     srcs = ["src/netdb/endprotoent.cpp"],
     hdrs = ["src/netdb/endprotoent.h"],
@@ -27297,6 +27310,48 @@ libc_function(
         ":__support_macros_config",
         ":netdb_resolv_protocols",
         ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "getnetbyaddr",
+    srcs = ["src/netdb/getnetbyaddr.cpp"],
+    hdrs = ["src/netdb/getnetbyaddr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_resolv_networks",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
+    name = "getnetbyname",
+    srcs = ["src/netdb/getnetbyname.cpp"],
+    hdrs = ["src/netdb/getnetbyname.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_resolv_networks",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
+    name = "getnetent",
+    srcs = ["src/netdb/getnetent.cpp"],
+    hdrs = ["src/netdb/getnetent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_resolv_networks",
+        ":types_struct_netent",
     ],
 )
 
@@ -27377,6 +27432,19 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":hdr_netdb_macros",
+    ],
+)
+
+libc_function(
+    name = "setnetent",
+    srcs = ["src/netdb/setnetent.cpp"],
+    hdrs = ["src/netdb/setnetent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":netdb_resolv_networks",
+        ":types_struct_netent",
     ],
 )
 
@@ -27586,6 +27654,49 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":netdb_resolv_protocols",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_netent",
+    hdrs = ["include/llvm-libc-types/struct_netent.h"],
+)
+
+libc_support_library(
+    name = "types_struct_netent",
+    hdrs = ["hdr/types/struct_netent.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_netent"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "netdb_resolv_networks",
+    srcs = ["src/netdb/resolv/networks.cpp"],
+    hdrs = ["src/netdb/resolv/networks.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":hdr_sys_socket_macros",
+        ":netdb_resolv_file_lines",
+        ":string_memory_utils",
+        ":types_size_t",
+        ":types_struct_netent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_net_storage",
+    srcs = ["src/netdb/net_storage.cpp"],
+    hdrs = ["src/netdb/net_storage.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":netdb_resolv_networks",
     ],
 )
 
