@@ -781,6 +781,24 @@ libc_function(
 )
 
 libc_function(
+    name = "getdomainname",
+    srcs = ["linux/getdomainname.cpp"],
+    hdrs = ["getdomainname.h"],
+    deps = [
+        ":unistd_getdomainname",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_utsname",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:uname",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
     name = "getdtablesize",
     srcs = ["linux/getdtablesize.cpp"],
     hdrs = ["getdtablesize.h"],
@@ -886,6 +904,21 @@ libc_function(
 )
 
 libc_function(
+    name = "setdomainname",
+    srcs = ["linux/setdomainname.cpp"],
+    hdrs = ["setdomainname.h"],
+    deps = [
+        ":unistd_setdomainname",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setdomainname",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "sethostname",
     srcs = ["linux/sethostname.cpp"],
     hdrs = ["sethostname.h"],
@@ -972,6 +1005,24 @@ libc_support_library(
     name = "unistd_daemon",
     hdrs = ["daemon.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_getdomainname",
+    hdrs = ["getdomainname.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setdomainname",
+    hdrs = ["setdomainname.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
         "//libc/src/__support/macros:config",
     ],
 )

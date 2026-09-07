@@ -80,6 +80,16 @@ libc_test(
 )
 
 libc_test(
+    name = "getdomainname_test",
+    srcs = ["getdomainname_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getdomainname",
+        "//libc/src/unistd:setdomainname",
+    ],
+)
+
+libc_test(
     name = "getdtablesize_test",
     srcs = ["getdtablesize_test.cpp"],
     deps = [
