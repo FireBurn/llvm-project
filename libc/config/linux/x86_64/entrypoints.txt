@@ -2087,6 +2087,11 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     # netdb.h entrypoints
     libc.src.netdb.herror
     libc.src.netdb.hstrerror
+    libc.src.netdb.getnetbyname
+    libc.src.netdb.getnetbyaddr
+    libc.src.netdb.getnetent
+    libc.src.netdb.setnetent
+    libc.src.netdb.endnetent
     libc.src.netdb.getprotobyname
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getprotoent
