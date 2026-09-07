@@ -64,6 +64,26 @@ libc_test(
 )
 
 libc_test(
+    name = "hstrerror_test",
+    srcs = ["hstrerror_test.cpp"],
+    deps = [
+        "//libc/hdr:netdb_macros",
+        "//libc/src/netdb:hstrerror",
+    ],
+)
+
+libc_test(
+    name = "gai_strerror_test",
+    srcs = ["gai_strerror_test.cpp"],
+    deps = [
+        "//libc/hdr:netdb_macros",
+        "//libc/src/netdb:__h_errno_location",
+        "//libc/src/netdb:gai_strerror",
+        "//libc/src/netdb:herror",
+    ],
+)
+
+libc_test(
     name = "getaddrinfo_test",
     srcs = ["getaddrinfo_test.cpp"],
     deps = [
