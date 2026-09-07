@@ -211,6 +211,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getdomainname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.getdomainname
+)
+
+add_entrypoint_object(
+  setdomainname
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setdomainname
+)
+
+add_entrypoint_object(
   gethostname
   ALIAS
   DEPENDS
