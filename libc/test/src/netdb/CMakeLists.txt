@@ -75,6 +75,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  gethostent_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    gethostent_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.netdb.endhostent
+    libc.src.netdb.gethostent
+    libc.src.netdb.sethostent
+)
+
+add_libc_test(
   getprotoent_test
   SUITE
     libc_netdb_unittests
