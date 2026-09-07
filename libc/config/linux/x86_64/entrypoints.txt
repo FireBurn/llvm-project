@@ -732,6 +732,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.getgroups
     libc.src.unistd.getlogin
     libc.src.unistd.getlogin_r
+    libc.src.unistd.getdomainname
+    libc.src.unistd.setdomainname
     libc.src.unistd.gethostname
     libc.src.unistd.getpagesize
     libc.src.unistd.getpgid
@@ -2083,6 +2085,8 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.resolv.dn_comp
 
     # netdb.h entrypoints
+    libc.src.netdb.herror
+    libc.src.netdb.hstrerror
     libc.src.netdb.getprotobyname
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getprotoent
