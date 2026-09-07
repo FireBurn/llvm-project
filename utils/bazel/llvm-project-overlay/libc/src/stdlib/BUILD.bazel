@@ -593,6 +593,19 @@ libc_function(
 )
 
 libc_function(
+    name = "malloc_trim",
+    srcs = ["malloc_trim.cpp"],
+    hdrs = ["malloc_trim.h"],
+    deps = [
+        "//libc/hdr/func:mallopt",
+        "//libc/hdr/types:size_t",
+        "//libc/include:llvm_libc_macros_malloc_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "mb_cur_max",
     srcs = ["mb_cur_max.cpp"],
     hdrs = ["mb_cur_max.h"],
