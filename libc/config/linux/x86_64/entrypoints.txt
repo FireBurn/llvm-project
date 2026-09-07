@@ -765,6 +765,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.getdtablesize
     libc.src.unistd.getegid
     libc.src.unistd.geteuid
+    libc.src.sys.fsuid.setfsgid
+    libc.src.sys.fsuid.setfsuid
     libc.src.unistd.getgroups
     libc.src.unistd.gethostid
     libc.src.unistd.gethostname
