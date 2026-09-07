@@ -1,0 +1,31 @@
+header: resolv.h
+standards:
+  - bsd
+public_includes:
+  # Where the message format these read and write is defined.
+  - arpa/nameser.h
+macros: []
+types: []
+enums: []
+objects: []
+functions:
+  - name: dn_expand
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const unsigned char *
+      - type: const unsigned char *
+      - type: const unsigned char *
+      - type: char *
+      - type: int
+  - name: dn_comp
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: unsigned char *
+      - type: int
+      - type: unsigned char **
+      - type: unsigned char **
