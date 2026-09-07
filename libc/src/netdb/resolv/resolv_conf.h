@@ -26,7 +26,17 @@ struct Nameserver {
   unsigned char bytes[16];
   // Already in the order the wire uses.
   uint16_t port;
+  // Which interface a link local address is on. A server written as
+  // fe80::1%eth0 can only be reached through the one it names, and cannot be
+  // reached at all without it.
+  uint32_t scope;
 };
+
+// How many search domains are worth keeping, and how much room their names
+// take between them. Six is what the file format allows and what every other
+// libc reads.
+constexpr size_t MAX_SEARCH = 6;
+constexpr size_t SEARCH_POOL = 256;
 
 // What /etc/resolv.conf says, or the defaults where it says nothing.
 struct ResolvConf {
@@ -34,6 +44,16 @@ struct ResolvConf {
   size_t server_count = 0;
   size_t timeout_seconds = 5;
   size_t attempts = 2;
+
+  // The domains a name with too few dots in it is tried in, in order.
+  char *search[MAX_SEARCH];
+  size_t search_count = 0;
+  char search_pool[SEARCH_POOL];
+  size_t search_used = 0;
+
+  // How many dots a name needs before it is tried as it stands rather than
+  // in the search domains first.
+  size_t ndots = 1;
 
   // Reads the file. Returns false if there is nothing to ask.
   bool read();
