@@ -1783,6 +1783,16 @@ add_header_macro(
     .llvm_libc_common_h
 )
 
+file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/gnu)
+
+add_header_macro(
+  gnu_libc_version
+  ../libc/include/gnu/libc-version.yaml
+  gnu/libc-version.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/arpa)
 
 add_header_macro(
