@@ -60,6 +60,12 @@ extern FILE *stderr;
 #define L_tmpnam 20
 #endif
 
+// Where a temporary file goes when nothing else says. Programs which make
+// their own name for one start it with this.
+#ifndef P_tmpdir
+#define P_tmpdir "/tmp"
+#endif
+
 // The size an array must have to hold the name ctermid returns, which on
 // Linux is always /dev/tty.
 #ifndef L_ctermid
