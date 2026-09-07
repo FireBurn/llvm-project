@@ -413,6 +413,24 @@ libc_test(
 )
 
 libc_test(
+    name = "getpass_test",
+    srcs = ["getpass_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_termios",
+        "//libc/hdr:termios_macros",
+        "//libc/src/pty:forkpty",
+        "//libc/src/stdlib:_Exit",
+        "//libc/src/string:strcmp",
+        "//libc/src/sys/wait:waitpid",
+        "//libc/src/termios:tcgetattr",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:getpass",
+        "//libc/src/unistd:usleep",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "getopt_test",
     srcs = ["getopt_test.cpp"],
     deps = [
