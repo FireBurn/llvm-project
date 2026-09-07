@@ -23,10 +23,4 @@ LLVM_LIBC_FUNCTION(const char *, gnu_get_libc_version, (void)) {
   return "2.34";
 }
 
-// glibc reports how its own release was made. Nothing reads it to decide
-// anything, and there is nothing truthful to say, so it says so.
-LLVM_LIBC_FUNCTION(const char *, gnu_get_libc_release, (void)) {
-  return "stable";
-}
-
 } // namespace LIBC_NAMESPACE_DECL
