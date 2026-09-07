@@ -1780,6 +1780,8 @@ add_header_macro(
   DEPENDS
     .llvm-libc-macros.netinet_tcp_macros
     .llvm_libc_common_h
+    .llvm-libc-types.struct_tcphdr
+    .llvm-libc-types.tcp_seq
 )
 
 add_header_macro(
