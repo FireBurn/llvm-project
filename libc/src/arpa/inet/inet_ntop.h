@@ -22,6 +22,11 @@ namespace LIBC_NAMESPACE_DECL {
 const char *inet_ntop(int af, const void *__restrict src, char *__restrict dst,
                       socklen_t size);
 
+namespace internal {
+const char *inet_ntop_impl(int af, const void *__restrict src,
+                           char *__restrict dst, socklen_t size);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_ARPA_INET_INET_NTOP_H

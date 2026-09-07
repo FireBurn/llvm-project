@@ -25,8 +25,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, inet_pton,
-                   (int af, const char *__restrict src, void *__restrict dst)) {
+namespace internal {
+
+int inet_pton_impl(int af, const char *__restrict src, void *__restrict dst) {
   LIBC_CRASH_ON_NULLPTR(src);
   LIBC_CRASH_ON_NULLPTR(dst);
   if (af == AF_INET)
@@ -35,6 +36,13 @@ LLVM_LIBC_FUNCTION(int, inet_pton,
     return net::str_to_ipv6(src, *reinterpret_cast<struct in6_addr *>(dst));
   libc_errno = EAFNOSUPPORT;
   return -1;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, inet_pton,
+                   (int af, const char *__restrict src, void *__restrict dst)) {
+  return internal::inet_pton_impl(af, src, dst);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

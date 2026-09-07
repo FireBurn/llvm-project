@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 unsigned int if_nametoindex(const char *ifname);
 
+namespace internal {
+unsigned int if_nametoindex_impl(const char *ifname);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_NET_IF_IF_NAMETOINDEX_H

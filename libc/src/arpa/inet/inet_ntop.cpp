@@ -24,9 +24,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(const char *, inet_ntop,
-                   (int af, const void *__restrict src, char *__restrict dst,
-                    socklen_t size)) {
+namespace internal {
+
+const char *inet_ntop_impl(int af, const void *__restrict src,
+                           char *__restrict dst, socklen_t size) {
   LIBC_CRASH_ON_NULLPTR(src);
   LIBC_CRASH_ON_NULLPTR(dst);
 
@@ -48,6 +49,14 @@ LLVM_LIBC_FUNCTION(const char *, inet_ntop,
   }
 
   return dst;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(const char *, inet_ntop,
+                   (int af, const void *__restrict src, char *__restrict dst,
+                    socklen_t size)) {
+  return internal::inet_ntop_impl(af, src, dst, size);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

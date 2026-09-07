@@ -24,6 +24,12 @@ int getnameinfo(const struct sockaddr *__restrict addr, socklen_t addrlen,
                 char *__restrict host, socklen_t hostlen, char *__restrict serv,
                 socklen_t servlen, int flags);
 
+namespace internal {
+int getnameinfo_impl(const struct sockaddr *__restrict addr, socklen_t addrlen,
+                     char *__restrict host, socklen_t hostlen,
+                     char *__restrict serv, socklen_t servlen, int flags);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_NETDB_GETNAMEINFO_H

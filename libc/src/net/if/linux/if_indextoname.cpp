@@ -29,8 +29,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(char *, if_indextoname,
-                   (unsigned int ifindex, char *ifname)) {
+namespace internal {
+
+char *if_indextoname_impl(unsigned int ifindex, char *ifname) {
   LIBC_CRASH_ON_NULLPTR(ifname);
 
   ErrorOr<int> fd =
@@ -66,6 +67,13 @@ LLVM_LIBC_FUNCTION(char *, if_indextoname,
     ifname[k_name.size()] = '\0';
 
   return ifname;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(char *, if_indextoname,
+                   (unsigned int ifindex, char *ifname)) {
+  return internal::if_indextoname_impl(ifindex, ifname);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
