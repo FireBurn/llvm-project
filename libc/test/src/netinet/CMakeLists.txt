@@ -31,3 +31,13 @@ add_libc_test(
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
   add_subdirectory(${LIBC_TARGET_OS})
 endif()
+
+add_libc_test(
+  tcp_test
+  SUITE
+    libc-netinet-tests
+  SRCS
+    tcp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_tcphdr
+)
