@@ -1737,6 +1737,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getprotoent
     libc.src.netdb.getservbyname
+    libc.src.netdb.herror
+    libc.src.netdb.hstrerror
     libc.src.netdb.setprotoent
 
     # pthread.h entrypoints
