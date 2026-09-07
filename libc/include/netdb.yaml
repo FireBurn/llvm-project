@@ -172,6 +172,31 @@ functions:
     return_type: void
     arguments:
       - type: void
+  - name: getservbyport
+    standards:
+      - posix
+    return_type: struct servent *
+    arguments:
+      - type: int
+      - type: const char *
+  - name: getservent
+    standards:
+      - posix
+    return_type: struct servent *
+    arguments:
+      - type: void
+  - name: setservent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: int
+  - name: endservent
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: void
   - name: getservbyname
     standards:
       - posix
