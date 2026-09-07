@@ -59,7 +59,10 @@ bool parse(char *line, ProtoStorage &storage) {
   inline_memcpy(number, digits.data(), digits.size());
   number[digits.size()] = '\0';
   auto value = internal::strtointeger<long>(number, 10);
-  if (value.value < 0 || value.value > 255)
+  // An IP header carries the number in one octet, but the file is not only
+  // for those: entries above 255 name things that never travel in one, and
+  // p_proto is wide enough to say so.
+  if (value.value < 0 || value.value > 0x7fffffff)
     return false;
 
   storage.used = 0;

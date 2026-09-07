@@ -24,8 +24,9 @@ TEST(LlvmLibcGetProtoEntTest, NoNameIsNoAnswer) {
   ASSERT_TRUE(LIBC_NAMESPACE::getprotobyname("no such protocol") == nullptr);
 }
 
-// A number outside what an IP header can carry names nothing.
-TEST(LlvmLibcGetProtoEntTest, ImpossibleNumbersAreNotFound) {
+// A number the file does not name is not found. The file is not limited to
+// what an IP header can carry, but nothing reaches this far.
+TEST(LlvmLibcGetProtoEntTest, NumbersTheFileDoesNotNameAreNotFound) {
   ASSERT_TRUE(LIBC_NAMESPACE::getprotobynumber(-1) == nullptr);
   ASSERT_TRUE(LIBC_NAMESPACE::getprotobynumber(1 << 20) == nullptr);
 }
