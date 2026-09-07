@@ -16,6 +16,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/str_to_integer.h"
 #include "src/arpa/inet/inet_pton.h"
+#include "src/net/if_nametoindex.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/unistd/close.h"
 
@@ -101,14 +102,57 @@ bool ResolvConf::read() {
       inline_memcpy(text, address.data(), address.size());
       text[address.size()] = '\0';
 
+      // A link local address carries the interface it is on after a percent
+      // sign, written either as the name or as the number.
+      char zone[64];
+      zone[0] = '\0';
+      for (size_t i = 0; text[i] != '\0'; ++i)
+        if (text[i] == '%') {
+          text[i] = '\0';
+          size_t j = 0;
+          for (; text[i + 1 + j] != '\0' && j + 1 < sizeof(zone); ++j)
+            zone[j] = text[i + 1 + j];
+          zone[j] = '\0';
+          break;
+        }
+
       Nameserver &server = servers[server_count];
       server.port = DNS_PORT;
+      server.scope = 0;
       if (LIBC_NAMESPACE::inet_pton(AF_INET, text, server.bytes) == 1) {
         server.family = AF_INET;
         ++server_count;
       } else if (LIBC_NAMESPACE::inet_pton(AF_INET6, text, server.bytes) == 1) {
         server.family = AF_INET6;
+        if (zone[0] != '\0') {
+          auto number = internal::strtointeger<unsigned int>(zone, 10);
+          server.scope = number.has_error() || number.value == 0
+                             ? LIBC_NAMESPACE::if_nametoindex(zone)
+                             : number.value;
+        }
         ++server_count;
+      }
+      continue;
+    }
+    // Both name the domains an unqualified name is tried in. The last line
+    // of either kind wins, which is what the file has always meant.
+    if (equal(keyword, "search") || equal(keyword, "domain")) {
+      search_count = 0;
+      search_used = 0;
+      for (cpp::string_view name = next_field(line); !name.empty();
+           name = next_field(line)) {
+        if (search_count == MAX_SEARCH)
+          break;
+        if (search_used + name.size() + 1 > SEARCH_POOL)
+          break;
+        char *at = search_pool + search_used;
+        inline_memcpy(at, name.data(), name.size());
+        at[name.size()] = '\0';
+        search_used += name.size() + 1;
+        search[search_count++] = at;
+        // A domain line names one domain, whatever else is on it.
+        if (equal(keyword, "domain"))
+          break;
       }
       continue;
     }
@@ -129,12 +173,17 @@ bool ResolvConf::read() {
         inline_memcpy(number, digits.data(), digits.size());
         number[digits.size()] = '\0';
         auto value = internal::strtointeger<int>(number, 10);
-        if (value.value <= 0)
+        if (value.value < 0)
           continue;
-        if (equal(word, "timeout"))
+        // Waiting no time at all or asking no times at all would mean never
+        // getting an answer, so those are left as they were. Trying a name
+        // in no search domain first is a real thing to ask for.
+        if (equal(word, "timeout") && value.value > 0)
           timeout_seconds = static_cast<size_t>(value.value);
-        else if (equal(word, "attempts"))
+        else if (equal(word, "attempts") && value.value > 0)
           attempts = static_cast<size_t>(value.value);
+        else if (equal(word, "ndots"))
+          ndots = value.value > 15 ? 15 : static_cast<size_t>(value.value);
       }
     }
   }
