@@ -452,6 +452,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netinet_in_systm_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_in_systm_test.cpp
+  DEPENDS
+    libc.include.netinet_in_systm
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
