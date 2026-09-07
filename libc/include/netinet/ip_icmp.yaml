@@ -1,0 +1,40 @@
+header: netinet/ip_icmp.h
+standards:
+  - bsd
+public_includes:
+  # Where the IP header an ICMP message is carried in is defined.
+  - netinet/ip.h
+macros:
+  - macro_name: ICMP_ECHOREPLY
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_DEST_UNREACH
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_SOURCE_QUENCH
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_REDIRECT
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_ECHO
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_TIME_EXCEEDED
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_PARAMETERPROB
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_TIMESTAMP
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_TIMESTAMPREPLY
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_INFO_REQUEST
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_INFO_REPLY
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_ADDRESS
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: ICMP_ADDRESSREPLY
+    macro_header: netinet-ip-icmp-macros.h
+  - macro_name: NR_ICMP_TYPES
+    macro_header: netinet-ip-icmp-macros.h
+types:
+  - type_name: struct_icmphdr
+enums: []
+objects: []
+functions: []
