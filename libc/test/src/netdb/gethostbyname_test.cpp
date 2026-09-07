@@ -68,8 +68,14 @@ TEST(LlvmLibcGetservbynameTest, FindsAServiceInTheFile) {
   EXPECT_EQ(LIBC_NAMESPACE::strcmp(service->s_proto, "tcp"), 0);
   // The port is kept in the order the wire uses.
   EXPECT_EQ(service->s_port, 0x5000);
+  // The other names the service goes by are reported, and the list ends.
   ASSERT_TRUE(service->s_aliases != nullptr);
-  EXPECT_EQ(service->s_aliases[0], static_cast<char *>(nullptr));
+  size_t count = 0;
+  while (service->s_aliases[count] != nullptr) {
+    EXPECT_TRUE(service->s_aliases[count][0] != '\0');
+    ++count;
+    ASSERT_LT(count, size_t(64));
+  }
 }
 
 TEST(LlvmLibcGetservbynameTest, WithNoProtocolTheOneFoundIsReported) {
