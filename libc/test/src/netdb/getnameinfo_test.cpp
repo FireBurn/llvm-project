@@ -17,6 +17,7 @@
 #include "hdr/types/struct_sockaddr_in6.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/arpa/inet/htons.h"
+#include "src/net/if/if_nametoindex.h"
 #include "src/netdb/getnameinfo.h"
 #include "test/UnitTest/Test.h"
 
@@ -60,6 +61,43 @@ TEST(LlvmLibcGetNameInfoTest, IPv6Address) {
   EXPECT_TRUE(string_view(serv) == "443");
 }
 
+TEST(LlvmLibcGetNameInfoTest, LinkLocalAddressNamesItsInterface) {
+  struct sockaddr_in6 addr{};
+  addr.sin6_family = AF_INET6;
+  addr.sin6_port = LIBC_NAMESPACE::htons(1234);
+  // fe80::1 on the loopback interface, which is always number one.
+  unsigned char bytes[16] = {0xfe, 0x80, 0, 0, 0, 0, 0, 0,
+                             0,    0,    0, 0, 0, 0, 0, 1};
+  __builtin_memcpy(&addr.sin6_addr, bytes, 16);
+  addr.sin6_scope_id = LIBC_NAMESPACE::if_nametoindex("lo");
+  ASSERT_NE(addr.sin6_scope_id, 0u);
+
+  char host[64] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::getnameinfo(
+                reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
+                sizeof(host), nullptr, 0, NI_NUMERICHOST),
+            0);
+  EXPECT_TRUE(string_view(host) == "fe80::1%lo");
+
+  ASSERT_EQ(LIBC_NAMESPACE::getnameinfo(
+                reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
+                sizeof(host), nullptr, 0, NI_NUMERICHOST | NI_NUMERICSCOPE),
+            0);
+  string_view numeric(host);
+  EXPECT_TRUE(numeric.starts_with("fe80::1%"));
+  EXPECT_FALSE(numeric == "fe80::1%lo");
+
+  // An address that is not tied to an interface has nothing to add.
+  unsigned char global[16] = {0x20, 0x01, 0xd, 0xb8, 0, 0, 0, 0,
+                              0,    0,    0,   0,    0, 0, 0, 1};
+  __builtin_memcpy(&addr.sin6_addr, global, 16);
+  ASSERT_EQ(LIBC_NAMESPACE::getnameinfo(
+                reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
+                sizeof(host), nullptr, 0, NI_NUMERICHOST),
+            0);
+  EXPECT_TRUE(string_view(host) == "2001:db8::1");
+}
+
 TEST(LlvmLibcGetNameInfoTest, HostOrServiceAlone) {
   struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
@@ -82,19 +120,42 @@ TEST(LlvmLibcGetNameInfoTest, HostOrServiceAlone) {
   EXPECT_TRUE(string_view(serv) == "22");
 }
 
-TEST(LlvmLibcGetNameInfoTest, NameRequiredCannotBeMet) {
+// Asking for a name gives one where the address has one, and says there is
+// none where it has not. Which of the two happens depends on what the system
+// this runs on says about the address, so both are accepted; what is checked
+// is that the two agree with each other.
+TEST(LlvmLibcGetNameInfoTest, NameRequiredIsMetOrRefused) {
   struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   unsigned char octets[4] = {127, 0, 0, 1};
   __builtin_memcpy(&addr.sin_addr, octets, 4);
 
-  char host[64] = {};
-  // There is no resolver, so a caller which will not take the numeric form
-  // is told the name is not there.
-  EXPECT_EQ(LIBC_NAMESPACE::getnameinfo(
+  char host[256] = {};
+  const int result = LIBC_NAMESPACE::getnameinfo(
+      reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
+      sizeof(host), nullptr, 0, NI_NAMEREQD);
+  if (result == 0) {
+    // A name was found, so it is a name and not the address written back.
+    ASSERT_NE(host[0], '\0');
+    ASSERT_STRNE(host, "127.0.0.1");
+  } else {
+    ASSERT_EQ(result, EAI_NONAME);
+  }
+}
+
+// Asking for the numeric form gives it whatever the address is called.
+TEST(LlvmLibcGetNameInfoTest, NumericHostIsAlwaysTheAddress) {
+  struct sockaddr_in addr{};
+  addr.sin_family = AF_INET;
+  unsigned char octets[4] = {127, 0, 0, 1};
+  __builtin_memcpy(&addr.sin_addr, octets, 4);
+
+  char host[256] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::getnameinfo(
                 reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr), host,
-                sizeof(host), nullptr, 0, NI_NAMEREQD),
-            EAI_NONAME);
+                sizeof(host), nullptr, 0, NI_NUMERICHOST),
+            0);
+  ASSERT_STREQ(host, "127.0.0.1");
 }
 
 TEST(LlvmLibcGetNameInfoTest, BadArguments) {
