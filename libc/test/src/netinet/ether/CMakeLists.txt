@@ -1,0 +1,36 @@
+add_custom_target(libc_netinet_ether_unittests)
+
+add_libc_test(
+  ether_aton_test
+  SUITE
+    libc_netinet_ether_unittests
+  SRCS
+    ether_aton_test.cpp
+  DEPENDS
+    libc.src.netinet.ether.ether_aton
+    libc.src.netinet.ether.ether_aton_r
+    libc.src.netinet.ether.ether_line
+    libc.src.netinet.ether.ether_ntoa
+    libc.src.netinet.ether.ether_ntoa_r
+    libc.src.string.strcmp
+)
+
+add_libc_test(
+  ether_hostton_test
+  SUITE
+    libc_netinet_ether_unittests
+  SRCS
+    ether_hostton_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_ether_addr
+    libc.src.__support.CPP.string_view
+    libc.src.fcntl.open
+    libc.src.netinet.ether.ether_hostton
+    libc.src.netinet.ether.ether_ntohost
+    libc.src.netinet.ether.ethers
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+)
