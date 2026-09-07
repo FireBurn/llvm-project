@@ -51,13 +51,16 @@ add_entrypoint_object(
     libc.src.string.string_utils
 )
 
-add_entrypoint_object(
-  getnameinfo
+add_object_library(
+  getnameinfo_utils
   SRCS
-    getnameinfo.cpp
+    getnameinfo_utils.cpp
   HDRS
-    getnameinfo.h
+    getnameinfo_utils.h
   DEPENDS
+    libc.src.netdb.resolv.lookup
+    libc.src.string.memory_utils.inline_memcpy
+    libc.hdr.net_if_macros
     libc.hdr.netdb_macros
     libc.hdr.types.socklen_t
     libc.hdr.types.struct_sockaddr
@@ -66,7 +69,20 @@ add_entrypoint_object(
     libc.include.sys_socket
     libc.src.arpa.inet.inet_ntop
     libc.src.arpa.inet.ntohs
+    libc.src.net.if.if_indextoname
     libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  getnameinfo
+  SRCS
+    getnameinfo.cpp
+  HDRS
+    getnameinfo.h
+  DEPENDS
+    .getnameinfo_utils
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_sockaddr
 )
 
 add_entrypoint_object(
@@ -120,6 +136,27 @@ add_entrypoint_object(
     libc.hdr.sys_socket_macros
     libc.hdr.types.struct_hostent
     libc.src.__support.common
+)
+
+add_entrypoint_object(
+  gethostbyaddr
+  SRCS
+    gethostbyaddr.cpp
+  HDRS
+    gethostbyaddr.h
+  DEPENDS
+    .hostent_storage
+    .__h_errno_location
+    libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_hostent
+    libc.hdr.types.struct_sockaddr_in
+    libc.hdr.types.struct_sockaddr_in6
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
 )
 
 add_object_library(

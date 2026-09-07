@@ -87,6 +87,16 @@ libc_test(
 )
 
 libc_test(
+    name = "gethostbyaddr_test",
+    srcs = ["gethostbyaddr_test.cpp"],
+    deps = [
+        "//libc:gethostbyaddr",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:types_struct_hostent",
+    ],
+)
+
+libc_test(
     name = "gai_strerror_test",
     srcs = ["gai_strerror_test.cpp"],
     deps = [
