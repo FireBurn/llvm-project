@@ -142,6 +142,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.ifaddrs
     libc.include.lastlog
     libc.include.net_if_arp
+    libc.include.net_route
     libc.include.netdb
     libc.include.netpacket_packet
     libc.include.pty
