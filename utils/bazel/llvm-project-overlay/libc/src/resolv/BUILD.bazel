@@ -16,6 +16,27 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "dn_expand",
+    srcs = ["dn_expand.cpp"],
+    hdrs = ["dn_expand.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/netdb:resolv_dns_message",
+    ],
+)
+
+libc_function(
+    name = "dn_comp",
+    srcs = ["dn_comp.cpp"],
+    hdrs = ["dn_comp.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "res_init",
     srcs = ["../compat/res_init.cpp"],
     hdrs = ["../compat/res_init.h"],
