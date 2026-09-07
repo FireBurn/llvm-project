@@ -149,6 +149,39 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "tee",
+    srcs = ["linux/tee.cpp"],
+    hdrs = ["tee.h"],
+    deps = [
+        ":fcntl_tee",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:tee",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "vmsplice",
+    srcs = ["linux/vmsplice.cpp"],
+    hdrs = ["vmsplice.h"],
+    deps = [
+        ":fcntl_vmsplice",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:vmsplice",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "fcntl_splice",
     hdrs = ["splice.h"],
@@ -183,6 +216,27 @@ libc_support_library(
     hdrs = ["sync_file_range.h"],
     deps = [
         "//libc/hdr/types:off_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_tee",
+    hdrs = ["tee.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_vmsplice",
+    hdrs = ["vmsplice.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
         "//libc/src/__support/macros:config",
     ],
 )
