@@ -1,6 +1,10 @@
 header: netinet/ether.h
 standards:
   - bsd
+public_includes:
+  # Where struct ether_addr comes from, and with it the rest of what code
+  # handling an Ethernet address reaches for.
+  - netinet/if_ether.h
 macros: []
 types:
   - type_name: struct_ether_addr
