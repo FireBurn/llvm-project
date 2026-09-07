@@ -61,3 +61,12 @@ libc_support_library(
         "//conditions:default": ["//libc/hdr:stdlib_overlay"],
     }),
 )
+
+libc_support_library(
+    name = "mallopt",
+    hdrs = ["mallopt.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/src/__support:common"],
+        "//conditions:default": [],
+    }),
+)
