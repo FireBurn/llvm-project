@@ -18,3 +18,14 @@ libc_test(
         "//libc/src/string:strcmp",
     ],
 )
+
+libc_test(
+    name = "resolv_conf_test",
+    srcs = ["resolv_conf_test.cpp"],
+    deps = [
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/netdb:resolv_resolv_conf",
+        "//libc/src/string:strcmp",
+    ],
+)
