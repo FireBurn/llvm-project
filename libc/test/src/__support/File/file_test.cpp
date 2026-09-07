@@ -892,6 +892,84 @@ TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
   ASSERT_EQ(f->close(), 0);
 }
 
+// A file that says whether it is over a terminal, and counts how many times
+// it was written to, so that the buffering settled on can be seen.
+class MaybeTerminalFile : public File {
+  static constexpr size_t SIZE = 512;
+  size_t pos;
+  char str[SIZE] = {0};
+  size_t writes;
+  bool terminal;
+
+  static FileIOResult tty_write(LIBC_NAMESPACE::File *f, const void *data,
+                                size_t len) {
+    MaybeTerminalFile *tf = static_cast<MaybeTerminalFile *>(f);
+    ++tf->writes;
+    size_t i = 0;
+    for (; i < len && tf->pos < SIZE; ++i, ++tf->pos)
+      tf->str[tf->pos] = reinterpret_cast<const char *>(data)[i];
+    return len;
+  }
+
+  static FileIOResult tty_read(LIBC_NAMESPACE::File *, void *, size_t) {
+    return 0;
+  }
+
+  static ErrorOr<off_t> tty_seek(LIBC_NAMESPACE::File *f, off_t, int) {
+    return static_cast<off_t>(static_cast<MaybeTerminalFile *>(f)->pos);
+  }
+
+  static int tty_close(LIBC_NAMESPACE::File *f) {
+    delete reinterpret_cast<MaybeTerminalFile *>(f);
+    return 0;
+  }
+
+  static bool tty_isatty(LIBC_NAMESPACE::File *f) {
+    return static_cast<MaybeTerminalFile *>(f)->terminal;
+  }
+
+public:
+  MaybeTerminalFile(char *buffer, size_t buflen, bool is_terminal)
+      : LIBC_NAMESPACE::File(&tty_write, &tty_read, &tty_seek, &tty_close,
+                             reinterpret_cast<uint8_t *>(buffer), buflen,
+                             _IOFBF, false,
+                             LIBC_NAMESPACE::File::mode_flags("w"),
+                             /*static_stream=*/false,
+                             /*has_file_descriptor=*/false, &tty_isatty,
+                             /*settle_buffer_mode=*/true),
+        pos(0), writes(0), terminal(is_terminal) {}
+
+  size_t get_writes() const { return writes; }
+  size_t get_pos() const { return pos; }
+};
+
+// C leaves a standard stream fully buffered unless it is over an interactive
+// device. A line written to something that is not one stays in the buffer.
+TEST(LlvmLibcFileTest, BufferingIsSettledOnTheFirstWrite) {
+  char buffer[64];
+  LIBC_NAMESPACE::AllocChecker ac;
+  MaybeTerminalFile *plain =
+      new (ac) MaybeTerminalFile(buffer, sizeof(buffer), /*is_terminal=*/false);
+  ASSERT_FALSE(plain == nullptr);
+  ASSERT_EQ(plain->write("hello\n", 6).value, size_t(6));
+  ASSERT_EQ(plain->get_writes(), size_t(0));
+  ASSERT_EQ(plain->flush(), 0);
+  ASSERT_EQ(plain->get_writes(), size_t(1));
+  ASSERT_EQ(plain->close(), 0);
+}
+
+// Over a terminal the same line goes out as soon as it is complete.
+TEST(LlvmLibcFileTest, ATerminalIsLineBuffered) {
+  char buffer[64];
+  LIBC_NAMESPACE::AllocChecker ac;
+  MaybeTerminalFile *tty =
+      new (ac) MaybeTerminalFile(buffer, sizeof(buffer), /*is_terminal=*/true);
+  ASSERT_FALSE(tty == nullptr);
+  ASSERT_EQ(tty->write("hello\n", 6).value, size_t(6));
+  ASSERT_GT(tty->get_writes(), size_t(0));
+  ASSERT_EQ(tty->close(), 0);
+}
+
 TEST(LlvmLibcFileTest, FileLockRAII) {
   StringFile *f = new_string_file(nullptr, 0, _IONBF, false, "w+");
   ASSERT_FALSE(f == nullptr);
