@@ -25844,6 +25844,26 @@ libc_support_library(
 )
 
 libc_function(
+    name = "gethostbyaddr",
+    srcs = ["src/netdb/gethostbyaddr.cpp"],
+    hdrs = ["src/netdb/gethostbyaddr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_netdb_macros",
+        ":hdr_sys_socket_macros",
+        ":__h_errno_location",
+        ":netdb_hostent_storage",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_socklen_t",
+        ":types_struct_hostent",
+        ":types_struct_sockaddr_in",
+        ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_function(
     name = "gethostbyname",
     srcs = ["src/netdb/gethostbyname.cpp"],
     hdrs = ["src/netdb/gethostbyname.h"],
@@ -25869,10 +25889,10 @@ libc_function(
     ],
 )
 
-libc_function(
-    name = "getnameinfo",
-    srcs = ["src/netdb/getnameinfo.cpp"],
-    hdrs = ["src/netdb/getnameinfo.h"],
+libc_support_library(
+    name = "netdb_getnameinfo_utils",
+    srcs = ["src/netdb/getnameinfo_utils.cpp"],
+    hdrs = ["src/netdb/getnameinfo_utils.h"],
     deps = [
         ":__support_common",
         ":__support_macros_config",
@@ -25888,6 +25908,19 @@ libc_function(
         ":types_struct_sockaddr",
         ":types_struct_sockaddr_in",
         ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_function(
+    name = "getnameinfo",
+    srcs = ["src/netdb/getnameinfo.cpp"],
+    hdrs = ["src/netdb/getnameinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_getnameinfo_utils",
+        ":types_socklen_t",
+        ":types_struct_sockaddr",
     ],
 )
 
@@ -26041,7 +26074,6 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_recvfrom",
         ":__support_osutil_linux_syscall_wrappers_sendto",
         ":__support_osutil_linux_syscall_wrappers_socket",
-        ":close",
         ":hdr_errno_macros",
         ":hdr_fcntl_macros",
         ":hdr_netdb_macros",
@@ -26052,10 +26084,6 @@ libc_support_library(
         ":net_if_if_nametoindex",
         ":netdb_resolv_dns_message",
         ":netdb_resolv_resolv_conf",
-        ":poll",
-        ":recvfrom",
-        ":sendto",
-        ":socket",
         ":string_memory_utils",
         ":string_utils",
         ":types_size_t",
