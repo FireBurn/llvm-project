@@ -90,6 +90,18 @@ functions:
     arguments:
       - type: const char *
       - type: int
+  - name: herror
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: const char *
+  - name: hstrerror
+    standards:
+      - bsd
+    return_type: const char *
+    arguments:
+      - type: int
   - name: getprotobyname
     standards:
       - posix
