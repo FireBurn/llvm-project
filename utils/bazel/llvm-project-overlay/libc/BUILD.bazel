@@ -616,7 +616,8 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_unistd_macros",
     hdrs = [
-                "include/llvm-libc-macros/linux/unistd-macros.h",
+        "include/llvm-libc-macros/access-mode-macros.h",
+        "include/llvm-libc-macros/linux/unistd-macros.h",
         "include/llvm-libc-macros/unistd-macros.h",
     ],
 )
