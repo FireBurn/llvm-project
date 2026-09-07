@@ -142,12 +142,67 @@ libc_function(
 )
 
 libc_function(
+    name = "endnetent",
+    srcs = ["endnetent.cpp"],
+    hdrs = ["endnetent.h"],
+    deps = [
+        ":resolv_networks",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "endprotoent",
     srcs = ["endprotoent.cpp"],
     hdrs = ["endprotoent.h"],
     deps = [
         ":resolv_protocols",
         "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getnetbyaddr",
+    srcs = ["getnetbyaddr.cpp"],
+    hdrs = ["getnetbyaddr.h"],
+    deps = [
+        ":net_storage",
+        ":resolv_networks",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getnetbyname",
+    srcs = ["getnetbyname.cpp"],
+    hdrs = ["getnetbyname.h"],
+    deps = [
+        ":net_storage",
+        ":resolv_networks",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getnetent",
+    srcs = ["getnetent.cpp"],
+    hdrs = ["getnetent.h"],
+    deps = [
+        ":net_storage",
+        ":resolv_networks",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -228,6 +283,19 @@ libc_function(
     hdrs = ["hstrerror.h"],
     deps = [
         "//libc/hdr:netdb_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "setnetent",
+    srcs = ["setnetent.cpp"],
+    hdrs = ["setnetent.h"],
+    deps = [
+        ":resolv_networks",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -334,6 +402,35 @@ libc_support_library(
     hdrs = ["proto_storage.h"],
     deps = [
         ":resolv_protocols",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_networks",
+    srcs = ["resolv/networks.cpp"],
+    hdrs = ["resolv/networks.h"],
+    deps = [
+        ":resolv_file_lines",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "net_storage",
+    srcs = ["net_storage.cpp"],
+    hdrs = ["net_storage.h"],
+    deps = [
+        ":resolv_networks",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
