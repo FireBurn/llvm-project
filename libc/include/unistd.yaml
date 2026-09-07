@@ -504,6 +504,20 @@ functions:
     return_type: uid_t
     arguments:
       - type: void
+  - name: getdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char *
+      - type: size_t
+  - name: setdomainname
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: size_t
   - name: gethostname
     standards:
       - posix
