@@ -177,6 +177,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("net/route"),
     libc_header_info("netinet/icmp6"),
     libc_header_info("netinet/if_ether"),
+    libc_header_info("netinet/in_systm"),
     libc_header_info("netinet/ip"),
     libc_header_info("netinet/ip6"),
     libc_header_info("netinet/ip_icmp"),
