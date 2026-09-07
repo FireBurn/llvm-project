@@ -2781,6 +2781,28 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "setfsgid",
+    hdrs = ["setfsgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "setfsuid",
+    hdrs = ["setfsuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
     name = "setgid",
     hdrs = ["setgid.h"],
     deps = [

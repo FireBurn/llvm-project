@@ -90,6 +90,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         has_def_template = True,
     ),
     libc_header_info("sys/fanotify"),
+    libc_header_info("sys/fsuid"),
     libc_header_info(
         "sys/io",
         has_def_template = True,
