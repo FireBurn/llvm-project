@@ -1,6 +1,16 @@
 add_custom_target(libc-stdlib-tests)
 
 add_libc_test(
+  getloadavg_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    getloadavg_test.cpp
+  DEPENDS
+    libc.src.stdlib.getloadavg
+)
+
+add_libc_test(
   atof_test
   SUITE
     libc-stdlib-tests
