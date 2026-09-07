@@ -1,6 +1,7 @@
 add_custom_target(libc-stdlib-tests)
 
 add_libc_test(
+  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
@@ -821,18 +822,13 @@ add_libc_test(
     libc.src.stdlib.setenv
 )
 
-# Handing memory back needs an allocator that can be asked, which is the
-# same condition the entrypoint itself is built under.
-if(TARGET libc.src.stdlib.malloc_trim)
-  add_libc_test(
-    malloc_trim_test
-    SUITE
-      libc-stdlib-tests
-    SRCS
-      malloc_trim_test.cpp
-    DEPENDS
-      libc.src.stdlib.free
-      libc.src.stdlib.malloc
-      libc.src.stdlib.malloc_trim
-  )
-endif()
+add_libc_test(
+  malloc_trim_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    malloc_trim_test.cpp
+  DEPENDS
+    libc.hdr.func.mallopt
+    libc.src.stdlib.malloc_trim
+)
