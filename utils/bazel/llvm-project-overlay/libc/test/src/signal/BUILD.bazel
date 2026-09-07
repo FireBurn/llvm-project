@@ -76,3 +76,15 @@ libc_test(
         "//libc:types_struct_timespec",
     ],
 )
+
+libc_test(
+    name = "siginterrupt_test",
+    srcs = ["siginterrupt_test.cpp"],
+    deps = [
+        "//libc:hdr_signal_macros",
+        "//libc:sigaction",
+        "//libc:sigemptyset",
+        "//libc:siginterrupt",
+        "//libc:types_struct_sigaction",
+    ],
+)
