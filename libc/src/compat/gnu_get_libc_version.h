@@ -19,7 +19,6 @@
 namespace LIBC_NAMESPACE_DECL {
 
 const char *gnu_get_libc_version(void);
-const char *gnu_get_libc_release(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 
