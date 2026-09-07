@@ -27,6 +27,10 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: EAI_OVERFLOW
     macro_header: netdb-macros.h
+  - macro_name: EAI_NODATA
+    macro_header: netdb-macros.h
+  - macro_name: EAI_ADDRFAMILY
+    macro_header: netdb-macros.h
   - macro_name: AI_PASSIVE
     macro_header: netdb-macros.h
   - macro_name: AI_CANONNAME
