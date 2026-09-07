@@ -201,6 +201,33 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  hstrerror
+  SRCS
+    hstrerror.cpp
+  HDRS
+    hstrerror.h
+  DEPENDS
+    libc.hdr.netdb_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  herror
+  SRCS
+    herror.cpp
+  HDRS
+    herror.h
+  DEPENDS
+    .__h_errno_location
+    .hstrerror
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   getservbyname
   SRCS
     getservbyname.cpp
