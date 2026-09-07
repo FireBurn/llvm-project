@@ -17757,6 +17757,19 @@ libc_support_library(
 )
 
 libc_function(
+    name = "malloc_trim",
+    srcs = ["src/stdlib/malloc_trim.cpp"],
+    hdrs = ["src/stdlib/malloc_trim.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_mallopt",
+        ":llvm_libc_macros_malloc_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "mb_cur_max",
     srcs = ["src/stdlib/mb_cur_max.cpp"],
     hdrs = ["src/stdlib/mb_cur_max.h"],
@@ -27001,6 +27014,20 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
     ],
+)
+
+libc_support_library(
+    name = "func_mallopt",
+    hdrs = ["hdr/func/mallopt.h"],
+    deps = select({
+        ":full_build": [":__support_common"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_malloc_macros",
+    hdrs = ["include/llvm-libc-macros/malloc-macros.h"],
 )
 
 libc_support_library(
