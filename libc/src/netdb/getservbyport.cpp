@@ -1,4 +1,4 @@
-//===-- Implementation of getservbyname -----------------------------------===//
+//===-- Implementation of getservbyport -----------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,8 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/netdb/getservbyname.h"
-
+#include "src/netdb/getservbyport.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/netdb/resolv/services.h"
@@ -15,11 +14,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-// The answer is kept in storage the library owns, which the next lookup from
-// this thread overwrites. That is what this interface has always been.
-LLVM_LIBC_FUNCTION(struct servent *, getservbyname,
-                   (const char *name, const char *proto)) {
-  return resolv::serv_by_name(name, proto, internal::serv_storage());
+// The port is given in the order the wire uses, which is how the entry
+// carries it, so it is compared as it arrives.
+LLVM_LIBC_FUNCTION(struct servent *, getservbyport,
+                   (int port, const char *proto)) {
+  return resolv::serv_by_port(port, proto, internal::serv_storage());
 }
 
 } // namespace LIBC_NAMESPACE_DECL
