@@ -1621,6 +1621,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  netinet_in_systm
+  ../libc/include/netinet/in_systm.yaml
+  netinet/in_systm.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.n_long
+    .llvm-libc-types.n_short
+    .llvm-libc-types.n_time
+)
+
+add_header_macro(
   netinet_ip
   ../libc/include/netinet/ip.yaml
   netinet/ip.h
