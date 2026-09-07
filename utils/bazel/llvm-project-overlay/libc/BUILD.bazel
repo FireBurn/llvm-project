@@ -2611,6 +2611,7 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":hdr_stdio_macros",
         ":hdr_sys_stat_macros",
+        ":termios_kernel_termios",
         ":termios_linux_kernel_termios",
         ":types_mode_t",
         ":types_off_t",
