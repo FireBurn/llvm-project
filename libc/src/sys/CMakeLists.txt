@@ -1,4 +1,5 @@
 add_subdirectory(file)
+add_subdirectory(fsuid)
 add_subdirectory(io)
 add_subdirectory(mount)
 add_subdirectory(msg)
