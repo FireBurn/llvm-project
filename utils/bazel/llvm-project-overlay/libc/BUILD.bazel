@@ -172,6 +172,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
+    libc_header_info("gnu/libc-version"),
     libc_header_info("gshadow"),
     libc_header_info("iconv"),
     libc_header_info("ifaddrs"),
@@ -28504,6 +28505,16 @@ libc_function(
         ":hdr_errno_macros",
         ":string_memory_utils",
         ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "gnu_get_libc_release",
+    srcs = ["src/compat/gnu_get_libc_release.cpp"],
+    hdrs = ["src/compat/gnu_get_libc_release.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
