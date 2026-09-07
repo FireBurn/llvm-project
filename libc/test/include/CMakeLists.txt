@@ -402,6 +402,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netdb_address_classes_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netdb_address_classes_test.cpp
+  DEPENDS
+    libc.include.netdb
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
