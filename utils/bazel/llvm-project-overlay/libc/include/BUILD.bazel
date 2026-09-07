@@ -47,6 +47,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
+    libc_header_info("gnu/libc-version"),
     libc_header_info("gshadow"),
     libc_header_info("iconv"),
     libc_header_info("ifaddrs"),
