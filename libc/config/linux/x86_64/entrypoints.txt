@@ -323,7 +323,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.atoll
     libc.src.stdlib.bsearch
     libc.src.stdlib.div
-    libc.src.stdlib.getloadavg
     libc.src.stdlib.l64a
     libc.src.stdlib.labs
     libc.src.stdlib.ldiv
@@ -1878,6 +1877,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.secure_getenv
     libc.src.stdlib.setenv
     libc.src.stdlib.clearenv
+    libc.src.stdlib.getloadavg
     libc.src.stdlib.unsetenv
     libc.src.stdlib.mbstowcs
     libc.src.stdlib.mbtowc
