@@ -43,6 +43,8 @@ struct rtentry {
   /// The interface to send by, where the route names one.
   char *rt_dev;
   unsigned long int rt_mtu;
+// The name this went by before a route could state a window as well.
+#define rt_mss rt_mtu
   unsigned long int rt_window;
   /// The round trip time to start from.
   unsigned short int rt_irtt;
