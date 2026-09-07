@@ -179,6 +179,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("netpacket/packet"),
     libc_header_info("paths"),
     libc_header_info("printf"),
+    libc_header_info("resolv"),
     libc_header_info("shadow"),
     libc_header_info("stdio_ext"),
     libc_header_info(
@@ -31235,6 +31236,27 @@ libc_function(
         ":__support_macros_null_check",
         ":func_free",
         ":types_regex_t",
+    ],
+)
+
+libc_function(
+    name = "dn_expand",
+    srcs = ["src/resolv/dn_expand.cpp"],
+    hdrs = ["src/resolv/dn_expand.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netdb_resolv_dns_message",
+    ],
+)
+
+libc_function(
+    name = "dn_comp",
+    srcs = ["src/resolv/dn_comp.cpp"],
+    hdrs = ["src/resolv/dn_comp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
