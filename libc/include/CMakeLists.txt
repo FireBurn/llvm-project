@@ -1707,6 +1707,7 @@ add_header_macro(
   ../libc/include/netinet/ether.yaml
   netinet/ether.h
   DEPENDS
+    .netinet_if_ether
     .llvm-libc-types.struct_ether_addr
     .llvm_libc_common_h
 )
