@@ -24,3 +24,110 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  __res_state
+  SRCS
+    res_state.cpp
+  HDRS
+    res_state.h
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct___res_state
+    libc.src.__support.common
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.resolv_conf
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  res_init
+  SRCS
+    res_init.cpp
+  HDRS
+    res_init.h
+  DEPENDS
+    .__res_state
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_close
+  SRCS
+    res_close.cpp
+  HDRS
+    res_close.h
+  DEPENDS
+    .__res_state
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.unistd.close
+)
+
+add_entrypoint_object(
+  res_mkquery
+  SRCS
+    res_mkquery.cpp
+  HDRS
+    res_mkquery.h
+  DEPENDS
+    .__res_state
+    libc.hdr.stdint_proxy
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.dns_message
+)
+
+add_entrypoint_object(
+  res_send
+  SRCS
+    res_send.cpp
+  HDRS
+    res_send.h
+  DEPENDS
+    .__res_state
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.exchange
+    libc.src.netdb.resolv.resolv_conf
+)
+
+add_entrypoint_object(
+  res_query
+  SRCS
+    res_query.cpp
+  HDRS
+    res_query.h
+  DEPENDS
+    .__res_state
+    libc.hdr.netdb_macros
+    libc.hdr.stdint_proxy
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.__h_errno_location
+    libc.src.netdb.resolv.dns_message
+    libc.src.netdb.resolv.exchange
+    libc.src.netdb.resolv.resolv_conf
+)
+
+add_entrypoint_object(
+  res_search
+  SRCS
+    res_search.cpp
+  HDRS
+    res_search.h
+  DEPENDS
+    .res_query
+    .__res_state
+    libc.hdr.netdb_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.__h_errno_location
+    libc.src.netdb.resolv.dns_message
+    libc.src.string.memory_utils.inline_memcpy
+)
