@@ -102,3 +102,19 @@ add_libc_test(
     libc.hdr.netdb_macros
     libc.src.netdb.hstrerror
 )
+
+add_libc_test(
+  getnetent_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    getnetent_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_netent
+    libc.src.netdb.endnetent
+    libc.src.netdb.getnetbyaddr
+    libc.src.netdb.getnetbyname
+    libc.src.netdb.getnetent
+    libc.src.netdb.setnetent
+)
