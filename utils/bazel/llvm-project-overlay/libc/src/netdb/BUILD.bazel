@@ -170,6 +170,17 @@ libc_function(
 )
 
 libc_function(
+    name = "endhostent",
+    srcs = ["endhostent.cpp"],
+    hdrs = ["endhostent.h"],
+    deps = [
+        ":resolv_hosts",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "endnetent",
     srcs = ["endnetent.cpp"],
     hdrs = ["endnetent.h"],
@@ -201,6 +212,19 @@ libc_function(
     deps = [
         ":resolv_services",
         "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "gethostent",
+    srcs = ["gethostent.cpp"],
+    hdrs = ["gethostent.h"],
+    deps = [
+        ":hosts_storage",
+        ":resolv_hosts",
+        "//libc/hdr/types:struct_hostent",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -347,6 +371,17 @@ libc_function(
         ":resolv_services",
         ":serv_storage",
         "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "sethostent",
+    srcs = ["sethostent.cpp"],
+    hdrs = ["sethostent.h"],
+    deps = [
+        ":resolv_hosts",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -518,6 +553,34 @@ libc_support_library(
     hdrs = ["net_storage.h"],
     deps = [
         ":resolv_networks",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "resolv_hosts",
+    srcs = ["resolv/hosts.cpp"],
+    hdrs = ["resolv/hosts.h"],
+    deps = [
+        ":resolv_file_lines",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/arpa/inet:inet_pton",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "hosts_storage",
+    srcs = ["hosts_storage.cpp"],
+    hdrs = ["hosts_storage.h"],
+    deps = [
+        ":resolv_hosts",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
