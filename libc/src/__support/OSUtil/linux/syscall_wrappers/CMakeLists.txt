@@ -2962,3 +2962,27 @@ add_header_library(
     libc.hdr.types.off_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  tee
+  HDRS
+    tee.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  vmsplice
+  HDRS
+    vmsplice.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
