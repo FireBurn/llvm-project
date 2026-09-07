@@ -73,6 +73,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  resolv_macros
+  HDR
+    resolv-macros.h
+)
+
+add_macro_header(
   null_macro
   HDR
     null-macro.h
