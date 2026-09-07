@@ -118,3 +118,15 @@ add_libc_test(
     libc.src.netdb.getnetent
     libc.src.netdb.setnetent
 )
+
+add_libc_test(
+  gethostbyaddr_test
+  SUITE
+    libc_netdb_unittests
+  SRCS
+    gethostbyaddr_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_hostent
+    libc.src.netdb.gethostbyaddr
+)

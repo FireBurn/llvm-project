@@ -103,6 +103,14 @@ functions:
     return_type: const char *
     arguments:
       - type: int
+  - name: gethostbyaddr
+    standards:
+      - posix
+    return_type: struct hostent *
+    arguments:
+      - type: const void *
+      - type: socklen_t
+      - type: int
   - name: getnetbyname
     standards:
       - posix
