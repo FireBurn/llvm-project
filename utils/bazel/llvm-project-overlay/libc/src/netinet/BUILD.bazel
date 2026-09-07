@@ -15,6 +15,30 @@ package(
 
 licenses(["notice"])
 
+libc_function(
+    name = "in6addr_any",
+    srcs = ["in6addr_any.cpp"],
+    hdrs = ["in6addr_any.h"],
+    deps = [
+        "//libc/hdr/types:struct_in6_addr",
+        "//libc/hdr:netinet_in_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "in6addr_loopback",
+    srcs = ["in6addr_loopback.cpp"],
+    hdrs = ["in6addr_loopback.h"],
+    deps = [
+        "//libc/hdr/types:struct_in6_addr",
+        "//libc/hdr:netinet_in_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_support_library(
     name = "ether_ethers",
     srcs = ["ether/ethers.cpp"],
