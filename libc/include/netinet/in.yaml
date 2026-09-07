@@ -113,6 +113,14 @@ macros:
     macro_value: 46 # struct group_source_req
   - macro_name: MCAST_LEAVE_SOURCE_GROUP
     macro_value: 47 # struct group_source_req
+  - macro_name: MCAST_MSFILTER
+    macro_value: 48 # struct group_filter
+  # Whether the sources a filter lists are the ones to accept or the ones to
+  # refuse.
+  - macro_name: MCAST_EXCLUDE
+    macro_value: 0
+  - macro_name: MCAST_INCLUDE
+    macro_value: 1
   - macro_name: IP_MULTICAST_ALL
     macro_value: 49 # int
   - macro_name: IP_LOCAL_PORT_RANGE
