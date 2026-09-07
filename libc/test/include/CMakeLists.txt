@@ -32,6 +32,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  arpa_nameser_test
+  SUITE
+    libc_include_tests
+  SRCS
+    arpa_nameser_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.arpa_nameser_macros
+    libc.include.llvm-libc-types.HEADER
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_libc_test(
   net_if_test
   SUITE
     libc_include_tests
