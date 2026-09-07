@@ -222,6 +222,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_socket_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_socket_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.socklen_t
+)
+
+add_libc_test(
   issubnormal_test
   SUITE
     libc-include-tests
