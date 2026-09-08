@@ -2664,3 +2664,17 @@ add_header_library(
     libc.hdr.types.ssize_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  getdents64
+  HDRS
+    getdents64.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.include.sys_syscall
+)
