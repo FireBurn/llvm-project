@@ -621,11 +621,13 @@ functions:
       - type: off_t
       - type: int
   - name: nice
+  - name: pause
     standards:
       - posix
     return_type: int
     arguments:
       - type: int
+      - type: void
   - name: pathconf
     standards:
       - posix
