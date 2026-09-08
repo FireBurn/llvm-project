@@ -144,7 +144,16 @@ LIBC_INLINE int getopt_r(int argc, char *const argv[], const char *optstring,
   if (!match) {
     ctx.report_error("%s: illegal option -- %c\n", argv[0], current[0]);
     ctx.optopt.get() = current[0];
-    return failure('?');
+    // The character is eaten even though it named nothing. A caller that
+    // carries on after an option it does not know, which is what a program
+    // passing the rest of its arguments to another one does, would
+    // otherwise be handed the same character for ever.
+    move_forward();
+    if (current.empty()) {
+      ctx.optind++;
+      ctx.optpos.get() = 0;
+    }
+    return '?';
   }
 
   // We've matched so eat that character.
