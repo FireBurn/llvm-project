@@ -46,16 +46,11 @@
 #define FSMOUNT_CLOEXEC 0x00000001
 #define FSMOUNT_NAMESPACE 0x00000002
 
-// What fsconfig is being asked to do.
-#define FSCONFIG_SET_FLAG 0
-#define FSCONFIG_SET_STRING 1
-#define FSCONFIG_SET_BINARY 2
-#define FSCONFIG_SET_PATH 3
-#define FSCONFIG_SET_PATH_EMPTY 4
-#define FSCONFIG_SET_FD 5
-#define FSCONFIG_CMD_CREATE 6
-#define FSCONFIG_CMD_RECONFIGURE 7
-#define FSCONFIG_CMD_CREATE_EXCL 8
+// What fsconfig is being asked to do is an enumeration in the kernel's
+// <linux/mount.h>, and there is no __UAPI_DEF guard for it, so a macro of
+// the same name here would break that header for anything which includes
+// both. The names are left to the kernel, and so is struct mount_attr,
+// which that header declares for the same reason.
 
 // Flags to open_tree.
 #define OPEN_TREE_CLONE (1 << 0)
