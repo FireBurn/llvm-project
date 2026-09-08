@@ -166,6 +166,12 @@ functions:
     return_type: time_t
     arguments:
       - type: time_t *
+  - name: timegm
+    standards:
+      - gnu
+    return_type: time_t
+    arguments:
+      - type: struct tm *
   - name: timespec_get
     standards:
       - stdc
