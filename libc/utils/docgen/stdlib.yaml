@@ -78,6 +78,8 @@ functions:
     c-definition: 7.24.3.2
     c-reference: memory/calloc
     in-latest-posix: ''
+  clearenv:
+    c-definition: 'TODO: glibc extension'
   div:
     c-definition: 7.24.6.2
     c-reference: numeric/math/div
@@ -98,6 +100,12 @@ functions:
   getenv:
     c-definition: 7.24.4.6
     in-latest-posix: ''
+  initstate:
+    in-latest-posix: ''
+  grantpt:
+    in-latest-posix: ''
+  getloadavg:
+    c-definition: 'TODO: BSD extension'
   labs:
     c-definition: 7.24.6.1
     c-reference: numeric/math/abs
@@ -114,10 +122,22 @@ functions:
     c-definition: 7.24.6.2
     c-reference: numeric/math/div
     in-latest-posix: ''
+  mallinfo2:
+    c-definition: 'TODO: glibc extension'
+  mallinfo:
+    c-definition: 'TODO: glibc extension'
   malloc:
     c-definition: 7.24.3.6
     c-reference: memory/malloc
     in-latest-posix: ''
+  mb_cur_max:
+    c-definition: 'TODO: glibc extension'
+  malloc_usable_size:
+    c-definition: 'TODO: glibc extension'
+  malloc_trim:
+    c-definition: 'TODO: glibc extension'
+  malloc_info:
+    c-definition: 'TODO: glibc extension'
   mblen:
     c-definition: 7.24.7.1
     c-reference: string/multibyte/mblen
@@ -130,9 +150,29 @@ functions:
     c-definition: 7.24.7.2
     c-reference: string/multibyte/mbtowc
     in-latest-posix: ''
+  memalign:
+    c-definition: 'TODO: glibc extension'
   memalignment:
     c-definition: 7.24.9.1
     c-reference: memory/memalignment
+  pvalloc:
+    c-definition: 'TODO: glibc extension'
+  ptsname_r:
+    c-definition: 'TODO: glibc extension'
+  ptsname:
+    in-latest-posix: ''
+  posix_openpt:
+    in-latest-posix: ''
+  mktemp:
+    in-latest-posix: ''
+  mkstemps:
+    c-definition: 'TODO: BSD extension'
+  mkostemps:
+    c-definition: 'TODO: BSD extension'
+  mkostemp:
+    c-definition: 'TODO: glibc extension'
+  mkdtemp:
+    in-latest-posix: ''
   qsort:
     c-definition: 7.24.5.2
     c-reference: algorithm/qsort
@@ -144,15 +184,25 @@ functions:
     c-definition: 7.24.2.1
     c-reference: numeric/random/rand
     in-latest-posix: ''
+  random:
+    in-latest-posix: ''
   realloc:
     c-definition: 7.24.3.7
     c-reference: memory/realloc
     in-latest-posix: ''
   reallocarray:
     in-latest-posix: ''
+  setstate:
+    in-latest-posix: ''
+  secure_getenv:
+    c-definition: 'TODO: glibc extension'
+  reallocarray:
+    c-definition: 'TODO: glibc extension'
   srand:
     c-definition: 7.24.2.2
     c-reference: numeric/random/srand
+    in-latest-posix: ''
+  srandom:
     in-latest-posix: ''
   strfromd:
     c-definition: 7.24.1.3
@@ -211,6 +261,10 @@ functions:
     in-latest-posix: ''
   system:
     c-definition: 7.24.4.8
+    in-latest-posix: ''
+  valloc:
+    c-definition: 'TODO: glibc extension'
+  unlockpt:
     in-latest-posix: ''
   wcstombs:
     c-definition: 7.24.8.2
