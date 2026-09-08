@@ -808,3 +808,48 @@ add_libc_test(
     libc.src.unistd.read
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  unlocked_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    unlocked_test.cpp
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.include.stdio_ext
+    libc.src.stdio.__fsetlocking
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fputc_unlocked
+    libc.src.stdio.fputs_unlocked
+    libc.src.stdio.fread
+    libc.src.stdio.putc_unlocked
+    libc.src.stdio.putchar_unlocked
+    libc.src.stdio.remove
+    libc.src.stdio.setbuffer
+    libc.src.stdio.setlinebuf
+    libc.src.stdio_ext.__flbf
+    libc.src.string.memcmp
+)
+
+add_libc_test(
+  renameat_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    renameat_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.fcntl.open
+    libc.src.stdio.renameat
+    libc.src.stdio.renameat2
+    libc.src.sys.stat.stat
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
