@@ -15,6 +15,7 @@
 #include "src/fcntl/open.h"
 #include "src/stdio/remove.h"
 #include "src/sys/inotify/inotify_add_watch.h"
+#include "src/sys/inotify/inotify_init.h"
 #include "src/sys/inotify/inotify_init1.h"
 #include "src/sys/inotify/inotify_rm_watch.h"
 #include "src/sys/stat/mkdir.h"
@@ -87,4 +88,13 @@ TEST_F(LlvmLibcInotifyTest, BadArguments) {
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
   EXPECT_THAT(LIBC_NAMESPACE::inotify_add_watch(-1, ".", IN_CREATE),
               Fails(EBADF, -1));
+}
+
+// inotify_init is inotify_init1 with no flags, which is how it was before
+// the flags were added.
+TEST_F(LlvmLibcInotifyTest, InitWithoutFlags) {
+  int fd = LIBC_NAMESPACE::inotify_init();
+  ASSERT_ERRNO_SUCCESS();
+  ASSERT_GT(fd, 0);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 }
