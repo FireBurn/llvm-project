@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_SRC_SHADOW_PWDLOCK_H
 #define LLVM_LIBC_SRC_SHADOW_PWDLOCK_H
 
+#include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -16,7 +17,7 @@ namespace shadow_lock {
 
 // The file everything which edits the user databases agrees to lock, and
 // the descriptor the lock is held on. It is -1 when nothing is held.
-inline constexpr const char *LOCK_PATH = "/etc/.pwd.lock";
+LIBC_INLINE_VAR constexpr const char *LOCK_PATH = "/etc/.pwd.lock";
 
 extern int held_fd;
 

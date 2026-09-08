@@ -32,6 +32,8 @@ add_header_library(
   pwdlock
   HDRS
     pwdlock.h
+  DEPENDS
+    libc.src.__support.macros.attributes
 )
 
 add_entrypoint_object(
