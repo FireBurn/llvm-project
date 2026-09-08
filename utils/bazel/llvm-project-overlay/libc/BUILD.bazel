@@ -25694,9 +25694,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_linux_uapi_compat_macros",
+    hdrs = ["include/llvm-libc-macros/linux/uapi-compat-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_linux_net_if_macros",
     hdrs = ["include/llvm-libc-macros/linux/net-if-macros.h"],
     deps = [
+        ":llvm_libc_macros_linux_uapi_compat_macros",
     ],
 )
 
@@ -27646,6 +27652,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_group_req",
+    hdrs = ["include/llvm-libc-types/struct_group_req.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_group_source_req",
+    hdrs = ["include/llvm-libc-types/struct_group_source_req.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_ifreq",
     hdrs = ["include/llvm-libc-types/struct_ifreq.h"],
 )
@@ -27657,6 +27673,31 @@ libc_support_library(
         ":full_build": [":llvm_libc_types_struct_ifreq"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ip_mreq",
+    hdrs = ["include/llvm-libc-types/struct_ip_mreq.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ip_mreq_source",
+    hdrs = ["include/llvm-libc-types/struct_ip_mreq_source.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ip_mreqn",
+    hdrs = ["include/llvm-libc-types/struct_ip_mreqn.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ip_msfilter",
+    hdrs = ["include/llvm-libc-types/struct_ip_msfilter.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_ipv6_mreq",
+    hdrs = ["include/llvm-libc-types/struct_ipv6_mreq.h"],
 )
 
 libc_support_library(
