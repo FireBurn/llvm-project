@@ -17,6 +17,7 @@
 // Prevent the linux headers from defining this macro.
 #define __UAPI_DEF_IF_IFNAMSIZ 0
 
+
 #define IF_NAMESIZE 16
 #define IFNAMSIZ IF_NAMESIZE
 
