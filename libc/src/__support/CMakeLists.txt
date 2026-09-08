@@ -313,6 +313,21 @@ add_header_library(
     libc.src.__support.macros.properties.types
     libc.src.__support.macros.properties.complex_types
 )
+add_header_library(
+  complex_sqrt
+  HDRS
+    complex_sqrt.h
+  DEPENDS
+    .complex_type
+    libc.src.__support.CPP.bit
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.FPUtil.manipulation_functions
+    libc.src.__support.FPUtil.multiply_add
+    libc.src.__support.FPUtil.sqrt
+    libc.src.__support.macros.config
+)
+
 
 add_header_library(
   complex_basic_ops
