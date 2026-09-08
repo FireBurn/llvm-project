@@ -15,12 +15,15 @@
 #define LLVM_LIBC_TYPES_LINUX_STRUCT_IFREQ_H
 
 #include "../../llvm-libc-macros/net-if-macros.h"
+#include "../../llvm-libc-macros/uapi-compat-macros.h"
 #include "../struct_sockaddr.h"
 #include "struct_ifmap.h"
 
-// Prevent the linux headers from defining this type.
-#define __UAPI_DEF_IF_IFREQ 0
-
+// The kernel defines this too, in <linux/if.h>. Leaving it to the
+// kernel is right only where that header has been read and its
+// guard says the definition is the kernel's.
+#if !(defined(__UAPI_DEF_IF_IFREQ) && __UAPI_DEF_IF_IFREQ &&                   \
+      defined(_LINUX_IF_H))
 struct ifreq {
   union {
     char ifrn_name[IF_NAMESIZE];
@@ -58,5 +61,11 @@ struct ifreq {
 #define ifr_bandwidth ifr_ifru.ifru_ivalue
 #define ifr_qlen ifr_ifru.ifru_ivalue
 #define ifr_newname ifr_ifru.ifru_newname
+
+// Say the definition here is the one, so <linux/if.h> skips its own if it
+// is read after this.
+#undef __UAPI_DEF_IF_IFREQ
+#define __UAPI_DEF_IF_IFREQ 0
+#endif
 
 #endif // LLVM_LIBC_TYPES_LINUX_STRUCT_IFREQ_H
