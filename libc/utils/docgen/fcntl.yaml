@@ -1,16 +1,30 @@
 functions:
   creat:
     in-latest-posix: ''
+  fallocate:
+    c-definition: 'TODO: Linux extension'
   fcntl:
     in-latest-posix: ''
+  name_to_handle_at:
+    c-definition: 'TODO: Linux extension'
   open:
     in-latest-posix: ''
+  open_by_handle_at:
+    c-definition: 'TODO: Linux extension'
   openat:
     in-latest-posix: ''
   posix_fadvise:
     in-latest-posix: ''
   posix_fallocate:
     in-latest-posix: ''
+  vmsplice:
+    c-definition: 'TODO: Linux extension'
+  tee:
+    c-definition: 'TODO: Linux extension'
+  sync_file_range:
+    c-definition: 'TODO: Linux extension'
+  splice:
+    c-definition: 'TODO: Linux extension'
 
 macros:
   AT_EACCESS:
