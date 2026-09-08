@@ -1120,6 +1120,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_resource_macros
+    .llvm-libc-types.pid_t
     .llvm-libc-types.rlim_t
     .llvm-libc-types.struct_rlimit
     .llvm-libc-types.struct_rusage
