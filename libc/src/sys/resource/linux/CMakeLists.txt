@@ -63,3 +63,17 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.prlimit
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  prlimit
+  SRCS
+    prlimit.cpp
+  HDRS
+    ../prlimit.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.hdr.types.struct_rlimit
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)

@@ -36,3 +36,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.setrlimit
 )
+
+add_entrypoint_object(
+  prlimit
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.prlimit
+)
