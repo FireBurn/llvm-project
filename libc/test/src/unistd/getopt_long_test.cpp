@@ -165,6 +165,22 @@ TEST_F(LlvmLibcGetoptLongTest, ArgumentGivenToNoArgumentOption) {
             int('?'));
 }
 
+// A program which hands the arguments it does not know to another one keeps
+// scanning past them, so an unknown short option has to be eaten rather
+// than offered again.
+TEST_F(LlvmLibcGetoptLongTest, UnknownShortOptionIsEaten) {
+  array<char *, 4> argv{"prog"_c, "-z"_c, "-a"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "a", LONGOPTS, nullptr),
+            int('?'));
+  EXPECT_EQ(test_globals::optopt, (int)'z');
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "a", LONGOPTS, nullptr),
+            int('a'));
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "a", LONGOPTS, nullptr),
+            -1);
+}
+
 TEST_F(LlvmLibcGetoptLongTest, ShortOptionsStillWork) {
   array<char *, 3> argv{"prog"_c, "-ab"_c, nullptr};
   EXPECT_EQ(
