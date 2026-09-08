@@ -51,12 +51,24 @@ macros:
     c-definition: '7.23.1'
     in-latest-posix: ''
 functions:
+  __fsetlocking:
+    c-definition: 'TODO: glibc extension'
+  fputs_unlocked:
+    c-definition: 'TODO: glibc extension'
+  fputc_unlocked:
+    c-definition: 'TODO: glibc extension'
   remove:
     c-definition: '7.23.4.1'
     in-latest-posix: ''
   rename:
     c-definition: '7.23.4.2'
     in-latest-posix: ''
+  setlinebuf:
+    c-definition: 'TODO: BSD extension'
+  setbuffer:
+    c-definition: 'TODO: BSD extension'
+  renameat2:
+    c-definition: 'TODO: Linux extension'
   tmpfile:
     c-definition: '7.23.4.3'
     in-latest-posix: ''
