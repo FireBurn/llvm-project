@@ -577,6 +577,12 @@ functions:
       - type: int
       - type: off_t
       - type: int
+  - name: pause
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: void
   - name: pathconf
     standards:
       - posix
