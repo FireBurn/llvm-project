@@ -82,7 +82,8 @@
 // What fsconfig is being asked to do is an enumeration in the kernel's
 // <linux/mount.h>, and there is no __UAPI_DEF guard for it, so a macro of
 // the same name here would break that header for anything which includes
-// both. The names are left to the kernel.
+// both. The names are left to the kernel, and so is struct mount_attr,
+// which that header declares for the same reason.
 
 // Flags to open_tree.
 #define OPEN_TREE_CLONE (1 << 0)
