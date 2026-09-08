@@ -30,4 +30,6 @@ add_libc_test(
     libc.src.resolv.res_init
     libc.src.resolv.res_mkquery
     libc.src.resolv.res_query
+    libc.src.resolv.res_search
+    libc.src.resolv.res_send
 )
