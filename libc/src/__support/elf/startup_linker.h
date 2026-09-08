@@ -35,7 +35,8 @@ constexpr size_t MAX_STARTUP_MODULES = MAX_PROCESS_MODULES;
 class StartupLinker {
 public:
   LIBC_INLINE StartupLinker(size_t page_size, char **envp)
-      : page_size_(page_size), library_path_(library_path_from(envp)) {}
+      : page_size_(page_size), library_path_(library_path_from(envp)),
+        preload_list_(preload_list_from(envp)) {}
 
   // Loads the executable's dependency graph, binds it, sets up thread local
   // storage and runs the initialisers. Returns false with a message already
@@ -51,6 +52,13 @@ public:
     // independent one still has relative relocations of its own, and without
     // them even its init array bounds point at the wrong addresses.
     modules_[0].relocations().apply_relative(bias);
+
+    // What LD_PRELOAD names goes in before anything the program asked for.
+    // Lookup walks the modules in the order they were added, so these sit
+    // ahead of the libraries the executable names and what they define is
+    // found first, which is the whole point of asking for them.
+    if (!load_preloads())
+      return false;
 
     // Breadth first, so a dependency named earlier is loaded earlier, which
     // is the order symbol lookup then walks.
@@ -146,6 +154,43 @@ private:
   }
 
   // The search order a loader is expected to use, which dlopen uses too.
+  // Loads each object named in LD_PRELOAD, separated by colons or blanks as
+  // every loader has always accepted. One that cannot be found is passed
+  // over rather than fatal: the variable is often set for a whole session and
+  // names things that only some of the programs in it have.
+  LIBC_INLINE bool load_preloads() {
+    if (preload_list_ == nullptr)
+      return true;
+    const char *p = preload_list_;
+    while (*p != '\0') {
+      while (*p == ':' || *p == ' ' || *p == '\t')
+        ++p;
+      if (*p == '\0')
+        break;
+      char name[MAX_SEARCH_PATH];
+      size_t n = 0;
+      while (*p != '\0' && *p != ':' && *p != ' ' && *p != '\t') {
+        if (n + 1 < sizeof(name))
+          name[n++] = *p;
+        ++p;
+      }
+      name[n] = '\0';
+      if (n == 0)
+        continue;
+      if (count_ >= MAX_STARTUP_MODULES) {
+        report("too many shared objects\n");
+        return false;
+      }
+      // The executable is what a relative run path is taken against, and it
+      // is the only module loaded at this point.
+      auto loaded =
+          find_and_load(name, &modules_[0], library_path_, page_size_);
+      if (loaded.has_value())
+        remember(loaded.value());
+    }
+    return true;
+  }
+
   LIBC_INLINE bool load_dependency(const Module &from, const char *name) {
     if (count_ >= MAX_STARTUP_MODULES) {
       report("too many shared objects\n");
@@ -250,6 +295,7 @@ private:
 
   size_t page_size_;
   const char *library_path_;
+  const char *preload_list_;
   Module modules_[MAX_STARTUP_MODULES];
   MappedModule mappings_[MAX_STARTUP_MODULES];
   intptr_t tls_offsets_[MAX_STARTUP_MODULES] = {};

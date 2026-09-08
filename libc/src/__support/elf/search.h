@@ -156,10 +156,9 @@ LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
 
 // LD_LIBRARY_PATH, without the value being copied anywhere: the environment
 // outlives whoever looks at it.
-LIBC_INLINE const char *library_path_from(char **envp) {
+LIBC_INLINE const char *value_of(char **envp, const char *key) {
   if (envp == nullptr)
     return nullptr;
-  const char key[] = "LD_LIBRARY_PATH=";
   for (char **e = envp; *e != nullptr; ++e) {
     const char *p = *e;
     size_t i = 0;
@@ -169,6 +168,16 @@ LIBC_INLINE const char *library_path_from(char **envp) {
       return p + i;
   }
   return nullptr;
+}
+
+LIBC_INLINE const char *library_path_from(char **envp) {
+  return value_of(envp, "LD_LIBRARY_PATH=");
+}
+
+// LD_PRELOAD, the objects to load before anything the program asked for so
+// that what they define is found first.
+LIBC_INLINE const char *preload_list_from(char **envp) {
+  return value_of(envp, "LD_PRELOAD=");
 }
 
 } // namespace elf
