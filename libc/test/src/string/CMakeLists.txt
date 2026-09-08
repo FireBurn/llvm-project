@@ -321,6 +321,7 @@ add_libc_test(
   SRCS
     strsignal_test.cpp
   DEPENDS
+    libc.src.__support.StringUtil.signal_to_string
     libc.src.string.strsignal
 )
 
