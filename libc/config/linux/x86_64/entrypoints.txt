@@ -682,6 +682,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.linkat
     libc.src.unistd.lseek
     libc.src.unistd.pathconf
+    libc.src.unistd.pause
     libc.src.unistd.pipe
     libc.src.unistd.pipe2
     libc.src.unistd.pread
