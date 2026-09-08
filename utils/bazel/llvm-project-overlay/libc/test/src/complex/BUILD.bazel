@@ -94,3 +94,24 @@ licenses(["notice"])
         "crealf16",
     ]
 ]
+
+[
+    libc_test(
+        name = func_name + "_test",
+        srcs = [
+            "CSqrtTest.h",
+            func_name + "_test.cpp",
+        ],
+        deps = ["//libc:func_name".replace("func_name", func_name)] + [
+            "//libc/hdr:math_macros",
+            "//libc/src/__support/FPUtil:manipulation_functions",
+            "//libc/src/__support/FPUtil:sqrt",
+            "//libc/test/UnitTest:fp_test_helpers",
+        ],
+    )
+    for func_name in [
+        "csqrt",
+        "csqrtf",
+        "csqrtl",
+    ]
+]
