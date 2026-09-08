@@ -738,3 +738,15 @@ add_generic_entrypoint_object(
     libc.hdr.types.FILE
     libc.src.stdio.setvbuf
 )
+
+add_generic_entrypoint_object(
+  __fsetlocking
+  SRCS
+    __fsetlocking.cpp
+  HDRS
+    ../__fsetlocking.h
+  DEPENDS
+    libc.hdr.stdio_ext_macros
+    libc.hdr.types.FILE
+    libc.src.__support.File.file
+)
