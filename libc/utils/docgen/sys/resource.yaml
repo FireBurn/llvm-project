@@ -5,6 +5,8 @@ functions:
     in-latest-posix: ''
   getrusage:
     in-latest-posix: ''
+  prlimit:
+    c-definition: 'TODO: Linux extension'
   setpriority:
     in-latest-posix: ''
   setrlimit:
