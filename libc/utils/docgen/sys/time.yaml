@@ -1,6 +1,10 @@
 functions:
+  lutimes:
+    c-definition: 'TODO: BSD extension'
   select:
     in-latest-posix: ''
+  settimeofday:
+    c-definition: 'TODO: BSD extension'
   utimes:
     in-latest-posix: ''
   getitimer:
