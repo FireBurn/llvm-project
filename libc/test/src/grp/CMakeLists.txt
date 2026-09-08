@@ -102,3 +102,29 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  fgetgrent_test
+  SUITE
+    libc_grp_unittests
+  SRCS
+    fgetgrent_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.string_view
+    libc.src.fcntl.open
+    libc.src.grp.fgetgrent
+    libc.src.grp.getgrouplist
+    libc.src.grp.grp_utils
+    libc.src.grp.putgrent
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
