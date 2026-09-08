@@ -26289,6 +26289,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_getdents64",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/getdents64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -27108,6 +27121,21 @@ libc_support_library(
         ":__support_macros_config",
         ":dlfcn_dl_internal",
         ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "getdents64",
+    srcs = ["src/dirent/getdents64.cpp"],
+    hdrs = ["src/dirent/getdents64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getdents64",
+        ":errno",
+        ":types_size_t",
+        ":types_ssize_t",
     ],
 )
 
