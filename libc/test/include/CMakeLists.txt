@@ -1217,6 +1217,17 @@ add_libc_test(
     libc.include.llvm-libc-macros.pthread_macros
 )
 
+add_libc_test(
+  barrier_type_bool_test
+  SUITE
+    libc-include-tests
+  SRCS
+    barrier_type_bool_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.__barrier_type
+    libc.include.llvm-libc-types.pthread_barrierattr_t
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.

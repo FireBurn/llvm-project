@@ -27610,6 +27610,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_pthread_barrierattr_t",
+    hdrs = ["include/llvm-libc-types/pthread_barrierattr_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_pthread_t",
     hdrs = ["include/llvm-libc-types/pthread_t.h"],
 )
