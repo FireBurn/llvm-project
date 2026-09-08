@@ -150,6 +150,11 @@ private:
   // free-ed when close method is called on the stream.
   bool own_buf;
 
+  // Whether the caller has said it will take the lock itself, which is what
+  // __fsetlocking asks for. A stream in that state does not lock on every
+  // call, which is the whole point of asking.
+  bool caller_locking = false;
+
   // True when the File object itself has static storage, as the standard
   // streams do. Closing one must not hand it to the deallocator.
   bool static_storage;
@@ -374,8 +379,19 @@ public:
   // is ENOMEM.
   int set_buffer(void *buffer, size_t size, int buffer_mode);
 
-  void lock() { mutex.lock(); }
-  void unlock() { mutex.unlock(); }
+  void lock() {
+    if (!caller_locking)
+      mutex.lock();
+  }
+  void unlock() {
+    if (!caller_locking)
+      mutex.unlock();
+  }
+
+  // What __fsetlocking reads and writes. These are only called with the
+  // stream not otherwise in use.
+  bool has_caller_locking() const { return caller_locking; }
+  void set_caller_locking(bool value) { caller_locking = value; }
 
   bool error_unlocked() const { return err; }
 
