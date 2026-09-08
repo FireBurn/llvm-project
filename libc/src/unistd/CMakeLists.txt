@@ -749,6 +749,12 @@ add_entrypoint_object(
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.getdtablesize
+
+add_entrypoint_object(
+  close_range
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.close_range
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.pwd.pwd_utils
     libc.src.stdlib.environ_internal
