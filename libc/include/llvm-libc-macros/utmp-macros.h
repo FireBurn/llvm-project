@@ -9,11 +9,17 @@
 #ifndef LLVM_LIBC_MACROS_UTMP_MACROS_H
 #define LLVM_LIBC_MACROS_UTMP_MACROS_H
 
-// The sizes of the three character fields of a record. <utmpx.h> has the
-// same values under names of its own.
+// The sizes of the three character fields of a record. <utmpx.h> defines the
+// same three, and a program may end up with both headers.
+#ifndef UT_LINESIZE
 #define UT_LINESIZE 32
+#endif
+#ifndef UT_NAMESIZE
 #define UT_NAMESIZE 32
+#endif
+#ifndef UT_HOSTSIZE
 #define UT_HOSTSIZE 256
+#endif
 
 // What ut_type says a record is. The same set <utmpx.h> defines, and the
 // same file, so a program may end up with both headers.
