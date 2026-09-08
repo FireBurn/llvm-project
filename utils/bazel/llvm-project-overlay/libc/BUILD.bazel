@@ -20548,6 +20548,22 @@ libc_function(
 )
 
 libc_function(
+    name = "prlimit",
+    srcs = ["src/sys/resource/linux/prlimit.cpp"],
+    hdrs = ["src/sys/resource/prlimit.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_prlimit64",
+        ":errno",
+        ":sys_resource_prlimit",
+        ":types_pid_t",
+        ":types_struct_rlimit",
+    ],
+)
+
+libc_function(
     name = "pwritev",
     srcs = ["src/sys/uio/linux/pwritev.cpp"],
     hdrs = ["src/sys/uio/pwritev.h"],
@@ -26360,6 +26376,16 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":sys_capability_cap_types",
+    ],
+)
+
+libc_support_library(
+    name = "sys_resource_prlimit",
+    hdrs = ["src/sys/resource/prlimit.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+        ":types_struct_rlimit",
     ],
 )
 
