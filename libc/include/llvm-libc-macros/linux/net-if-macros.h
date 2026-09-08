@@ -14,14 +14,22 @@
 #ifndef LLVM_LIBC_MACROS_LINUX_NET_IF_MACROS_H
 #define LLVM_LIBC_MACROS_LINUX_NET_IF_MACROS_H
 
+#include "uapi-compat-macros.h"
 
 #define IF_NAMESIZE 16
 
 // The older name for the same limit. Code which reaches for struct ifreq
 // tends to spell it this way.
+#if !(defined(__UAPI_DEF_IF_IFNAMSIZ) && __UAPI_DEF_IF_IFNAMSIZ &&             \
+      defined(_LINUX_IF_H))
 #define IFNAMSIZ IF_NAMESIZE
+#undef __UAPI_DEF_IF_IFNAMSIZ
+#define __UAPI_DEF_IF_IFNAMSIZ 0
+#endif
 
 // Interface flags, as the SIOCGIFFLAGS ioctl reports them.
+#if !(defined(__UAPI_DEF_IF_NET_DEVICE_FLAGS) &&                               \
+      __UAPI_DEF_IF_NET_DEVICE_FLAGS && defined(_LINUX_IF_H))
 #define IFF_UP 0x1
 #define IFF_BROADCAST 0x2
 #define IFF_DEBUG 0x4
@@ -38,5 +46,9 @@
 #define IFF_PORTSEL 0x2000
 #define IFF_AUTOMEDIA 0x4000
 #define IFF_DYNAMIC 0x8000
+
+#undef __UAPI_DEF_IF_NET_DEVICE_FLAGS
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS 0
+#endif
 
 #endif // LLVM_LIBC_MACROS_LINUX_NET_IF_MACROS_H
