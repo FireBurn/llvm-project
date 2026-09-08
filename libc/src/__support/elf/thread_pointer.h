@@ -48,7 +48,9 @@ LIBC_INLINE bool set_thread_pointer(uintptr_t value) {
 // Where the thread's blocks are, which is what a thread local's offset is
 // measured from.
 LIBC_INLINE uintptr_t thread_pointer() {
-#if defined(LIBC_TARGET_ARCH_IS_X86_64)
+#if __has_builtin(__builtin_thread_pointer)
+  return reinterpret_cast<uintptr_t>(__builtin_thread_pointer());
+#elif defined(LIBC_TARGET_ARCH_IS_X86_64)
   // The register reads back through itself; the first word of the thread
   // control block holds its own address so that this works.
   uintptr_t value;
@@ -56,11 +58,7 @@ LIBC_INLINE uintptr_t thread_pointer() {
   return value;
 #elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
   uintptr_t value;
-#if __has_builtin(__builtin_arm_rsr64)
-  value = __builtin_arm_rsr64("tpidr_el0");
-#else
   __asm__ __volatile__("mrs %0, tpidr_el0" : "=r"(value));
-#endif
   return value;
 #elif defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
   uintptr_t value;
