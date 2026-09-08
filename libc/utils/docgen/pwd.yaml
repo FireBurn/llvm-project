@@ -1,6 +1,8 @@
 functions:
   endpwent:
     in-latest-posix: ''
+  fgetpwent:
+    c-definition: 'TODO: glibc extension'
   getpwent:
     in-latest-posix: ''
   getpwnam:
@@ -11,5 +13,7 @@ functions:
     in-latest-posix: ''
   getpwuid_r:
     in-latest-posix: ''
+  putpwent:
+    c-definition: 'TODO: glibc extension'
   setpwent:
     in-latest-posix: ''
