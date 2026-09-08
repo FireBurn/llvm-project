@@ -32,16 +32,16 @@ LIBC_INLINE constexpr int index_of(nl_item item) {
 }
 
 // The C locale, which POSIX spells out in full.
-inline constexpr const char *CTYPE_ITEMS[] = {
+LIBC_INLINE_VAR constexpr const char *CTYPE_ITEMS[] = {
     "ANSI_X3.4-1968", // CODESET, the name of the character set.
 };
 
-inline constexpr const char *NUMERIC_ITEMS[] = {
+LIBC_INLINE_VAR constexpr const char *NUMERIC_ITEMS[] = {
     ".", // RADIXCHAR
     "",  // THOUSEP, which the C locale does not have.
 };
 
-inline constexpr const char *TIME_ITEMS[] = {
+LIBC_INLINE_VAR constexpr const char *TIME_ITEMS[] = {
     "%a %b %e %H:%M:%S %Y", // D_T_FMT
     "%m/%d/%y",             // D_FMT
     "%H:%M:%S",             // T_FMT
@@ -93,11 +93,11 @@ inline constexpr const char *TIME_ITEMS[] = {
     "", // ALT_DIGITS
 };
 
-inline constexpr const char *MONETARY_ITEMS[] = {
+LIBC_INLINE_VAR constexpr const char *MONETARY_ITEMS[] = {
     "", // CRNCYSTR, which the C locale does not have.
 };
 
-inline constexpr const char *MESSAGES_ITEMS[] = {
+LIBC_INLINE_VAR constexpr const char *MESSAGES_ITEMS[] = {
     "^[yY]", // YESEXPR
     "^[nN]", // NOEXPR
 };
