@@ -6,8 +6,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_STDIO_EXT_FPENDING_H
-#define LLVM_LIBC_SRC_STDIO_EXT_FPENDING_H
+#ifndef LLVM_LIBC_SRC_STDIO_EXT___FPENDING_H
+#define LLVM_LIBC_SRC_STDIO_EXT___FPENDING_H
 
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
@@ -19,4 +19,4 @@ size_t __fpending(::FILE *stream);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_STDIO_EXT_FPENDING_H
+#endif // LLVM_LIBC_SRC_STDIO_EXT___FPENDING_H

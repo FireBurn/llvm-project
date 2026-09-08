@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_STDIO_EXT_FWRITABLE_H
-#define LLVM_LIBC_SRC_STDIO_EXT_FWRITABLE_H
+#ifndef LLVM_LIBC_SRC_STDIO_EXT___FWRITABLE_H
+#define LLVM_LIBC_SRC_STDIO_EXT___FWRITABLE_H
 
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
@@ -20,4 +20,4 @@ int __fwritable(::FILE *stream);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_STDIO_EXT_FWRITABLE_H
+#endif // LLVM_LIBC_SRC_STDIO_EXT___FWRITABLE_H

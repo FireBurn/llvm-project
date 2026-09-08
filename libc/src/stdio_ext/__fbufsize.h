@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_STDIO_EXT_FBUFSIZE_H
-#define LLVM_LIBC_SRC_STDIO_EXT_FBUFSIZE_H
+#ifndef LLVM_LIBC_SRC_STDIO_EXT___FBUFSIZE_H
+#define LLVM_LIBC_SRC_STDIO_EXT___FBUFSIZE_H
 
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
@@ -20,4 +20,4 @@ size_t __fbufsize(::FILE *stream);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_STDIO_EXT_FBUFSIZE_H
+#endif // LLVM_LIBC_SRC_STDIO_EXT___FBUFSIZE_H

@@ -7,8 +7,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_STDIO_EXT_FLBF_H
-#define LLVM_LIBC_SRC_STDIO_EXT_FLBF_H
+#ifndef LLVM_LIBC_SRC_STDIO_EXT___FLBF_H
+#define LLVM_LIBC_SRC_STDIO_EXT___FLBF_H
 
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
@@ -20,4 +20,4 @@ int __flbf(::FILE *stream);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_STDIO_EXT_FLBF_H
+#endif // LLVM_LIBC_SRC_STDIO_EXT___FLBF_H
