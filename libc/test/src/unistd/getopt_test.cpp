@@ -129,8 +129,26 @@ TEST_F(LlvmLibcGetoptTest, WrongMatch) {
 
   EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "a"), int('?'));
   EXPECT_EQ(test_globals::optopt, (int)'b');
-  EXPECT_EQ(test_globals::optind, 1);
+  // The argument is eaten even though it named no option, so that the scan
+  // moves on rather than being handed the same one again.
+  EXPECT_EQ(test_globals::optind, 2);
   EXPECT_STREQ(get_error_msg(), "prog: illegal option -- b\n");
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "a"), -1);
+}
+
+TEST_F(LlvmLibcGetoptTest, WrongMatchInACluster) {
+  array<char *, 3> argv{"prog"_c, "-abc"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "ac"), int('a'));
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "ac"), int('?'));
+  EXPECT_EQ(test_globals::optopt, (int)'b');
+  // Only the one character is eaten; what follows it in the same argument
+  // is still to be read.
+  EXPECT_EQ(test_globals::optind, 1);
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "ac"), int('c'));
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "ac"), -1);
 }
 
 TEST_F(LlvmLibcGetoptTest, OpterrFalse) {
@@ -140,7 +158,7 @@ TEST_F(LlvmLibcGetoptTest, OpterrFalse) {
   set_state(errstream);
   EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "a"), int('?'));
   EXPECT_EQ(test_globals::optopt, (int)'b');
-  EXPECT_EQ(test_globals::optind, 1);
+  EXPECT_EQ(test_globals::optind, 2);
   EXPECT_STREQ(get_error_msg(), "");
 }
 
