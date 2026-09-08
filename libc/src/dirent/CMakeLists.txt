@@ -139,3 +139,16 @@ add_entrypoint_object(
     libc.hdr.types.struct_dirent
     libc.src.string.strverscmp
 )
+
+add_entrypoint_object(
+  getdents64
+  SRCS
+    getdents64.cpp
+  HDRS
+    getdents64.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getdents64
+    libc.src.errno.errno
+)
