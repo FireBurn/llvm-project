@@ -180,6 +180,7 @@ if(NOT LIBC_TARGET_ARCHITECTURE_IS_NVPTX)
     SRCS
       strerror_test.cpp
     DEPENDS
+      libc.src.__support.StringUtil.error_to_string
       libc.src.string.strerror
   )
 endif()
@@ -322,6 +323,7 @@ add_libc_test(
   SRCS
     strsignal_test.cpp
   DEPENDS
+    libc.src.__support.StringUtil.signal_to_string
     libc.src.string.strsignal
 )
 
