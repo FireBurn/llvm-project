@@ -49,6 +49,8 @@ functions:
     in-latest-posix: ''
   fdopendir:
     in-latest-posix: ''
+  getdents64:
+    c-definition: 'TODO: Linux extension'
   opendir:
     in-latest-posix: ''
   posix_getdents:
@@ -65,3 +67,5 @@ functions:
     in-latest-posix: ''
   telldir:
     in-latest-posix: ''
+  versionsort:
+    c-definition: 'TODO: glibc extension'
