@@ -282,6 +282,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_quota_uapi_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_quota_uapi_test.cpp
+  DEPENDS
+    libc.include.sys_quota
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
