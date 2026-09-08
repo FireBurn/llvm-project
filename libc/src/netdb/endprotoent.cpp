@@ -13,8 +13,6 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(void, endprotoent, (void)) {
-  resolv::stop_entries();
-}
+LLVM_LIBC_FUNCTION(void, endprotoent, (void)) { resolv::stop_entries(); }
 
 } // namespace LIBC_NAMESPACE_DECL

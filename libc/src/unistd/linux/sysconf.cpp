@@ -15,11 +15,11 @@
 
 #include "src/__support/common.h"
 
+#include "hdr/limits_macros.h"
 #include "hdr/sys_auxv_macros.h"
 #include "hdr/sys_resource_macros.h"
 #include "hdr/types/struct_rlimit.h"
 #include "hdr/types/struct_sysinfo.h"
-#include "hdr/limits_macros.h"
 #include "hdr/unistd_macros.h"
 #include "src/__support/OSUtil/linux/auxv.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/prlimit.h"

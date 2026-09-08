@@ -23,8 +23,8 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, posix_fadvise,
                    (int fd, off_t offset, off_t len, int advice)) {
 #if __SIZEOF_LONG__ == 8
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_fadvise64, fd, offset, len,
-                                              advice);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_fadvise64, fd, offset, len, advice);
 #else
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
       SYS_fadvise64_64, fd, static_cast<long>(offset),

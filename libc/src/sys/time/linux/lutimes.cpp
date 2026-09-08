@@ -1,4 +1,4 @@
-//===-- Linux implementation of lutimes ------------------------------------===//
+//===-- Linux implementation of lutimes -----------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -53,7 +53,8 @@ LLVM_LIBC_FUNCTION(int, lutimes,
   // utimensat syscall.
   // AT_SYMLINK_NOFOLLOW is what sets this apart from utimes: a symbolic
   // link has its own times set rather than those of what it points at.
-  auto result = linux_syscalls::utimensat(AT_FDCWD, path, ts_ptr, AT_SYMLINK_NOFOLLOW);
+  auto result =
+      linux_syscalls::utimensat(AT_FDCWD, path, ts_ptr, AT_SYMLINK_NOFOLLOW);
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;

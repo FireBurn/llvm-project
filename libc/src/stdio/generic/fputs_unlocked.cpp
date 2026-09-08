@@ -22,8 +22,9 @@ LLVM_LIBC_FUNCTION(int, fputs_unlocked,
                    (const char *__restrict str, ::FILE *__restrict stream)) {
   cpp::string_view str_view(str);
 
-  auto result = reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->write_unlocked(
-      str, str_view.size());
+  auto result =
+      reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->write_unlocked(
+          str, str_view.size());
   if (result.has_error())
     libc_errno = result.error;
 

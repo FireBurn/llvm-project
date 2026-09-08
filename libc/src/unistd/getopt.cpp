@@ -7,7 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/unistd/getopt.h"
-#include "src/unistd/getopt_common.h"
 #include "src/__support/CPP/optional.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/File/file.h"
@@ -15,6 +14,7 @@
 #include "src/__support/macros/config.h"
 #include "src/stdio/fprintf.h"
 #include "src/stdio/stderr.h"
+#include "src/unistd/getopt_common.h"
 
 #include "hdr/types/FILE.h"
 

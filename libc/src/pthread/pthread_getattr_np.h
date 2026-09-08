@@ -9,8 +9,8 @@
 #ifndef LLVM_LIBC_SRC_PTHREAD_PTHREAD_GETATTR_NP_H
 #define LLVM_LIBC_SRC_PTHREAD_PTHREAD_GETATTR_NP_H
 
-#include <pthread.h>
 #include "src/__support/macros/config.h"
+#include <pthread.h>
 
 namespace LIBC_NAMESPACE_DECL {
 

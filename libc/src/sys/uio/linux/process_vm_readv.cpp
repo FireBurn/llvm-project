@@ -23,8 +23,9 @@ LLVM_LIBC_FUNCTION(ssize_t, process_vm_readv,
                    (pid_t pid, const struct iovec *local_iov,
                     unsigned long liovcnt, const struct iovec *remote_iov,
                     unsigned long riovcnt, unsigned long flags)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(
-      SYS_process_vm_readv, pid, local_iov, liovcnt, remote_iov, riovcnt, flags);
+  long ret =
+      LIBC_NAMESPACE::syscall_impl<long>(SYS_process_vm_readv, pid, local_iov,
+                                         liovcnt, remote_iov, riovcnt, flags);
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

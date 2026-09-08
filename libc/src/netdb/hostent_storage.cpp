@@ -65,8 +65,8 @@ struct hostent *fill_hostent(const char *name, int family) {
     if (found[i].family != family)
       continue;
     inline_memcpy(storage.addresses[kept], found[i].bytes, size);
-    storage.address_list[kept] = reinterpret_cast<char *>(
-        storage.addresses[kept]);
+    storage.address_list[kept] =
+        reinterpret_cast<char *>(storage.addresses[kept]);
     ++kept;
   }
   if (kept == 0) {

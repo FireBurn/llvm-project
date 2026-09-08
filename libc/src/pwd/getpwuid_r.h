@@ -1,4 +1,4 @@
-//===-- Implementation header for getpwuid_r ------------------------*- C++ -*-===//
+//===-- Implementation header for getpwuid_r --------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -16,7 +16,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int getpwuid_r(uid_t uid, struct passwd *pwd, char *buf, size_t buflen, struct passwd **result);
+int getpwuid_r(uid_t uid, struct passwd *pwd, char *buf, size_t buflen,
+               struct passwd **result);
 
 } // namespace LIBC_NAMESPACE_DECL
 

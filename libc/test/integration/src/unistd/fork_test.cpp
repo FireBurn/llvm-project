@@ -175,10 +175,9 @@ void concurrent_forks() {
   constexpr int THREADS = 4;
   pthread_t threads[THREADS];
   for (int i = 0; i < THREADS; ++i)
-    ASSERT_EQ(
-        LIBC_NAMESPACE::pthread_create(&threads[i], nullptr, forking_thread,
-                                       nullptr),
-        0);
+    ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&threads[i], nullptr,
+                                             forking_thread, nullptr),
+              0);
   // Nothing to check but that this returns at all: the failure was a hang.
   for (int i = 0; i < THREADS; ++i)
     ASSERT_EQ(LIBC_NAMESPACE::pthread_join(threads[i], nullptr), 0);

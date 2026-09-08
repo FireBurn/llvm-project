@@ -8,11 +8,11 @@
 
 #include "src/stdio/sscanf.h"
 
-#include "hdr/stdio_macros.h" // For EOF
 #include "hdr/func/free.h"
+#include "hdr/stdio_macros.h" // For EOF
 #include "src/__support/CPP/limits.h"
-#include "src/string/string_utils.h"
 #include "src/__support/FPUtil/FPBits.h"
+#include "src/string/string_utils.h"
 #include "test/UnitTest/FPMatcher.h"
 #include "test/UnitTest/Test.h"
 

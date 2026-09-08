@@ -119,16 +119,14 @@ TEST_F(LlvmLibcMsgTest, AMessageTooLargeForTheBuffer) {
   EXPECT_THAT(LIBC_NAMESPACE::msgrcv(queue, &in, sizeof(in.text), 0, 0),
               Fails(E2BIG, ssize_t(-1)));
   // With it, what fits is taken and the rest thrown away.
-  EXPECT_EQ(LIBC_NAMESPACE::msgrcv(queue, &in, sizeof(in.text), 0,
-                                   MSG_NOERROR),
+  EXPECT_EQ(LIBC_NAMESPACE::msgrcv(queue, &in, sizeof(in.text), 0, MSG_NOERROR),
             static_cast<ssize_t>(sizeof(in.text)));
 
   ASSERT_THAT(LIBC_NAMESPACE::msgctl(queue, IPC_RMID, nullptr), Succeeds(0));
 }
 
 TEST_F(LlvmLibcMsgTest, ABadQueueIsReported) {
-  EXPECT_THAT(LIBC_NAMESPACE::msgctl(-1, IPC_RMID, nullptr),
-              Fails(EINVAL, -1));
+  EXPECT_THAT(LIBC_NAMESPACE::msgctl(-1, IPC_RMID, nullptr), Fails(EINVAL, -1));
   Note in{};
   EXPECT_THAT(LIBC_NAMESPACE::msgrcv(-1, &in, sizeof(in.text), 0, IPC_NOWAIT),
               Fails(EINVAL, ssize_t(-1)));

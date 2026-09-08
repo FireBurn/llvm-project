@@ -22,9 +22,8 @@ TEST_F(LlvmLibcReallocarrayTest, GrowsAndKeepsTheContents) {
   for (int i = 0; i < 4; ++i)
     ptr[i] = i + 1;
 
-  int *bigger =
-      reinterpret_cast<int *>(LIBC_NAMESPACE::reallocarray(ptr, 16,
-                                                           sizeof(int)));
+  int *bigger = reinterpret_cast<int *>(
+      LIBC_NAMESPACE::reallocarray(ptr, 16, sizeof(int)));
   ASSERT_TRUE(bigger != nullptr);
   ASSERT_ERRNO_SUCCESS();
   for (int i = 0; i < 4; ++i)

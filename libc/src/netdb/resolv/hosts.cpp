@@ -128,9 +128,7 @@ bool parse(char *line, HostsStorage &storage) {
 
 } // anonymous namespace
 
-void rewind_hosts(bool stay_open) {
-  enumeration.rewind(HOSTS_PATH, stay_open);
-}
+void rewind_hosts(bool stay_open) { enumeration.rewind(HOSTS_PATH, stay_open); }
 
 void stop_hosts() { enumeration.stop(); }
 

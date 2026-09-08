@@ -44,7 +44,7 @@ TEST_F(LlvmLibcGetResUidTest, AgreesWithGetgid) {
 
 TEST_F(LlvmLibcGetResUidTest, BadPointerFails) {
   uid_t euid = 0, suid = 0;
-  EXPECT_THAT(LIBC_NAMESPACE::getresuid(reinterpret_cast<uid_t *>(-1), &euid,
-                                        &suid),
-              Fails(EFAULT, -1));
+  EXPECT_THAT(
+      LIBC_NAMESPACE::getresuid(reinterpret_cast<uid_t *>(-1), &euid, &suid),
+      Fails(EFAULT, -1));
 }

@@ -21,8 +21,7 @@ namespace LIBC_NAMESPACE_DECL {
 // adjtimex for a named clock rather than always the system one, which is
 // what steers a clock a device provides.
 LLVM_LIBC_FUNCTION(int, clock_adjtime, (clockid_t clk_id, struct timex *buf)) {
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_clock_adjtime, clk_id, buf);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_clock_adjtime, clk_id, buf);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

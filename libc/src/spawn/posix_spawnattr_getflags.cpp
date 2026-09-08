@@ -18,7 +18,8 @@ namespace LIBC_NAMESPACE_DECL {
 
 // These report the error rather than setting errno, which is what every
 // call in this family does.
-LLVM_LIBC_FUNCTION(int, posix_spawnattr_getflags, (const posix_spawnattr_t *__restrict attr,
+LLVM_LIBC_FUNCTION(int, posix_spawnattr_getflags,
+                   (const posix_spawnattr_t *__restrict attr,
                     short *__restrict flags)) {
   if (attr == nullptr || flags == nullptr)
     return EINVAL;

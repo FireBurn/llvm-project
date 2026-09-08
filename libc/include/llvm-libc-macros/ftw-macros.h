@@ -10,13 +10,13 @@
 #define LLVM_LIBC_MACROS_FTW_MACROS_H
 
 // What the walk found, passed to the callback.
-#define FTW_F 0    // A file which is not a directory.
-#define FTW_D 1    // A directory, before its contents.
-#define FTW_DNR 2  // A directory which could not be read.
-#define FTW_NS 3   // Something which could not be stat'd.
-#define FTW_SL 4   // A symbolic link, only under FTW_PHYS.
-#define FTW_DP 5   // A directory, after its contents, only under FTW_DEPTH.
-#define FTW_SLN 6  // A symbolic link whose target does not exist.
+#define FTW_F 0   // A file which is not a directory.
+#define FTW_D 1   // A directory, before its contents.
+#define FTW_DNR 2 // A directory which could not be read.
+#define FTW_NS 3  // Something which could not be stat'd.
+#define FTW_SL 4  // A symbolic link, only under FTW_PHYS.
+#define FTW_DP 5  // A directory, after its contents, only under FTW_DEPTH.
+#define FTW_SLN 6 // A symbolic link whose target does not exist.
 
 // How nftw walks.
 #define FTW_PHYS 1  // Do not follow symbolic links.

@@ -1,4 +1,4 @@
-//===-- Linux implementation of shmctl -----------------------------------------===//
+//===-- Linux implementation of shmctl ------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -8,9 +8,9 @@
 
 #include "src/sys/shm/shmctl.h"
 
+#include "hdr/types/struct_shmid_ds.h"
 #include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
-#include "hdr/types/struct_shmid_ds.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 

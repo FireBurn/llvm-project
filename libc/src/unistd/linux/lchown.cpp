@@ -26,9 +26,8 @@ LLVM_LIBC_FUNCTION(int, lchown, (const char *path, uid_t owner, gid_t group)) {
 #ifdef SYS_lchown
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_lchown, path, owner, group);
 #elif defined(SYS_fchownat)
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_fchownat, AT_FDCWD, path,
-                                              owner, group,
-                                              AT_SYMLINK_NOFOLLOW);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(
+      SYS_fchownat, AT_FDCWD, path, owner, group, AT_SYMLINK_NOFOLLOW);
 #else
 #error "lchown and fchownat syscalls not available."
 #endif

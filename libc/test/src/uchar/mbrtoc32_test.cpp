@@ -75,15 +75,16 @@ TEST_F(LlvmLibcUcharTest, Encodes) {
   EXPECT_EQ(static_cast<unsigned>(static_cast<unsigned char>(buf[0])), 0xC3u);
   EXPECT_EQ(static_cast<unsigned>(static_cast<unsigned char>(buf[1])), 0xA9u);
 
-  EXPECT_EQ(LIBC_NAMESPACE::c32rtomb(buf, char32_t(0x1F600), &state), size_t(4));
+  EXPECT_EQ(LIBC_NAMESPACE::c32rtomb(buf, char32_t(0x1F600), &state),
+            size_t(4));
   EXPECT_EQ(static_cast<unsigned>(static_cast<unsigned char>(buf[0])), 0xF0u);
 }
 
 TEST_F(LlvmLibcUcharTest, EncodeRoundTrips) {
   mbstate_t state{};
   char buf[8] = {};
-  const char32_t cases[] = {char32_t(0x41), char32_t(0x00E9),
-                            char32_t(0x4E00), char32_t(0x1F600)};
+  const char32_t cases[] = {char32_t(0x41), char32_t(0x00E9), char32_t(0x4E00),
+                            char32_t(0x1F600)};
   for (char32_t original : cases) {
     size_t written = LIBC_NAMESPACE::c32rtomb(buf, original, &state);
     ASSERT_NE(written, static_cast<size_t>(-1));

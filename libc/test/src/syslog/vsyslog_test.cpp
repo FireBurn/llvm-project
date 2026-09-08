@@ -33,9 +33,8 @@ void log_through_wrapper(int priority, const char *format, ...) {
 TEST(LlvmLibcVsyslogTest, WritesAMessageAtEveryPriority) {
   LIBC_NAMESPACE::openlog("llvm-libc-test", LOG_PID, LOG_USER);
 
-  constexpr int PRIORITIES[] = {LOG_EMERG,  LOG_ALERT,  LOG_CRIT, LOG_ERR,
-                                LOG_WARNING, LOG_NOTICE, LOG_INFO,
-                                LOG_DEBUG};
+  constexpr int PRIORITIES[] = {LOG_EMERG,   LOG_ALERT,  LOG_CRIT, LOG_ERR,
+                                LOG_WARNING, LOG_NOTICE, LOG_INFO, LOG_DEBUG};
   for (int priority : PRIORITIES)
     log_through_wrapper(priority, "a message with %s and %d", "a string", 42);
 

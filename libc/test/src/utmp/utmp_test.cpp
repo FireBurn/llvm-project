@@ -12,9 +12,9 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/fcntl/open.h"
 #include "src/stdio/remove.h"
-#include "src/unistd/close.h"
 #include "src/string/strcpy.h"
 #include "src/string/strncmp.h"
+#include "src/unistd/close.h"
 #include "src/utmp/endutent.h"
 #include "src/utmp/getutent.h"
 #include "src/utmp/getutent_r.h"
@@ -61,8 +61,8 @@ public:
     LIBC_NAMESPACE::endutent();
     // The calls open the file but do not create it, the same as glibc's, so
     // each test starts from an empty one of its own.
-    int fd = LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                  S_IRWXU);
+    int fd =
+        LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
     ASSERT_GT(fd, 0);
     ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
   }
@@ -220,8 +220,8 @@ TEST_F(LlvmLibcUtmpTest, AppendsToTheLoginHistory) {
   constexpr const char *HISTORY_FILE = "wtmp.test.db";
   // The history is appended to and never created, as glibc's is, so it has
   // to be there before anything is written to it.
-  int fd = LIBC_NAMESPACE::open(HISTORY_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(HISTORY_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
 

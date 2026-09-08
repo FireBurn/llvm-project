@@ -215,10 +215,9 @@ int year_of(time_t seconds) {
   const int64_t shifted = days + 719468;
   const int64_t era = (shifted >= 0 ? shifted : shifted - 146096) / 146097;
   const int64_t day_of_era = shifted - era * 146097;
-  const int64_t year_of_era =
-      (day_of_era - day_of_era / 1460 + day_of_era / 36524 -
-       day_of_era / 146096) /
-      365;
+  const int64_t year_of_era = (day_of_era - day_of_era / 1460 +
+                               day_of_era / 36524 - day_of_era / 146096) /
+                              365;
   const int64_t day_of_year =
       day_of_era - (365 * year_of_era + year_of_era / 4 - year_of_era / 100);
   // The cycle counts from March, so the last two months of it belong to the

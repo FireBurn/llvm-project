@@ -31,12 +31,12 @@ LLVM_LIBC_FUNCTION(int, sigqueue,
   info.si_signo = sig;
   info.si_code = SI_QUEUE;
   info.si_pid = LIBC_NAMESPACE::getpid();
-  info.si_uid = static_cast<unsigned int>(
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_getuid));
+  info.si_uid =
+      static_cast<unsigned int>(LIBC_NAMESPACE::syscall_impl<int>(SYS_getuid));
   info.si_value = value;
 
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_rt_sigqueueinfo, pid, sig,
-                                              &info);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_rt_sigqueueinfo, pid, sig, &info);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

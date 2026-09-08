@@ -17,8 +17,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 int mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-                 unsigned int msg_prio,
-                 const struct timespec *abs_timeout);
+                 unsigned int msg_prio, const struct timespec *abs_timeout);
 
 } // namespace LIBC_NAMESPACE_DECL
 

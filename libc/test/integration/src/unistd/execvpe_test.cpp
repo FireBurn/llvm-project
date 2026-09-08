@@ -68,9 +68,9 @@ void execvpe_reports_missing_file() {
   ASSERT_EQ(LIBC_NAMESPACE::setenv("PATH", ".", 1), 0);
   char *const bad_argv[] = {const_cast<char *>("nope"), nullptr};
   char *const bad_envp[] = {nullptr};
-  ASSERT_EQ(LIBC_NAMESPACE::execvpe("libc-definitely-not-here", bad_argv,
-                                    bad_envp),
-            -1);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::execvpe("libc-definitely-not-here", bad_argv, bad_envp),
+      -1);
   ASSERT_ERRNO_EQ(ENOENT);
   errno = 0;
 }

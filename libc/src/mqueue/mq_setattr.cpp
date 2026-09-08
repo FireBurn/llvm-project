@@ -23,8 +23,8 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, mq_setattr,
                    (mqd_t mqdes, const struct mq_attr *__restrict newattr,
                     struct mq_attr *__restrict oldattr)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_getsetattr, mqdes,
-                                              newattr, oldattr);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_getsetattr, mqdes, newattr,
+                                              oldattr);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

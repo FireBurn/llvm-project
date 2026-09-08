@@ -155,8 +155,7 @@ bool parse_ipv6(const char *src, unsigned char out[16]) {
 // with EAFNOSUPPORT for a family it does not know. Nothing is written to
 // dst unless the whole string parsed.
 LLVM_LIBC_FUNCTION(int, inet_pton,
-                   (int af, const char *__restrict src,
-                    void *__restrict dst)) {
+                   (int af, const char *__restrict src, void *__restrict dst)) {
   if (src == nullptr || dst == nullptr)
     return 0;
 

@@ -22,8 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 // the rest.
 LLVM_LIBC_FUNCTION(int, ioperm,
                    (unsigned long from, unsigned long num, int turn_on)) {
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_ioperm, from, num, turn_on);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_ioperm, from, num, turn_on);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

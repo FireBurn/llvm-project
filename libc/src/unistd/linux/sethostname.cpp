@@ -17,7 +17,6 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-
 LLVM_LIBC_FUNCTION(int, sethostname, (const char *name, size_t len)) {
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_sethostname, name, len);
   if (ret < 0) {

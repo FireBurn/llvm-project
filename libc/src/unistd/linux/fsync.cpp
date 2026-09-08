@@ -10,9 +10,9 @@
 
 #include "src/__support/OSUtil/linux/syscall_wrappers/fsync.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/cancel.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 

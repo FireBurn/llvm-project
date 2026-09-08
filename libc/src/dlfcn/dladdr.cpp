@@ -21,9 +21,8 @@ namespace {
 // The symbol an address belongs to is the one defined closest below it. A
 // symbol with a size covers only that much; one with none, which is what an
 // assembly routine often has, covers up to whatever is defined next.
-const ElfW(Sym) *
-    enclosing_symbol(const elf::Module &module, ElfW(Addr) address,
-                     const char **name) {
+const ElfW(Sym) * enclosing_symbol(const elf::Module &module,
+                                   ElfW(Addr) address, const char **name) {
   const elf::GnuSymbolTable table = module.symbols();
   const uint32_t count = table.count();
   const ElfW(Sym) *best = nullptr;

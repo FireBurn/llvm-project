@@ -59,9 +59,9 @@ TEST_F(LlvmLibcRenameatTest, RefusesToReplaceWhenAskedNotTo) {
   ASSERT_GT(make_file(from), 0);
   ASSERT_GT(make_file(to), 0);
 
-  ASSERT_THAT(LIBC_NAMESPACE::renameat2(AT_FDCWD, from, AT_FDCWD, to,
-                                        RENAME_NOREPLACE),
-              Fails(EEXIST));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::renameat2(AT_FDCWD, from, AT_FDCWD, to, RENAME_NOREPLACE),
+      Fails(EEXIST));
 
   // Without the flag it goes over the top of it.
   ASSERT_THAT(LIBC_NAMESPACE::renameat2(AT_FDCWD, from, AT_FDCWD, to, 0),
@@ -73,7 +73,7 @@ TEST_F(LlvmLibcRenameatTest, RefusesToReplaceWhenAskedNotTo) {
 }
 
 TEST_F(LlvmLibcRenameatTest, PathThatIsNotThere) {
-  ASSERT_THAT(LIBC_NAMESPACE::renameat(AT_FDCWD, "llvm-libc-not-here",
-                                       AT_FDCWD, "llvm-libc-elsewhere"),
+  ASSERT_THAT(LIBC_NAMESPACE::renameat(AT_FDCWD, "llvm-libc-not-here", AT_FDCWD,
+                                       "llvm-libc-elsewhere"),
               Fails(ENOENT));
 }

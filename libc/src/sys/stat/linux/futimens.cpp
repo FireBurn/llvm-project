@@ -20,8 +20,8 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, futimens, (int fd, const struct timespec times[2])) {
   // This is utimensat with no path at all, which the kernel takes as meaning
   // the descriptor itself.
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_utimensat, fd, nullptr,
-                                              times, 0);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_utimensat, fd, nullptr, times, 0);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

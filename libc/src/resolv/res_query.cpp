@@ -54,9 +54,9 @@ LLVM_LIBC_FUNCTION(int, res_query,
   state->id = id;
 
   unsigned char message[resolv::MAX_MESSAGE];
-  const size_t length = resolv::build_query(
-      name, static_cast<uint16_t>(type), static_cast<uint16_t>(rr_class), id,
-      message, sizeof(message));
+  const size_t length = resolv::build_query(name, static_cast<uint16_t>(type),
+                                            static_cast<uint16_t>(rr_class), id,
+                                            message, sizeof(message));
   if (length == 0) {
     *h_errno_location = NO_RECOVERY;
     return -1;

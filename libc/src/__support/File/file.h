@@ -239,12 +239,11 @@ public:
         mutex(/*timed=*/false, /*recursive=*/true,
               /*robust=*/false, /*pshared=*/false),
         ungetc_buf{}, buf(buffer), bufsize(buffer_size), bufmode(buffer_mode),
-        bufmode_unsettled(settle_buffer_mode),
-        own_buf(owned), static_storage(static_stream),
-        has_descriptor_(has_file_descriptor), mode(modeflags), pos(0),
-        prev_op(FileOp::NONE), read_limit(0), eof(false), err(false),
-        orientation(Orientation::UNORIENTED), mbstate(), prev(nullptr),
-        next(nullptr) {
+        bufmode_unsettled(settle_buffer_mode), own_buf(owned),
+        static_storage(static_stream), has_descriptor_(has_file_descriptor),
+        mode(modeflags), pos(0), prev_op(FileOp::NONE), read_limit(0),
+        eof(false), err(false), orientation(Orientation::UNORIENTED), mbstate(),
+        prev(nullptr), next(nullptr) {
     adjust_buf();
   }
 

@@ -13,8 +13,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, ftw, (const char *path, __ftw_func_t callback, int descriptors)) {
-  return ftw_internal::walk_tree(path, ftw_internal::Callback{callback, nullptr}, descriptors, 0);
+LLVM_LIBC_FUNCTION(int, ftw,
+                   (const char *path, __ftw_func_t callback, int descriptors)) {
+  return ftw_internal::walk_tree(
+      path, ftw_internal::Callback{callback, nullptr}, descriptors, 0);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

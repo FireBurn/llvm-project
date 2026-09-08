@@ -23,8 +23,8 @@ LLVM_LIBC_FUNCTION(int, mq_timedsend,
                    (mqd_t mqdes, const char *msg_ptr, size_t msg_len,
                     unsigned int msg_prio,
                     const struct timespec *abs_timeout)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_mq_timedsend, mqdes, msg_ptr, msg_len, msg_prio, abs_timeout);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_timedsend, mqdes, msg_ptr,
+                                              msg_len, msg_prio, abs_timeout);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

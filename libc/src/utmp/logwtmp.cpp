@@ -24,10 +24,10 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(void, logwtmp,
                    (const char *line, const char *name, const char *host)) {
   struct utmp record = {};
-  record.ut_type = (name != nullptr && name[0] != '\0') ? USER_PROCESS
-                                                        : DEAD_PROCESS;
-  record.ut_pid = static_cast<pid_t>(
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_getpid));
+  record.ut_type =
+      (name != nullptr && name[0] != '\0') ? USER_PROCESS : DEAD_PROCESS;
+  record.ut_pid =
+      static_cast<pid_t>(LIBC_NAMESPACE::syscall_impl<long>(SYS_getpid));
   utmp_fill::field(record.ut_line, sizeof(record.ut_line), line);
   utmp_fill::field(record.ut_user, sizeof(record.ut_user), name);
   utmp_fill::field(record.ut_host, sizeof(record.ut_host), host);

@@ -31,19 +31,19 @@ struct exit_status {
 // uses. The two are one file format and one set of calls; only the names
 // differ, POSIX having standardised the x forms of both.
 struct utmp {
-  short int ut_type;            // What kind of record this is.
-  pid_t ut_pid;                 // The process it is about.
-  char ut_line[__UT_LINESIZE];  // The terminal.
-  char ut_id[4];                // The inittab entry.
-  char ut_user[__UT_NAMESIZE];  // Who.
-  char ut_host[__UT_HOSTSIZE];  // Where from, for a remote login.
-  struct exit_status ut_exit;   // How it ended, for a dead process.
-  int32_t ut_session;           // The session, for a windowing system.
+  short int ut_type;           // What kind of record this is.
+  pid_t ut_pid;                // The process it is about.
+  char ut_line[__UT_LINESIZE]; // The terminal.
+  char ut_id[4];               // The inittab entry.
+  char ut_user[__UT_NAMESIZE]; // Who.
+  char ut_host[__UT_HOSTSIZE]; // Where from, for a remote login.
+  struct exit_status ut_exit;  // How it ended, for a dead process.
+  int32_t ut_session;          // The session, for a windowing system.
   struct {
     int32_t tv_sec;
     int32_t tv_usec;
-  } ut_tv;                      // When the record was made.
-  int32_t ut_addr_v6[4];        // The remote address.
+  } ut_tv;               // When the record was made.
+  int32_t ut_addr_v6[4]; // The remote address.
   char __libc_reserved[20];
 };
 

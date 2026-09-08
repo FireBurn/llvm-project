@@ -25,8 +25,8 @@
 #include "src/dirent/opendir.h"
 #include "src/dirent/readdir.h"
 #include "src/fnmatch/fnmatch.h"
-#include "src/sys/stat/stat.h"
 #include "src/string/string_utils.h"
+#include "src/sys/stat/stat.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -61,7 +61,11 @@ public:
     return true;
   }
 
-  void release() { items = nullptr; count = 0; capacity = 0; }
+  void release() {
+    items = nullptr;
+    count = 0;
+    capacity = 0;
+  }
 
   void clear() {
     for (size_t i = 0; i < count; ++i)
@@ -249,12 +253,10 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
   // Split off the first component and whatever follows it.
   size_t slash = pattern.find_first_of('/');
   bool last = slash == string_view::npos;
-  string_view component =
-      last ? pattern : string_view(pattern.data(), slash);
-  string_view rest =
-      last ? string_view()
-           : string_view(pattern.data() + slash + 1,
-                         pattern.size() - slash - 1);
+  string_view component = last ? pattern : string_view(pattern.data(), slash);
+  string_view rest = last ? string_view()
+                          : string_view(pattern.data() + slash + 1,
+                                        pattern.size() - slash - 1);
 
   // Runs of slashes belong to the prefix, not to a component. They are kept
   // as written, except at the very start where a second leading slash is
@@ -464,9 +466,8 @@ LLVM_LIBC_FUNCTION(int, glob,
   size_t previous = appending ? pglob->gl_pathc : 0;
   size_t added = found.size();
   size_t total = offs + previous + added;
-  char **paths = reinterpret_cast<char **>(
-      ::realloc(appending ? pglob->gl_pathv : nullptr,
-                (total + 1) * sizeof(char *)));
+  char **paths = reinterpret_cast<char **>(::realloc(
+      appending ? pglob->gl_pathv : nullptr, (total + 1) * sizeof(char *)));
   if (paths == nullptr) {
     found.clear();
     return GLOB_NOSPACE;

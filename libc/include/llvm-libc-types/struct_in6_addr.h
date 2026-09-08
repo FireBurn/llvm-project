@@ -16,7 +16,8 @@
 // The kernel defines this too, in <linux/in6.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(defined(__UAPI_DEF_IN6_ADDR) && __UAPI_DEF_IN6_ADDR && defined(_LINUX_IN6_H))
+#if !(defined(__UAPI_DEF_IN6_ADDR) && __UAPI_DEF_IN6_ADDR &&                   \
+      defined(_LINUX_IN6_H))
 // The three ways of looking at the same sixteen octets. They are reached
 // through macros rather than named directly, which is how every other library
 // and the kernel's own header spell them: code that has to work where one of

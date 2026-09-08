@@ -35,9 +35,9 @@ bool map_zone_file(const char *path, Mapping &out) {
 
   // The size is not asked for up front; the file is read into a mapping big
   // enough for any of them, which keeps this to the three calls it makes.
-  auto mapping = linux_syscalls::mmap(nullptr, MAX_ZONE_SIZE,
-                                      PROT_READ | PROT_WRITE,
-                                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  auto mapping =
+      linux_syscalls::mmap(nullptr, MAX_ZONE_SIZE, PROT_READ | PROT_WRITE,
+                           MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
   if (!mapping.has_value()) {
     LIBC_NAMESPACE::close(fd.value());
     return false;

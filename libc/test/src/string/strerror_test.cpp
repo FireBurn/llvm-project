@@ -6,9 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "src/__support/StringUtil/error_to_string.h"
 #include "src/__support/StringUtil/platform_errors.h"
 #include "src/__support/macros/properties/architectures.h"
-#include "src/__support/StringUtil/error_to_string.h"
 #include "src/string/strerror.h"
 #include "test/UnitTest/Test.h"
 

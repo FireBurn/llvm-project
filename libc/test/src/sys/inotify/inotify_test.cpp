@@ -43,8 +43,8 @@ TEST_F(LlvmLibcInotifyTest, ReportsAFileBeingMade) {
   int wd = LIBC_NAMESPACE::inotify_add_watch(fd, DIR, IN_CREATE);
   ASSERT_GT(wd, 0);
 
-  int made = LIBC_NAMESPACE::open("inotify.testdir/new", O_WRONLY | O_CREAT,
-                                  S_IRWXU);
+  int made =
+      LIBC_NAMESPACE::open("inotify.testdir/new", O_WRONLY | O_CREAT, S_IRWXU);
   ASSERT_GT(made, 0);
   ASSERT_THAT(LIBC_NAMESPACE::close(made), Succeeds(0));
 
@@ -80,8 +80,9 @@ TEST_F(LlvmLibcInotifyTest, BadArguments) {
   int fd = LIBC_NAMESPACE::inotify_init1(IN_NONBLOCK);
   ASSERT_GT(fd, 0);
 
-  EXPECT_THAT(LIBC_NAMESPACE::inotify_add_watch(fd, "inotify.no.such", IN_CREATE),
-              Fails(ENOENT, -1));
+  EXPECT_THAT(
+      LIBC_NAMESPACE::inotify_add_watch(fd, "inotify.no.such", IN_CREATE),
+      Fails(ENOENT, -1));
   // A watch descriptor which was never given out cannot be removed.
   EXPECT_THAT(LIBC_NAMESPACE::inotify_rm_watch(fd, 9999), Fails(EINVAL, -1));
 

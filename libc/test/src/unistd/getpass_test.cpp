@@ -37,9 +37,8 @@ TEST_F(LlvmLibcGetpassTest, ReadsWhatWasTypedAtTheTerminal) {
 
   if (pid == 0) {
     const char *read = LIBC_NAMESPACE::getpass("Password: ");
-    int code = read != nullptr && LIBC_NAMESPACE::strcmp(read, ANSWER) == 0
-                   ? 0
-                   : 1;
+    int code =
+        read != nullptr && LIBC_NAMESPACE::strcmp(read, ANSWER) == 0 ? 0 : 1;
     LIBC_NAMESPACE::_Exit(code);
   }
 

@@ -127,7 +127,9 @@ struct protoent *by_number(int number, ProtoStorage &storage) {
   return found;
 }
 
-void rewind_entries(bool stay_open) { enumeration.rewind(PROTOCOLS_PATH, stay_open); }
+void rewind_entries(bool stay_open) {
+  enumeration.rewind(PROTOCOLS_PATH, stay_open);
+}
 
 void stop_entries() { enumeration.stop(); }
 

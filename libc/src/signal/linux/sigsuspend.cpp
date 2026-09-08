@@ -12,9 +12,9 @@
 #include "hdr/types/sigset_t.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigsuspend.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/cancel.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -25,7 +25,8 @@ LLVM_LIBC_FUNCTION(int, sigsuspend, (const sigset_t *set)) {
     libc_errno = EINVAL;
     return -1;
   }
-  auto result = internal::cancellable([&] { return linux_syscalls::rt_sigsuspend(set); });
+  auto result =
+      internal::cancellable([&] { return linux_syscalls::rt_sigsuspend(set); });
   libc_errno = result.has_value() ? EINTR : result.error();
   return -1;
 }

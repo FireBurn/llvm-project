@@ -1,4 +1,4 @@
-//===-- Implementation header for getgrnam_r ------------------------*- C++ -*-===//
+//===-- Implementation header for getgrnam_r --------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -15,7 +15,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int getgrnam_r(const char *name, struct group *grp, char *buf, size_t buflen, struct group **result);
+int getgrnam_r(const char *name, struct group *grp, char *buf, size_t buflen,
+               struct group **result);
 
 } // namespace LIBC_NAMESPACE_DECL
 

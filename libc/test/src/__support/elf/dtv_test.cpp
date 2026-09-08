@@ -67,7 +67,8 @@ TEST(LlvmLibcElfDtvTest, NothingForAModuleWithoutTls) {
   const size_t index = record.lend(bare);
 
   DynamicThreadVector vector;
-  EXPECT_EQ(vector.block_for(record.get(), index), static_cast<void *>(nullptr));
+  EXPECT_EQ(vector.block_for(record.get(), index),
+            static_cast<void *>(nullptr));
   vector.release();
 }
 
@@ -91,8 +92,8 @@ TEST(LlvmLibcElfDtvTest, GivesTheSameBlockBackUntilSomethingChanges) {
   const size_t index = record.lend(c.module);
 
   DynamicThreadVector vector;
-  auto *first = static_cast<unsigned char *>(
-      vector.block_for(record.get(), index));
+  auto *first =
+      static_cast<unsigned char *>(vector.block_for(record.get(), index));
   ASSERT_TRUE(first != nullptr);
   // Asking again is the same block: a thread local keeps its value.
   EXPECT_EQ(static_cast<void *>(vector.block_for(record.get(), index)),
@@ -100,17 +101,17 @@ TEST(LlvmLibcElfDtvTest, GivesTheSameBlockBackUntilSomethingChanges) {
 
   const unsigned char was = first[0];
   first[0] = static_cast<unsigned char>(was + 1);
-  EXPECT_EQ(static_cast<unsigned char *>(
-                vector.block_for(record.get(), index))[0],
-            static_cast<unsigned char>(was + 1));
+  EXPECT_EQ(
+      static_cast<unsigned char *>(vector.block_for(record.get(), index))[0],
+      static_cast<unsigned char>(was + 1));
 
   // Once something has been opened or closed, an index may name a different
   // module, so what was kept for it is given up and made again from the
   // module's own image. The kernel may hand back the same memory, so what
   // says this happened is the contents rather than the address.
   record.reopen();
-  auto *second = static_cast<unsigned char *>(
-      vector.block_for(record.get(), index));
+  auto *second =
+      static_cast<unsigned char *>(vector.block_for(record.get(), index));
   ASSERT_TRUE(second != nullptr);
   EXPECT_EQ(second[0], was);
 
@@ -129,7 +130,8 @@ TEST(LlvmLibcElfDtvTest, BlockStartsFromTheModulesInitialImage) {
   const size_t index = record.lend(c.module);
 
   DynamicThreadVector vector;
-  auto *block = static_cast<const unsigned char *>(vector.block_for(record.get(), index));
+  auto *block =
+      static_cast<const unsigned char *>(vector.block_for(record.get(), index));
   ASSERT_TRUE(block != nullptr);
 
   // The alignment the segment asks for has to be met.

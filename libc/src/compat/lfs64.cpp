@@ -70,7 +70,8 @@ LLVM_LIBC_FUNCTION(int, open64, (const char *path, int flags, ...)) {
   return LIBC_NAMESPACE::open(path, flags, mode);
 }
 
-LLVM_LIBC_FUNCTION(int, openat64, (int dir_fd, const char *path, int flags, ...)) {
+LLVM_LIBC_FUNCTION(int, openat64,
+                   (int dir_fd, const char *path, int flags, ...)) {
   va_list args;
   va_start(args, flags);
   mode_t mode = static_cast<mode_t>(va_arg(args, int));
@@ -86,11 +87,15 @@ LLVM_LIBC_FUNCTION(off_t, lseek64, (int fd, off_t offset, int whence)) {
   return LIBC_NAMESPACE::lseek(fd, offset, whence);
 }
 
-LLVM_LIBC_FUNCTION(void *, mmap64, (void *addr, size_t size, int prot, int flags, int fd, off_t offset)) {
+LLVM_LIBC_FUNCTION(void *, mmap64,
+                   (void *addr, size_t size, int prot, int flags, int fd,
+                    off_t offset)) {
   return LIBC_NAMESPACE::mmap(addr, size, prot, flags, fd, offset);
 }
 
-LLVM_LIBC_FUNCTION(int, stat64, (const char *__restrict path, struct stat *__restrict statbuf)) {
+LLVM_LIBC_FUNCTION(int, stat64,
+                   (const char *__restrict path,
+                    struct stat *__restrict statbuf)) {
   return LIBC_NAMESPACE::stat(path, statbuf);
 }
 
@@ -98,11 +103,15 @@ LLVM_LIBC_FUNCTION(int, fstat64, (int fd, struct stat *statbuf)) {
   return LIBC_NAMESPACE::fstat(fd, statbuf);
 }
 
-LLVM_LIBC_FUNCTION(int, lstat64, (const char *__restrict path, struct stat *__restrict statbuf)) {
+LLVM_LIBC_FUNCTION(int, lstat64,
+                   (const char *__restrict path,
+                    struct stat *__restrict statbuf)) {
   return LIBC_NAMESPACE::lstat(path, statbuf);
 }
 
-LLVM_LIBC_FUNCTION(int, fstatat64, (int dir_fd, const char *__restrict path, struct stat *__restrict statbuf, int flags)) {
+LLVM_LIBC_FUNCTION(int, fstatat64,
+                   (int dir_fd, const char *__restrict path,
+                    struct stat *__restrict statbuf, int flags)) {
   return LIBC_NAMESPACE::fstatat(dir_fd, path, statbuf, flags);
 }
 
@@ -114,27 +123,35 @@ LLVM_LIBC_FUNCTION(int, truncate64, (const char *path, off_t length)) {
   return LIBC_NAMESPACE::truncate(path, length);
 }
 
-LLVM_LIBC_FUNCTION(ssize_t, pread64, (int fd, void *buf, size_t count, off_t offset)) {
+LLVM_LIBC_FUNCTION(ssize_t, pread64,
+                   (int fd, void *buf, size_t count, off_t offset)) {
   return LIBC_NAMESPACE::pread(fd, buf, count, offset);
 }
 
-LLVM_LIBC_FUNCTION(ssize_t, pwrite64, (int fd, const void *buf, size_t count, off_t offset)) {
+LLVM_LIBC_FUNCTION(ssize_t, pwrite64,
+                   (int fd, const void *buf, size_t count, off_t offset)) {
   return LIBC_NAMESPACE::pwrite(fd, buf, count, offset);
 }
 
-LLVM_LIBC_FUNCTION(struct dirent *, readdir64, (DIR *dir)) {
+LLVM_LIBC_FUNCTION(struct dirent *, readdir64, (DIR * dir)) {
   return LIBC_NAMESPACE::readdir(dir);
 }
 
-LLVM_LIBC_FUNCTION(int, scandir64, (const char *path, struct dirent ***namelist, int (*filter)(const struct dirent *), int (*compare)(const struct dirent **, const struct dirent **))) {
+LLVM_LIBC_FUNCTION(int, scandir64,
+                   (const char *path, struct dirent ***namelist,
+                    int (*filter)(const struct dirent *),
+                    int (*compare)(const struct dirent **,
+                                   const struct dirent **))) {
   return LIBC_NAMESPACE::scandir(path, namelist, filter, compare);
 }
 
-LLVM_LIBC_FUNCTION(int, alphasort64, (const struct dirent **left, const struct dirent **right)) {
+LLVM_LIBC_FUNCTION(int, alphasort64,
+                   (const struct dirent **left, const struct dirent **right)) {
   return LIBC_NAMESPACE::alphasort(left, right);
 }
 
-LLVM_LIBC_FUNCTION(int, versionsort64, (const struct dirent **left, const struct dirent **right)) {
+LLVM_LIBC_FUNCTION(int, versionsort64,
+                   (const struct dirent **left, const struct dirent **right)) {
   return LIBC_NAMESPACE::versionsort(left, right);
 }
 
@@ -146,7 +163,9 @@ LLVM_LIBC_FUNCTION(int, fstatfs64, (int fd, struct statfs *buf)) {
   return LIBC_NAMESPACE::fstatfs(fd, buf);
 }
 
-LLVM_LIBC_FUNCTION(int, statvfs64, (const char *__restrict path, struct statvfs *__restrict buf)) {
+LLVM_LIBC_FUNCTION(int, statvfs64,
+                   (const char *__restrict path,
+                    struct statvfs *__restrict buf)) {
   return LIBC_NAMESPACE::statvfs(path, buf);
 }
 
@@ -154,11 +173,13 @@ LLVM_LIBC_FUNCTION(int, fstatvfs64, (int fd, struct statvfs *buf)) {
   return LIBC_NAMESPACE::fstatvfs(fd, buf);
 }
 
-LLVM_LIBC_FUNCTION(int, posix_fallocate64, (int fd, off_t offset, off_t length)) {
+LLVM_LIBC_FUNCTION(int, posix_fallocate64,
+                   (int fd, off_t offset, off_t length)) {
   return LIBC_NAMESPACE::posix_fallocate(fd, offset, length);
 }
 
-LLVM_LIBC_FUNCTION(int, fallocate64, (int fd, int mode, off_t offset, off_t length)) {
+LLVM_LIBC_FUNCTION(int, fallocate64,
+                   (int fd, int mode, off_t offset, off_t length)) {
   return LIBC_NAMESPACE::fallocate(fd, mode, offset, length);
 }
 
@@ -166,7 +187,8 @@ LLVM_LIBC_FUNCTION(int, getrlimit64, (int resource, struct rlimit *limits)) {
   return LIBC_NAMESPACE::getrlimit(resource, limits);
 }
 
-LLVM_LIBC_FUNCTION(int, setrlimit64, (int resource, const struct rlimit *limits)) {
+LLVM_LIBC_FUNCTION(int, setrlimit64,
+                   (int resource, const struct rlimit *limits)) {
   return LIBC_NAMESPACE::setrlimit(resource, limits);
 }
 
@@ -174,23 +196,27 @@ LLVM_LIBC_FUNCTION(FILE *, tmpfile64, (void)) {
   return LIBC_NAMESPACE::tmpfile();
 }
 
-LLVM_LIBC_FUNCTION(FILE *, fopen64, (const char *__restrict path, const char *__restrict mode)) {
+LLVM_LIBC_FUNCTION(FILE *, fopen64,
+                   (const char *__restrict path, const char *__restrict mode)) {
   return LIBC_NAMESPACE::fopen(path, mode);
 }
 
-LLVM_LIBC_FUNCTION(FILE *, freopen64, (const char *__restrict path, const char *__restrict mode, FILE *__restrict stream)) {
+LLVM_LIBC_FUNCTION(FILE *, freopen64,
+                   (const char *__restrict path, const char *__restrict mode,
+                    FILE *__restrict stream)) {
   return LIBC_NAMESPACE::freopen(path, mode, stream);
 }
 
-LLVM_LIBC_FUNCTION(int, fseeko64, (FILE *stream, off_t offset, int whence)) {
+LLVM_LIBC_FUNCTION(int, fseeko64, (FILE * stream, off_t offset, int whence)) {
   return LIBC_NAMESPACE::fseeko(stream, offset, whence);
 }
 
-LLVM_LIBC_FUNCTION(off_t, ftello64, (FILE *stream)) {
+LLVM_LIBC_FUNCTION(off_t, ftello64, (FILE * stream)) {
   return LIBC_NAMESPACE::ftello(stream);
 }
 
-LLVM_LIBC_FUNCTION(ssize_t, sendfile64, (int out_fd, int in_fd, off_t *offset, size_t count)) {
+LLVM_LIBC_FUNCTION(ssize_t, sendfile64,
+                   (int out_fd, int in_fd, off_t *offset, size_t count)) {
   return LIBC_NAMESPACE::sendfile(out_fd, in_fd, offset, count);
 }
 

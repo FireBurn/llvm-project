@@ -15,7 +15,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct netent * getnetbyaddr (uint32_t net, int type);
+struct netent *getnetbyaddr(uint32_t net, int type);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -24,9 +24,9 @@ TEST_F(LlvmLibcClockNanosleepTest, SleepsForTheGivenTime) {
 
   struct timespec how_long = {};
   how_long.tv_nsec = 1000000; // A millisecond.
-  ASSERT_EQ(LIBC_NAMESPACE::clock_nanosleep(CLOCK_MONOTONIC, 0, &how_long,
-                                            nullptr),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::clock_nanosleep(CLOCK_MONOTONIC, 0, &how_long, nullptr),
+      0);
   ASSERT_ERRNO_SUCCESS();
 
   struct timespec after;
@@ -52,8 +52,7 @@ TEST_F(LlvmLibcClockNanosleepTest, AMomentThatHasPassed) {
 TEST_F(LlvmLibcClockNanosleepTest, ATimeThatIsNotOne) {
   struct timespec bad = {};
   bad.tv_nsec = 2000000000; // More than a second's worth of nanoseconds.
-  ASSERT_EQ(LIBC_NAMESPACE::clock_nanosleep(CLOCK_MONOTONIC, 0, &bad,
-                                            nullptr),
+  ASSERT_EQ(LIBC_NAMESPACE::clock_nanosleep(CLOCK_MONOTONIC, 0, &bad, nullptr),
             EINVAL);
   ASSERT_ERRNO_SUCCESS();
 }
@@ -61,8 +60,7 @@ TEST_F(LlvmLibcClockNanosleepTest, ATimeThatIsNotOne) {
 TEST_F(LlvmLibcClockNanosleepTest, AClockThatCannotBeSleptOn) {
   struct timespec how_long = {};
   how_long.tv_nsec = 1;
-  int result =
-      LIBC_NAMESPACE::clock_nanosleep(-1, 0, &how_long, nullptr);
+  int result = LIBC_NAMESPACE::clock_nanosleep(-1, 0, &how_long, nullptr);
   ASSERT_TRUE(result == EINVAL || result == ENOTSUP);
   ASSERT_ERRNO_SUCCESS();
 }

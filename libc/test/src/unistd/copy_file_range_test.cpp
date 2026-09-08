@@ -39,8 +39,7 @@ TEST_F(LlvmLibcCopyFileRangeTest, CopiesFromOneFileToAnother) {
   ASSERT_THAT(LIBC_NAMESPACE::write(in, TEXT, SIZE), Succeeds<ssize_t>(SIZE));
   ASSERT_THAT(LIBC_NAMESPACE::lseek(in, 0, SEEK_SET), Succeeds<off_t>(0));
 
-  int out =
-      LIBC_NAMESPACE::open(out_path, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+  int out = LIBC_NAMESPACE::open(out_path, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_ERRNO_SUCCESS();
   ASSERT_GT(out, 0);
 
@@ -74,8 +73,7 @@ TEST_F(LlvmLibcCopyFileRangeTest, CopiesFromAStatedOffset) {
   ASSERT_GT(in, 0);
   ASSERT_THAT(LIBC_NAMESPACE::write(in, TEXT, SIZE), Succeeds<ssize_t>(SIZE));
 
-  int out =
-      LIBC_NAMESPACE::open(out_path, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
+  int out = LIBC_NAMESPACE::open(out_path, O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(out, 0);
 
   off_t in_off = 4;

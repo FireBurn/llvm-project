@@ -21,7 +21,6 @@
 #define SEEK_DATA 3
 #define SEEK_HOLE 4
 
-
 // The numbers are the ones Linux already uses, so a program built against
 // another libc and run here asks the same questions.
 #define _SC_ARG_MAX 0

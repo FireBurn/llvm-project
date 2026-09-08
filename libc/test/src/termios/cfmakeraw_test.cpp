@@ -27,8 +27,7 @@ TEST(LlvmLibcCfmakerawTest, TurnsOffEverythingThatChangesTheBytes) {
                                         INLCR | IGNCR | ICRNL | IXON),
             tcflag_t(0));
   ASSERT_EQ(settings.c_oflag & tcflag_t(OPOST), tcflag_t(0));
-  ASSERT_EQ(settings.c_lflag &
-                tcflag_t(ECHO | ECHONL | ICANON | ISIG | IEXTEN),
+  ASSERT_EQ(settings.c_lflag & tcflag_t(ECHO | ECHONL | ICANON | ISIG | IEXTEN),
             tcflag_t(0));
   ASSERT_EQ(settings.c_cflag & tcflag_t(CSIZE | PARENB), tcflag_t(0));
   ASSERT_EQ(settings.c_cflag & tcflag_t(CS8), tcflag_t(CS8));

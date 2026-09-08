@@ -375,7 +375,8 @@ FileIOResult File::read_unlocked_nbf(uint8_t *data, size_t len) {
   size_t fetched = 0;
 
   while (fetched < to_fetch) {
-    FileIOResult result = platform_read(this, dest + fetched, to_fetch - fetched);
+    FileIOResult result =
+        platform_read(this, dest + fetched, to_fetch - fetched);
     if (result.has_error()) {
       err = true;
       return {available_data + fetched, result.error};

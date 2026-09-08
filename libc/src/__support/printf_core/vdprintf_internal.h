@@ -52,10 +52,9 @@ LIBC_INLINE ErrorOr<size_t> vdprintf_internal(int fd,
                                               const char *__restrict format,
                                               internal::ArgList args) {
   char buffer[DPRINTF_BUFFER_SIZE];
-  printf_core::FlushingBuffer wb(buffer, DPRINTF_BUFFER_SIZE,
-                                 write_to_descriptor,
-                                 reinterpret_cast<void *>(
-                                     static_cast<size_t>(fd)));
+  printf_core::FlushingBuffer wb(
+      buffer, DPRINTF_BUFFER_SIZE, write_to_descriptor,
+      reinterpret_cast<void *>(static_cast<size_t>(fd)));
   printf_core::Writer writer(wb);
 
   auto written = printf_core::printf_main(&writer, format, args);

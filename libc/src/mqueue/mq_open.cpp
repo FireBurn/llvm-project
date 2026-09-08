@@ -41,8 +41,8 @@ LLVM_LIBC_FUNCTION(mqd_t, mq_open, (const char *name, int oflag, ...)) {
   if (bare != nullptr && bare[0] == '/')
     ++bare;
 
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_open, bare, oflag, mode,
-                                              attr);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_open, bare, oflag, mode, attr);
   if (ret < 0) {
     libc_errno = -ret;
     return static_cast<mqd_t>(-1);

@@ -12,8 +12,8 @@
 #include "src/time/time_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
-#include "test/src/time/TzFixture.h"
 #include "test/src/time/TmHelper.h"
+#include "test/src/time/TzFixture.h"
 
 using LlvmLibcCtimeR = TzErrnoFixture;
 

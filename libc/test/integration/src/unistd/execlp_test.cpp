@@ -36,8 +36,7 @@ void execlp_finds_name_on_path() {
 
 void execlp_reports_missing_file() {
   ASSERT_EQ(LIBC_NAMESPACE::setenv("PATH", ".", 1), 0);
-  ASSERT_EQ(LIBC_NAMESPACE::execlp("libc-definitely-not-here", "nope",
-                                   nullptr),
+  ASSERT_EQ(LIBC_NAMESPACE::execlp("libc-definitely-not-here", "nope", nullptr),
             -1);
   ASSERT_ERRNO_EQ(ENOENT);
   errno = 0;

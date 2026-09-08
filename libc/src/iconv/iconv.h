@@ -15,7 +15,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-size_t iconv(iconv_t cd, char **__restrict inbuf, size_t *__restrict inbytesleft, char **__restrict outbuf, size_t *__restrict outbytesleft);
+size_t iconv(iconv_t cd, char **__restrict inbuf,
+             size_t *__restrict inbytesleft, char **__restrict outbuf,
+             size_t *__restrict outbytesleft);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -9,8 +9,8 @@
 #ifndef LLVM_LIBC_SRC_SYSLOG_VSYSLOG_H
 #define LLVM_LIBC_SRC_SYSLOG_VSYSLOG_H
 
-#include <stdarg.h>
 #include "src/__support/macros/config.h"
+#include <stdarg.h>
 
 namespace LIBC_NAMESPACE_DECL {
 

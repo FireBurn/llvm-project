@@ -18,8 +18,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-// Reports which processors a thread may run on. The kernel knows a thread by its
-// id, so that is what the pthread_t is turned into. Unlike the sched calls
+// Reports which processors a thread may run on. The kernel knows a thread by
+// its id, so that is what the pthread_t is turned into. Unlike the sched calls
 // these report the error rather than setting errno, as the rest of the
 // pthread interface does.
 LLVM_LIBC_FUNCTION(int, pthread_getaffinity_np,

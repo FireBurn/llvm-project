@@ -1,4 +1,4 @@
-//===-- Implementation header for getpwnam_r ------------------------*- C++ -*-===//
+//===-- Implementation header for getpwnam_r --------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -15,7 +15,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int getpwnam_r(const char *name, struct passwd *pwd, char *buf, size_t buflen, struct passwd **result);
+int getpwnam_r(const char *name, struct passwd *pwd, char *buf, size_t buflen,
+               struct passwd **result);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -13,7 +13,8 @@
 TEST(LlvmLibcHstrerrorTest, EachValueHasItsOwnWords) {
   ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(0), "Resolver Error 0 (no error)");
   ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(HOST_NOT_FOUND), "Unknown host");
-  ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(TRY_AGAIN), "Host name lookup failure");
+  ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(TRY_AGAIN),
+               "Host name lookup failure");
   ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(NO_RECOVERY), "Unknown server error");
   ASSERT_STREQ(LIBC_NAMESPACE::hstrerror(NO_DATA),
                "No address associated with name");

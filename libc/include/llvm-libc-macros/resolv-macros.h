@@ -17,9 +17,9 @@
 #define MAXRESOLVSORT 10   // Addresses the answers may be sorted by.
 
 // The defaults, and the limits the configuration may not go past.
-#define RES_TIMEOUT 5    // Seconds to wait for an answer.
-#define RES_DFLRETRY 2   // Times to ask before giving up.
-#define RES_MAXNDOTS 15  // As many as the field holding it can count.
+#define RES_TIMEOUT 5   // Seconds to wait for an answer.
+#define RES_DFLRETRY 2  // Times to ask before giving up.
+#define RES_MAXNDOTS 15 // As many as the field holding it can count.
 #define RES_MAXRETRANS 30
 #define RES_MAXRETRY 5
 #define RES_MAXTIME 65535 // Milliseconds standing for no limit at all.

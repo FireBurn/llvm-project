@@ -33,9 +33,8 @@ void execl_runs_the_named_program() {
 }
 
 void execl_reports_missing_file() {
-  ASSERT_EQ(LIBC_NAMESPACE::execl("./libc-definitely-not-here", "nope",
-                                  nullptr),
-            -1);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::execl("./libc-definitely-not-here", "nope", nullptr), -1);
   ASSERT_ERRNO_EQ(ENOENT);
   errno = 0;
 }

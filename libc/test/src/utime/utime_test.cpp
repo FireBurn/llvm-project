@@ -30,7 +30,8 @@ using LlvmLibcUtimeTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcUtimeTest, SetsBothTimes) {
   constexpr const char *FILENAME = "utime.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_ERRNO_SUCCESS();
   ASSERT_GT(fd, 0);
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
@@ -42,17 +43,18 @@ TEST_F(LlvmLibcUtimeTest, SetsBothTimes) {
 
   struct stat statbuf;
   ASSERT_THAT(LIBC_NAMESPACE::stat(FILENAME, &statbuf), Succeeds(0));
-  EXPECT_EQ(statbuf.st_atim.tv_sec, static_cast<decltype(
-                                        statbuf.st_atim.tv_sec)>(123456));
-  EXPECT_EQ(statbuf.st_mtim.tv_sec, static_cast<decltype(
-                                        statbuf.st_mtim.tv_sec)>(654321));
+  EXPECT_EQ(statbuf.st_atim.tv_sec,
+            static_cast<decltype(statbuf.st_atim.tv_sec)>(123456));
+  EXPECT_EQ(statbuf.st_mtim.tv_sec,
+            static_cast<decltype(statbuf.st_mtim.tv_sec)>(654321));
 
   ASSERT_THAT(LIBC_NAMESPACE::unlink(FILENAME), Succeeds(0));
 }
 
 TEST_F(LlvmLibcUtimeTest, NullTimesUsesNow) {
   constexpr const char *FILENAME = "utime_now.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_ERRNO_SUCCESS();
   ASSERT_GT(fd, 0);
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
@@ -67,8 +69,8 @@ TEST_F(LlvmLibcUtimeTest, NullTimesUsesNow) {
 
   struct stat statbuf;
   ASSERT_THAT(LIBC_NAMESPACE::stat(FILENAME, &statbuf), Succeeds(0));
-  EXPECT_GT(statbuf.st_mtim.tv_sec, static_cast<decltype(
-                                        statbuf.st_mtim.tv_sec)>(1));
+  EXPECT_GT(statbuf.st_mtim.tv_sec,
+            static_cast<decltype(statbuf.st_mtim.tv_sec)>(1));
 
   ASSERT_THAT(LIBC_NAMESPACE::unlink(FILENAME), Succeeds(0));
 }

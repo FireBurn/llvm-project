@@ -25,7 +25,8 @@ LLVM_LIBC_FUNCTION(void, cfmakeraw, (struct termios * t)) {
   t->c_iflag &= static_cast<tcflag_t>(
       ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON));
   t->c_oflag &= static_cast<tcflag_t>(~OPOST);
-  t->c_lflag &= static_cast<tcflag_t>(~(ECHO | ECHONL | ICANON | ISIG | IEXTEN));
+  t->c_lflag &=
+      static_cast<tcflag_t>(~(ECHO | ECHONL | ICANON | ISIG | IEXTEN));
   t->c_cflag &= static_cast<tcflag_t>(~(CSIZE | PARENB));
   t->c_cflag |= CS8;
   t->c_cc[VMIN] = 1;

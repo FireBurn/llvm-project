@@ -10,15 +10,16 @@
 
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/cancel.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/sanitizer.h" // for LIBC_MSAN_UNPOISON
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, read, (int fd, void *buf, size_t count)) {
-  auto result = internal::cancellable([&] { return linux_syscalls::read(fd, buf, count); });
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::read(fd, buf, count); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;

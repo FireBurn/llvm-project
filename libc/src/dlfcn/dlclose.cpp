@@ -22,8 +22,7 @@ LLVM_LIBC_FUNCTION(int, dlclose, (void *handle)) {
   cpp::lock_guard lock(dl::dl_mutex);
 
   size_t index = 0;
-  if (modules == nullptr || !modules->linked ||
-      !dl::index_for(handle, index)) {
+  if (modules == nullptr || !modules->linked || !dl::index_for(handle, index)) {
     dl::set_error("dlclose was given a handle that dlopen did not return");
     return -1;
   }

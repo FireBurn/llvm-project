@@ -34,8 +34,9 @@ LLVM_LIBC_FUNCTION(int, getspnam_r,
                     size_t buflen, struct spwd **spbufp)) {
   if (name == nullptr)
     return EINVAL;
-  return shadow_r::find(spbuf, buf, buflen, spbufp,
-                        [name](struct spwd *e) { return same(e->sp_namp, name); });
+  return shadow_r::find(spbuf, buf, buflen, spbufp, [name](struct spwd *e) {
+    return same(e->sp_namp, name);
+  });
 }
 
 } // namespace LIBC_NAMESPACE_DECL

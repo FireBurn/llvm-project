@@ -107,40 +107,40 @@
 #include <linux/ioctl.h>
 
 #ifndef BLKROSET
-#define BLKROSET _IO(0x12, 93)     // Set the device read only.
+#define BLKROSET _IO(0x12, 93) // Set the device read only.
 #endif
 #ifndef BLKROGET
-#define BLKROGET _IO(0x12, 94)     // Whether it is read only.
+#define BLKROGET _IO(0x12, 94) // Whether it is read only.
 #endif
 #ifndef BLKRRPART
-#define BLKRRPART _IO(0x12, 95)    // Read the partition table again.
+#define BLKRRPART _IO(0x12, 95) // Read the partition table again.
 #endif
 #ifndef BLKGETSIZE
-#define BLKGETSIZE _IO(0x12, 96)   // The size in 512 byte sectors.
+#define BLKGETSIZE _IO(0x12, 96) // The size in 512 byte sectors.
 #endif
 #ifndef BLKFLSBUF
-#define BLKFLSBUF _IO(0x12, 97)    // Write back and drop the buffers.
+#define BLKFLSBUF _IO(0x12, 97) // Write back and drop the buffers.
 #endif
 #ifndef BLKRASET
-#define BLKRASET _IO(0x12, 98)     // Set the read ahead.
+#define BLKRASET _IO(0x12, 98) // Set the read ahead.
 #endif
 #ifndef BLKRAGET
 #define BLKRAGET _IO(0x12, 99)
 #endif
 #ifndef BLKFRASET
-#define BLKFRASET _IO(0x12, 100)   // Set the file system read ahead.
+#define BLKFRASET _IO(0x12, 100) // Set the file system read ahead.
 #endif
 #ifndef BLKFRAGET
 #define BLKFRAGET _IO(0x12, 101)
 #endif
 #ifndef BLKSECTSET
-#define BLKSECTSET _IO(0x12, 102)  // Set the maximum sectors per request.
+#define BLKSECTSET _IO(0x12, 102) // Set the maximum sectors per request.
 #endif
 #ifndef BLKSECTGET
 #define BLKSECTGET _IO(0x12, 103)
 #endif
 #ifndef BLKSSZGET
-#define BLKSSZGET _IO(0x12, 104)   // The logical sector size.
+#define BLKSSZGET _IO(0x12, 104) // The logical sector size.
 #endif
 #ifndef BLKBSZGET
 #define BLKBSZGET _IOR(0x12, 112, __SIZE_TYPE__)

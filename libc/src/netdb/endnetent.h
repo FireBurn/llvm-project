@@ -15,7 +15,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-void endnetent (void);
+void endnetent(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -20,8 +20,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, sgetsgent_r,
-                   (const char *s, struct sgrp *sgbuf, char *buf,
-                    size_t buflen, struct sgrp **sgbufp)) {
+                   (const char *s, struct sgrp *sgbuf, char *buf, size_t buflen,
+                    struct sgrp **sgbufp)) {
   if (sgbufp != nullptr)
     *sgbufp = nullptr;
   if (s == nullptr || sgbuf == nullptr || buf == nullptr || sgbufp == nullptr)

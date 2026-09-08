@@ -22,8 +22,7 @@ TEST(LlvmLibcEnvironmentTest, SecureGetenvReadsTheEnvironment) {
   ASSERT_FALSE(value == nullptr);
   ASSERT_STREQ(value, "value");
 
-  ASSERT_TRUE(LIBC_NAMESPACE::secure_getenv("LLVM_LIBC_ABSENT_VAR") ==
-              nullptr);
+  ASSERT_TRUE(LIBC_NAMESPACE::secure_getenv("LLVM_LIBC_ABSENT_VAR") == nullptr);
 }
 
 // clearenv leaves an environment with nothing in it, which is still an

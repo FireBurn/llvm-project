@@ -92,8 +92,8 @@ load_from_path_list(const char *list, const char *name, size_t page_size,
       ++end;
     char dir[MAX_SEARCH_PATH];
     const size_t length = static_cast<size_t>(end - segment);
-    if (length > 0 && expand_run_path(segment, length, origin, dir,
-                                      sizeof(dir))) {
+    if (length > 0 &&
+        expand_run_path(segment, length, origin, dir, sizeof(dir))) {
       char path[MAX_SEARCH_PATH];
       if (join_path(dir, name, path, sizeof(path))) {
         auto loaded = load_module(path, page_size);
@@ -114,9 +114,10 @@ load_from_path_list(const char *list, const char *name, size_t page_size,
 // apart.
 //
 // `requester` is the module whose run path applies, or null where none does.
-LIBC_INLINE cpp::optional<LoadedModule>
-find_and_load(const char *name, const Module *requester,
-              const char *library_path, size_t page_size) {
+LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
+                                                      const Module *requester,
+                                                      const char *library_path,
+                                                      size_t page_size) {
   if (name == nullptr)
     return cpp::nullopt;
 

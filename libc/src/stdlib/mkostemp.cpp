@@ -42,8 +42,8 @@ LLVM_LIBC_FUNCTION(int, mkostemp, (char *tmpl, int flags)) {
       libc_errno = ok.error();
       return -1;
     }
-    auto fd = linux_syscalls::open(tmpl, O_RDWR | O_CREAT | O_EXCL | flags,
-                                   0600);
+    auto fd =
+        linux_syscalls::open(tmpl, O_RDWR | O_CREAT | O_EXCL | flags, 0600);
     if (fd.has_value())
       return fd.value();
     if (fd.error() != EEXIST) {

@@ -240,7 +240,8 @@ Answer answer_locked(time_t seconds, bool republish) {
         // charge and states the names as well as the readings.
         copy_name(state.names[0], state.file.footer_rules().standard_name);
         copy_name(state.names[1], state.file.footer_rules().daylight_name);
-        timezone = -static_cast<long>(state.file.footer_rules().standard_offset);
+        timezone =
+            -static_cast<long>(state.file.footer_rules().standard_offset);
         daylight = state.file.footer_rules().has_daylight ? 1 : 0;
       } else {
         const char *standard = reading.standard_name;
@@ -291,7 +292,8 @@ ErrorOr<tm *> to_local(time_t seconds, tm *result) {
   // the file is only read again if what it says has changed.
   set_from_environment();
   const Answer answer = answer_and_publish(seconds);
-  auto status = time_utils::update_from_seconds(seconds + answer.offset, result);
+  auto status =
+      time_utils::update_from_seconds(seconds + answer.offset, result);
   if (!status)
     return cpp::unexpected(status.error());
   result->tm_isdst = answer.daylight ? 1 : 0;
@@ -363,9 +365,8 @@ time_t from_local(time_t local_seconds, int daylight_hint, int32_t &offset,
     // maps onto. The reading whose daylight flag is not the one asked for is
     // taken, which is what everything else does and is more use than failing.
     if (candidate == before_that && candidate != previous &&
-        (daylight_hint < 0
-             ? previous_daylight <= settled.daylight
-             : (daylight_hint != 0) != settled.daylight))
+        (daylight_hint < 0 ? previous_daylight <= settled.daylight
+                           : (daylight_hint != 0) != settled.daylight))
       break;
 
     before_that = previous;

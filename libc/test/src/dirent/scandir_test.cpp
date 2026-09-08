@@ -38,7 +38,8 @@ void release(struct dirent **list, int count) {
 
 TEST_F(LlvmLibcScandirTest, ReadsAndSortsADirectory) {
   struct dirent **list = nullptr;
-  int count = LIBC_NAMESPACE::scandir("testdata", &list, nullptr, &LIBC_NAMESPACE::alphasort);
+  int count = LIBC_NAMESPACE::scandir("testdata", &list, nullptr,
+                                      &LIBC_NAMESPACE::alphasort);
   ASSERT_GT(count, 0);
   ASSERT_ERRNO_SUCCESS();
 
@@ -53,12 +54,14 @@ TEST_F(LlvmLibcScandirTest, ReadsAndSortsADirectory) {
 
 TEST_F(LlvmLibcScandirTest, TheFilterDecidesWhatIsKept) {
   struct dirent **all = nullptr;
-  int total = LIBC_NAMESPACE::scandir("testdata", &all, nullptr, &LIBC_NAMESPACE::alphasort);
+  int total = LIBC_NAMESPACE::scandir("testdata", &all, nullptr,
+                                      &LIBC_NAMESPACE::alphasort);
   ASSERT_GT(total, 0);
   release(all, total);
 
   struct dirent **some = nullptr;
-  int kept = LIBC_NAMESPACE::scandir("testdata", &some, only_txt, &LIBC_NAMESPACE::alphasort);
+  int kept = LIBC_NAMESPACE::scandir("testdata", &some, only_txt,
+                                     &LIBC_NAMESPACE::alphasort);
   ASSERT_GE(kept, 0);
   EXPECT_LT(kept, total);
   for (int i = 0; i < kept; ++i)
@@ -77,7 +80,8 @@ TEST_F(LlvmLibcScandirTest, NoComparisonMeansNoSorting) {
 
 TEST_F(LlvmLibcScandirTest, TheEntriesOutliveTheDirectory) {
   struct dirent **list = nullptr;
-  int count = LIBC_NAMESPACE::scandir("testdata", &list, nullptr, &LIBC_NAMESPACE::alphasort);
+  int count = LIBC_NAMESPACE::scandir("testdata", &list, nullptr,
+                                      &LIBC_NAMESPACE::alphasort);
   ASSERT_GT(count, 1);
   // Every entry is a copy of its own, so the names are all still readable
   // after the directory has been closed and they do not run together.
@@ -98,9 +102,12 @@ TEST_F(LlvmLibcScandirTest, MissingDirectory) {
 
 TEST_F(LlvmLibcScandirTest, NullArguments) {
   struct dirent **list = nullptr;
-  EXPECT_EQ(LIBC_NAMESPACE::scandir(nullptr, &list, nullptr, &LIBC_NAMESPACE::alphasort), -1);
+  EXPECT_EQ(LIBC_NAMESPACE::scandir(nullptr, &list, nullptr,
+                                    &LIBC_NAMESPACE::alphasort),
+            -1);
   ASSERT_ERRNO_EQ(EINVAL);
-  EXPECT_EQ(LIBC_NAMESPACE::scandir("testdata", nullptr, nullptr, &LIBC_NAMESPACE::alphasort),
+  EXPECT_EQ(LIBC_NAMESPACE::scandir("testdata", nullptr, nullptr,
+                                    &LIBC_NAMESPACE::alphasort),
             -1);
   ASSERT_ERRNO_EQ(EINVAL);
 }

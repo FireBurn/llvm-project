@@ -27,8 +27,7 @@ namespace tanh_internal {
 LIBC_INLINE double refined_div(double numerator, double denominator) {
   const fputil::DoubleDouble d = fputil::exact_add(denominator, 0.0);
   const double q = numerator / d.hi;
-  const double remainder =
-      fputil::multiply_add(-q, d.hi, numerator) - q * d.lo;
+  const double remainder = fputil::multiply_add(-q, d.hi, numerator) - q * d.lo;
   return q + remainder / d.hi;
 }
 
@@ -75,9 +74,9 @@ LIBC_INLINE static double tanh(double x) {
     }
     const double t = math::expm1(2.0 * ax);
     const fputil::DoubleDouble d = fputil::exact_add(t, 2.0);
-    return with_sign(1.0 - (tanh_internal::refined_div(2.0, d.hi) -
-                            tanh_internal::refined_div(2.0 * d.lo,
-                                                       d.hi * d.hi)));
+    return with_sign(1.0 -
+                     (tanh_internal::refined_div(2.0, d.hi) -
+                      tanh_internal::refined_div(2.0 * d.lo, d.hi * d.hi)));
   }
 
   // Past that the answer is nearer one than anything else, though it never

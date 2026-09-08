@@ -16,8 +16,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-ssize_t splice(int fd_in, off_t *off_in, int fd_out, off_t *off_out,
-               size_t len, unsigned int flags);
+ssize_t splice(int fd_in, off_t *off_in, int fd_out, off_t *off_out, size_t len,
+               unsigned int flags);
 
 } // namespace LIBC_NAMESPACE_DECL
 

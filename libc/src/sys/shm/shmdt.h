@@ -1,4 +1,4 @@
-//===-- Implementation header for shmdt ---------------------------*- C++ -*-===//
+//===-- Implementation header for shmdt -------------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -8,7 +8,6 @@
 
 #ifndef LLVM_LIBC_SRC_SYS_SHM_SHMDT_H
 #define LLVM_LIBC_SRC_SYS_SHM_SHMDT_H
-
 
 #include "src/__support/macros/config.h"
 

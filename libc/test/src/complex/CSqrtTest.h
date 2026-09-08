@@ -125,9 +125,9 @@ public:
 
           // |root|^2 is |z|, and both are sums of squares rather than
           // differences, so nothing cancels.
-          EXPECT_TRUE(close_enough(re * re + im * im,
-                                   LIBC_NAMESPACE::fputil::sqrt<FPT>(
-                                       re_in * re_in + b * b)));
+          EXPECT_TRUE(close_enough(
+              re * re + im * im,
+              LIBC_NAMESPACE::fputil::sqrt<FPT>(re_in * re_in + b * b)));
           // 2 re im is the imaginary part of the square.
           EXPECT_TRUE(close_enough(FPT(2.0) * re * im, b));
         }
@@ -150,7 +150,6 @@ private:
         LIBC_NAMESPACE::fputil::ldexp(magnitude, -FPBits::FRACTION_LEN);
     return difference <= ulp * FPT(16.0);
   }
-
 };
 
 #define LIST_CSQRT_TESTS(U, T, func)                                           \

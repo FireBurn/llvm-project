@@ -26,15 +26,14 @@ TEST_F(LlvmLibcQuotactlTest, ADeviceThatIsNotThere) {
                                         "/dev/llvm-libc-not-here", 0, buf);
   ASSERT_EQ(result, -1);
   int err = static_cast<int>(LIBC_NAMESPACE::libc_errno);
-  ASSERT_TRUE(err == ENOENT || err == EPERM || err == ENOTBLK ||
-              err == ENOSYS);
+  ASSERT_TRUE(err == ENOENT || err == EPERM || err == ENOTBLK || err == ENOSYS);
   LIBC_NAMESPACE::libc_errno = 0;
 }
 
 TEST_F(LlvmLibcQuotactlTest, DescriptorThatIsNotOne) {
   char buf[64] = {};
-  ASSERT_EQ(
-      LIBC_NAMESPACE::quotactl_fd(-1, QCMD(Q_GETQUOTA, USRQUOTA), 0, buf), -1);
+  ASSERT_EQ(LIBC_NAMESPACE::quotactl_fd(-1, QCMD(Q_GETQUOTA, USRQUOTA), 0, buf),
+            -1);
   int err = static_cast<int>(LIBC_NAMESPACE::libc_errno);
   ASSERT_TRUE(err == EBADF || err == ENOSYS);
   LIBC_NAMESPACE::libc_errno = 0;

@@ -33,9 +33,9 @@ TEST_F(LlvmLibcFanotifyTest, MakingAGroup) {
     return;
   }
 
-  ASSERT_THAT(LIBC_NAMESPACE::fanotify_mark(fd, FAN_MARK_ADD, FAN_OPEN,
-                                            AT_FDCWD, "."),
-              Succeeds(0));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::fanotify_mark(fd, FAN_MARK_ADD, FAN_OPEN, AT_FDCWD, "."),
+      Succeeds(0));
   ASSERT_THAT(LIBC_NAMESPACE::fanotify_mark(fd, FAN_MARK_REMOVE, FAN_OPEN,
                                             AT_FDCWD, "."),
               Succeeds(0));

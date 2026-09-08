@@ -14,8 +14,7 @@
 // what a program that checks its own format strings asks for.
 TEST(LlvmLibcParsePrintfFormatTest, ReportsTheTypeOfEachConversion) {
   int types[8] = {};
-  size_t count =
-      LIBC_NAMESPACE::parse_printf_format("%d %s %c %p", 8, types);
+  size_t count = LIBC_NAMESPACE::parse_printf_format("%d %s %c %p", 8, types);
   ASSERT_EQ(count, size_t(4));
   ASSERT_EQ(types[0], PA_INT);
   ASSERT_EQ(types[1], PA_STRING);
@@ -61,8 +60,7 @@ TEST(LlvmLibcParsePrintfFormatTest, ALiteralPercentTakesNothing) {
 // caller can size an array and ask again.
 TEST(LlvmLibcParsePrintfFormatTest, CountsMoreThanItWasGivenRoomFor) {
   int types[2] = {};
-  size_t count =
-      LIBC_NAMESPACE::parse_printf_format("%d %d %d %d", 2, types);
+  size_t count = LIBC_NAMESPACE::parse_printf_format("%d %d %d %d", 2, types);
   ASSERT_EQ(count, size_t(4));
   ASSERT_EQ(types[0], PA_INT);
   ASSERT_EQ(types[1], PA_INT);

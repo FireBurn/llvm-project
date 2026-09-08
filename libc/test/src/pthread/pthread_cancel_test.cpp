@@ -34,7 +34,7 @@ namespace {
     LIBC_NAMESPACE::_pthread_cleanup_push(&__buffer, (routine), (arg));
 
 #define TEST_CLEANUP_POP(execute)                                              \
-    LIBC_NAMESPACE::_pthread_cleanup_pop(&__buffer, (execute));                \
+  LIBC_NAMESPACE::_pthread_cleanup_pop(&__buffer, (execute));                  \
   }
 
 // A thread cannot be handed a context, so what each one reports is here.
@@ -211,21 +211,21 @@ TEST(LlvmLibcPthreadCancelTest, RejectsUnknownStateAndType) {
 
 TEST(LlvmLibcPthreadCancelTest, StateAndTypeReportWhatTheyReplaced) {
   int previous = -1;
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_setcancelstate(PTHREAD_CANCEL_DISABLE,
-                                                   &previous),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &previous),
+      0);
   EXPECT_EQ(previous, PTHREAD_CANCEL_ENABLE);
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,
-                                                   &previous),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &previous),
+      0);
   EXPECT_EQ(previous, PTHREAD_CANCEL_DISABLE);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,
                                                   &previous),
             0);
   EXPECT_EQ(previous, PTHREAD_CANCEL_DEFERRED);
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,
-                                                  &previous),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &previous),
+      0);
   EXPECT_EQ(previous, PTHREAD_CANCEL_ASYNCHRONOUS);
 }

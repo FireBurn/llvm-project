@@ -20,7 +20,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, fgetspent_r,
-                   (::FILE *stream, struct spwd *spbuf, char *buf,
+                   (::FILE * stream, struct spwd *spbuf, char *buf,
                     size_t buflen, struct spwd **spbufp)) {
   if (spbufp != nullptr)
     *spbufp = nullptr;
