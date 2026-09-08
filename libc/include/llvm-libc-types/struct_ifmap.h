@@ -14,6 +14,7 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_IFMAP_H
 #define LLVM_LIBC_TYPES_STRUCT_IFMAP_H
 
+
 struct ifmap {
   unsigned long mem_start;
   unsigned long mem_end;

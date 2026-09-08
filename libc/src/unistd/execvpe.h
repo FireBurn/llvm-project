@@ -1,4 +1,4 @@
-//===-- Linux implementation of execvp ------------------------------------===//
+//===-- Implementation header for execvpe -----------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,17 +6,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/unistd/execvp.h"
+#ifndef LLVM_LIBC_SRC_UNISTD_EXECVPE_H
+#define LLVM_LIBC_SRC_UNISTD_EXECVPE_H
 
-#include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/unistd/environ.h"
-#include "src/unistd/linux/exec_path_search.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, execvp, (const char *file, char *const argv[])) {
-  return exec_search::run(file, argv, LIBC_NAMESPACE::environ);
-}
+int execvpe(const char *file, char *const argv[], char *const envp[]);
 
 } // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_UNISTD_EXECVPE_H
