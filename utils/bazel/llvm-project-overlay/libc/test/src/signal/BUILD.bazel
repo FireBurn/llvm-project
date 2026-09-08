@@ -88,3 +88,19 @@ libc_test(
         "//libc:types_struct_sigaction",
     ],
 )
+
+libc_test(
+    name = "psignal_test",
+    srcs = ["psignal_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:__support_stringutil",
+        "//libc:close",
+        "//libc:dup",
+        "//libc:dup2",
+        "//libc:hdr_signal_macros",
+        "//libc:pipe",
+        "//libc:psignal",
+        "//libc:read",
+    ],
+)
