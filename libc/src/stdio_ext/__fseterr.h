@@ -6,8 +6,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_STDIO_EXT_FSETERR_H
-#define LLVM_LIBC_SRC_STDIO_EXT_FSETERR_H
+#ifndef LLVM_LIBC_SRC_STDIO_EXT___FSETERR_H
+#define LLVM_LIBC_SRC_STDIO_EXT___FSETERR_H
 
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
@@ -19,4 +19,4 @@ void __fseterr(::FILE *stream);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_STDIO_EXT_FSETERR_H
+#endif // LLVM_LIBC_SRC_STDIO_EXT___FSETERR_H
