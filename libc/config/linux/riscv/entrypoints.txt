@@ -343,13 +343,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.calloc
     libc.src.stdlib.free
     libc.src.stdlib.malloc
-    libc.src.stdlib.mallinfo
-    libc.src.stdlib.mallinfo2
-    libc.src.stdlib.malloc_info
-    libc.src.stdlib.malloc_usable_size
-    libc.src.stdlib.memalign
-    libc.src.stdlib.pvalloc
-    libc.src.stdlib.valloc
     libc.src.stdlib.posix_memalign
     libc.src.stdlib.realloc
     libc.src.stdlib.reallocarray
@@ -815,6 +808,14 @@ if(LLVM_LIBC_INCLUDE_SCUDO)
   list(APPEND TARGET_LIBC_ENTRYPOINTS
     # malloc.h external entrypoints
     libc.src.stdlib.mallopt
+    libc.src.stdlib.mallinfo
+    libc.src.stdlib.mallinfo2
+    libc.src.stdlib.malloc_info
+    libc.src.stdlib.malloc_trim
+    libc.src.stdlib.malloc_usable_size
+    libc.src.stdlib.memalign
+    libc.src.stdlib.pvalloc
+    libc.src.stdlib.valloc
   )
 endif()
 
