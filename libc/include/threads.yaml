@@ -6,6 +6,8 @@ macros:
     macro_value: '{0}'
   - macro_name: TSS_DTOR_ITERATIONS
     macro_header: threads-macros.h
+  - macro_name: thread_local
+    macro_header: threads-macros.h
 types:
   - type_name: once_flag
   - type_name: __call_once_func_t
