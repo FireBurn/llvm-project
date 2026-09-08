@@ -507,6 +507,8 @@ functions:
     in-latest-posix: ""
   alarm:
     in-latest-posix: ""
+  brk:
+    c-definition: 'TODO: BSD extension'
   chdir:
     in-latest-posix: ""
   chown:
@@ -515,10 +517,16 @@ functions:
     in-latest-posix: ""
   close:
     in-latest-posix: ""
+  close_range:
+    c-definition: 'TODO: Linux extension'
   confstr:
     in-latest-posix: ""
+  copy_file_range:
+    c-definition: 'TODO: Linux extension'
   crypt:
     in-latest-posix: ""
+  daemon:
+    c-definition: 'TODO: BSD extension'
   dup:
     in-latest-posix: ""
   dup2:
@@ -529,6 +537,8 @@ functions:
     in-latest-posix: ""
   encrypt:
     in-latest-posix: ""
+  endusershell:
+    c-definition: 'TODO: BSD extension'
   execl:
     in-latest-posix: ""
   execle:
@@ -541,6 +551,8 @@ functions:
     in-latest-posix: ""
   execvp:
     in-latest-posix: ""
+  execvpe:
+    c-definition: 'TODO: glibc extension'
   faccessat:
     in-latest-posix: ""
   fchdir:
@@ -563,8 +575,14 @@ functions:
     in-latest-posix: ""
   ftruncate:
     in-latest-posix: ""
+  get_current_dir_name:
+    c-definition: 'TODO: glibc extension'
   getcwd:
     in-latest-posix: ""
+  getdtablesize:
+    c-definition: 'TODO: BSD extension'
+  getdomainname:
+    c-definition: 'TODO: BSD extension'
   getegid:
     in-latest-posix: ""
   getentropy:
@@ -579,6 +597,10 @@ functions:
     in-latest-posix: ""
   gethostname:
     in-latest-posix: ""
+  getopt_long_only:
+    c-definition: 'TODO: glibc extension'
+  getopt_long:
+    in-latest-posix: ''
   getpagesize:
     in-latest-posix: ""
   getlogin:
@@ -587,6 +609,8 @@ functions:
     in-latest-posix: ""
   getopt:
     in-latest-posix: ""
+  getpass:
+    c-definition: 'TODO: BSD extension'
   getpgid:
     in-latest-posix: ""
   getpgrp:
@@ -603,6 +627,8 @@ functions:
     in-latest-posix: ""
   getuid:
     in-latest-posix: ""
+  getusershell:
+    c-definition: 'TODO: BSD extension'
   isatty:
     in-latest-posix: ""
   lchown:
@@ -639,12 +665,18 @@ functions:
     in-latest-posix: ""
   rmdir:
     in-latest-posix: ""
+  setdomainname:
+    c-definition: 'TODO: BSD extension'
+  sbrk:
+    c-definition: 'TODO: BSD extension'
   setegid:
     in-latest-posix: ""
   seteuid:
     in-latest-posix: ""
   setgid:
     in-latest-posix: ""
+  sethostname:
+    c-definition: 'TODO: BSD extension'
   setpgid:
     in-latest-posix: ""
   setregid:
@@ -659,6 +691,8 @@ functions:
     in-latest-posix: ""
   setuid:
     in-latest-posix: ""
+  setusershell:
+    c-definition: 'TODO: BSD extension'
   sleep:
     in-latest-posix: ""
   swab:
@@ -669,6 +703,8 @@ functions:
     in-latest-posix: ""
   sync:
     in-latest-posix: ""
+  syncfs:
+    c-definition: 'TODO: Linux extension'
   sysconf:
     in-latest-posix: ""
   tcgetpgrp:
@@ -685,5 +721,7 @@ functions:
     in-latest-posix: ""
   unlinkat:
     in-latest-posix: ""
+  vhangup:
+    c-definition: 'TODO: Linux extension'
   write:
     in-latest-posix: ""

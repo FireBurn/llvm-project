@@ -1,4 +1,6 @@
 functions:
+  explicit_bzero:
+    c-definition: 'TODO: BSD extension'
   memccpy:
     c-definition: 7.26.2.2
     in-latest-posix: ''
@@ -86,6 +88,8 @@ functions:
     in-latest-posix: ''
   strtok_r:
     in-latest-posix: ''
+  strverscmp:
+    c-definition: 'TODO: glibc extension'
   strxfrm:
     c-definition: 7.26.4.5
     in-latest-posix: ''
