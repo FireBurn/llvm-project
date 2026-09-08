@@ -18259,6 +18259,20 @@ libc_function(
 )
 
 libc_function(
+    name = "close_range",
+    srcs = ["src/unistd/linux/close_range.cpp"],
+    hdrs = ["src/unistd/close_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close_range",
+        ":errno",
+        ":unistd_close_range",
+    ],
+)
+
+libc_function(
     name = "dup",
     srcs = ["src/unistd/linux/dup.cpp"],
     hdrs = ["src/unistd/dup.h"],
@@ -23253,5 +23267,24 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_close_range",
+    hdrs = ["src/unistd/close_range.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_close_range",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/close_range.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
