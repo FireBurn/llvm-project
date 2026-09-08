@@ -17,6 +17,7 @@ add_libc_test(
     libc.src.fcntl.open
     libc.src.stdio.remove
     libc.src.sys.inotify.inotify_add_watch
+    libc.src.sys.inotify.inotify_init
     libc.src.sys.inotify.inotify_init1
     libc.src.sys.inotify.inotify_rm_watch
     libc.src.sys.stat.mkdir
