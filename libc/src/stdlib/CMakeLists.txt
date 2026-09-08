@@ -581,6 +581,41 @@ if(NOT LIBC_TARGET_OS_IS_BAREMETAL AND NOT LIBC_TARGET_OS_IS_GPU)
         ${SCUDO_DEPS}
     )
     add_entrypoint_external(
+      mallinfo
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      mallinfo2
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      malloc_info
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      malloc_usable_size
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      memalign
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      valloc
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
+      pvalloc
+      DEPENDS
+        ${SCUDO_DEPS}
+    )
+    add_entrypoint_external(
       posix_memalign
       DEPENDS
         ${SCUDO_DEPS}
