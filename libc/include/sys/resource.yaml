@@ -25,6 +25,7 @@ macros:
   - macro_name: PRIO_USER
     macro_header: sys-resource-macros.h
 types:
+  - type_name: pid_t
   - type_name: struct_rlimit
   - type_name: rlim_t
   - type_name: struct_rusage
