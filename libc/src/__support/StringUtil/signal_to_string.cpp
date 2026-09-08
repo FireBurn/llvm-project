@@ -60,7 +60,12 @@ cpp::string_view build_signal_string(int sig_num, cpp::span<char> buffer) {
   cpp::StringStream buffer_stream(
       {const_cast<char *>(buffer.data()), buffer.size()});
   buffer_stream << base_str << ' ' << sig_num << '\0';
-  return buffer_stream.str();
+  // The terminator is written so that a caller wanting a C string out of
+  // this has one, but it is not part of the text. Leaving it in the length
+  // puts a stray zero byte in the middle of the output of anyone who writes
+  // the result out by its size, which is what perror and psignal do.
+  cpp::string_view written = buffer_stream.str();
+  return written.substr(0, written.size() - 1);
 }
 
 } // namespace
