@@ -37,6 +37,12 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${LIBC_TARGET_OS})
 endif()
 
 add_macro_header(
+  uapi_compat_macros
+  HDR
+    uapi-compat-macros.h
+)
+
+add_macro_header(
   annex_k_macros
   HDR
     annex-k-macros.h
@@ -192,6 +198,14 @@ add_macro_header(
   DEPENDS
     .math_macros
     .float16_macros
+)
+
+add_macro_header(
+  netinet_in_macros
+  HDR
+    netinet-in-macros.h
+  DEPENDS
+    .uapi_compat_macros
 )
 
 add_macro_header(
@@ -595,6 +609,20 @@ add_macro_header(
   sys_timerfd_macros
   HDR
     sys-timerfd-macros.h
+)
+
+add_macro_header(
+  threads_macros
+  HDR
+    threads-macros.h
+)
+
+add_macro_header(
+  net_ethernet_macros
+  HDR
+    net-ethernet-macros.h
+  DEPENDS
+    .uapi_compat_macros
 )
 
 add_macro_header(
