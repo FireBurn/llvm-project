@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 #define LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 
+
 #include "../__llvm-libc-common.h"
 #include "../llvm-libc-types/in_addr_t.h"
 #include "../llvm-libc-types/struct_in6_addr.h"
@@ -44,8 +45,8 @@
 #define IPPROTO_SMC 256
 #define IPPROTO_MPTCP 262
 
+
 // The extension headers an IPv6 packet may carry, which sit in the same
-// number space as the protocols above.
 #define IPPROTO_HOPOPTS 0
 #define IPPROTO_ROUTING 43
 #define IPPROTO_FRAGMENT 44
@@ -53,6 +54,7 @@
 #define IPPROTO_NONE 59
 #define IPPROTO_DSTOPTS 60
 #define IPPROTO_MH 135
+
 
 #define INADDR_ANY __LLVM_LIBC_CAST(static_cast, in_addr_t, 0x00000000)
 #define INADDR_BROADCAST __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
@@ -264,7 +266,6 @@
 #define IPV6_UNICAST_IF 76
 #define IPV6_RECVFRAGSIZE 77
 #define IPV6_FREEBIND 78
-
 // What IPV6_MTU_DISCOVER may be set to.
 #define IPV6_PMTUDISC_DONT 0
 #define IPV6_PMTUDISC_WANT 1
@@ -272,5 +273,4 @@
 #define IPV6_PMTUDISC_PROBE 3
 #define IPV6_PMTUDISC_INTERFACE 4
 #define IPV6_PMTUDISC_OMIT 5
-
 #endif // LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
