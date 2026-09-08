@@ -814,3 +814,19 @@ add_libc_test(
     libc.src.unistd.read
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  unlocked_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    unlocked_test.cpp
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.include.stdio_ext
+    libc.src.stdio.__fsetlocking
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.remove
+)

@@ -186,6 +186,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  stdio_ext_macros
+  HDRS
+    stdio_ext_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.stdio_ext_macros
+)
+
+add_proxy_header_library(
   syslog_macros
   HDRS
     syslog_macros.h
