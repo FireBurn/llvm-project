@@ -58,21 +58,10 @@ Length read_length(const char *&p) {
   }
 }
 
-// Which flag describes a type of this width.
-int width_flag(size_t width) {
-  if (width > sizeof(long))
-    return PA_FLAG_LONG_LONG;
-  if (width > sizeof(int))
-    return PA_FLAG_LONG;
-  if (width < sizeof(int))
-    return PA_FLAG_SHORT;
-  return 0;
-}
-
-// The type an integer conversion of this length takes. The flags say how
-// wide it is, so a length whose type is no wider than long is reported as
-// long even when it was spelled "ll"; this is what glibc reports too, and
-// it is what a caller stepping over the argument needs to know.
+// The type an integer conversion of this length takes. The flag says how
+// the length was spelled rather than how wide the type turns out to be, so
+// "ll" is reported as long long on a machine where long is just as wide.
+// glibc reports it the same way, and callers match on the flag.
 int int_type_for(Length len) {
   switch (len) {
   case Length::hh:
@@ -80,14 +69,12 @@ int int_type_for(Length len) {
   case Length::h:
     return PA_INT | PA_FLAG_SHORT;
   case Length::l:
-    return PA_INT | (sizeof(long) > sizeof(int) ? PA_FLAG_LONG : 0);
-  case Length::ll:
-    return PA_INT | width_flag(sizeof(long long));
-  case Length::j:
-    return PA_INT | width_flag(sizeof(long long));
   case Length::z:
   case Length::t:
-    return PA_INT | width_flag(sizeof(size_t));
+    return PA_INT | PA_FLAG_LONG;
+  case Length::ll:
+  case Length::j:
+    return PA_INT | PA_FLAG_LONG_LONG;
   default:
     return PA_INT;
   }
