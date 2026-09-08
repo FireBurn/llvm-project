@@ -207,4 +207,19 @@
 
 #define STT_SPARC_REGISTER 13
 
+// The thirty two bit absolute data relocation of each remaining
+// architecture, which is what a tool rewriting debug information matches
+// against to find a value it has to adjust.
+#define R_390_32 4
+#define R_68K_32 1
+#define R_ALPHA_REFLONG 1
+#define R_IA64_SECREL32LSB 0x65
+#define R_PARISC_DIR32 1
+#define R_PPC_UADDR32 24
+#define R_SPARC_32 3
+#define R_SPARC_UA32 23
+
+// The section a MIPS object keeps its debug information in.
+#define SHT_MIPS_DWARF 0x7000001e
+
 #endif // LLVM_LIBC_MACROS_ELF_MACROS_H
