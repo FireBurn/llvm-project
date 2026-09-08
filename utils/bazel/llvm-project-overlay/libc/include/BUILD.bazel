@@ -697,6 +697,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_stdio_ext_macros",
+    hdrs = ["llvm-libc-macros/stdio-ext-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_Elf64_Sxword",
     hdrs = ["llvm-libc-types/Elf64_Sxword.h"],
 )
