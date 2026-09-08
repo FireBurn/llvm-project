@@ -28,6 +28,21 @@ libc_support_library(
 )
 
 libc_function(
+    name = "getdents64",
+    srcs = ["getdents64.cpp"],
+    hdrs = ["getdents64.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getdents64",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "versionsort",
     srcs = ["versionsort.cpp"],
     hdrs = ["versionsort.h"],
