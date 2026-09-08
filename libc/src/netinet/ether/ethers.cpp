@@ -19,7 +19,9 @@ namespace ether {
 
 namespace {
 
-constexpr const char *ETHERS_PATH = "/etc/ethers";
+constexpr const char *DEFAULT_ETHERS_PATH = "/etc/ethers";
+
+const char *ethers_path = DEFAULT_ETHERS_PATH;
 
 // The name of a machine can be as long as any host name.
 constexpr size_t NAME_SIZE = 256;
@@ -133,7 +135,7 @@ namespace {
 template <typename Match>
 bool scan(struct ether_addr *addr, char *hostname, Match matches) {
   resolv::FileLines lines;
-  if (!lines.open(ETHERS_PATH))
+  if (!lines.open(ethers_path))
     return false;
 
   char line[NAME_SIZE + TEXT_SIZE + 2];
@@ -166,6 +168,10 @@ bool same(const struct ether_addr &a, const struct ether_addr &b) {
 }
 
 } // namespace
+
+void TESTONLY_set_ethers_path(const char *path) {
+  ethers_path = path != nullptr ? path : DEFAULT_ETHERS_PATH;
+}
 
 bool find_by_addr(const struct ether_addr *addr, char *hostname) {
   if (addr == nullptr || hostname == nullptr)

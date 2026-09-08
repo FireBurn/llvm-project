@@ -31,6 +31,9 @@ void to_text(const struct ether_addr *addr, char *buf);
 // blank line or one that is all comment does.
 bool from_line(const char *line, struct ether_addr *addr, char *hostname);
 
+// Overrides the ethers file path, for testing.
+void TESTONLY_set_ethers_path(const char *path);
+
 // Searches the ethers database. One of the two is given and the other is
 // filled in.
 bool find_by_addr(const struct ether_addr *addr, char *hostname);
