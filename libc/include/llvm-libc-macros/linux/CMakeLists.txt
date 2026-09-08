@@ -1,4 +1,10 @@
 add_header(
+  uapi_compat_macros
+  HDR
+    uapi-compat-macros.h
+)
+
+add_header(
   error_number_macros
   HDR
     error-number-macros.h
@@ -122,6 +128,8 @@ add_header(
   net_if_macros
   HDR
     net-if-macros.h
+  DEPENDS
+    .uapi_compat_macros
 )
 
 add_header(
