@@ -20,9 +20,11 @@ namespace LIBC_NAMESPACE_DECL {
 
 // Reads or changes a limit of another process, not only of this one.
 
-LLVM_LIBC_FUNCTION(int, prlimit, (pid_t pid, int resource, const struct rlimit *new_limit,
-            struct rlimit *old_limit)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_prlimit64, pid, resource, new_limit, old_limit);
+LLVM_LIBC_FUNCTION(int, prlimit,
+                   (pid_t pid, int resource, const struct rlimit *new_limit,
+                    struct rlimit *old_limit)) {
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_prlimit64, pid, resource,
+                                              new_limit, old_limit);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

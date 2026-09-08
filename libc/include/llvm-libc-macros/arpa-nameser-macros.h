@@ -10,11 +10,11 @@
 #define LLVM_LIBC_MACROS_ARPA_NAMESER_MACROS_H
 
 // The sizes a message and the names in it are held to.
-#define NS_PACKETSZ 512    // What a message sent over UDP may reach.
-#define NS_MAXDNAME 1025   // The longest name, written out.
-#define NS_MAXMSG 65535    // The longest message.
-#define NS_MAXCDNAME 255   // The longest name, as it is sent.
-#define NS_MAXLABEL 63     // The longest one part of a name.
+#define NS_PACKETSZ 512  // What a message sent over UDP may reach.
+#define NS_MAXDNAME 1025 // The longest name, written out.
+#define NS_MAXMSG 65535  // The longest message.
+#define NS_MAXCDNAME 255 // The longest name, as it is sent.
+#define NS_MAXLABEL 63   // The longest one part of a name.
 #define NS_MAXDHOSTNAME 256
 
 // The fixed parts of a message.
@@ -50,7 +50,6 @@
 #define IN6ADDRSZ NS_IN6ADDRSZ
 #define INDIR_MASK NS_CMPRSFLGS
 #define NAMESERVER_PORT NS_DEFAULTPORT
-
 
 // The names the record types went by before the ns_t_ prefix, which programs
 // still use. Each is the enumerator of the same name.

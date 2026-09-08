@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-void setprotoent (int stayopen);
+void setprotoent(int stayopen);
 
 } // namespace LIBC_NAMESPACE_DECL
 

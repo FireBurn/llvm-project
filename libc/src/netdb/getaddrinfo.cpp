@@ -13,18 +13,18 @@
 #include "hdr/func/free.h"
 #include "hdr/func/malloc.h"
 #include "hdr/netdb_macros.h"
-#include "include/llvm-libc-macros/netinet-in-macros.h"
 #include "hdr/sys_socket_macros.h"
 #include "hdr/types/struct_addrinfo.h"
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
+#include "include/llvm-libc-macros/netinet-in-macros.h"
 #include "src/__support/common.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/str_to_integer.h"
-#include "src/netdb/resolv/services.h"
 #include "src/netdb/resolv/lookup.h"
+#include "src/netdb/resolv/services.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
 
@@ -153,9 +153,8 @@ LLVM_LIBC_FUNCTION(int, getaddrinfo,
       }
     }
   } else {
-    const int looked = resolv::lookup_name(nodename, family, flags, found,
-                                           resolv::MAX_ADDRESSES,
-                                           canonical_name);
+    const int looked = resolv::lookup_name(
+        nodename, family, flags, found, resolv::MAX_ADDRESSES, canonical_name);
     // The EAI_ codes are negative, so anything below zero is one of them.
     if (looked < 0)
       return looked;

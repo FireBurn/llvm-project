@@ -25,8 +25,8 @@ using LlvmLibcFstatatTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcFstatatTest, RelativeToTheWorkingDirectory) {
   constexpr const char *FILENAME = "fstatat.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 
@@ -41,8 +41,8 @@ TEST_F(LlvmLibcFstatatTest, RelativeToTheWorkingDirectory) {
 
 TEST_F(LlvmLibcFstatatTest, RelativeToADirectory) {
   constexpr const char *FILENAME = "fstatat.dirfd.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 
@@ -73,9 +73,9 @@ TEST_F(LlvmLibcFstatatTest, NotFollowingALink) {
   EXPECT_TRUE(S_ISREG(followed.st_mode));
 
   struct stat itself;
-  ASSERT_THAT(LIBC_NAMESPACE::fstatat(AT_FDCWD, LINK, &itself,
-                                      AT_SYMLINK_NOFOLLOW),
-              Succeeds(0));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::fstatat(AT_FDCWD, LINK, &itself, AT_SYMLINK_NOFOLLOW),
+      Succeeds(0));
   EXPECT_TRUE(S_ISLNK(itself.st_mode));
 
   ASSERT_EQ(LIBC_NAMESPACE::remove(LINK), 0);

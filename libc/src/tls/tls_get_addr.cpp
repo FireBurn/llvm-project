@@ -52,5 +52,4 @@ LLVM_LIBC_FUNCTION(void *, __tls_get_addr, (TlsIndex * index)) {
   return reinterpret_cast<unsigned char *>(block) + index->ti_offset;
 }
 
-
 } // namespace LIBC_NAMESPACE_DECL

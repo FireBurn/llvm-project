@@ -1,4 +1,4 @@
-//===-- Linux implementation of setxattr ------------------------------------===//
+//===-- Linux implementation of setxattr ----------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -19,8 +19,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, setxattr, (const char *path, const char *name, const void *value, size_t size, int flags)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_setxattr, path, name, value, size, flags);
+LLVM_LIBC_FUNCTION(int, setxattr,
+                   (const char *path, const char *name, const void *value,
+                    size_t size, int flags)) {
+  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_setxattr, path, name, value,
+                                                size, flags);
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

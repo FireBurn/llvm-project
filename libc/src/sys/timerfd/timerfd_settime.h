@@ -1,4 +1,4 @@
-//===-- Implementation header for timerfd_settime ---------------------*- C++ -*-===//
+//===-- Implementation header for timerfd_settime ---------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -15,7 +15,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int timerfd_settime(int fd, int flags, const struct itimerspec *new_value, struct itimerspec *old_value);
+int timerfd_settime(int fd, int flags, const struct itimerspec *new_value,
+                    struct itimerspec *old_value);
 
 } // namespace LIBC_NAMESPACE_DECL
 

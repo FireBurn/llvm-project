@@ -11,8 +11,8 @@
 
 #include <link.h>
 
-using LIBC_NAMESPACE::elf::Module;
 using LIBC_NAMESPACE::elf::library_path_from;
+using LIBC_NAMESPACE::elf::Module;
 using LIBC_NAMESPACE::elf::preload_list_from;
 using LIBC_NAMESPACE::elf::rpath_of;
 using LIBC_NAMESPACE::elf::runpath_of;

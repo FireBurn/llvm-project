@@ -20,16 +20,16 @@
 #define SHM_EXEC 0100000  // Attach so that the pages may be executed.
 
 // The shmctl commands which are Linux's own.
-#define SHM_LOCK 11     // Keep the segment out of swap.
-#define SHM_UNLOCK 12   // Let it be swapped again.
+#define SHM_LOCK 11   // Keep the segment out of swap.
+#define SHM_UNLOCK 12 // Let it be swapped again.
 #define SHM_STAT 13
 #define SHM_INFO 14
 #define SHM_STAT_ANY 15
 
 // The mode bits shmctl reports which are not permissions.
-#define SHM_DEST 01000      // Destroy the segment when the last one detaches.
-#define SHM_LOCKED 02000    // The segment is kept out of swap.
-#define SHM_HUGETLB 04000   // It is backed by huge pages.
+#define SHM_DEST 01000    // Destroy the segment when the last one detaches.
+#define SHM_LOCKED 02000  // The segment is kept out of swap.
+#define SHM_HUGETLB 04000 // It is backed by huge pages.
 #define SHM_NORESERVE 010000
 
 // What an attach address is rounded to when SHM_RND asks for it.

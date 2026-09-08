@@ -17,8 +17,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int pthread_getaffinity_np(pthread_t th, size_t cpuset_size,
-                            cpu_set_t *mask);
+int pthread_getaffinity_np(pthread_t th, size_t cpuset_size, cpu_set_t *mask);
 
 } // namespace LIBC_NAMESPACE_DECL
 

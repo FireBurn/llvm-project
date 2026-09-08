@@ -17,9 +17,9 @@
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/load_module.h"
 #include "src/__support/elf/module.h"
+#include "src/__support/elf/passive_abi.h"
 #include "src/__support/elf/run_path.h"
 #include "src/__support/elf/search.h"
-#include "src/__support/elf/passive_abi.h"
 #include "src/__support/elf/startup_stack.h"
 #include "src/__support/elf/thread_pointer.h"
 #include "src/__support/elf/tls_block.h"
@@ -183,8 +183,8 @@ private:
       }
       // The executable is what a relative run path is taken against, and it
       // is the only module loaded at this point.
-      auto loaded = find_and_load(name, &modules_[0], library_path_,
-                                  page_size_);
+      auto loaded =
+          find_and_load(name, &modules_[0], library_path_, page_size_);
       if (loaded.has_value())
         remember(loaded.value());
     }
@@ -215,7 +215,6 @@ private:
     report("\n");
     return false;
   }
-
 
   LIBC_INLINE bool setup_tls() {
     auto block = allocate_tls_block(modules_, count_, tls_offsets_);

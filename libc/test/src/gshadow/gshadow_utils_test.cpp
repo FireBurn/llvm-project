@@ -21,8 +21,7 @@ bool parse(char *line, struct sgrp *entry) {
   size_t len = 0;
   while (line[len] != '\0')
     ++len;
-  return LIBC_NAMESPACE::internal::parse_line(span<char>(line, len + 1),
-                                              entry);
+  return LIBC_NAMESPACE::internal::parse_line(span<char>(line, len + 1), entry);
 }
 
 } // anonymous namespace
@@ -168,8 +167,8 @@ TEST(LlvmLibcGShadowTest, TheReentrantFormRejectsWhatItCannotAnswerInto) {
   struct sgrp entry;
   char buffer[1024];
   struct sgrp *result = nullptr;
-  ASSERT_NE(LIBC_NAMESPACE::sgetsgent_r(nullptr, &entry, buffer,
-                                        sizeof(buffer), &result),
+  ASSERT_NE(LIBC_NAMESPACE::sgetsgent_r(nullptr, &entry, buffer, sizeof(buffer),
+                                        &result),
             0);
   ASSERT_NE(LIBC_NAMESPACE::sgetsgent_r("a:b:c:d", nullptr, buffer,
                                         sizeof(buffer), &result),

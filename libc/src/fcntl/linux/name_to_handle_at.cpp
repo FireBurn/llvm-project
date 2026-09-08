@@ -18,8 +18,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, name_to_handle_at,
-                   (int dirfd, const char *pathname,
-                    struct file_handle *handle, int *mount_id, int flags)) {
+                   (int dirfd, const char *pathname, struct file_handle *handle,
+                    int *mount_id, int flags)) {
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
       SYS_name_to_handle_at, dirfd, pathname, handle, mount_id, flags);
   if (ret < 0) {

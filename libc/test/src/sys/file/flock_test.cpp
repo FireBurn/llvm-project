@@ -23,8 +23,8 @@ using LlvmLibcFlockTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcFlockTest, TakeAndRelease) {
   constexpr const char *FILENAME = "flock.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
 
   ASSERT_THAT(LIBC_NAMESPACE::flock(fd, LOCK_EX), Succeeds(0));
@@ -42,8 +42,8 @@ TEST_F(LlvmLibcFlockTest, TakeAndRelease) {
 
 TEST_F(LlvmLibcFlockTest, ATakenLockIsReported) {
   constexpr const char *FILENAME = "flock.contended.test";
-  int first = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                   S_IRWXU);
+  int first =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(first, 0);
   // A separate open is a separate description, so its lock is a separate
   // claim on the same file.
@@ -68,8 +68,8 @@ TEST_F(LlvmLibcFlockTest, BadDescriptorAndOperation) {
   EXPECT_THAT(LIBC_NAMESPACE::flock(-1, LOCK_EX), Fails(EBADF, -1));
 
   constexpr const char *FILENAME = "flock.bad.test";
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   // An operation which is none of the four is not one the kernel knows.
   EXPECT_THAT(LIBC_NAMESPACE::flock(fd, 0), Fails(EINVAL, -1));

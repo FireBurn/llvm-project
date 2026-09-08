@@ -15,16 +15,17 @@
 
 #include "src/__support/OSUtil/linux/syscall_wrappers/ioctl.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/cancel.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 #include <asm/ioctls.h> // Safe to include without the risk of name pollution.
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, tcdrain, (int fd)) {
-  auto ret = internal::cancellable([&] { return linux_syscalls::ioctl(fd, TCSBRK, 1); });
+  auto ret = internal::cancellable(
+      [&] { return linux_syscalls::ioctl(fd, TCSBRK, 1); });
   if (!ret.has_value()) {
     libc_errno = ret.error();
     return -1;

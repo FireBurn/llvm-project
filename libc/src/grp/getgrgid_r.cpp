@@ -21,9 +21,9 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, getgrgid_r,
                    (gid_t gid, struct group *grp, char *buf, size_t buflen,
                     struct group **result)) {
-  return group_r::find(
-      grp, buf, buflen, result,
-      [gid](struct group *entry) { return entry->gr_gid == gid; });
+  return group_r::find(grp, buf, buflen, result, [gid](struct group *entry) {
+    return entry->gr_gid == gid;
+  });
 }
 
 } // namespace LIBC_NAMESPACE_DECL

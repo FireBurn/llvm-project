@@ -20,7 +20,7 @@
 using string_view = LIBC_NAMESPACE::cpp::string_view;
 
 TEST(LlvmLibcGetNameInfoTest, IPv4AddressAndPort) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   addr.sin_port = LIBC_NAMESPACE::htons(8080);
   // 127.0.0.1 in network order.
@@ -38,7 +38,7 @@ TEST(LlvmLibcGetNameInfoTest, IPv4AddressAndPort) {
 }
 
 TEST(LlvmLibcGetNameInfoTest, IPv6Address) {
-  struct sockaddr_in6 addr {};
+  struct sockaddr_in6 addr{};
   addr.sin6_family = AF_INET6;
   addr.sin6_port = LIBC_NAMESPACE::htons(443);
   // ::1
@@ -56,7 +56,7 @@ TEST(LlvmLibcGetNameInfoTest, IPv6Address) {
 }
 
 TEST(LlvmLibcGetNameInfoTest, HostOrServiceAlone) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   addr.sin_port = LIBC_NAMESPACE::htons(22);
   unsigned char octets[4] = {10, 0, 0, 5};
@@ -82,7 +82,7 @@ TEST(LlvmLibcGetNameInfoTest, HostOrServiceAlone) {
 // this runs on says about the address, so both are accepted; what is checked
 // is that the two agree with each other.
 TEST(LlvmLibcGetNameInfoTest, NameRequiredIsMetOrRefused) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   unsigned char octets[4] = {127, 0, 0, 1};
   __builtin_memcpy(&addr.sin_addr, octets, 4);
@@ -102,7 +102,7 @@ TEST(LlvmLibcGetNameInfoTest, NameRequiredIsMetOrRefused) {
 
 // Asking for the numeric form gives it whatever the address is called.
 TEST(LlvmLibcGetNameInfoTest, NumericHostIsAlwaysTheAddress) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   unsigned char octets[4] = {127, 0, 0, 1};
   __builtin_memcpy(&addr.sin_addr, octets, 4);
@@ -116,7 +116,7 @@ TEST(LlvmLibcGetNameInfoTest, NumericHostIsAlwaysTheAddress) {
 }
 
 TEST(LlvmLibcGetNameInfoTest, BadArguments) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   char host[64] = {};
 
@@ -124,17 +124,17 @@ TEST(LlvmLibcGetNameInfoTest, BadArguments) {
                                         sizeof(host), nullptr, 0, 0),
             EAI_FAMILY);
   // Neither a host nor a service was asked for.
-  EXPECT_EQ(LIBC_NAMESPACE::getnameinfo(
-                reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr),
-                nullptr, 0, nullptr, 0, 0),
-            EAI_NONAME);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getnameinfo(reinterpret_cast<struct sockaddr *>(&addr),
+                                  sizeof(addr), nullptr, 0, nullptr, 0, 0),
+      EAI_NONAME);
   // A length too short for the family named.
-  EXPECT_EQ(LIBC_NAMESPACE::getnameinfo(
-                reinterpret_cast<struct sockaddr *>(&addr), 4, host,
-                sizeof(host), nullptr, 0, 0),
-            EAI_FAMILY);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getnameinfo(reinterpret_cast<struct sockaddr *>(&addr), 4,
+                                  host, sizeof(host), nullptr, 0, 0),
+      EAI_FAMILY);
 
-  struct sockaddr other {};
+  struct sockaddr other{};
   other.sa_family = AF_UNIX;
   EXPECT_EQ(LIBC_NAMESPACE::getnameinfo(&other, sizeof(other), host,
                                         sizeof(host), nullptr, 0, 0),
@@ -142,7 +142,7 @@ TEST(LlvmLibcGetNameInfoTest, BadArguments) {
 }
 
 TEST(LlvmLibcGetNameInfoTest, BuffersTooSmall) {
-  struct sockaddr_in addr {};
+  struct sockaddr_in addr{};
   addr.sin_family = AF_INET;
   addr.sin_port = LIBC_NAMESPACE::htons(65535);
   unsigned char octets[4] = {192, 168, 100, 200};

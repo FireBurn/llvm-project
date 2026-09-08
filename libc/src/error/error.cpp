@@ -17,8 +17,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(void, error, (int status, int errnum, const char *format,
-                                 ...)) {
+LLVM_LIBC_FUNCTION(void, error,
+                   (int status, int errnum, const char *format, ...)) {
   va_list args;
   va_start(args, format);
   internal::ArgList arg_list(args);

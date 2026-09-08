@@ -25,8 +25,8 @@ using LIBC_NAMESPACE::resolv::TYPE_CNAME;
 
 TEST(LlvmLibcDnsMessageTest, QueryHasTheNameAsLabels) {
   unsigned char message[MAX_MESSAGE];
-  const size_t length = build_query("www.example.com", TYPE_A, CLASS_IN, 0x1234, message,
-                                    sizeof(message));
+  const size_t length = build_query("www.example.com", TYPE_A, CLASS_IN, 0x1234,
+                                    message, sizeof(message));
   // A header, then 3www7example3com0, then the type and the class.
   ASSERT_EQ(length, HEADER_SIZE + 17 + 4);
   EXPECT_EQ(message[0], static_cast<unsigned char>(0x12));
@@ -50,7 +50,8 @@ TEST(LlvmLibcDnsMessageTest, QueryHasTheNameAsLabels) {
 
 TEST(LlvmLibcDnsMessageTest, RefusesWhatIsNotAName) {
   unsigned char message[MAX_MESSAGE];
-  EXPECT_EQ(build_query("", TYPE_A, CLASS_IN, 1, message, sizeof(message)), size_t(0));
+  EXPECT_EQ(build_query("", TYPE_A, CLASS_IN, 1, message, sizeof(message)),
+            size_t(0));
   EXPECT_EQ(build_query("a..b", TYPE_A, CLASS_IN, 1, message, sizeof(message)),
             size_t(0));
   EXPECT_EQ(build_query(nullptr, TYPE_A, CLASS_IN, 1, message, sizeof(message)),
@@ -60,11 +61,13 @@ TEST(LlvmLibcDnsMessageTest, RefusesWhatIsNotAName) {
   for (size_t i = 0; i < 70; ++i)
     too_long[i] = 'a';
   too_long[70] = '\0';
-  EXPECT_EQ(build_query(too_long, TYPE_A, CLASS_IN, 1, message, sizeof(message)),
-            size_t(0));
+  EXPECT_EQ(
+      build_query(too_long, TYPE_A, CLASS_IN, 1, message, sizeof(message)),
+      size_t(0));
   // And there has to be room to put it.
   unsigned char tiny[8];
-  EXPECT_EQ(build_query("a.b", TYPE_A, CLASS_IN, 1, tiny, sizeof(tiny)), size_t(0));
+  EXPECT_EQ(build_query("a.b", TYPE_A, CLASS_IN, 1, tiny, sizeof(tiny)),
+            size_t(0));
 }
 
 TEST(LlvmLibcDnsMessageTest, ANameThatEndsInADotIsTheSameName) {
@@ -72,8 +75,8 @@ TEST(LlvmLibcDnsMessageTest, ANameThatEndsInADotIsTheSameName) {
   unsigned char without[MAX_MESSAGE];
   const size_t a = build_query("example.com.", TYPE_A, CLASS_IN, 1, with_dot,
                                sizeof(with_dot));
-  const size_t b = build_query("example.com", TYPE_A, CLASS_IN, 1, without,
-                               sizeof(without));
+  const size_t b =
+      build_query("example.com", TYPE_A, CLASS_IN, 1, without, sizeof(without));
   ASSERT_GT(a, size_t(0));
   ASSERT_EQ(a, b);
   for (size_t i = 0; i < a; ++i)
@@ -88,7 +91,8 @@ struct Builder {
   size_t length = 0;
 
   void start(uint16_t id, size_t answers, unsigned char code = 0) {
-    length = build_query("example.com", TYPE_A, CLASS_IN, id, bytes, sizeof(bytes));
+    length =
+        build_query("example.com", TYPE_A, CLASS_IN, id, bytes, sizeof(bytes));
     // Say it is an answer, and how many there are.
     bytes[2] = 0x80;
     bytes[3] = code;
@@ -125,15 +129,13 @@ TEST(LlvmLibcDnsMessageTest, ReadsTheAnswers) {
 
   int seen = 0;
   unsigned char collected[2][4] = {};
-  const Status status =
-      for_each_answer(message.bytes, message.length, 0x4321,
-                      [&](const Record &record) {
-                        if (seen < 2 && record.type == TYPE_A &&
-                            record.length == 4)
-                          for (size_t i = 0; i < 4; ++i)
-                            collected[seen][i] = record.data[i];
-                        ++seen;
-                      });
+  const Status status = for_each_answer(
+      message.bytes, message.length, 0x4321, [&](const Record &record) {
+        if (seen < 2 && record.type == TYPE_A && record.length == 4)
+          for (size_t i = 0; i < 4; ++i)
+            collected[seen][i] = record.data[i];
+        ++seen;
+      });
   EXPECT_EQ(static_cast<int>(status), static_cast<int>(Status::Ok));
   ASSERT_EQ(seen, 2);
   EXPECT_EQ(collected[0][3], static_cast<unsigned char>(34));
@@ -147,9 +149,8 @@ TEST(LlvmLibcDnsMessageTest, AnAnswerToSomeoneElseIsNotAnAnswer) {
   message.answer(TYPE_A, address, 4);
 
   int seen = 0;
-  const Status status =
-      for_each_answer(message.bytes, message.length, 0x2222,
-                      [&](const Record &) { ++seen; });
+  const Status status = for_each_answer(message.bytes, message.length, 0x2222,
+                                        [&](const Record &) { ++seen; });
   EXPECT_EQ(static_cast<int>(status), static_cast<int>(Status::Failed));
   EXPECT_EQ(seen, 0);
 }
@@ -181,11 +182,11 @@ TEST(LlvmLibcDnsMessageTest, ATruncatedAnswerIsNoAnswer) {
 
 TEST(LlvmLibcDnsMessageTest, ReadsANameBackFromItsLabels) {
   unsigned char message[MAX_MESSAGE];
-  const size_t length = build_query("www.example.com", TYPE_AAAA, CLASS_IN, 1, message,
-                                    sizeof(message));
+  const size_t length = build_query("www.example.com", TYPE_AAAA, CLASS_IN, 1,
+                                    message, sizeof(message));
   char name[256];
-  const size_t taken = read_name(message, length, HEADER_SIZE, name,
-                                 sizeof(name));
+  const size_t taken =
+      read_name(message, length, HEADER_SIZE, name, sizeof(name));
   EXPECT_EQ(taken, size_t(17));
   EXPECT_EQ(LIBC_NAMESPACE::strcmp(name, "www.example.com"), 0);
   EXPECT_EQ(skip_name(message, length, HEADER_SIZE), HEADER_SIZE + 17);
@@ -193,8 +194,8 @@ TEST(LlvmLibcDnsMessageTest, ReadsANameBackFromItsLabels) {
 
 TEST(LlvmLibcDnsMessageTest, FollowsAPointerToANameAlreadyThere) {
   unsigned char message[MAX_MESSAGE];
-  size_t length = build_query("example.com", TYPE_A, CLASS_IN, 1, message,
-                              sizeof(message));
+  size_t length =
+      build_query("example.com", TYPE_A, CLASS_IN, 1, message, sizeof(message));
   // A name that is just a pointer back to the question's.
   const size_t pointer_at = length;
   message[length++] = 0xC0;

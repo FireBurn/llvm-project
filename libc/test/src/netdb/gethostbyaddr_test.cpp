@@ -33,8 +33,7 @@ TEST(LlvmLibcGetHostByAddrTest, OnlyInternetFamilies) {
 // that was asked about.
 TEST(LlvmLibcGetHostByAddrTest, TheAnswerDescribesTheAddress) {
   const unsigned char loopback[4] = {127, 0, 0, 1};
-  struct hostent *entry =
-      LIBC_NAMESPACE::gethostbyaddr(loopback, 4, AF_INET);
+  struct hostent *entry = LIBC_NAMESPACE::gethostbyaddr(loopback, 4, AF_INET);
   if (entry == nullptr)
     return; // Nothing names it here, which is allowed.
   ASSERT_EQ(entry->h_addrtype, AF_INET);

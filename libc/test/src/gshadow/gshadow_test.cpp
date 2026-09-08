@@ -29,7 +29,7 @@
 namespace {
 
 constexpr char FILE_CONTENTS[] = "wheel:$y$hash:root:alice,bob\n"
-                                "empty:!::\n";
+                                 "empty:!::\n";
 
 class LlvmLibcGshadowTest : public LIBC_NAMESPACE::testing::ErrnoCheckingTest {
 public:
@@ -38,9 +38,9 @@ public:
     path = libc_make_test_file_path("gshadow_test.gshadow");
     ::FILE *f = LIBC_NAMESPACE::fopen(path, "w");
     ASSERT_FALSE(f == nullptr);
-    ASSERT_EQ(LIBC_NAMESPACE::fwrite(FILE_CONTENTS, 1,
-                                     sizeof(FILE_CONTENTS) - 1, f),
-              sizeof(FILE_CONTENTS) - 1);
+    ASSERT_EQ(
+        LIBC_NAMESPACE::fwrite(FILE_CONTENTS, 1, sizeof(FILE_CONTENTS) - 1, f),
+        sizeof(FILE_CONTENTS) - 1);
     ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
     LIBC_NAMESPACE::gshadow_db::TESTONLY_set_gshadow_path(path);
   }
@@ -124,16 +124,16 @@ TEST_F(LlvmLibcGshadowTest, CallerSuppliedBuffers) {
   char buf[256];
   struct sgrp *result = nullptr;
 
-  ASSERT_EQ(LIBC_NAMESPACE::getsgnam_r("wheel", &entry, buf, sizeof(buf),
-                                       &result),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getsgnam_r("wheel", &entry, buf, sizeof(buf), &result),
+      0);
   ASSERT_TRUE(result == &entry);
   ASSERT_STREQ(entry.sg_namp, "wheel");
   ASSERT_STREQ(entry.sg_mem[0], "alice");
 
-  ASSERT_EQ(LIBC_NAMESPACE::getsgnam_r("nogroup", &entry, buf, sizeof(buf),
-                                       &result),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getsgnam_r("nogroup", &entry, buf, sizeof(buf), &result),
+      0);
   ASSERT_TRUE(result == nullptr);
 
   LIBC_NAMESPACE::setsgent();
@@ -154,9 +154,9 @@ TEST_F(LlvmLibcGshadowTest, BufferTooSmall) {
   struct sgrp entry;
   char buf[4];
   struct sgrp *result = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getsgnam_r("wheel", &entry, buf, sizeof(buf),
-                                       &result),
-            ERANGE);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getsgnam_r("wheel", &entry, buf, sizeof(buf), &result),
+      ERANGE);
   ASSERT_TRUE(result == nullptr);
 }
 

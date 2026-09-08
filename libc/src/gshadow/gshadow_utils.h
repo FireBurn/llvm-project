@@ -55,10 +55,9 @@ namespace internal {
 template <>
 LIBC_INLINE bool parse_line<struct sgrp>(cpp::span<char> line,
                                          struct sgrp *entry) {
-  return gshadow::parse_line_into(line, entry, gshadow::admin_list,
-                                  gshadow::GSHADOW_NAME_MAX,
-                                  gshadow::member_list,
-                                  gshadow::GSHADOW_NAME_MAX);
+  return gshadow::parse_line_into(
+      line, entry, gshadow::admin_list, gshadow::GSHADOW_NAME_MAX,
+      gshadow::member_list, gshadow::GSHADOW_NAME_MAX);
 }
 
 } // namespace internal

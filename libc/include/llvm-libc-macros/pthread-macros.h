@@ -35,7 +35,7 @@
     _pthread_cleanup_push(&__llvm_libc_cleanup_buffer, (routine), (arg));
 
 #define pthread_cleanup_pop(execute)                                           \
-    _pthread_cleanup_pop(&__llvm_libc_cleanup_buffer, (execute));               \
+  _pthread_cleanup_pop(&__llvm_libc_cleanup_buffer, (execute));                \
   }
 
 #define PTHREAD_MUTEX_NORMAL 0
@@ -98,7 +98,7 @@
 // glibc extensions
 #ifndef PTHREAD_STACK_MIN
 #define PTHREAD_STACK_MIN (1 << 14) // 16KB
-#endif // PTHREAD_STACK_MIN
+#endif                              // PTHREAD_STACK_MIN
 #define PTHREAD_RWLOCK_PREFER_READER_NP 0
 #define PTHREAD_RWLOCK_PREFER_WRITER_NP 1
 #define PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP 2

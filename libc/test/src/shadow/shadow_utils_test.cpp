@@ -19,8 +19,7 @@ bool parse(char *line, struct spwd *entry) {
   size_t len = 0;
   while (line[len] != '\0')
     ++len;
-  return LIBC_NAMESPACE::internal::parse_line(span<char>(line, len + 1),
-                                              entry);
+  return LIBC_NAMESPACE::internal::parse_line(span<char>(line, len + 1), entry);
 }
 
 } // anonymous namespace

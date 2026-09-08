@@ -32,7 +32,8 @@ TEST_F(LlvmLibcShmTest, CreateAttachAndWrite) {
   ASSERT_GE(id, 0);
   ASSERT_ERRNO_SUCCESS();
 
-  char *memory = reinterpret_cast<char *>(LIBC_NAMESPACE::shmat(id, nullptr, 0));
+  char *memory =
+      reinterpret_cast<char *>(LIBC_NAMESPACE::shmat(id, nullptr, 0));
   ASSERT_TRUE(memory != ATTACH_FAILED);
   ASSERT_ERRNO_SUCCESS();
 

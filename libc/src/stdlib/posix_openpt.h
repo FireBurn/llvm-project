@@ -1,4 +1,4 @@
-//===-- Implementation header for posix_openpt -----------------------*- C++ -*-===//
+//===-- Implementation header for posix_openpt ------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.

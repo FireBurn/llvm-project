@@ -18,8 +18,7 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(long, delete_module,
                    (const char *name, unsigned int flags)) {
-  long ret =
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_delete_module, name, flags);
+  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_delete_module, name, flags);
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

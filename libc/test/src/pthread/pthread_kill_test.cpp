@@ -7,8 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/errno_macros.h"
-#include "hdr/stdint_proxy.h"
 #include "hdr/signal_macros.h"
+#include "hdr/stdint_proxy.h"
 #include "src/pthread/pthread_attr_destroy.h"
 #include "src/pthread/pthread_attr_getstack.h"
 #include "src/pthread/pthread_getattr_np.h"
@@ -33,17 +33,15 @@ TEST(LlvmLibcPthreadKillTest, SignalsAThread) {
   ASSERT_NE(LIBC_NAMESPACE::signal(SIGUSR1, &handler), SIG_ERR);
   delivered = 0;
 
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_kill(LIBC_NAMESPACE::pthread_self(),
-                                         SIGUSR1),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_kill(LIBC_NAMESPACE::pthread_self(), SIGUSR1), 0);
   ASSERT_EQ(delivered, 1);
 }
 
 // A signal of zero asks whether the thread is there rather than sending
 // anything, and a number that is not a signal is refused.
 TEST(LlvmLibcPthreadKillTest, AskingWhetherAThreadIsThere) {
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_kill(LIBC_NAMESPACE::pthread_self(), 0),
-            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_kill(LIBC_NAMESPACE::pthread_self(), 0), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_kill(LIBC_NAMESPACE::pthread_self(), -1),
             EINVAL);
 }
@@ -53,9 +51,9 @@ TEST(LlvmLibcPthreadKillTest, AskingWhetherAThreadIsThere) {
 // the thread is on.
 TEST(LlvmLibcPthreadGetattrNpTest, ReportsTheStackTheThreadIsOn) {
   pthread_attr_t attr;
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_getattr_np(LIBC_NAMESPACE::pthread_self(),
-                                               &attr),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_getattr_np(LIBC_NAMESPACE::pthread_self(), &attr),
+      0);
 
   void *stack = nullptr;
   size_t size = 0;

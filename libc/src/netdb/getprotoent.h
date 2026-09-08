@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct protoent * getprotoent (void);
+struct protoent *getprotoent(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 

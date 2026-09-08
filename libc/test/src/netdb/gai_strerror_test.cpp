@@ -6,8 +6,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/netdb/gai_strerror.h"
 #include "src/netdb/__h_errno_location.h"
+#include "src/netdb/gai_strerror.h"
 #include "src/netdb/herror.h"
 #include "src/string/strlen.h"
 #include "test/UnitTest/Test.h"
@@ -17,9 +17,9 @@
 // Every code the lookup calls report has a message of its own, and one that
 // is not a code still has something to say rather than nothing.
 TEST(LlvmLibcGaiStrerrorTest, NamesEveryCode) {
-  constexpr int CODES[] = {EAI_BADFLAGS, EAI_NONAME, EAI_AGAIN,  EAI_FAIL,
-                           EAI_FAMILY,   EAI_SOCKTYPE, EAI_SERVICE,
-                           EAI_MEMORY,   EAI_SYSTEM, EAI_OVERFLOW};
+  constexpr int CODES[] = {EAI_BADFLAGS, EAI_NONAME,   EAI_AGAIN,   EAI_FAIL,
+                           EAI_FAMILY,   EAI_SOCKTYPE, EAI_SERVICE, EAI_MEMORY,
+                           EAI_SYSTEM,   EAI_OVERFLOW};
   for (int code : CODES) {
     const char *message = LIBC_NAMESPACE::gai_strerror(code);
     ASSERT_FALSE(message == nullptr);
@@ -39,8 +39,8 @@ TEST(LlvmLibcGaiStrerrorTest, NamesEveryCode) {
 // can say is that it runs over every value h_errno takes, and over a null
 // prefix, without reaching for anything that is not there.
 TEST(LlvmLibcHerrorTest, WritesAMessageForEveryValue) {
-  constexpr int VALUES[] = {0, HOST_NOT_FOUND, TRY_AGAIN, NO_RECOVERY,
-                            NO_DATA, 12345};
+  constexpr int VALUES[] = {0,           HOST_NOT_FOUND, TRY_AGAIN,
+                            NO_RECOVERY, NO_DATA,        12345};
   for (int value : VALUES) {
     *LIBC_NAMESPACE::__h_errno_location() = value;
     LIBC_NAMESPACE::herror("llvm-libc test");

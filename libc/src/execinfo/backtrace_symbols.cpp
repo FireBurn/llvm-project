@@ -43,8 +43,7 @@ size_t render(void *address, char *out, size_t room) {
   if (cursor != scratch)
     cursor = execinfo::put(cursor, end, ' ');
   cursor = execinfo::put(cursor, end, '[');
-  cursor = execinfo::put_hex(cursor, end,
-                             reinterpret_cast<uintptr_t>(address));
+  cursor = execinfo::put_hex(cursor, end, reinterpret_cast<uintptr_t>(address));
   cursor = execinfo::put(cursor, end, ']');
   *cursor = '\0';
 
@@ -60,7 +59,8 @@ size_t render(void *address, char *out, size_t room) {
 // The same lines backtrace_symbols_fd writes, in one block the caller frees
 // with a single call: the array of pointers is at the front and the strings
 // follow it.
-LLVM_LIBC_FUNCTION(char **, backtrace_symbols, (void *const *buffer, int size)) {
+LLVM_LIBC_FUNCTION(char **, backtrace_symbols,
+                   (void *const *buffer, int size)) {
   if (buffer == nullptr || size <= 0)
     return nullptr;
 

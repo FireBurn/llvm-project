@@ -20,8 +20,8 @@ namespace LIBC_NAMESPACE_DECL {
 // through a file. Reaching into another process this way needs the right to
 // trace it.
 ssize_t process_vm_readv(pid_t pid, const struct iovec *local_iov,
-                        unsigned long liovcnt, const struct iovec *remote_iov,
-                        unsigned long riovcnt, unsigned long flags);
+                         unsigned long liovcnt, const struct iovec *remote_iov,
+                         unsigned long riovcnt, unsigned long flags);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -22,8 +22,8 @@
 TEST(LlvmLibcPthreadAffinityTest, ReportsWhereItMayRun) {
   cpu_set_t set;
   LIBC_NAMESPACE::memset(&set, 0, sizeof(set));
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(LIBC_NAMESPACE::pthread_self(), sizeof(set),
-                                                   &set),
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(
+                LIBC_NAMESPACE::pthread_self(), sizeof(set), &set),
             0);
   // The thread has to be allowed to run somewhere.
   EXPECT_GT(int(LIBC_NAMESPACE::__sched_getcpucount(sizeof(set), &set)), 0);
@@ -39,14 +39,14 @@ TEST(LlvmLibcPthreadAffinityTest, NarrowsToOneProcessorAndBack) {
   cpu_set_t one;
   LIBC_NAMESPACE::memset(&one, 0, sizeof(one));
   LIBC_NAMESPACE::__sched_setcpuset(0, sizeof(one), &one);
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_setaffinity_np(LIBC_NAMESPACE::pthread_self(), sizeof(one),
-                                                   &one),
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setaffinity_np(
+                LIBC_NAMESPACE::pthread_self(), sizeof(one), &one),
             0);
 
   cpu_set_t now;
   LIBC_NAMESPACE::memset(&now, 0, sizeof(now));
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(LIBC_NAMESPACE::pthread_self(), sizeof(now),
-                                                   &now),
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(
+                LIBC_NAMESPACE::pthread_self(), sizeof(now), &now),
             0);
   EXPECT_EQ(int(LIBC_NAMESPACE::__sched_getcpucount(sizeof(now), &now)), 1);
   EXPECT_NE(LIBC_NAMESPACE::__sched_getcpuisset(0, sizeof(now), &now), 0);
@@ -59,6 +59,7 @@ TEST(LlvmLibcPthreadAffinityTest, NarrowsToOneProcessorAndBack) {
 TEST(LlvmLibcPthreadAffinityTest, ReportsTheErrorRatherThanSettingErrno) {
   cpu_set_t set;
   // A set the kernel will not accept, so the error comes back as the result.
-  EXPECT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(LIBC_NAMESPACE::pthread_self(), 1, &set),
+  EXPECT_EQ(LIBC_NAMESPACE::pthread_getaffinity_np(
+                LIBC_NAMESPACE::pthread_self(), 1, &set),
             EINVAL);
 }

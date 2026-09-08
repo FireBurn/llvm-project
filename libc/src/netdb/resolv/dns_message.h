@@ -82,8 +82,7 @@ Status for_each_answer(const unsigned char *message, size_t length,
                        uint16_t expected_id, F callback) {
   if (length < HEADER_SIZE)
     return Status::Failed;
-  const uint16_t id =
-      static_cast<uint16_t>(message[0] << 8) | message[1];
+  const uint16_t id = static_cast<uint16_t>(message[0] << 8) | message[1];
   if (id != expected_id)
     return Status::Failed;
   // The message has to be an answer, and not a truncated one: what is missing

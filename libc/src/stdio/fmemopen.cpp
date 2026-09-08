@@ -16,8 +16,8 @@
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/new.h"
-#include "src/__support/alloc-checker.h"
 #include "src/__support/File/file.h"
+#include "src/__support/alloc-checker.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
@@ -157,8 +157,8 @@ LLVM_LIBC_FUNCTION(::FILE *, fmemopen,
   // Where the position starts and how much is already there depend on the
   // mode: appending starts at whatever is in the buffer, writing throws it
   // away, and reading takes all of it.
-  const bool append = (flags & static_cast<File::ModeFlags>(
-                                   File::OpenMode::APPEND)) != 0;
+  const bool append =
+      (flags & static_cast<File::ModeFlags>(File::OpenMode::APPEND)) != 0;
   const bool write =
       (flags & static_cast<File::ModeFlags>(File::OpenMode::WRITE)) != 0;
 
@@ -195,9 +195,8 @@ LLVM_LIBC_FUNCTION(::FILE *, fmemopen,
     }
   }
   AllocChecker ac;
-  auto *file =
-      new (ac) MemoryFile(memory, size, limit, length, position, owned, buffer,
-                          File::DEFAULT_BUFFER_SIZE, flags);
+  auto *file = new (ac) MemoryFile(memory, size, limit, length, position, owned,
+                                   buffer, File::DEFAULT_BUFFER_SIZE, flags);
   if (!ac) {
     delete[] buffer;
     if (owned)

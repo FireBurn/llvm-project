@@ -16,9 +16,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, move_mount, (int from_dfd, const char *from_path, int to_dfd,
-               const char *to_path, unsigned int flags)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_move_mount, from_dfd, from_path, to_dfd, to_path, flags);
+LLVM_LIBC_FUNCTION(int, move_mount,
+                   (int from_dfd, const char *from_path, int to_dfd,
+                    const char *to_path, unsigned int flags)) {
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(
+      SYS_move_mount, from_dfd, from_path, to_dfd, to_path, flags);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

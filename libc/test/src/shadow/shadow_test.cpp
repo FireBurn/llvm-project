@@ -34,7 +34,7 @@
 namespace {
 
 constexpr char FILE_CONTENTS[] = "alice:$y$alice:19500:1:180:14:30:20000:0\n"
-                                "bob:!:19600:0:99999:7:::\n";
+                                 "bob:!:19600:0:99999:7:::\n";
 
 // The database is read from whatever path is set, so each test points it at
 // a file it wrote itself rather than at the machine's own.
@@ -45,9 +45,9 @@ public:
     path = libc_make_test_file_path("shadow_test.shadow");
     ::FILE *f = LIBC_NAMESPACE::fopen(path, "w");
     ASSERT_FALSE(f == nullptr);
-    ASSERT_EQ(LIBC_NAMESPACE::fwrite(FILE_CONTENTS, 1,
-                                     sizeof(FILE_CONTENTS) - 1, f),
-              sizeof(FILE_CONTENTS) - 1);
+    ASSERT_EQ(
+        LIBC_NAMESPACE::fwrite(FILE_CONTENTS, 1, sizeof(FILE_CONTENTS) - 1, f),
+        sizeof(FILE_CONTENTS) - 1);
     ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
     LIBC_NAMESPACE::shadow_db::TESTONLY_set_shadow_path(path);
   }
@@ -134,21 +134,20 @@ TEST_F(LlvmLibcShadowTest, CallerSuppliedBuffers) {
   char buf[256];
   struct spwd *result = nullptr;
 
-  ASSERT_EQ(LIBC_NAMESPACE::getspnam_r("alice", &entry, buf, sizeof(buf),
-                                       &result),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getspnam_r("alice", &entry, buf, sizeof(buf), &result),
+      0);
   ASSERT_TRUE(result == &entry);
   ASSERT_STREQ(entry.sp_namp, "alice");
 
   // A name that is not there is not an error: the result is just empty.
-  ASSERT_EQ(LIBC_NAMESPACE::getspnam_r("nobody", &entry, buf, sizeof(buf),
-                                       &result),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getspnam_r("nobody", &entry, buf, sizeof(buf), &result),
+      0);
   ASSERT_TRUE(result == nullptr);
 
   LIBC_NAMESPACE::setspent();
-  ASSERT_EQ(
-      LIBC_NAMESPACE::getspent_r(&entry, buf, sizeof(buf), &result), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::getspent_r(&entry, buf, sizeof(buf), &result), 0);
   ASSERT_TRUE(result == &entry);
   ASSERT_STREQ(entry.sp_namp, "alice");
 
@@ -160,8 +159,8 @@ TEST_F(LlvmLibcShadowTest, CallerSuppliedBuffers) {
 
   ::FILE *f = LIBC_NAMESPACE::fopen(path, "r");
   ASSERT_FALSE(f == nullptr);
-  ASSERT_EQ(
-      LIBC_NAMESPACE::fgetspent_r(f, &entry, buf, sizeof(buf), &result), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fgetspent_r(f, &entry, buf, sizeof(buf), &result),
+            0);
   ASSERT_TRUE(result == &entry);
   ASSERT_STREQ(entry.sp_namp, "alice");
   ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
@@ -171,9 +170,9 @@ TEST_F(LlvmLibcShadowTest, BufferTooSmall) {
   struct spwd entry;
   char buf[4];
   struct spwd *result = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getspnam_r("alice", &entry, buf, sizeof(buf),
-                                       &result),
-            ERANGE);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::getspnam_r("alice", &entry, buf, sizeof(buf), &result),
+      ERANGE);
   ASSERT_TRUE(result == nullptr);
 }
 

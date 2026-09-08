@@ -10,10 +10,10 @@
 #define LLVM_LIBC_SRC_FTW_FTW_WALK_H
 
 #include "hdr/errno_macros.h"
+#include "hdr/ftw_macros.h"
 #include "hdr/func/free.h"
 #include "hdr/func/malloc.h"
 #include "hdr/func/realloc.h"
-#include "hdr/ftw_macros.h"
 #include "hdr/limits_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "hdr/types/DIR.h"
@@ -43,10 +43,10 @@ constexpr int MAX_DEPTH = PATH_MAX / 2;
 
 // What visiting one entry led to.
 enum class Step {
-  Continue,      // Carry on with the next entry.
-  SkipSiblings,  // Leave the rest of the directory this entry is in.
-  Stop,          // The callback ended the walk; its value is in the state.
-  Failed         // Something went wrong; errno says what.
+  Continue,     // Carry on with the next entry.
+  SkipSiblings, // Leave the rest of the directory this entry is in.
+  Stop,         // The callback ended the walk; its value is in the state.
+  Failed        // Something went wrong; errno says what.
 };
 
 // The path being walked, built up in place so each level appends its own
@@ -327,9 +327,8 @@ LIBC_INLINE Step visit(Walk &walk, PathBuffer &path, int level, size_t base) {
 
   if (report_first) {
     bool skip_subtree = false;
-    const Step step =
-        act_on(walk, walk.callback(path.get(), &info, kind, &position),
-               skip_subtree);
+    const Step step = act_on(
+        walk, walk.callback(path.get(), &info, kind, &position), skip_subtree);
     if (step != Step::Continue || skip_subtree) {
       if (dir != nullptr)
         LIBC_NAMESPACE::closedir(dir);
@@ -377,9 +376,9 @@ LIBC_INLINE int walk_tree(const char *root, Callback callback, int descriptors,
   // nothing to walk. One that exists but cannot be read still gets reported,
   // as does a symbolic link with no target.
   struct stat root_info;
-  if (((flags & FTW_PHYS) != 0 ? LIBC_NAMESPACE::lstat(path.get(), &root_info)
-                               : LIBC_NAMESPACE::stat(path.get(), &root_info)) !=
-      0) {
+  if (((flags & FTW_PHYS) != 0
+           ? LIBC_NAMESPACE::lstat(path.get(), &root_info)
+           : LIBC_NAMESPACE::stat(path.get(), &root_info)) != 0) {
     const int reason = libc_errno;
     if (reason != EACCES &&
         !((flags & FTW_PHYS) == 0 &&

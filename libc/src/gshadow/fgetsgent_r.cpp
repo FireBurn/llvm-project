@@ -50,8 +50,8 @@ LLVM_LIBC_FUNCTION(int, fgetsgent_r,
       continue;
 
     if (!gshadow::parse_line_into(split.line.first(len + 1), sgbuf,
-                                  split.admins, split.max_admins,
-                                  split.members, split.max_members))
+                                  split.admins, split.max_admins, split.members,
+                                  split.max_members))
       return EINVAL;
 
     *sgbufp = sgbuf;

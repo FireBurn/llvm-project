@@ -210,7 +210,8 @@ struct Link {
 };
 
 // Walks a dump, calling `each(nh)` for every message of `wanted`.
-template <typename F> void for_each_message(const Dump &d, uint16_t wanted, F each) {
+template <typename F>
+void for_each_message(const Dump &d, uint16_t wanted, F each) {
   size_t left = d.size;
   for (auto *nh = reinterpret_cast<struct nlmsghdr *>(d.data);
        NLMSG_OK(nh, left); nh = NLMSG_NEXT(nh, left)) {
@@ -226,15 +227,15 @@ template <typename F> void for_each_message(const Dump &d, uint16_t wanted, F ea
 // The addresses of every interface, as one list the caller frees with
 // freeifaddrs. The list is one allocation: the entries, then the names, then
 // the addresses, so that giving it back is a single call.
-LLVM_LIBC_FUNCTION(int, getifaddrs, (struct ifaddrs **list)) {
+LLVM_LIBC_FUNCTION(int, getifaddrs, (struct ifaddrs * *list)) {
   if (list == nullptr) {
     libc_errno = EINVAL;
     return -1;
   }
   *list = nullptr;
 
-  auto fd_or_err =
-      linux_syscalls::socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_ROUTE);
+  auto fd_or_err = linux_syscalls::socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC,
+                                          NETLINK_ROUTE);
   if (!fd_or_err.has_value()) {
     libc_errno = fd_or_err.error();
     return -1;

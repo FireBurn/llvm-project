@@ -15,8 +15,8 @@
 #include "hdr/errno_macros.h"
 #include "hdr/types/struct_passwd.h"
 #include "src/__support/CPP/span.h"
-#include "src/__support/macros/attributes.h"
 #include "src/__support/flat_file_db.h"
+#include "src/__support/macros/attributes.h"
 #include "src/string/string_utils.h"
 
 #ifndef LIBC_COPT_PWD_FILE_PATH

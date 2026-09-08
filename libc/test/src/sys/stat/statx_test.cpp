@@ -33,9 +33,9 @@ TEST_F(LlvmLibcStatxTest, ReportsWhatWasAskedFor) {
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 
   struct statx buf = {};
-  ASSERT_THAT(LIBC_NAMESPACE::statx(AT_FDCWD, path, 0,
-                                    STATX_TYPE | STATX_SIZE, &buf),
-              Succeeds(0));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::statx(AT_FDCWD, path, 0, STATX_TYPE | STATX_SIZE, &buf),
+      Succeeds(0));
 
   // The mask says which of the fields the kernel actually filled in.
   ASSERT_NE(buf.stx_mask & STATX_SIZE, decltype(buf.stx_mask)(0));
@@ -48,7 +48,6 @@ TEST_F(LlvmLibcStatxTest, ReportsWhatWasAskedFor) {
 
 TEST_F(LlvmLibcStatxTest, PathThatIsNotThere) {
   struct statx buf = {};
-  ASSERT_THAT(
-      LIBC_NAMESPACE::statx(AT_FDCWD, "llvm-libc-not-here", 0, 0, &buf),
-      Fails(ENOENT));
+  ASSERT_THAT(LIBC_NAMESPACE::statx(AT_FDCWD, "llvm-libc-not-here", 0, 0, &buf),
+              Fails(ENOENT));
 }

@@ -41,8 +41,8 @@
 #define IN_EXCL_UNLINK 0x04000000 // Stop reporting on an unlinked child.
 #define IN_MASK_CREATE 0x10000000 // Fail if the path is watched already.
 #define IN_MASK_ADD 0x20000000    // Add to the mask rather than replace it.
-#define IN_ISDIR 0x40000000       // The thing the event is about is a directory.
-#define IN_ONESHOT 0x80000000     // Report once, then drop the watch.
+#define IN_ISDIR 0x40000000   // The thing the event is about is a directory.
+#define IN_ONESHOT 0x80000000 // Report once, then drop the watch.
 
 // Everything which can be asked for.
 #define IN_ALL_EVENTS                                                          \

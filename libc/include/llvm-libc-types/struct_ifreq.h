@@ -23,7 +23,8 @@
 // The kernel defines this too, in <linux/if.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(defined(__UAPI_DEF_IF_IFREQ) && __UAPI_DEF_IF_IFREQ && defined(_LINUX_IF_H))
+#if !(defined(__UAPI_DEF_IF_IFREQ) && __UAPI_DEF_IF_IFREQ &&                   \
+      defined(_LINUX_IF_H))
 // The two unions are named, and the members reached through the macros
 // below, because that is how the interface has always been written and code
 // which asks for a request by naming ifr_ifru expects to find it.

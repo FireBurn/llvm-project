@@ -7,8 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/spawn/posix_spawn.h"
-#include "src/spawn/posix_spawnp.h"
-#include "src/unistd/linux/exec_path_search.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
@@ -17,12 +15,14 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/spawn/file_actions.h"
+#include "src/spawn/posix_spawnp.h"
+#include "src/unistd/linux/exec_path_search.h"
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/signal_macros.h" // For SIGCHLD
-#include "hdr/types/mode_t.h"
 #include "hdr/signal_macros.h"
 #include "hdr/spawn_macros.h"
+#include "hdr/types/mode_t.h"
 #include "hdr/types/sigset_t.h"
 #include "src/signal/linux/signal_utils.h"
 #include "src/signal/sigismember.h"
@@ -187,9 +187,8 @@ void child_process(const char *__restrict path,
         // handing a descriptor to a child it is about to start says so this
         // way.
         if (dup2_act->fd == dup2_act->newfd) {
-          long flags = LIBC_NAMESPACE::syscall_impl<long>(SYS_fcntl,
-                                                          dup2_act->fd,
-                                                          F_GETFD, 0);
+          long flags = LIBC_NAMESPACE::syscall_impl<long>(
+              SYS_fcntl, dup2_act->fd, F_GETFD, 0);
           if (flags < 0)
             exit(static_cast<int>(-flags));
           long set = LIBC_NAMESPACE::syscall_impl<long>(
@@ -231,7 +230,8 @@ void child_process(const char *__restrict path,
     exit(static_cast<int>(libc_errno));
   }
 
-  long result = LIBC_NAMESPACE::syscall_impl<long>(SYS_execve, path, argv, envp);
+  long result =
+      LIBC_NAMESPACE::syscall_impl<long>(SYS_execve, path, argv, envp);
   exit(static_cast<int>(-result));
 }
 
@@ -270,7 +270,7 @@ int spawn(pid_t *__restrict pid, const char *__restrict path,
   int error = 0;
   for (;;) {
     long got = LIBC_NAMESPACE::syscall_impl<long>(SYS_read, notify[0], &error,
-                                                 sizeof(error));
+                                                  sizeof(error));
     if (got == -EINTR)
       continue;
     // Anything other than the whole of an error number means the child said

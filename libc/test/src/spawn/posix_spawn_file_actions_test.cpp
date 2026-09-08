@@ -94,8 +94,8 @@ TEST(LlvmLibcPosixSpawnFileActionsTest, ChangingDirectory) {
             0);
 
   int action_count = 0;
-  auto *act = reinterpret_cast<LIBC_NAMESPACE::BaseSpawnFileAction *>(
-      actions.__front);
+  auto *act =
+      reinterpret_cast<LIBC_NAMESPACE::BaseSpawnFileAction *>(actions.__front);
   while (act != nullptr) {
     ++action_count;
     if (action_count == 1)

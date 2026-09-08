@@ -1,4 +1,4 @@
-//===-- Implementation header for lsetxattr -----------------------------------*- C++ -*-===//
+//===-- Implementation header for lsetxattr ---------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -15,7 +15,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int lsetxattr(const char *path, const char *name, const void *value, size_t size, int flags);
+int lsetxattr(const char *path, const char *name, const void *value,
+              size_t size, int flags);
 
 } // namespace LIBC_NAMESPACE_DECL
 

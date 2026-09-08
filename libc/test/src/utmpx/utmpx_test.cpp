@@ -57,8 +57,8 @@ public:
     LIBC_NAMESPACE::endutxent();
     // The calls open the file but do not create it, so each test starts
     // from an empty one of its own.
-    int fd = LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                  S_IRWXU);
+    int fd =
+        LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
     ASSERT_GT(fd, 0);
     ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
   }
@@ -145,8 +145,8 @@ TEST_F(LlvmLibcUtmpxTest, AppendsToTheLoginHistory) {
   constexpr const char *HISTORY_FILE = "wtmpx.test.db";
   // The history is appended to and never created, as glibc's is, so it has
   // to be there before anything is written to it.
-  int fd = LIBC_NAMESPACE::open(HISTORY_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(HISTORY_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
 

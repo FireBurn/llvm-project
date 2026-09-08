@@ -21,7 +21,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, getresgid, (gid_t *rgid, gid_t *egid, gid_t *sgid)) {
+LLVM_LIBC_FUNCTION(int, getresgid, (gid_t * rgid, gid_t *egid, gid_t *sgid)) {
   auto ret = linux_syscalls::getresgid(rgid, egid, sgid);
   if (!ret) {
     libc_errno = ret.error();

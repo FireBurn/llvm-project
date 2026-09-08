@@ -57,9 +57,8 @@ LLVM_LIBC_FUNCTION(void, backtrace_symbols_fd,
     if (found && info.dli_sname != nullptr) {
       out = execinfo::put(out, end, '(');
       out = execinfo::put(out, end, info.dli_sname);
-      const uintptr_t offset =
-          reinterpret_cast<uintptr_t>(buffer[i]) -
-          reinterpret_cast<uintptr_t>(info.dli_saddr);
+      const uintptr_t offset = reinterpret_cast<uintptr_t>(buffer[i]) -
+                               reinterpret_cast<uintptr_t>(info.dli_saddr);
       out = execinfo::put(out, end, '+');
       out = execinfo::put_hex(out, end, offset);
       out = execinfo::put(out, end, ')');
@@ -67,8 +66,7 @@ LLVM_LIBC_FUNCTION(void, backtrace_symbols_fd,
     if (out != line)
       out = execinfo::put(out, end, ' ');
     out = execinfo::put(out, end, '[');
-    out = execinfo::put_hex(out, end,
-                            reinterpret_cast<uintptr_t>(buffer[i]));
+    out = execinfo::put_hex(out, end, reinterpret_cast<uintptr_t>(buffer[i]));
     out = execinfo::put(out, end, ']');
     out = execinfo::put(out, end, '\n');
 

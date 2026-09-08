@@ -9,8 +9,8 @@
 #include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
 #include "hdr/sys_stat_macros.h"
-#include "src/fcntl/open.h"
 #include "src/__support/libc_errno.h"
+#include "src/fcntl/open.h"
 #include "src/string/memcmp.h"
 #include "src/sys/xattr/fgetxattr.h"
 #include "src/sys/xattr/flistxattr.h"
@@ -160,8 +160,7 @@ TEST_F(LlvmLibcXattrTest, NameThatIsNotThere) {
   char buf[8];
   ASSERT_THAT(LIBC_NAMESPACE::getxattr(path, "user.absent", buf, sizeof(buf)),
               Fails<ssize_t>(ENODATA));
-  ASSERT_THAT(LIBC_NAMESPACE::removexattr(path, "user.absent"),
-              Fails(ENODATA));
+  ASSERT_THAT(LIBC_NAMESPACE::removexattr(path, "user.absent"), Fails(ENODATA));
 
   ASSERT_THAT(LIBC_NAMESPACE::unlink(path), Succeeds(0));
 }

@@ -1,4 +1,4 @@
-//===-- Implementation header for mount --------------------------*- C++ -*-===//
+//===-- Implementation header for mount -------------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -13,7 +13,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int mount(const char *source, const char *target, const char *filesystemtype, unsigned long mountflags, const void *data);
+int mount(const char *source, const char *target, const char *filesystemtype,
+          unsigned long mountflags, const void *data);
 
 } // namespace LIBC_NAMESPACE_DECL
 

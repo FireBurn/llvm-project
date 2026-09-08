@@ -8,9 +8,9 @@
 
 #include "src/sys/uio/preadv.h"
 
-#include "hdr/types/struct_iovec.h"
-#include "hdr/types/ssize_t.h"
 #include "hdr/types/off_t.h"
+#include "hdr/types/ssize_t.h"
+#include "hdr/types/struct_iovec.h"
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -22,8 +22,11 @@ namespace LIBC_NAMESPACE_DECL {
 // The offset goes to the kernel as a pair of longs, low half first. On a
 // 64 bit machine the second is always zero and is ignored.
 
-LLVM_LIBC_FUNCTION(ssize_t, preadv, (int fd, const struct iovec *iov, int iovcnt, off_t offset)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_preadv, fd, iov, iovcnt, static_cast<long>(offset),
+LLVM_LIBC_FUNCTION(ssize_t, preadv,
+                   (int fd, const struct iovec *iov, int iovcnt,
+                    off_t offset)) {
+  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(
+      SYS_preadv, fd, iov, iovcnt, static_cast<long>(offset),
       static_cast<long>(static_cast<unsigned long long>(offset) >> 32));
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);

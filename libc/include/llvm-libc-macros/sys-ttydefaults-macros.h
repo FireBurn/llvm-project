@@ -38,7 +38,8 @@
 #endif
 #define CKILL CTRL('u')
 #define CMIN 1
-#define CQUIT 034 // FS, ^\
+#define CQUIT                                                                  \
+  034 // FS, ^\
 #define CSUSP CTRL('z')
 #define CTIME 0
 #define CDSUSP CTRL('y')

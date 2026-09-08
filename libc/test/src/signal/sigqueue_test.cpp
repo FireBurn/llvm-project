@@ -70,17 +70,16 @@ TEST_F(LlvmLibcSigqueueTest, ABlockedSignalIsReportedAsPending) {
 
   union sigval value;
   value.sival_int = 42;
-  ASSERT_THAT(LIBC_NAMESPACE::sigqueue(LIBC_NAMESPACE::getpid(), SIGUSR1,
-                                       value),
-              Succeeds(0));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::sigqueue(LIBC_NAMESPACE::getpid(), SIGUSR1, value),
+      Succeeds(0));
 
   ASSERT_THAT(LIBC_NAMESPACE::sigpending(&pending), Succeeds(0));
   ASSERT_EQ(LIBC_NAMESPACE::sigismember(&pending, SIGUSR1), 1);
 
   // Taking it off the queue carries the value the sender attached.
   siginfo_t info = {};
-  ASSERT_THAT(LIBC_NAMESPACE::sigwaitinfo(&blocked, &info),
-              Succeeds(SIGUSR1));
+  ASSERT_THAT(LIBC_NAMESPACE::sigwaitinfo(&blocked, &info), Succeeds(SIGUSR1));
   ASSERT_EQ(info.si_signo, SIGUSR1);
   ASSERT_EQ(info.si_value.sival_int, 42);
 }
@@ -88,9 +87,9 @@ TEST_F(LlvmLibcSigqueueTest, ABlockedSignalIsReportedAsPending) {
 TEST_F(LlvmLibcSigqueueTest, WaitingWithADeadlineThatPasses) {
   union sigval value;
   value.sival_int = 7;
-  ASSERT_THAT(LIBC_NAMESPACE::sigqueue(LIBC_NAMESPACE::getpid(), SIGUSR1,
-                                       value),
-              Succeeds(0));
+  ASSERT_THAT(
+      LIBC_NAMESPACE::sigqueue(LIBC_NAMESPACE::getpid(), SIGUSR1, value),
+      Succeeds(0));
 
   struct timespec timeout = {};
   siginfo_t info = {};

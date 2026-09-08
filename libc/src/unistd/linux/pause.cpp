@@ -18,7 +18,6 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-
 // Waits for a signal and nothing else. It only ever returns -1, with errno
 // set to EINTR, once a handler has run.
 LLVM_LIBC_FUNCTION(int, pause, (void)) {

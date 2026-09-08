@@ -111,8 +111,8 @@ LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
   // the mapping does.
   const ElfW(Phdr) *mapped_phdrs = reinterpret_cast<const ElfW(Phdr) *>(
       loaded.mapping.load_bias + header.e_phoff);
-  loaded.module = Module(mapped_phdrs, header.e_phnum,
-                        loaded.mapping.load_bias, loaded.mapping.name);
+  loaded.module = Module(mapped_phdrs, header.e_phnum, loaded.mapping.load_bias,
+                         loaded.mapping.name);
 
   // Relative relocations are the ones a module can apply to itself. Anything
   // that names a symbol needs the other modules to be loaded first.

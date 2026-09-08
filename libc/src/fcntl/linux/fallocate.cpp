@@ -20,8 +20,8 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, fallocate,
                    (int fd, int mode, off_t offset, off_t len)) {
 #if __SIZEOF_LONG__ == 8
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_fallocate, fd, mode, offset,
-                                              len);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_fallocate, fd, mode, offset, len);
 #else
   // A 32 bit call takes each offset as a pair of registers, low half first.
   int ret = LIBC_NAMESPACE::syscall_impl<int>(

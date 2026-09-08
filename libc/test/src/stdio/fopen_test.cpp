@@ -11,8 +11,8 @@
 #include "src/stdio/fclose.h"
 #include "src/stdio/fopen.h"
 #include "src/stdio/fread.h"
-#include "src/stdio/remove.h"
 #include "src/stdio/fwrite.h"
+#include "src/stdio/remove.h"
 
 #include "test/UnitTest/Test.h"
 

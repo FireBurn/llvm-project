@@ -86,9 +86,9 @@ TEST(LlvmLibcElfRunPathTest, RefusesWhatItCannotExpand) {
   EXPECT_TRUE(expand("", "/x/y", buffer, sizeof(buffer)).empty());
   // Does not fit.
   char small[8];
-  EXPECT_TRUE(expand("$ORIGIN/lib", "/a/very/long/path/tool", small,
-                     sizeof(small))
-                  .empty());
+  EXPECT_TRUE(
+      expand("$ORIGIN/lib", "/a/very/long/path/tool", small, sizeof(small))
+          .empty());
 }
 
 TEST(LlvmLibcElfRunPathTest, DirectoryLength) {

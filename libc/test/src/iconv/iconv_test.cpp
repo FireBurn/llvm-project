@@ -54,8 +54,8 @@ TEST_F(LlvmLibcIconvTest, OpenAndClose) {
 TEST_F(LlvmLibcIconvTest, NamesAreMatchedLoosely) {
   // Case and the punctuation between the parts make no difference, and a
   // trailing behaviour is not part of the name.
-  const char *spellings[] = {"ISO-8859-1", "iso-8859-1", "iso88591",
-                             "ISO_8859-1", "LATIN1",     "latin1",
+  const char *spellings[] = {"ISO-8859-1",     "iso-8859-1", "iso88591",
+                             "ISO_8859-1",     "LATIN1",     "latin1",
                              "UTF-8//TRANSLIT"};
   for (const char *name : spellings) {
     iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-8", name);
@@ -91,28 +91,25 @@ TEST_F(LlvmLibcIconvTest, Utf8ToLatin1) {
 TEST_F(LlvmLibcIconvTest, Utf16AndUtf32) {
   char out[16] = {};
   // "A" in UTF-16LE is 41 00.
-  ASSERT_EQ(convert("UTF-16LE", "UTF-8", "A", 1, out, sizeof(out)),
-            ssize_t(2));
+  ASSERT_EQ(convert("UTF-16LE", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(2));
   EXPECT_EQ(out[0], 'A');
   EXPECT_EQ(out[1], '\0');
 
   // The same in big endian order.
-  ASSERT_EQ(convert("UTF-16BE", "UTF-8", "A", 1, out, sizeof(out)),
-            ssize_t(2));
+  ASSERT_EQ(convert("UTF-16BE", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(2));
   EXPECT_EQ(out[0], '\0');
   EXPECT_EQ(out[1], 'A');
 
-  ASSERT_EQ(convert("UTF-32LE", "UTF-8", "A", 1, out, sizeof(out)),
-            ssize_t(4));
+  ASSERT_EQ(convert("UTF-32LE", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(4));
   EXPECT_EQ(out[0], 'A');
 }
 
 TEST_F(LlvmLibcIconvTest, SurrogatePairs) {
   char out[16] = {};
   // U+1F600 needs a surrogate pair in UTF-16 and four bytes in UTF-8.
-  ASSERT_EQ(convert("UTF-16LE", "UTF-8", "\xf0\x9f\x98\x80", 4, out,
-                    sizeof(out)),
-            ssize_t(4));
+  ASSERT_EQ(
+      convert("UTF-16LE", "UTF-8", "\xf0\x9f\x98\x80", 4, out, sizeof(out)),
+      ssize_t(4));
   EXPECT_EQ(static_cast<unsigned>(static_cast<unsigned char>(out[0])), 0x3Du);
   EXPECT_EQ(static_cast<unsigned>(static_cast<unsigned char>(out[1])), 0xD8u);
 
@@ -171,8 +168,7 @@ TEST_F(LlvmLibcIconvTest, OutputTooSmall) {
 TEST_F(LlvmLibcIconvTest, ACharacterWithNoPlaceInTheTargetSet) {
   char out[16] = {};
   // A CJK ideograph cannot be written in Latin-1.
-  EXPECT_EQ(convert("ISO-8859-1", "UTF-8", "\xe4\xb8\x80", 3, out,
-                    sizeof(out)),
+  EXPECT_EQ(convert("ISO-8859-1", "UTF-8", "\xe4\xb8\x80", 3, out, sizeof(out)),
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EILSEQ);
 

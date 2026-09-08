@@ -187,9 +187,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       }
       auto *slot =
           reinterpret_cast<ElfW(Addr) *>(target.load_bias() + rela->r_offset);
-      *slot = is_tls_module
-                  ? static_cast<ElfW(Addr)>(module)
-                  : static_cast<ElfW(Addr)>(value + rela->r_addend);
+      *slot = is_tls_module ? static_cast<ElfW(Addr)>(module)
+                            : static_cast<ElfW(Addr)>(value + rela->r_addend);
       ++result.bound;
       continue;
     }

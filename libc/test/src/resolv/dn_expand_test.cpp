@@ -43,8 +43,8 @@ TEST(LlvmLibcDnExpandTest, ReadsAName) {
   const size_t len = build_message(msg, example_at, pointer_at);
 
   char out[256];
-  const int used = LIBC_NAMESPACE::dn_expand(msg, msg + len, msg, out,
-                                             sizeof(out));
+  const int used =
+      LIBC_NAMESPACE::dn_expand(msg, msg + len, msg, out, sizeof(out));
   ASSERT_EQ(used, 17);
   ASSERT_STREQ(out, "www.example.com");
 }
@@ -68,9 +68,8 @@ TEST(LlvmLibcDnExpandTest, RefusesWhatWillNotFit) {
   const size_t len = build_message(msg, example_at, pointer_at);
 
   char small[4];
-  ASSERT_EQ(LIBC_NAMESPACE::dn_expand(msg, msg + len, msg, small,
-                                      sizeof(small)),
-            -1);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::dn_expand(msg, msg + len, msg, small, sizeof(small)), -1);
 }
 
 // A pointer that leads forward, or to itself, would never end.
@@ -100,9 +99,9 @@ TEST(LlvmLibcDnExpandTest, WhatIsWrittenReadsBack) {
                                           sizeof(packed), nullptr, nullptr);
   ASSERT_GT(len, 0);
   char out[256];
-  ASSERT_EQ(LIBC_NAMESPACE::dn_expand(packed, packed + len, packed, out,
-                                      sizeof(out)),
-            len);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::dn_expand(packed, packed + len, packed, out, sizeof(out)),
+      len);
   ASSERT_STREQ(out, "one.two.example");
 }
 

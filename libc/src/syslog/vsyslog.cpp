@@ -234,8 +234,9 @@ LLVM_LIBC_FUNCTION(void, vsyslog,
 
   // A program which passed no ident to openlog is tagged with its own name,
   // which is more use to whoever reads the log than no tag at all.
-  const char *tag =
-      s.ident != nullptr ? s.ident : LIBC_NAMESPACE::program_invocation_short_name;
+  const char *tag = s.ident != nullptr
+                        ? s.ident
+                        : LIBC_NAMESPACE::program_invocation_short_name;
   if (tag != nullptr)
     out.put(tag);
   if (s.option & LOG_PID) {

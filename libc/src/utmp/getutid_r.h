@@ -14,8 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int getutid_r(const struct utmp *id, struct utmp *buffer,
-              struct utmp **result);
+int getutid_r(const struct utmp *id, struct utmp *buffer, struct utmp **result);
 
 } // namespace LIBC_NAMESPACE_DECL
 

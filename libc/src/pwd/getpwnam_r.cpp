@@ -40,10 +40,9 @@ LLVM_LIBC_FUNCTION(int, getpwnam_r,
                     size_t buflen, struct passwd **result)) {
   if (name == nullptr)
     return EINVAL;
-  return passwd_r::find(pwd, buf, buflen, result,
-                        [name](struct passwd *entry) {
-                          return same(entry->pw_name, name);
-                        });
+  return passwd_r::find(pwd, buf, buflen, result, [name](struct passwd *entry) {
+    return same(entry->pw_name, name);
+  });
 }
 
 } // namespace LIBC_NAMESPACE_DECL

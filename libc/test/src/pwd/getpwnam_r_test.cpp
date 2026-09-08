@@ -31,8 +31,8 @@ namespace {
 constexpr const char *PASSWD_FILE = "getpwnam_r.test.passwd";
 
 void write_passwd_file() {
-  int fd = LIBC_NAMESPACE::open(PASSWD_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(PASSWD_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   string_view contents("root:x:0:0:root:/root:/bin/sh\n"
                        "andy:x:1000:1000:Andy:/home/andy:/bin/bash\n"
@@ -84,9 +84,9 @@ TEST_F(LlvmLibcGetPwNamRTest, NotFoundIsNotAnError) {
   EXPECT_TRUE(result == nullptr);
 
   result = &entry;
-  EXPECT_EQ(LIBC_NAMESPACE::getpwuid_r(4242, &entry, buffer, sizeof(buffer),
-                                       &result),
-            0);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getpwuid_r(4242, &entry, buffer, sizeof(buffer), &result),
+      0);
   EXPECT_TRUE(result == nullptr);
 
   ASSERT_EQ(LIBC_NAMESPACE::remove(PASSWD_FILE), 0);
@@ -119,8 +119,8 @@ TEST_F(LlvmLibcGetPwNamRTest, DoesNotDisturbAnIteration) {
   char buffer[1024];
   struct passwd entry;
   struct passwd *result = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getpwnam_r("nobody", &entry, buffer,
-                                       sizeof(buffer), &result),
+  ASSERT_EQ(LIBC_NAMESPACE::getpwnam_r("nobody", &entry, buffer, sizeof(buffer),
+                                       &result),
             0);
   ASSERT_TRUE(result != nullptr);
 
@@ -135,13 +135,12 @@ TEST_F(LlvmLibcGetPwNamRTest, BadArguments) {
   char buffer[1024];
   struct passwd entry;
   struct passwd *result = nullptr;
-  EXPECT_EQ(LIBC_NAMESPACE::getpwnam_r(nullptr, &entry, buffer,
-                                       sizeof(buffer), &result),
+  EXPECT_EQ(LIBC_NAMESPACE::getpwnam_r(nullptr, &entry, buffer, sizeof(buffer),
+                                       &result),
             EINVAL);
-  EXPECT_EQ(LIBC_NAMESPACE::getpwnam_r("root", nullptr, buffer,
-                                       sizeof(buffer), &result),
+  EXPECT_EQ(LIBC_NAMESPACE::getpwnam_r("root", nullptr, buffer, sizeof(buffer),
+                                       &result),
             EINVAL);
-  EXPECT_EQ(
-      LIBC_NAMESPACE::getpwnam_r("root", &entry, nullptr, 0, &result),
-      EINVAL);
+  EXPECT_EQ(LIBC_NAMESPACE::getpwnam_r("root", &entry, nullptr, 0, &result),
+            EINVAL);
 }

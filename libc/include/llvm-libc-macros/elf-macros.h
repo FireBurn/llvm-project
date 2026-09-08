@@ -178,7 +178,6 @@
 #define R_LARCH_MARK_LA 20
 #define R_LARCH_SOP_PUSH_PLT_PCREL 29
 
-
 // Additional relocation and symbol types that object file tools match
 // against. R_ARM_THM_CALL is the current name for the value glibc still
 // spells R_ARM_THM_PC22.

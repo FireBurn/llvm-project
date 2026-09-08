@@ -15,7 +15,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct netent * getnetent (void);
+struct netent *getnetent(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 

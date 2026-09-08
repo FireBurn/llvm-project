@@ -139,9 +139,9 @@ TEST_F(LlvmLibcNetdbTest, RejectsWhatItCannotAnswer) {
 
   hints = {};
   hints.ai_flags = AI_NUMERICSERV;
-  EXPECT_EQ(LIBC_NAMESPACE::getaddrinfo("127.0.0.1", "notanumber", &hints,
-                                        &res),
-            EAI_NONAME);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getaddrinfo("127.0.0.1", "notanumber", &hints, &res),
+      EAI_NONAME);
 
   hints = {};
   EXPECT_EQ(LIBC_NAMESPACE::getaddrinfo("127.0.0.1", "99999", &hints, &res),
@@ -159,8 +159,7 @@ TEST_F(LlvmLibcNetdbTest, EveryKindOfSocketIsReportedWhenNoneIsAskedFor) {
   struct addrinfo hints = {};
   hints.ai_socktype = SOCK_DGRAM;
   res = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getaddrinfo("127.0.0.1", nullptr, &hints, &res),
-            0);
+  ASSERT_EQ(LIBC_NAMESPACE::getaddrinfo("127.0.0.1", nullptr, &hints, &res), 0);
   EXPECT_EQ(length_of(res), size_t(1));
   EXPECT_EQ(res->ai_socktype, SOCK_DGRAM);
   LIBC_NAMESPACE::freeaddrinfo(res);

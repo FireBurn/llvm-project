@@ -21,7 +21,7 @@ namespace LIBC_NAMESPACE_DECL {
 // Sets both speeds at once, which is what a caller wants nearly every time
 // and is why BSD added it. Either failing leaves the other set, the same as
 // setting the two separately would.
-LLVM_LIBC_FUNCTION(int, cfsetspeed, (struct termios *t, speed_t speed)) {
+LLVM_LIBC_FUNCTION(int, cfsetspeed, (struct termios * t, speed_t speed)) {
   LIBC_CRASH_ON_NULLPTR(t);
   if (LIBC_NAMESPACE::cfsetospeed(t, speed) != 0)
     return -1;

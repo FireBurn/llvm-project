@@ -12,9 +12,9 @@
 #include "hdr/types/locale_t.h"
 #include "hdr/types/nl_item.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/CPP/string_view.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/CPP/string_view.h"
 #include "src/langinfo/langinfo_table.h"
 #include "src/locale/locale.h"
 

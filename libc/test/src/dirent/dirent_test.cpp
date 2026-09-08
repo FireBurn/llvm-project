@@ -7,11 +7,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/__support/CPP/string_view.h"
+#include "src/__support/libc_errno.h"
 #include "src/dirent/closedir.h"
 #include "src/dirent/dirfd.h"
 #include "src/dirent/opendir.h"
 #include "src/dirent/readdir.h"
-#include "src/__support/libc_errno.h"
 #include "src/sys/stat/mkdir.h"
 #include "src/unistd/rmdir.h"
 
@@ -92,10 +92,12 @@ TEST_F(LlvmLibcDirentTest, ADirectoryRemovedWhileOpenIsSimplyEnded) {
   // the end of it rather than something going wrong. A caller tells the two
   // apart by looking at errno, so this must leave it alone.
   libc_errno = 0;
-  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir), static_cast<struct dirent *>(nullptr));
+  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir),
+            static_cast<struct dirent *>(nullptr));
   ASSERT_ERRNO_SUCCESS();
   // And asking again says the same thing.
-  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir), static_cast<struct dirent *>(nullptr));
+  EXPECT_EQ(LIBC_NAMESPACE::readdir(dir),
+            static_cast<struct dirent *>(nullptr));
   ASSERT_ERRNO_SUCCESS();
 
   ASSERT_EQ(LIBC_NAMESPACE::closedir(dir), 0);

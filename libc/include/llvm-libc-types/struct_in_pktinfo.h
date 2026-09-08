@@ -21,7 +21,8 @@
 // The kernel defines this too, in <linux/in.h>.
 // Skipping it here is right only when that header has been read and
 // its guard says the definition is the kernel's.
-#if !(defined(__UAPI_DEF_IN_PKTINFO) && __UAPI_DEF_IN_PKTINFO && defined(_LINUX_IN_H))
+#if !(defined(__UAPI_DEF_IN_PKTINFO) && __UAPI_DEF_IN_PKTINFO &&               \
+      defined(_LINUX_IN_H))
 // What IP_PKTINFO reports about a datagram, or asks about one being sent:
 // which interface it came in on and which of that interface's addresses it
 // was sent to.

@@ -25,7 +25,8 @@
 // The kernel defines this too, in <linux/in6.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(defined(__UAPI_DEF_SOCKADDR_IN6) && __UAPI_DEF_SOCKADDR_IN6 && defined(_LINUX_IN6_H))
+#if !(defined(__UAPI_DEF_SOCKADDR_IN6) && __UAPI_DEF_SOCKADDR_IN6 &&           \
+      defined(_LINUX_IN6_H))
 struct __attribute__((may_alias)) sockaddr_in6 {
   sa_family_t sin6_family;
   in_port_t sin6_port;

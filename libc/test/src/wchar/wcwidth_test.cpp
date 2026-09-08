@@ -23,8 +23,8 @@ TEST(LlvmLibcWcwidthTest, NulIsZeroAndControlsAreNotPrintable) {
   EXPECT_EQ(LIBC_NAMESPACE::wcwidth(L'\0'), 0);
   EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x07), -1); // BEL
   EXPECT_EQ(LIBC_NAMESPACE::wcwidth(L'\n'), -1);
-  EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x7F), -1); // DEL
-  EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x9F), -1); // end of the C1 range
+  EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x7F), -1);   // DEL
+  EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x9F), -1);   // end of the C1 range
   EXPECT_EQ(LIBC_NAMESPACE::wcwidth(0x2028), -1); // line separator
 }
 

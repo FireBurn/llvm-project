@@ -20,7 +20,7 @@ namespace LIBC_NAMESPACE_DECL {
 // than left in the library, but the file being walked is still the one
 // shared by every caller.
 LLVM_LIBC_FUNCTION(int, getutent_r,
-                   (struct utmp *buffer, struct utmp **result)) {
+                   (struct utmp * buffer, struct utmp **result)) {
   if (buffer == nullptr || result == nullptr)
     return -1;
   struct utmp *entry = LIBC_NAMESPACE::getutent();

@@ -11,11 +11,11 @@
 #include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
 #include "hdr/netdb_macros.h"
-#include "include/llvm-libc-macros/linux/poll-macros.h"
 #include "hdr/sys_socket_macros.h"
 #include "hdr/types/struct_pollfd.h"
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
+#include "include/llvm-libc-macros/linux/poll-macros.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getrandom.h"
@@ -187,8 +187,8 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
   for (size_t attempt = 0; attempt < conf.attempts; ++attempt) {
     for (size_t i = 0; i < conf.server_count; ++i) {
       const Nameserver &server = conf.servers[i];
-      int fd = LIBC_NAMESPACE::socket(server.family,
-                                      SOCK_DGRAM | SOCK_CLOEXEC, 0);
+      int fd =
+          LIBC_NAMESPACE::socket(server.family, SOCK_DGRAM | SOCK_CLOEXEC, 0);
       if (fd < 0)
         continue;
 
@@ -225,8 +225,8 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
       }
 
       unsigned char reply[MAX_MESSAGE];
-      const ssize_t taken = LIBC_NAMESPACE::recvfrom(
-          fd, reply, sizeof(reply), 0, nullptr, nullptr);
+      const ssize_t taken = LIBC_NAMESPACE::recvfrom(fd, reply, sizeof(reply),
+                                                     0, nullptr, nullptr);
       LIBC_NAMESPACE::close(fd);
       if (taken <= 0)
         continue;
@@ -252,28 +252,29 @@ Status from_dns_one(const ResolvConf &conf, const char *name, uint16_t type,
   Query query;
   query.id = id;
   query.type = type;
-  query.length = build_query(name, type, CLASS_IN, id, query.message, MAX_MESSAGE);
+  query.length =
+      build_query(name, type, CLASS_IN, id, query.message, MAX_MESSAGE);
   if (query.length == 0)
     return Status::Failed;
 
-  return ask(conf, query,
-             [&](const unsigned char *message, ssize_t length,
-                 const Record &record) {
-               // A server may answer with the name the one asked about
-               // really stands for, which is the name to report back.
-               if (record.type == TYPE_CNAME) {
-                 char real[MAX_NAME + 1];
-                 real[0] = '\0';
-                 if (read_name(message, static_cast<size_t>(length),
-                               static_cast<size_t>(record.data - message), real,
-                               sizeof(real)) != 0)
-                   remember_canonical(canonical, real);
-                 return;
-               }
-               if (record.type != type || record.length != size)
-                 return;
-               add(out, capacity, count, family, record.data, size);
-             });
+  return ask(
+      conf, query,
+      [&](const unsigned char *message, ssize_t length, const Record &record) {
+        // A server may answer with the name the one asked about
+        // really stands for, which is the name to report back.
+        if (record.type == TYPE_CNAME) {
+          char real[MAX_NAME + 1];
+          real[0] = '\0';
+          if (read_name(message, static_cast<size_t>(length),
+                        static_cast<size_t>(record.data - message), real,
+                        sizeof(real)) != 0)
+            remember_canonical(canonical, real);
+          return;
+        }
+        if (record.type != type || record.length != size)
+          return;
+        add(out, capacity, count, family, record.data, size);
+      });
 }
 
 // Writes the name an address is asked about under: the bytes backwards, one
@@ -392,7 +393,8 @@ bool lookup_address(const unsigned char *bytes, int family, char *out,
   Query query;
   query.id = id;
   query.type = TYPE_PTR;
-  query.length = build_query(arpa, TYPE_PTR, CLASS_IN, id, query.message, MAX_MESSAGE);
+  query.length =
+      build_query(arpa, TYPE_PTR, CLASS_IN, id, query.message, MAX_MESSAGE);
   if (query.length == 0)
     return false;
 

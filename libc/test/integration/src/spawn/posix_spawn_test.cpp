@@ -8,13 +8,13 @@
 
 #include "test_binary_properties.h"
 
-#include "hdr/stdint_proxy.h"
 #include "hdr/errno_macros.h"
+#include "hdr/stdint_proxy.h"
 #include "src/spawn/posix_spawn.h"
-#include "src/spawn/posix_spawnp.h"
 #include "src/spawn/posix_spawn_file_actions_addopen.h"
 #include "src/spawn/posix_spawn_file_actions_destroy.h"
 #include "src/spawn/posix_spawn_file_actions_init.h"
+#include "src/spawn/posix_spawnp.h"
 #include "src/sys/wait/waitpid.h"
 #include "test/IntegrationTest/test.h"
 

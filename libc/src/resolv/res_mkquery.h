@@ -11,7 +11,6 @@
 
 #include "src/__support/macros/config.h"
 
-
 namespace LIBC_NAMESPACE_DECL {
 
 int res_mkquery(int op, const char *dname, int rr_class, int type,

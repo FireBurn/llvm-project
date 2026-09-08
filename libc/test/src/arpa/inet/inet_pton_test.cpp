@@ -80,7 +80,7 @@ TEST_F(LlvmLibcInetPtonTest, IPv6) {
 }
 
 TEST_F(LlvmLibcInetPtonTest, IPv6WithEmbeddedIPv4) {
-  const unsigned char mapped[16] = {0, 0, 0, 0, 0,    0,    0, 0,
+  const unsigned char mapped[16] = {0, 0, 0,    0,    0, 0, 0, 0,
                                     0, 0, 0xff, 0xff, 1, 2, 3, 4};
   ASSERT_TRUE(v6_is("::ffff:1.2.3.4", mapped));
 

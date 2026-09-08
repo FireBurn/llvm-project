@@ -52,8 +52,8 @@ TEST_F(LlvmLibcGetGrNamRTest, FindsByNameAndByGid) {
   struct group entry;
   struct group *result = nullptr;
 
-  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer,
-                                       sizeof(buffer), &result),
+  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer, sizeof(buffer),
+                                       &result),
             0);
   ASSERT_TRUE(result == &entry);
   EXPECT_TRUE(string_view(entry.gr_name) == "wheel");
@@ -74,8 +74,8 @@ TEST_F(LlvmLibcGetGrNamRTest, TheMemberListIsInTheCallersBuffer) {
   char buffer[1024];
   struct group entry;
   struct group *result = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer,
-                                       sizeof(buffer), &result),
+  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer, sizeof(buffer),
+                                       &result),
             0);
   ASSERT_TRUE(result != nullptr);
 
@@ -123,8 +123,8 @@ TEST_F(LlvmLibcGetGrNamRTest, ABufferTooSmallIsReported) {
   char buffer[8];
   struct group entry;
   struct group *result = nullptr;
-  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer,
-                                       sizeof(buffer), &result),
+  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r("wheel", &entry, buffer, sizeof(buffer),
+                                       &result),
             ERANGE);
   EXPECT_TRUE(result == nullptr);
 
@@ -144,8 +144,8 @@ TEST_F(LlvmLibcGetGrNamRTest, DoesNotDisturbAnIteration) {
   char buffer[1024];
   struct group entry;
   struct group *result = nullptr;
-  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("audio", &entry, buffer,
-                                       sizeof(buffer), &result),
+  ASSERT_EQ(LIBC_NAMESPACE::getgrnam_r("audio", &entry, buffer, sizeof(buffer),
+                                       &result),
             0);
   ASSERT_TRUE(result != nullptr);
 
@@ -160,11 +160,11 @@ TEST_F(LlvmLibcGetGrNamRTest, BadArguments) {
   char buffer[1024];
   struct group entry;
   struct group *result = nullptr;
-  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r(nullptr, &entry, buffer,
-                                       sizeof(buffer), &result),
+  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r(nullptr, &entry, buffer, sizeof(buffer),
+                                       &result),
             EINVAL);
-  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r("root", nullptr, buffer,
-                                       sizeof(buffer), &result),
+  EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r("root", nullptr, buffer, sizeof(buffer),
+                                       &result),
             EINVAL);
   EXPECT_EQ(LIBC_NAMESPACE::getgrnam_r("root", &entry, nullptr, 0, &result),
             EINVAL);

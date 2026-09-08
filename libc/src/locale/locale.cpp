@@ -102,8 +102,8 @@ const char *locale_from_environment(int category) {
     return all;
 
   static const char *const NAMES[NUM_LOCALE_CATEGORIES] = {
-      "LC_CTYPE", "LC_NUMERIC", "LC_TIME", "LC_COLLATE", "LC_MONETARY",
-      "LC_MESSAGES"};
+      "LC_CTYPE",   "LC_NUMERIC",  "LC_TIME",
+      "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES"};
   if (category >= 0 && category < NUM_LOCALE_CATEGORIES) {
     const char *named = environment_value(NAMES[category]);
     if (named != nullptr && *named != '\0')

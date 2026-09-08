@@ -50,8 +50,7 @@ LIBC_INLINE void cancel_point() {
 // the ones that can wait indefinitely. The request is acted on before the
 // call is made and again if the call was interrupted, which is what the
 // signal sent with the request causes.
-template <typename F>
-LIBC_INLINE auto cancellable(F call) -> decltype(call()) {
+template <typename F> LIBC_INLINE auto cancellable(F call) -> decltype(call()) {
   cancel_point();
   auto result = call();
   if (!result.has_value() && result.error() == EINTR)

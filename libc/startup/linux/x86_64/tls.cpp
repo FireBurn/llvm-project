@@ -34,8 +34,7 @@ LIBC_INLINE bool init_tls_from_modules(TLSDescriptor &tls_descriptor) {
   auto block = elf::allocate_tls_block(modules->modules, modules->count);
   if (!block.has_value())
     syscall_impl<long>(SYS_exit, 1);
-  tls_descriptor = {block->size,
-                    reinterpret_cast<uintptr_t>(block->storage),
+  tls_descriptor = {block->size, reinterpret_cast<uintptr_t>(block->storage),
                     block->thread_pointer};
   return true;
 }

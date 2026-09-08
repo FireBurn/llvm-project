@@ -8,9 +8,9 @@
 
 #include "src/unistd/copy_file_range.h"
 
-#include "hdr/types/ssize_t.h"
 #include "hdr/types/off_t.h"
 #include "hdr/types/size_t.h"
+#include "hdr/types/ssize_t.h"
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -19,10 +19,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-
-LLVM_LIBC_FUNCTION(ssize_t, copy_file_range, (int fd_in, off_t *off_in, int fd_out, off_t *off_out,
-                        size_t len, unsigned int flags)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_copy_file_range, fd_in, off_in, fd_out, off_out, len, flags);
+LLVM_LIBC_FUNCTION(ssize_t, copy_file_range,
+                   (int fd_in, off_t *off_in, int fd_out, off_t *off_out,
+                    size_t len, unsigned int flags)) {
+  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(
+      SYS_copy_file_range, fd_in, off_in, fd_out, off_out, len, flags);
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

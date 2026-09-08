@@ -16,9 +16,9 @@ struct msginfo {
   int msgmap;  // Entries in the message map.
   int msgmax;  // The largest a single message may be.
   int msgmnb;  // The most bytes one queue may hold.
-  int msgmni; // How many queues there may be at once.
-  int msgssz; // The size of a message segment.
-  int msgtql; // How many messages there may be in all.
+  int msgmni;  // How many queues there may be at once.
+  int msgssz;  // The size of a message segment.
+  int msgtql;  // How many messages there may be in all.
   unsigned short msgseg;
 };
 

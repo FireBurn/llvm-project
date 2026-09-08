@@ -23,8 +23,7 @@ using LIBC_NAMESPACE::testing::ErrnoSetterMatcher::Succeeds;
 // A pid of zero means this process, and asking with no new limit is a read.
 TEST_F(LlvmLibcPrlimitTest, ReadsTheSameLimitAsGetrlimit) {
   struct rlimit expected;
-  ASSERT_THAT(LIBC_NAMESPACE::getrlimit(RLIMIT_NOFILE, &expected),
-              Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::getrlimit(RLIMIT_NOFILE, &expected), Succeeds(0));
 
   struct rlimit limit;
   ASSERT_THAT(LIBC_NAMESPACE::prlimit(0, RLIMIT_NOFILE, nullptr, &limit),

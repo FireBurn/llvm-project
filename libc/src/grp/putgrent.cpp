@@ -36,13 +36,11 @@ LLVM_LIBC_FUNCTION(int, putgrent, (const struct group *g, ::FILE *stream)) {
 
   const int written =
       from_network_database
-          ? LIBC_NAMESPACE::fprintf(
-                stream, "%s:%s::", g->gr_name,
-                g->gr_passwd != nullptr ? g->gr_passwd : "")
-          : LIBC_NAMESPACE::fprintf(
-                stream, "%s:%s:%u:", g->gr_name,
-                g->gr_passwd != nullptr ? g->gr_passwd : "",
-                static_cast<unsigned>(g->gr_gid));
+          ? LIBC_NAMESPACE::fprintf(stream, "%s:%s::", g->gr_name,
+                                    g->gr_passwd != nullptr ? g->gr_passwd : "")
+          : LIBC_NAMESPACE::fprintf(stream, "%s:%s:%u:", g->gr_name,
+                                    g->gr_passwd != nullptr ? g->gr_passwd : "",
+                                    static_cast<unsigned>(g->gr_gid));
   if (written < 0)
     return -1;
 

@@ -16,7 +16,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 int posix_spawn_file_actions_addchdir_np(
-    posix_spawn_file_actions_t *__restrict actions, const char *__restrict path);
+    posix_spawn_file_actions_t *__restrict actions,
+    const char *__restrict path);
 
 } // namespace LIBC_NAMESPACE_DECL
 
