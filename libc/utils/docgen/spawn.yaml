@@ -19,12 +19,16 @@ functions:
     in-latest-posix: ''
   posix_spawn_file_actions_addchdir:
     in-latest-posix: ''
+  posix_spawn_file_actions_addchdir_np:
+    c-definition: 'TODO: glibc extension'
   posix_spawn_file_actions_addclose:
     in-latest-posix: ''
   posix_spawn_file_actions_adddup2:
     in-latest-posix: ''
   posix_spawn_file_actions_addfchdir:
     in-latest-posix: ''
+  posix_spawn_file_actions_addfchdir_np:
+    c-definition: 'TODO: glibc extension'
   posix_spawn_file_actions_addopen:
     in-latest-posix: ''
   posix_spawn_file_actions_destroy:
