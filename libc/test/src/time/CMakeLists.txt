@@ -324,3 +324,31 @@ add_libc_test(
     libc.hdr.types.clock_t
 )
 
+
+add_libc_test(
+  timegm_test
+  SUITE
+    libc_time_unittests
+  SRCS
+    timegm_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_tm
+    libc.hdr.types.time_t
+    libc.src.time.gmtime_r
+    libc.src.time.timegm
+)
+
+add_libc_test(
+  clock_nanosleep_test
+  SUITE
+    libc_time_unittests
+  SRCS
+    clock_nanosleep_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.src.time.clock_gettime
+    libc.src.time.clock_nanosleep
+    libc.test.UnitTest.ErrnoCheckingTest
+)

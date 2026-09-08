@@ -88,3 +88,21 @@ add_libc_test(
     libc.hdr.types.struct_dirent
     libc.src.string.strlen
 )
+
+add_libc_test(
+  getdents64_test
+  SUITE
+    libc_dirent_unittests
+  SRCS
+    getdents64_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_dirent
+    libc.src.dirent.getdents64
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
