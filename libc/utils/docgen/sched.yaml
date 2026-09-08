@@ -23,6 +23,8 @@ macros:
     in-latest-posix: ''
 
 functions:
+  clone:
+    c-definition: 'TODO: Linux extension'
   sched_get_priority_max:
     in-latest-posix: ''
   sched_get_priority_min:
@@ -49,3 +51,7 @@ functions:
     extension: gnu
   sched_setaffinity:
     extension: gnu
+  unshare:
+    c-definition: 'TODO: Linux extension'
+  setns:
+    c-definition: 'TODO: Linux extension'
