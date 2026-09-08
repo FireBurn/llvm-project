@@ -9,6 +9,50 @@ macros:
   - macro_name: M_PURGE_ALL
     macro_header: malloc-macros.h
 functions:
+  - name: mallinfo
+    standards:
+      - gnu
+    return_type: struct mallinfo
+    arguments:
+      - type: void
+  - name: mallinfo2
+    standards:
+      - gnu
+    return_type: struct mallinfo2
+    arguments:
+      - type: void
+  - name: malloc_info
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: FILE *
+  - name: malloc_usable_size
+    standards:
+      - gnu
+    return_type: size_t
+    arguments:
+      - type: void *
+  - name: memalign
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: size_t
+      - type: size_t
+  - name: pvalloc
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: size_t
+  - name: valloc
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: size_t
   - name: malloc_usable_size
     standards:
       - gnu
