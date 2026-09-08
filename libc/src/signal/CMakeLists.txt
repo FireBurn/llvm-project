@@ -24,6 +24,23 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  psignal
+  SRCS
+    psignal.cpp
+  HDRS
+    psignal.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.src.__support.CPP.string_view
+    libc.src.__support.File.file
+    libc.src.__support.StringUtil.signal_to_string
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.stdio.stderr
+)
+
+add_entrypoint_object(
   siginterrupt
   SRCS
     siginterrupt.cpp
