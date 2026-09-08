@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_SRC_NETDB_RESOLV_FILE_LINES_H
 #define LLVM_LIBC_SRC_NETDB_RESOLV_FILE_LINES_H
 
+#include "src/__support/macros/attributes.h"
 #include "hdr/fcntl_macros.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/string_view.h"
@@ -28,7 +29,7 @@ namespace resolv {
 // destructor cannot be kept at that level. Whoever opens it closes it.
 class FileLines {
 public:
-  bool open(const char *path) {
+  LIBC_INLINE bool open(const char *path) {
     close_file();
     auto fd = linux_syscalls::open(path, O_RDONLY | O_CLOEXEC, 0);
     if (!fd.has_value())
@@ -39,9 +40,9 @@ public:
     return true;
   }
 
-  bool is_open() const { return fd_ >= 0; }
+  LIBC_INLINE bool is_open() const { return fd_ >= 0; }
 
-  void close_file() {
+  LIBC_INLINE void close_file() {
     if (fd_ >= 0)
       LIBC_NAMESPACE::close(fd_);
     fd_ = -1;
@@ -49,7 +50,7 @@ public:
     ended_ = false;
   }
 
-  bool next_line(char *line, size_t capacity) {
+  LIBC_INLINE bool next_line(char *line, size_t capacity) {
     size_t written = 0;
     bool any = false;
     for (;;) {
@@ -91,7 +92,7 @@ private:
 // end says there is nothing rather than quietly starting over.
 class Enumeration {
 public:
-  void rewind(const char *path, bool stay_open) {
+  LIBC_INLINE void rewind(const char *path, bool stay_open) {
     keep_open_ = stay_open;
     ended_ = false;
     lines_.open(path);
@@ -99,14 +100,14 @@ public:
 
   // Closes the file. A read after this opens it again from the front, which
   // is what closing the connection to a database has always meant.
-  void stop() {
+  LIBC_INLINE void stop() {
     keep_open_ = false;
     ended_ = false;
     lines_.close_file();
   }
 
   // The next line that holds anything, or null at the end of the file.
-  char *next(const char *path, char *line, size_t capacity) {
+  LIBC_INLINE char *next(const char *path, char *line, size_t capacity) {
     if (ended_)
       return nullptr;
     if (!lines_.is_open() && !lines_.open(path)) {

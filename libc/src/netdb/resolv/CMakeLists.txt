@@ -16,6 +16,7 @@ add_header_library(
   HDRS
     file_lines.h
   DEPENDS
+    libc.src.__support.macros.attributes
     libc.hdr.fcntl_macros
     libc.hdr.types.size_t
     libc.src.__support.CPP.string_view
