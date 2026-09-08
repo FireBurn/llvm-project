@@ -258,3 +258,21 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  psignal_test
+  SUITE
+    libc_signal_unittests
+  SRCS
+    psignal_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.StringUtil.signal_to_string
+    libc.src.signal.psignal
+    libc.src.unistd.close
+    libc.src.unistd.dup
+    libc.src.unistd.dup2
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+)
