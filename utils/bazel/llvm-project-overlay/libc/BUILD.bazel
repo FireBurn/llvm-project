@@ -19028,6 +19028,22 @@ libc_function(
 )
 
 libc_function(
+    name = "psignal",
+    srcs = ["src/signal/psignal.cpp"],
+    hdrs = ["src/signal/psignal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_stringutil",
+        ":stderr",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "sigaction",
     srcs = ["src/signal/linux/sigaction.cpp"],
     hdrs = ["src/signal/sigaction.h"],
