@@ -9,11 +9,16 @@
 #ifndef LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 #define LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
 
+#include "uapi-compat-macros.h"
 
 #include "../__llvm-libc-common.h"
 #include "../llvm-libc-types/in_addr_t.h"
 #include "../llvm-libc-types/struct_in6_addr.h"
 
+// The protocol numbers are the kernel's too, in <linux/in.h>. Leaving them
+// to it is right only where that header has been read.
+#if !(defined(__UAPI_DEF_IN_IPPROTO) && __UAPI_DEF_IN_IPPROTO &&               \
+      defined(_LINUX_IN_H))
 #define IPPROTO_IP 0
 #define IPPROTO_ICMP 1
 #define IPPROTO_IGMP 2
@@ -45,8 +50,17 @@
 #define IPPROTO_SMC 256
 #define IPPROTO_MPTCP 262
 
+// Say the definitions here are the ones, so <linux/in.h> skips its own if
+// it is read after this.
+#undef __UAPI_DEF_IN_IPPROTO
+#define __UAPI_DEF_IN_IPPROTO 0
+#endif
 
 // The extension headers an IPv6 packet may carry, which sit in the same
+// number space as the protocols above. The kernel has these in
+// <linux/in6.h>.
+#if !(defined(__UAPI_DEF_IPPROTO_V6) && __UAPI_DEF_IPPROTO_V6 &&               \
+      defined(_LINUX_IN6_H))
 #define IPPROTO_HOPOPTS 0
 #define IPPROTO_ROUTING 43
 #define IPPROTO_FRAGMENT 44
@@ -55,6 +69,9 @@
 #define IPPROTO_DSTOPTS 60
 #define IPPROTO_MH 135
 
+#undef __UAPI_DEF_IPPROTO_V6
+#define __UAPI_DEF_IPPROTO_V6 0
+#endif
 
 #define INADDR_ANY __LLVM_LIBC_CAST(static_cast, in_addr_t, 0x00000000)
 #define INADDR_BROADCAST __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
@@ -266,6 +283,7 @@
 #define IPV6_UNICAST_IF 76
 #define IPV6_RECVFRAGSIZE 77
 #define IPV6_FREEBIND 78
+
 // What IPV6_MTU_DISCOVER may be set to.
 #define IPV6_PMTUDISC_DONT 0
 #define IPV6_PMTUDISC_WANT 1
@@ -273,4 +291,5 @@
 #define IPV6_PMTUDISC_PROBE 3
 #define IPV6_PMTUDISC_INTERFACE 4
 #define IPV6_PMTUDISC_OMIT 5
+
 #endif // LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
