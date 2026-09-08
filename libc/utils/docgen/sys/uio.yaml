@@ -1,4 +1,12 @@
 functions:
+  pwritev:
+    c-definition: 'TODO: Linux extension'
+  process_vm_writev:
+    c-definition: 'TODO: Linux extension'
+  process_vm_readv:
+    c-definition: 'TODO: Linux extension'
+  preadv:
+    c-definition: 'TODO: Linux extension'
   readv:
     in-latest-posix: ""
   writev:
