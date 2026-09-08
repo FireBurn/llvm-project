@@ -324,6 +324,8 @@ add_type_header(
 )
 add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_arphdr HDR struct_arphdr.h)
+add_header(struct_mallinfo HDR struct_mallinfo.h DEPENDS .size_t)
+add_header(struct_mallinfo2 HDR struct_mallinfo2.h DEPENDS .size_t)
 add_header(struct_timex HDR struct_timex.h DEPENDS .struct_timeval)
 add_header(struct_dqblk HDR struct_dqblk.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_utmpx HDR struct_utmpx.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .pid_t)
