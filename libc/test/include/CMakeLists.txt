@@ -529,6 +529,17 @@ add_libc_test(
     libc.include.llvm-libc-macros.math_macros
 )
 
+add_libc_test(
+  mallinfo_test
+  SUITE
+    libc_include_tests
+  SRCS
+    mallinfo_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_mallinfo
+    libc.include.llvm-libc-types.struct_mallinfo2
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.

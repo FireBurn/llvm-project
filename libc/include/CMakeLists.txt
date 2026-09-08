@@ -208,6 +208,9 @@ add_header_macro(
   ../libc/include/malloc.yaml
   malloc.h
   DEPENDS
+    .llvm-libc-types.struct_mallinfo
+    .llvm-libc-types.struct_mallinfo2
+    .llvm-libc-types.FILE
     .llvm_libc_common_h
     .llvm-libc-macros.malloc_macros
 )
