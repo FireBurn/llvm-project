@@ -112,6 +112,8 @@ functions:
     in-latest-posix: ''
   stat:
     in-latest-posix: ''
+  statx:
+    c-definition: 'TODO: Linux extension'
   umask:
     in-latest-posix: ''
   utimensat:
