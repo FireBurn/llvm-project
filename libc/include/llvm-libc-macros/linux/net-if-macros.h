@@ -14,6 +14,7 @@
 #ifndef LLVM_LIBC_MACROS_LINUX_NET_IF_MACROS_H
 #define LLVM_LIBC_MACROS_LINUX_NET_IF_MACROS_H
 
+
 #define IF_NAMESIZE 16
 
 // The older name for the same limit. Code which reaches for struct ifreq
