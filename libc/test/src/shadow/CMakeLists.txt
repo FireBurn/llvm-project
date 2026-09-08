@@ -15,3 +15,35 @@ add_libc_test(
     libc.src.__support.CPP.span
     libc.src.shadow.shadow_utils
 )
+
+add_libc_test(
+  shadow_test
+  SUITE
+    libc_shadow_unittests
+  SRCS
+    shadow_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.struct_spwd
+    libc.src.__support.libc_errno
+    libc.src.shadow.endspent
+    libc.src.shadow.fgetspent
+    libc.src.shadow.fgetspent_r
+    libc.src.shadow.getspent
+    libc.src.shadow.getspent_r
+    libc.src.shadow.getspnam
+    libc.src.shadow.getspnam_r
+    libc.src.shadow.lckpwdf
+    libc.src.shadow.putspent
+    libc.src.shadow.setspent
+    libc.src.shadow.sgetspent
+    libc.src.shadow.sgetspent_r
+    libc.src.shadow.shadow_utils
+    libc.src.shadow.ulckpwdf
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fwrite
+    libc.src.stdio.remove
+    libc.test.UnitTest.ErrnoCheckingTest
+)
