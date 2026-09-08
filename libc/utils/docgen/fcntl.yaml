@@ -17,10 +17,16 @@ types:
 functions:
   creat:
     in-latest-posix: ''
+  fallocate:
+    c-definition: 'TODO: Linux extension'
   fcntl:
     in-latest-posix: ''
+  name_to_handle_at:
+    c-definition: 'TODO: Linux extension'
   open:
     in-latest-posix: ''
+  open_by_handle_at:
+    c-definition: 'TODO: Linux extension'
   openat:
     in-latest-posix: ''
   posix_fadvise:
@@ -29,6 +35,14 @@ functions:
     in-latest-posix: ''
   fallocate:
     c-definition: ''
+  vmsplice:
+    c-definition: 'TODO: Linux extension'
+  tee:
+    c-definition: 'TODO: Linux extension'
+  sync_file_range:
+    c-definition: 'TODO: Linux extension'
+  splice:
+    c-definition: 'TODO: Linux extension'
 
   posix_fadvise64:
     extension: gnu
