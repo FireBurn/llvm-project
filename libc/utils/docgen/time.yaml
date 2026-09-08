@@ -52,6 +52,8 @@ functions:
   time:
     c-definition: 7.27.2.4
     in-latest-posix: ''
+  timegm:
+    c-definition: 'TODO: BSD extension'
   timespec_get:
     c-definition: 7.27.2.5
   timer_create:
@@ -64,5 +66,7 @@ functions:
     in-latest-posix: ''
   timer_settime:
     in-latest-posix: ''
+  tz_variables:
+    c-definition: 'TODO: glibc extension'
   tzset:
     in-latest-posix: ''
