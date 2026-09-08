@@ -35,6 +35,16 @@
 #define QIF_DQBLKSIZE_BITS 10
 #define QIF_DQBLKSIZE (1 << QIF_DQBLKSIZE_BITS)
 
+// The bit numbers these are built from are enumerators in the kernel's own
+// <linux/quota.h>, so they are not spelled out here: a macro of the same
+// name would break that header for anything which includes both. glibc
+// leaves them out for the same reason.
+#define QIF_BLIMITS 1
+#define QIF_SPACE 2
+#define QIF_ILIMITS 4
+#define QIF_INODES 8
+#define QIF_BTIME 16
+#define QIF_ITIME 32
 #define QIF_LIMITS (QIF_BLIMITS | QIF_ILIMITS)
 #define QIF_USAGE (QIF_SPACE | QIF_INODES)
 #define QIF_TIMES (QIF_BTIME | QIF_ITIME)
