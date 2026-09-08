@@ -1,6 +1,10 @@
 functions:
   kill:
     in-latest-posix: ''
+  psignal:
+    in-latest-posix: ''
+  killpg:
+    in-latest-posix: ''
   raise:
     c-definition: 7.14.2.1
     in-latest-posix: ''
@@ -16,10 +20,28 @@ functions:
     in-latest-posix: ''
   sigfillset:
     in-latest-posix: ''
+  sigismember:
+    in-latest-posix: ''
+  sigisemptyset:
+    c-definition: 'TODO: glibc extension'
+  siginterrupt:
+    in-latest-posix: ''
   signal:
     c-definition: 7.14.1.1
     in-latest-posix: ''
+  sigpending:
+    in-latest-posix: ''
   sigprocmask:
+    in-latest-posix: ''
+  sigwaitinfo:
+    in-latest-posix: ''
+  sigwait:
+    in-latest-posix: ''
+  sigtimedwait:
+    in-latest-posix: ''
+  sigsuspend:
+    in-latest-posix: ''
+  sigqueue:
     in-latest-posix: ''
 macros:
   SIGABRT:
