@@ -1162,3 +1162,15 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.sys.resource.getrlimit
 )
+
+add_entrypoint_object(
+  close_range
+  SRCS
+    close_range.cpp
+  HDRS
+    ../close_range.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
