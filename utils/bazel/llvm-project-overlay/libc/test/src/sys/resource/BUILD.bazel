@@ -25,3 +25,15 @@ libc_test(
         "//libc/src/unistd:unlink",
     ],
 )
+
+libc_test(
+    name = "prlimit_test",
+    srcs = ["prlimit_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_rlimit",
+        "//libc/hdr:errno_macros",
+        "//libc/src/sys/resource:getrlimit",
+        "//libc/src/sys/resource:prlimit",
+        "//libc/src/sys/resource:sys_resource_prlimit",
+    ],
+)
