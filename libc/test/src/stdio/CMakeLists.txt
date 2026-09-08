@@ -761,6 +761,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  unlocked_test
+  SUITE
+    libc_stdio_unittests
+  SRCS
+    unlocked_test.cpp
+  DEPENDS
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.include.stdio_ext
+    libc.src.stdio.__fsetlocking
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.remove
+)
+
+add_libc_test(
   renameat_test
   SUITE
     libc_stdio_unittests
