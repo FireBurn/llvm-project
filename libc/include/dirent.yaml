@@ -68,6 +68,14 @@ functions:
     return_type: DIR *
     arguments:
       - type: int
+  - name: getdents64
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: void *
+      - type: size_t
   - name: opendir
     standards:
       - posix
