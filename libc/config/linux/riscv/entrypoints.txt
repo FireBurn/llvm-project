@@ -835,6 +835,9 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.complex.conjf
     libc.src.complex.conjl
     libc.src.complex.cproj
+    libc.src.complex.csqrt
+    libc.src.complex.csqrtf
+    libc.src.complex.csqrtl
     libc.src.complex.cprojf
     libc.src.complex.cprojl
 
