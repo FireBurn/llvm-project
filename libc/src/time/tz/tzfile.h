@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_SRC_TIME_TZ_TZFILE_H
 #define LLVM_LIBC_SRC_TIME_TZ_TZFILE_H
 
+#include "src/__support/macros/attributes.h"
 #include "hdr/stdint_proxy.h"
 #include "hdr/types/size_t.h"
 #include "hdr/types/time_t.h"
@@ -56,7 +57,7 @@ public:
 
   // The rules the file ends with, which only mean anything where read_at said
   // it used them.
-  const PosixZone &footer_rules() const { return footer; }
+  LIBC_INLINE const PosixZone &footer_rules() const { return footer; }
 
   // The pair of names the zone goes by, which is what tzname reports. Taken
   // by walking the changes backwards from the last and keeping the first name

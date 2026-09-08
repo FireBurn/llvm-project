@@ -21,6 +21,7 @@ add_object_library(
   HDRS
     tzfile.h
   DEPENDS
+    libc.src.__support.macros.attributes
     .posix_tz
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
