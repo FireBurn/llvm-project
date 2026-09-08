@@ -252,3 +252,45 @@ add_fp_unittest(
   DEPENDS
     libc.src.complex.cimagf128
 )
+
+add_fp_unittest(
+  csqrt_test
+  SUITE
+    libc-complex-unittests
+  SRCS
+    csqrt_test.cpp
+  HDRS
+    CSqrtTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.manipulation_functions
+    libc.src.__support.FPUtil.sqrt
+    libc.src.complex.csqrt
+)
+
+add_fp_unittest(
+  csqrtf_test
+  SUITE
+    libc-complex-unittests
+  SRCS
+    csqrtf_test.cpp
+  HDRS
+    CSqrtTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.manipulation_functions
+    libc.src.__support.FPUtil.sqrt
+    libc.src.complex.csqrtf
+)
+
+add_fp_unittest(
+  csqrtl_test
+  SUITE
+    libc-complex-unittests
+  SRCS
+    csqrtl_test.cpp
+  HDRS
+    CSqrtTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.manipulation_functions
+    libc.src.__support.FPUtil.sqrt
+    libc.src.complex.csqrtl
+)
