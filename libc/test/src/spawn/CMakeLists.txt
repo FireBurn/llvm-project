@@ -11,9 +11,43 @@ add_libc_test(
     libc.hdr.stdint_proxy
     libc.include.spawn
     libc.src.spawn.file_actions
+    libc.src.spawn.posix_spawn_file_actions_addchdir_np
     libc.src.spawn.posix_spawn_file_actions_addclose
     libc.src.spawn.posix_spawn_file_actions_adddup2
+    libc.src.spawn.posix_spawn_file_actions_addfchdir_np
     libc.src.spawn.posix_spawn_file_actions_addopen
     libc.src.spawn.posix_spawn_file_actions_destroy
     libc.src.spawn.posix_spawn_file_actions_init
+)
+
+add_libc_test(
+  posix_spawnattr_test
+  SUITE
+    libc_spawn_unittests
+  SRCS
+    posix_spawnattr_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.spawn_macros
+    libc.hdr.types.posix_spawnattr_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_sched_param
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigismember
+    libc.src.spawn.posix_spawnattr_destroy
+    libc.src.spawn.posix_spawnattr_getflags
+    libc.src.spawn.posix_spawnattr_getpgroup
+    libc.src.spawn.posix_spawnattr_getschedparam
+    libc.src.spawn.posix_spawnattr_getschedpolicy
+    libc.src.spawn.posix_spawnattr_getsigdefault
+    libc.src.spawn.posix_spawnattr_getsigmask
+    libc.src.spawn.posix_spawnattr_init
+    libc.src.spawn.posix_spawnattr_setflags
+    libc.src.spawn.posix_spawnattr_setpgroup
+    libc.src.spawn.posix_spawnattr_setschedparam
+    libc.src.spawn.posix_spawnattr_setschedpolicy
+    libc.src.spawn.posix_spawnattr_setsigdefault
+    libc.src.spawn.posix_spawnattr_setsigmask
 )
