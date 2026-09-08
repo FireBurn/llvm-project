@@ -11,6 +11,7 @@ add_object_library(
     libc.include.sys_syscall
     libc.include.sys_un
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.macros.attributes
     libc.src.__support.threads.mutex
 )
 

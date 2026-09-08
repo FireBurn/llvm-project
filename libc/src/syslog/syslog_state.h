@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_SRC_SYSLOG_SYSLOG_STATE_H
 #define LLVM_LIBC_SRC_SYSLOG_SYSLOG_STATE_H
 
+#include "src/__support/macros/attributes.h"
 #include "hdr/syslog_macros.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/mutex.h"
@@ -18,7 +19,7 @@ namespace syslog_internal {
 
 // Where the log daemon listens. This is where it has always been, and no
 // program passes it in.
-inline constexpr const char *LOG_PATH = "/dev/log";
+LIBC_INLINE_VAR constexpr const char *LOG_PATH = "/dev/log";
 
 // The one connection the whole program shares, and the settings openlog
 // left behind. Everything here is reached under the lock.
