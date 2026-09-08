@@ -19,12 +19,32 @@ functions:
     return_type: struct mallinfo2
     arguments:
       - type: void
+  - name: mallinfo
+    standards:
+      - gnu
+    return_type: struct mallinfo
+    arguments:
+      - type: void
+  - name: malloc_info
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: FILE *
   - name: malloc_usable_size
     standards:
       - gnu
     return_type: size_t
     arguments:
       - type: void *
+  - name: memalign
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: size_t
+      - type: size_t
   - name: mallopt
     standards:
       - gnu
@@ -34,7 +54,12 @@ functions:
       - type: int
   - name: pvalloc
     standards:
-      - bsd
+      - gnu
+    return_type: void *
+    arguments:
+      - type: size_t
+  - name: valloc
+    standards:
       - gnu
     return_type: void *
     arguments:
