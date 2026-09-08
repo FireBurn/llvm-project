@@ -483,6 +483,36 @@ alias(
     actual = "//libc/src/complex:creall",
 )
 
+alias(
+    name = "csqrt",
+    actual = "//libc/src/complex:csqrt",
+)
+
+alias(
+    name = "csqrtf",
+    actual = "//libc/src/complex:csqrtf",
+)
+
+alias(
+    name = "csqrtl",
+    actual = "//libc/src/complex:csqrtl",
+)
+
+alias(
+    name = "complex_csqrt",
+    actual = "//libc/src/complex:complex_csqrt",
+)
+
+alias(
+    name = "complex_csqrtf",
+    actual = "//libc/src/complex:complex_csqrtf",
+)
+
+alias(
+    name = "complex_csqrtl",
+    actual = "//libc/src/complex:complex_csqrtl",
+)
+
 ################################ link targets ##################################
 
 alias(

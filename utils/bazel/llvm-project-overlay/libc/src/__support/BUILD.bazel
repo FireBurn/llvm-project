@@ -619,6 +619,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "complex_sqrt",
+    hdrs = ["complex_sqrt.h"],
+    deps = [
+        ":complex_type",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/FPUtil:basic_operations",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:manipulation_functions",
+        "//libc/src/__support/FPUtil:multiply_add",
+        "//libc/src/__support/FPUtil:sqrt",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_bind",
     hdrs = ["elf/bind.h"],
     deps = [

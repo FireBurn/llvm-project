@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -255,5 +255,71 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:complex_type",
+    ],
+)
+
+libc_function(
+    name = "csqrt",
+    srcs = ["generic/csqrt.cpp"],
+    hdrs = ["csqrt.h"],
+    deps = [
+        ":complex_csqrt",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:complex_sqrt",
+        "//libc/src/__support:complex_type",
+    ],
+)
+
+libc_function(
+    name = "csqrtf",
+    srcs = ["generic/csqrtf.cpp"],
+    hdrs = ["csqrtf.h"],
+    deps = [
+        ":complex_csqrtf",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:complex_sqrt",
+        "//libc/src/__support:complex_type",
+    ],
+)
+
+libc_function(
+    name = "csqrtl",
+    srcs = ["generic/csqrtl.cpp"],
+    hdrs = ["csqrtl.h"],
+    deps = [
+        ":complex_csqrtl",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:complex_sqrt",
+        "//libc/src/__support:complex_type",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csqrt",
+    hdrs = ["csqrt.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csqrtf",
+    hdrs = ["csqrtf.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csqrtl",
+    hdrs = ["csqrtl.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
     ],
 )
