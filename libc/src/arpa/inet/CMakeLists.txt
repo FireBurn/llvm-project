@@ -113,3 +113,17 @@ add_entrypoint_object(
     libc.include.arpa_inet
     libc.src.__support.common
 )
+
+add_entrypoint_object(
+  inet_pton
+  SRCS
+    inet_pton.cpp
+  HDRS
+    inet_pton.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.size_t
+    libc.src.__support.ctype_utils
+    libc.src.errno.errno
+)
