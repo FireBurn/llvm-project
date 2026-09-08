@@ -11,11 +11,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "src/__support/macros/config.h"
-#include <stddef.h>
-
 #ifndef LLVM_LIBC_SRC_STDLIB_MALLOC_USABLE_SIZE_H
 #define LLVM_LIBC_SRC_STDLIB_MALLOC_USABLE_SIZE_H
+
+#include "hdr/types/size_t.h"
+#include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
