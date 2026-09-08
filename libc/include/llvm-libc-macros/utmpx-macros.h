@@ -9,6 +9,20 @@
 #ifndef LLVM_LIBC_MACROS_UTMPX_MACROS_H
 #define LLVM_LIBC_MACROS_UTMPX_MACROS_H
 
+// The sizes of the three character fields of a record. <utmp.h> defines the
+// same three, and a program may end up with both headers, so each is only
+// defined once. glibc offers them from here as well, and code that includes
+// <utmpx.h> alone counts on finding them.
+#ifndef UT_LINESIZE
+#define UT_LINESIZE 32
+#endif
+#ifndef UT_NAMESIZE
+#define UT_NAMESIZE 32
+#endif
+#ifndef UT_HOSTSIZE
+#define UT_HOSTSIZE 256
+#endif
+
 // What ut_type says a record is.
 #define EMPTY 0         // Nothing here.
 #define RUN_LVL 1       // The run level changed.
