@@ -166,3 +166,65 @@ add_integration_test(
   ENV
     EXECV_TEST=PASS
 )
+
+add_integration_test(
+  execlp_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execlp_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execlp
+    libc.src.unistd.fork
+  ENV
+    EXECV_TEST=PASS
+)
+
+add_integration_test(
+  execvpe_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execvpe_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execvpe
+    libc.src.unistd.fork
+)
+
+add_integration_test(
+  get_current_dir_name_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    get_current_dir_name_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.stdlib.unsetenv
+    libc.src.sys.stat.stat
+    libc.src.unistd.get_current_dir_name
+)
+
+add_integration_test(
+  execl_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execl_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execl
+    libc.src.unistd.fork
+  ENV
+    EXECV_TEST=PASS
+)
