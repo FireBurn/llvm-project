@@ -8,10 +8,10 @@
 
 #include "src/fcntl/posix_fallocate.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/types/off_t.h"
 #include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
-#include "hdr/errno_macros.h"
 #include "src/__support/macros/config.h"
 #include <sys/syscall.h>
 

@@ -16,8 +16,8 @@
 #include "hdr/types/time_t.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/nanosleep.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/cancel.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -25,7 +25,8 @@ LLVM_LIBC_FUNCTION(unsigned int, sleep, (unsigned int seconds)) {
   static_assert(sizeof(unsigned int) <= sizeof(time_t), "Avoids overflow");
   struct timespec req = {seconds, 0};
   struct timespec rem = {};
-  auto result = internal::cancellable([&] { return linux_syscalls::nanosleep(&req, &rem); });
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::nanosleep(&req, &rem); });
   if (!result) {
     // Cast does not lose information as `remaining` cannot be greater than
     // `seconds`.

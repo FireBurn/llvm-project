@@ -13,7 +13,7 @@
 
 // One entry of the library list a Solaris object carries.
 typedef struct {
-  Elf64_Word l_name;       // Its name, as an index into the string table.
+  Elf64_Word l_name; // Its name, as an index into the string table.
   Elf64_Word l_time_stamp;
   Elf64_Word l_checksum;
   Elf64_Word l_version;

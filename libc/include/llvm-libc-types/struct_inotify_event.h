@@ -15,10 +15,10 @@
 // rather than being pointed at, and len says how much room it took, so the
 // next event begins len bytes after the end of this one.
 struct inotify_event {
-  int wd;         // Which watch it came from.
-  uint32_t mask;  // What happened.
+  int wd;          // Which watch it came from.
+  uint32_t mask;   // What happened.
   uint32_t cookie; // Pairs a move out with the move in which matches it.
-  uint32_t len;   // How much room the name took, padding included.
+  uint32_t len;    // How much room the name took, padding included.
   char name[];
 };
 

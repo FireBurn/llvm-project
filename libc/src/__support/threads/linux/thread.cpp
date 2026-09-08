@@ -6,13 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/__support/elf/dynamic_blocks.h"
-#include "src/__support/threads/cancel.h"
-#include "hdr/sys_resource_macros.h"
-#include "src/__support/CPP/atomic.h"
-#include "src/__support/OSUtil/linux/syscall_wrappers/prlimit.h"
 #include "src/__support/threads/thread.h"
 #include "config/app.h"
+#include "hdr/sys_resource_macros.h"
 #include "src/__support/CPP/atomic.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/CPP/stringstream.h"
@@ -21,6 +17,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/mprotect.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/munmap.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/prlimit.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getparam.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getscheduler.h"
@@ -28,9 +25,11 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/OSUtil/syscall.h" // For syscall functions.
 #include "src/__support/common.h"
+#include "src/__support/elf/dynamic_blocks.h"
 #include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h" // For error macros
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 #include "src/__support/threads/linux/futex_utils.h" // For FutexWordType
 
 #ifdef LIBC_TARGET_ARCH_IS_AARCH64

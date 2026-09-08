@@ -21,9 +21,9 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, getpwuid_r,
                    (uid_t uid, struct passwd *pwd, char *buf, size_t buflen,
                     struct passwd **result)) {
-  return passwd_r::find(
-      pwd, buf, buflen, result,
-      [uid](struct passwd *entry) { return entry->pw_uid == uid; });
+  return passwd_r::find(pwd, buf, buflen, result, [uid](struct passwd *entry) {
+    return entry->pw_uid == uid;
+  });
 }
 
 } // namespace LIBC_NAMESPACE_DECL

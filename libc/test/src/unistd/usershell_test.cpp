@@ -23,8 +23,8 @@ namespace {
 constexpr const char *TEST_FILE = "usershell.test.shells";
 
 void write_file(const char *contents) {
-  int fd = LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(TEST_FILE, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   size_t length = 0;
   while (contents[length] != '\0')

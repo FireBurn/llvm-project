@@ -17,7 +17,7 @@
 
 // The protocol numbers are the kernel's too, in <linux/in.h>. Leaving them
 // to it is right only where that header has been read.
-#if !(defined(__UAPI_DEF_IN_IPPROTO) && __UAPI_DEF_IN_IPPROTO &&        \
+#if !(defined(__UAPI_DEF_IN_IPPROTO) && __UAPI_DEF_IN_IPPROTO &&               \
       defined(_LINUX_IN_H))
 #define IPPROTO_IP 0
 #define IPPROTO_ICMP 1
@@ -80,7 +80,8 @@
 // The classes addresses were once divided into. Subnetting replaced them
 // long ago, but the names are still how a program asks whether an address is
 // a multicast one.
-#define IN_CLASSA(a) ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0x80000000) == 0)
+#define IN_CLASSA(a)                                                           \
+  ((__LLVM_LIBC_CAST(static_cast, in_addr_t, a) & 0x80000000) == 0)
 #define IN_CLASSA_NET 0xff000000
 #define IN_CLASSA_NSHIFT 24
 #define IN_CLASSA_HOST (0xffffffff & ~IN_CLASSA_NET)

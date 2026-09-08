@@ -9,9 +9,9 @@
 #ifndef LLVM_LIBC_SRC_STDIO_SCANF_CORE_SCANF_MAIN_H
 #define LLVM_LIBC_SRC_STDIO_SCANF_CORE_SCANF_MAIN_H
 
+#include "hdr/errno_macros.h"
 #include "hdr/stdio_macros.h"
 #include "src/__support/arg_list.h"
-#include "hdr/errno_macros.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/stdio/scanf_core/converter.h"

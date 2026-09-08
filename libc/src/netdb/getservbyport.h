@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct servent * getservbyport (int port, const char *proto);
+struct servent *getservbyport(int port, const char *proto);
 
 } // namespace LIBC_NAMESPACE_DECL
 

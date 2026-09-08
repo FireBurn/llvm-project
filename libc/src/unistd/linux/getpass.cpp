@@ -40,8 +40,7 @@ void say(int fd, const char *text) {
     ++length;
   size_t written = 0;
   while (written < length) {
-    auto taken =
-        linux_syscalls::write(fd, text + written, length - written);
+    auto taken = linux_syscalls::write(fd, text + written, length - written);
     if (!taken.has_value() || taken.value() == 0)
       return;
     written += static_cast<size_t>(taken.value());

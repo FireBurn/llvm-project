@@ -28,7 +28,8 @@ LLVM_LIBC_FUNCTION(int, res_mkquery,
   (void)data;
   (void)datalen;
   (void)newrr;
-  if (op != resolv::OPCODE_QUERY || dname == nullptr || buf == nullptr || buflen <= 0)
+  if (op != resolv::OPCODE_QUERY || dname == nullptr || buf == nullptr ||
+      buflen <= 0)
     return -1;
 
   struct __res_state *state = LIBC_NAMESPACE::__res_state();
@@ -41,9 +42,9 @@ LLVM_LIBC_FUNCTION(int, res_mkquery,
     return -1;
   state->id = id;
 
-  const size_t length = resolv::build_query(
-      dname, static_cast<uint16_t>(type), static_cast<uint16_t>(rr_class), id,
-      buf, static_cast<size_t>(buflen));
+  const size_t length = resolv::build_query(dname, static_cast<uint16_t>(type),
+                                            static_cast<uint16_t>(rr_class), id,
+                                            buf, static_cast<size_t>(buflen));
   return length == 0 ? -1 : static_cast<int>(length);
 }
 

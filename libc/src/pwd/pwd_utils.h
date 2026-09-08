@@ -21,11 +21,11 @@
 #include "src/__support/CPP/span.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/error_or.h"
+#include "src/__support/field_tokenizer.h"
+#include "src/__support/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/str_to_integer.h"
-#include "src/__support/field_tokenizer.h"
-#include "src/__support/flat_file_db.h"
 #include "src/string/string_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -115,7 +115,6 @@ namespace pwd {
 // How long a line the password file may have. A caller which reads one
 // entry at a time needs the same room.
 constexpr size_t PASSWD_LINE_SIZE = 1024;
-
 
 // Parses a colon-separated password database line into a struct passwd.
 ErrorOr<struct passwd> parse_passwd_line(char *line);

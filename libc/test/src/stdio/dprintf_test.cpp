@@ -53,8 +53,8 @@ size_t read_back(char *buf, size_t buflen) {
 } // anonymous namespace
 
 TEST_F(LlvmLibcDprintfTest, WritesToTheDescriptor) {
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
 
   constexpr const char *EXPECTED = "answer=42 3.14 x\n";
@@ -72,8 +72,8 @@ TEST_F(LlvmLibcDprintfTest, WritesToTheDescriptor) {
 }
 
 TEST_F(LlvmLibcDprintfTest, VarargsForm) {
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
   EXPECT_EQ(call_vdprintf(fd, "%d-%d", 1, 2), 3);
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
@@ -85,8 +85,8 @@ TEST_F(LlvmLibcDprintfTest, VarargsForm) {
 }
 
 TEST_F(LlvmLibcDprintfTest, MoreThanTheBufferHolds) {
-  int fd = LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC,
-                                S_IRWXU);
+  int fd =
+      LIBC_NAMESPACE::open(FILENAME, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
   ASSERT_GT(fd, 0);
 
   // The internal buffer is flushed as it fills, so a run longer than it can

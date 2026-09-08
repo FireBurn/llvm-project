@@ -51,7 +51,7 @@ void install_handler() {
   uint32_t expected = 0;
   if (!handler_installed.compare_exchange_strong(expected, 1))
     return;
-  struct sigaction action {};
+  struct sigaction action{};
   action.sa_handler = on_cancel_signal;
   action.sa_flags = 0; // No SA_RESTART: an interrupted call has to return.
   (void)unchecked_sigaction(internal::CANCEL_SIGNAL, &action, nullptr);

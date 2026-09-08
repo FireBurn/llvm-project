@@ -8,19 +8,19 @@
 
 #include "src/stdio/open_memstream.h"
 
+#include "hdr/func/free.h"
+#include "hdr/func/malloc.h"
+#include "hdr/func/realloc.h"
 #include "hdr/stdio_macros.h"
 #include "hdr/types/FILE.h"
 #include "hdr/types/off_t.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/new.h"
-#include "src/__support/alloc-checker.h"
 #include "src/__support/File/file.h"
+#include "src/__support/alloc-checker.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "hdr/func/free.h"
-#include "hdr/func/malloc.h"
-#include "hdr/func/realloc.h"
 
 namespace LIBC_NAMESPACE_DECL {
 

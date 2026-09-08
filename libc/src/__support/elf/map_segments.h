@@ -153,8 +153,8 @@ LIBC_INLINE ErrorOr<MappedModule> map_segments(int fd, const ElfW(Phdr) * phdrs,
   }
 
   auto name_page = linux_syscalls::mmap(
-      reinterpret_cast<void *>(base + span), page_size,
-      PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
+      reinterpret_cast<void *>(base + span), page_size, PROT_READ | PROT_WRITE,
+      MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
   if (!name_page.has_value())
     return fail(name_page.error());
 

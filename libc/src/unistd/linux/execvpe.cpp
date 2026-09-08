@@ -16,8 +16,7 @@ namespace LIBC_NAMESPACE_DECL {
 
 // execvp with the environment given rather than taken from environ.
 LLVM_LIBC_FUNCTION(int, execvpe,
-                   (const char *file, char *const argv[],
-                    char *const envp[])) {
+                   (const char *file, char *const argv[], char *const envp[])) {
   return exec_search::run(file, argv, envp);
 }
 

@@ -103,7 +103,8 @@ LLVM_LIBC_FUNCTION(void, makecontext,
   regs[REG_RSP] = static_cast<greg_t>(sp);
   regs[REG_RIP] = static_cast<greg_t>(reinterpret_cast<uintptr_t>(func));
   // What start_context reads to find where to go next.
-  regs[REG_RBX] = static_cast<greg_t>(reinterpret_cast<uintptr_t>(ucp->uc_link));
+  regs[REG_RBX] =
+      static_cast<greg_t>(reinterpret_cast<uintptr_t>(ucp->uc_link));
 }
 
 } // namespace LIBC_NAMESPACE_DECL

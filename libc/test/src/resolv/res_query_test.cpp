@@ -50,8 +50,9 @@ TEST(LlvmLibcResQueryTest, FillingItInAgainSaysTheSame) {
 TEST(LlvmLibcResQueryTest, AQuestionIsWrittenTheWayItGoesOnTheWire) {
   unsigned char message[512];
   const int length = LIBC_NAMESPACE::res_mkquery(
-      LIBC_NAMESPACE::resolv::OPCODE_QUERY, "example.com", LIBC_NAMESPACE::resolv::CLASS_IN, LIBC_NAMESPACE::resolv::TYPE_A, nullptr, 0, nullptr, message,
-      sizeof(message));
+      LIBC_NAMESPACE::resolv::OPCODE_QUERY, "example.com",
+      LIBC_NAMESPACE::resolv::CLASS_IN, LIBC_NAMESPACE::resolv::TYPE_A, nullptr,
+      0, nullptr, message, sizeof(message));
   // A header, then "example" and "com" with their lengths, the root, and the
   // type and class.
   ASSERT_EQ(length, 12 + 1 + 7 + 1 + 3 + 1 + 4);
@@ -63,28 +64,36 @@ TEST(LlvmLibcResQueryTest, AQuestionIsWrittenTheWayItGoesOnTheWire) {
   ASSERT_EQ(int(message[12]), 7);
   ASSERT_EQ(int(message[20]), 3);
   ASSERT_EQ(int(message[24]), 0);
-  ASSERT_EQ((message[25] << 8) | message[26], int(LIBC_NAMESPACE::resolv::TYPE_A));
-  ASSERT_EQ((message[27] << 8) | message[28], int(LIBC_NAMESPACE::resolv::CLASS_IN));
+  ASSERT_EQ((message[25] << 8) | message[26],
+            int(LIBC_NAMESPACE::resolv::TYPE_A));
+  ASSERT_EQ((message[27] << 8) | message[28],
+            int(LIBC_NAMESPACE::resolv::CLASS_IN));
 }
 
 TEST(LlvmLibcResQueryTest, AQuestionThatWillNotFitIsRefused) {
   unsigned char message[8];
-  ASSERT_EQ(LIBC_NAMESPACE::res_mkquery(LIBC_NAMESPACE::resolv::OPCODE_QUERY, "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
-                                        LIBC_NAMESPACE::resolv::TYPE_A, nullptr, 0, nullptr, message,
-                                        sizeof(message)),
+  ASSERT_EQ(LIBC_NAMESPACE::res_mkquery(LIBC_NAMESPACE::resolv::OPCODE_QUERY,
+                                        "example.com",
+                                        LIBC_NAMESPACE::resolv::CLASS_IN,
+                                        LIBC_NAMESPACE::resolv::TYPE_A, nullptr,
+                                        0, nullptr, message, sizeof(message)),
             -1);
 }
 
 TEST(LlvmLibcResQueryTest, NothingToAskAboutIsRefused) {
   unsigned char answer[512];
-  ASSERT_EQ(LIBC_NAMESPACE::res_query(nullptr, LIBC_NAMESPACE::resolv::CLASS_IN, LIBC_NAMESPACE::resolv::TYPE_A, answer,
+  ASSERT_EQ(LIBC_NAMESPACE::res_query(nullptr, LIBC_NAMESPACE::resolv::CLASS_IN,
+                                      LIBC_NAMESPACE::resolv::TYPE_A, answer,
                                       sizeof(answer)),
             -1);
-  ASSERT_EQ(LIBC_NAMESPACE::res_query("example.com", LIBC_NAMESPACE::resolv::CLASS_IN, LIBC_NAMESPACE::resolv::TYPE_A, nullptr,
-                                      sizeof(answer)),
+  ASSERT_EQ(LIBC_NAMESPACE::res_query(
+                "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, nullptr, sizeof(answer)),
             -1);
   ASSERT_EQ(
-      LIBC_NAMESPACE::res_query("example.com", LIBC_NAMESPACE::resolv::CLASS_IN, LIBC_NAMESPACE::resolv::TYPE_A, answer, 0), -1);
+      LIBC_NAMESPACE::res_query("example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                                LIBC_NAMESPACE::resolv::TYPE_A, answer, 0),
+      -1);
 }
 
 // Closing what was never opened is harmless, and may be done twice.
@@ -97,20 +106,17 @@ TEST(LlvmLibcResQueryTest, ClosingIsHarmless) {
 // same arguments res_query refuses.
 TEST(LlvmLibcResSearchTest, NothingToSearchForIsRefused) {
   unsigned char answer[512];
-  ASSERT_EQ(LIBC_NAMESPACE::res_search(nullptr,
-                                       LIBC_NAMESPACE::resolv::CLASS_IN,
-                                       LIBC_NAMESPACE::resolv::TYPE_A, answer,
-                                       sizeof(answer)),
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                nullptr, LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, answer, sizeof(answer)),
             -1);
-  ASSERT_EQ(LIBC_NAMESPACE::res_search("example.com",
-                                       LIBC_NAMESPACE::resolv::CLASS_IN,
-                                       LIBC_NAMESPACE::resolv::TYPE_A, nullptr,
-                                       sizeof(answer)),
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, nullptr, sizeof(answer)),
             -1);
-  ASSERT_EQ(LIBC_NAMESPACE::res_search("example.com",
-                                       LIBC_NAMESPACE::resolv::CLASS_IN,
-                                       LIBC_NAMESPACE::resolv::TYPE_A, answer,
-                                       0),
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, answer, 0),
             -1);
 }
 
@@ -140,7 +146,6 @@ TEST(LlvmLibcResSendTest, CarriesAQueryThatWasBuilt) {
   // Whether anything answers is the network's to decide; what matters is
   // that the message was accepted rather than refused out of hand.
   unsigned char answer[512];
-  int result = LIBC_NAMESPACE::res_send(query, length, answer,
-                                        sizeof(answer));
+  int result = LIBC_NAMESPACE::res_send(query, length, answer, sizeof(answer));
   ASSERT_TRUE(result == -1 || result > 0);
 }

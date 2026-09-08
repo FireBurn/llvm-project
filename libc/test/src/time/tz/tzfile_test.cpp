@@ -36,13 +36,16 @@ public:
 
   void header(unsigned char version, uint32_t transitions, uint32_t types,
               uint32_t names) {
-    put('T'); put('Z'); put('i'); put('f');
+    put('T');
+    put('Z');
+    put('i');
+    put('f');
     put(version);
     for (int i = 0; i < 15; ++i)
       put(0);
-    put32(0);           // no records saying which times are UT
-    put32(0);           // nor which are standard
-    put32(0);           // no leap seconds
+    put32(0); // no records saying which times are UT
+    put32(0); // nor which are standard
+    put32(0); // no leap seconds
     put32(transitions);
     put32(types);
     put32(names);

@@ -1,4 +1,4 @@
-//===-- Linux implementation of msgctl -----------------------------------------===//
+//===-- Linux implementation of msgctl ------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -8,9 +8,9 @@
 
 #include "src/sys/msg/msgctl.h"
 
+#include "hdr/types/struct_msqid_ds.h"
 #include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
-#include "hdr/types/struct_msqid_ds.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 

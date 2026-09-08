@@ -77,9 +77,8 @@ bool res_setup(struct __res_state &state) {
     state.dnsrch[count++] = at;
     if (count == 1)
       inline_memcpy(state.defdname, at,
-                    length + 1 > sizeof(state.defdname)
-                        ? sizeof(state.defdname)
-                        : length + 1);
+                    length + 1 > sizeof(state.defdname) ? sizeof(state.defdname)
+                                                        : length + 1);
   }
   state.dnsrch[count] = nullptr;
 
@@ -92,8 +91,7 @@ bool res_ready(struct __res_state &state) {
   return res_setup(state);
 }
 
-void conf_from_state(const struct __res_state &state,
-                     resolv::ResolvConf &out) {
+void conf_from_state(const struct __res_state &state, resolv::ResolvConf &out) {
   // Whatever the file said, what is asked is what the state now holds: a
   // program may reach in and change it before asking anything, and that is
   // the whole reason the state is public.

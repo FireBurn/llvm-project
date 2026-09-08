@@ -23,7 +23,7 @@ struct Table {
   uint32_t symoffset = 1;
   uint32_t bloom_size = 2;
   uint32_t bloom_shift = 6;
-  ElfW(Addr) bloom[2] = {0x2110400020000084ULL, 0x2000200000000000ULL};
+  ElfW(Addr) bloom[2] = { 0x2110400020000084ULL, 0x2000200000000000ULL };
   uint32_t buckets[3] = {1, 2, 0};
   uint32_t chain[5] = {0x1c93bb9d, 0x156b2bb8, 0x0d39ad3c, 0x7c96f086,
                        0x0f738b7d};
@@ -44,12 +44,12 @@ ElfW(Sym) make_sym(uint32_t name_offset, ElfW(Addr) value) {
 }
 
 const ElfW(Sym) SYMTAB[] = {
-    make_sym(0, 0),        // reserved null entry
-    make_sym(1, 0x1000),   // strlen
-    make_sym(8, 0x2000),   // printf
-    make_sym(15, 0x3000),  // malloc
-    make_sym(22, 0x4000),  // free
-    make_sym(27, 0x5000),  // fopen
+    make_sym(0, 0),       // reserved null entry
+    make_sym(1, 0x1000),  // strlen
+    make_sym(8, 0x2000),  // printf
+    make_sym(15, 0x3000), // malloc
+    make_sym(22, 0x4000), // free
+    make_sym(27, 0x5000), // fopen
 };
 
 GnuSymbolTable table() { return GnuSymbolTable(&TABLE, SYMTAB, STRTAB); }

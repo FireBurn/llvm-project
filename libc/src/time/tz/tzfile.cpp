@@ -169,7 +169,8 @@ TZFile::NamePair TZFile::name_pair() const {
       }
     } else if (pair.standard == nullptr) {
       pair.standard = names + types[index * TYPE_SIZE + 5];
-      pair.standard_offset = static_cast<int32_t>(read_u32(types + index * TYPE_SIZE));
+      pair.standard_offset =
+          static_cast<int32_t>(read_u32(types + index * TYPE_SIZE));
     }
     if (pair.standard != nullptr && pair.daylight != nullptr)
       break;

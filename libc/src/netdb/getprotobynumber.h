@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct protoent * getprotobynumber (int proto);
+struct protoent *getprotobynumber(int proto);
 
 } // namespace LIBC_NAMESPACE_DECL
 

@@ -16,8 +16,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 int getnameinfo(const struct sockaddr *__restrict addr, socklen_t addrlen,
-                char *__restrict host, socklen_t hostlen,
-                char *__restrict serv, socklen_t servlen, int flags);
+                char *__restrict host, socklen_t hostlen, char *__restrict serv,
+                socklen_t servlen, int flags);
 
 } // namespace LIBC_NAMESPACE_DECL
 

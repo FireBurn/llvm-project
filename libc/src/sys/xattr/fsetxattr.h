@@ -1,4 +1,4 @@
-//===-- Implementation header for fsetxattr -----------------------------------*- C++ -*-===//
+//===-- Implementation header for fsetxattr ---------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -15,7 +15,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-int fsetxattr(int fd, const char *name, const void *value, size_t size, int flags);
+int fsetxattr(int fd, const char *name, const void *value, size_t size,
+              int flags);
 
 } // namespace LIBC_NAMESPACE_DECL
 

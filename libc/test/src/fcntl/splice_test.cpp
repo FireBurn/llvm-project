@@ -42,14 +42,12 @@ TEST_F(LlvmLibcSpliceTest, MovesFromAFileIntoAPipe) {
   ASSERT_THAT(LIBC_NAMESPACE::pipe(fds), Succeeds(0));
 
   off_t offset = 0;
-  ASSERT_THAT(
-      LIBC_NAMESPACE::splice(fd, &offset, fds[1], nullptr, SIZE, 0),
-      Succeeds<ssize_t>(SIZE));
+  ASSERT_THAT(LIBC_NAMESPACE::splice(fd, &offset, fds[1], nullptr, SIZE, 0),
+              Succeeds<ssize_t>(SIZE));
   ASSERT_EQ(offset, static_cast<off_t>(SIZE));
 
   char buf[SIZE];
-  ASSERT_THAT(LIBC_NAMESPACE::read(fds[0], buf, SIZE),
-              Succeeds<ssize_t>(SIZE));
+  ASSERT_THAT(LIBC_NAMESPACE::read(fds[0], buf, SIZE), Succeeds<ssize_t>(SIZE));
   ASSERT_EQ(LIBC_NAMESPACE::memcmp(buf, TEXT, SIZE), 0);
 
   ASSERT_THAT(LIBC_NAMESPACE::close(fds[0]), Succeeds(0));

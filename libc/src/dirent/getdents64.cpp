@@ -22,7 +22,8 @@ namespace LIBC_NAMESPACE_DECL {
 // writes them, rather than one struct dirent at a time.
 
 LLVM_LIBC_FUNCTION(ssize_t, getdents64, (int fd, void *buf, size_t count)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_getdents64, fd, buf, count);
+  ssize_t ret =
+      LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_getdents64, fd, buf, count);
   if (ret < 0) {
     libc_errno = static_cast<int>(-ret);
     return -1;

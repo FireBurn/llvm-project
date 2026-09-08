@@ -15,7 +15,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct netent * getnetbyname (const char *name);
+struct netent *getnetbyname(const char *name);
 
 } // namespace LIBC_NAMESPACE_DECL
 

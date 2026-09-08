@@ -14,11 +14,11 @@
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
 #include "src/__support/common.h"
-#include "src/netdb/resolv/lookup.h"
-#include "src/string/memory_utils/inline_memcpy.h"
 #include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_ntop.h"
 #include "src/arpa/inet/ntohs.h"
+#include "src/netdb/resolv/lookup.h"
+#include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
 
 #include <sys/socket.h>
@@ -82,8 +82,9 @@ LLVM_LIBC_FUNCTION(int, getnameinfo,
     bool named = false;
     if (!(flags & NI_NUMERICHOST)) {
       char name[resolv::MAX_NAME + 1];
-      if (resolv::lookup_address(reinterpret_cast<const unsigned char *>(address),
-                                 family, name, sizeof(name))) {
+      if (resolv::lookup_address(
+              reinterpret_cast<const unsigned char *>(address), family, name,
+              sizeof(name))) {
         size_t written = 0;
         while (name[written] != '\0')
           ++written;

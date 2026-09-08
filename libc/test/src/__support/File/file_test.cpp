@@ -839,8 +839,7 @@ public:
       : LIBC_NAMESPACE::File(&short_write, &short_read, &short_seek,
                              &short_close, reinterpret_cast<uint8_t *>(buffer),
                              buflen, bufmode, owned, modeflags),
-        pos(0), max_write(max_write_bytes),
-        accept_total(accept_total_bytes) {}
+        pos(0), max_write(max_write_bytes), accept_total(accept_total_bytes) {}
 
   void reset() { pos = 0; }
   size_t get_pos() const { return pos; }
@@ -1029,9 +1028,8 @@ public:
   explicit ShortReadFile(char *buffer, size_t buflen, int bufmode,
                          ModeFlags modeflags, size_t max_read_bytes)
       : LIBC_NAMESPACE::File(&short_write, &short_read, &short_seek,
-                             &short_close,
-                             reinterpret_cast<uint8_t *>(buffer), buflen,
-                             bufmode, false, modeflags),
+                             &short_close, reinterpret_cast<uint8_t *>(buffer),
+                             buflen, bufmode, false, modeflags),
         pos(0), len(0), max_read(max_read_bytes), read_calls(0) {}
 
   void fill(size_t count) {

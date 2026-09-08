@@ -33,8 +33,8 @@ LLVM_LIBC_FUNCTION(long, syscall, (long number, ...)) {
   long a5 = va_arg(args, long);
   va_end(args);
 
-  long result = LIBC_NAMESPACE::syscall_impl<long>(number, a0, a1, a2, a3, a4,
-                                                   a5);
+  long result =
+      LIBC_NAMESPACE::syscall_impl<long>(number, a0, a1, a2, a3, a4, a5);
   // The kernel reports a failure as the negated error number; a libc reports
   // it in errno and answers with minus one.
   if (result < 0 && result > -4096) {

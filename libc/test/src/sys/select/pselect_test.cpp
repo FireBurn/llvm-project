@@ -47,14 +47,11 @@ TEST_F(LlvmLibcPSelectTest, ZeroTimeoutDoesNotWait) {
   fd_set set;
   FD_ZERO(&set);
   FD_SET(fds[0], &set);
-  struct timespec zero {
-    0, 0
-  };
+  struct timespec zero{0, 0};
   // Nothing has been written, so the read end is not ready.
-  ASSERT_THAT(
-      LIBC_NAMESPACE::pselect(fds[0] + 1, &set, nullptr, nullptr, &zero,
-                              nullptr),
-      Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::pselect(fds[0] + 1, &set, nullptr, nullptr, &zero,
+                                      nullptr),
+              Succeeds(0));
   EXPECT_EQ(0, FD_ISSET(fds[0], &set));
 
   char c = 'x';
@@ -62,10 +59,9 @@ TEST_F(LlvmLibcPSelectTest, ZeroTimeoutDoesNotWait) {
 
   FD_ZERO(&set);
   FD_SET(fds[0], &set);
-  ASSERT_THAT(
-      LIBC_NAMESPACE::pselect(fds[0] + 1, &set, nullptr, nullptr, &zero,
-                              nullptr),
-      Succeeds(1));
+  ASSERT_THAT(LIBC_NAMESPACE::pselect(fds[0] + 1, &set, nullptr, nullptr, &zero,
+                                      nullptr),
+              Succeeds(1));
   EXPECT_EQ(1, FD_ISSET(fds[0], &set));
 
   ASSERT_THAT(LIBC_NAMESPACE::close(fds[0]), Succeeds(0));
@@ -81,9 +77,7 @@ TEST_F(LlvmLibcPSelectTest, TimeoutIsNotWrittenBack) {
   FD_SET(fds[0], &set);
   // The pselect6 syscall writes the time left back to its argument. POSIX
   // says pselect must leave the caller's timespec alone.
-  struct timespec timeout {
-    0, 1000000
-  };
+  struct timespec timeout{0, 1000000};
   ASSERT_THAT(LIBC_NAMESPACE::pselect(fds[0] + 1, &set, nullptr, nullptr,
                                       &timeout, nullptr),
               Succeeds(0));
@@ -141,9 +135,7 @@ TEST_F(LlvmLibcPSelectTest, MaskBlocksTheAlarm) {
   fd_set set;
   FD_ZERO(&set);
   FD_SET(fds[0], &set);
-  struct timespec timeout {
-    1, 0
-  };
+  struct timespec timeout{1, 0};
   // With SIGALRM blocked for the duration of the call, the alarm cannot cut
   // the wait short, so this runs out the timeout instead of failing EINTR.
   catch_alarm();

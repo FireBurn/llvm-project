@@ -9,6 +9,7 @@
 #include "src/stdio/popen.h"
 
 #include "hdr/errno_macros.h"
+#include "hdr/fcntl_macros.h"
 #include "hdr/types/FILE.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -21,7 +22,6 @@
 #include "src/unistd/dup2.h"
 #include "src/unistd/execv.h"
 #include "src/unistd/fork.h"
-#include "hdr/fcntl_macros.h"
 #include "src/unistd/pipe2.h"
 
 namespace LIBC_NAMESPACE_DECL {

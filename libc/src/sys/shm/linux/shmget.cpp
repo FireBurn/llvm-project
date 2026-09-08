@@ -1,4 +1,4 @@
-//===-- Linux implementation of shmget -----------------------------------------===//
+//===-- Linux implementation of shmget ------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -8,10 +8,10 @@
 
 #include "src/sys/shm/shmget.h"
 
-#include "src/__support/OSUtil/syscall.h"
-#include "src/__support/common.h"
 #include "hdr/types/key_t.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 

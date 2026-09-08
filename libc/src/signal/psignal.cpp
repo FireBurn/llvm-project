@@ -24,9 +24,8 @@ namespace {
 int write_out(cpp::string_view text) {
   if (text.empty())
     return 0;
-  auto result =
-      reinterpret_cast<LIBC_NAMESPACE::File *>(LIBC_NAMESPACE::stderr)
-          ->write_unlocked(text.data(), text.size());
+  auto result = reinterpret_cast<LIBC_NAMESPACE::File *>(LIBC_NAMESPACE::stderr)
+                    ->write_unlocked(text.data(), text.size());
   if (result.has_error())
     return result.error;
   return 0;

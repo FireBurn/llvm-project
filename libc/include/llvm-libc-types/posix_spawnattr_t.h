@@ -22,10 +22,10 @@
 // looked at is decided by __flags; the rest are left alone.
 typedef struct {
   short __flags;
-  pid_t __pgroup;                 // POSIX_SPAWN_SETPGROUP
-  sigset_t __sigdefault;          // POSIX_SPAWN_SETSIGDEF
-  sigset_t __sigmask;             // POSIX_SPAWN_SETSIGMASK
-  int __policy;                   // POSIX_SPAWN_SETSCHEDULER
+  pid_t __pgroup;                  // POSIX_SPAWN_SETPGROUP
+  sigset_t __sigdefault;           // POSIX_SPAWN_SETSIGDEF
+  sigset_t __sigmask;              // POSIX_SPAWN_SETSIGMASK
+  int __policy;                    // POSIX_SPAWN_SETSCHEDULER
   struct sched_param __schedparam; // POSIX_SPAWN_SETSCHEDPARAM
 } posix_spawnattr_t;
 

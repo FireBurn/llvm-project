@@ -1,4 +1,4 @@
-//===-- Implementation of mkostemps ----------------------------------------===//
+//===-- Implementation of mkostemps ---------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -42,8 +42,8 @@ LLVM_LIBC_FUNCTION(int, mkostemps, (char *tmpl, int suffix_length, int flags)) {
       libc_errno = ok.error();
       return -1;
     }
-    auto fd = linux_syscalls::open(
-        tmpl, O_RDWR | O_CREAT | O_EXCL | open_flags, 0600);
+    auto fd = linux_syscalls::open(tmpl, O_RDWR | O_CREAT | O_EXCL | open_flags,
+                                   0600);
     if (fd.has_value())
       return fd.value();
     if (fd.error() != EEXIST) {

@@ -11,11 +11,10 @@
 
 #include "src/__support/macros/config.h"
 
-
 namespace LIBC_NAMESPACE_DECL {
 
-int res_search(const char *name, int rr_class, int type,
-               unsigned char *answer, int anslen);
+int res_search(const char *name, int rr_class, int type, unsigned char *answer,
+               int anslen);
 
 } // namespace LIBC_NAMESPACE_DECL
 

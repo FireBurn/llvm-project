@@ -7,16 +7,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/fcntl_macros.h"
-#include "src/__support/libc_errno.h"
 #include "hdr/sys_stat_macros.h"
 #include "hdr/types/struct_stat.h"
+#include "src/__support/libc_errno.h"
 #include "src/fcntl/open.h"
 #include "src/sys/stat/fchmodat.h"
 #include "src/sys/stat/fstat.h"
 #include "src/sys/stat/stat.h"
+#include "src/unistd/close.h"
 #include "src/unistd/symlink.h"
 #include "src/unistd/unlink.h"
-#include "src/unistd/close.h"
 #include "src/unistd/write.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"
@@ -83,9 +83,9 @@ TEST_F(LlvmLibcFchmodatTest, EmptyPathActsOnTheDescriptor) {
   // rather than naming anything.
   int path_fd = LIBC_NAMESPACE::open(TEST_FILE, O_PATH);
   ASSERT_GT(path_fd, 0);
-  EXPECT_THAT(LIBC_NAMESPACE::fchmodat(path_fd, "", S_IRUSR | S_IWUSR,
-                                       AT_EMPTY_PATH),
-              Succeeds(0));
+  EXPECT_THAT(
+      LIBC_NAMESPACE::fchmodat(path_fd, "", S_IRUSR | S_IWUSR, AT_EMPTY_PATH),
+      Succeeds(0));
 
   struct stat statbuf;
   ASSERT_EQ(LIBC_NAMESPACE::fstat(path_fd, &statbuf), 0);
@@ -108,9 +108,9 @@ TEST_F(LlvmLibcFchmodatTest, DoesNotFollowALinkWhenToldNotTo) {
 
   // A mode cannot be set on a symbolic link at all, so this reports that
   // rather than quietly changing what the link points at.
-  ASSERT_EQ(LIBC_NAMESPACE::fchmodat(AT_FDCWD, LINK, S_IRWXU,
-                                     AT_SYMLINK_NOFOLLOW),
-            -1);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::fchmodat(AT_FDCWD, LINK, S_IRWXU, AT_SYMLINK_NOFOLLOW),
+      -1);
   // That failure was the point of the call, so what it left behind is not an
   // error the rest of the test should be checked against.
   libc_errno = 0;

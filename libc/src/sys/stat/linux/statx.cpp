@@ -20,8 +20,8 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, statx,
                    (int dirfd, const char *__restrict pathname, int flags,
                     unsigned int mask, struct statx *__restrict statxbuf)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_statx, dirfd, pathname,
-                                              flags, mask, statxbuf);
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_statx, dirfd, pathname, flags,
+                                              mask, statxbuf);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

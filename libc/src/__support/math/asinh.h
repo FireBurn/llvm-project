@@ -43,8 +43,8 @@ LIBC_INLINE static double asinh(double x) {
   } else if (ax > 2.0) {
     // asinh(|x|) = log(2|x| + 1 / (sqrt(x^2 + 1) + |x|)), which keeps the
     // second term from being lost to the first.
-    result = math::log(2.0 * ax +
-                       1.0 / (fputil::sqrt<double>(ax * ax + 1.0) + ax));
+    result =
+        math::log(2.0 * ax + 1.0 / (fputil::sqrt<double>(ax * ax + 1.0) + ax));
   } else {
     // Near zero the answer is small, so it is built from log1p rather than
     // from the logarithm of something near one.

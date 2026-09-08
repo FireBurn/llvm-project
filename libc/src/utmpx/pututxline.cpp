@@ -68,8 +68,8 @@ LLVM_LIBC_FUNCTION(struct utmpx *, pututxline, (const struct utmpx *utmpx)) {
 
   if (offset < 0) {
     // Nothing matched, so it goes on the end.
-    offset =
-        LIBC_NAMESPACE::syscall_impl<long>(SYS_lseek, utmpx_db::fd, 0, SEEK_END);
+    offset = LIBC_NAMESPACE::syscall_impl<long>(SYS_lseek, utmpx_db::fd, 0,
+                                                SEEK_END);
     if (offset < 0)
       return nullptr;
   }

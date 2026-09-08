@@ -44,8 +44,7 @@ TEST_F(LlvmLibcFchownatTest, RelativeToTheWorkingDirectory) {
   ASSERT_EQ(st.st_gid, gid);
 
   // A value of -1 for either leaves that one as it was.
-  ASSERT_THAT(LIBC_NAMESPACE::fchownat(AT_FDCWD, path,
-                                       static_cast<uid_t>(-1),
+  ASSERT_THAT(LIBC_NAMESPACE::fchownat(AT_FDCWD, path, static_cast<uid_t>(-1),
                                        static_cast<gid_t>(-1), 0),
               Succeeds(0));
 

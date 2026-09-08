@@ -1,4 +1,4 @@
-//===-- Implementation header for setstate -------------------------*- C++ -*-===//
+//===-- Implementation header for setstate ----------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-char * setstate(char *state);
+char *setstate(char *state);
 
 } // namespace LIBC_NAMESPACE_DECL
 

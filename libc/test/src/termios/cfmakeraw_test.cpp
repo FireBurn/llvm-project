@@ -27,8 +27,7 @@ TEST(LlvmLibcCfmakerawTest, TurnsOffEverythingThatChangesTheBytes) {
                                         INLCR | IGNCR | ICRNL | IXON),
             tcflag_t(0));
   ASSERT_EQ(settings.c_oflag & tcflag_t(OPOST), tcflag_t(0));
-  ASSERT_EQ(settings.c_lflag &
-                tcflag_t(ECHO | ECHONL | ICANON | ISIG | IEXTEN),
+  ASSERT_EQ(settings.c_lflag & tcflag_t(ECHO | ECHONL | ICANON | ISIG | IEXTEN),
             tcflag_t(0));
   // The character size is set to eight bits, and CS8 is itself one of the
   // values CSIZE covers, so what is left of that field is CS8 rather than

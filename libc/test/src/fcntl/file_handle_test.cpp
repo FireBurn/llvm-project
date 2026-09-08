@@ -52,7 +52,8 @@ TEST_F(LlvmLibcFileHandleTest, MakesAHandleAndOpensItAgain) {
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 
   HandleBuffer buffer = {};
-  buffer.handle.handle_bytes = sizeof(buffer.bytes) - sizeof(struct file_handle);
+  buffer.handle.handle_bytes =
+      sizeof(buffer.bytes) - sizeof(struct file_handle);
   int mount_id = 0;
   int made = LIBC_NAMESPACE::name_to_handle_at(AT_FDCWD, path, &buffer.handle,
                                                &mount_id, 0);
@@ -67,8 +68,8 @@ TEST_F(LlvmLibcFileHandleTest, MakesAHandleAndOpensItAgain) {
 
   int mount = LIBC_NAMESPACE::open("/", O_RDONLY | O_DIRECTORY);
   ASSERT_GT(mount, 0);
-  int opened = LIBC_NAMESPACE::open_by_handle_at(mount, &buffer.handle,
-                                                 O_RDONLY);
+  int opened =
+      LIBC_NAMESPACE::open_by_handle_at(mount, &buffer.handle, O_RDONLY);
   if (opened < 0) {
     ASSERT_ERRNO_EQ(EPERM);
     LIBC_NAMESPACE::libc_errno = 0;
@@ -94,8 +95,8 @@ TEST_F(LlvmLibcFileHandleTest, RoomThatIsNotEnough) {
   HandleBuffer buffer = {};
   buffer.handle.handle_bytes = 0;
   int mount_id = 0;
-  int result = LIBC_NAMESPACE::name_to_handle_at(AT_FDCWD, path,
-                                                 &buffer.handle, &mount_id, 0);
+  int result = LIBC_NAMESPACE::name_to_handle_at(AT_FDCWD, path, &buffer.handle,
+                                                 &mount_id, 0);
   ASSERT_EQ(result, -1);
   int err = static_cast<int>(LIBC_NAMESPACE::libc_errno);
   ASSERT_TRUE(err == EOVERFLOW || err == EOPNOTSUPP);
@@ -108,7 +109,8 @@ TEST_F(LlvmLibcFileHandleTest, RoomThatIsNotEnough) {
 
 TEST_F(LlvmLibcFileHandleTest, PathThatIsNotThere) {
   HandleBuffer buffer = {};
-  buffer.handle.handle_bytes = sizeof(buffer.bytes) - sizeof(struct file_handle);
+  buffer.handle.handle_bytes =
+      sizeof(buffer.bytes) - sizeof(struct file_handle);
   int mount_id = 0;
   ASSERT_THAT(LIBC_NAMESPACE::name_to_handle_at(AT_FDCWD, "llvm-libc-not-here",
                                                 &buffer.handle, &mount_id, 0),

@@ -51,8 +51,7 @@ LIBC_INLINE bool split_buffer(char *buf, size_t buflen, Split *out) {
 
   // The arrays start at the first aligned address past the line.
   size_t offset = line_len;
-  size_t misalign =
-      reinterpret_cast<uintptr_t>(buf + offset) % alignof(char *);
+  size_t misalign = reinterpret_cast<uintptr_t>(buf + offset) % alignof(char *);
   if (misalign != 0)
     offset += alignof(char *) - misalign;
   if (offset >= buflen)

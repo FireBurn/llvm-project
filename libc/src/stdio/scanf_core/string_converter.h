@@ -52,8 +52,8 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
   // Everything but %c is terminated, so there has to be room for that too.
   const size_t terminator = to_conv.conv_name == 'c' ? 0 : 1;
 
-  char *output = allocating ? nullptr : reinterpret_cast<char *>(
-                                            to_conv.output_ptr);
+  char *output =
+      allocating ? nullptr : reinterpret_cast<char *>(to_conv.output_ptr);
   size_t capacity = 0;
 
   char cur_char = reader->getc();

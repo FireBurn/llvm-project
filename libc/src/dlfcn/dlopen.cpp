@@ -136,7 +136,6 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
     }
   }
 
-
   if (!make_room(set)) {
     dl::set_error("cannot make room for another shared object");
     return nullptr;

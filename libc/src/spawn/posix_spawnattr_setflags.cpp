@@ -18,13 +18,14 @@ namespace LIBC_NAMESPACE_DECL {
 
 // These report the error rather than setting errno, which is what every
 // call in this family does.
-LLVM_LIBC_FUNCTION(int, posix_spawnattr_setflags, (posix_spawnattr_t * attr, short flags)) {
+LLVM_LIBC_FUNCTION(int, posix_spawnattr_setflags,
+                   (posix_spawnattr_t * attr, short flags)) {
   if (attr == nullptr)
     return EINVAL;
-  constexpr short KNOWN =
-      POSIX_SPAWN_RESETIDS | POSIX_SPAWN_SETPGROUP | POSIX_SPAWN_SETSIGDEF |
-      POSIX_SPAWN_SETSIGMASK | POSIX_SPAWN_SETSCHEDPARAM |
-      POSIX_SPAWN_SETSCHEDULER | POSIX_SPAWN_SETSID;
+  constexpr short KNOWN = POSIX_SPAWN_RESETIDS | POSIX_SPAWN_SETPGROUP |
+                          POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK |
+                          POSIX_SPAWN_SETSCHEDPARAM | POSIX_SPAWN_SETSCHEDULER |
+                          POSIX_SPAWN_SETSID;
   if ((flags & ~KNOWN) != 0)
     return EINVAL;
   attr->__flags = flags;

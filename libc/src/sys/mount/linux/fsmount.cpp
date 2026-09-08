@@ -16,8 +16,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, fsmount, (int fd, unsigned int flags, unsigned int attr_flags)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_fsmount, fd, flags, attr_flags);
+LLVM_LIBC_FUNCTION(int, fsmount,
+                   (int fd, unsigned int flags, unsigned int attr_flags)) {
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_fsmount, fd, flags, attr_flags);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

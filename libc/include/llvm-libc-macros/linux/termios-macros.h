@@ -159,21 +159,21 @@
 
 // The characters a terminal has for each of the V indices before anything
 // has changed them.
-#define CINTR 003     // The interrupt character, ^C
-#define CQUIT 034     // The quit character, ^backslash
-#define CERASE 0177   // The erase character, delete
-#define CKILL 025     // The kill character, ^U
-#define CEOF 004      // The end of file character, ^D
-#define CTIME 0       // No timeout between characters
-#define CMIN 1        // One character is enough to satisfy a read
-#define CSTART 021    // The start character, ^Q
-#define CSTOP 023     // The stop character, ^S
-#define CSUSP 032     // The suspend character, ^Z
-#define CEOL 0        // No second end of line character
-#define CREPRINT 022  // The reprint character, ^R
-#define CDISCARD 017  // The discard character, ^O
-#define CWERASE 027   // The word erase character, ^W
-#define CLNEXT 026    // The literal next character, ^V
+#define CINTR 003    // The interrupt character, ^C
+#define CQUIT 034    // The quit character, ^backslash
+#define CERASE 0177  // The erase character, delete
+#define CKILL 025    // The kill character, ^U
+#define CEOF 004     // The end of file character, ^D
+#define CTIME 0      // No timeout between characters
+#define CMIN 1       // One character is enough to satisfy a read
+#define CSTART 021   // The start character, ^Q
+#define CSTOP 023    // The stop character, ^S
+#define CSUSP 032    // The suspend character, ^Z
+#define CEOL 0       // No second end of line character
+#define CREPRINT 022 // The reprint character, ^R
+#define CDISCARD 017 // The discard character, ^O
+#define CWERASE 027  // The word erase character, ^W
+#define CLNEXT 026   // The literal next character, ^V
 #define CEOL2 CEOL
 
 // The two speeds the older interface named rather than numbered.

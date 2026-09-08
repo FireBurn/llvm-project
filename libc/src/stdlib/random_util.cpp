@@ -16,7 +16,7 @@ namespace random_internal {
 // which never calls initstate gets.
 int32_t default_table[KINDS[3].degree + 1];
 
-State state = {default_table + 1, 3, KINDS[3].degree, KINDS[3].separation,
+State state = {default_table + 1,   3, KINDS[3].degree, KINDS[3].separation,
                KINDS[3].separation, 0};
 
 bool seeded = false;

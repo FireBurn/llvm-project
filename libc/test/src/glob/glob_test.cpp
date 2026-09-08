@@ -158,9 +158,8 @@ TEST_F(LlvmLibcGlobTest, NoMatch) {
   libc_errno = 0;
 
   // GLOB_NOCHECK makes an unmatched pattern stand for itself.
-  ASSERT_EQ(LIBC_NAMESPACE::glob("glob.testdir/*.zzz", GLOB_NOCHECK, nullptr,
-                                 &g),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::glob("glob.testdir/*.zzz", GLOB_NOCHECK, nullptr, &g), 0);
   ASSERT_EQ(g.gl_pathc, size_t(1));
   EXPECT_TRUE(string_view(g.gl_pathv[0]) == "glob.testdir/*.zzz");
   LIBC_NAMESPACE::globfree(&g);
@@ -225,9 +224,8 @@ TEST_F(LlvmLibcGlobTest, Append) {
   ASSERT_EQ(LIBC_NAMESPACE::glob("glob.testdir/*.txt", 0, nullptr, &g), 0);
   ASSERT_EQ(g.gl_pathc, size_t(2));
   // A second call with GLOB_APPEND adds to the list rather than replacing it.
-  ASSERT_EQ(LIBC_NAMESPACE::glob("glob.testdir/*.log", GLOB_APPEND, nullptr,
-                                 &g),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::glob("glob.testdir/*.log", GLOB_APPEND, nullptr, &g), 0);
   ASSERT_EQ(g.gl_pathc, size_t(3));
   EXPECT_TRUE(string_view(g.gl_pathv[2]) == "glob.testdir/c.log");
   EXPECT_TRUE(g.gl_pathv[3] == nullptr);
@@ -241,9 +239,8 @@ TEST_F(LlvmLibcGlobTest, DoOffs) {
 
   glob_t g;
   g.gl_offs = 2;
-  ASSERT_EQ(LIBC_NAMESPACE::glob("glob.testdir/*.txt", GLOB_DOOFFS, nullptr,
-                                 &g),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::glob("glob.testdir/*.txt", GLOB_DOOFFS, nullptr, &g), 0);
   ASSERT_EQ(g.gl_pathc, size_t(2));
   // The reserved slots are left null for the caller to fill in.
   EXPECT_TRUE(g.gl_pathv[0] == nullptr);
@@ -259,9 +256,8 @@ TEST_F(LlvmLibcGlobTest, NoSort) {
   build_tree();
 
   glob_t g;
-  ASSERT_EQ(LIBC_NAMESPACE::glob("glob.testdir/*.txt", GLOB_NOSORT, nullptr,
-                                 &g),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::glob("glob.testdir/*.txt", GLOB_NOSORT, nullptr, &g), 0);
   // The order is unspecified, but everything still has to be there.
   EXPECT_EQ(g.gl_pathc, size_t(2));
   LIBC_NAMESPACE::globfree(&g);
@@ -289,8 +285,7 @@ TEST_F(LlvmLibcGlobTest, GlobErrOnlyAppliesToDirectoriesThatAreRead) {
   // The last component is literal, so no directory is read and a missing
   // path is simply not a match even under GLOB_ERR.
   glob_t g;
-  EXPECT_EQ(LIBC_NAMESPACE::glob("glob.testdir/nodir/x", GLOB_ERR, nullptr,
-                                 &g),
+  EXPECT_EQ(LIBC_NAMESPACE::glob("glob.testdir/nodir/x", GLOB_ERR, nullptr, &g),
             GLOB_NOMATCH);
   LIBC_NAMESPACE::globfree(&g);
   libc_errno = 0;

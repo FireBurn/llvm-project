@@ -24,7 +24,8 @@
 // The kernel defines this too, in <linux/in.h>. Leaving it to the
 // kernel is right only where that header has been read and its
 // guard says the definition is the kernel's.
-#if !(defined(__UAPI_DEF_SOCKADDR_IN) && __UAPI_DEF_SOCKADDR_IN && defined(_LINUX_IN_H))
+#if !(defined(__UAPI_DEF_SOCKADDR_IN) && __UAPI_DEF_SOCKADDR_IN &&             \
+      defined(_LINUX_IN_H))
 struct __attribute__((may_alias)) sockaddr_in {
   sa_family_t sin_family; /* AF_INET */
   in_port_t sin_port;

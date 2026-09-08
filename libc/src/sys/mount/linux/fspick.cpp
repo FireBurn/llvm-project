@@ -16,7 +16,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, fspick, (int dfd, const char *path, unsigned int flags)) {
+LLVM_LIBC_FUNCTION(int, fspick,
+                   (int dfd, const char *path, unsigned int flags)) {
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_fspick, dfd, path, flags);
   if (ret < 0) {
     libc_errno = -ret;

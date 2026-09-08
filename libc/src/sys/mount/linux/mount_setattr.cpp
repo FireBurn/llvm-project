@@ -18,9 +18,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, mount_setattr, (int dfd, const char *path, unsigned int flags,
-                  struct mount_attr *attr, size_t size)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mount_setattr, dfd, path, flags, attr, size);
+LLVM_LIBC_FUNCTION(int, mount_setattr,
+                   (int dfd, const char *path, unsigned int flags,
+                    struct mount_attr *attr, size_t size)) {
+  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mount_setattr, dfd, path,
+                                              flags, attr, size);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

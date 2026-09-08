@@ -85,8 +85,8 @@ public:
       // but a pointer to storage this allocates for it.
       if (str[cur_pos] == 'm') {
         ++cur_pos;
-        section.flags = static_cast<FormatFlags>(section.flags |
-                                                 FormatFlags::ALLOCATE);
+        section.flags =
+            static_cast<FormatFlags>(section.flags | FormatFlags::ALLOCATE);
       }
 
       LengthModifier lm = parse_length_modifier(&cur_pos);

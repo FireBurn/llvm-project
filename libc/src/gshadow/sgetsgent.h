@@ -9,7 +9,6 @@
 #ifndef LLVM_LIBC_SRC_GSHADOW_SGETSGENT_H
 #define LLVM_LIBC_SRC_GSHADOW_SGETSGENT_H
 
-
 #include "hdr/types/struct_sgrp.h"
 #include "src/__support/macros/config.h"
 

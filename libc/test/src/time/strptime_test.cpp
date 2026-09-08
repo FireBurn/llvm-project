@@ -28,9 +28,8 @@ struct tm cleared() {
 
 TEST(LlvmLibcStrptimeTest, DateAndTime) {
   struct tm time = cleared();
-  char *result =
-      LIBC_NAMESPACE::strptime("2026-01-02 03:04:05", "%Y-%m-%d %H:%M:%S",
-                               &time);
+  char *result = LIBC_NAMESPACE::strptime("2026-01-02 03:04:05",
+                                          "%Y-%m-%d %H:%M:%S", &time);
   ASSERT_TRUE(result != nullptr);
   EXPECT_EQ(*result, '\0');
   EXPECT_EQ(time.tm_year, 126);
@@ -159,8 +158,8 @@ TEST(LlvmLibcStrptimeTest, RejectsOutOfRange) {
 
 TEST(LlvmLibcStrptimeTest, ReturnsWhereItStopped) {
   struct tm time = cleared();
-  char *result = LIBC_NAMESPACE::strptime("2026-01-02 trailing", "%Y-%m-%d",
-                                          &time);
+  char *result =
+      LIBC_NAMESPACE::strptime("2026-01-02 trailing", "%Y-%m-%d", &time);
   ASSERT_TRUE(result != nullptr);
   EXPECT_EQ(*result, ' ');
 }

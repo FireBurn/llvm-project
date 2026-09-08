@@ -8,8 +8,8 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
-#include "hdr/time_macros.h"
 #include "hdr/sys_stat_macros.h"
+#include "hdr/time_macros.h"
 #include "hdr/types/mqd_t.h"
 #include "hdr/types/struct_mq_attr.h"
 #include "hdr/types/struct_timespec.h"
@@ -42,8 +42,8 @@ bool have_queues() {
   struct mq_attr attr = {};
   attr.mq_maxmsg = 4;
   attr.mq_msgsize = 64;
-  mqd_t q = LIBC_NAMESPACE::mq_open(NAME, O_CREAT | O_EXCL | O_RDWR, S_IRWXU,
-                                    &attr);
+  mqd_t q =
+      LIBC_NAMESPACE::mq_open(NAME, O_CREAT | O_EXCL | O_RDWR, S_IRWXU, &attr);
   if (q == static_cast<mqd_t>(-1)) {
     LIBC_NAMESPACE::libc_errno = 0;
     return false;
@@ -131,9 +131,8 @@ TEST_F(LlvmLibcMqueueTest, WaitingWithADeadline) {
   ASSERT_EQ(LIBC_NAMESPACE::clock_gettime(CLOCK_REALTIME, &deadline), 0);
   deadline.tv_sec += 5;
 
-  ASSERT_EQ(LIBC_NAMESPACE::mq_timedsend(q, MESSAGE, MESSAGE_SIZE, 1,
-                                         &deadline),
-            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::mq_timedsend(q, MESSAGE, MESSAGE_SIZE, 1, &deadline), 0);
 
   char buf[64];
   unsigned int prio = 0;
@@ -190,8 +189,8 @@ TEST_F(LlvmLibcMqueueTest, DescriptorThatIsNotOne) {
   ASSERT_ERRNO_EQ(EBADF);
   LIBC_NAMESPACE::libc_errno = 0;
 
-  ASSERT_EQ(LIBC_NAMESPACE::mq_receive(static_cast<mqd_t>(-1), buf,
-                                       sizeof(buf), nullptr),
+  ASSERT_EQ(LIBC_NAMESPACE::mq_receive(static_cast<mqd_t>(-1), buf, sizeof(buf),
+                                       nullptr),
             static_cast<ssize_t>(-1));
   ASSERT_ERRNO_EQ(EBADF);
   LIBC_NAMESPACE::libc_errno = 0;

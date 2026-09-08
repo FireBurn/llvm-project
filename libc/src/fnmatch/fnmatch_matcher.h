@@ -138,8 +138,7 @@ LIBC_INLINE bool Matcher::match_bracket(const char *&p, char c) const {
         ++name_end;
       if (name_end[0] != ':' || name_end[1] != ']')
         return false;
-      string_view name(name_start,
-                       static_cast<size_t>(name_end - name_start));
+      string_view name(name_start, static_cast<size_t>(name_end - name_start));
       matched = matched || in_class(name, c);
       cursor = name_end + 2;
       continue;

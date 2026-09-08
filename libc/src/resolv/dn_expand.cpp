@@ -28,8 +28,8 @@ LLVM_LIBC_FUNCTION(int, dn_expand,
 
   const size_t length = static_cast<size_t>(eom - msg);
   const size_t at = static_cast<size_t>(src - msg);
-  const size_t used = resolv::read_name(msg, length, at, dn,
-                                        static_cast<size_t>(dnsiz));
+  const size_t used =
+      resolv::read_name(msg, length, at, dn, static_cast<size_t>(dnsiz));
   if (used == 0)
     return -1;
 

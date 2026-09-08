@@ -138,8 +138,7 @@ TEST_F(LlvmLibcFGetGrEntTest, ListsTheGroupsAUserIsIn) {
 
   // A user in no group at all is still in the one it was given.
   int alone = 8;
-  ASSERT_EQ(LIBC_NAMESPACE::getgrouplist("nobody", 42, groups, &alone),
-            alone);
+  ASSERT_EQ(LIBC_NAMESPACE::getgrouplist("nobody", 42, groups, &alone), alone);
   ASSERT_EQ(alone, 1);
   EXPECT_EQ(groups[0], gid_t(42));
 

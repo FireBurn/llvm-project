@@ -59,8 +59,8 @@ LLVM_LIBC_FUNCTION(struct hostent *, gethostbyaddr,
   // NI_NAMEREQD so that an address with no name is a failure rather than the
   // address written back as though it were one.
   if (getnameinfo(reinterpret_cast<struct sockaddr *>(&socket_address),
-                  socket_length, storage.name, sizeof(storage.name), nullptr,
-                  0, NI_NAMEREQD) != 0) {
+                  socket_length, storage.name, sizeof(storage.name), nullptr, 0,
+                  NI_NAMEREQD) != 0) {
     *__h_errno_location() = HOST_NOT_FOUND;
     return nullptr;
   }

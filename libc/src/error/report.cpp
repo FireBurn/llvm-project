@@ -53,8 +53,8 @@ LIBC_INLINE void flush_stdout() {
   reinterpret_cast<File *>(*slot)->flush();
 }
 
-template <typename W> LIBC_INLINE void write_unsigned(W &writer,
-                                                      unsigned int val) {
+template <typename W>
+LIBC_INLINE void write_unsigned(W &writer, unsigned int val) {
   char digits[10];
   size_t len = 0;
   do {

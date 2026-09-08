@@ -11,7 +11,6 @@
 
 #include "src/__support/macros/config.h"
 
-
 namespace LIBC_NAMESPACE_DECL {
 
 int res_init(void);

@@ -14,7 +14,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-struct servent * getservent (void);
+struct servent *getservent(void);
 
 } // namespace LIBC_NAMESPACE_DECL
 

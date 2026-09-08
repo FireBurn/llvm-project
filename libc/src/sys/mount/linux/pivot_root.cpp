@@ -18,8 +18,8 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, pivot_root,
                    (const char *new_root, const char *put_old)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_pivot_root, new_root,
-                                              put_old);
+  int ret =
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_pivot_root, new_root, put_old);
   if (ret < 0) {
     libc_errno = -ret;
     return -1;

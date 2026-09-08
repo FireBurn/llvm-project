@@ -21,7 +21,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, getresuid, (uid_t *ruid, uid_t *euid, uid_t *suid)) {
+LLVM_LIBC_FUNCTION(int, getresuid, (uid_t * ruid, uid_t *euid, uid_t *suid)) {
   auto ret = linux_syscalls::getresuid(ruid, euid, suid);
   if (!ret) {
     libc_errno = ret.error();

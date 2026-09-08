@@ -74,8 +74,7 @@ struct Thread {
   constexpr Thread(ThreadAttributes *attr) : attrib(attr) {}
 
   int run(ThreadRunnerPosix *func, void *arg, void *stack = nullptr,
-          size_t stacksize = 0,
-          size_t guardsize = DEFAULT_GUARDSIZE,
+          size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
           bool detached = DEFAULT_DETACHED) {
     ThreadRunner runner;
     runner.posix_runner = func;
@@ -84,8 +83,7 @@ struct Thread {
   }
 
   int run(ThreadRunnerStdc *func, void *arg, void *stack = nullptr,
-          size_t stacksize = 0,
-          size_t guardsize = DEFAULT_GUARDSIZE,
+          size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
           bool detached = DEFAULT_DETACHED) {
     ThreadRunner runner;
     runner.stdc_runner = func;

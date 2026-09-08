@@ -1,4 +1,4 @@
-//===-- Implementation header for iconv_close ------------------------*- C++ -*-===//
+//===-- Implementation header for iconv_close -------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.

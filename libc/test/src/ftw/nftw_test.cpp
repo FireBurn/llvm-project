@@ -10,6 +10,7 @@
 #include "hdr/sys_stat_macros.h"
 #include "hdr/types/struct_FTW.h"
 #include "hdr/types/struct_stat.h"
+#include "src/fcntl/open.h"
 #include "src/ftw/ftw.h"
 #include "src/ftw/nftw.h"
 #include "src/stdio/remove.h"
@@ -18,7 +19,6 @@
 #include "src/unistd/close.h"
 #include "src/unistd/rmdir.h"
 #include "src/unistd/unlink.h"
-#include "src/fcntl/open.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
 
