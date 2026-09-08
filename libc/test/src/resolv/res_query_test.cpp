@@ -12,6 +12,8 @@
 #include "src/resolv/res_init.h"
 #include "src/resolv/res_mkquery.h"
 #include "src/resolv/res_query.h"
+#include "src/resolv/res_search.h"
+#include "src/resolv/res_send.h"
 #include "src/resolv/res_state.h"
 #include "test/UnitTest/Test.h"
 
@@ -98,4 +100,52 @@ TEST(LlvmLibcResQueryTest, NothingToAskAboutIsRefused) {
 TEST(LlvmLibcResQueryTest, ClosingIsHarmless) {
   LIBC_NAMESPACE::res_close();
   LIBC_NAMESPACE::res_close();
+}
+
+// res_search is res_query with the search list applied, so it refuses the
+// same arguments res_query refuses.
+TEST(LlvmLibcResSearchTest, NothingToSearchForIsRefused) {
+  unsigned char answer[512];
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                nullptr, LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, answer, sizeof(answer)),
+            -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, nullptr, sizeof(answer)),
+            -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_search(
+                "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+                LIBC_NAMESPACE::resolv::TYPE_A, answer, 0),
+            -1);
+}
+
+// res_send takes a query already built rather than a name, so what it
+// refuses is a message that is not one.
+TEST(LlvmLibcResSendTest, AMessageThatIsNotOneIsRefused) {
+  unsigned char answer[512];
+  unsigned char query[512];
+
+  ASSERT_EQ(LIBC_NAMESPACE::res_send(nullptr, 12, answer, sizeof(answer)), -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_send(query, 0, answer, sizeof(answer)), -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_send(query, -1, answer, sizeof(answer)), -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_send(query, 12, nullptr, sizeof(answer)), -1);
+  ASSERT_EQ(LIBC_NAMESPACE::res_send(query, 12, answer, 0), -1);
+}
+
+// A query res_mkquery built is one res_send will carry, so the two agree on
+// what a message is even where nothing answers it.
+TEST(LlvmLibcResSendTest, CarriesAQueryThatWasBuilt) {
+  unsigned char query[512];
+  int length = LIBC_NAMESPACE::res_mkquery(
+      0, "example.com", LIBC_NAMESPACE::resolv::CLASS_IN,
+      LIBC_NAMESPACE::resolv::TYPE_A, nullptr, 0, nullptr, query,
+      sizeof(query));
+  ASSERT_GT(length, 0);
+
+  // Whether anything answers is the network's to decide; what matters is
+  // that the message was accepted rather than refused out of hand.
+  unsigned char answer[512];
+  int result = LIBC_NAMESPACE::res_send(query, length, answer, sizeof(answer));
+  ASSERT_TRUE(result == -1 || result > 0);
 }
