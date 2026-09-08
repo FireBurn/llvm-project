@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "src/__support/StringUtil/error_to_string.h"
 #include "src/__support/StringUtil/platform_errors.h"
 #include "src/__support/macros/properties/architectures.h"
 #include "src/string/strerror.h"
@@ -25,4 +26,17 @@ TEST(LlvmLibcStrErrorTest, UnknownErrors) {
                "Unknown error 2147483647");
   ASSERT_STREQ(LIBC_NAMESPACE::strerror(-2147483648),
                "Unknown error -2147483648");
+}
+
+// As for a signal with no name of its own: the terminator is not part of the
+// text, and perror writes the text out by its size.
+TEST(LlvmLibcStrErrorTest, ABuiltDescriptionIsNotTerminatedTwice) {
+  const int cases[] = {-1, 134, 2147483647};
+  for (const int err : cases) {
+    LIBC_NAMESPACE::cpp::string_view text =
+        LIBC_NAMESPACE::get_error_string(err);
+    ASSERT_GT(text.size(), size_t(0));
+    for (size_t i = 0; i < text.size(); ++i)
+      ASSERT_NE(text[i], '\0');
+  }
 }
