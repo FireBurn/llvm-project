@@ -11,6 +11,17 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "timegm_test",
+    srcs = ["timegm_test.cpp"],
+    deps = [
+        "//libc:gmtime_r",
+        "//libc:timegm",
+        "//libc:types_struct_tm",
+        "//libc:types_time_t",
+    ],
+)
+
+libc_test(
     name = "clock_nanosleep_test",
     srcs = ["clock_nanosleep_test.cpp"],
     deps = [
