@@ -1704,6 +1704,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fputs
     libc.src.stdio.fputs_unlocked
     libc.src.stdio.setlinebuf
+    libc.src.stdio.__fsetlocking
     libc.src.stdio.fread
     libc.src.stdio.fread_unlocked
     libc.src.stdio.fseek
