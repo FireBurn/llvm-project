@@ -56,10 +56,11 @@ LLVM_LIBC_FUNCTION(int, dladdr,
   if (info == nullptr)
     return 0;
 
-  elf::ModuleSet &set = elf::loaded_modules();
+  elf::ModuleSet *modules = elf::process_modules();
   cpp::lock_guard lock(dl::dl_mutex);
-  if (!set.linked)
+  if (modules == nullptr || !modules->linked)
     return 0;
+  elf::ModuleSet &set = *modules;
 
   const ElfW(Addr) address = reinterpret_cast<ElfW(Addr)>(addr);
   const elf::Module *module = nullptr;
