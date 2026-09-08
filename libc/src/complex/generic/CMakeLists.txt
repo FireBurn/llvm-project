@@ -278,3 +278,45 @@ add_entrypoint_object(
     libc.src.__support.macros.properties.types
     libc.src.__support.macros.properties.complex_types
 )
+
+add_entrypoint_object(
+  csqrt
+  SRCS
+    csqrt.cpp
+  HDRS
+    ../csqrt.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_sqrt
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  csqrtf
+  SRCS
+    csqrtf.cpp
+  HDRS
+    ../csqrtf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_sqrt
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  csqrtl
+  SRCS
+    csqrtl.cpp
+  HDRS
+    ../csqrtl.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_sqrt
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
