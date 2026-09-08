@@ -11,7 +11,9 @@
 
 #include <link.h>
 
+using LIBC_NAMESPACE::elf::library_path_from;
 using LIBC_NAMESPACE::elf::Module;
+using LIBC_NAMESPACE::elf::preload_list_from;
 using LIBC_NAMESPACE::elf::rpath_of;
 using LIBC_NAMESPACE::elf::runpath_of;
 
@@ -68,4 +70,26 @@ TEST(LlvmLibcElfSearchPathsTest, TheNewerTagTurnsTheOlderOneOff) {
   Module m = with(/*rpath=*/true, /*runpath=*/true);
   ASSERT_TRUE(rpath_of(m) == nullptr);
   ASSERT_STREQ(runpath_of(m), STRTAB + LIVE);
+}
+
+// The two variables are picked out of the environment by name, and a name
+// that only starts the same way is not one of them.
+TEST(LlvmLibcElfSearchPathsTest, TheVariablesAreFoundByName) {
+  char zero[] = "LD_LIBRARY_PATH_NOT_THIS=/no";
+  char one[] = "LD_PRELOAD=/a/shim.so:/b/other.so";
+  char two[] = "PATH=/usr/bin";
+  char three[] = "LD_LIBRARY_PATH=/lib:/usr/lib";
+  char *envp[] = {zero, one, two, three, nullptr};
+
+  ASSERT_STREQ(library_path_from(envp), "/lib:/usr/lib");
+  ASSERT_STREQ(preload_list_from(envp), "/a/shim.so:/b/other.so");
+}
+
+TEST(LlvmLibcElfSearchPathsTest, NeitherVariableSetIsNoList) {
+  char only[] = "PATH=/usr/bin";
+  char *envp[] = {only, nullptr};
+  ASSERT_TRUE(library_path_from(envp) == nullptr);
+  ASSERT_TRUE(preload_list_from(envp) == nullptr);
+  ASSERT_TRUE(library_path_from(nullptr) == nullptr);
+  ASSERT_TRUE(preload_list_from(nullptr) == nullptr);
 }
