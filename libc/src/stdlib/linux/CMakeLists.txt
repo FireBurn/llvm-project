@@ -127,6 +127,7 @@ add_header_library(
     libc.hdr.types.size_t
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.macros.attributes
 )
 
 add_entrypoint_object(

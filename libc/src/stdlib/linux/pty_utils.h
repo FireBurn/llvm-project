@@ -20,9 +20,9 @@ namespace LIBC_NAMESPACE_DECL {
 namespace pty {
 
 // Where the multiplexer lives, and the shape of the names it hands out.
-inline constexpr const char *PTMX_PATH = "/dev/ptmx";
-inline constexpr const char *PTS_PREFIX = "/dev/pts/";
-inline constexpr size_t PTS_PREFIX_LEN = 9;
+LIBC_INLINE_VAR constexpr const char *PTMX_PATH = "/dev/ptmx";
+LIBC_INLINE_VAR constexpr const char *PTS_PREFIX = "/dev/pts/";
+LIBC_INLINE_VAR constexpr size_t PTS_PREFIX_LEN = 9;
 
 // Asks the kernel which numbered terminal a master descriptor is for.
 // Returns an errno value, or zero.
