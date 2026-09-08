@@ -564,6 +564,19 @@ libc_function(
 )
 
 libc_function(
+    name = "__fsetlocking",
+    srcs = ["generic/__fsetlocking.cpp"],
+    hdrs = ["__fsetlocking.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr:stdio_ext_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "dprintf",
     srcs = ["generic/dprintf.cpp"],
     hdrs = ["dprintf.h"],

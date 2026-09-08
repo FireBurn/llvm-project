@@ -361,6 +361,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "stdio_ext_macros",
+    hdrs = ["stdio_ext_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_stdio_ext_macros",
+    ],
+)
+
+libc_support_library(
     name = "printf_macros",
     hdrs = ["printf_macros.h"],
     deps = select({
