@@ -1,4 +1,8 @@
 functions:
+  _pthread_cleanup_push:
+    c-definition: 'TODO: glibc extension'
+  _pthread_cleanup_pop:
+    c-definition: 'TODO: glibc extension'
   pthread_atfork:
     in-latest-posix: ''
   pthread_attr_destroy:
@@ -91,6 +95,10 @@ functions:
     in-latest-posix: ''
   pthread_exit:
     in-latest-posix: ''
+  pthread_getattr_np:
+    c-definition: 'TODO: glibc extension'
+  pthread_getaffinity_np:
+    c-definition: 'TODO: Linux extension'
   pthread_getcpuclockid:
     in-latest-posix: ''
   pthread_getschedparam:
@@ -102,6 +110,8 @@ functions:
   pthread_key_create:
     in-latest-posix: ''
   pthread_key_delete:
+    in-latest-posix: ''
+  pthread_kill:
     in-latest-posix: ''
   pthread_mutex_clocklock:
     in-latest-posix: ''
@@ -181,6 +191,8 @@ functions:
     in-latest-posix: ''
   pthread_self:
     in-latest-posix: ''
+  pthread_setaffinity_np:
+    c-definition: 'TODO: Linux extension'
   pthread_setcancelstate:
     in-latest-posix: ''
   pthread_setcanceltype:
