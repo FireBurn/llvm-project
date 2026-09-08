@@ -229,12 +229,10 @@ add_entrypoint_object(
     libc.src.unistd.environ
 )
 
-add_entrypoint_object(
-  execvp
-  SRCS
-    execvp.cpp
+add_header_library(
+  exec_path_search
   HDRS
-    ../execvp.h
+    exec_path_search.h
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.limits_macros
@@ -243,7 +241,27 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.stdlib.getenv
     libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  execvp
+  SRCS
+    execvp.cpp
+  HDRS
+    ../execvp.h
+  DEPENDS
+    .exec_path_search
     libc.src.unistd.environ
+)
+
+add_entrypoint_object(
+  execvpe
+  SRCS
+    execvpe.cpp
+  HDRS
+    ../execvpe.h
+  DEPENDS
+    .exec_path_search
 )
 
 add_entrypoint_object(

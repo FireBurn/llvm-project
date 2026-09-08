@@ -183,6 +183,21 @@ add_integration_test(
 )
 
 add_integration_test(
+  execvpe_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    execvpe_test.cpp
+  DEPENDS
+    libc_execv_test_normal_exit
+    libc.src.errno.errno
+    libc.src.stdlib.setenv
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.execvpe
+    libc.src.unistd.fork
+)
+
+add_integration_test(
   get_current_dir_name_test
   SUITE
     unistd-integration-tests
