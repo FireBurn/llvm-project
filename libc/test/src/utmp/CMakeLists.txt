@@ -21,8 +21,13 @@ add_libc_test(
     libc.src.utmp.getutent
     libc.src.utmp.getutent_r
     libc.src.utmp.getutid
+    libc.src.utmp.getutid_r
     libc.src.utmp.getutline
+    libc.src.utmp.getutline_r
+    libc.src.utmp.logout
+    libc.src.utmp.logwtmp
     libc.src.utmp.pututline
     libc.src.utmp.setutent
+    libc.src.utmp.updwtmp
     libc.src.utmp.utmpname
 )
