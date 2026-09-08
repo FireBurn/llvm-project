@@ -201,12 +201,6 @@ add_macro_header(
 )
 
 add_macro_header(
-  netinet_in_macros
-  HDR
-    netinet-in-macros.h
-)
-
-add_macro_header(
   offsetof_macro
   HDR
     offsetof-macro.h
@@ -411,12 +405,6 @@ add_macro_header(
   sys_timerfd_macros
   HDR
     sys-timerfd-macros.h
-)
-
-add_macro_header(
-  net_ethernet_macros
-  HDR
-    net-ethernet-macros.h
 )
 
 add_macro_header(
