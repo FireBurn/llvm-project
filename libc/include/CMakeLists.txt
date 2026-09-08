@@ -480,6 +480,24 @@ add_header_macro(
 )
 
 add_header_macro(
+  threads
+  ../libc/include/threads.yaml
+  threads.h
+  DEPENDS
+    .llvm-libc-macros.threads_macros
+    .llvm_libc_common_h
+    .llvm-libc-types.__call_once_func_t
+    .llvm-libc-types.once_flag
+    .llvm-libc-types.cnd_t
+    .llvm-libc-types.mtx_t
+    .llvm-libc-types.thrd_t
+    .llvm-libc-types.thrd_start_t
+    .llvm-libc-types.tss_t
+    .llvm-libc-types.tss_dtor_t
+    .llvm-libc-types.struct_timespec
+)
+
+add_header_macro(
   errno
   ../libc/include/errno.yaml
   errno.h
