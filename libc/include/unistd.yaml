@@ -278,6 +278,14 @@ functions:
       - type: int
       - type: char *
       - type: size_t
+  - name: close_range
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: unsigned int
+      - type: unsigned int
+      - type: int
   - name: close
     standards:
       - posix
