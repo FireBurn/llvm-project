@@ -61,6 +61,15 @@ functions:
       - type: int
       - type: id_t
       - type: int
+  - name: prlimit
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: pid_t
+      - type: int
+      - type: const struct rlimit *
+      - type: struct rlimit *
   - name: setrlimit
     standards:
       - posix

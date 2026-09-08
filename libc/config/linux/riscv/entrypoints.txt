@@ -443,6 +443,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.resource.getrusage
     libc.src.sys.resource.setpriority
     libc.src.sys.resource.setrlimit
+    libc.src.sys.resource.prlimit
 
     # sys/sendfile.h entrypoints
     libc.src.sys.sendfile.sendfile
