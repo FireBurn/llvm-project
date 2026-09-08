@@ -173,3 +173,21 @@ functions:
     arguments:
       - type: cfloat128
     guard: LIBC_TYPES_HAS_CFLOAT128
+  - name: csqrt
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: csqrtf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: csqrtl
+    standards:
+      - stdc
+    return_type: _Complex long double
+    arguments:
+      - type: _Complex long double
