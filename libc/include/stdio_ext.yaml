@@ -1,7 +1,13 @@
 header: stdio_ext.h
 standards:
   - gnu
-macros: []
+macros:
+  - macro_name: FSETLOCKING_QUERY
+    macro_header: stdio-ext-macros.h
+  - macro_name: FSETLOCKING_INTERNAL
+    macro_header: stdio-ext-macros.h
+  - macro_name: FSETLOCKING_BYCALLER
+    macro_header: stdio-ext-macros.h
 types:
   - type_name: FILE
   - type_name: size_t
