@@ -25,3 +25,15 @@ libc_test(
         "//libc:unlink",
     ],
 )
+
+libc_test(
+    name = "prlimit_test",
+    srcs = ["prlimit_test.cpp"],
+    deps = [
+        "//libc:getrlimit",
+        "//libc:hdr_errno_macros",
+        "//libc:prlimit",
+        "//libc:sys_resource_prlimit",
+        "//libc:types_struct_rlimit",
+    ],
+)
