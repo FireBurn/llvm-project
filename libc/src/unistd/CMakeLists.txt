@@ -794,3 +794,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.getdtablesize
 )
+
+add_entrypoint_object(
+  close_range
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.close_range
+)
