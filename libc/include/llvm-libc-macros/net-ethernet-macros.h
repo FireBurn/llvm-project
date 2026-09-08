@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_MACROS_NET_ETHERNET_MACROS_H
 #define LLVM_LIBC_MACROS_NET_ETHERNET_MACROS_H
 
+
 // The shape of an Ethernet frame.
 #define ETH_ALEN 6         // Octets in one address.
 #define ETH_TLEN 2         // Octets in the type field.
