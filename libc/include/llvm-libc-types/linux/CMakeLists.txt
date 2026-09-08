@@ -22,6 +22,8 @@ add_header(
   struct_ifmap
   HDR
     struct_ifmap.h
+  DEPENDS
+    libc.include.llvm-libc-macros.uapi_compat_macros
 )
 
 add_header(
@@ -31,5 +33,6 @@ add_header(
   DEPENDS
     .struct_ifmap
     libc.include.llvm-libc-macros.net_if_macros
+    libc.include.llvm-libc-macros.uapi_compat_macros
     libc.include.llvm-libc-types.struct_sockaddr
 )
