@@ -282,6 +282,25 @@ libc_test(
 )
 
 libc_test(
+    name = "unlocked_test",
+    srcs = ["unlocked_test.cpp"],
+    deps = [
+        "//libc:__flbf",
+        "//libc:__fsetlocking",
+        "//libc:fclose",
+        "//libc:fopen",
+        "//libc:fputc_unlocked",
+        "//libc:fputs_unlocked",
+        "//libc:fread",
+        "//libc:hdr_stdio_macros",
+        "//libc:memcmp",
+        "//libc:remove",
+        "//libc:setlinebuf",
+        "//libc:types_FILE",
+    ],
+)
+
+libc_test(
     name = "renameat2_test",
     srcs = ["renameat2_test.cpp"],
     deps = [
