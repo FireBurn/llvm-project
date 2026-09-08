@@ -18985,6 +18985,23 @@ libc_function(
         ":types_struct_timespec",
     ],
 )
+
+libc_function(
+    name = "timegm",
+    srcs = ["src/time/timegm.cpp"],
+    hdrs = ["src/time/timegm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_time_constants",
+        ":time_time_utils",
+        ":types_struct_tm",
+        ":types_time_t",
+    ],
+)
 ################################ unistd targets ################################
 
 libc_function(
@@ -25673,6 +25690,22 @@ libc_function(
         ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "gmtime_r",
+    srcs = ["src/time/gmtime_r.cpp"],
+    hdrs = ["src/time/gmtime_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":time_time_utils",
+        ":types_struct_tm",
+        ":types_time_t",
     ],
 )
 
