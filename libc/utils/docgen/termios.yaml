@@ -219,10 +219,14 @@ functions:
     in-latest-posix: ''
   cfgetospeed:
     in-latest-posix: ''
+  cfmakeraw:
+    c-definition: 'TODO: BSD extension'
   cfsetispeed:
     in-latest-posix: ''
   cfsetospeed:
     in-latest-posix: ''
+  cfsetspeed:
+    c-definition: 'TODO: BSD extension'
   tcdrain:
     in-latest-posix: ''
   tcflow:
