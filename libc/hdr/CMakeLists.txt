@@ -195,6 +195,14 @@ add_header_library(dirent_overlay HDRS dirent_overlay.h)
 add_header_library(stdio_overlay HDRS stdio_overlay.h)
 
 add_proxy_header_library(
+  stdio_ext_macros
+  HDRS
+    stdio_ext_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.stdio_ext_macros
+)
+
+add_proxy_header_library(
   stdio_macros
   HDRS
     stdio_macros.h
