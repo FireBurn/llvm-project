@@ -14,6 +14,13 @@ types:
 enums: []
 objects: []
 functions:
+  - name: __fsetlocking
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+      - type: int
   - name: __fbufsize
     standards:
       - gnu
