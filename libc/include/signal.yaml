@@ -103,6 +103,13 @@ functions:
     return_type: int
     arguments:
       - type: int
+  - name: psignal
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: int
+      - type: const char *
   - name: sigaction
     standards:
       - posix
