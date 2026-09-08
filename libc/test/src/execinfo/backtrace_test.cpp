@@ -19,17 +19,13 @@
 namespace {
 
 // Three frames deep, so the trace has something in it to count. They are
-// kept from being folded into one another.
+// kept from being folded into one another by -fno-optimize-sibling-calls.
 [[gnu::noinline]] int innermost(void **buffer, int size) {
-  int count = LIBC_NAMESPACE::backtrace(buffer, size);
-  asm volatile("");
-  return count;
+  return LIBC_NAMESPACE::backtrace(buffer, size);
 }
 
 [[gnu::noinline]] int middle(void **buffer, int size) {
-  int count = innermost(buffer, size);
-  asm volatile("");
-  return count;
+  return innermost(buffer, size);
 }
 
 } // anonymous namespace
