@@ -7,6 +7,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/signal_macros.h"
+#include "src/__support/StringUtil/signal_to_string.h"
 #include "src/string/strsignal.h"
 #include "test/UnitTest/Test.h"
 
@@ -82,4 +83,20 @@ TEST(LlvmLibcStrsignalTest, UnknownSignals) {
                "Unknown signal 2147483647");
   ASSERT_STREQ(LIBC_NAMESPACE::strsignal(-2147483648),
                "Unknown signal -2147483648");
+}
+
+// The description of a signal with no name of its own is built into a
+// buffer, and the terminator written after it is not part of the text.
+// Leaving it in the length puts a stray zero byte in the middle of the
+// output of anything that writes the result out by its size, which psignal
+// does.
+TEST(LlvmLibcStrSignalTest, ABuiltDescriptionIsNotTerminatedTwice) {
+  const int cases[] = {0, 9999, SIGRTMIN};
+  for (const int sig : cases) {
+    LIBC_NAMESPACE::cpp::string_view text =
+        LIBC_NAMESPACE::get_signal_string(sig);
+    ASSERT_GT(text.size(), size_t(0));
+    for (size_t i = 0; i < text.size(); ++i)
+      ASSERT_NE(text[i], '\0');
+  }
 }
