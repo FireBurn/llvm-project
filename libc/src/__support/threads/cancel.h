@@ -12,7 +12,6 @@
 #include "hdr/errno_macros.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/threads/thread.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
@@ -27,23 +26,23 @@ LIBC_INLINE void *canceled() { return reinterpret_cast<void *>(-1); }
 // SIGRTMIN is one above it.
 constexpr int CANCEL_SIGNAL = 32;
 
-// True if the calling thread has been asked to stop and is willing to.
-LIBC_INLINE bool cancel_pending() {
-  ThreadAttributes *attrib = self.attrib;
-  return attrib != nullptr &&
-         attrib->cancel_state.load() == uint32_t(CancelState::ENABLE) &&
-         attrib->cancel_requested.load() != 0;
-}
+// Acts on a request the calling thread has been given, and is defined with
+// the rest of the thread machinery, which is what knows how to end one. The
+// reference is weak so that a cancellation point costs a program with no
+// threads in it nothing: nothing has asked it to stop, and reaching for the
+// thread machinery to be told so would pull the whole of it, and the startup
+// code it needs, into a link that has no use for either.
+[[gnu::weak]] void reach_cancel_point();
 
-// Runs the calling thread's cleanup handlers and ends it. Declared here and
-// defined with the rest of the thread machinery, which is what knows how to
-// end one.
+// Runs the calling thread's cleanup handlers and ends it. Defined with the
+// rest of the thread machinery. Anything calling this directly is asking for
+// threads by name, so the reference is an ordinary one.
 [[noreturn]] void cancel_self();
 
 // A cancellation point: where a thread that has been asked to stop does so.
 LIBC_INLINE void cancel_point() {
-  if (cancel_pending())
-    cancel_self();
+  if (reach_cancel_point != nullptr)
+    reach_cancel_point();
 }
 
 // Makes a blocking call a cancellation point, which is what POSIX requires of

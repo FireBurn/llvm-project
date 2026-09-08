@@ -47,6 +47,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace internal {
+// Defined below, beside the rest of the cancellation machinery.
+static bool cancel_pending();
+} // namespace internal
+
 static constexpr size_t NAME_SIZE_MAX = 16; // Includes the null terminator
 static constexpr uint32_t CLEAR_TID_VALUE = 0xABCD1234;
 static constexpr unsigned CLONE_SYSCALL_FLAGS =
@@ -560,6 +565,14 @@ ErrorOr<SchedParameters> Thread::getschedparam() const {
 
 namespace internal {
 
+// True if the calling thread has been asked to stop and is willing to.
+static bool cancel_pending() {
+  ThreadAttributes *attrib = self.attrib;
+  return attrib != nullptr &&
+         attrib->cancel_state.load() == uint32_t(CancelState::ENABLE) &&
+         attrib->cancel_requested.load() != 0;
+}
+
 // Ends the calling thread because it was asked to. The cleanup handlers run
 // first, innermost first, which is what lets a thread holding a lock or a
 // buffer give it up before it goes.
@@ -578,6 +591,14 @@ namespace internal {
   // way an ordinary return from the thread's function is.
   attrib->retval.posix_retval = canceled();
   thread_exit(ThreadReturnValue(canceled()), ThreadStyle::POSIX);
+}
+
+// What a cancellation point calls once the thread machinery is in the link.
+// Declared weak where the cancellation points are, so that this definition is
+// found only by a program which has threads in it.
+void reach_cancel_point() {
+  if (cancel_pending())
+    cancel_self();
 }
 
 } // namespace internal
