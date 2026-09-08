@@ -14,6 +14,7 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_IFCONF_H
 #define LLVM_LIBC_TYPES_STRUCT_IFCONF_H
 
+
 #include "struct_ifreq.h"
 
 // What the SIOCGIFCONF ioctl fills in. On the way in ifc_len is the room in
