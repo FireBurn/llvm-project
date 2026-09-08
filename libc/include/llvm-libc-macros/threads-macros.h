@@ -19,4 +19,11 @@
 /// Maximum number of destructor iterations for thread-specific storage.
 #define TSS_DTOR_ITERATIONS __LLVM_LIBC_TSS_DTOR_ITERATIONS
 
+// C23 made this a keyword. Before that it is spelled with an underscore and
+// the plain name is a macro, which is what code written against C11 uses.
+#if !defined(__cplusplus) &&                                                   \
+    (!defined(__STDC_VERSION__) || __STDC_VERSION__ <= 201710L)
+#define thread_local _Thread_local
+#endif
+
 #endif // LLVM_LIBC_MACROS_THREADS_MACROS_H
