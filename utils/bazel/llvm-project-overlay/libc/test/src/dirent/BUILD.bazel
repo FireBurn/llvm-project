@@ -39,3 +39,17 @@ libc_test(
         "//libc:unlink",
     ],
 )
+
+libc_test(
+    name = "getdents64_test",
+    srcs = ["getdents64_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:getdents64",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:open",
+        "//libc:strcmp",
+        "//libc:types_struct_dirent",
+    ],
+)
