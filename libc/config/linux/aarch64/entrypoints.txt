@@ -564,9 +564,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.utime.utime
 
     libc.src.unistd.acct
-    # utime.h entrypoints
-    libc.src.utime.utime
-
     # unistd.h entrypoints
     libc.src.unistd.alarm
     libc.src.unistd.access
@@ -578,7 +575,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.close_range
     libc.src.unistd.copy_file_range
     libc.src.unistd.daemon
-    libc.src.unistd.copy_file_range
     libc.src.unistd.dup
     libc.src.unistd.dup2
     libc.src.unistd.dup3
@@ -1379,6 +1375,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.alphasort
     libc.src.dirent.closedir
     libc.src.dirent.dirfd
+    libc.src.dirent.getdents
+    libc.src.dirent.getdents64
     libc.src.dirent.opendir
     libc.src.dirent.readdir
     libc.src.dirent.rewinddir
@@ -1578,7 +1576,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.__fsetlocking
     libc.src.stdio.fflush_unlocked
     libc.src.stdio.ctermid
-    libc.src.stdio.fflush_unlocked
     libc.src.stdio.fileno
     libc.src.stdio.flockfile
     libc.src.stdio.fmemopen
