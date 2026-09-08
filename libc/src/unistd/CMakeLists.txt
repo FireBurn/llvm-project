@@ -777,3 +777,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.close_range
 )
+
+add_entrypoint_object(
+  pause
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.pause
+)
