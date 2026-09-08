@@ -355,3 +355,19 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.clock_getcpuclockid
 )
+
+add_entrypoint_object(
+  timegm
+  SRCS
+    timegm.cpp
+  HDRS
+    timegm.h
+  DEPENDS
+    libc.hdr.types.struct_tm
+    libc.hdr.types.time_t
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.null_check
+    libc.src.errno.errno
+    libc.src.time.time_constants
+    libc.src.time.time_utils
+)
