@@ -601,6 +601,7 @@ add_entrypoint_object(
     libc.src.__support.File.file
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
+    libc.src.stdlib.getenv
 )
 
 add_entrypoint_object(
@@ -618,6 +619,7 @@ add_entrypoint_object(
     libc.src.__support.CPP.string_view
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
+    libc.src.stdlib.getenv
     libc.src.unistd.getopt
 )
 
@@ -636,6 +638,7 @@ add_entrypoint_object(
     libc.src.__support.CPP.string_view
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
+    libc.src.stdlib.getenv
     libc.src.unistd.getopt
 )
 

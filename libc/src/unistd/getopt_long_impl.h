@@ -134,23 +134,16 @@ LIBC_INLINE int parse_long(int argc, char *const argv[],
 
 // Shared body of getopt_long and getopt_long_only. `long_only` also accepts a
 // long option written with a single dash.
-LIBC_INLINE int getopt_long_r(int argc, char *const argv[],
-                              const char *optstring,
-                              const struct option *longopts, int *longindex,
-                              bool long_only, GetoptContext &ctx) {
-  // Zero is a request to scan the arguments again from the start, not an
-  // index: see the note in getopt_r, which this shares the state with.
-  if (ctx.optind == 0) {
-    ctx.optind.get() = 1;
-    ctx.optpos.get() = 0;
-  }
-
+LIBC_INLINE int getopt_long_scan(int argc, char *const argv[],
+                                 const char *optstring,
+                                 const struct option *longopts, int *longindex,
+                                 bool long_only, GetoptContext &ctx) {
   if (ctx.optind >= argc || argv[ctx.optind] == nullptr)
     return -1;
 
   // Mid-cluster, as in the "b" of "-ab": only short parsing applies.
   if (ctx.optpos != 0)
-    return getopt_r(argc, argv, optstring, ctx);
+    return getopt_scan(argc, argv, optstring, ctx);
 
   cpp::string_view arg(argv[ctx.optind]);
   if (arg.size() < 2 || arg[0] != '-')
@@ -177,7 +170,21 @@ LIBC_INLINE int getopt_long_r(int argc, char *const argv[],
                         colon_first, ctx);
   }
 
-  return getopt_r(argc, argv, optstring, ctx);
+  return getopt_scan(argc, argv, optstring, ctx);
+}
+
+// The operands are stepped over and carried along the same way they are for
+// getopt, so that a long option after one is still read as an option.
+LIBC_INLINE int getopt_long_r(int argc, char *const argv[],
+                              const char *optstring,
+                              const struct option *longopts, int *longindex,
+                              bool long_only, GetoptContext &ctx) {
+  return getopt_permuting(
+      argc, argv, optstring, ctx,
+      [longopts, longindex, long_only](int c, char *const v[], const char *o,
+                                       GetoptContext &g) {
+        return getopt_long_scan(c, v, o, longopts, longindex, long_only, g);
+      });
 }
 
 } // namespace internal

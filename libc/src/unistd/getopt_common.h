@@ -16,6 +16,7 @@
 #include "src/__support/macros/config.h"
 #include "src/stdio/fprintf.h"
 #include "src/stdio/stderr.h"
+#include "src/stdlib/getenv.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -87,8 +88,8 @@ struct OptstringParser {
   iterator end() { return {optstring.substr(optstring.size())}; }
 };
 
-LIBC_INLINE int getopt_r(int argc, char *const argv[], const char *optstring,
-                         GetoptContext &ctx) {
+LIBC_INLINE int getopt_scan(int argc, char *const argv[],
+                            const char *optstring, GetoptContext &ctx) {
   auto failure = [&ctx](int ret = -1) {
     ctx.optpos.get() = 0;
     return ret;
@@ -189,6 +190,75 @@ LIBC_INLINE int getopt_r(int argc, char *const argv[], const char *optstring,
 
   return match->c;
 }
+
+// Whether an option is still an option when it comes after an operand. This
+// is what lets "mount tmpfs /tmp -t tmpfs" be read the way it is written,
+// which a great deal of software relies on. A leading '+' or '-' in the
+// option string asks for the plain POSIX order instead, as does
+// POSIXLY_CORRECT in the environment.
+LIBC_INLINE bool options_may_follow_operands(const char *optstring) {
+  if (optstring[0] == '+' || optstring[0] == '-')
+    return false;
+  return LIBC_NAMESPACE::getenv("POSIXLY_CORRECT") == nullptr;
+}
+
+// Moves argv[src] down to argv[dest], pushing what was there along by one.
+LIBC_INLINE void move_into_place(char *const argv[], int dest, int src) {
+  char **args = const_cast<char **>(argv);
+  char *moved = args[src];
+  for (int i = src; i > dest; --i)
+    args[i] = args[i - 1];
+  args[dest] = moved;
+}
+
+// Runs one scan with the operands stepped over, then puts them back in front
+// of whatever is left. The operands keep their order among themselves and
+// end up after the options, which is where a caller reading argv from optind
+// expects to find them.
+template <typename Scan>
+LIBC_INLINE int getopt_permuting(int argc, char *const argv[],
+                                 const char *optstring, GetoptContext &ctx,
+                                 Scan scan) {
+  if (ctx.optind == 0) {
+    ctx.optind.get() = 1;
+    ctx.optpos.get() = 0;
+  }
+
+  const int skipped = ctx.optind;
+  if (options_may_follow_operands(optstring) && ctx.optpos == 0) {
+    int i = ctx.optind;
+    for (;; ++i) {
+      if (i >= argc || argv[i] == nullptr) {
+        // Nothing but operands is left, so the scan is over and argv is
+        // already in the order the caller wants.
+        ctx.optpos.get() = 0;
+        return -1;
+      }
+      if (argv[i][0] == '-' && argv[i][1] != '\0')
+        break;
+    }
+    ctx.optind.get() = i;
+  }
+
+  const int resumed = ctx.optind;
+  int result = scan(argc, argv, optstring, ctx);
+
+  // The words this scan consumed are carried back over the operands it
+  // stepped over, so that optind keeps naming the first thing not yet read.
+  if (resumed > skipped && ctx.optpos == 0) {
+    const int taken = ctx.optind - resumed;
+    for (int i = 0; i < taken; ++i)
+      move_into_place(argv, skipped + i, ctx.optind - taken + i);
+    ctx.optind.get() = skipped + taken;
+  }
+  return result;
+}
+
+LIBC_INLINE int getopt_r(int argc, char *const argv[], const char *optstring,
+                         GetoptContext &ctx) {
+  return getopt_permuting(argc, argv, optstring, ctx, getopt_scan);
+}
+
 
 namespace impl {
 

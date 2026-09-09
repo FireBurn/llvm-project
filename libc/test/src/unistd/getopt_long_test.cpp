@@ -220,3 +220,28 @@ TEST_F(LlvmLibcGetoptLongTest, PlainArgumentStops) {
   EXPECT_EQ(LIBC_NAMESPACE::getopt_long(2, argv.data(), "", LONGOPTS, nullptr),
             -1);
 }
+
+// A long option after an operand is still an option, and the operands are
+// left at the end in the order they were given.
+TEST_F(LlvmLibcGetoptLongTest, LongOptionAfterAnOperand) {
+  array<char *, 5> argv{"prog"_c, "file.txt"_c, "--verify"_c, nullptr};
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            int('V'));
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            -1);
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(argv[2], "file.txt"), 0);
+}
+
+// The argument of a long option moved over an operand comes with it.
+TEST_F(LlvmLibcGetoptLongTest, LongOptionWithArgumentAfterAnOperand) {
+  array<char *, 5> argv{"prog"_c, "file.txt"_c, "--file=x"_c, nullptr};
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            int('f'));
+  ASSERT_TRUE(test_globals::optarg != nullptr);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(test_globals::optarg, "x"), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::getopt_long(3, argv.data(), "", LONGOPTS, nullptr),
+            -1);
+  EXPECT_EQ(test_globals::optind, 2);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(argv[2], "file.txt"), 0);
+}
