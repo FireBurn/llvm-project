@@ -1,0 +1,19 @@
+//===-- Older header wait.h -----------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_WAIT_H
+#define LLVM_LIBC_WAIT_H
+
+#include "__llvm-libc-common.h"
+
+// The place these declarations were kept before POSIX put them under sys.
+#include <sys/wait.h>
+
+%%public_api()
+
+#endif // LLVM_LIBC_WAIT_H
