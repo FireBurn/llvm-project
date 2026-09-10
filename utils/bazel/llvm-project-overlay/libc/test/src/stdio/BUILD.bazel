@@ -281,6 +281,24 @@ libc_test(
 )
 
 libc_test(
+    name = "unlocked_fileop_test",
+    srcs = ["unlocked_fileop_test.cpp"],
+    deps = [
+        "//libc/src/stdio:clearerr_unlocked",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof_unlocked",
+        "//libc/src/stdio:ferror_unlocked",
+        "//libc/src/stdio:fflush_unlocked",
+        "//libc/src/stdio:flockfile",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fread_unlocked",
+        "//libc/src/stdio:funlockfile",
+        "//libc/src/stdio:fwrite_unlocked",
+    ],
+)
+
+libc_test(
     name = "renameat2_test",
     srcs = ["renameat2_test.cpp"],
     deps = [
