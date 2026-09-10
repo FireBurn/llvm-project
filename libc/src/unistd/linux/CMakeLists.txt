@@ -211,6 +211,21 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vfork
+  SRCS
+    vfork.cpp
+  HDRS
+    ../vfork.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.include.unistd
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vfork
+    libc.src.errno.errno
+    libc.src.__support.threads.identifier
+)
+
+add_entrypoint_object(
   fpathconf
   SRCS
     fpathconf.cpp
