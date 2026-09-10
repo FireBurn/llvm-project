@@ -304,27 +304,49 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
   return 0;
 }
 
-int Thread::join(ThreadReturnValue &retval) {
-  if (current_thread().attrib) {
-    // Reject self join.
-    if (current_thread().attrib == attrib)
-      return EDEADLK;
+// Take the exclusive right to join |attrib|, or return the error which stops
+// the caller from taking it.
+static int claim_joiner(ThreadAttributes *attrib) {
+  if (current_thread().attrib == nullptr)
+    return 0;
 
-    // Do a best-effort check of concurrent/repeated join.
-    // This cmpxchg establishes exclusive joiner role by setting the joiner
-    // field iff there is no previous joiner
-    ThreadAttributes *expected = nullptr;
-    if (!attrib->joiner.compare_exchange_strong(
-            expected, current_thread().attrib, cpp::MemoryOrder::ACQ_REL))
-      return EINVAL;
+  // Reject self join.
+  if (current_thread().attrib == attrib)
+    return EDEADLK;
 
-    // Reject mutual join.
-    if (current_thread().attrib->joiner.load(cpp::MemoryOrder::ACQUIRE) ==
-        attrib) {
-      attrib->joiner.store(nullptr, cpp::MemoryOrder::RELEASE);
-      return EDEADLK;
-    }
+  // Do a best-effort check of concurrent/repeated join.
+  // This cmpxchg establishes exclusive joiner role by setting the joiner
+  // field iff there is no previous joiner
+  ThreadAttributes *expected = nullptr;
+  if (!attrib->joiner.compare_exchange_strong(expected, current_thread().attrib,
+                                              cpp::MemoryOrder::ACQ_REL))
+    return EINVAL;
+
+  // Reject mutual join.
+  if (current_thread().attrib->joiner.load(cpp::MemoryOrder::ACQUIRE) ==
+      attrib) {
+    attrib->joiner.store(nullptr, cpp::MemoryOrder::RELEASE);
+    return EDEADLK;
   }
+
+  return 0;
+}
+
+// Collect what a finished thread left behind: its return value goes to the
+// joiner and the stack and TLS it held go back.
+[[gnu::always_inline]] LIBC_INLINE void
+collect_finished_thread(ThreadAttributes *attrib, ThreadReturnValue &retval) {
+  if (attrib->style == ThreadStyle::POSIX)
+    retval.posix_retval = attrib->retval.posix_retval;
+  else
+    retval.stdc_retval = attrib->retval.stdc_retval;
+
+  cleanup_thread_resources(attrib);
+}
+
+int Thread::join(ThreadReturnValue &retval) {
+  if (int err = claim_joiner(attrib); err != 0)
+    return err;
 
   // Joining waits without limit, so POSIX has it be a cancellation point. A
   // joiner that stops here has to give up the role first, or nothing could
@@ -337,12 +359,25 @@ int Thread::join(ThreadReturnValue &retval) {
       attrib->joiner.store(nullptr, cpp::MemoryOrder::RELEASE);
   }
 
-  if (attrib->style == ThreadStyle::POSIX)
-    retval.posix_retval = attrib->retval.posix_retval;
-  else
-    retval.stdc_retval = attrib->retval.stdc_retval;
+  collect_finished_thread(attrib, retval);
 
-  cleanup_thread_resources(attrib);
+  return 0;
+}
+
+int Thread::try_join(ThreadReturnValue &retval) {
+  if (int err = claim_joiner(attrib); err != 0)
+    return err;
+
+  // Nothing here waits, so unlike join this is not a cancellation point. A
+  // thread that has not finished is left as it was found, joinable and
+  // unclaimed.
+  auto *clear_tid = reinterpret_cast<Futex *>(attrib->platform_data);
+  if (clear_tid->load() != 0) {
+    attrib->joiner.store(nullptr, cpp::MemoryOrder::RELEASE);
+    return EBUSY;
+  }
+
+  collect_finished_thread(attrib, retval);
 
   return 0;
 }

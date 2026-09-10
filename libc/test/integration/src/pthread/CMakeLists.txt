@@ -273,6 +273,21 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_tryjoin_np_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_tryjoin_np_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.atomic
+    libc.include.pthread
+    libc.src.errno.errno
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_self
+    libc.src.pthread.pthread_tryjoin_np
+)
+
+add_integration_test(
   pthread_join_main_test
   SUITE
     libc-pthread-integration-tests

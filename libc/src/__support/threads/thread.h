@@ -112,6 +112,16 @@ struct Thread {
     return 0;
   }
 
+  int try_join(void **val) {
+    ThreadReturnValue retval;
+    int status = try_join(retval);
+    if (status != 0)
+      return status;
+    if (val != nullptr)
+      *val = retval.posix_retval;
+    return 0;
+  }
+
   // Platform should implement the functions below.
 
   // Return 0 on success or an error value on failure.
@@ -120,6 +130,10 @@ struct Thread {
 
   // Return 0 on success or an error value on failure.
   int join(ThreadReturnValue &retval);
+
+  // Join a thread that has already finished. Return EBUSY without waiting if
+  // it is still running, leaving it joinable.
+  int try_join(ThreadReturnValue &retval);
 
   // Detach a joinable thread.
   //
