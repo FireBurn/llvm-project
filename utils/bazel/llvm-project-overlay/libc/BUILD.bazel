@@ -17500,6 +17500,18 @@ libc_function(
 )
 
 libc_function(
+    name = "getsubopt",
+    srcs = ["src/stdlib/getsubopt.cpp"],
+    hdrs = ["src/stdlib/getsubopt.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":string_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "grantpt",
     srcs = ["src/stdlib/linux/grantpt.cpp"],
     hdrs = ["src/stdlib/grantpt.h"],

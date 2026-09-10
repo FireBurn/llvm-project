@@ -1916,6 +1916,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.exit
     libc.src.stdlib.getenv
     libc.src.stdlib.mb_cur_max
+    libc.src.stdlib.getsubopt
     libc.src.stdlib.grantpt
     libc.src.stdlib.posix_openpt
     libc.src.stdlib.ptsname
