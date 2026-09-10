@@ -372,6 +372,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  wait_sys_wait_test
+  SUITE
+    libc-include-tests
+  SRCS
+    wait_sys_wait_test.cpp
+  DEPENDS
+    libc.include.wait
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
