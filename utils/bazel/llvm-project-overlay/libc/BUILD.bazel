@@ -19935,6 +19935,22 @@ libc_function(
 )
 
 libc_function(
+    name = "fflush_unlocked",
+    srcs = ["src/stdio/generic/fflush_unlocked.cpp"],
+    hdrs = ["src/stdio/fflush_unlocked.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_stdio_macros",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "fgetc",
     srcs = ["src/stdio/generic/fgetc.cpp"],
     hdrs = ["src/stdio/fgetc.h"],
@@ -23703,6 +23719,75 @@ libc_function(
         ":__support_file_file",
         ":__support_file_platform_file",
         ":__support_macros_config",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "clearerr_unlocked",
+    srcs = ["src/stdio/generic/clearerr_unlocked.cpp"],
+    hdrs = ["src/stdio/clearerr_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "feof_unlocked",
+    srcs = ["src/stdio/generic/feof_unlocked.cpp"],
+    hdrs = ["src/stdio/feof_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "ferror_unlocked",
+    srcs = ["src/stdio/generic/ferror_unlocked.cpp"],
+    hdrs = ["src/stdio/ferror_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "fread_unlocked",
+    srcs = ["src/stdio/generic/fread_unlocked.cpp"],
+    hdrs = ["src/stdio/fread_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
+        ":types_file",
+    ],
+)
+
+libc_function(
+    name = "fwrite_unlocked",
+    srcs = ["src/stdio/generic/fwrite_unlocked.cpp"],
+    hdrs = ["src/stdio/fwrite_unlocked.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
         ":types_FILE",
         ":types_file",
     ],

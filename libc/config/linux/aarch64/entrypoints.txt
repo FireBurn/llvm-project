@@ -1385,7 +1385,9 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio_ext.__fwritable
     libc.src.stdio_ext.__fwriting
     libc.src.stdio.__fsetlocking
+    libc.src.stdio.fflush_unlocked
     libc.src.stdio.ctermid
+    libc.src.stdio.fflush_unlocked
     libc.src.stdio.fileno
     libc.src.stdio.flockfile
     libc.src.stdio.fmemopen
