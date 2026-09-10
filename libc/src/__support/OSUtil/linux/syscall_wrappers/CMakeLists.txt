@@ -2594,3 +2594,43 @@ add_header_library(
     libc.src.__support.macros.config
     libc.include.sys_syscall
 )
+
+add_header_library(
+  gettid
+  HDRS
+    gettid.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.hdr.types.pid_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  vfork
+  HDRS
+    vfork.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.signal_macros
+    libc.hdr.types.pid_t
+    libc.hdr.sched_macros
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  setsid
+  HDRS
+    setsid.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.pid_t
+    libc.include.sys_syscall
+)
