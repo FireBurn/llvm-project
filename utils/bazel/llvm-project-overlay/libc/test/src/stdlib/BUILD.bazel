@@ -290,6 +290,15 @@ libc_test(
 )
 
 libc_test(
+    name = "rand_r_test",
+    srcs = ["rand_r_test.cpp"],
+    deps = [
+        "//libc:hdr_stdlib_macros",
+        "//libc:rand_r",
+    ],
+)
+
+libc_test(
     name = "rand_test",
     srcs = ["rand_test.cpp"],
     deps = [

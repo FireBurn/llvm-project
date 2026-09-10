@@ -394,6 +394,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  rand_r_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand_r_test.cpp
+  DEPENDS
+    libc.hdr.stdlib_macros
+    libc.src.stdlib.rand_r
+)
+
+add_libc_test(
   rand_test
   SUITE
     libc-stdlib-tests

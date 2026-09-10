@@ -142,6 +142,8 @@ functions:
   rand:
     c-definition: 7.24.2.1
     in-latest-posix: ''
+  rand_r:
+    in-latest-posix: ''
   random:
     in-latest-posix: ''
   realloc:
