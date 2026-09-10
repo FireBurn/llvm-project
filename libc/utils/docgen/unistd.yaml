@@ -569,6 +569,8 @@ functions:
     in-latest-posix: ""
   fork:
     in-latest-posix: ""
+  vfork:
+    removed-in-posix-2008: ''
   fpathconf:
     in-latest-posix: ""
   fsync:
