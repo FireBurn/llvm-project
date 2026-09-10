@@ -1,4 +1,13 @@
 add_custom_target(libc-stdlib-tests)
+add_libc_test(
+  getsubopt_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    getsubopt_test.cpp
+  DEPENDS
+    libc.src.stdlib.getsubopt
+)
 
 add_libc_test(
   malloc_trim_test
@@ -694,16 +703,6 @@ add_libc_test(
     libc.src.stdlib.nrand48
     libc.src.stdlib.seed48
     libc.src.stdlib.srand48
-)
-
-add_libc_test(
-  getsubopt_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    getsubopt_test.cpp
-  DEPENDS
-    libc.src.stdlib.getsubopt
 )
 
 add_libc_test(
