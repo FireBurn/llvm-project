@@ -779,6 +779,7 @@ add_header_macro(
   netpacket/packet.h
   DEPENDS
     .llvm-libc-macros.packet_macros
+    .llvm-libc-types.struct_packet_mreq
     .llvm-libc-types.struct_sockaddr_ll
 )
 
