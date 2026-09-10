@@ -47,14 +47,16 @@ constexpr long DEFAULT_STACK_LIMIT = 8 * 1024 * 1024;          // 8MB
 constexpr long ARG_MAX_FALLBACK = DEFAULT_STACK_LIMIT / 4 * 3; // 6MB
 
 // We define a local structure for prlimit64 to avoid type mismatches
-// and stack corruption on 32-bit systems when in overlay mode.
-struct rlimit64 {
+// and stack corruption on 32-bit systems when in overlay mode. It is not
+// called rlimit64: that name stands for struct rlimit wherever the header
+// defining it has been included.
+struct KernelRlimit {
   uint64_t rlim_cur;
   uint64_t rlim_max;
 };
 
 long get_arg_max() {
-  struct rlimit64 limits;
+  struct KernelRlimit limits;
   ErrorOr<int> ret = linux_syscalls::prlimit(
       0, RLIMIT_STACK, nullptr, reinterpret_cast<struct rlimit *>(&limits));
   if (!ret) {
@@ -69,7 +71,7 @@ long get_arg_max() {
 }
 
 long get_open_max() {
-  struct rlimit64 limits;
+  struct KernelRlimit limits;
   ErrorOr<int> ret = linux_syscalls::prlimit(
       0, RLIMIT_NOFILE, nullptr, reinterpret_cast<struct rlimit *>(&limits));
   if (!ret) {
@@ -125,7 +127,7 @@ long get_phys_pages() {
 // The most children a single user may have at once, which the kernel keeps
 // as a resource limit rather than as a constant.
 long get_child_max() {
-  struct rlimit64 limits;
+  struct KernelRlimit limits;
   ErrorOr<int> ret = linux_syscalls::prlimit(
       0, RLIMIT_NPROC, nullptr, reinterpret_cast<struct rlimit *>(&limits));
   if (!ret) {
