@@ -621,6 +621,8 @@ add_header_macro(
     .llvm-libc-types.siginfo_t
     .llvm-libc-types.sigset_t
     .llvm-libc-types.stack_t
+    .llvm-libc-types.mcontext_t
+    .llvm-libc-types.ucontext_t
     .llvm-libc-types.struct_timespec
     .llvm-libc-types.struct_sigaction
     .llvm-libc-types.struct_sigevent
