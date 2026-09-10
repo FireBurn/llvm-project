@@ -1806,6 +1806,7 @@ add_header_macro(
   netinet/tcp.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-types.struct_tcp_info
     .llvm-libc-types.struct_tcphdr
     .llvm-libc-types.tcp_seq
 )
