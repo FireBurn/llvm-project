@@ -632,6 +632,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  values_macros
+  HDR
+    values-macros.h
+)
+
+add_macro_header(
   unistd_macros
   HDR
     unistd-macros.h
