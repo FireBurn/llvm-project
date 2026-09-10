@@ -203,6 +203,10 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("utime"),
     libc_header_info("utmpx"),
     libc_header_info(
+        "wait",
+        has_def_template = True,
+    ),
+    libc_header_info(
         "assert",
         has_def_template = True,
     ),
