@@ -155,6 +155,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  lockf
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.lockf
+)
+
+add_entrypoint_object(
   fpathconf
   ALIAS
   DEPENDS
