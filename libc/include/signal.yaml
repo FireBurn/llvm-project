@@ -41,6 +41,8 @@ types:
   - type_name: siginfo_t
   - type_name: sigset_t
   - type_name: stack_t
+  - type_name: mcontext_t
+  - type_name: ucontext_t
   - type_name: struct_sigaction
   - type_name: struct_sigevent
   - type_name: union_sigval
