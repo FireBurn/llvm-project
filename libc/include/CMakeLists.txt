@@ -1603,6 +1603,15 @@ add_header_macro(
     .llvm-libc-types.siginfo_t
 )
 
+add_header_macro(
+  wait
+  ../libc/include/wait.yaml
+  wait.h
+  DEPENDS
+    .llvm_libc_common_h
+    .sys_wait
+)
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/net)
 
 add_header_macro(
