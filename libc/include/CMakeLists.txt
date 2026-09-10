@@ -1590,6 +1590,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  wait
+  ../libc/include/wait.yaml
+  wait.h
+  DEPENDS
+    .llvm_libc_common_h
+    .sys_wait
+)
+
+add_header_macro(
   sys_xattr
   ../libc/include/sys/xattr.yaml
   sys/xattr.h
