@@ -98,3 +98,19 @@ libc_test(
         "//libc/src/unistd:write",
     ],
 )
+
+libc_test(
+    name = "readahead_test",
+    srcs = ["readahead_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:fcntl_readahead",
+        "//libc/src/fcntl:open",
+        "//libc/src/fcntl:readahead",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
