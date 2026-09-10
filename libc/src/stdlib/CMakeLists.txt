@@ -190,6 +190,21 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  getsubopt
+  SRCS
+    getsubopt.cpp
+  HDRS
+    getsubopt.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.string.string_utils
+)
+
+)
+
+add_entrypoint_object(
   strtold
   SRCS
     strtold.cpp
