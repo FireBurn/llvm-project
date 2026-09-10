@@ -110,7 +110,7 @@ long get_phys_pages() {
 // The most children a single user may have at once, which the kernel keeps
 // as a resource limit rather than as a constant.
 long get_child_max() {
-  struct rlimit64 limits;
+  struct KernelRlimit limits;
   ErrorOr<int> ret = linux_syscalls::prlimit(
       0, RLIMIT_NPROC, nullptr, reinterpret_cast<struct rlimit *>(&limits));
   if (!ret) {
