@@ -134,6 +134,14 @@ functions:
     arguments:
       - type: double[]
       - type: int
+  - name: getsubopt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: char **
+      - type: char *const *
+      - type: char **
   - name: labs
     standards:
       - stdc
@@ -221,13 +229,6 @@ functions:
     return_type: char *
     arguments:
       - type: char *
-  - name: getloadavg
-    standards:
-      - bsd
-    return_type: int
-    arguments:
-      - type: double *
-      - type: int
   - name: mkdtemp
     standards:
       - posix
@@ -236,11 +237,8 @@ functions:
       - type: char *
   - name: mkostemp
     standards:
-<<<<<<< HEAD
       - posix
-=======
       - gnu
->>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)
     return_type: int
     arguments:
       - type: char *
