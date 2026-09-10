@@ -537,6 +537,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  rand_r
+  SRCS
+    rand_r.cpp
+  HDRS
+    rand_r.h
+  DEPENDS
+    .rand_util
+    libc.hdr.stdint_proxy
+    libc.hdr.stdlib_macros
+)
+
+add_entrypoint_object(
   srand
   SRCS
     srand.cpp
