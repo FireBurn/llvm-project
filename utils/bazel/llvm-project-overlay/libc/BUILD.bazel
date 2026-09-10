@@ -17473,6 +17473,28 @@ libc_function(
 )
 
 libc_function(
+    name = "drand48",
+    srcs = ["src/stdlib/drand48.cpp"],
+    hdrs = ["src/stdlib/drand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
+    name = "erand48",
+    srcs = ["src/stdlib/erand48.cpp"],
+    hdrs = ["src/stdlib/erand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
     name = "exit",
     srcs = ["src/stdlib/exit.cpp"],
     hdrs = ["src/stdlib/exit.h"],
@@ -17541,6 +17563,17 @@ libc_function(
 )
 
 libc_function(
+    name = "jrand48",
+    srcs = ["src/stdlib/jrand48.cpp"],
+    hdrs = ["src/stdlib/jrand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
     name = "labs",
     srcs = ["src/stdlib/labs.cpp"],
     hdrs = ["src/stdlib/labs.h"],
@@ -17548,6 +17581,17 @@ libc_function(
         ":__support_common",
         ":__support_integer_operations",
         ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "lcong48",
+    srcs = ["src/stdlib/lcong48.cpp"],
+    hdrs = ["src/stdlib/lcong48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
     ],
 )
 
@@ -17769,6 +17813,17 @@ libc_support_library(
 )
 
 libc_function(
+    name = "lrand48",
+    srcs = ["src/stdlib/lrand48.cpp"],
+    hdrs = ["src/stdlib/lrand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
     name = "malloc_trim",
     srcs = ["src/stdlib/malloc_trim.cpp"],
     hdrs = ["src/stdlib/malloc_trim.h"],
@@ -17859,6 +17914,28 @@ libc_function(
         ":hdr_fcntl_macros",
         ":stdlib_linux_mktemp_util",
         ":stdlib_mktemp",
+    ],
+)
+
+libc_function(
+    name = "mrand48",
+    srcs = ["src/stdlib/mrand48.cpp"],
+    hdrs = ["src/stdlib/mrand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
+    name = "nrand48",
+    srcs = ["src/stdlib/nrand48.cpp"],
+    hdrs = ["src/stdlib/nrand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
     ],
 )
 
@@ -17996,6 +18073,17 @@ libc_function(
 )
 
 libc_function(
+    name = "seed48",
+    srcs = ["src/stdlib/seed48.cpp"],
+    hdrs = ["src/stdlib/seed48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
+    ],
+)
+
+libc_function(
     name = "setenv",
     srcs = ["src/stdlib/linux/setenv.cpp"],
     hdrs = ["src/stdlib/setenv.h"],
@@ -18049,6 +18137,17 @@ libc_support_library(
         ":__support_printf_core_printf_writer",
         ":__support_str_to_integer",
         ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "srand48",
+    srcs = ["src/stdlib/srand48.cpp"],
+    hdrs = ["src/stdlib/srand48.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_rand48",
     ],
 )
 
@@ -27040,6 +27139,18 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_malloc_macros",
     hdrs = ["include/llvm-libc-macros/malloc-macros.h"],
+)
+
+libc_support_library(
+    name = "stdlib_rand48",
+    srcs = ["src/stdlib/rand48.cpp"],
+    hdrs = ["src/stdlib/rand48.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
 )
 
 libc_support_library(
