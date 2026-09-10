@@ -41,6 +41,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  signal_ucontext_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    signal_ucontext_t_test.cpp
+  DEPENDS
+    libc.include.signal
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
