@@ -1,16 +1,6 @@
 add_custom_target(libc-stdlib-tests)
-add_libc_test(
-  getsubopt_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    getsubopt_test.cpp
-  DEPENDS
-    libc.src.stdlib.getsubopt
-)
 
 add_libc_test(
-  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
@@ -759,6 +749,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  getsubopt_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    getsubopt_test.cpp
+  DEPENDS
+    libc.src.stdlib.getsubopt
+)
+
+add_libc_test(
   rand_r_test
   SUITE
     libc-stdlib-tests
@@ -863,4 +863,15 @@ add_libc_test(
     libc.src.stdlib.getenv
     libc.src.stdlib.secure_getenv
     libc.src.stdlib.setenv
+)
+
+add_libc_test(
+  malloc_trim_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    malloc_trim_test.cpp
+  DEPENDS
+    libc.hdr.func.mallopt
+    libc.src.stdlib.malloc_trim
 )
