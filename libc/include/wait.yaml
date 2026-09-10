@@ -1,0 +1,9 @@
+header: wait.h
+header_template: wait.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []

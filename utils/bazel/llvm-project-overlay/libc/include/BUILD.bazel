@@ -166,6 +166,10 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("unistd"),
     libc_header_info("utime"),
     libc_header_info("utmpx"),
+    libc_header_info(
+        "wait",
+        has_def_template = True,
+    ),
     libc_header_info("wchar"),
     libc_header_info("wctype"),
     libc_header_info(
