@@ -355,6 +355,11 @@ add_header(res_state HDR res_state.h DEPENDS libc.include.llvm-libc-types.struct
 add_header(n_short HDR n_short.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(n_long HDR n_long.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(n_time HDR n_time.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
+add_type_header(
+  struct_tcp_info
+  HDR
+    struct_tcp_info.h
+)
 add_header(struct_tcphdr HDR struct_tcphdr.h DEPENDS libc.include.llvm-libc-types.tcp_seq libc.include.llvm-libc-macros.endian_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_arphdr HDR struct_arphdr.h)
@@ -384,11 +389,6 @@ add_header(struct_ucred HDR struct_ucred.h DEPENDS .pid_t .uid_t .gid_t)
 add_header(struct_cmsghdr HDR struct_cmsghdr.h DEPENDS .size_t)
 add_header(struct_msghdr HDR struct_msghdr.h DEPENDS .size_t .socklen_t .struct_iovec)
 add_header(struct_mmsghdr HDR struct_mmsghdr.h DEPENDS .struct_msghdr)
-add_type_header(
-  struct_tcp_info
-  HDR
-    struct_tcp_info.h
-)
 add_header(struct_udphdr HDR struct_udphdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_ether_addr HDR struct_ether_addr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(ns_class HDR ns_class.h)
