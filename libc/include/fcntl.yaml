@@ -73,6 +73,14 @@ functions:
       - type: int
       - type: struct file_handle *
       - type: int
+  - name: readahead
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: off_t
+      - type: size_t
   - name: sync_file_range
     standards:
       - linux
