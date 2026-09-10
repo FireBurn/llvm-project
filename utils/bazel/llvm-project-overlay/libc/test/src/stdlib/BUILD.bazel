@@ -274,6 +274,22 @@ libc_test(
 )
 
 libc_test(
+    name = "rand48_test",
+    srcs = ["rand48_test.cpp"],
+    deps = [
+        "//libc:drand48",
+        "//libc:erand48",
+        "//libc:jrand48",
+        "//libc:lcong48",
+        "//libc:lrand48",
+        "//libc:mrand48",
+        "//libc:nrand48",
+        "//libc:seed48",
+        "//libc:srand48",
+    ],
+)
+
+libc_test(
     name = "rand_test",
     srcs = ["rand_test.cpp"],
     deps = [
