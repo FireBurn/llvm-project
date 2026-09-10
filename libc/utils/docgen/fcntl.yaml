@@ -25,6 +25,8 @@ functions:
     c-definition: 'TODO: Linux extension'
   sync_file_range:
     c-definition: 'TODO: Linux extension'
+  readahead:
+    c-definition: 'TODO: Linux extension'
   splice:
     c-definition: 'TODO: Linux extension'
 
