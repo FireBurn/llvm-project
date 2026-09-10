@@ -572,6 +572,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  values_test
+  SUITE
+    libc-include-tests
+  SRCS
+    values_test.cpp
+  DEPENDS
+    libc.include.values
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
