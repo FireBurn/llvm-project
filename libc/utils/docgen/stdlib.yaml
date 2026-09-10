@@ -200,6 +200,8 @@ functions:
     c-definition: 7.24.2.1
     c-reference: numeric/random/rand
     in-latest-posix: ''
+  rand_r:
+    in-latest-posix: ''
   random:
     in-latest-posix: ''
   realloc:
