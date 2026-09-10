@@ -651,6 +651,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  dirent_fileno_test
+  SUITE
+    libc-include-tests
+  SRCS
+    dirent_fileno_test.cpp
+  DEPENDS
+    libc.include.dirent
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
