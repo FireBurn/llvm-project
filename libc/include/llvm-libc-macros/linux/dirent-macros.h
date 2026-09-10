@@ -23,6 +23,10 @@
 #define DT_LNK 10
 #define DT_SOCK 12
 
+// A whiteout entry, which a union filesystem leaves where a name from the
+// layer underneath has been removed.
+#define DT_WHT 14
+
 // Converting between the type a directory entry reports and the one a
 // mode holds, which are the same values twelve bits apart.
 #define IFTODT(mode) (((mode) & 0170000) >> 12)
