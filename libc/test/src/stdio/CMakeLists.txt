@@ -145,8 +145,10 @@ add_libc_test(
     libc.src.stdio.fclose
     libc.src.stdio.feof_unlocked
     libc.src.stdio.ferror_unlocked
+    libc.src.stdio.fflush_unlocked
     libc.src.stdio.flockfile
     libc.src.stdio.fopen
+    libc.src.stdio.fread
     libc.src.stdio.fread_unlocked
     libc.src.stdio.funlockfile
     libc.src.stdio.fwrite_unlocked

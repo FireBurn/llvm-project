@@ -249,6 +249,12 @@ functions:
     arguments:
       - type: const char *__restrict
       - type: FILE *__restrict
+  - name: fflush_unlocked
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
   - name: fputs_unlocked
     standards:
       - gnu
