@@ -30278,6 +30278,18 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_tryjoin_np",
+    srcs = ["src/pthread/pthread_tryjoin_np.cpp"],
+    hdrs = ["src/pthread/pthread_tryjoin_np.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+    ],
+)
+
+libc_function(
     name = "pthread_cancel",
     srcs = ["src/pthread/pthread_cancel.cpp"],
     hdrs = ["src/pthread/pthread_cancel.h"],
