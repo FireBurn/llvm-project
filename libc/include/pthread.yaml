@@ -358,6 +358,13 @@ functions:
     arguments:
       - type: pthread_t
       - type: void **
+  - name: pthread_tryjoin_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: void **
   - name: pthread_key_create
     return_type: int
     arguments:
