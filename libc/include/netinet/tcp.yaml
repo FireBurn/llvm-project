@@ -150,6 +150,7 @@ macros:
   - macro_name: TCPI_OPT_TFO_CHILD
     macro_value: 128
 types:
+  - type_name: struct_tcp_info
   - type_name: struct_tcphdr
   - type_name: tcp_seq
 enums:
