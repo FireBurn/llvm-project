@@ -22,14 +22,12 @@
 #include "../llvm-libc-types/size_t.h"
 #include "../llvm-libc-types/ssize_t.h"
 
-// The names of records. Each stands for a type and, where there is a call of
-// the same name, for that as well: the library still defines those three
-// symbols, but the name resolving to the ordinary one covers both uses.
-#define stat64 stat
-#define statfs64 statfs
-#define statvfs64 statvfs
-#define rlimit64 rlimit
-#define dirent64 dirent
+// The names of records are not here. A macro is in force over a whole
+// translation unit, so one standing for a record name would rewrite that name
+// wherever it appeared, including in the Linux headers, which define records
+// of their own called struct stat64 and struct statfs64. Each of those names
+// is defined alongside the record it stands for instead, so that only a
+// program which included that record's header is affected.
 
 struct dirent;
 struct rlimit;
