@@ -81,6 +81,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  readahead
+  SRCS
+    readahead.cpp
+  HDRS
+    ../readahead.h
+  DEPENDS
+    libc.hdr.types.off_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.readahead
+    libc.src.__support.libc_errno
+)
+
+add_entrypoint_object(
   sync_file_range
   SRCS
     sync_file_range.cpp
