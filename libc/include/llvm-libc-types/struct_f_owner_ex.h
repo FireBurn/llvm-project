@@ -11,14 +11,14 @@
 
 #include "pid_t.h"
 
-enum pid_type {
+enum __pid_type {
   F_OWNER_TID = 0,
   F_OWNER_PID,
   F_OWNER_PGRP,
 };
 
 struct f_owner_ex {
-  enum pid_type type;
+  enum __pid_type type;
   pid_t pid;
 };
 
