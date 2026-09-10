@@ -84,6 +84,10 @@ functions:
     c-definition: 7.24.6.2
     c-reference: numeric/math/div
     in-latest-posix: ''
+  drand48:
+    in-latest-posix: ''
+  erand48:
+    in-latest-posix: ''
   exit:
     c-definition: 7.24.4.4
     in-latest-posix: ''
@@ -123,6 +127,16 @@ functions:
   lldiv:
     c-definition: 7.24.6.2
     c-reference: numeric/math/div
+    in-latest-posix: ''
+  jrand48:
+    in-latest-posix: ''
+  lcong48:
+    in-latest-posix: ''
+  lrand48:
+    in-latest-posix: ''
+  mrand48:
+    in-latest-posix: ''
+  nrand48:
     in-latest-posix: ''
   mallinfo2:
     c-definition: 'TODO: glibc extension'
@@ -195,6 +209,10 @@ functions:
   reallocarray:
     in-latest-posix: ''
   setstate:
+    in-latest-posix: ''
+  seed48:
+    in-latest-posix: ''
+  srand48:
     in-latest-posix: ''
   secure_getenv:
     c-definition: 'TODO: glibc extension'
