@@ -98,3 +98,19 @@ libc_test(
         "//libc:write",
     ],
 )
+
+libc_test(
+    name = "readahead_test",
+    srcs = ["readahead_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:fcntl_readahead",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:readahead",
+        "//libc:unlink",
+        "//libc:write",
+    ],
+)
