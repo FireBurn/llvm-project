@@ -933,6 +933,24 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "vfork",
+    srcs = ["linux/vfork.cpp"],
+    hdrs = ["vfork.h"],
+    deps = [
+        ":unistd_vfork",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:gettid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:vfork",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "unistd_get_current_dir_name",
     hdrs = ["get_current_dir_name.h"],
@@ -1023,6 +1041,16 @@ libc_support_library(
     hdrs = ["setdomainname.h"],
     deps = [
         "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_vfork",
+    hdrs = ["vfork.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/macros:config",
     ],
 )
