@@ -162,6 +162,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vfork
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.vfork
+)
+
+add_entrypoint_object(
   fpathconf
   ALIAS
   DEPENDS
