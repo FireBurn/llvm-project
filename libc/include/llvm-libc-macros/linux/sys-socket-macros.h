@@ -199,6 +199,7 @@
 #define SO_DOMAIN 39
 #define SO_RXQ_OVFL 40
 #define SO_WIFI_STATUS 41
+#define SCM_WIFI_STATUS SO_WIFI_STATUS
 #define SO_PEEK_OFF 42
 #define SO_NOFCS 43
 #define SO_LOCK_FILTER 44
@@ -220,6 +221,7 @@
 #define SO_PEERGROUPS 59
 #define SO_ZEROCOPY 60
 #define SO_TXTIME 61
+#define SCM_TXTIME SO_TXTIME
 #define SO_BINDTOIFINDEX 62
 
 // These are the "new" options, which assume a 64-bit time_t, regardless of the
