@@ -640,6 +640,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_dir_dirent_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_dir_dirent_test.cpp
+  DEPENDS
+    libc.include.sys_dir
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
