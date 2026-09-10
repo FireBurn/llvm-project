@@ -64,6 +64,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.vmsplice
     libc.src.fcntl.tee
     libc.src.fcntl.posix_fadvise
+    libc.src.fcntl.readahead
     libc.src.fcntl.sync_file_range
     libc.src.fcntl.posix_fallocate
     libc.src.fcntl.fcntl
