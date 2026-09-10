@@ -57,6 +57,8 @@ functions:
     c-definition: 'TODO: glibc extension'
   fputc_unlocked:
     c-definition: 'TODO: glibc extension'
+  fflush_unlocked:
+    c-definition: 'TODO: glibc extension'
   remove:
     c-definition: '7.23.4.1'
     in-latest-posix: ''
