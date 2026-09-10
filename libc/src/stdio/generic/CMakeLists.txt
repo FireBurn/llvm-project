@@ -268,6 +268,20 @@ add_generic_entrypoint_object(
 )
 
 add_generic_entrypoint_object(
+  fflush_unlocked
+  SRCS
+    fflush_unlocked.cpp
+  HDRS
+    ../fflush_unlocked.h
+  DEPENDS
+    libc.src.errno.errno
+    libc.hdr.stdio_macros
+    libc.hdr.types.FILE
+    libc.src.__support.File.file
+    libc.src.__support.File.platform_file
+)
+
+add_generic_entrypoint_object(
   fputs_unlocked
   SRCS
     fputs_unlocked.cpp
