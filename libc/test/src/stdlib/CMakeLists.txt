@@ -1,4 +1,23 @@
 add_custom_target(libc-stdlib-tests)
+
+add_libc_test(
+  rand48_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand48_test.cpp
+  DEPENDS
+    libc.src.stdlib.drand48
+    libc.src.stdlib.erand48
+    libc.src.stdlib.jrand48
+    libc.src.stdlib.lcong48
+    libc.src.stdlib.lrand48
+    libc.src.stdlib.mrand48
+    libc.src.stdlib.nrand48
+    libc.src.stdlib.seed48
+    libc.src.stdlib.srand48
+)
+
 add_libc_test(
   getsubopt_test
   SUITE
