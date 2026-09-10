@@ -564,6 +564,28 @@ libc_function(
 )
 
 libc_function(
+    name = "drand48",
+    srcs = ["drand48.cpp"],
+    hdrs = ["drand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "erand48",
+    srcs = ["erand48.cpp"],
+    hdrs = ["erand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getsubopt",
     srcs = ["getsubopt.cpp"],
     hdrs = ["getsubopt.h"],
@@ -601,6 +623,39 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "jrand48",
+    srcs = ["jrand48.cpp"],
+    hdrs = ["jrand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "lcong48",
+    srcs = ["lcong48.cpp"],
+    hdrs = ["lcong48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "lrand48",
+    srcs = ["lrand48.cpp"],
+    hdrs = ["lrand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -700,6 +755,28 @@ libc_function(
 )
 
 libc_function(
+    name = "mrand48",
+    srcs = ["mrand48.cpp"],
+    hdrs = ["mrand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "nrand48",
+    srcs = ["nrand48.cpp"],
+    hdrs = ["nrand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "posix_openpt",
     srcs = ["linux/posix_openpt.cpp"],
     hdrs = ["posix_openpt.h"],
@@ -753,6 +830,17 @@ libc_function(
 )
 
 libc_function(
+    name = "seed48",
+    srcs = ["seed48.cpp"],
+    hdrs = ["seed48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "setenv",
     srcs = ["linux/setenv.cpp"],
     hdrs = ["setenv.h"],
@@ -778,6 +866,17 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "srand48",
+    srcs = ["srand48.cpp"],
+    hdrs = ["srand48.h"],
+    deps = [
+        ":rand48",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -929,6 +1028,18 @@ libc_support_library(
     name = "stdlib_mkstemps",
     hdrs = ["mkstemps.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "rand48",
+    srcs = ["rand48.cpp"],
+    hdrs = ["rand48.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
 )
