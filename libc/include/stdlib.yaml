@@ -142,6 +142,60 @@ functions:
       - type: char **
       - type: char *const *
       - type: char **
+  - name: drand48
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: void
+  - name: erand48
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: unsigned short *
+  - name: lrand48
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: void
+  - name: nrand48
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: unsigned short *
+  - name: mrand48
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: void
+  - name: jrand48
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: unsigned short *
+  - name: srand48
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: long
+  - name: seed48
+    standards:
+      - posix
+    return_type: unsigned short *
+    arguments:
+      - type: unsigned short *
+  - name: lcong48
+    standards:
+      - posix
+    return_type: void
+    arguments:
+      - type: unsigned short *
   - name: labs
     standards:
       - stdc
