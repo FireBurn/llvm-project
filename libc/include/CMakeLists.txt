@@ -1302,6 +1302,16 @@ add_header_macro(
 )
 
 add_header_macro(
+add_header_macro(
+  sys_dir
+  ../libc/include/sys/dir.yaml
+  sys/dir.h
+  DEPENDS
+    .llvm_libc_common_h
+    .dirent
+)
+
+add_header_macro(
   sys_errno
   ../libc/include/sys/errno.yaml
   sys/errno.h
