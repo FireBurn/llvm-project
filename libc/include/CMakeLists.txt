@@ -981,6 +981,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  values
+  ../libc/include/values.yaml
+  values.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.values_macros
+)
+
+add_header_macro(
   paths
   ../libc/include/paths.yaml
   paths.h
