@@ -88,6 +88,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_prctl
     libc.include.sys_queue
     libc.include.sys_random
+    libc.include.sys_dir
     libc.include.sys_errno
     libc.include.sys_io
     libc.include.sys_swap
