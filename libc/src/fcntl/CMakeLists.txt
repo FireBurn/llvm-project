@@ -45,6 +45,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  readahead
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.readahead
+)
+
+add_entrypoint_object(
   sync_file_range
   ALIAS
   DEPENDS
