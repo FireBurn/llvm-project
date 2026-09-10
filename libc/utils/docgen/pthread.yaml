@@ -103,6 +103,8 @@ functions:
     in-latest-posix: ''
   pthread_join:
     in-latest-posix: ''
+  pthread_tryjoin_np:
+    c-definition: 'TODO: glibc extension'
   pthread_key_create:
     in-latest-posix: ''
   pthread_key_delete:
