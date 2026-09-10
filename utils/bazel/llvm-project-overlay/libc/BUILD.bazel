@@ -17397,6 +17397,20 @@ libc_function(
 )
 
 libc_function(
+    name = "rand_r",
+    srcs = ["src/stdlib/rand_r.cpp"],
+    hdrs = ["src/stdlib/rand_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":hdr_stdlib_macros",
+        ":stdlib_rand_r",
+        ":stdlib_rand_util",
+    ],
+)
+
+libc_function(
     name = "random",
     srcs = ["src/stdlib/random.cpp"],
     hdrs = ["src/stdlib/random.h"],
@@ -27092,6 +27106,32 @@ libc_support_library(
     srcs = ["src/stdlib/rand48.cpp"],
     hdrs = ["src/stdlib/rand48.h"],
     deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_rand_r",
+    srcs = ["src/stdlib/rand_r.cpp"],
+    hdrs = ["src/stdlib/rand_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":hdr_stdlib_macros",
+        ":stdlib_rand_util",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_rand_util",
+    srcs = ["src/stdlib/rand_util.cpp"],
+    hdrs = ["src/stdlib/rand_util.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_atomic",
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":hdr_stdint_proxy",
