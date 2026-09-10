@@ -16,7 +16,9 @@
 
 TEST(LlvmLibcUnameTest, GetMachineName) {
   struct utsname names;
-  ASSERT_GE(LIBC_NAMESPACE::uname(&names), 0);
+  // Zero, not merely non-negative: callers test the result against zero, and
+  // POSIX allowing any non-negative value does not help a program that does.
+  ASSERT_EQ(LIBC_NAMESPACE::uname(&names), 0);
 #ifdef LIBC_TARGET_ARCH_IS_X86_64
   ASSERT_STREQ(names.machine, "x86_64");
 #elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
