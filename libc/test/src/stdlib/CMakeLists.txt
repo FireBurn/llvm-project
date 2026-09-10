@@ -10,7 +10,6 @@ add_libc_test(
 )
 
 add_libc_test(
-  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
