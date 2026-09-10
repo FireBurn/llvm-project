@@ -223,6 +223,23 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  lockf
+  SRCS
+    lockf.cpp
+  HDRS
+    ../lockf.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.stdio_macros
+    libc.hdr.types.off_t
+    libc.hdr.types.struct_flock
+    libc.hdr.unistd_macros
+    libc.include.unistd
+    libc.src.errno.errno
+    libc.src.fcntl.fcntl
+)
+
+add_entrypoint_object(
   fpathconf
   SRCS
     fpathconf.cpp
