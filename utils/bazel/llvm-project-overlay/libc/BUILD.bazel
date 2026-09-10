@@ -18263,6 +18263,19 @@ libc_function(
 )
 
 libc_function(
+    name = "rand_r",
+    srcs = ["src/stdlib/rand_r.cpp"],
+    hdrs = ["src/stdlib/rand_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":hdr_stdlib_macros",
+        ":rand_util",
+    ],
+)
+
+libc_function(
     name = "random",
     srcs = ["src/stdlib/random.cpp"],
     hdrs = ["src/stdlib/random.h"],
