@@ -202,6 +202,124 @@ add_entrypoint_object(
     libc.src.string.string_utils
 )
 
+add_object_library(
+  rand48
+  SRCS
+    rand48.cpp
+  HDRS
+    rand48.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  drand48
+  SRCS
+    drand48.cpp
+  HDRS
+    drand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  erand48
+  SRCS
+    erand48.cpp
+  HDRS
+    erand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  lrand48
+  SRCS
+    lrand48.cpp
+  HDRS
+    lrand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  nrand48
+  SRCS
+    nrand48.cpp
+  HDRS
+    nrand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  mrand48
+  SRCS
+    mrand48.cpp
+  HDRS
+    mrand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  jrand48
+  SRCS
+    jrand48.cpp
+  HDRS
+    jrand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  srand48
+  SRCS
+    srand48.cpp
+  HDRS
+    srand48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  seed48
+  SRCS
+    seed48.cpp
+  HDRS
+    seed48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
+)
+
+add_entrypoint_object(
+  lcong48
+  SRCS
+    lcong48.cpp
+  HDRS
+    lcong48.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.rand48
 )
 
 add_entrypoint_object(
