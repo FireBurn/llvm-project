@@ -302,6 +302,7 @@ add_header(struct_arpreq HDR struct_arpreq.h DEPENDS .struct_sockaddr)
 add_header(struct_arpreq_old HDR struct_arpreq_old.h DEPENDS .struct_sockaddr)
 add_header(struct_rtentry HDR struct_rtentry.h DEPENDS .struct_sockaddr)
 add_header(struct_sockaddr_ll HDR struct_sockaddr_ll.h)
+add_header(struct_packet_mreq HDR struct_packet_mreq.h)
 add_header(struct_addrinfo HDR struct_addrinfo.h DEPENDS .socklen_t .struct_sockaddr)
 add_header(struct_sockaddr_in HDR struct_sockaddr_in.h DEPENDS .in_port_t .sa_family_t .struct_in_addr libc.include.llvm-libc-macros.uapi_compat_macros)
 add_header(
