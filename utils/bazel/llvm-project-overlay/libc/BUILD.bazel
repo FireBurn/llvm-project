@@ -19571,6 +19571,7 @@ libc_function(
         ":__support_error_or",
         ":__support_libc_errno",
         ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
         ":__support_osutil_syscall",
         ":__support_threads_fork_callbacks",
         ":__support_threads_identifier",
@@ -20449,6 +20450,24 @@ libc_function(
         ":hdr_unistd_macros",
         ":types_struct_rlimit",
         ":types_struct_sysinfo",
+    ],
+)
+
+libc_function(
+    name = "vfork",
+    srcs = ["src/unistd/linux/vfork.cpp"],
+    hdrs = ["src/unistd/vfork.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_osutil_linux_syscall_wrappers_vfork",
+        ":__support_threads_identifier",
+        ":errno",
+        ":hdr_unistd_macros",
+        ":types_pid_t",
+        ":unistd_vfork",
     ],
 )
 
@@ -24017,6 +24036,41 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_vfork",
+    hdrs = ["src/unistd/vfork.h"],
+    deps = [
+        ":__support_macros_config",
+        ":hdr_unistd_macros",
+        ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_gettid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/gettid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_vfork",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/vfork.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_sched_macros",
+        ":hdr_signal_macros",
+        ":types_pid_t",
     ],
 )
 
