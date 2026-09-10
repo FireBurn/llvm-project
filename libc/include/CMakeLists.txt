@@ -1574,6 +1574,8 @@ add_header_macro(
   sys/user.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-types.struct_user
+    .llvm-libc-types.struct_user_fpregs_struct
     .llvm-libc-types.struct_user_regs_struct
 )
 
