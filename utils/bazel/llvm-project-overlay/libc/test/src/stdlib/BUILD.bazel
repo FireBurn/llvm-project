@@ -17,6 +17,12 @@ libc_test(
 )
 
 libc_test(
+    name = "getsubopt_test",
+    srcs = ["getsubopt_test.cpp"],
+    deps = ["//libc:getsubopt"],
+)
+
+libc_test(
     name = "labs_test",
     srcs = ["labs_test.cpp"],
     deps = ["//libc:labs"],
