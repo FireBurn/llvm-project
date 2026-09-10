@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Definition of struct user_fpregs_struct for x86_64.
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_TYPES_X86_64_STRUCT_USER_FPREGS_STRUCT_H
+#define LLVM_LIBC_TYPES_X86_64_STRUCT_USER_FPREGS_STRUCT_H
+
+// The 512 byte area an FXSAVE writes, which is what PTRACE_GETFPREGS returns.
+struct user_fpregs_struct {
+  unsigned short cwd;
+  unsigned short swd;
+  unsigned short ftw;
+  unsigned short fop;
+  unsigned long long rip;
+  unsigned long long rdp;
+  unsigned int mxcsr;
+  unsigned int mxcr_mask;
+  unsigned int st_space[32];  // Eight registers of sixteen bytes.
+  unsigned int xmm_space[64]; // Sixteen registers of sixteen bytes.
+  unsigned int padding[24];
+};
+
+#endif // LLVM_LIBC_TYPES_X86_64_STRUCT_USER_FPREGS_STRUCT_H
