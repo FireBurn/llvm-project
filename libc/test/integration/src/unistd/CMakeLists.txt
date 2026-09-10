@@ -39,6 +39,21 @@ add_integration_test(
     libc.include.sys_syscall
 )
 
+add_integration_test(
+  vfork_test
+  SUITE
+    unistd-integration-tests
+  SRCS
+    vfork_test.cpp
+  DEPENDS
+    libc.include.sys_wait
+    libc.include.unistd
+    libc.src.sys.wait.waitpid
+    libc.src.unistd._exit
+    libc.src.unistd.getpid
+    libc.src.unistd.vfork
+)
+
 if((${LIBC_TARGET_OS} STREQUAL "linux") AND (${LIBC_TARGET_ARCHITECTURE_IS_X86}))
   add_integration_test(
     stack_smashing_test
