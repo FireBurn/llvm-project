@@ -1600,6 +1600,15 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.exit
     libc.src.stdlib.getenv
     libc.src.stdlib.getsubopt
+    libc.src.stdlib.lcong48
+    libc.src.stdlib.seed48
+    libc.src.stdlib.srand48
+    libc.src.stdlib.jrand48
+    libc.src.stdlib.mrand48
+    libc.src.stdlib.nrand48
+    libc.src.stdlib.lrand48
+    libc.src.stdlib.erand48
+    libc.src.stdlib.drand48
     libc.src.stdlib.mb_cur_max
     libc.src.stdlib.grantpt
     libc.src.stdlib.posix_openpt
