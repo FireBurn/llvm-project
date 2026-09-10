@@ -50,3 +50,9 @@ TEST(LlvmLibcLinuxSysSocketMacrosTest, AddSomaxconn) {
 TEST(LlvmLibcLinuxSysSocketMacrosTest, AddSock_Dccp) {
   EXPECT_EQ(static_cast<long long>(SOCK_DCCP), 6LL);
 }
+
+TEST(LlvmLibcLinuxSysSocketMacrosTest,
+     NameTheControlMessagesForWifiStatusAndTr) {
+  EXPECT_EQ(static_cast<long long>(SCM_WIFI_STATUS), 41LL);
+  EXPECT_EQ(static_cast<long long>(SCM_TXTIME), 61LL);
+}
