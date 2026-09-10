@@ -33,4 +33,8 @@ struct dirent {
   char d_name[NAME_MAX + 1];
 };
 
+// The name BSD gave the inode number, which a good deal of portable code
+// still uses.
+#define d_fileno d_ino
+
 #endif // LLVM_LIBC_TYPES_STRUCT_DIRENT_H
