@@ -187,6 +187,10 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("utmp"),
     libc_header_info("utmpx"),
     libc_header_info(
+        "values",
+        has_def_template = True,
+    ),
+    libc_header_info(
         "wait",
         has_def_template = True,
     ),
