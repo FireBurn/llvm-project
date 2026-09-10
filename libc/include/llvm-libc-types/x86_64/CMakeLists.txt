@@ -11,6 +11,21 @@ add_header(
 )
 
 add_header(
+  struct_user_fpregs_struct
+  HDR
+    struct_user_fpregs_struct.h
+)
+
+add_header(
+  struct_user
+  HDR
+    struct_user.h
+  DEPENDS
+    .struct_user_fpregs_struct
+    .struct_user_regs_struct
+)
+
+add_header(
   ucontext_t
   HDR
     ucontext_t.h
