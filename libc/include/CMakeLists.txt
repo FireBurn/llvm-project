@@ -59,6 +59,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_dir
+  ../libc/include/sys/dir.yaml
+  sys/dir.h
+  DEPENDS
+    .llvm_libc_common_h
+    .dirent
+)
+
+add_header_macro(
   fcntl
   ../libc/include/fcntl.yaml
   fcntl.h
