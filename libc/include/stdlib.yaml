@@ -395,6 +395,12 @@ functions:
     return_type: int
     arguments:
       - type: void
+  - name: rand_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: unsigned int *
   - name: realpath
     standards:
       - posix
