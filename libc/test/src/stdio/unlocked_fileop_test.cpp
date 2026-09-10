@@ -10,8 +10,10 @@
 #include "src/stdio/fclose.h"
 #include "src/stdio/feof_unlocked.h"
 #include "src/stdio/ferror_unlocked.h"
+#include "src/stdio/fflush_unlocked.h"
 #include "src/stdio/flockfile.h"
 #include "src/stdio/fopen.h"
+#include "src/stdio/fread.h"
 #include "src/stdio/fread_unlocked.h"
 #include "src/stdio/funlockfile.h"
 #include "src/stdio/fwrite_unlocked.h"
@@ -70,5 +72,29 @@ TEST_F(LlvmLibcFILETest, UnlockedReadAndWrite) {
   LIBC_NAMESPACE::funlockfile(f);
   ASSERT_STREQ(data, "1234567890");
 
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+}
+
+// What was written under the lock reaches the file when it is flushed under
+// the same lock, without reaching for the lock a second time.
+TEST_F(LlvmLibcFILETest, FlushUnderTheLock) {
+  constexpr char FILENAME[] = "testdata/unlocked_flush.test";
+  ::FILE *f = LIBC_NAMESPACE::fopen(FILENAME, "w");
+  ASSERT_FALSE(f == nullptr);
+
+  constexpr char CONTENT[] = "written";
+  LIBC_NAMESPACE::flockfile(f);
+  ASSERT_EQ(sizeof(CONTENT) - 1, LIBC_NAMESPACE::fwrite_unlocked(
+                                     CONTENT, 1, sizeof(CONTENT) - 1, f));
+  ASSERT_EQ(LIBC_NAMESPACE::fflush_unlocked(f), 0);
+  LIBC_NAMESPACE::funlockfile(f);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+
+  f = LIBC_NAMESPACE::fopen(FILENAME, "r");
+  ASSERT_FALSE(f == nullptr);
+  char buf[sizeof(CONTENT)] = {};
+  ASSERT_EQ(sizeof(CONTENT) - 1,
+            LIBC_NAMESPACE::fread(buf, 1, sizeof(CONTENT) - 1, f));
+  ASSERT_STREQ(buf, CONTENT);
   ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
 }
