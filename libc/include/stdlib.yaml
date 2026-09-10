@@ -136,6 +136,14 @@ functions:
     arguments:
       - type: double[]
       - type: int
+  - name: getsubopt
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: char **
+      - type: char *const *
+      - type: char **
   - name: labs
     standards:
       - stdc
