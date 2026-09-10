@@ -21,6 +21,15 @@ namespace LIBC_NAMESPACE_DECL {
 // provide it here.
 extern cpp::Atomic<unsigned long> rand_next;
 
+// The thirty two bit half of the mixer below, which rand_r needs on its own:
+// the state it is given is a word of the caller's, whatever the machine.
+LIBC_INLINE constexpr uint32_t rand_mix32(uint32_t z) {
+  z += 0x9E3779B9u;
+  z = (z ^ (z >> 16)) * 0x85EBCA6Bu;
+  z = (z ^ (z >> 13)) * 0xC2B2AE35u;
+  return z ^ (z >> 16);
+}
+
 // Turns a seed into a generator state.
 //
 // The generator is a xorshift, which has no way out of a state of all zero
@@ -37,11 +46,7 @@ LIBC_INLINE constexpr unsigned long rand_state_for(unsigned int seed) {
     z = z ^ (z >> 31);
     return static_cast<unsigned long>(z);
   } else {
-    uint32_t z = static_cast<uint32_t>(seed) + 0x9E3779B9u;
-    z = (z ^ (z >> 16)) * 0x85EBCA6Bu;
-    z = (z ^ (z >> 13)) * 0xC2B2AE35u;
-    z = z ^ (z >> 16);
-    return static_cast<unsigned long>(z);
+    return rand_mix32(static_cast<uint32_t>(seed));
   }
 }
 
