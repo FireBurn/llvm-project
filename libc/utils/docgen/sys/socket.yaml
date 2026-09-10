@@ -1,6 +1,10 @@
 macros:
   SCM_RIGHTS:
     in-latest-posix: ''
+  SCM_TXTIME:
+    c-definition: 'TODO: Linux extension'
+  SCM_WIFI_STATUS:
+    c-definition: 'TODO: Linux extension'
   CMSG_DATA:
     in-latest-posix: ''
   CMSG_NXTHDR:
