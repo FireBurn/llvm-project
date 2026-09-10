@@ -1,0 +1,9 @@
+header: sys/dir.h
+header_template: dir.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
