@@ -13,6 +13,8 @@ macros:
     in-latest-posix: ''
   DT_SOCK:
     in-latest-posix: ''
+  DT_WHT:
+    c-definition: 'TODO: BSD extension'
   DT_UNKNOWN:
     in-latest-posix: ''
   DT_MQ:
