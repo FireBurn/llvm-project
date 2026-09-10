@@ -632,6 +632,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_tryjoin_np
+  SRCS
+    pthread_tryjoin_np.cpp
+  HDRS
+    pthread_tryjoin_np.h
+  DEPENDS
+    libc.include.pthread
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
   pthread_detach
   SRCS
     pthread_detach.cpp
