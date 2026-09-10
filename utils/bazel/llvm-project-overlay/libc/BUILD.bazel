@@ -16869,6 +16869,19 @@ libc_function(
 )
 
 libc_function(
+    name = "getsubopt",
+    srcs = ["src/stdlib/getsubopt.cpp"],
+    hdrs = ["src/stdlib/getsubopt.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_getsubopt",
+        ":string_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "grantpt",
     srcs = ["src/stdlib/linux/grantpt.cpp"],
     hdrs = ["src/stdlib/grantpt.h"],
@@ -26853,4 +26866,16 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_malloc_macros",
     hdrs = ["include/llvm-libc-macros/malloc-macros.h"],
+)
+
+libc_support_library(
+    name = "stdlib_getsubopt",
+    srcs = ["src/stdlib/getsubopt.cpp"],
+    hdrs = ["src/stdlib/getsubopt.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":string_utils",
+        ":types_size_t",
+    ],
 )
