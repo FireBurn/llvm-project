@@ -114,6 +114,7 @@ add_type_header(
     loff_t.h
 )
 add_header(FILE HDR FILE.h)
+add_header(fd_mask HDR fd_mask.h DEPENDS libc.include.llvm-libc-macros.sys_select_macros)
 add_header(fd_set HDR fd_set.h DEPENDS libc.include.llvm-libc-macros.sys_select_macros)
 add_header(fenv_t HDR fenv_t.h)
 add_header(fexcept_t HDR fexcept_t.h)
