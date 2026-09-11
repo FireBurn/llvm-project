@@ -408,6 +408,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_un_macros
+  HDR
+    sys-un-macros.h
+)
+
+add_macro_header(
   sys_socket_macros
   HDR
     sys-socket-macros.h
