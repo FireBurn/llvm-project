@@ -33347,6 +33347,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_sys_select_macros",
+    hdrs = ["include/llvm-libc-macros/sys-select-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_sys_xattr_macros",
     hdrs = ["include/llvm-libc-macros/sys-xattr-macros.h"],
 )
