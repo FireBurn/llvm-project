@@ -8,6 +8,7 @@ types:
   - type_name: suseconds_t
   - type_name: sigset_t
   - type_name: time_t
+  - type_name: fd_mask
 enums: []
 objects: []
 functions:
