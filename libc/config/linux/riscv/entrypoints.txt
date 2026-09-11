@@ -733,6 +733,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcsncmp
     libc.src.wchar.wcsxfrm
     libc.src.wchar.wcscmp
+    libc.src.wchar.wcscasecmp
+    libc.src.wchar.wcsncasecmp
     libc.src.wchar.wcscoll
     libc.src.wchar.wcspbrk
     libc.src.wchar.wcsrchr
