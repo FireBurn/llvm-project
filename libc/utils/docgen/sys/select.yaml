@@ -15,3 +15,5 @@ macros:
     in-latest-posix: ""
   FD_ZERO:
     in-latest-posix: ""
+  NFDBITS:
+    c-definition: 'TODO: BSD extension'
