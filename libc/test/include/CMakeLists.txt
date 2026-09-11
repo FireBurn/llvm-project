@@ -162,6 +162,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_un_test
+  SUITE
+    libc_include_tests
+  SRCS
+    sys/un_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_un_macros
+    libc.include.llvm-libc-types.struct_sockaddr_un
+)
+
+add_libc_test(
   stdbit_test
   SUITE
     libc_include_tests
