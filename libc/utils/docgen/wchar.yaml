@@ -55,6 +55,8 @@ functions:
     c-definition: 7.31.4.4.1
   wcschr:
     c-definition: 7.31.4.6.2
+  wcscasecmp:
+    in-latest-posix: ''
   wcscmp:
     c-definition: 7.31.4.5.2
   wcscasecmp:
@@ -73,6 +75,8 @@ functions:
     c-definition: 7.31.4.7.1
   wcsncat:
     c-definition: 7.31.4.4.2
+  wcsncasecmp:
+    in-latest-posix: ''
   wcsncmp:
     c-definition: 7.31.4.5.4
   wcsncpy:
