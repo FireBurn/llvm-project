@@ -252,3 +252,20 @@ libc_test(
         "//libc/src/wchar:wmemset",
     ],
 )
+
+libc_test(
+    name = "swprintf_test",
+    srcs = ["swprintf_test.cpp"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/printf_core:printf_config",
+        "//libc/src/wchar:swprintf",
+        "//libc/test/UnitTest:fp_test_helpers",
+    ],
+)
