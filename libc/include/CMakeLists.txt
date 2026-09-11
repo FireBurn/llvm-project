@@ -1568,6 +1568,7 @@ add_header_macro(
   sys/un.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros.sys_un_macros
     .llvm-libc-types.struct_sockaddr_un
 )
 
