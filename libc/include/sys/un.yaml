@@ -1,5 +1,10 @@
 header: sys/un.h
 standards:
   - posix
+macros:
+  - macro_name: SUN_LEN
+    macro_header: sys-un-macros.h
+  - macro_name: UNIX_PATH_MAX
+    macro_header: sys-un-macros.h
 types:
   - type_name: struct_sockaddr_un
