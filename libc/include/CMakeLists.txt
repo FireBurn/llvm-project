@@ -1362,6 +1362,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_select_macros
+    .llvm-libc-types.fd_mask
     .llvm-libc-types.fd_set
     .llvm-libc-types.sigset_t
     .llvm-libc-types.suseconds_t
