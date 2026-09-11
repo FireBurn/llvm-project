@@ -182,6 +182,15 @@ foreach(target IN LISTS startup_components)
     COMPONENT libc)
 endforeach()
 
+# Position independent executables start from Scrt1.o. The objects of a shared
+# build are position independent already, so crt1.o serves under both names.
+if(LIBC_ENABLE_SHARED)
+  install(FILES $<TARGET_OBJECTS:libc.startup.linux.crt1>
+    DESTINATION ${LIBC_INSTALL_LIBRARY_DIR}
+    RENAME Scrt1.o
+    COMPONENT libc)
+endif()
+
 add_object_library(
   passive_abi
   SRCS
