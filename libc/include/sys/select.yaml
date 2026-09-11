@@ -6,6 +6,7 @@ merge_yaml_files:
 types:
   - type_name: struct_timespec
   - type_name: sigset_t
+  - type_name: fd_mask
 enums: []
 objects: []
 functions:
