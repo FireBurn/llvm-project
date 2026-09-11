@@ -150,6 +150,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_select_test
+  SUITE
+    libc_include_tests
+  SRCS
+    sys/select_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_select_macros
+    libc.include.llvm-libc-types.fd_mask
+    libc.include.llvm-libc-types.fd_set
+)
+
+add_libc_test(
   stdbit_test
   SUITE
     libc_include_tests
