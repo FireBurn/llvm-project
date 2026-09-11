@@ -816,8 +816,6 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # wchar.h entrypoints
     libc.src.wchar.btowc
-    libc.src.wchar.wcscasecmp
-    libc.src.wchar.wcsncasecmp
     libc.src.wchar.wcslen
     libc.src.wchar.wcsnlen
     libc.src.wchar.wctob
@@ -827,6 +825,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcsncmp
     libc.src.wchar.wcsxfrm
     libc.src.wchar.wcscmp
+    libc.src.wchar.wcscasecmp
+    libc.src.wchar.wcsncasecmp
     libc.src.wchar.wcscoll
     libc.src.wchar.wcspbrk
     libc.src.wchar.wcsrchr
