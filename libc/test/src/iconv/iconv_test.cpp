@@ -1182,3 +1182,54 @@ TEST_F(LlvmLibcIconvTest, JapaneseErrors) {
   EXPECT_EQ(r.error, EILSEQ);
   EXPECT_EQ(r.made, size_t(3));
 }
+
+TEST_F(LlvmLibcIconvTest, SimplifiedChineseSets) {
+  struct Case {
+    const char *name;
+    const char *bytes;
+    size_t length;
+    const char *utf8;
+    size_t utf8_length;
+  };
+  const Case cases[] = {
+      // The first hanzi of GB 2312.
+      {"EUC-CN", "\xb0\xa1", 2, "\xe5\x95\x8a", 3},
+      {"GB_2312-80", "\x30\x21", 2, "\xe5\x95\x8a", 3},
+      {"GBK", "\xb0\xa1", 2, "\xe5\x95\x8a", 3},
+      {"GB18030", "\xb0\xa1", 2, "\xe5\x95\x8a", 3},
+      // GB 2312 has the katakana middle dot where Microsoft has the Latin one.
+      {"EUC-CN", "\xa1\xa4", 2, "\xe3\x83\xbb", 3},
+      {"CP936", "\xa1\xa4", 2, "\xc2\xb7", 2},
+      // A hanzi GBK added to GB 2312.
+      {"GBK", "\x81\x40", 2, "\xe4\xb8\x82", 3},
+      // The euro sign, one byte in CP936 and two in GB18030.
+      {"CP936", "\x80", 1, "\xe2\x82\xac", 3},
+      {"GB18030", "\xa2\xe3", 2, "\xe2\x82\xac", 3},
+      // A vertical form, which GB18030-2022 gave its own code point.
+      {"GB18030", "\xa6\xd9", 2, "\xef\xb8\x90", 3},
+      // Four byte codes: the first one, and the first past U+FFFF.
+      {"GB18030", "\x81\x30\x81\x30", 4, "\xc2\x80", 2},
+      {"GB18030", "\x90\x30\x81\x30", 4, "\xf0\x90\x80\x80", 4},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, c.bytes, c.length, out, sizeof(out)),
+              static_cast<ssize_t>(c.utf8_length));
+    for (size_t i = 0; i < c.utf8_length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    expect_bytes(c.name, "UTF-8", c.utf8, c.utf8_length, c.bytes, c.length);
+  }
+
+  // What a set does not have is not written.
+  char out[8] = {};
+  EXPECT_EQ(convert("EUC-CN", "UTF-8", "\xc2\xb7", 2, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(convert("GBK", "UTF-8", "\xef\xb8\x90", 3, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  // A four byte code is incomplete until all four bytes are there.
+  EXPECT_EQ(convert("UTF-8", "GB18030", "\x81\x30\x81", 3, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+}
