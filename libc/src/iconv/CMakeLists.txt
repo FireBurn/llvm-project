@@ -42,6 +42,7 @@ add_header_library(
     japanese.h
     korean.h
     status.h
+    traditional_chinese.h
   DEPENDS
     .charsets
     ${cjk_tables}
