@@ -58,7 +58,7 @@ libc_support_library(
 
 libc_support_library(
     name = "conversion",
-    hdrs = ["conversion.h", "japanese.h", "status.h"],
+    hdrs = ["chinese.h", "conversion.h", "japanese.h", "status.h"],
     deps = [
         ":charsets",
         ":cjk_tables",
