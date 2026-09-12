@@ -1393,3 +1393,16 @@ TEST_F(LlvmLibcIconvTest, Iso2022JpMs) {
             ssize_t(3));
   EXPECT_EQ(out[2], '\xa1');
 }
+
+TEST_F(LlvmLibcIconvTest, Big5) {
+  expect_bytes("BIG5", "UTF-8", "\xe4\xb8\x80", 3, "\xa4\x40", 2);
+  // The doubled box drawing lines are written in row 0xA2, and 0xC6A1 is a
+  // private use character.
+  expect_bytes("CP950", "UTF-8", "\xe2\x95\x90", 3, "\xa2\xa4", 2);
+  expect_bytes("UTF-8", "BIG-5", "\xc6\xa1", 2, "\xef\x9a\xb1", 3);
+  // A pair with no character is not one.
+  char out[8] = {};
+  EXPECT_EQ(convert("UTF-8", "BIG5", "\xa3\xfe", 2, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
