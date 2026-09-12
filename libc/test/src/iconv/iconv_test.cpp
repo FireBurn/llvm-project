@@ -1426,3 +1426,16 @@ TEST_F(LlvmLibcIconvTest, Big5Hkscs) {
       convert("UTF-8", "BIG5-HKSCS:2004", "\x87\x40", 2, out, sizeof(out)),
       ssize_t(3));
 }
+
+TEST_F(LlvmLibcIconvTest, EucTw) {
+  // Plane 1 of CNS 11643 is two bytes, and the other planes four.
+  expect_bytes("EUC-TW", "UTF-8", "\xe3\x80\x80", 3, "\xa1\xa1", 2);
+  expect_bytes("EUC-TW", "UTF-8", "\xe4\xb9\x82", 3, "\x8e\xa2\xa1\xa1", 4);
+  expect_bytes("EUC-TW", "UTF-8", "\xf0\xa0\x80\x82", 4, "\x8e\xaf\xa1\xa1", 4);
+  // Plane 1 can also be read after 0x8E, and plane 8 has no characters here.
+  expect_bytes("UTF-8", "EUC-TW", "\x8e\xa1\xa1\xa1", 4, "\xe3\x80\x80", 3);
+  char out[8] = {};
+  EXPECT_EQ(convert("UTF-8", "EUC-TW", "\x8e\xa8\xa1\xa1", 4, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
