@@ -31,6 +31,20 @@ constexpr size_t CP932_CHANGE_COUNT = 6;
 extern const CodePair CP932_CHANGES[CP932_CHANGE_COUNT];
 constexpr size_t CP932_AREA_COUNT = 6;
 extern const CodeRange CP932_AREAS[CP932_AREA_COUNT];
+extern const CodeTable GB18030_TWO_BYTE;
+constexpr size_t GB18030_RUN_COUNT = 221;
+constexpr uint32_t GB18030_FOUR_BYTE_COUNT = 39420;
+// Where a run of consecutive code points begins among the four byte
+// codes, in order of position.
+extern const CodeRun GB18030_RUNS[GB18030_RUN_COUNT];
+extern const uint8_t GB18030_RUNS_BY_CODE_POINT[GB18030_RUN_COUNT];
+constexpr size_t GBK_EXCLUDED_COUNT = 13;
+extern const CodeRange GBK_EXCLUDED[GBK_EXCLUDED_COUNT];
+// A bit for each GB 2312 code with a character, row by row.
+extern const uint8_t GB2312_ASSIGNED[1105];
+// The GB 2312 codes GB18030 reads as other characters.
+constexpr size_t GB2312_CHANGE_COUNT = 2;
+extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];
 
 } // namespace iconv_internal
 } // namespace LIBC_NAMESPACE_DECL
