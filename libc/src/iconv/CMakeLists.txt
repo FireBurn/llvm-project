@@ -1,14 +1,10 @@
 add_header_library(
-  charsets
+  sequences
   HDRS
-    charsets.h
-    combining.h
     sequences.h
-    single_byte_tables.h
   DEPENDS
     libc.hdr.stdint_proxy
     libc.hdr.types.char32_t
-    libc.src.__support.common
     libc.hdr.types.size_t
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
@@ -24,6 +20,7 @@ if(NOT LIBC_CONF_ICONV_DISABLE_CJK)
     SRCS
       cjk_tables.cpp
     DEPENDS
+      .sequences
       libc.hdr.stdint_proxy
       libc.hdr.types.char32_t
       libc.hdr.types.size_t
@@ -32,6 +29,23 @@ if(NOT LIBC_CONF_ICONV_DISABLE_CJK)
   )
   set(cjk_tables .cjk_tables)
 endif()
+
+add_header_library(
+  charsets
+  HDRS
+    charsets.h
+    combining.h
+    single_byte_tables.h
+  DEPENDS
+    .sequences
+    ${cjk_tables}
+    libc.hdr.stdint_proxy
+    libc.hdr.types.char32_t
+    libc.src.__support.common
+    libc.hdr.types.size_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
 
 add_header_library(
   conversion
