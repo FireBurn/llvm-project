@@ -2,6 +2,7 @@ add_header_library(
   charsets
   HDRS
     charsets.h
+    single_byte_tables.h
   DEPENDS
     libc.hdr.stdint_proxy
     libc.src.__support.common
