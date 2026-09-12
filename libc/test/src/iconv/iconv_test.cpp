@@ -154,6 +154,68 @@ TEST_F(LlvmLibcIconvTest, Utf16AndUtf32) {
   EXPECT_EQ(out[0], 'A');
 }
 
+TEST_F(LlvmLibcIconvTest, MoreSingleByteSets) {
+  struct Case {
+    const char *name;
+    char byte;
+    const char *utf8;
+    size_t length;
+  };
+  const Case cases[] = {
+      // Latin capital letter r with acute.
+      {"CP1250", '\xc0', "\xc5\x94", 2},
+      // Greek small letter iota with dialytika and tonos.
+      {"WINDOWS-1253", '\xc0', "\xce\x90", 2},
+      // Latin capital letter a with grave.
+      {"CP1254", '\xc0', "\xc3\x80", 2},
+      // Arabic letter heh goal.
+      {"MS-ARAB", '\xc0', "\xdb\x81", 2},
+      // Latin capital letter a with ogonek.
+      {"CP1257", '\xc0', "\xc4\x84", 2},
+      // Thai character pho samphao.
+      {"WINDOWS-874", '\xc0', "\xe0\xb8\xa0", 3},
+      // Box drawings light up and right.
+      {"IBM862", '\xc0', "\xe2\x94\x94", 3},
+      // Box drawings light up and right.
+      {"CP866", '\xc0', "\xe2\x94\x94", 3},
+      // Cyrillic small letter yu.
+      {"KOI8-U", '\xc0', "\xd1\x8e", 2},
+      // Cyrillic capital letter a.
+      {"KZ-1048", '\xc0', "\xd0\x90", 2},
+      // Cyrillic small letter yu.
+      {"KOI8-T", '\xc0', "\xd1\x8e", 2},
+      // Cyrillic small letter yu.
+      {"KOI8-RU", '\xc0', "\xd1\x8e", 2},
+      // Cyrillic capital letter a.
+      {"PTCP154", '\xc0', "\xd0\x90", 2},
+      // Georgian letter an.
+      {"GEORGIAN-ACADEMY", '\xc0', "\xe1\x83\x90", 3},
+      // Georgian letter an.
+      {"GEORGIAN-PS", '\xc0', "\xe1\x83\x90", 3},
+      // Latin small letter a with circumflex.
+      {"ROMAN8", '\xc0', "\xc3\xa2", 2},
+      // Box drawings light up and right.
+      {"CP1131", '\xc0', "\xe2\x94\x94", 3},
+      // No-break space.
+      {"MULELAO-1", '\xa0', "\xc2\xa0", 2},
+      // Lao vowel sign a.
+      {"IBM-CP1133", '\xc0', "\xe0\xba\xb0", 3},
+      // Thai character pho samphao.
+      {"TIS620", '\xc0', "\xe0\xb8\xa0", 3},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, &c.byte, 1, out, sizeof(out)),
+              static_cast<ssize_t>(c.length));
+    for (size_t i = 0; i < c.length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    char back[8] = {};
+    ASSERT_EQ(convert(c.name, "UTF-8", c.utf8, c.length, back, sizeof(back)),
+              ssize_t(1));
+    EXPECT_EQ(back[0], c.byte);
+  }
+}
+
 TEST_F(LlvmLibcIconvTest, Ucs4IsBigEndian) {
   char out[16] = {};
   ASSERT_EQ(convert("UCS-4", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(4));
