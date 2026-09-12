@@ -7,8 +7,8 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// ISO-2022-JP, ISO-2022-JP-2 and ISO-2022-KR, which switch between sets with
-/// escape sequences and shifts, read and written as glibc does.
+/// ISO-2022-JP, ISO-2022-JP-1, ISO-2022-JP-2, ISO-2022-KR and HZ, which switch
+/// between sets with escape sequences and shifts.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -535,6 +535,196 @@ LIBC_INLINE Status unshift_iso2022(Iso2022State &state, bool korean,
   for (size_t i = 0; i < length; ++i)
     out[i] = bytes[i];
   made = length;
+  return Status::OK;
+}
+
+// ISO-2022-JP-1 is ISO-2022-JP with JIS X 0212 as well. glibc does not have
+// it, so it is read and written as GNU libiconv does: an escape sequence it
+// does not know is not a character, a byte in a set of two byte characters
+// waits for the next, a pair which is not a character is skipped by its first
+// byte, and writing goes back to ASCII for every character ASCII has.
+constexpr Iso2022Escape ISO2022_JP1_ESCAPES[] = {
+    {"(B", 2, Iso2022Set::ASCII},      {"(J", 2, Iso2022Set::JIS_ROMAN},
+    {"$B", 2, Iso2022Set::JIS_X0208},  {"$@", 2, Iso2022Set::JIS_X0208},
+    {"$(D", 3, Iso2022Set::JIS_X0212},
+};
+
+LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
+                                    const unsigned char *in, size_t inleft,
+                                    char32_t &out, size_t &used) {
+  const unsigned byte = in[0];
+  used = 1;
+  if (byte == ESC) {
+    if (inleft < 3)
+      return Status::INCOMPLETE;
+    bool waiting = false;
+    for (const Iso2022Escape &escape : ISO2022_JP1_ESCAPES) {
+      const size_t have =
+          inleft - 1 < escape.length ? inleft - 1 : escape.length;
+      size_t same = 0;
+      while (same < have &&
+             in[1 + same] == static_cast<unsigned char>(escape.bytes[same]))
+        ++same;
+      if (same < have)
+        continue;
+      if (have < escape.length) {
+        waiting = true;
+        continue;
+      }
+      state.read_g0 = escape.set;
+      used = 1 + escape.length;
+      return Status::NONE;
+    }
+    return waiting ? Status::INCOMPLETE : Status::INVALID;
+  }
+  if (state.read_g0 == Iso2022Set::ASCII ||
+      state.read_g0 == Iso2022Set::JIS_ROMAN) {
+    if (byte >= 0x80)
+      return Status::INVALID;
+    out = state.read_g0 == Iso2022Set::ASCII ? byte
+          : byte == 0x5C                     ? 0xA5
+          : byte == 0x7E                     ? 0x203E
+                                             : byte;
+    return Status::OK;
+  }
+  // In a two byte set every byte waits for the next before it is judged.
+  if (inleft < 2)
+    return Status::INCOMPLETE;
+  if (byte < 0x21 || byte >= 0x7F)
+    return Status::INVALID;
+  const unsigned second = in[1];
+  if (second < 0x21 || second >= 0x7F)
+    return Status::INVALID;
+  char32_t cp = iso2022_character(state.read_g0, byte, second);
+  if (cp == 0)
+    return Status::INVALID;
+  used = 2;
+  out = cp;
+  return Status::OK;
+}
+
+LIBC_INLINE Status write_iso2022_jp1(Iso2022State &state, char32_t cp,
+                                     unsigned char *out, size_t outleft,
+                                     size_t &made) {
+  made = 0;
+  // GNU libiconv takes language tags and writes nothing for them.
+  if (cp >= 0xE0000 && cp <= 0xE007F)
+    return Status::OK;
+  static constexpr Iso2022Set ORDER[] = {
+      Iso2022Set::ASCII, Iso2022Set::JIS_ROMAN, Iso2022Set::JIS_X0208,
+      Iso2022Set::JIS_X0212};
+  uint16_t code = 0;
+  for (const Iso2022Set set : ORDER) {
+    if (!iso2022_code(set, cp, code))
+      continue;
+    unsigned char bytes[6];
+    size_t length = 0;
+    if (state.write_g0 != set) {
+      const Iso2022Escape &escape = iso2022_escape(set);
+      bytes[length++] = ESC;
+      for (size_t i = 0; i < escape.length; ++i)
+        bytes[length++] = static_cast<unsigned char>(escape.bytes[i]);
+    }
+    if (set == Iso2022Set::JIS_X0208 || set == Iso2022Set::JIS_X0212)
+      bytes[length++] = static_cast<unsigned char>(code >> 8);
+    bytes[length++] = static_cast<unsigned char>(code & 0xFF);
+    if (outleft < length)
+      return Status::FULL;
+    for (size_t i = 0; i < length; ++i)
+      out[i] = bytes[i];
+    made = length;
+    state.write_g0 = set;
+    return Status::OK;
+  }
+  return Status::INVALID;
+}
+
+// HZ: ASCII, and GB 2312 between "~{" and "~}". "~~" is a tilde, and a "~" at
+// the end of a line joins it to the next. glibc does not have it, so it is
+// read and written as GNU libiconv does, which also reads a byte from 0x80 as
+// the character of that value, and writes a tilde as it is.
+LIBC_INLINE Status read_hz(Iso2022State &state, const unsigned char *in,
+                           size_t inleft, char32_t &out, size_t &used) {
+  const unsigned byte = in[0];
+  used = 1;
+  if (byte == '~') {
+    if (inleft < 2)
+      return Status::INCOMPLETE;
+    const unsigned next = in[1];
+    if (!state.read_shifted && (next == '~' || next == '\n')) {
+      used = 2;
+      if (next == '\n')
+        return Status::NONE;
+      out = '~';
+      return Status::OK;
+    }
+    if (next == (state.read_shifted ? '}' : '{')) {
+      state.read_shifted = !state.read_shifted;
+      used = 2;
+      return Status::NONE;
+    }
+    return Status::INVALID;
+  }
+  if (!state.read_shifted) {
+    out = byte;
+    return Status::OK;
+  }
+  if (inleft < 2)
+    return Status::INCOMPLETE;
+  // A pair which is not a character skips one byte.
+  char32_t cp = gb2312_character(byte, in[1]);
+  if (byte < 0x21 || byte > 0x7E || cp == 0)
+    return Status::INVALID;
+  used = 2;
+  out = cp;
+  return Status::OK;
+}
+
+LIBC_INLINE Status write_hz(Iso2022State &state, char32_t cp,
+                            unsigned char *out, size_t outleft, size_t &made) {
+  made = 0;
+  if (cp >= 0xE0000 && cp <= 0xE007F)
+    return Status::OK;
+  unsigned char bytes[4];
+  size_t length = 0;
+  bool shifted = state.write_shifted;
+  if (cp < 0x80) {
+    if (shifted) {
+      bytes[length++] = '~';
+      bytes[length++] = '}';
+    }
+    bytes[length++] = static_cast<unsigned char>(cp);
+    shifted = false;
+  } else {
+    const uint16_t code = gb2312_code(cp);
+    if (code == 0)
+      return Status::INVALID;
+    if (!shifted) {
+      bytes[length++] = '~';
+      bytes[length++] = '{';
+    }
+    bytes[length++] = static_cast<unsigned char>(code >> 8);
+    bytes[length++] = static_cast<unsigned char>(code & 0xFF);
+    shifted = true;
+  }
+  if (outleft < length)
+    return Status::FULL;
+  for (size_t i = 0; i < length; ++i)
+    out[i] = bytes[i];
+  made = length;
+  state.write_shifted = shifted;
+  return Status::OK;
+}
+
+LIBC_INLINE Status unshift_hz(Iso2022State &state, unsigned char *out,
+                              size_t outleft, size_t &made) {
+  if (!state.write_shifted)
+    return Status::OK;
+  if (outleft < 2)
+    return Status::FULL;
+  out[0] = '~';
+  out[1] = '}';
+  made = 2;
   return Status::OK;
 }
 
