@@ -12,6 +12,7 @@ from sys import argv, exit
 
 UNICODE = "https://www.unicode.org/Public/MAPPINGS"
 UCD = "https://www.unicode.org/Public/UCD/latest/ucd"
+EASTASIA = f"{UNICODE}/OBSOLETE/EASTASIA"
 CITRUS = "https://github.com/freebsd/freebsd-src/tree/main/share/i18n/csmapper"
 ICU = "https://github.com/unicode-org/icu-data/tree/main/charset/data/ucm"
 
@@ -211,6 +212,17 @@ FULL = [
 # and then another mark: marks of the same class in another order are
 # different text.
 COMBINING = ["CP1258", "CP1255", "TCVN"]
+
+# The Japanese sets. The Unicode Consortium's JIS X 0208 and JIS X 0212 tables
+# map 0x2140 and 0x2237 to ASCII's reverse solidus and tilde. glibc and GNU
+# libiconv map them to the fullwidth forms, so that EUC-JP, which has ASCII as
+# well, can write both.
+JIS_X0208 = ("JIS0208.TXT", f"{EASTASIA}/JIS", {0x2140: 0xFF3C})
+JIS_X0212 = ("JIS0212.TXT", f"{EASTASIA}/JIS", {0x2237: 0xFF5E})
+# CP932 reads as Microsoft's table has it. Where several codes read as the same
+# character, it is written as the one Microsoft's best fit table gives, and the
+# others are only read.
+CP932 = ("CP932.TXT", "bestfit932.txt", f"{UNICODE}/VENDORS/MICSFT")
 
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
@@ -493,6 +505,196 @@ def format_sequences(name: str, sequences: dict[int, tuple[int, ...]]) -> str:
     return "\n".join(lines)
 
 
+def read_columns(path: str, key: int, value: int) -> dict[int, int]:
+    """Reads two columns of a Unicode Consortium mapping file."""
+    mapping = {}
+    with open(path, encoding="latin-1") as file:
+        for line in file:
+            fields = line.split("#")[0].split()
+            if len(fields) <= max(key, value):
+                continue
+            if fields[key].startswith("0x") and fields[value].startswith("0x"):
+                mapping[int(fields[key], 16)] = int(fields[value], 16)
+    return mapping
+
+
+def read_best_fit_writes(path: str) -> dict[int, int]:
+    """Reads the code Microsoft's best fit table writes each code point as."""
+    writes, in_table = {}, False
+    with open(path, encoding="latin-1") as file:
+        for line in file:
+            fields = line.split(";")[0].split()
+            if not fields:
+                continue
+            if not fields[0].startswith("0x"):
+                in_table = fields[0] == "WCTABLE"
+            elif in_table and len(fields) >= 2:
+                writes[int(fields[0], 16)] = int(fields[1], 16)
+    return writes
+
+
+def shift_jis_from_jis(code: int) -> int:
+    row, column = (code >> 8) - 0x21, (code & 0xFF) - 0x21
+    lead = (row >> 1) + (0x81 if row < 62 else 0xC1)
+    if row & 1:
+        trail = column + 0x9F
+    else:
+        trail = column + 0x40 + (1 if column >= 0x3F else 0)
+    return lead << 8 | trail
+
+
+def format_values(kind: str, name: str, values: list[int], digits: int) -> str:
+    per_line = 72 // (digits + 4)
+    lines = [f"const {kind} {name}[{len(values)}] = {{"]
+    for start in range(0, len(values), per_line):
+        row = values[start : start + per_line]
+        lines.append("    " + " ".join(f"0x{value:0{digits}X}," for value in row))
+    lines.append("};")
+    return "\n".join(lines)
+
+
+def format_code_table(
+    name: str,
+    mapping: dict[int, int],
+    leads: tuple[int, int],
+    trails: tuple[int, int],
+    writes: dict[int, int] | None = None,
+) -> str:
+    """A CodeTable of the codes from |leads| and |trails|, each an inclusive
+    range. With |writes|, only a character written as its code here is in the
+    order, which is how writing finds it."""
+    lead_count = leads[1] - leads[0] + 1
+    trail_count = trails[1] - trails[0] + 1
+    cells = [0] * (lead_count * trail_count)
+    for code, code_point in mapping.items():
+        row, column = (code >> 8) - leads[0], (code & 0xFF) - trails[0]
+        if not (0 <= row < lead_count and 0 <= column < trail_count):
+            exit(f"{name}: 0x{code:04X} is outside the table")
+        if not 0 < code_point <= 0xFFFF:
+            exit(f"{name}: 0x{code:04X} is U+{code_point:04X}, which does not fit")
+        cells[row * trail_count + column] = code_point
+    order, written = [], set()
+    for position in sorted(range(len(cells)), key=lambda p: (cells[p], p)):
+        code_point = cells[position]
+        code = (leads[0] + position // trail_count) << 8
+        code |= trails[0] + position % trail_count
+        if code_point == 0:
+            continue
+        if writes is not None and writes.get(code_point) != code:
+            continue
+        if code_point in written:
+            exit(f"{name}: U+{code_point:04X} is written as two codes")
+        written.add(code_point)
+        order.append(position)
+    arrays = [format_values("uint16_t", f"{name}_CODE_POINTS", cells, 4)]
+    order_name = "nullptr"
+    if order:
+        arrays.append(format_values("uint16_t", f"{name}_ORDER", order, 4))
+        order_name = f"{name}_ORDER"
+    return "\n".join(
+        ["namespace {"]
+        + arrays
+        + [
+            "} // namespace",
+            "",
+            f"const CodeTable {name} = {{",
+            f"    0x{leads[0]:02X}, {lead_count}, 0x{trails[0]:02X}, {trail_count},",
+            f"    {name}_CODE_POINTS,",
+            f"    {order_name}, {len(order)},",
+            "};",
+        ]
+    )
+
+
+def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
+    """The definitions and declarations of the Japanese sets' tables."""
+    file_name, _, changes = JIS_X0208
+    jis_x0208 = read_columns(f"{mappings}/{file_name}", 1, 2)
+    jis_x0208.update(changes)
+    file_name, _, changes = JIS_X0212
+    jis_x0212 = read_columns(f"{mappings}/{file_name}", 0, 1)
+    jis_x0212.update(changes)
+    definitions = [
+        format_code_table("JIS_X0208", jis_x0208, (0x21, 0x7E), (0x21, 0x7E)),
+        format_code_table("JIS_X0212", jis_x0212, (0x21, 0x7E), (0x21, 0x7E)),
+    ]
+    declarations = [
+        "extern const CodeTable JIS_X0208;",
+        "extern const CodeTable JIS_X0212;",
+    ]
+
+    table_file, best_fit_file, _ = CP932
+    cp932 = read_columns(f"{mappings}/{table_file}", 0, 1)
+    cp932 = {code: code_point for code, code_point in cp932.items() if code > 0xFF}
+    writes = read_best_fit_writes(f"{mappings}/{best_fit_file}")
+    from_jis = {shift_jis_from_jis(code): cp for code, cp in jis_x0208.items()}
+    jis_leads = {code >> 8 for code in from_jis}
+    if any(code not in cp932 for code in from_jis):
+        exit("CP932: a JIS X 0208 code is missing")
+    # The codes of JIS X 0208 which CP932 reads as another character.
+    changes = sorted(
+        (code, cp)
+        for code, cp in cp932.items()
+        if code in from_jis and from_jis[code] != cp
+    )
+    blocks = [
+        ("CP932_NEC_ROW_13", (0x87, 0x87)),
+        ("CP932_IBM", (0xFA, 0xFC)),
+        ("CP932_NEC_SELECTED_IBM", (0xED, 0xEE)),
+    ]
+    extension = {code: cp for code, cp in cp932.items() if code not in from_jis}
+    for name, (first, last) in blocks:
+        block = {c: cp for c, cp in extension.items() if first <= c >> 8 <= last}
+        definitions.append(
+            format_code_table(name, block, (first, last), (0x40, 0xFC), writes)
+        )
+        declarations.append(f"extern const CodeTable {name};")
+    if any(not any(f <= c >> 8 <= l for _, (f, l) in blocks) for c in extension):
+        exit("CP932: a code is outside JIS X 0208 and the extension blocks")
+
+    # Writing tries the changed codes, JIS X 0208 and then the blocks in the
+    # order above. Check that finds what Microsoft writes.
+    by_jis = {cp: code for code, cp in sorted(from_jis.items(), reverse=True)}
+    for code_point, code in writes.items():
+        if cp932.get(code) != code_point:
+            continue
+        found = dict((cp, c) for c, cp in changes).get(code_point)
+        found = found or by_jis.get(code_point)
+        for _, (first, last) in blocks:
+            if found:
+                break
+            candidates = [c for c, cp in extension.items() if cp == code_point]
+            candidates = [c for c in candidates if first <= c >> 8 <= last]
+            found = code if code in candidates else None
+        if found != code:
+            exit(f"CP932: U+{code_point:04X} would not be written as 0x{code:04X}")
+
+    definitions.append(
+        "const CodePair CP932_CHANGES[CP932_CHANGE_COUNT] = {\n"
+        + "\n".join(f"    {{0x{code:04X}, 0x{cp:04X}}}," for code, cp in changes)
+        + "\n};"
+    )
+    declarations.append(f"constexpr size_t CP932_CHANGE_COUNT = {len(changes)};")
+    declarations.append("extern const CodePair CP932_CHANGES[CP932_CHANGE_COUNT];")
+    # The areas CP932 is laid out in: JIS X 0208's rows of symbols and of
+    # kanji, the extension blocks, and the user-defined area.
+    symbols = [shift_jis_from_jis(c) for c in jis_x0208 if c >> 8 < 0x30]
+    kanji = [shift_jis_from_jis(c) for c in jis_x0208 if c >> 8 >= 0x30]
+    areas = [(min(symbols), max(symbols)), (min(kanji), max(kanji)), (0xF040, 0xF9FC)]
+    for _, (first, last) in blocks:
+        codes = [c for c in extension if first <= c >> 8 <= last]
+        areas.append((min(codes), max(codes)))
+    areas.sort()
+    definitions.append(
+        "const CodeRange CP932_AREAS[CP932_AREA_COUNT] = {\n"
+        + "\n".join(f"    {{0x{first:04X}, 0x{last:04X}}}," for first, last in areas)
+        + "\n};"
+    )
+    declarations.append(f"constexpr size_t CP932_AREA_COUNT = {len(areas)};")
+    declarations.append("extern const CodeRange CP932_AREAS[CP932_AREA_COUNT];")
+    return definitions, declarations
+
+
 def high_half(name: str, mapping: dict[int, int]) -> list[int]:
     for byte in range(0x80):
         if mapping.get(byte, byte) != byte:
@@ -508,6 +710,75 @@ def format_table(name: str, values: list[int]) -> str:
         lines.append("    " + " ".join(f"0x{value:04X}," for value in row))
     lines.append("};")
     return "\n".join(lines)
+
+
+LICENSE = (
+    "//\n"
+    + "// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.\n"
+    + "// See https://llvm.org/LICENSE.txt for license information.\n"
+    + "// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception\n"
+    + "//\n"
+    + "//===----------------------------------------------------------------------===//\n"
+)
+
+
+def title_line(text: str, suffix: str) -> str:
+    title = f"//===-- {text} "
+    return title + "-" * (80 - len(title) - len(suffix)) + suffix
+
+
+def write_cjk_tables(root: str, definitions: list[str], declarations: list[str]):
+    notice = (
+        "//\n"
+        + "// DO NOT EDIT MANUALLY. This file is generated by\n"
+        + "// libc/utils/iconv_utils/gen.py from the mapping files it lists.\n"
+        + "//\n"
+        + "//===----------------------------------------------------------------------===//\n"
+    )
+    with open(f"{root}/libc/src/iconv/cjk_tables.h", "w") as file:
+        file.write(
+            title_line("Tables for iconv's East Asian sets", "*- C++ -*-===//")
+            + "\n"
+            + LICENSE
+            + notice
+            + "\n"
+            + "#ifndef LLVM_LIBC_SRC_ICONV_CJK_TABLES_H\n"
+            + "#define LLVM_LIBC_SRC_ICONV_CJK_TABLES_H\n"
+            + "\n"
+            + '#include "hdr/stdint_proxy.h"\n'
+            + '#include "hdr/types/size_t.h"\n'
+            + '#include "src/__support/macros/config.h"\n'
+            + '#include "src/iconv/code_table.h"\n'
+            + "\n"
+            + "namespace LIBC_NAMESPACE_DECL {\n"
+            + "namespace iconv_internal {\n"
+            + "\n"
+            + "\n".join(declarations)
+            + "\n\n"
+            + "} // namespace iconv_internal\n"
+            + "} // namespace LIBC_NAMESPACE_DECL\n"
+            + "\n"
+            + "#endif // LLVM_LIBC_SRC_ICONV_CJK_TABLES_H\n"
+        )
+    with open(f"{root}/libc/src/iconv/cjk_tables.cpp", "w") as file:
+        file.write(
+            title_line("Tables for iconv's East Asian sets", "---===//")
+            + "\n"
+            + LICENSE
+            + notice
+            + "\n"
+            + '#include "src/iconv/cjk_tables.h"\n'
+            + "\n"
+            + "namespace LIBC_NAMESPACE_DECL {\n"
+            + "namespace iconv_internal {\n"
+            + "\n"
+            + "// clang-format off\n"
+            + "\n\n".join(definitions)
+            + "\n// clang-format on\n"
+            + "\n"
+            + "} // namespace iconv_internal\n"
+            + "} // namespace LIBC_NAMESPACE_DECL\n"
+        )
 
 
 def main() -> None:
@@ -563,6 +834,9 @@ def main() -> None:
                 ),
             )
         )
+
+    definitions, declarations = japanese_tables(mappings)
+    write_cjk_tables(root, definitions, declarations)
 
     title = "//===-- Tables for iconv's single byte sets "
     title += "-" * (80 - len(title) - len("*- C++ -*-===//")) + "*- C++ -*-===//"
