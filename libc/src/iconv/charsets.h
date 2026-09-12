@@ -7,8 +7,8 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// The character sets iconv converts between. A single byte set agrees with
-/// ASCII below 0x80, so only its high half is tabulated, in
+/// The character sets iconv converts between. Most single byte sets agree with
+/// ASCII below 0x80, so only their high half is tabulated, in
 /// single_byte_tables.h, which libc/utils/iconv_utils/gen.py generates from the
 /// mapping files the vendors publish. 0xFFFD marks a byte the set does not
 /// assign.
@@ -56,7 +56,9 @@ enum class Encoding {
   // it is.
   UTF7,
   ASCII,
-  SINGLE_BYTE, // One of the tables above.
+  SINGLE_BYTE,      // A table of the bytes from 0x80 up.
+  SINGLE_BYTE_FULL, // A table of all 256 bytes, for a set which is not ASCII
+                    // below 0x80.
 };
 
 struct Charset {
@@ -271,6 +273,25 @@ constexpr Charset CHARSETS[] = {
     {"TIS620.25330", Encoding::SINGLE_BYTE, TIS_620_HIGH},
     {"TIS620.25331", Encoding::SINGLE_BYTE, TIS_620_HIGH},
     {"ISOIR166", Encoding::SINGLE_BYTE, TIS_620_HIGH},
+    {"NEXTSTEP", Encoding::SINGLE_BYTE, NEXTSTEP_HIGH},
+    {"ARMSCII8", Encoding::SINGLE_BYTE, ARMSCII_8_HIGH},
+    {"JISC62201969RO", Encoding::SINGLE_BYTE_FULL, JIS_C6220_1969_RO_FULL},
+    {"ISO646JP", Encoding::SINGLE_BYTE_FULL, JIS_C6220_1969_RO_FULL},
+    {"ISOIR14", Encoding::SINGLE_BYTE_FULL, JIS_C6220_1969_RO_FULL},
+    {"JP", Encoding::SINGLE_BYTE_FULL, JIS_C6220_1969_RO_FULL},
+    {"CSISO14JISC6220RO", Encoding::SINGLE_BYTE_FULL, JIS_C6220_1969_RO_FULL},
+    {"GB198880", Encoding::SINGLE_BYTE_FULL, GB_1988_80_FULL},
+    {"ISO646CN", Encoding::SINGLE_BYTE_FULL, GB_1988_80_FULL},
+    {"ISOIR57", Encoding::SINGLE_BYTE_FULL, GB_1988_80_FULL},
+    {"CN", Encoding::SINGLE_BYTE_FULL, GB_1988_80_FULL},
+    {"CSISO57GB1988", Encoding::SINGLE_BYTE_FULL, GB_1988_80_FULL},
+    {"VISCII", Encoding::SINGLE_BYTE_FULL, VISCII_FULL},
+    {"VISCII1.11", Encoding::SINGLE_BYTE_FULL, VISCII_FULL},
+    {"CSVISCII", Encoding::SINGLE_BYTE_FULL, VISCII_FULL},
+    {"JISX0201", Encoding::SINGLE_BYTE_FULL, JIS_X0201_FULL},
+    {"JISX02011976", Encoding::SINGLE_BYTE_FULL, JIS_X0201_FULL},
+    {"X0201", Encoding::SINGLE_BYTE_FULL, JIS_X0201_FULL},
+    {"CSHALFWIDTHKATAKANA", Encoding::SINGLE_BYTE_FULL, JIS_X0201_FULL},
 };
 
 constexpr size_t CHARSET_COUNT = sizeof(CHARSETS) / sizeof(CHARSETS[0]);
