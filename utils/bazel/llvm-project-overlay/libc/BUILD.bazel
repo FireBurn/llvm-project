@@ -23782,10 +23782,10 @@ libc_support_library(
 )
 
 libc_support_library(
-    name = "iconv_charsets",
-    hdrs = ["src/iconv/charsets.h", "src/iconv/combining.h", "src/iconv/single_byte_tables.h"],
+    name = "iconv_cjk_tables",
+    srcs = ["src/iconv/cjk_tables.cpp"],
+    hdrs = ["src/iconv/cjk_tables.h", "src/iconv/code_table.h"],
     deps = [
-        ":__support_common",
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":hdr_stdint_proxy",
@@ -23796,8 +23796,23 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "iconv_charsets",
+    hdrs = ["src/iconv/charsets.h", "src/iconv/combining.h", "src/iconv/single_byte_tables.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":iconv_cjk_tables",
+        ":iconv_sequences",
+        ":types_char32_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "iconv_conversion",
-    hdrs = ["src/iconv/conversion.h"],
+    hdrs = ["src/iconv/conversion.h", "src/iconv/japanese.h", "src/iconv/status.h"],
     deps = [
         ":__support_common",
         ":__support_ctype_utils",
@@ -23806,6 +23821,7 @@ libc_support_library(
         ":hdr_errno_macros",
         ":hdr_stdint_proxy",
         ":iconv_charsets",
+        ":iconv_cjk_tables",
         ":iconv_sequences",
         ":types_char32_t",
         ":types_size_t",
