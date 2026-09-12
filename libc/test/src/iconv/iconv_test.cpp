@@ -1452,3 +1452,26 @@ TEST_F(LlvmLibcIconvTest, IsoIr165) {
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EINVAL);
 }
+
+TEST_F(LlvmLibcIconvTest, Iso2022Cn) {
+  // GB 2312 after SO, plane 2 of CNS 11643 after ESC N, and SI before ASCII.
+  expect_bytes(
+      "ISO-2022-CN", "UTF-8", "\xe5\x95\x8a\xe4\xb9\x82\x41", 7,
+      "\x1b\x24\x29\x41\x0e\x30\x21\x1b\x24\x2a\x48\x1b\x4e\x21\x21\x0f\x41",
+      17);
+  // Each line designates its sets again.
+  expect_bytes(
+      "ISO-2022-CN", "UTF-8", "\xe5\x95\x8a\x0a\xe5\x95\x8a", 7,
+      "\x1b\x24\x29\x41\x0e\x30\x21\x0f\x0a\x1b\x24\x29\x41\x0e\x30\x21", 16);
+  // A designation made while shifted out takes effect at once.
+  expect_bytes("UTF-8", "ISO-2022-CN",
+               "\x1b\x24\x29\x41\x0e\x44\x21\x1b\x24\x29\x47\x44\x21", 13,
+               "\xe6\x91\xb9\xe4\xb8\x80", 6);
+  // ISO-2022-CN-EXT also has ISO-IR-165.
+  expect_bytes("ISO-2022-CN-EXT", "UTF-8", "\xc9\x91", 2,
+               "\x1b\x24\x29\x45\x0e\x28\x3b", 7);
+  char out[8] = {};
+  EXPECT_EQ(convert("ISO-2022-CN", "UTF-8", "\xc9\x91", 2, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
