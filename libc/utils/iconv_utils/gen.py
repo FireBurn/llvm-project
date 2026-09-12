@@ -242,6 +242,14 @@ GB2312 = ("GB2312%UCS.src", f"{CITRUS}/GB")
 # characters from U+F6B1, as Windows does.
 CP950 = ("CP950.TXT", "bestfit950.txt", f"{UNICODE}/VENDORS/MICSFT")
 BIG5_ROW_A2_WRITES = [0x2550, 0x255E, 0x2561, 0x256A]
+# BIG5-HKSCS is Big5 as the Unicode Consortium's table has it, with the 2008
+# edition of the Hong Kong Supplementary Character Set, as Hong Kong's
+# government publishes it, over it. HKSCS has its own characters from 0xC6A1 to
+# 0xC8FE, so Big5's there are left out, as are the codes Big5's table gives no
+# character. Where HKSCS has a character Big5 also has, it is written as
+# HKSCS's code, as glibc does.
+BIG5_TXT = ("BIG5.TXT", f"{EASTASIA}/OTHER")
+HKSCS_2008 = ("hkscs-2008-big5-iso.txt", "https://www.ccli.gov.hk/doc")
 
 # The Korean sets share KS X 1001, from the Unicode Consortium's KSC5601 table,
 # whose codes with both bytes from 0xA1 are KS X 1001's. KS X 1001:1998 added
@@ -829,6 +837,58 @@ def traditional_chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
         format_code_table("BIG5_TWO_BYTE", big5, (0xA1, 0xF9), (0x40, 0xFE), writes)
     ]
     declarations = ["extern const CodeTable BIG5_TWO_BYTE;"]
+
+    hkscs = {
+        code: cp
+        for code, cp in read_columns(f"{mappings}/{BIG5_TXT[0]}", 0, 1).items()
+        if code > 0xFF and cp != 0xFFFD and not 0xC6A1 <= code <= 0xC8FE
+    }
+    own, sequences, plane_2 = set(), {}, {}
+    with open(f"{mappings}/{HKSCS_2008[0]}", encoding="utf-8-sig") as file:
+        for line in file:
+            fields = line.split()
+            if len(fields) < 2 or not re.fullmatch(r"[0-9A-F]{4}", fields[0]):
+                continue
+            # The last column has the characters in ISO/IEC 10646:2003 with its
+            # amendments, and several of them between angle brackets.
+            code = int(fields[0], 16)
+            code_points = [int(cp, 16) for cp in fields[-1].strip("<>").split(",")]
+            own.add(code)
+            hkscs.pop(code, None)
+            if len(code_points) > 1:
+                sequences[code] = tuple(code_points)
+            elif code_points[0] > 0xFFFF:
+                plane_2[code] = code_points[0]
+            else:
+                hkscs[code] = code_points[0]
+    hkscs_writes = {}
+    for code in sorted(hkscs, key=lambda code: (code not in own, code)):
+        hkscs_writes.setdefault(hkscs[code], code)
+    if any(not 0x20000 <= cp <= 0x2FFFF for cp in plane_2.values()):
+        exit("HKSCS: a character is beyond the Supplementary Ideographic Plane")
+    if len(set(plane_2.values())) != len(plane_2):
+        exit("HKSCS: a character of the Supplementary Ideographic Plane has two codes")
+    pairs = sorted(plane_2.items())
+    order = sorted(range(len(pairs)), key=lambda i: pairs[i][1])
+    definitions += [
+        format_code_table(
+            "BIG5_HKSCS", hkscs, (0x87, 0xFE), (0x40, 0xFE), hkscs_writes
+        ),
+        "const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT] = {\n"
+        + "\n".join(f"    {{0x{c:04X}, 0x{cp - 0x20000:04X}}}," for c, cp in pairs)
+        + "\n};",
+        format_values("uint16_t", "BIG5_HKSCS_PLANE_2_ORDER", order, 4),
+    ]
+    declarations += [
+        "extern const CodeTable BIG5_HKSCS;",
+        f"constexpr size_t BIG5_HKSCS_PLANE_2_COUNT = {len(pairs)};",
+        "// The characters of the Supplementary Ideographic Plane, in order of",
+        "// code, as their offset from U+20000, and their positions in order of",
+        "// code point.",
+        "extern const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT];",
+        "extern const uint16_t BIG5_HKSCS_PLANE_2_ORDER[BIG5_HKSCS_PLANE_2_COUNT];",
+        format_sequences("BIG5_HKSCS", sequences),
+    ]
     return definitions, declarations
 
 
@@ -1078,6 +1138,7 @@ def write_cjk_tables(root: str, definitions: list[str], declarations: list[str])
             + '#include "hdr/types/size_t.h"\n'
             + '#include "src/__support/macros/config.h"\n'
             + '#include "src/iconv/code_table.h"\n'
+            + '#include "src/iconv/sequences.h"\n'
             + "\n"
             + "namespace LIBC_NAMESPACE_DECL {\n"
             + "namespace iconv_internal {\n"
