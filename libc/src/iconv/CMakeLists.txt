@@ -38,6 +38,7 @@ add_entrypoint_object(
     libc.hdr.func.malloc
     libc.hdr.types.iconv_t
     libc.src.errno.errno
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
