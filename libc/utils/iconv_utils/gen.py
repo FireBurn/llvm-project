@@ -158,6 +158,12 @@ SINGLE_BYTE += [
     ("MAC_GREEK", "APPLE-GREEK.TXT", APPLE, {"controls": True}),
     ("MAC_TURKISH", "APPLE-TURKISH.TXT", APPLE, {"controls": True}),
     ("MAC_ARABIC", "APPLE-ARABIC.TXT", APPLE, {"controls": True}),
+    # Apple gives some bytes of these as several characters: a ligature as its
+    # letters and points, or a character and one of Apple's transcoding hints,
+    # which mark a group, a variant or where to draw it. Such a byte reads as
+    # all of them.
+    ("MAC_HEBREW", "APPLE-HEBREW.TXT", APPLE, {"controls": True}),
+    ("MAC_THAI", "APPLE-THAI.TXT", APPLE, {"controls": True}),
 ]
 
 # The sets which write some characters as a letter followed by combining marks.
@@ -208,6 +214,9 @@ COMBINING = ["CP1258", "CP1255", "TCVN"]
 
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
+
+# The value a table holds for a byte which stands for several characters.
+MULTIPLE = 0xFFFF
 
 
 def read_unicode_mapping(path: str) -> dict[int, int]:
@@ -279,21 +288,22 @@ def read_iso646_mapping(path: str) -> dict[int, int]:
     return mapping
 
 
-def read_apple_mapping(path: str) -> dict[int, int]:
+def read_apple_mapping(path: str) -> dict:
     """Reads one of Apple's tables, which may mark a character with the
-    direction it is written in, as <LR>+0x0020."""
+    direction it is written in, as <LR>+0x0020, and may give a byte as several
+    characters, as 0x05F2+0x05B7. Those are a tuple."""
     mapping = {}
     with open(path, encoding="latin-1") as file:
         for line in file:
             fields = line.split("#")[0].split()
             if len(fields) < 2 or not fields[0].startswith("0x"):
                 continue
-            code_points = [
-                part for part in fields[1].split("+") if part.startswith("0x")
-            ]
-            if len(code_points) != 1:
-                exit(f"{path}: {fields[0]} maps to more than one character")
-            mapping[int(fields[0], 16)] = int(code_points[0], 16)
+            code_points = tuple(
+                int(part, 16) for part in fields[1].split("+") if part.startswith("0x")
+            )
+            mapping[int(fields[0], 16)] = (
+                code_points[0] if len(code_points) == 1 else code_points
+            )
     return mapping
 
 
@@ -452,6 +462,37 @@ def format_combining(name: str, compositions, decompositions) -> str:
     return "\n".join(lines)
 
 
+def split_sequences(mapping: dict) -> dict[int, tuple[int, ...]]:
+    """Takes the bytes which stand for several characters out of |mapping|,
+    leaving MULTIPLE in their place."""
+    sequences = {
+        byte: value for byte, value in mapping.items() if isinstance(value, tuple)
+    }
+    for byte in sequences:
+        mapping[byte] = MULTIPLE
+    return sequences
+
+
+def format_sequences(name: str, sequences: dict[int, tuple[int, ...]]) -> str:
+    lines = [f"constexpr Sequence {name}_SEQUENCE_LIST[{len(sequences)}] = {{"]
+    for code, code_points in sorted(sequences.items()):
+        if len(code_points) > 3 or max(code_points) > 0xFFFF:
+            exit(f"{name}: 0x{code:02X} stands for more than a sequence holds")
+        padded = list(code_points) + [0] * (3 - len(code_points))
+        lines.append(
+            f"    {{0x{code:02X}, {len(code_points)}, {{"
+            + ", ".join(f"0x{code_point:04X}" for code_point in padded)
+            + "}},"
+        )
+    lines.append("};")
+    lines.append("")
+    lines.append(
+        f"constexpr Sequences {name}_SEQUENCES = {{{name}_SEQUENCE_LIST, "
+        + f"{len(sequences)}}};"
+    )
+    return "\n".join(lines)
+
+
 def high_half(name: str, mapping: dict[int, int]) -> list[int]:
     for byte in range(0x80):
         if mapping.get(byte, byte) != byte:
@@ -502,7 +543,10 @@ def main() -> None:
     for name, file_name, _, *rules in SINGLE_BYTE:
         mapping = apply_rules(file_name, rules[0] if rules else {})
         mappings_by_name[name] = mapping
+        sequences = split_sequences(mapping)
         tables.append(format_table(name, high_half(name, mapping)))
+        if sequences:
+            tables.append(format_sequences(name, sequences))
     for name, file_name, _, *rules in FULL:
         mapping = apply_rules(file_name, rules[0] if rules else {})
         mappings_by_name[name] = mapping
@@ -538,7 +582,8 @@ def main() -> None:
             + "//\n"
             + "// A _HIGH table gives the code points of bytes 0x80 to 0xFF, for a set which\n"
             + "// agrees with ASCII below them; a _FULL table gives all 256. 0xFFFD marks a\n"
-            + "// byte the set does not assign.\n"
+            + "// byte the set does not assign, and 0xFFFF one which stands for the several\n"
+            + "// characters its _SEQUENCE_LIST gives.\n"
             + "//\n"
             + "// For a set which joins a character and the combining mark after it, a\n"
             + "// _COMPOSITIONS table gives the pairs it joins and what they make, in the\n"
@@ -553,6 +598,7 @@ def main() -> None:
             + '#include "hdr/stdint_proxy.h"\n'
             + '#include "src/__support/macros/config.h"\n'
             + '#include "src/iconv/combining.h"\n'
+            + '#include "src/iconv/sequences.h"\n'
             + "\n"
             + "namespace LIBC_NAMESPACE_DECL {\n"
             + "namespace iconv_internal {\n"
