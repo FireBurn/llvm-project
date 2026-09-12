@@ -2,9 +2,11 @@ add_header_library(
   charsets
   HDRS
     charsets.h
+    combining.h
     single_byte_tables.h
   DEPENDS
     libc.hdr.stdint_proxy
+    libc.hdr.types.char32_t
     libc.src.__support.common
     libc.hdr.types.size_t
     libc.src.__support.macros.attributes
