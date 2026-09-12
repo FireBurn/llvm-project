@@ -47,14 +47,13 @@ extern const uint8_t GB2312_ASSIGNED[1105];
 // The GB 2312 codes GB18030 reads as other characters.
 constexpr size_t GB2312_CHANGE_COUNT = 2;
 extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];
+// The characters ISO-IR-165 has beyond GB 2312.
+extern const CodeList ISO_IR_165_ADDITIONS;
 extern const CodeTable BIG5_TWO_BYTE;
 extern const CodeTable BIG5_HKSCS;
-constexpr size_t BIG5_HKSCS_PLANE_2_COUNT = 1713;
-// The characters of the Supplementary Ideographic Plane, in order of
-// code, as their offset from U+20000, and their positions in order of
-// code point.
-extern const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT];
-extern const uint16_t BIG5_HKSCS_PLANE_2_ORDER[BIG5_HKSCS_PLANE_2_COUNT];
+// The characters of the Supplementary Ideographic Plane, as their
+// offset from U+20000.
+extern const CodeList BIG5_HKSCS_PLANE_2;
 constexpr Sequence BIG5_HKSCS_SEQUENCE_LIST[4] = {
     {0x8862, 2, {0x00CA, 0x0304, 0x0000}},
     {0x8864, 2, {0x00CA, 0x030C, 0x0000}},
