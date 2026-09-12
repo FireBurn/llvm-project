@@ -51,8 +51,9 @@ LIBC_INLINE bool row_has_characters(const CodeTable &table, unsigned lead) {
   return false;
 }
 
-// JIS X 0208 or JIS X 0212 by itself: each character is two bytes from 0x21
-// to 0x7E. A lead byte from a row with no characters is not one.
+// A set of 94 rows of 94 characters by itself, such as JIS X 0208, JIS X 0212
+// or KS X 1001: each character is two bytes from 0x21 to 0x7E. A lead byte
+// from a row with no characters is not one.
 LIBC_INLINE Status read_jis(const CodeTable &table, const unsigned char *in,
                             size_t inleft, char32_t &out, size_t &used) {
   used = 1;
