@@ -1233,3 +1233,53 @@ TEST_F(LlvmLibcIconvTest, SimplifiedChineseSets) {
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EINVAL);
 }
+
+TEST_F(LlvmLibcIconvTest, KoreanSets) {
+  struct Case {
+    const char *name;
+    const char *bytes;
+    size_t length;
+    const char *utf8;
+    size_t utf8_length;
+  };
+  const Case cases[] = {
+      // The first Hangul syllable.
+      {"EUC-KR", "\xb0\xa1", 2, "\xea\xb0\x80", 3},
+      {"KSC_5601", "\x30\x21", 2, "\xea\xb0\x80", 3},
+      {"CP949", "\xb0\xa1", 2, "\xea\xb0\x80", 3},
+      {"JOHAB", "\x88\x61", 2, "\xea\xb0\x80", 3},
+      // The first syllable KS X 1001 lacks, which CP949 adds.
+      {"CP949", "\x81\x41", 2, "\xea\xb0\x82", 3},
+      {"JOHAB", "\x88\x63", 2, "\xea\xb0\x82", 3},
+      // The euro sign, which KS X 1001 added in 1998.
+      {"EUC-KR", "\xa2\xe6", 2, "\xe2\x82\xac", 3},
+      {"JOHAB", "\xd9\xe6", 2, "\xe2\x82\xac", 3},
+      // The letter kiyeok by itself.
+      {"EUC-KR", "\xa4\xa1", 2, "\xe3\x84\xb1", 3},
+      {"JOHAB", "\x88\x41", 2, "\xe3\x84\xb1", 3},
+      // The first hanja.
+      {"EUC-KR", "\xca\xa1", 2, "\xe4\xbc\xbd", 3},
+      {"JOHAB", "\xe0\x31", 2, "\xe4\xbc\xbd", 3},
+      // JOHAB has the won sign in place of the reverse solidus.
+      {"JOHAB", "\x5c", 1, "\xe2\x82\xa9", 3},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, c.bytes, c.length, out, sizeof(out)),
+              static_cast<ssize_t>(c.utf8_length));
+    for (size_t i = 0; i < c.utf8_length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    expect_bytes(c.name, "UTF-8", c.utf8, c.utf8_length, c.bytes, c.length);
+  }
+
+  // CP949 is older than the postal code mark KS X 1001 added in 2002.
+  char out[8] = {};
+  EXPECT_EQ(convert("CP949", "UTF-8", "\xe3\x89\xbe", 3, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(convert("JOHAB", "UTF-8", "\\", 1, out, sizeof(out)), ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(convert("UTF-8", "EUC-KR", "\xb0", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+}
