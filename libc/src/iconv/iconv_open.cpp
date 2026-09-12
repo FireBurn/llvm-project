@@ -38,6 +38,7 @@ LLVM_LIBC_FUNCTION(iconv_t, iconv_open,
   conv->to = to->encoding;
   conv->from_table = from->table;
   conv->to_table = to->table;
+  conv->ignore = iconv_internal::has_flag(tocode, "IGNORE");
   return reinterpret_cast<iconv_t>(conv);
 }
 
