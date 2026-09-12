@@ -234,6 +234,15 @@ GB18030 = ("gb18030-2022.ucm", ICU_MAPPINGS)
 CP936 = ("CP936.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
 GB2312 = ("GB2312%UCS.src", f"{CITRUS}/GB")
 
+# BIG5, which glibc also calls CP950, is Microsoft's CP950. Where several codes
+# read as the same character, it is written as Microsoft's best fit table gives,
+# except that glibc writes the four doubled box drawing lines at their codes in
+# row 0xA2, as the other box drawing characters are. glibc also reads the codes
+# from 0xC6A1 to 0xC8FE, which Microsoft's table leaves out, as private use
+# characters from U+F6B1, as Windows does.
+CP950 = ("CP950.TXT", "bestfit950.txt", f"{UNICODE}/VENDORS/MICSFT")
+BIG5_ROW_A2_WRITES = [0x2550, 0x255E, 0x2561, 0x256A]
+
 # The Korean sets share KS X 1001, from the Unicode Consortium's KSC5601 table,
 # whose codes with both bytes from 0xA1 are KS X 1001's. KS X 1001:1998 added
 # the euro and registered signs, which CP949 has, and KS X 1001:2002 a postal
@@ -798,6 +807,31 @@ def johab_from_ks_x_1001(code: int) -> int:
     return lead << 8 | (column + (0x30 if column <= 0x4E else 0x42))
 
 
+def traditional_chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
+    """The definitions and declarations of the Traditional Chinese sets' tables."""
+    table_file, best_fit_file, _ = CP950
+    cp950 = read_columns(f"{mappings}/{table_file}", 0, 1)
+    big5 = {code: cp for code, cp in cp950.items() if code > 0xFF}
+    writes = read_best_fit_writes(f"{mappings}/{best_fit_file}")
+    for code_point in BIG5_ROW_A2_WRITES:
+        codes = [code for code, cp in big5.items() if cp == code_point]
+        if len(codes) != 2 or min(codes) >> 8 != 0xA2:
+            exit(f"CP950: U+{code_point:04X} is not in row 0xA2 and another")
+        writes[code_point] = min(codes)
+    trails = list(range(0x40, 0x7F)) + list(range(0xA1, 0xFF))
+    private_use = [lead << 8 | trail for lead in (0xC6, 0xC7, 0xC8) for trail in trails]
+    for index, code in enumerate(c for c in private_use if c >= 0xC6A1):
+        if code in big5:
+            exit(f"CP950: 0x{code:04X} has a character")
+        big5[code] = 0xF6B1 + index
+        writes[0xF6B1 + index] = code
+    definitions = [
+        format_code_table("BIG5_TWO_BYTE", big5, (0xA1, 0xF9), (0x40, 0xFE), writes)
+    ]
+    declarations = ["extern const CodeTable BIG5_TWO_BYTE;"]
+    return definitions, declarations
+
+
 def korean_tables(mappings: str) -> tuple[list[str], list[str]]:
     """The definitions and declarations of the Korean sets' tables."""
     ksc5601 = read_columns(f"{mappings}/{KSC5601[0]}", 0, 1)
@@ -1134,6 +1168,9 @@ def main() -> None:
     chinese = chinese_tables(mappings)
     definitions += chinese[0]
     declarations += chinese[1]
+    traditional = traditional_chinese_tables(mappings)
+    definitions += traditional[0]
+    declarations += traditional[1]
     korean = korean_tables(mappings)
     definitions += korean[0]
     declarations += korean[1]
