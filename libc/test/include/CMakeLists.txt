@@ -1,6 +1,16 @@
 add_libc_testsuite(libc-include-tests)
 
 add_libc_test(
+  pwd_size_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    pwd_size_t_test.cpp
+  DEPENDS
+    libc.include.pwd
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
