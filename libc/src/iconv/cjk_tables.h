@@ -63,6 +63,9 @@ constexpr Sequence BIG5_HKSCS_SEQUENCE_LIST[4] = {
 };
 
 constexpr Sequences BIG5_HKSCS_SEQUENCES = {BIG5_HKSCS_SEQUENCE_LIST, 4};
+constexpr size_t CNS_PLANE_COUNT = 8;
+// Planes 1, 2, 3, 4, 5, 6, 7 and 15 of CNS 11643.
+extern const WideTable CNS_11643[CNS_PLANE_COUNT];
 extern const CodeTable KS_X_1001;
 // The JOHAB codes of a Hangul letter by itself.
 constexpr size_t JOHAB_LETTER_COUNT = 51;
