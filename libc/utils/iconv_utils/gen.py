@@ -285,6 +285,21 @@ KS_X_1001_ADDITIONS = {0x2266: 0x20AC, 0x2267: 0x00AE, 0x2268: 0x327E}
 CP949 = ("CP949.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
 JOHAB = ("JOHAB.TXT", f"{EASTASIA}/KSC")
 
+# //TRANSLIT writes a character the target set does not have as others, taken
+# in this order from: its canonical decomposition in UnicodeData.txt without the
+# marks, where a long solidus overlay becomes "!" before what it was over;
+# CLDR's Latin-ASCII transform; for a currency sign, the code of the currency
+# CLDR's root locale gives it as the symbol of; and its compatibility
+# decomposition without the marks, a circled character between parentheses and
+# a fraction between spaces as glibc writes them. A decomposition which leaves
+# only spaces is not used. Combining marks and what Unicode calls default
+# ignorable are left out. glibc's own lists write some characters otherwise,
+# such as the fractions without a space after them, and others not at all.
+CLDR = "https://github.com/unicode-org/cldr/tree/main/common"
+LATIN_ASCII = ("Latin-ASCII.xml", f"{CLDR}/transforms")
+CLDR_ROOT = ("root.xml", f"{CLDR}/main")
+DERIVED_CORE_PROPERTIES = ("DerivedCoreProperties.txt", UCD)
+
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
 
@@ -1226,6 +1241,248 @@ LICENSE = (
 )
 
 
+def read_transform(path: str) -> dict[int, str]:
+    """The rules of a CLDR transform which rewrite one character whatever is
+    around it."""
+
+    def without_comment(line: str) -> str:
+        quoted, i = False, 0
+        while i < len(line):
+            if line[i] == "\\":
+                i += 2
+                continue
+            if line[i] == "'":
+                quoted = not quoted
+            elif line[i] == "#" and not quoted:
+                return line[:i]
+            i += 1
+        return line
+
+    def unquote(text: str) -> str:
+        out, i = [], 0
+        while i < len(text):
+            c = text[i]
+            if c == "'":
+                end = text.index("'", i + 1)
+                out.append("'" if end == i + 1 else text[i + 1 : end])
+                i = end + 1
+            elif c == "\\" and text[i + 1] == "u":
+                out.append(chr(int(text[i + 2 : i + 6], 16)))
+                i += 6
+            elif c == "\\":
+                out.append(text[i + 1])
+                i += 2
+            else:
+                if not c.isspace():
+                    out.append(c)
+                i += 1
+        return "".join(out)
+
+    with open(path, encoding="utf-8") as file:
+        text = file.read()
+    body = text[text.index("<![CDATA[") + 9 : text.index("]]>")]
+    rules = {}
+    for raw in body.splitlines():
+        line = without_comment(raw).strip()
+        match = re.match(r"^((?:\\.|[^→\\])*?)\s*→\s*(.*?)\s*;$", line)
+        if not match or re.search(r"(?<!\\)[{}\[]", match.group(1)):
+            continue
+        source = unquote(match.group(1))
+        if len(source) == 1:
+            rules.setdefault(ord(source), unquote(match.group(2)))
+    return rules
+
+
+def read_currency_symbols(path: str) -> dict[int, str]:
+    """The currencies CLDR's root locale gives one character of their own as
+    their symbol, by that character."""
+    with open(path, encoding="utf-8") as file:
+        text = file.read()
+    symbols = {}
+    for code, body in re.findall(
+        r'<currency type="([A-Z]{3})">(.*?)</currency>', text, re.S
+    ):
+        for symbol in re.findall(r"<symbol>(.*?)</symbol>", body):
+            if len(symbol) == 1 and ord(symbol) >= 0x80 and code != "XXX":
+                if ord(symbol) in symbols:
+                    exit(f"CLDR: U+{ord(symbol):04X} is the symbol of two currencies")
+                symbols[ord(symbol)] = code
+    return symbols
+
+
+def read_property(path: str, name: str) -> set[int]:
+    """The characters a Unicode Character Database property file gives |name|."""
+    characters = set()
+    with open(path, encoding="utf-8") as file:
+        for line in file:
+            fields = line.split("#")[0].split(";")
+            if len(fields) < 2 or fields[1].strip() != name:
+                continue
+            first, _, last = fields[0].strip().partition("..")
+            characters.update(range(int(first, 16), int(last or first, 16) + 1))
+    return characters
+
+
+def transliterations(mappings: str) -> tuple[dict[int, list[int]], list[int]]:
+    """What //TRANSLIT writes each character as, and the characters it leaves
+    out."""
+    categories, decompositions = {}, {}
+    with open(f"{mappings}/UnicodeData.txt", encoding="utf-8") as file:
+        for line in file:
+            fields = line.split(";")
+            code_point = int(fields[0], 16)
+            categories[code_point] = fields[2]
+            if fields[5]:
+                parts = fields[5].split()
+                tag = parts[0] if parts[0].startswith("<") else None
+                decompositions[code_point] = (
+                    tag,
+                    [int(part, 16) for part in parts[1 if tag else 0 :]],
+                )
+    latin_ascii = read_transform(f"{mappings}/{LATIN_ASCII[0]}")
+    currencies = read_currency_symbols(f"{mappings}/{CLDR_ROOT[0]}")
+    ignorable = read_property(
+        f"{mappings}/{DERIVED_CORE_PROPERTIES[0]}", "Default_Ignorable_Code_Point"
+    )
+
+    def is_mark(code_point):
+        return categories.get(code_point, "").startswith("M")
+
+    def canonical(code_point):
+        tag, parts = decompositions.get(code_point, ("", []))
+        if tag is not None:
+            return [code_point]
+        return [c for part in parts for c in canonical(part)]
+
+    def usable(parts):
+        return parts and any(c != 0x20 for c in parts)
+
+    replacements = {}
+    for code_point in sorted(set(categories) | set(latin_ascii) | set(currencies)):
+        if code_point < 0x80:
+            continue
+        tag, parts = decompositions.get(code_point, ("", []))
+        written = None
+        if tag is None:
+            full = canonical(code_point)
+            base = [c for c in full if not is_mark(c)]
+            if 0x0338 in full and base:
+                base = [ord("!")] + base
+            if usable(base):
+                written = base
+        if written is None and code_point in latin_ascii:
+            written = [ord(c) for c in latin_ascii[code_point]]
+        if written is None and code_point in currencies:
+            written = [ord(c) for c in currencies[code_point]]
+        if written is None and tag:
+            base = [c for c in parts if not is_mark(c)]
+            if tag == "<circle>":
+                base = [ord("(")] + base + [ord(")")]
+            elif tag == "<fraction>":
+                base = [ord(" ")] + [ord("/") if c == 0x2044 else c for c in base]
+                base.append(ord(" "))
+            if usable(base):
+                written = base
+        # A compatibility ideograph whose unified one is beyond the Basic
+        # Multilingual Plane has none: no set here has one but not the other.
+        if written is not None and written != [code_point]:
+            if all(c <= 0xFFFF for c in written):
+                replacements[code_point] = written
+
+    # Writing a character as its replacement, and each of those the same way,
+    # must come to an end.
+    def ends(code_point, depth):
+        if depth > 4:
+            return False
+        return all(
+            c < 0x80 or c not in replacements or ends(c, depth + 1)
+            for c in replacements[code_point]
+        )
+
+    for code_point in replacements:
+        if not ends(code_point, 0):
+            exit(f"TRANSLIT: U+{code_point:04X} is written as itself in the end")
+    removed = sorted(
+        c
+        for c in set(categories) | ignorable
+        if c not in replacements and (is_mark(c) or c in ignorable)
+    )
+    return replacements, removed
+
+
+def write_translit_table(root: str, mappings: str):
+    replacements, removed = transliterations(mappings)
+    keys = sorted(replacements)
+    offsets, text = [0], []
+    for code_point in keys:
+        text += replacements[code_point]
+        offsets.append(len(text))
+    if len(text) > 0xFFFF:
+        exit("TRANSLIT: the replacements do not fit 16 bit offsets")
+    ranges = []
+    for code_point in removed:
+        if ranges and ranges[-1][1] + 1 == code_point:
+            ranges[-1][1] = code_point
+        else:
+            ranges.append([code_point, code_point])
+
+    def values(kind, name, items, digits, per_line):
+        lines = [f"constexpr {kind} {name}[{len(items)}] = {{"]
+        for start in range(0, len(items), per_line):
+            row = items[start : start + per_line]
+            lines.append("    " + " ".join(f"0x{v:0{digits}X}," for v in row))
+        lines.append("};")
+        return "\n".join(lines)
+
+    notice = (
+        "//\n"
+        + "// DO NOT EDIT MANUALLY. This file is generated by\n"
+        + "// libc/utils/iconv_utils/gen.py from the mapping files it lists.\n"
+        + "//\n"
+        + "//===----------------------------------------------------------------------===//\n"
+    )
+    with open(f"{root}/libc/src/iconv/translit_table.h", "w") as file:
+        file.write(
+            title_line("What //TRANSLIT writes for iconv", "*- C++ -*-===//")
+            + "\n"
+            + LICENSE
+            + notice
+            + "\n"
+            + "#ifndef LLVM_LIBC_SRC_ICONV_TRANSLIT_TABLE_H\n"
+            + "#define LLVM_LIBC_SRC_ICONV_TRANSLIT_TABLE_H\n"
+            + "\n"
+            + '#include "hdr/stdint_proxy.h"\n'
+            + '#include "hdr/types/char32_t.h"\n'
+            + '#include "hdr/types/size_t.h"\n'
+            + '#include "src/__support/macros/config.h"\n'
+            + "\n"
+            + "namespace LIBC_NAMESPACE_DECL {\n"
+            + "namespace iconv_internal {\n"
+            + "\n"
+            + "// clang-format off\n"
+            + "// The characters with a replacement, in order, where each one's replacement\n"
+            + "// starts in TRANSLIT_TEXT, and where the next one's does.\n"
+            + f"constexpr size_t TRANSLIT_COUNT = {len(keys)};\n"
+            + values("char32_t", "TRANSLIT_CODE_POINTS", keys, 5, 8)
+            + "\n"
+            + values("uint16_t", "TRANSLIT_OFFSETS", offsets, 4, 9)
+            + "\n"
+            + values("char16_t", "TRANSLIT_TEXT", text, 4, 9)
+            + "\n\n"
+            + "// The first and last of each run of characters which are left out.\n"
+            + f"constexpr size_t TRANSLIT_REMOVED_COUNT = {len(ranges)};\n"
+            + values(
+                "char32_t", "TRANSLIT_REMOVED", [v for r in ranges for v in r], 5, 8
+            )
+            + "\n// clang-format on\n"
+            + "\n"
+            + "} // namespace iconv_internal\n"
+            + "} // namespace LIBC_NAMESPACE_DECL\n"
+            + "\n"
+            + "#endif // LLVM_LIBC_SRC_ICONV_TRANSLIT_TABLE_H\n"
+        )
+
+
 def title_line(text: str, suffix: str) -> str:
     title = f"//===-- {text} "
     return title + "-" * (80 - len(title) - len(suffix)) + suffix
@@ -1351,6 +1608,7 @@ def main() -> None:
     definitions += korean[0]
     declarations += korean[1]
     write_cjk_tables(root, definitions, declarations)
+    write_translit_table(root, mappings)
 
     title = "//===-- Tables for iconv's single byte sets "
     title += "-" * (80 - len(title) - len("*- C++ -*-===//")) + "*- C++ -*-===//"
