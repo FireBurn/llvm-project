@@ -134,6 +134,31 @@ SINGLE_BYTE += [
     ),
 ]
 
+APPLE = f"{UNICODE}/VENDORS/APPLE"
+
+# Apple's Mac OS sets, as Apple's current tables give them. They leave out the
+# control characters, which these sets share with ASCII.
+SINGLE_BYTE += [
+    ("MAC_ROMAN", "APPLE-ROMAN.TXT", APPLE, {"controls": True}),
+    ("MAC_CENTRAL_EUROPE", "APPLE-CENTEURO.TXT", APPLE, {"controls": True}),
+    ("MAC_ICELAND", "APPLE-ICELAND.TXT", APPLE, {"controls": True}),
+    ("MAC_CROATIAN", "APPLE-CROATIAN.TXT", APPLE, {"controls": True}),
+    ("MAC_ROMANIA", "APPLE-ROMANIAN.TXT", APPLE, {"controls": True}),
+    ("MAC_CYRILLIC", "APPLE-CYRILLIC.TXT", APPLE, {"controls": True}),
+    # Apple publishes no table of its own for Mac OS Ukrainian. The notes in its
+    # Cyrillic table give it as that table with the currency sign at 0xFF,
+    # where Mac OS 9 put the euro sign.
+    (
+        "MAC_UKRAINE",
+        "APPLE-CYRILLIC.TXT",
+        APPLE,
+        {"controls": True, "changes": {0xFF: 0x00A4}},
+    ),
+    ("MAC_GREEK", "APPLE-GREEK.TXT", APPLE, {"controls": True}),
+    ("MAC_TURKISH", "APPLE-TURKISH.TXT", APPLE, {"controls": True}),
+    ("MAC_ARABIC", "APPLE-ARABIC.TXT", APPLE, {"controls": True}),
+]
+
 # The sets which do not agree with ASCII below 0x80, so are written out for
 # all 256 bytes. The same rules apply as for SINGLE_BYTE.
 FULL = [
@@ -223,7 +248,27 @@ def read_iso646_mapping(path: str) -> dict[int, int]:
     return mapping
 
 
+def read_apple_mapping(path: str) -> dict[int, int]:
+    """Reads one of Apple's tables, which may mark a character with the
+    direction it is written in, as <LR>+0x0020."""
+    mapping = {}
+    with open(path, encoding="latin-1") as file:
+        for line in file:
+            fields = line.split("#")[0].split()
+            if len(fields) < 2 or not fields[0].startswith("0x"):
+                continue
+            code_points = [
+                part for part in fields[1].split("+") if part.startswith("0x")
+            ]
+            if len(code_points) != 1:
+                exit(f"{path}: {fields[0]} maps to more than one character")
+            mapping[int(fields[0], 16)] = int(code_points[0], 16)
+    return mapping
+
+
 def read_mapping(path: str) -> dict[int, int]:
+    if "/APPLE-" in path:
+        return read_apple_mapping(path)
     if path.endswith(".646"):
         return read_iso646_mapping(path)
     if path.endswith(".src"):
