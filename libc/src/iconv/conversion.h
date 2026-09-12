@@ -50,6 +50,10 @@ struct Conversion {
   const Sequences *to_sequences;
   // Whether what cannot be converted is left out rather than reported.
   bool ignore;
+  // Whether a character the target set does not have is written as something
+  // like it, and how many have been in the current call.
+  bool translit;
+  size_t irreversible;
   // For input which may begin with a byte order mark: whether one may still
   // come, and the order the input is read in.
   bool read_mark;
