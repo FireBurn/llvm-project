@@ -64,7 +64,9 @@ enum class Encoding {
 struct Charset {
   const char *name;
   Encoding encoding;
-  const uint16_t *table; // Only for SINGLE_BYTE.
+  const uint16_t *table; // Only for the single byte sets.
+  // Only for a set which joins a letter and the marks after it.
+  const Combining *combining = nullptr;
 };
 
 // The names iconv_open accepts: every name GNU libiconv gives these sets, and
@@ -306,6 +308,15 @@ constexpr Charset CHARSETS[] = {
     {"MACGREEK", Encoding::SINGLE_BYTE, MAC_GREEK_HIGH},
     {"MACTURKISH", Encoding::SINGLE_BYTE, MAC_TURKISH_HIGH},
     {"MACARABIC", Encoding::SINGLE_BYTE, MAC_ARABIC_HIGH},
+    {"CP1258", Encoding::SINGLE_BYTE, CP1258_HIGH, &CP1258_COMBINING},
+    {"WINDOWS1258", Encoding::SINGLE_BYTE, CP1258_HIGH, &CP1258_COMBINING},
+    {"CP1255", Encoding::SINGLE_BYTE, CP1255_HIGH, &CP1255_COMBINING},
+    {"WINDOWS1255", Encoding::SINGLE_BYTE, CP1255_HIGH, &CP1255_COMBINING},
+    {"MSHEBR", Encoding::SINGLE_BYTE, CP1255_HIGH, &CP1255_COMBINING},
+    {"TCVN", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
+    {"TCVN5712", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
+    {"TCVN57121", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
+    {"TCVN57121:1993", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
 };
 
 constexpr size_t CHARSET_COUNT = sizeof(CHARSETS) / sizeof(CHARSETS[0]);
