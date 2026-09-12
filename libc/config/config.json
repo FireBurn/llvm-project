@@ -204,5 +204,11 @@
       "value": "LIBC_HARDENING_MODE_NONE",
       "doc": "Hardening mode for the library."
     }
+  },
+  "iconv": {
+    "LIBC_CONF_ICONV_DISABLE_CJK": {
+      "value": false,
+      "doc": "Leave the Chinese, Japanese and Korean character sets out of iconv. Their tables are most of its size."
+    }
   }
 }
