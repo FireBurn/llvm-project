@@ -310,6 +310,15 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return Status::OK;
   }
 
+  case Encoding::SINGLE_BYTE_FULL: {
+    used = 1;
+    uint16_t mapped = table[in[0]];
+    if (mapped == UNASSIGNED)
+      return Status::INVALID;
+    out = mapped;
+    return Status::OK;
+  }
+
   case Encoding::UTF8: {
     unsigned char lead = in[0];
     if (lead < 0x80) {
@@ -683,6 +692,21 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
       if (outleft < 1)
         return Status::FULL;
       out[0] = static_cast<unsigned char>(0x80 + i);
+      made = 1;
+      return Status::OK;
+    }
+    return Status::INVALID;
+  }
+
+  case Encoding::SINGLE_BYTE_FULL: {
+    if (cp > 0xFFFF || cp == UNASSIGNED)
+      return Status::INVALID;
+    for (size_t i = 0; i < 256; ++i) {
+      if (table[i] != cp)
+        continue;
+      if (outleft < 1)
+        return Status::FULL;
+      out[0] = static_cast<unsigned char>(i);
       made = 1;
       return Status::OK;
     }
