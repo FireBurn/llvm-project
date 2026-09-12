@@ -264,6 +264,50 @@ TEST_F(LlvmLibcIconvTest, SetsWhichAreNotAsciiBelow0x80) {
   ASSERT_ERRNO_EQ(EILSEQ);
 }
 
+TEST_F(LlvmLibcIconvTest, MacOsSets) {
+  struct Case {
+    const char *name;
+    char byte;
+    const char *utf8;
+    size_t length;
+  };
+  // The Mac OS sets follow Apple's current tables, so MacRoman has the euro
+  // sign at 0xDB, and MacUkraine keeps the currency sign MacCyrillic replaced.
+  const Case cases[] = {
+      // Euro sign.
+      {"MACINTOSH", '\xdb', "\xe2\x82\xac", 3},
+      // Latin small letter n with cedilla.
+      {"MacCentralEurope", '\xc0', "\xc5\x86", 2},
+      // Inverted question mark.
+      {"MacIceland", '\xc0', "\xc2\xbf", 2},
+      // Inverted question mark.
+      {"MacCroatian", '\xc0', "\xc2\xbf", 2},
+      // Latin capital letter s with comma below.
+      {"MacRomania", '\xaf', "\xc8\x98", 2},
+      // Euro sign.
+      {"MacCyrillic", '\xff', "\xe2\x82\xac", 3},
+      // Currency sign.
+      {"MAC-UK", '\xff', "\xc2\xa4", 2},
+      // Greek small letter alpha with tonos.
+      {"MacGreek", '\xc0', "\xce\xac", 2},
+      // Inverted question mark.
+      {"MacTurkish", '\xc0', "\xc2\xbf", 2},
+      // Arabic letter beh.
+      {"MacArabic", '\xc8', "\xd8\xa8", 2},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, &c.byte, 1, out, sizeof(out)),
+              static_cast<ssize_t>(c.length));
+    for (size_t i = 0; i < c.length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    char back[8] = {};
+    ASSERT_EQ(convert(c.name, "UTF-8", c.utf8, c.length, back, sizeof(back)),
+              ssize_t(1));
+    EXPECT_EQ(back[0], c.byte);
+  }
+}
+
 TEST_F(LlvmLibcIconvTest, Ucs4IsBigEndian) {
   char out[16] = {};
   ASSERT_EQ(convert("UCS-4", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(4));
