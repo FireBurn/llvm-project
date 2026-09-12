@@ -15,13 +15,27 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/conversion.h"
+#include "src/locale/locale.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace {
+
+// An empty name, or libiconv's "CHAR", is the character set of the locale in
+// force when the conversion is opened.
+const iconv_internal::Charset *find(const char *name) {
+  if (name != nullptr && (iconv_internal::same_name(name, "") ||
+                          iconv_internal::same_name(name, "CHAR")))
+    return iconv_internal::find_charset(internal::current_codeset());
+  return iconv_internal::find_charset(name);
+}
+
+} // namespace
+
 LLVM_LIBC_FUNCTION(iconv_t, iconv_open,
                    (const char *tocode, const char *fromcode)) {
-  const auto *to = iconv_internal::find_charset(tocode);
-  const auto *from = iconv_internal::find_charset(fromcode);
+  const auto *to = find(tocode);
+  const auto *from = find(fromcode);
   // A set which is not known is the one error iconv_open reports.
   if (to == nullptr || from == nullptr) {
     libc_errno = EINVAL;
