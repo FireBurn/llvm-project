@@ -657,6 +657,46 @@ TEST_F(LlvmLibcIconvTest, IgnoreIsOnlyReadFromTheTargetName) {
   ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
 }
 
+TEST_F(LlvmLibcIconvTest, Translit) {
+  char out[32] = {};
+  // Marks come off letters, and ligatures, fractions and currency signs are
+  // spelled out. Each such character counts as irreversible.
+  Result r =
+      convert_all("ASCII//TRANSLIT", "\xc3\xa9\xef\xac\x81\xc2\xbd\xe2\x82\xac",
+                  10, out, sizeof(out));
+  EXPECT_EQ(r.error, 0);
+  EXPECT_EQ(r.ret, size_t(4));
+  ASSERT_EQ(r.made, size_t(10));
+  for (size_t i = 0; i < 10; ++i)
+    EXPECT_EQ(out[i], "efi 1/2EUR"[i]);
+
+  // What has no transliteration is a question mark, even under //IGNORE, and a
+  // combining mark by itself is left out.
+  r = convert_all("ASCII//TRANSLIT//IGNORE",
+                  "a\xe4\xb8\x80\xcc\x81"
+                  "b",
+                  7, out, sizeof(out));
+  EXPECT_EQ(r.ret, size_t(2));
+  ASSERT_EQ(r.made, size_t(3));
+  EXPECT_EQ(out[0], 'a');
+  EXPECT_EQ(out[1], '?');
+  EXPECT_EQ(out[2], 'b');
+
+  // Nothing of a transliteration is written unless all of it fits.
+  r = convert_all("ASCII//TRANSLIT", "\xe2\x82\xac", 3, out, 2);
+  EXPECT_EQ(r.error, E2BIG);
+  EXPECT_EQ(r.made, size_t(0));
+
+  // A character the target set has is written as itself.
+  r = convert_all("ISO-8859-1//TRANSLIT", "\xc3\xa9\xc5\x92", 4, out,
+                  sizeof(out));
+  EXPECT_EQ(r.ret, size_t(1));
+  ASSERT_EQ(r.made, size_t(3));
+  EXPECT_EQ(out[0], '\xe9');
+  EXPECT_EQ(out[1], 'O');
+  EXPECT_EQ(out[2], 'E');
+}
+
 TEST_F(LlvmLibcIconvTest, BadDescriptor) {
   char *ip = nullptr;
   size_t il = 0;
