@@ -84,6 +84,7 @@ enum class Encoding {
   BIG5_HKSCS_2001,
   BIG5_HKSCS_2004,
   BIG5_HKSCS,
+  EUC_TW,
   // KS X 1001 by itself, and the Korean sets built on it.
   KS_X_1001,
   EUC_KR,
@@ -408,6 +409,8 @@ constexpr Charset CHARSETS[] = {
      &BIG5_HKSCS_SEQUENCES},
     {"BIG5HKSCS:2008", Encoding::BIG5_HKSCS, nullptr, nullptr,
      &BIG5_HKSCS_SEQUENCES},
+    {"EUCTW", Encoding::EUC_TW, nullptr},
+    {"CSEUCTW", Encoding::EUC_TW, nullptr},
     {"MS936", Encoding::GBK, nullptr},
     {"WINDOWS936", Encoding::GBK, nullptr},
     {"GB18030", Encoding::GB18030, nullptr},
