@@ -183,6 +183,59 @@ TEST_F(LlvmLibcIconvTest, Ucs2) {
   ASSERT_ERRNO_EQ(EILSEQ);
 }
 
+// Converts |in| and checks the bytes that come out against |expected|.
+void expect_bytes(const char *to, const char *from, const char *in,
+                  size_t inlen, const char *expected, size_t expected_len) {
+  char out[64] = {};
+  ASSERT_EQ(convert(to, from, in, inlen, out, sizeof(out)),
+            static_cast<ssize_t>(expected_len));
+  for (size_t i = 0; i < expected_len; ++i)
+    EXPECT_EQ(out[i], expected[i]);
+}
+
+TEST_F(LlvmLibcIconvTest, WritingC99AndJavaEscapes) {
+  // "A", e with an acute, the euro sign, U+1F600 and a backslash.
+  const char in[] = "A\xc3\xa9\xe2\x82\xac\xf0\x9f\x98\x80\\";
+  const char c99[] = "A\\u00e9\\u20ac\\U0001f600\\";
+  const char java[] = "A\\u00e9\\u20ac\\ud83d\\ude00\\";
+  expect_bytes("C99", "UTF-8", in, sizeof(in) - 1, c99, sizeof(c99) - 1);
+  expect_bytes("JAVA", "UTF-8", in, sizeof(in) - 1, java, sizeof(java) - 1);
+
+  // C99 cannot name a character below U+00A0, so it is written as it is.
+  expect_bytes("C99", "UTF-8", "\xc2\x85", 2, "\x85", 1);
+  expect_bytes("JAVA", "UTF-8", "\xc2\x85", 2, "\\u0085", 6);
+}
+
+TEST_F(LlvmLibcIconvTest, ReadingC99AndJavaEscapes) {
+  expect_bytes("UTF-8", "C99", "\\u00E9", 6, "\xc3\xa9", 2);
+  expect_bytes("UTF-8", "C99", "\\U0001F600", 10, "\xf0\x9f\x98\x80", 4);
+  expect_bytes("UTF-8", "JAVA", "\\ud83d\\ude00", 12, "\xf0\x9f\x98\x80", 4);
+  expect_bytes("UTF-8", "JAVA", "\\u0041", 6, "A", 1);
+
+  // What is not an escape is text: a backslash before anything else, a
+  // malformed escape, and in Java a surrogate on its own.
+  expect_bytes("UTF-8", "C99", "\\xg", 3, "\\xg", 3);
+  expect_bytes("UTF-8", "C99", "\\u00eg", 6, "\\u00eg", 6);
+  expect_bytes("UTF-8", "JAVA", "\\ude00", 6, "\\ude00", 6);
+
+  // An escape cut short may still be completed.
+  char out[16] = {};
+  EXPECT_EQ(convert("UTF-8", "C99", "\\u00e", 5, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+  EXPECT_EQ(convert("UTF-8", "JAVA", "\\ud83d\\u", 8, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+
+  // C99 names no surrogate and nothing below U+00A0 but $, @ and `.
+  EXPECT_EQ(convert("UTF-8", "C99", "\\ud83d", 6, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(convert("UTF-8", "C99", "\\u0041", 6, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
+
 TEST_F(LlvmLibcIconvTest, SurrogatePairs) {
   char out[16] = {};
   // U+1F600 needs a surrogate pair in UTF-16 and four bytes in UTF-8.
