@@ -67,6 +67,34 @@ TEST_F(LlvmLibcIconvTest, NamesAreMatchedLoosely) {
   }
 }
 
+TEST_F(LlvmLibcIconvTest, OtherNamesForTheSameSets) {
+  struct Case {
+    const char *name;
+    const char *bytes; // "A" in the set.
+    size_t length;
+  };
+  const bool little = LIBC_NAMESPACE::Endian::IS_LITTLE;
+  const Case cases[] = {
+      {"csASCII", "A", 1},
+      {"L1", "A", 1},
+      {"ISO-IR-100", "A", 1},
+      {"UNICODELITTLE", "A\0", 2},
+      {"UNICODEBIG", "\0A", 2},
+      {"ISO-10646-UCS-4", "\0\0\0A", 4},
+      {"UCS-2-INTERNAL", little ? "A\0" : "\0A", 2},
+      {"UCS-2-SWAPPED", little ? "\0A" : "A\0", 2},
+      {"UCS-4-SWAPPED", little ? "\0\0\0A" : "A\0\0\0", 4},
+      {"WCHAR_T", little ? "A\0\0\0" : "\0\0\0A", 4},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert(c.name, "UTF-8", "A", 1, out, sizeof(out)),
+              static_cast<ssize_t>(c.length));
+    for (size_t i = 0; i < c.length; ++i)
+      EXPECT_EQ(out[i], c.bytes[i]);
+  }
+}
+
 TEST_F(LlvmLibcIconvTest, AnUnknownSetIsRejected) {
   EXPECT_TRUE(LIBC_NAMESPACE::iconv_open("UTF-8", "NO-SUCH-SET") == FAILED);
   ASSERT_ERRNO_EQ(EINVAL);
