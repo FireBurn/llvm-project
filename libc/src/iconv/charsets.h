@@ -31,6 +31,10 @@ namespace iconv_internal {
 // The byte a single byte set has no character for.
 constexpr uint16_t UNASSIGNED = 0xFFFD;
 
+// The byte of a single byte set which stands for several characters, which
+// the set's sequences give.
+constexpr uint16_t MULTIPLE = 0xFFFF;
+
 // How the bytes of a conversion are laid out. The multibyte forms are
 // handled in code; the single byte ones are a table lookup.
 enum class Encoding {
@@ -67,6 +71,8 @@ struct Charset {
   const uint16_t *table; // Only for the single byte sets.
   // Only for a set which joins a letter and the marks after it.
   const Combining *combining = nullptr;
+  // Only for a set with codes which stand for several characters.
+  const Sequences *sequences = nullptr;
 };
 
 // The names iconv_open accepts: every name GNU libiconv gives these sets, and
@@ -308,6 +314,10 @@ constexpr Charset CHARSETS[] = {
     {"MACGREEK", Encoding::SINGLE_BYTE, MAC_GREEK_HIGH},
     {"MACTURKISH", Encoding::SINGLE_BYTE, MAC_TURKISH_HIGH},
     {"MACARABIC", Encoding::SINGLE_BYTE, MAC_ARABIC_HIGH},
+    {"MACHEBREW", Encoding::SINGLE_BYTE, MAC_HEBREW_HIGH, nullptr,
+     &MAC_HEBREW_SEQUENCES},
+    {"MACTHAI", Encoding::SINGLE_BYTE, MAC_THAI_HIGH, nullptr,
+     &MAC_THAI_SEQUENCES},
     {"CP1258", Encoding::SINGLE_BYTE, CP1258_HIGH, &CP1258_COMBINING},
     {"WINDOWS1258", Encoding::SINGLE_BYTE, CP1258_HIGH, &CP1258_COMBINING},
     {"CP1255", Encoding::SINGLE_BYTE, CP1255_HIGH, &CP1255_COMBINING},
