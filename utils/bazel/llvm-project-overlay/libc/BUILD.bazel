@@ -23872,7 +23872,6 @@ libc_function(
     hdrs = ["src/langinfo/nl_langinfo_l.h"],
     deps = [
         ":__support_common",
-        ":__support_cpp_string_view",
         ":__support_macros_config",
         ":hdr_locale_macros",
         ":langinfo_langinfo_table",
