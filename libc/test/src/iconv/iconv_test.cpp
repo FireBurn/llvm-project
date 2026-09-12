@@ -1039,3 +1039,63 @@ TEST_F(LlvmLibcIconvTest, AnErrorHandsBackAHeldLetter) {
   EXPECT_EQ(r.used, size_t(2));
   EXPECT_EQ(r.made, size_t(0));
 }
+
+TEST_F(LlvmLibcIconvTest, ACodeForSeveralCharacters) {
+  // A Yiddish ligature, which Apple gives as yod yod and a patah.
+  expect_utf8("MacHebrew", "\x81", 1, "\xd7\xb2\xd6\xb7", 4);
+  // Lamed and holam, grouped by one of Apple's transcoding hints.
+  expect_utf8("MacHebrew", "\xc0", 1, "\xef\xa1\xaa\xd7\x9c\xd6\xb9", 7);
+  // Mai ek, with a hint to draw it low and to the left.
+  expect_utf8("MacThai", "\x83", 1, "\xe0\xb9\x88\xef\xa1\xb5", 6);
+  // A plus sign for right to left text is still a plus sign.
+  expect_utf8("MacHebrew", "\xab", 1, "+", 1);
+
+  // Writing waits to see whether a character begins a sequence.
+  expect_bytes("MacHebrew", "UTF-8", "\xd7\xb2\xd6\xb7", 4, "\x81", 1);
+  expect_bytes("MacHebrew", "UTF-8", "\xd6\xb8\xef\xa1\xbf", 5, "\xde", 1);
+  const char mai_ek_a[] = {'\xe0', '\xb9', '\x88', 'a'};
+  const char written[] = {'\xe8', 'a'};
+  expect_bytes("MacThai", "UTF-8", mai_ek_a, 4, written, 2);
+  // One held back at the end is written as it is.
+  char out[8] = {};
+  ASSERT_EQ(
+      convert_and_finish("MacThai", "UTF-8", mai_ek_a, 3, out, sizeof(out)),
+      ssize_t(1));
+  EXPECT_EQ(out[0], '\xe8');
+}
+
+TEST_F(LlvmLibcIconvTest, ErrorsPartWayThroughASequence) {
+  // Yod yod is held back for a patah. What comes instead leaves it to be
+  // written alone, and MacHebrew has no byte for it.
+  char out[8] = {};
+  const char yod_yod_a[] = {'\xd7', '\xb2', 'a'};
+  Result r = convert_all("MacHebrew", yod_yod_a, 3, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(2));
+  EXPECT_EQ(r.made, size_t(0));
+
+  // With room for only the first character of a code, the code is used and
+  // the rest is owed.
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-32BE", "MacHebrew");
+  ASSERT_TRUE(cd != FAILED);
+  char input[] = {'\x81', 'A'};
+  char wide[8] = {};
+  char *ip = input;
+  size_t il = 1;
+  char *op = wide;
+  size_t ol = 4;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  EXPECT_EQ(il, size_t(0));
+  EXPECT_EQ(wide[3], '\xf2');
+  // What is owed goes out before anything more is read.
+  il = 1;
+  ol = 4;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  EXPECT_EQ(il, size_t(1));
+  EXPECT_EQ(wide[7], '\xb7');
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
