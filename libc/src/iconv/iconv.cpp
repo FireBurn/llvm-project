@@ -27,12 +27,16 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     libc_errno = EBADF;
     return static_cast<size_t>(-1);
   }
-  const auto &conv = *reinterpret_cast<iconv_internal::Conversion *>(cd);
+  auto &conv = *reinterpret_cast<iconv_internal::Conversion *>(cd);
 
-  // None of these conversions carry state between calls, so being asked to
-  // go back to the initial state is nothing to do.
-  if (inbuf == nullptr || *inbuf == nullptr)
+  // Going back to the initial state lets a byte order mark be read again and
+  // makes the output owe one again. The byte order already read is kept, as
+  // glibc does, and none of these sets need any bytes written to get back.
+  if (inbuf == nullptr || *inbuf == nullptr) {
+    conv.read_mark = true;
+    conv.write_mark = true;
     return 0;
+  }
 
   // Whether anything was left out under //IGNORE.
   bool skipped = false;
@@ -42,6 +46,10 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     size_t used = 0;
     auto in = reinterpret_cast<const unsigned char *>(*inbuf);
     switch (iconv_internal::decode(conv, in, *inbytesleft, cp, used)) {
+    case iconv_internal::Status::NONE:
+      *inbuf += used;
+      *inbytesleft -= used;
+      continue;
     case iconv_internal::Status::INCOMPLETE:
       libc_errno = EINVAL;
       return static_cast<size_t>(-1);
@@ -68,6 +76,10 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     size_t made = 0;
     auto out = reinterpret_cast<unsigned char *>(*outbuf);
     auto wrote = iconv_internal::encode(conv, cp, out, *outbytesleft, made);
+    // A byte order mark written ahead of the character stays written, whatever
+    // becomes of the character.
+    *outbuf += made;
+    *outbytesleft -= made;
     if (wrote == iconv_internal::Status::FULL) {
       libc_errno = E2BIG;
       return static_cast<size_t>(-1);
@@ -89,8 +101,6 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     // caller which is handed E2BIG can enlarge the buffer and go again.
     *inbuf += used;
     *inbytesleft -= used;
-    *outbuf += made;
-    *outbytesleft -= made;
   }
 
   // What was left out is still an error once the rest has been converted, so
