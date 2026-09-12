@@ -25,7 +25,6 @@ libc_function(
         "//libc/hdr/types:nl_item",
         "//libc/hdr/types:size_t",
         "//libc/hdr:locale_macros",
-        "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support:common",
