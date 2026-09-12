@@ -27,6 +27,11 @@ functions:
     arguments:
       - type: const char*
       - type: const struct timeval*
+  - name: futimes
+    return_type: int
+    arguments:
+      - type: int
+      - type: const struct timeval*
   - name: lutimes
     return_type: int
     arguments:
