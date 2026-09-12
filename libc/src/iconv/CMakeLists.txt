@@ -3,6 +3,7 @@ add_header_library(
   HDRS
     charsets.h
     combining.h
+    sequences.h
     single_byte_tables.h
   DEPENDS
     libc.hdr.stdint_proxy
