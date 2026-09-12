@@ -14,6 +14,7 @@
 #include "src/iconv/iconv.h"
 #include "src/iconv/iconv_close.h"
 #include "src/iconv/iconv_open.h"
+#include "src/string/string_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
 
@@ -263,6 +264,119 @@ TEST_F(LlvmLibcIconvTest, PartialProgressIsKept) {
   EXPECT_EQ(il, size_t(1));
   EXPECT_EQ(static_cast<long>(op - out), 2L);
 
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+// Converts |in| from UTF-8 with the whole input offered at once, and reports
+// what came out and how much input was used.
+struct Result {
+  size_t ret;
+  int error;
+  size_t used;
+  size_t made;
+};
+
+Result convert_all(const char *to, const char *in, size_t inlen, char *out,
+                   size_t outlen) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open(to, "UTF-8");
+  if (cd == FAILED)
+    return {0, -1, 0, 0};
+  char input[64];
+  for (size_t i = 0; i < inlen; ++i)
+    input[i] = in[i];
+  char *ip = input;
+  char *op = out;
+  size_t il = inlen;
+  size_t ol = outlen;
+  size_t ret = LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol);
+  int error = ret == static_cast<size_t>(-1) ? libc_errno : 0;
+  libc_errno = 0;
+  LIBC_NAMESPACE::iconv_close(cd);
+  return {ret, error, inlen - il, static_cast<size_t>(op - out)};
+}
+
+TEST_F(LlvmLibcIconvTest, IgnoreLeavesOutWhatHasNoPlace) {
+  char out[16] = {};
+  // e with an acute has no place in ASCII. The rest is converted, all of the
+  // input is used, and the call still reports that something was left out.
+  Result r = convert_all("ASCII//IGNORE",
+                         "a\xc3\xa9"
+                         "b",
+                         4, out, sizeof(out));
+  EXPECT_EQ(r.ret, static_cast<size_t>(-1));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(4));
+  ASSERT_EQ(r.made, size_t(2));
+  EXPECT_EQ(out[0], 'a');
+  EXPECT_EQ(out[1], 'b');
+}
+
+TEST_F(LlvmLibcIconvTest, IgnoreSkipsInputWhichIsNotACharacter) {
+  struct Case {
+    const char *in;
+    size_t len;
+    const char *expected;
+  };
+  // A broken character is passed over as far as it got, and one which is
+  // complete but not allowed is passed over whole.
+  const Case cases[] = {
+      {"a\x80"
+       "b",
+       3, "ab"}, // A continuation byte on its own.
+      {"a\xe2\x82"
+       "Ab",
+       5, "aAb"}, // Cut short by an ASCII byte.
+      {"a\xc0\x80"
+       "b",
+       4, "ab"}, // 0xC0 never starts a character.
+      {"a\xed\xa0\x80"
+       "b",
+       5, "ab"}, // A surrogate.
+      {"a\xf4\x90\x80\x80"
+       "b",
+       6, "ab"}, // Past the end of Unicode.
+      {"a\xff"
+       "b",
+       3, "ab"},
+  };
+  for (const Case &c : cases) {
+    char out[16] = {};
+    Result r = convert_all("UTF-8//IGNORE", c.in, c.len, out, sizeof(out));
+    EXPECT_EQ(r.error, EILSEQ);
+    EXPECT_EQ(r.used, c.len);
+    ASSERT_EQ(r.made, LIBC_NAMESPACE::internal::string_length(c.expected));
+    for (size_t i = 0; i < r.made; ++i)
+      EXPECT_EQ(out[i], c.expected[i]);
+  }
+}
+
+TEST_F(LlvmLibcIconvTest, IgnoreStillReportsAnIncompleteEnd) {
+  char out[16] = {};
+  Result r = convert_all("ASCII//IGNORE", "a\xc3", 2, out, sizeof(out));
+  EXPECT_EQ(r.error, EINVAL);
+  EXPECT_EQ(r.used, size_t(1));
+}
+
+TEST_F(LlvmLibcIconvTest, IgnoreIsOnlyReadFromTheTargetName) {
+  char out[16] = {};
+  // Spelled in any case, and among other flags.
+  const char *spellings[] = {"ASCII//IGNORE", "ASCII//ignore",
+                             "ASCII//TRANSLIT,IGNORE", "ASCII//IGNORE//"};
+  for (const char *to : spellings)
+    EXPECT_EQ(convert_all(to, "\xc3\xa9", 2, out, sizeof(out)).used, size_t(2));
+
+  // On the source set's name it does nothing.
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("ASCII", "UTF-8//IGNORE");
+  ASSERT_TRUE(cd != FAILED);
+  char input[] = "\xc3\xa9";
+  char *ip = input;
+  char *op = out;
+  size_t il = 2;
+  size_t ol = sizeof(out);
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(il, size_t(2));
   ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
 }
 
