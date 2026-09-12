@@ -1328,3 +1328,38 @@ TEST_F(LlvmLibcIconvTest, Iso2022Sets) {
             ssize_t(3));
   EXPECT_EQ(out[0], '\xea');
 }
+
+TEST_F(LlvmLibcIconvTest, Iso2022Jp1AndHz) {
+  // ISO-2022-JP-1 has JIS X 0212, which ISO-2022-JP has not.
+  const char jis_x0212[] = {'\x1b', '$', '(', 'D', '\x30', '\x21'};
+  expect_bytes("ISO-2022-JP-1", "UTF-8", "\xe4\xb8\x82", 3, jis_x0212,
+               sizeof(jis_x0212));
+  char out[32] = {};
+  EXPECT_EQ(
+      convert("ISO-2022-JP", "UTF-8", "\xe4\xb8\x82", 3, out, sizeof(out)),
+      ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  // An escape sequence ISO-2022-JP-1 does not know is not a character.
+  const char katakana[] = {'\x1b', '(', 'I', '1'};
+  EXPECT_EQ(convert("UTF-8", "ISO-2022-JP-1", katakana, sizeof(katakana), out,
+                    sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  // In a two byte set a lone byte waits for the next, even a control.
+  const char lone[] = {'\x1b', '$', 'B', '\x0e'};
+  EXPECT_EQ(
+      convert("UTF-8", "ISO-2022-JP-1", lone, sizeof(lone), out, sizeof(out)),
+      ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+
+  // HZ has GB 2312 between ~{ and ~}.
+  const char hz[] = {'~', '{', '\x52', '\x3b', '~', '}', 'A'};
+  const char utf8[] = {'\xe4', '\xb8', '\x80', 'A'};
+  expect_bytes("HZ", "UTF-8", utf8, sizeof(utf8), hz, sizeof(hz));
+  ASSERT_EQ(convert("UTF-8", "HZ", hz, sizeof(hz), out, sizeof(out)),
+            ssize_t(4));
+  EXPECT_EQ(out[3], 'A');
+  // "~~" is a tilde.
+  ASSERT_EQ(convert("UTF-8", "HZ", "~~", 2, out, sizeof(out)), ssize_t(1));
+  EXPECT_EQ(out[0], '~');
+}
