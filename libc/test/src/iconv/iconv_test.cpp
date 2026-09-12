@@ -392,11 +392,139 @@ TEST_F(LlvmLibcIconvTest, BadDescriptor) {
   ASSERT_ERRNO_EQ(EBADF);
 }
 
-TEST_F(LlvmLibcIconvTest, ResettingTheStateDoesNothing) {
-  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-8", "ISO-8859-1");
+Result step(iconv_t cd, const char *in, size_t inlen, char *out,
+            size_t outlen) {
+  char input[16];
+  for (size_t i = 0; i < inlen; ++i)
+    input[i] = in[i];
+  char *ip = input;
+  char *op = out;
+  size_t il = inlen;
+  size_t ol = outlen;
+  size_t ret = LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol);
+  int error = ret == static_cast<size_t>(-1) ? libc_errno : 0;
+  libc_errno = 0;
+  return {ret, error, inlen - il, outlen - ol};
+}
+
+// Where the high and low bytes of a two byte unit go in the host's order.
+const size_t HIGH = LIBC_NAMESPACE::Endian::IS_LITTLE ? 1 : 0;
+const size_t LOW = 1 - HIGH;
+
+unsigned at(const char *p, size_t i) {
+  return static_cast<unsigned char>(p[i]);
+}
+
+TEST_F(LlvmLibcIconvTest, Utf16WritesAByteOrderMarkFirst) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-16", "UTF-8");
   ASSERT_TRUE(cd != FAILED);
-  // None of these conversions carry state, so there is nothing to reset.
+  char out[16] = {};
+  // The mark, then "A", both in the host's byte order.
+  Result r = step(cd, "A", 1, out, sizeof(out));
+  ASSERT_EQ(r.made, size_t(4));
+  EXPECT_EQ(at(out, HIGH), 0xFEu);
+  EXPECT_EQ(at(out, LOW), 0xFFu);
+  EXPECT_EQ(at(out, 2 + LOW), unsigned('A'));
+
+  // Only once.
+  r = step(cd, "B", 1, out, sizeof(out));
+  ASSERT_EQ(r.made, size_t(2));
+  EXPECT_EQ(at(out, LOW), unsigned('B'));
+
+  // Going back to the initial state means the next output has one again.
   EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, nullptr, nullptr),
             size_t(0));
+  EXPECT_EQ(step(cd, "C", 1, out, sizeof(out)).made, size_t(4));
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+
+  // UTF-32 writes one as well.
+  cd = LIBC_NAMESPACE::iconv_open("UTF-32", "UTF-8");
+  ASSERT_TRUE(cd != FAILED);
+  EXPECT_EQ(step(cd, "A", 1, out, sizeof(out)).made, size_t(8));
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, AByteOrderMarkStaysWhenTheCharacterDoesNotFit) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-16", "UTF-8");
+  ASSERT_TRUE(cd != FAILED);
+  char out[2] = {};
+  // Room for the mark but not for the character after it.
+  Result r = step(cd, "A", 1, out, sizeof(out));
+  EXPECT_EQ(r.error, E2BIG);
+  EXPECT_EQ(r.used, size_t(0));
+  EXPECT_EQ(r.made, size_t(2));
+
+  // The retry writes the character without a second mark.
+  r = step(cd, "A", 1, out, sizeof(out));
+  EXPECT_EQ(r.error, 0);
+  ASSERT_EQ(r.made, size_t(2));
+  EXPECT_EQ(at(out, LOW), unsigned('A'));
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, ReadingAByteOrderMark) {
+  char out[16] = {};
+  // The mark gives the order and is not itself converted.
+  EXPECT_EQ(convert("UTF-8", "UTF-16", "\xfe\xff\x00\x41", 4, out, sizeof(out)),
+            ssize_t(1));
+  EXPECT_EQ(out[0], 'A');
+  EXPECT_EQ(convert("UTF-8", "UTF-16", "\xff\xfe\x41\x00", 4, out, sizeof(out)),
+            ssize_t(1));
+  EXPECT_EQ(out[0], 'A');
+  EXPECT_EQ(convert("UTF-8", "UTF-32", "\x00\x00\xfe\xff\x00\x00\x00\x41", 8,
+                    out, sizeof(out)),
+            ssize_t(1));
+  EXPECT_EQ(out[0], 'A');
+
+  // Without one, the input is in the host's order.
+  char host[2] = {};
+  host[LOW] = 'A';
+  EXPECT_EQ(convert("UTF-8", "UTF-16", host, 2, out, sizeof(out)), ssize_t(1));
+  EXPECT_EQ(out[0], 'A');
+
+  // Past the first character, FEFF is the character U+FEFF.
+  EXPECT_EQ(convert("UTF-8", "UTF-16", "\xfe\xff\x00\x41\xfe\xff", 6, out,
+                    sizeof(out)),
+            ssize_t(4));
+  EXPECT_EQ(at(out, 1), 0xEFu);
+}
+
+TEST_F(LlvmLibcIconvTest, ResettingLetsAByteOrderMarkBeReadAgain) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-8", "UTF-16");
+  ASSERT_TRUE(cd != FAILED);
+  char out[16] = {};
+  // A mark cut short is incomplete, and a whole one on its own is read.
+  Result r = step(cd, "\xfe", 1, out, sizeof(out));
+  EXPECT_EQ(r.error, EINVAL);
+  EXPECT_EQ(r.used, size_t(0));
+  r = step(cd, "\xfe\xff", 2, out, sizeof(out));
+  EXPECT_EQ(r.used, size_t(2));
+  EXPECT_EQ(r.made, size_t(0));
+
+  // After a reset another mark may come, and until one does the order the
+  // last one gave still holds.
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, nullptr, nullptr),
+            size_t(0));
+  r = step(cd, "\x00\x41", 2, out, sizeof(out));
+  ASSERT_EQ(r.made, size_t(1));
+  EXPECT_EQ(out[0], 'A');
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, nullptr, nullptr),
+            size_t(0));
+  r = step(cd, "\xff\xfe\x42\x00", 4, out, sizeof(out));
+  ASSERT_EQ(r.made, size_t(1));
+  EXPECT_EQ(out[0], 'B');
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, UnicodeIsUcs2WithAByteOrderMark) {
+  char out[16] = {};
+  EXPECT_EQ(convert("UNICODE", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(4));
+
+  // The mark is written before a character the set cannot hold is found.
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UNICODE", "UTF-8");
+  ASSERT_TRUE(cd != FAILED);
+  Result r = step(cd, "\xf0\x9f\x98\x80", 4, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.made, size_t(2));
   ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
 }
