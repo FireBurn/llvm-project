@@ -24,6 +24,9 @@
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/single_byte_tables.h"
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+#include "src/iconv/cjk_tables.h"
+#endif
 
 namespace LIBC_NAMESPACE_DECL {
 namespace iconv_internal {
@@ -77,6 +80,10 @@ enum class Encoding {
   GB18030,
   // The Traditional Chinese sets.
   BIG5,
+  BIG5_HKSCS_1999,
+  BIG5_HKSCS_2001,
+  BIG5_HKSCS_2004,
+  BIG5_HKSCS,
   // KS X 1001 by itself, and the Korean sets built on it.
   KS_X_1001,
   EUC_KR,
@@ -391,6 +398,16 @@ constexpr Charset CHARSETS[] = {
     {"CNBIG5", Encoding::BIG5, nullptr},
     {"CSBIG5", Encoding::BIG5, nullptr},
     {"CP950", Encoding::BIG5, nullptr},
+    {"BIG5HKSCS:1999", Encoding::BIG5_HKSCS_1999, nullptr, nullptr,
+     &BIG5_HKSCS_SEQUENCES},
+    {"BIG5HKSCS:2001", Encoding::BIG5_HKSCS_2001, nullptr, nullptr,
+     &BIG5_HKSCS_SEQUENCES},
+    {"BIG5HKSCS:2004", Encoding::BIG5_HKSCS_2004, nullptr, nullptr,
+     &BIG5_HKSCS_SEQUENCES},
+    {"BIG5HKSCS", Encoding::BIG5_HKSCS, nullptr, nullptr,
+     &BIG5_HKSCS_SEQUENCES},
+    {"BIG5HKSCS:2008", Encoding::BIG5_HKSCS, nullptr, nullptr,
+     &BIG5_HKSCS_SEQUENCES},
     {"MS936", Encoding::GBK, nullptr},
     {"WINDOWS936", Encoding::GBK, nullptr},
     {"GB18030", Encoding::GB18030, nullptr},
