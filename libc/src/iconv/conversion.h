@@ -705,6 +705,10 @@ LIBC_INLINE Status decode(Conversion &conv, const unsigned char *in,
                             in, inleft, out, used);
   if (conv.from == Encoding::HZ)
     return read_hz(conv.iso2022, in, inleft, out, used);
+  if (conv.from == Encoding::ISO2022_CN ||
+      conv.from == Encoding::ISO2022_CN_EXT)
+    return read_iso2022_cn(conv.iso2022, conv.from == Encoding::ISO2022_CN_EXT,
+                           in, inleft, out, used);
 #endif
 
   if (has_mark(conv.from) && conv.read_mark) {
@@ -1043,6 +1047,8 @@ LIBC_INLINE Status unshift(Conversion &conv, unsigned char *out, size_t outleft,
 #ifndef LIBC_COPT_ICONV_DISABLE_CJK
   if (conv.to == Encoding::HZ)
     return unshift_hz(conv.iso2022, out, outleft, made);
+  if (conv.to == Encoding::ISO2022_CN || conv.to == Encoding::ISO2022_CN_EXT)
+    return unshift_iso2022_cn(conv.iso2022, out, outleft, made);
   if (conv.to == Encoding::ISO2022_JP || conv.to == Encoding::ISO2022_JP1 ||
       conv.to == Encoding::ISO2022_JP2 || conv.to == Encoding::ISO2022_JP_MS ||
       conv.to == Encoding::ISO2022_KR)
@@ -1081,6 +1087,9 @@ LIBC_INLINE Status encode(Conversion &conv, char32_t cp, unsigned char *out,
     return write_iso2022_jp_ms(conv.iso2022, cp, out, outleft, made);
   if (conv.to == Encoding::HZ)
     return write_hz(conv.iso2022, cp, out, outleft, made);
+  if (conv.to == Encoding::ISO2022_CN || conv.to == Encoding::ISO2022_CN_EXT)
+    return write_iso2022_cn(conv.iso2022, conv.to == Encoding::ISO2022_CN_EXT,
+                            cp, out, outleft, made);
 #endif
   // Output with a mark is in the host's byte order, which the mark says.
   const bool big = !Endian::IS_LITTLE;
