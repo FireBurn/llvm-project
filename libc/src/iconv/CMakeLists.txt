@@ -57,6 +57,8 @@ add_header_library(
     korean.h
     status.h
     traditional_chinese.h
+    translit.h
+    translit_table.h
   DEPENDS
     .charsets
     ${cjk_tables}
