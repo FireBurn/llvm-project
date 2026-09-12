@@ -903,10 +903,14 @@ def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
         ("CP932_NEC_SELECTED_IBM", (0xED, 0xEE)),
     ]
     extension = {code: cp for code, cp in cp932.items() if code not in from_jis}
+    # ISO-2022-JP-MS writes characters of the NEC-selected block as its own
+    # codes, so all of them are in its order. CP932 finds each one sooner.
+    unfiltered = "CP932_NEC_SELECTED_IBM"
     for name, (first, last) in blocks:
         block = {c: cp for c, cp in extension.items() if first <= c >> 8 <= last}
+        only = None if name == unfiltered else writes
         definitions.append(
-            format_code_table(name, block, (first, last), (0x40, 0xFC), writes)
+            format_code_table(name, block, (first, last), (0x40, 0xFC), only)
         )
         declarations.append(f"extern const CodeTable {name};")
     if any(not any(f <= c >> 8 <= l for _, (f, l) in blocks) for c in extension):
@@ -920,12 +924,15 @@ def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
             continue
         found = dict((cp, c) for c, cp in changes).get(code_point)
         found = found or by_jis.get(code_point)
-        for _, (first, last) in blocks:
+        for name, (first, last) in blocks:
             if found:
                 break
             candidates = [c for c, cp in extension.items() if cp == code_point]
             candidates = [c for c in candidates if first <= c >> 8 <= last]
-            found = code if code in candidates else None
+            if name == unfiltered:
+                found = candidates[0] if candidates else None
+            else:
+                found = code if code in candidates else None
         if found != code:
             exit(f"CP932: U+{code_point:04X} would not be written as 0x{code:04X}")
 
@@ -952,6 +959,34 @@ def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
     )
     declarations.append(f"constexpr size_t CP932_AREA_COUNT = {len(areas)};")
     declarations.append("extern const CodeRange CP932_AREAS[CP932_AREA_COUNT];")
+
+    # ISO-2022-JP-MS has the IBM extensions which neither JIS X 0208, as CP932
+    # reads it, nor JIS X 0212 has in rows 0x73 and 0x74 of JIS X 0212, in
+    # CP932's order. eucJP-ms, which has the same 106 from 0x8FF3F3, counts
+    # U+FFE4 as JIS X 0212's broken bar and U+2116 as one of them. GNU libiconv
+    # is the only implementation of ISO-2022-JP-MS, and this follows it: they
+    # start at 0x7321, the ones in NEC's row 13 and U+663B are left out, and
+    # U+974D is at 0x7463.
+    in_jis_x0212 = (set(jis_x0212.values()) | {0xFFE4}) - {0x2116}
+    elsewhere = {cp932[code] for code in from_jis} | in_jis_x0212
+    row_13 = {cp for code, cp in extension.items() if code >> 8 == 0x87}
+    ibm = [
+        cp
+        for code, cp in sorted(extension.items())
+        if 0xFA <= code >> 8 <= 0xFC and cp not in elsewhere
+    ]
+    if len(ibm) != 106:
+        exit(f"ISO-2022-JP-MS: {len(ibm)} IBM extensions, not 106")
+    jp_ms_ibm = {}
+    for index, cp in enumerate(ibm):
+        if cp in row_13 or cp == 0x663B:
+            continue
+        code = (0x73 + index // 94) << 8 | (0x21 + index % 94)
+        jp_ms_ibm[0x7463 if cp == 0x974D else code] = cp
+    definitions.append(
+        format_code_table("ISO2022_JP_MS_IBM", jp_ms_ibm, (0x73, 0x74), (0x21, 0x7E))
+    )
+    declarations.append("extern const CodeTable ISO2022_JP_MS_IBM;")
     return definitions, declarations
 
 
