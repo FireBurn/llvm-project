@@ -234,6 +234,17 @@ GB18030 = ("gb18030-2022.ucm", ICU_MAPPINGS)
 CP936 = ("CP936.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
 GB2312 = ("GB2312%UCS.src", f"{CITRUS}/GB")
 
+# The Korean sets share KS X 1001, from the Unicode Consortium's KSC5601 table,
+# whose codes with both bytes from 0xA1 are KS X 1001's. KS X 1001:1998 added
+# the euro and registered signs, which CP949 has, and KS X 1001:2002 a postal
+# code mark. CP949 writes the Hangul syllables KS X 1001 lacks in order after
+# it, and JOHAB builds its syllables from their letters, so neither needs a
+# table of its own.
+KSC5601 = ("KSC5601.TXT", f"{EASTASIA}/KSC")
+KS_X_1001_ADDITIONS = {0x2266: 0x20AC, 0x2267: 0x00AE, 0x2268: 0x327E}
+CP949 = ("CP949.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
+JOHAB = ("JOHAB.TXT", f"{EASTASIA}/KSC")
+
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
 
@@ -754,6 +765,107 @@ def chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
     return definitions, declarations
 
 
+JOHAB_MEDIALS = [3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23]
+JOHAB_MEDIALS += [26, 27, 28, 29]
+JOHAB_FINALS = [1] + list(range(2, 18)) + list(range(19, 30))
+
+
+def johab_syllable(code: int) -> int:
+    """The Hangul syllable a JOHAB code builds, or 0."""
+    initial, medial, final = (code >> 10) & 31, (code >> 5) & 31, code & 31
+    if not code & 0x8000 or not 2 <= initial <= 20:
+        return 0
+    if medial not in JOHAB_MEDIALS or final not in JOHAB_FINALS:
+        return 0
+    return (
+        0xAC00
+        + ((initial - 2) * 21 + JOHAB_MEDIALS.index(medial)) * 28
+        + (JOHAB_FINALS.index(final))
+    )
+
+
+def johab_from_ks_x_1001(code: int) -> int:
+    """Where JOHAB has a KS X 1001 symbol or hanja, or 0 for its Hangul."""
+    row, column = (code >> 8) - 0x20, (code & 0xFF) - 0x20
+    if row <= 12:
+        lead, trail_row = 0xD8 + (row + 1) // 2, row % 2 == 1
+    elif row >= 42:
+        lead, trail_row = 0xE0 + (row - 42) // 2, row % 2 == 0
+    else:
+        return 0
+    if not trail_row:
+        return lead << 8 | (column + 0xA0)
+    return lead << 8 | (column + (0x30 if column <= 0x4E else 0x42))
+
+
+def korean_tables(mappings: str) -> tuple[list[str], list[str]]:
+    """The definitions and declarations of the Korean sets' tables."""
+    ksc5601 = read_columns(f"{mappings}/{KSC5601[0]}", 0, 1)
+    ks_x_1001 = {
+        code & 0x7F7F: cp
+        for code, cp in ksc5601.items()
+        if code >> 8 >= 0xA1 and code & 0xFF >= 0xA1
+    }
+    ks_x_1001.update(KS_X_1001_ADDITIONS)
+
+    # CP949: KS X 1001 without the postal code mark, and the other Hangul
+    # syllables in order.
+    in_ks_x_1001 = set(ks_x_1001.values())
+    trails = list(range(0x41, 0x5B)) + list(range(0x61, 0x7B)) + list(range(0x81, 0xFF))
+    extra_codes = [
+        lead << 8 | trail
+        for lead in range(0x81, 0xFF)
+        for trail in trails
+        if lead < 0xA1 or trail < 0xA1
+    ]
+    extra = [cp for cp in range(0xAC00, 0xD7A4) if cp not in in_ks_x_1001]
+    model = {code | 0x8080: cp for code, cp in ks_x_1001.items() if code != 0x2268}
+    model.update(zip(extra_codes, extra))
+    cp949 = read_columns(f"{mappings}/{CP949[0]}", 0, 1)
+    if model != {code: cp for code, cp in cp949.items() if code > 0xFF}:
+        exit("CP949: KS X 1001 and the Hangul syllables after it are not CP949")
+
+    # JOHAB: syllables from their letters, the Hangul letters KS X 1001 has
+    # first as codes with only one letter, and its other symbols and hanja
+    # moved. Unicode's JOHAB table is older than the additions, which glibc
+    # and GNU libiconv both have.
+    johab = {
+        code: cp
+        for code, cp in read_columns(f"{mappings}/{JOHAB[0]}", 0, 1).items()
+        if code > 0xFF
+    }
+    johab.update({johab_from_ks_x_1001(k): cp for k, cp in KS_X_1001_ADDITIONS.items()})
+    letters = sorted(
+        (code, cp)
+        for code, cp in johab.items()
+        if code >> 8 < 0xD8 and johab_syllable(code) != cp
+    )
+    letter_code_points = {cp for _, cp in letters}
+    built = {c: johab_syllable(c) for c in range(0x8000, 0x10000) if johab_syllable(c)}
+    built.update(letters)
+    for k, cp in ks_x_1001.items():
+        if johab_from_ks_x_1001(k) and cp not in letter_code_points:
+            built[johab_from_ks_x_1001(k)] = cp
+    if built != johab:
+        exit("JOHAB: the rules do not build JOHAB's table")
+    if any((k >> 8) != 0x24 for k, cp in ks_x_1001.items() if cp in letter_code_points):
+        exit("JOHAB: a letter is not in KS X 1001's row of letters")
+
+    definitions = [
+        format_code_table("KS_X_1001", ks_x_1001, (0x21, 0x7E), (0x21, 0x7E)),
+        "const CodePair JOHAB_LETTERS[JOHAB_LETTER_COUNT] = {\n"
+        + "\n".join(f"    {{0x{c:04X}, 0x{cp:04X}}}," for c, cp in letters)
+        + "\n};",
+    ]
+    declarations = [
+        "extern const CodeTable KS_X_1001;",
+        "// The JOHAB codes of a Hangul letter by itself.",
+        f"constexpr size_t JOHAB_LETTER_COUNT = {len(letters)};",
+        "extern const CodePair JOHAB_LETTERS[JOHAB_LETTER_COUNT];",
+    ]
+    return definitions, declarations
+
+
 def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
     """The definitions and declarations of the Japanese sets' tables."""
     file_name, _, changes = JIS_X0208
@@ -987,6 +1099,9 @@ def main() -> None:
     chinese = chinese_tables(mappings)
     definitions += chinese[0]
     declarations += chinese[1]
+    korean = korean_tables(mappings)
+    definitions += korean[0]
+    declarations += korean[1]
     write_cjk_tables(root, definitions, declarations)
 
     title = "//===-- Tables for iconv's single byte sets "
