@@ -28,6 +28,7 @@
 #ifndef LIBC_COPT_ICONV_DISABLE_CJK
 #include "src/iconv/chinese.h"
 #include "src/iconv/japanese.h"
+#include "src/iconv/korean.h"
 #endif
 #include "src/iconv/status.h"
 
@@ -359,6 +360,14 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return read_gbk(in, inleft, out, used);
   case Encoding::GB18030:
     return read_gb18030(in, inleft, out, used);
+  case Encoding::KS_X_1001:
+    return read_jis(KS_X_1001, in, inleft, out, used);
+  case Encoding::EUC_KR:
+    return read_euc_kr(in, inleft, out, used);
+  case Encoding::CP949:
+    return read_cp949(in, inleft, out, used);
+  case Encoding::JOHAB:
+    return read_johab(in, inleft, out, used);
 #endif
 
   case Encoding::UTF8: {
@@ -694,6 +703,7 @@ LIBC_INLINE size_t narrowest(Encoding encoding) {
   case Encoding::JIS_X0208:
   case Encoding::JIS_X0212:
   case Encoding::GB2312:
+  case Encoding::KS_X_1001:
     return 2;
   case Encoding::UTF32LE:
   case Encoding::UTF32BE:
@@ -778,6 +788,14 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     return write_gbk(cp, out, outleft, made);
   case Encoding::GB18030:
     return write_gb18030(cp, out, outleft, made);
+  case Encoding::KS_X_1001:
+    return write_jis(KS_X_1001, cp, out, outleft, made);
+  case Encoding::EUC_KR:
+    return write_euc_kr(cp, out, outleft, made);
+  case Encoding::CP949:
+    return write_cp949(cp, out, outleft, made);
+  case Encoding::JOHAB:
+    return write_johab(cp, out, outleft, made);
 #endif
 
   case Encoding::UTF8: {
