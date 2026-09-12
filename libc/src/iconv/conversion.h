@@ -33,6 +33,8 @@ struct Conversion {
   Encoding to;
   const uint16_t *from_table;
   const uint16_t *to_table;
+  // Whether what cannot be converted is left out rather than reported.
+  bool ignore;
 };
 
 // A name matches without regard to case, or to the punctuation between its
@@ -61,6 +63,30 @@ LIBC_INLINE bool same_name(const char *wanted, const char *known) {
   return *k == '\0' && (*w == '\0' || (w[0] == '/' && w[1] == '/'));
 }
 
+// Whether the flags after a target set's name ask for |flag|. The flags follow
+// "//", are separated by "//" or ",", and match without regard to case. One
+// which is not known is not an error.
+LIBC_INLINE bool has_flag(const char *name, const char *flag) {
+  const char *p = name;
+  while (p[0] != '\0' && !(p[0] == '/' && p[1] == '/'))
+    ++p;
+  while (*p != '\0') {
+    while (*p == '/' || *p == ',')
+      ++p;
+    const char *f = flag;
+    const char *q = p;
+    while (*q != '\0' && *f != '\0' && internal::toupper(*q) == *f) {
+      ++q;
+      ++f;
+    }
+    if (*f == '\0' && (*q == '\0' || *q == '/' || *q == ','))
+      return true;
+    while (*p != '\0' && *p != '/' && *p != ',')
+      ++p;
+  }
+  return false;
+}
+
 LIBC_INLINE const Charset *find_charset(const char *name) {
   if (name == nullptr)
     return nullptr;
@@ -78,7 +104,8 @@ enum class Status {
   FULL,       // There is no room in the output.
 };
 
-// Reads one character. |used| is how many bytes it took.
+// Reads one character. |used| is how many bytes it took, or for input which is
+// not a character, how many bytes are passed over to skip it.
 LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
                           size_t inleft, char32_t &out, size_t &used) {
   if (inleft == 0)
@@ -86,23 +113,22 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
 
   switch (conv.from) {
   case Encoding::ASCII:
+    used = 1;
     if (in[0] > 0x7F)
       return Status::INVALID;
     out = in[0];
-    used = 1;
     return Status::OK;
 
   case Encoding::SINGLE_BYTE: {
+    used = 1;
     if (in[0] < 0x80) {
       out = in[0];
-      used = 1;
       return Status::OK;
     }
     uint16_t mapped = conv.from_table[in[0] - 0x80];
     if (mapped == UNASSIGNED)
       return Status::INVALID;
     out = mapped;
-    used = 1;
     return Status::OK;
   }
 
@@ -157,9 +183,10 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
       return big ? (uint32_t(p[0]) << 8) | p[1] : (uint32_t(p[1]) << 8) | p[0];
     };
     uint32_t first = unit(in);
+    // A unit which does not begin a character is passed over on its own.
+    used = 2;
     if (first < 0xD800 || first > 0xDFFF) {
       out = first;
-      used = 2;
       return Status::OK;
     }
     if (first >= 0xDC00)
@@ -199,10 +226,10 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
     else
       value = (uint32_t(in[3]) << 24) | (uint32_t(in[2]) << 16) |
               (uint32_t(in[1]) << 8) | in[0];
+    used = 4;
     if (value > 0x10FFFF || (value >= 0xD800 && value <= 0xDFFF))
       return Status::INVALID;
     out = value;
-    used = 4;
     return Status::OK;
   }
   }
