@@ -58,6 +58,49 @@ struct CodeTable {
   uint16_t count;
 };
 
+// Codes and the values they stand for, in order of code, where too few codes
+// have characters for a table of rows and columns.
+struct CodeList {
+  const CodePair *pairs;
+  // The positions of the pairs, in order of value.
+  const uint16_t *order;
+  uint16_t count;
+};
+
+// Whether |list| has |code|, and the value it stands for.
+LIBC_INLINE bool look_up(const CodeList &list, unsigned code, uint16_t &value) {
+  size_t low = 0;
+  size_t high = list.count;
+  while (low < high) {
+    size_t mid = low + (high - low) / 2;
+    if (list.pairs[mid].code < code)
+      low = mid + 1;
+    else
+      high = mid;
+  }
+  if (low == list.count || list.pairs[low].code != code)
+    return false;
+  value = list.pairs[low].code_point;
+  return true;
+}
+
+// The code which stands for |value| in |list|, or 0.
+LIBC_INLINE uint16_t find_code(const CodeList &list, unsigned value) {
+  size_t low = 0;
+  size_t high = list.count;
+  while (low < high) {
+    size_t mid = low + (high - low) / 2;
+    if (list.pairs[list.order[mid]].code_point < value)
+      low = mid + 1;
+    else
+      high = mid;
+  }
+  if (low == list.count)
+    return 0;
+  const CodePair &pair = list.pairs[list.order[low]];
+  return pair.code_point == value ? pair.code : 0;
+}
+
 // A set of 94 rows of 94 characters from 0x2121, some of them beyond the Basic
 // Multilingual Plane.
 struct WideTable {
