@@ -413,6 +413,9 @@ enum class Encoding {
   // Java source name them.
   C99,
   JAVA,
+  // UTF-16 written in ASCII, with base64 runs for what cannot be written as
+  // it is.
+  UTF7,
   ASCII,
   SINGLE_BYTE, // One of the tables above.
 };
@@ -568,6 +571,9 @@ constexpr Charset CHARSETS[] = {
     {"850", Encoding::SINGLE_BYTE, CP850_HIGH},
     {"CSPC850MULTILINGUAL", Encoding::SINGLE_BYTE, CP850_HIGH},
     {"UNICODE", Encoding::UCS2_BOM, nullptr},
+    {"UTF7", Encoding::UTF7, nullptr},
+    {"UNICODE11UTF7", Encoding::UTF7, nullptr},
+    {"CSUNICODE11UTF7", Encoding::UTF7, nullptr},
     {"C99", Encoding::C99, nullptr},
     {"JAVA", Encoding::JAVA, nullptr},
     {"WCHART", Endian::IS_LITTLE ? Encoding::UTF32LE : Encoding::UTF32BE,
