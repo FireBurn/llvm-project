@@ -216,6 +216,54 @@ TEST_F(LlvmLibcIconvTest, MoreSingleByteSets) {
   }
 }
 
+TEST_F(LlvmLibcIconvTest, SetsWhichAreNotAsciiBelow0x80) {
+  struct Case {
+    const char *name;
+    char byte;
+    const char *utf8;
+    size_t length;
+  };
+  const Case cases[] = {
+      // Superscript one.
+      {"NEXTSTEP", '\xc0', "\xc2\xb9", 2},
+      // Armenian capital letter et.
+      {"ARMSCII-8", '\xc0', "\xd4\xb8", 2},
+      // Yen sign.
+      {"ISO646-JP", '\x5c', "\xc2\xa5", 2},
+      // Yen sign.
+      {"ISO646-CN", '\x24', "\xc2\xa5", 2},
+      // Latin capital letter a with breve and hook above.
+      {"VISCII", '\x02', "\xe1\xba\xb2", 3},
+      // Latin capital letter a with grave.
+      {"VISCII", '\xc0', "\xc3\x80", 2},
+      // Yen sign.
+      {"JISX0201-1976", '\x5c', "\xc2\xa5", 2},
+      // Halfwidth katakana letter ta.
+      {"JISX0201-1976", '\xc0', "\xef\xbe\x80", 3},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, &c.byte, 1, out, sizeof(out)),
+              static_cast<ssize_t>(c.length));
+    for (size_t i = 0; i < c.length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    char back[8] = {};
+    ASSERT_EQ(convert(c.name, "UTF-8", c.utf8, c.length, back, sizeof(back)),
+              ssize_t(1));
+    EXPECT_EQ(back[0], c.byte);
+  }
+
+  // A seven bit set has nothing from 0x80 up, and no place for the ASCII
+  // character it replaces.
+  char out[8] = {};
+  EXPECT_EQ(convert("UTF-8", "ISO646-JP", "\x80", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(convert("ISO646-JP", "UTF-8", "\\", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
+
 TEST_F(LlvmLibcIconvTest, Ucs4IsBigEndian) {
   char out[16] = {};
   ASSERT_EQ(convert("UCS-4", "UTF-8", "A", 1, out, sizeof(out)), ssize_t(4));
