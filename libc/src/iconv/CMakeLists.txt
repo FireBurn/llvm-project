@@ -38,6 +38,7 @@ add_header_library(
   HDRS
     chinese.h
     conversion.h
+    iso2022.h
     japanese.h
     korean.h
     status.h
