@@ -29,12 +29,25 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
   }
   auto &conv = *reinterpret_cast<iconv_internal::Conversion *>(cd);
 
-  // Going back to the initial state lets a byte order mark be read again and
-  // makes the output owe one again. The byte order already read is kept, as
-  // glibc does, and none of these sets need any bytes written to get back.
+  // Going back to the initial state. With somewhere to write it, the output
+  // first gets what it owes, such as the end of an open UTF-7 run; without,
+  // that is dropped. A byte order mark may then be read again and is owed
+  // again, but the byte order already read is kept, as glibc does.
   if (inbuf == nullptr || *inbuf == nullptr) {
-    conv.read_mark = true;
-    conv.write_mark = true;
+    if (outbuf != nullptr && *outbuf != nullptr) {
+      size_t made = 0;
+      auto out = reinterpret_cast<unsigned char *>(*outbuf);
+      if (iconv_internal::unshift(conv, out, *outbytesleft, made) ==
+          iconv_internal::Status::FULL) {
+        libc_errno = E2BIG;
+        return static_cast<size_t>(-1);
+      }
+      *outbuf += made;
+      *outbytesleft -= made;
+    }
+    const bool big = conv.read_big;
+    iconv_internal::reset_state(conv);
+    conv.read_big = big;
     return 0;
   }
 
