@@ -38,6 +38,12 @@ struct CodeRange {
   uint16_t last;
 };
 
+// Where a run of consecutive code points begins among a set's codes.
+struct CodeRun {
+  uint16_t position;
+  uint16_t code_point;
+};
+
 struct CodeTable {
   uint8_t lead_first;
   uint8_t lead_count;
