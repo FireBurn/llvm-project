@@ -34,6 +34,9 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
   if (inbuf == nullptr || *inbuf == nullptr)
     return 0;
 
+  // Whether anything was left out under //IGNORE.
+  bool skipped = false;
+
   while (*inbytesleft > 0) {
     char32_t cp = 0;
     size_t used = 0;
@@ -43,6 +46,12 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
       libc_errno = EINVAL;
       return static_cast<size_t>(-1);
     case iconv_internal::Status::INVALID:
+      if (conv.ignore) {
+        *inbuf += used;
+        *inbytesleft -= used;
+        skipped = true;
+        continue;
+      }
       libc_errno = EILSEQ;
       return static_cast<size_t>(-1);
     default:
@@ -66,6 +75,12 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     if (wrote != iconv_internal::Status::OK) {
       // The character has no place in the target set. POSIX says this is
       // EILSEQ, the same as an input which was not a character at all.
+      if (conv.ignore) {
+        *inbuf += used;
+        *inbytesleft -= used;
+        skipped = true;
+        continue;
+      }
       libc_errno = EILSEQ;
       return static_cast<size_t>(-1);
     }
@@ -76,6 +91,13 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     *inbytesleft -= used;
     *outbuf += made;
     *outbytesleft -= made;
+  }
+
+  // What was left out is still an error once the rest has been converted, so
+  // that a caller can tell the output is not the whole of the input.
+  if (skipped) {
+    libc_errno = EILSEQ;
+    return static_cast<size_t>(-1);
   }
 
   // Every character converted to exactly one character, so none of them was
