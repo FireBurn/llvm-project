@@ -30,6 +30,7 @@
 #include "src/iconv/iso2022.h"
 #include "src/iconv/japanese.h"
 #include "src/iconv/korean.h"
+#include "src/iconv/traditional_chinese.h"
 #endif
 #include "src/iconv/status.h"
 
@@ -368,6 +369,8 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return read_gbk(in, inleft, out, used);
   case Encoding::GB18030:
     return read_gb18030(in, inleft, out, used);
+  case Encoding::BIG5:
+    return read_big5(in, inleft, out, used);
   case Encoding::KS_X_1001:
     return read_jis(KS_X_1001, in, inleft, out, used);
   case Encoding::EUC_KR:
@@ -809,6 +812,8 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     return write_gbk(cp, out, outleft, made);
   case Encoding::GB18030:
     return write_gb18030(cp, out, outleft, made);
+  case Encoding::BIG5:
+    return write_big5(cp, out, outleft, made);
   case Encoding::KS_X_1001:
     return write_jis(KS_X_1001, cp, out, outleft, made);
   case Encoding::EUC_KR:
