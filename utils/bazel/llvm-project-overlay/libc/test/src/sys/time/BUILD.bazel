@@ -23,6 +23,23 @@ libc_test(
 )
 
 libc_test(
+    name = "futimes_test",
+    srcs = ["futimes_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:fstat",
+        "//libc:futimes",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:sys_time_futimes",
+        "//libc:types_struct_timeval",
+        "//libc:unlink",
+    ],
+)
+
+libc_test(
     name = "lutimes_test",
     srcs = ["lutimes_test.cpp"],
     deps = [
