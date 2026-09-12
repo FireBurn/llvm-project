@@ -27,6 +27,7 @@
 #include "src/iconv/korean.h"
 #include "src/iconv/single_byte_tables.h"
 #include "src/iconv/status.h"
+#include "src/iconv/traditional_chinese.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace iconv_internal {
@@ -42,6 +43,9 @@ enum class Iso2022Set : uint8_t {
   KS_C_5601,
   ISO8859_1,
   ISO8859_7,
+  ISO_IR_165,
+  CNS_PLANE_1,
+  CNS_PLANE_2,
 };
 
 enum class Iso2022Language : uint8_t { NONE, JAPANESE, CHINESE, KOREAN };
@@ -65,6 +69,11 @@ struct Iso2022State {
   Iso2022Language language;
   uint8_t tag_length = TAG_LETTERS;
   char32_t tag_first;
+  // For ISO-2022-CN-EXT: the planes of CNS 11643 designated for SS3, or 0.
+  uint8_t read_g3;
+  uint8_t write_g3;
+  // For ISO-2022-CN: whether the last character written was shifted out.
+  bool write_last_shifted;
 };
 
 struct Iso2022Escape {
@@ -249,6 +258,10 @@ LIBC_INLINE bool iso2022_code(Iso2022Set set, char32_t cp, uint16_t &code) {
   case Iso2022Set::KS_C_5601:
     code = find_code(KS_X_1001, cp);
     return code != 0;
+  case Iso2022Set::ISO_IR_165:
+  case Iso2022Set::CNS_PLANE_1:
+  case Iso2022Set::CNS_PLANE_2:
+    return false;
   case Iso2022Set::ISO8859_1:
     code = static_cast<uint16_t>(cp - 0x80);
     return cp >= 0xA0 && cp <= 0xFF;
@@ -835,6 +848,256 @@ LIBC_INLINE Status unshift_hz(Iso2022State &state, unsigned char *out,
   out[0] = '~';
   out[1] = '}';
   made = 2;
+  return Status::OK;
+}
+
+// ISO-2022-CN: ASCII, and after SO the set the last ESC $ ) designated, GB 2312
+// or plane 1 of CNS 11643. ESC N takes the next two bytes from plane 2.
+// ISO-2022-CN-EXT adds ISO-IR-165 for SO, and ESC O for the plane from 3 to 7
+// the last ESC $ + designated. They are read and written as glibc does, with
+// these exceptions. glibc ignores a designation made while shifted out, which
+// it writes itself, so that takes effect at once. After a character from plane
+// 2 or later, glibc writes the next such character without its ESC N or ESC O,
+// and shifts in or out as if it had shifted out for it; each has its own here,
+// and only SO shifts out. Characters of planes 3 to 7 beyond the Basic
+// Multilingual Plane are written, which glibc does not.
+struct Iso2022CnEscape {
+  char bytes[2];
+  Iso2022Set set;
+  uint8_t plane;
+};
+
+// The designations after ESC $, and last the ones ISO-2022-CN-EXT adds.
+constexpr Iso2022CnEscape ISO2022_CN_ESCAPES[] = {
+    {{')', 'A'}, Iso2022Set::GB2312, 0},
+    {{')', 'G'}, Iso2022Set::CNS_PLANE_1, 0},
+    {{'*', 'H'}, Iso2022Set::CNS_PLANE_2, 2},
+    {{')', 'E'}, Iso2022Set::ISO_IR_165, 0},
+    {{'+', 'I'}, Iso2022Set::ASCII, 3},
+    {{'+', 'J'}, Iso2022Set::ASCII, 4},
+    {{'+', 'K'}, Iso2022Set::ASCII, 5},
+    {{'+', 'L'}, Iso2022Set::ASCII, 6},
+    {{'+', 'M'}, Iso2022Set::ASCII, 7},
+};
+constexpr size_t ISO2022_CN_ESCAPE_COUNT = 3;
+
+// The character of a code shifted out to |set|, or 0. Before any designation,
+// glibc reads GB 2312.
+LIBC_INLINE char32_t iso2022_cn_character(Iso2022Set set, unsigned row,
+                                          unsigned column) {
+  if (set == Iso2022Set::CNS_PLANE_1)
+    return look_up(CNS_11643[0], row, column);
+  if (set == Iso2022Set::ISO_IR_165)
+    return iso_ir_165_character(row, column);
+  return gb2312_character(row, column);
+}
+
+LIBC_INLINE uint16_t iso2022_cn_code(Iso2022Set set, char32_t cp) {
+  if (set == Iso2022Set::GB2312)
+    return gb2312_code(cp);
+  if (set == Iso2022Set::ISO_IR_165)
+    return iso_ir_165_code(cp);
+  if (set == Iso2022Set::CNS_PLANE_1)
+    return find_code(CNS_11643[0], cp);
+  return 0;
+}
+
+LIBC_INLINE Status read_iso2022_cn(Iso2022State &state, bool ext,
+                                   const unsigned char *in, size_t inleft,
+                                   char32_t &out, size_t &used) {
+  const unsigned byte = in[0];
+  used = 1;
+  if (byte == ESC) {
+    if (inleft < 2)
+      return Status::INCOMPLETE;
+    if (in[1] == 'N' || (ext && in[1] == 'O')) {
+      if (inleft < 4)
+        return Status::INCOMPLETE;
+      const WideTable *table = cns_plane(in[1] == 'N' ? 2 : state.read_g3);
+      const char32_t cp = table ? look_up(*table, in[2], in[3]) : 0;
+      // glibc skips the single shift of a code which is not a character, and
+      // in ISO-2022-CN-EXT the code too.
+      if (cp == 0) {
+        used = ext ? 4 : 2;
+        return Status::INVALID;
+      }
+      used = 4;
+      out = cp;
+      return Status::OK;
+    }
+    const size_t count =
+        ext ? sizeof(ISO2022_CN_ESCAPES) / sizeof(ISO2022_CN_ESCAPES[0])
+            : ISO2022_CN_ESCAPE_COUNT;
+    for (size_t e = 0; in[1] == '$' && e < count; ++e) {
+      const Iso2022CnEscape &escape = ISO2022_CN_ESCAPES[e];
+      if (inleft < 4) {
+        if (inleft == 2 || in[2] == static_cast<unsigned char>(escape.bytes[0]))
+          return Status::INCOMPLETE;
+        continue;
+      }
+      if (in[2] != static_cast<unsigned char>(escape.bytes[0]) ||
+          in[3] != static_cast<unsigned char>(escape.bytes[1]))
+        continue;
+      if (escape.plane >= 3)
+        state.read_g3 = escape.plane;
+      else if (escape.plane == 0)
+        state.read_g0 = escape.set;
+      used = 4;
+      return Status::NONE;
+    }
+    // As in glibc, an escape sequence it does not know is read as the
+    // characters it is, unless shifted out.
+    if (state.read_shifted)
+      return Status::INVALID;
+    out = byte;
+    return Status::OK;
+  }
+  // glibc reads a shift out with nothing designated for it only in
+  // ISO-2022-CN.
+  if (byte == SO && ext && state.read_g0 == Iso2022Set::ASCII)
+    return Status::INVALID;
+  if (byte == SO || byte == SI) {
+    state.read_shifted = byte == SO;
+    return Status::NONE;
+  }
+  if (!state.read_shifted) {
+    // glibc takes DEL for a character only in ISO-2022-CN-EXT.
+    if (byte >= 0x80 || (byte == 0x7F && !ext))
+      return Status::INVALID;
+    out = byte;
+    return Status::OK;
+  }
+  // Shifted out, glibc waits for a second byte after any byte below 0x80 in
+  // ISO-2022-CN-EXT, and after one from 0x21 to 0x7E in ISO-2022-CN.
+  const bool pair_byte = byte >= 0x21 && byte <= 0x7E;
+  if (byte >= 0x80 || (!ext && !pair_byte))
+    return Status::INVALID;
+  if (inleft < 2) {
+    // In ISO-2022-CN, not after a byte past the set's last row of characters.
+    const unsigned last = state.read_g0 == Iso2022Set::CNS_PLANE_1  ? 0x7D
+                          : state.read_g0 == Iso2022Set::ISO_IR_165 ? 0x7E
+                                                                    : 0x77;
+    return ext || byte <= last ? Status::INCOMPLETE : Status::INVALID;
+  }
+  if (!pair_byte)
+    return Status::INVALID;
+  const char32_t cp = iso2022_cn_character(state.read_g0, byte, in[1]);
+  if (cp == 0)
+    return Status::INVALID;
+  used = 2;
+  out = cp;
+  return Status::OK;
+}
+
+LIBC_INLINE Status write_iso2022_cn(Iso2022State &state, bool ext, char32_t cp,
+                                    unsigned char *out, size_t outleft,
+                                    size_t &made) {
+  made = 0;
+  unsigned char bytes[8];
+  size_t length = 0;
+  if (cp < 0x80) {
+    if (state.write_shifted)
+      bytes[length++] = SI;
+    bytes[length++] = static_cast<unsigned char>(cp);
+    if (outleft < length)
+      return Status::FULL;
+    for (size_t i = 0; i < length; ++i)
+      out[i] = bytes[i];
+    made = length;
+    state.write_shifted = false;
+    state.write_last_shifted = false;
+    // Each line designates its sets again.
+    if (cp == '\n') {
+      state.write_g0 = Iso2022Set::ASCII;
+      state.write_g2 = Iso2022Set::ASCII;
+      state.write_g3 = 0;
+    }
+    return Status::OK;
+  }
+  // As in glibc, the set designated for SO is kept while the last character
+  // came from it. Otherwise GB 2312 is tried first, or plane 1 if it or
+  // ISO-IR-165 was designated, then plane 2, then the sets for SO in order,
+  // then planes 3 to 7.
+  const Iso2022Set designated = state.write_g0;
+  Iso2022Set set = designated;
+  uint16_t code = 0;
+  unsigned plane = 0;
+  if (!state.write_last_shifted)
+    set = designated == Iso2022Set::CNS_PLANE_1 ||
+                  designated == Iso2022Set::ISO_IR_165
+              ? Iso2022Set::CNS_PLANE_1
+              : Iso2022Set::GB2312;
+  code = iso2022_cn_code(set, cp);
+  if (code == 0) {
+    code = find_code(CNS_11643[1], cp);
+    plane = 2;
+  }
+  static constexpr Iso2022Set ORDER[] = {
+      Iso2022Set::GB2312, Iso2022Set::ISO_IR_165, Iso2022Set::CNS_PLANE_1};
+  for (size_t i = 0; i < 3 && code == 0; ++i) {
+    if (ORDER[i] == Iso2022Set::ISO_IR_165 && !ext)
+      continue;
+    set = ORDER[i];
+    plane = 0;
+    code = iso2022_cn_code(set, cp);
+  }
+  for (unsigned p = 3; ext && p <= 7 && code == 0; ++p) {
+    code = find_code(*cns_plane(p), cp);
+    plane = p;
+  }
+  if (code == 0)
+    return Status::INVALID;
+  if (plane == 0) {
+    if (state.write_g0 != set) {
+      bytes[length++] = ESC;
+      bytes[length++] = '$';
+      bytes[length++] = ')';
+      bytes[length++] = set == Iso2022Set::GB2312        ? 'A'
+                        : set == Iso2022Set::CNS_PLANE_1 ? 'G'
+                                                         : 'E';
+    }
+    if (!state.write_shifted)
+      bytes[length++] = SO;
+  } else {
+    const bool announced = plane == 2
+                               ? state.write_g2 == Iso2022Set::CNS_PLANE_2
+                               : state.write_g3 == plane;
+    if (!announced) {
+      bytes[length++] = ESC;
+      bytes[length++] = '$';
+      bytes[length++] = plane == 2 ? '*' : '+';
+      bytes[length++] = static_cast<unsigned char>('H' + plane - 2);
+    }
+    bytes[length++] = ESC;
+    bytes[length++] = plane == 2 ? 'N' : 'O';
+  }
+  bytes[length++] = static_cast<unsigned char>(code >> 8);
+  bytes[length++] = static_cast<unsigned char>(code & 0xFF);
+  if (outleft < length)
+    return Status::FULL;
+  for (size_t i = 0; i < length; ++i)
+    out[i] = bytes[i];
+  made = length;
+  state.write_last_shifted = plane == 0;
+  if (plane == 0) {
+    state.write_g0 = set;
+    state.write_shifted = true;
+  } else if (plane == 2) {
+    state.write_g2 = Iso2022Set::CNS_PLANE_2;
+  } else {
+    state.write_g3 = static_cast<uint8_t>(plane);
+  }
+  return Status::OK;
+}
+
+LIBC_INLINE Status unshift_iso2022_cn(Iso2022State &state, unsigned char *out,
+                                      size_t outleft, size_t &made) {
+  if (!state.write_shifted)
+    return Status::OK;
+  if (outleft < 1)
+    return Status::FULL;
+  out[0] = SI;
+  made = 1;
   return Status::OK;
 }
 
