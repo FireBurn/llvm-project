@@ -17,6 +17,7 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/conversion.h"
+#include "src/iconv/translit.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -36,6 +37,29 @@ size_t fail_with(Status status) {
   return fail(status == Status::FULL ? E2BIG : EILSEQ);
 }
 
+// Writes |cp| as its transliteration, each character of which the target set
+// does not have either being written as its own in turn.
+Status write_transliterated(Conversion &conv, char32_t cp, unsigned char *out,
+                            size_t outleft, size_t &made, int depth) {
+  const char16_t *text = nullptr;
+  size_t length = 0;
+  if (depth > 4 || !iconv_internal::find_transliteration(cp, text, length))
+    return Status::INVALID;
+  made = 0;
+  for (size_t i = 0; i < length; ++i) {
+    size_t written = 0;
+    Status status = iconv_internal::encode(conv, text[i], out + made,
+                                           outleft - made, written);
+    if (status == Status::INVALID)
+      status = write_transliterated(conv, text[i], out + made, outleft - made,
+                                    written, depth + 1);
+    if (status != Status::OK)
+      return status;
+    made += written;
+  }
+  return Status::OK;
+}
+
 // Writes one character as the target set has it. A byte order mark written
 // ahead of the character stays written, whatever becomes of the character.
 // Under //IGNORE, a character with no place in the target set is left out.
@@ -44,6 +68,26 @@ Status write_plain(Conversion &conv, char32_t cp, char **outbuf,
   size_t made = 0;
   auto out = reinterpret_cast<unsigned char *>(*outbuf);
   Status status = iconv_internal::encode(conv, cp, out, *outbytesleft, made);
+  if (status == Status::INVALID && conv.translit) {
+    // Nothing of a transliteration is written unless all of it is, and what
+    // has none is written as a question mark, as glibc does.
+    const Conversion before = conv;
+    size_t written = 0;
+    status = write_transliterated(conv, cp, out + made, *outbytesleft - made,
+                                  written, 0);
+    if (status == Status::INVALID) {
+      conv = before;
+      written = 0;
+      status = iconv_internal::encode(conv, '?', out + made,
+                                      *outbytesleft - made, written);
+    }
+    if (status == Status::OK) {
+      made += written;
+      ++conv.irreversible;
+    } else {
+      conv = before;
+    }
+  }
   *outbuf += made;
   *outbytesleft -= made;
   if (status == Status::INVALID && conv.ignore) {
@@ -154,6 +198,7 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
   if (cd == reinterpret_cast<iconv_t>(-1) || cd == nullptr)
     return fail(EBADF);
   auto &conv = *reinterpret_cast<Conversion *>(cd);
+  conv.irreversible = 0;
 
   // Whether anything was left out under //IGNORE.
   bool skipped = false;
@@ -189,7 +234,7 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
     const bool big = conv.read_big;
     iconv_internal::reset_state(conv);
     conv.read_big = big;
-    return skipped ? fail(EILSEQ) : 0;
+    return skipped ? fail(EILSEQ) : conv.irreversible;
   }
 
   // Where the input goes back to when a character cannot be written: just
@@ -311,9 +356,9 @@ LLVM_LIBC_FUNCTION(size_t, iconv,
   if (skipped)
     return fail(EILSEQ);
 
-  // Every character converted to exactly one character, so none of them was
+  // The characters written as something else under //TRANSLIT are the ones
   // converted in a way which cannot be undone.
-  return 0;
+  return conv.irreversible;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
