@@ -250,6 +250,21 @@ BIG5_ROW_A2_WRITES = [0x2550, 0x255E, 0x2561, 0x256A]
 # HKSCS's code, as glibc does.
 BIG5_TXT = ("BIG5.TXT", f"{EASTASIA}/OTHER")
 HKSCS_2008 = ("hkscs-2008-big5-iso.txt", "https://www.ccli.gov.hk/doc")
+# EUC-TW has the planes of CNS 11643 glibc has, 1 to 7 and 15, as the tables
+# Taiwan's government publishes have them now. glibc's are older: these have
+# more characters, read some punctuation of plane 1 otherwise, and read as
+# unified ideographs some codes glibc reads as compatibility ideographs. The
+# private use characters the tables give codes with no Unicode character are
+# left out.
+CNS_11643 = (
+    [
+        "CNS2UNICODE_Unicode BMP.txt",
+        "CNS2UNICODE_Unicode 2.txt",
+        "CNS2UNICODE_Unicode 3.txt",
+    ],
+    "https://www.cns11643.gov.tw/opendata/MapingTables.zip",
+)
+CNS_PLANES = [1, 2, 3, 4, 5, 6, 7, 15]
 
 # The Korean sets share KS X 1001, from the Unicode Consortium's KSC5601 table,
 # whose codes with both bytes from 0xA1 are KS X 1001's. KS X 1001:1998 added
@@ -815,6 +830,38 @@ def johab_from_ks_x_1001(code: int) -> int:
     return lead << 8 | (column + (0x30 if column <= 0x4E else 0x42))
 
 
+def format_wide_table(name: str, mapping: dict[int, int]) -> tuple[str, str]:
+    """The arrays of a WideTable of the codes from 0x2121 to 0x7E7E, and its
+    initializer."""
+    cells = [0] * (94 * 94)
+    for code, code_point in mapping.items():
+        row, column = (code >> 8) - 0x21, (code & 0xFF) - 0x21
+        if not (0 <= row < 94 and 0 <= column < 94):
+            exit(f"{name}: 0x{code:04X} is outside the table")
+        if not 0 < code_point <= 0x3FFFF:
+            exit(f"{name}: 0x{code:04X} is U+{code_point:04X}, which does not fit")
+        cells[row * 94 + column] = code_point
+    planes = [0] * (len(cells) // 4 + 1)
+    for position, code_point in enumerate(cells):
+        planes[position // 4] |= (code_point >> 16) << (position % 4 * 2)
+    order = sorted((p for p, cp in enumerate(cells) if cp), key=lambda p: cells[p])
+    if len({cells[p] for p in order}) != len(order):
+        exit(f"{name}: a character has two codes")
+    arrays = "\n".join(
+        [
+            "namespace {",
+            format_values(
+                "uint16_t", f"{name}_CODE_POINTS", [c & 0xFFFF for c in cells], 4
+            ),
+            format_values("uint8_t", f"{name}_PLANES", planes, 2),
+            format_values("uint16_t", f"{name}_ORDER", order, 4),
+            "} // namespace",
+        ]
+    )
+    initializer = f"{{{name}_CODE_POINTS, {name}_PLANES, {name}_ORDER, {len(order)}}}"
+    return arrays, initializer
+
+
 def traditional_chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
     """The definitions and declarations of the Traditional Chinese sets' tables."""
     table_file, best_fit_file, _ = CP950
@@ -888,6 +935,33 @@ def traditional_chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
         "extern const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT];",
         "extern const uint16_t BIG5_HKSCS_PLANE_2_ORDER[BIG5_HKSCS_PLANE_2_COUNT];",
         format_sequences("BIG5_HKSCS", sequences),
+    ]
+
+    cns = {plane: {} for plane in CNS_PLANES}
+    file_names, _ = CNS_11643
+    for file_name in file_names:
+        with open(f"{mappings}/{file_name}", encoding="utf-8-sig") as file:
+            for line in file:
+                match = re.match(r"(\d+)-([0-9A-F]{4})\s+([0-9A-F]{4,5})\s*$", line)
+                if match and int(match.group(1)) in cns:
+                    code, code_point = int(match.group(2), 16), int(match.group(3), 16)
+                    cns[int(match.group(1))][code] = code_point
+    initializers = []
+    for plane, mapping in cns.items():
+        arrays, initializer = format_wide_table(f"CNS_11643_{plane}", mapping)
+        definitions.append(arrays)
+        initializers.append(f"    {initializer},")
+    definitions.append(
+        "const WideTable CNS_11643[CNS_PLANE_COUNT] = {\n"
+        + "\n".join(initializers)
+        + "\n};"
+    )
+    declarations += [
+        f"constexpr size_t CNS_PLANE_COUNT = {len(CNS_PLANES)};",
+        "// Planes "
+        + ", ".join(str(p) for p in CNS_PLANES[:-1])
+        + f" and {CNS_PLANES[-1]} of CNS 11643.",
+        "extern const WideTable CNS_11643[CNS_PLANE_COUNT];",
     ]
     return definitions, declarations
 
