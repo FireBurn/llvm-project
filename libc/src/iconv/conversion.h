@@ -27,6 +27,7 @@
 #include "src/iconv/charsets.h"
 #ifndef LIBC_COPT_ICONV_DISABLE_CJK
 #include "src/iconv/chinese.h"
+#include "src/iconv/iso2022.h"
 #include "src/iconv/japanese.h"
 #include "src/iconv/korean.h"
 #endif
@@ -73,6 +74,10 @@ struct Conversion {
   // Characters written but held back while they may begin a sequence.
   char32_t write_held[2];
   uint8_t write_held_count;
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  // For the sets which switch between others: which they are in.
+  Iso2022State iso2022;
+#endif
 };
 
 // Puts a conversion back in its initial state, dropping whatever it had
@@ -90,6 +95,9 @@ LIBC_INLINE void reset_state(Conversion &conv) {
   conv.held = 0;
   conv.pending_count = 0;
   conv.write_held_count = 0;
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  conv.iso2022 = Iso2022State{};
+#endif
 }
 
 // A name matches without regard to case, or to the punctuation between its
@@ -670,6 +678,13 @@ LIBC_INLINE Status decode(Conversion &conv, const unsigned char *in,
     return Status::INCOMPLETE;
   if (conv.from == Encoding::UTF7)
     return decode_utf7(conv, in, inleft, out, used);
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  if (conv.from == Encoding::ISO2022_JP || conv.from == Encoding::ISO2022_JP2)
+    return read_iso2022_jp(conv.iso2022, conv.from == Encoding::ISO2022_JP2, in,
+                           inleft, out, used);
+  if (conv.from == Encoding::ISO2022_KR)
+    return read_iso2022_kr(conv.iso2022, in, inleft, out, used);
+#endif
 
   if (has_mark(conv.from) && conv.read_mark) {
     const bool wide = conv.from == Encoding::UTF32;
@@ -984,10 +999,17 @@ LIBC_INLINE Status encode_utf7(Conversion &conv, char32_t cp,
 }
 
 // Writes what the output owes before it is back in its initial state: the
-// end of an open UTF-7 run. |made| is how many bytes that took.
+// end of an open UTF-7 run, or the escape or shift back to ASCII. |made| is
+// how many bytes that took.
 LIBC_INLINE Status unshift(Conversion &conv, unsigned char *out, size_t outleft,
                            size_t &made) {
   made = 0;
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  if (conv.to == Encoding::ISO2022_JP || conv.to == Encoding::ISO2022_JP2 ||
+      conv.to == Encoding::ISO2022_KR)
+    return unshift_iso2022(conv.iso2022, conv.to == Encoding::ISO2022_KR, out,
+                           outleft, made);
+#endif
   if (conv.to != Encoding::UTF7 || !conv.write_run)
     return Status::OK;
   const size_t need = (conv.write_bit_count > 0 ? 1 : 0) + 1;
@@ -1008,6 +1030,13 @@ LIBC_INLINE Status encode(Conversion &conv, char32_t cp, unsigned char *out,
   made = 0;
   if (conv.to == Encoding::UTF7)
     return encode_utf7(conv, cp, out, outleft, made);
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  if (conv.to == Encoding::ISO2022_JP || conv.to == Encoding::ISO2022_JP2)
+    return write_iso2022_jp(conv.iso2022, conv.to == Encoding::ISO2022_JP2, cp,
+                            out, outleft, made);
+  if (conv.to == Encoding::ISO2022_KR)
+    return write_iso2022_kr(conv.iso2022, cp, out, outleft, made);
+#endif
   // Output with a mark is in the host's byte order, which the mark says.
   const bool big = !Endian::IS_LITTLE;
   if (has_mark(conv.to) && conv.write_mark) {
