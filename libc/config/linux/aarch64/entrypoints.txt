@@ -734,6 +734,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.times.times
 
     # sys/time.h entrypoints
+    libc.src.sys.time.futimes
     libc.src.sys.time.lutimes
     libc.src.sys.time.setitimer
     libc.src.sys.time.getitimer
