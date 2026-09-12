@@ -396,6 +396,25 @@ Result convert_all(const char *to, const char *in, size_t inlen, char *out,
   return {ret, error, inlen - il, static_cast<size_t>(op - out)};
 }
 
+Result convert_all_from(const char *to, const char *from, const char *in,
+                        size_t inlen, char *out, size_t outlen) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open(to, from);
+  if (cd == FAILED)
+    return {0, -1, 0, 0};
+  char input[64];
+  for (size_t i = 0; i < inlen; ++i)
+    input[i] = in[i];
+  char *ip = input;
+  char *op = out;
+  size_t il = inlen;
+  size_t ol = outlen;
+  size_t ret = LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol);
+  int error = ret == static_cast<size_t>(-1) ? libc_errno : 0;
+  libc_errno = 0;
+  LIBC_NAMESPACE::iconv_close(cd);
+  return {ret, error, inlen - il, static_cast<size_t>(op - out)};
+}
+
 TEST_F(LlvmLibcIconvTest, IgnoreLeavesOutWhatHasNoPlace) {
   char out[16] = {};
   // e with an acute has no place in ASCII. The rest is converted, all of the
@@ -628,4 +647,81 @@ TEST_F(LlvmLibcIconvTest, UnicodeIsUcs2WithAByteOrderMark) {
   EXPECT_EQ(r.error, EILSEQ);
   EXPECT_EQ(r.made, size_t(2));
   ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, WritingUtf7) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-7", "UTF-8");
+  ASSERT_TRUE(cd != FAILED);
+  char out[32] = {};
+  // "Hi+€A€." A plus sign is "+-", the euro sign is a base64 run, which a '-'
+  // ends before "A" but not before ".".
+  const char in[] = "Hi+\xe2\x82\xac"
+                    "A\xe2\x82\xac.";
+  const char expected[] = "Hi+-+IKw-A+IKw.";
+  Result r = step(cd, in, sizeof(in) - 1, out, sizeof(out));
+  EXPECT_EQ(r.error, 0);
+  ASSERT_EQ(r.made, sizeof(expected) - 1);
+  for (size_t i = 0; i < r.made; ++i)
+    EXPECT_EQ(out[i], expected[i]);
+
+  // A run still open when the state is reset is ended, if there is room.
+  r = step(cd, "\xe2\x82\xac", 3, out, sizeof(out));
+  ASSERT_EQ(r.made, size_t(3));
+  char *op = out;
+  size_t ol = 1;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  ol = sizeof(out);
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol), size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 2L);
+  EXPECT_EQ(out[0], 'w');
+  EXPECT_EQ(out[1], '-');
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, ReadingUtf7) {
+  expect_bytes("UTF-8", "UTF-7", "+IKw-A", 6,
+               "\xe2\x82\xac"
+               "A",
+               4);
+  expect_bytes("UTF-8", "UTF-7", "+IKw.A", 6, "\xe2\x82\xac.A", 5);
+  expect_bytes("UTF-8", "UTF-7", "+-", 2, "+", 1);
+  expect_bytes("UTF-8", "UTF-7", "+2D3eAA-", 8, "\xf0\x9f\x98\x80", 4);
+
+  // A run may go on into the next call, halfway through a surrogate pair.
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-8", "UTF-7");
+  ASSERT_TRUE(cd != FAILED);
+  char out[16] = {};
+  Result r = step(cd, "+2D3", 4, out, sizeof(out));
+  EXPECT_EQ(r.used, size_t(4));
+  EXPECT_EQ(r.made, size_t(0));
+  r = step(cd, "eAA-", 4, out, sizeof(out));
+  EXPECT_EQ(r.made, size_t(4));
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, Utf7Errors) {
+  char out[16] = {};
+  // A low surrogate on its own is not a character, and nothing of it is used.
+  Result r = convert_all_from("UTF-8", "UTF-7", "+3gB", 4, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(0));
+  // Leftover bits which are not zero are reported where the run ends.
+  r = convert_all_from("UTF-8", "UTF-7", "+II-", 4, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(3));
+  // A backslash is not a UTF-7 character, and a '+' at the end may yet start
+  // a run.
+  r = convert_all_from("UTF-8", "UTF-7", "\\", 1, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  r = convert_all_from("UTF-8", "UTF-7", "A+", 2, out, sizeof(out));
+  EXPECT_EQ(r.error, EINVAL);
+  EXPECT_EQ(r.used, size_t(1));
+  // Under //IGNORE a bad unit is dropped with the rest of its run.
+  r = convert_all_from("UTF-8//IGNORE", "UTF-7", "+3gBAB-C", 8, out,
+                       sizeof(out));
+  EXPECT_EQ(r.used, size_t(8));
+  ASSERT_EQ(r.made, size_t(1));
+  EXPECT_EQ(out[0], 'C');
 }
