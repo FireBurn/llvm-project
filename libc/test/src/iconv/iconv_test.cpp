@@ -1363,3 +1363,33 @@ TEST_F(LlvmLibcIconvTest, Iso2022Jp1AndHz) {
   ASSERT_EQ(convert("UTF-8", "HZ", "~~", 2, out, sizeof(out)), ssize_t(1));
   EXPECT_EQ(out[0], '~');
 }
+
+TEST_F(LlvmLibcIconvTest, Iso2022JpMs) {
+  // ISO-2022-JP-MS has NEC's row 13 in JIS X 0208, the rest of IBM's
+  // extensions in JIS X 0212, and half-width katakana.
+  const char circled[] = {'\x1b', '$', 'B', '\x2d', '\x21'};
+  expect_bytes("ISO-2022-JP-MS", "UTF-8", "\xe2\x91\xa0", 3, circled,
+               sizeof(circled));
+  const char numeral[] = {'\x1b', '$', '(', 'D', '\x73', '\x21'};
+  expect_bytes("ISO-2022-JP-MS", "UTF-8", "\xe2\x85\xb0", 3, numeral,
+               sizeof(numeral));
+  const char kana[] = {'\x1b', '(', 'I', '\x21'};
+  expect_bytes("ISO-2022-JP-MS", "UTF-8", "\xef\xbd\xa1", 3, kana,
+               sizeof(kana));
+  // A shift out from ASCII does nothing, and row 0x75 has private use
+  // characters.
+  const char shifted[] = {'\x0e', '\x1b', '$', 'B', '\x75', '\x21', '\x0f'};
+  char out[32] = {};
+  ASSERT_EQ(convert("UTF-8", "ISO-2022-JP-MS", shifted, sizeof(shifted), out,
+                    sizeof(out)),
+            ssize_t(3));
+  EXPECT_EQ(out[0], '\xee');
+  EXPECT_EQ(out[1], '\x80');
+  EXPECT_EQ(out[2], '\x80');
+  // From JIS X 0201 Roman, a shift out goes to katakana.
+  const char roman_kana[] = {'\x1b', '(', 'J', '\x0e', '\x21'};
+  ASSERT_EQ(convert("UTF-8", "ISO-2022-JP-MS", roman_kana, sizeof(roman_kana),
+                    out, sizeof(out)),
+            ssize_t(3));
+  EXPECT_EQ(out[2], '\xa1');
+}
