@@ -39,6 +39,7 @@ add_header_library(
     chinese.h
     conversion.h
     japanese.h
+    korean.h
     status.h
   DEPENDS
     .charsets

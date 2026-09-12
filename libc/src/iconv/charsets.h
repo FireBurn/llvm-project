@@ -75,6 +75,11 @@ enum class Encoding {
   EUC_CN,
   GBK,
   GB18030,
+  // KS X 1001 by itself, and the Korean sets built on it.
+  KS_X_1001,
+  EUC_KR,
+  CP949,
+  JOHAB,
 };
 
 struct Charset {
@@ -375,6 +380,18 @@ constexpr Charset CHARSETS[] = {
     {"MS936", Encoding::GBK, nullptr},
     {"WINDOWS936", Encoding::GBK, nullptr},
     {"GB18030", Encoding::GB18030, nullptr},
+    {"KSC5601", Encoding::KS_X_1001, nullptr},
+    {"KSC56011987", Encoding::KS_X_1001, nullptr},
+    {"KSC56011989", Encoding::KS_X_1001, nullptr},
+    {"ISOIR149", Encoding::KS_X_1001, nullptr},
+    {"CSKSC56011987", Encoding::KS_X_1001, nullptr},
+    {"KOREAN", Encoding::KS_X_1001, nullptr},
+    {"EUCKR", Encoding::EUC_KR, nullptr},
+    {"CSEUCKR", Encoding::EUC_KR, nullptr},
+    {"CP949", Encoding::CP949, nullptr},
+    {"UHC", Encoding::CP949, nullptr},
+    {"JOHAB", Encoding::JOHAB, nullptr},
+    {"CP1361", Encoding::JOHAB, nullptr},
 #endif // LIBC_COPT_ICONV_DISABLE_CJK
 };
 
