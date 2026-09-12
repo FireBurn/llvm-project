@@ -7,10 +7,10 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// GB 2312 by itself, EUC-CN, GBK and GB18030. They share GB18030's table of
-/// two byte codes: GB 2312 and GBK are the parts of it they have. |used| is
-/// how many bytes a character took, or for input which is not a character,
-/// how many are skipped, which follows glibc.
+/// GB 2312 by itself, EUC-CN, GBK, GB18030 and ISO-IR-165. They share GB18030's
+/// table of two byte codes: GB 2312 and GBK are the parts of it they have.
+/// |used| is how many bytes a character took, or for input which is not a
+/// character, how many are skipped, which follows glibc.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -88,6 +88,47 @@ LIBC_INLINE Status read_gb2312(const unsigned char *in, size_t inleft,
 LIBC_INLINE Status write_gb2312(char32_t cp, unsigned char *out, size_t outleft,
                                 size_t &made) {
   uint16_t code = gb2312_code(cp);
+  if (code == 0)
+    return Status::INVALID;
+  return put_code(code, 2, out, outleft, made);
+}
+
+// ISO-IR-165: GB 2312 with the additions of GB 6345.1 and GB 8565.2, and GB
+// 1988 in row 0x2A. glibc has it only inside ISO-2022-CN-EXT, so by itself it
+// is read and written as GNU libiconv does: every byte from 0x21 to 0x7E waits
+// for a second, and a pair which is not a character is skipped by its first
+// byte.
+LIBC_INLINE char32_t iso_ir_165_character(unsigned row, unsigned column) {
+  if (char32_t cp = gb2312_character(row, column))
+    return cp;
+  uint16_t cp = 0;
+  return look_up(ISO_IR_165_ADDITIONS, row << 8 | column, cp) ? cp : 0;
+}
+
+LIBC_INLINE uint16_t iso_ir_165_code(char32_t cp) {
+  if (uint16_t code = gb2312_code(cp))
+    return code;
+  return cp > 0xFFFF ? 0 : find_code(ISO_IR_165_ADDITIONS, cp);
+}
+
+LIBC_INLINE Status read_iso_ir_165(const unsigned char *in, size_t inleft,
+                                   char32_t &out, size_t &used) {
+  used = 1;
+  if (in[0] < 0x21 || in[0] > 0x7E)
+    return Status::INVALID;
+  if (inleft < 2)
+    return Status::INCOMPLETE;
+  const char32_t cp = iso_ir_165_character(in[0], in[1]);
+  if (cp == 0)
+    return Status::INVALID;
+  used = 2;
+  out = cp;
+  return Status::OK;
+}
+
+LIBC_INLINE Status write_iso_ir_165(char32_t cp, unsigned char *out,
+                                    size_t outleft, size_t &made) {
+  const uint16_t code = iso_ir_165_code(cp);
   if (code == 0)
     return Status::INVALID;
   return put_code(code, 2, out, outleft, made);
