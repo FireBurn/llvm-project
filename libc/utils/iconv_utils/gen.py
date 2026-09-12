@@ -8,6 +8,7 @@
 #
 # ==------------------------------------------------------------------------==#
 
+import re
 from sys import argv, exit
 
 UNICODE = "https://www.unicode.org/Public/MAPPINGS"
@@ -223,6 +224,15 @@ JIS_X0212 = ("JIS0212.TXT", f"{EASTASIA}/JIS", {0x2237: 0xFF5E})
 # character, it is written as the one Microsoft's best fit table gives, and the
 # others are only read.
 CP932 = ("CP932.TXT", "bestfit932.txt", f"{UNICODE}/VENDORS/MICSFT")
+
+# The Simplified Chinese sets share one table of two byte codes: GB18030's, as
+# ICU's table for GB18030-2022 has it. GBK and CP936, which glibc treats as the
+# same set, are Microsoft's CP936, whose two byte codes are all GB18030's too.
+# EUC-CN is GB 2312 as Citrus has it.
+ICU_MAPPINGS = "https://github.com/unicode-org/icu/tree/main/icu4c/source/data/mappings"
+GB18030 = ("gb18030-2022.ucm", ICU_MAPPINGS)
+CP936 = ("CP936.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
+GB2312 = ("GB2312%UCS.src", f"{CITRUS}/GB")
 
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
@@ -606,6 +616,144 @@ def format_code_table(
     )
 
 
+def read_ucm_entries(path: str) -> list[tuple[int, int, str]]:
+    """Reads each mapping of an ICU ucm file: the code point, the bytes as one
+    number, and the kind of mapping after the "|"."""
+    entries = []
+    with open(path, encoding="latin-1") as file:
+        for line in file:
+            match = re.match(r"<U([0-9A-F]+)>\s+((?:\\x[0-9A-F]{2})+)\s+\|(\d)", line)
+            if match:
+                code = int(match.group(2).replace("\\x", ""), 16)
+                entries.append((int(match.group(1), 16), code, match.group(3)))
+    return entries
+
+
+def gb18030_index(code: int) -> int:
+    """The position of a four byte GB18030 code among all of them."""
+    first, second, third, fourth = code.to_bytes(4, "big")
+    return (((first - 0x81) * 10 + second - 0x30) * 126 + third - 0x81) * 10 + (
+        fourth - 0x30
+    )
+
+
+def code_ranges(codes: list[int]) -> list[tuple[int, int]]:
+    ranges = []
+    for code in sorted(codes):
+        if ranges and code == ranges[-1][1] + 1:
+            ranges[-1] = (ranges[-1][0], code)
+        else:
+            ranges.append((code, code))
+    return ranges
+
+
+def chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
+    """The definitions and declarations of the Simplified Chinese sets' tables."""
+    two, four, read_only, write_only = {}, {}, [], {}
+    for code_point, code, kind in read_ucm_entries(f"{mappings}/{GB18030[0]}"):
+        if kind == "0" and code > 0xFF:
+            (two if code <= 0xFFFF else four)[code] = code_point
+        elif kind == "3":
+            read_only.append((code_point, code))
+        elif kind == "1":
+            write_only[code] = code_point
+    # ICU reads 0xA3A0 as U+3000, and writes U+E5E5 as it. glibc reads and
+    # writes it as U+E5E5.
+    two[0xA3A0] = 0xE5E5
+    # GB18030-2022 gave 18 characters two byte codes of their own, and the
+    # private use characters those codes had took the characters' four byte
+    # codes. ICU still reads the four byte codes as the characters; glibc reads
+    # them as the private use characters, as the standard has it.
+    by_code_point = {code_point: code for code, code_point in two.items()}
+    for code_point, code in read_only:
+        if code > 0xFFFF:
+            four[code] = write_only[by_code_point[code_point]]
+    # Every other four byte code in the Basic Multilingual Plane stands for the
+    # next code point which has no code yet.
+    pinned = {gb18030_index(c): cp for c, cp in four.items() if c <= 0x8439FE39}
+    taken = set(two.values()) | set(pinned.values())
+    free = [
+        code_point
+        for code_point in range(0x80, 0x10000)
+        if code_point not in taken and not 0xD800 <= code_point <= 0xDFFF
+    ]
+    count = len(pinned) + len(free)
+    if max(pinned) >= count:
+        exit("GB18030: a four byte code is beyond the Basic Multilingual Plane's")
+    free.reverse()
+    positions = [pinned[i] if i in pinned else free.pop() for i in range(count)]
+    runs = []
+    for position, code_point in enumerate(positions):
+        if runs and code_point == runs[-1][1] + position - runs[-1][0]:
+            continue
+        runs.append((position, code_point))
+    if len(runs) > 255:
+        exit("GB18030: too many runs of four byte codes")
+    by_code_point_order = sorted(range(len(runs)), key=lambda i: runs[i][1])
+
+    definitions = [
+        format_code_table("GB18030_TWO_BYTE", two, (0x81, 0xFE), (0x40, 0xFE)),
+        "const CodeRun GB18030_RUNS[GB18030_RUN_COUNT] = {\n"
+        + "\n".join(f"    {{{p}, 0x{cp:04X}}}," for p, cp in runs)
+        + "\n};",
+        format_values("uint8_t", "GB18030_RUNS_BY_CODE_POINT", by_code_point_order, 2),
+    ]
+    declarations = [
+        "extern const CodeTable GB18030_TWO_BYTE;",
+        f"constexpr size_t GB18030_RUN_COUNT = {len(runs)};",
+        f"constexpr uint32_t GB18030_FOUR_BYTE_COUNT = {count};",
+        "// Where a run of consecutive code points begins among the four byte",
+        "// codes, in order of position.",
+        "extern const CodeRun GB18030_RUNS[GB18030_RUN_COUNT];",
+        "extern const uint8_t GB18030_RUNS_BY_CODE_POINT[GB18030_RUN_COUNT];",
+    ]
+
+    cp936 = read_columns(f"{mappings}/{CP936[0]}", 0, 1)
+    if cp936.get(0x80) != 0x20AC:
+        exit("CP936: 0x80 is not the euro sign")
+    gbk = {code: cp for code, cp in cp936.items() if code > 0xFF}
+    if any(two.get(code) != cp or 0xE000 <= cp <= 0xF8FF for code, cp in gbk.items()):
+        exit("CP936: a two byte code is not GB18030's")
+    # GBK has no private use characters, nor these codes of GB18030's.
+    excluded = [
+        code
+        for code, cp in two.items()
+        if code not in gbk and not 0xE000 <= cp <= 0xF8FF
+    ]
+    ranges = code_ranges(excluded)
+    definitions.append(
+        "const CodeRange GBK_EXCLUDED[GBK_EXCLUDED_COUNT] = {\n"
+        + "\n".join(f"    {{0x{a:04X}, 0x{b:04X}}}," for a, b in ranges)
+        + "\n};"
+    )
+    declarations.append(f"constexpr size_t GBK_EXCLUDED_COUNT = {len(ranges)};")
+    declarations.append("extern const CodeRange GBK_EXCLUDED[GBK_EXCLUDED_COUNT];")
+
+    gb2312 = read_citrus_mapping(f"{mappings}/{GB2312[0]}")
+    gb2312 = {code: cp for code, cp in gb2312.items() if code > 0xFF}
+    assigned = [0] * ((94 * 94 + 7) // 8)
+    changes = []
+    for code, code_point in sorted(gb2312.items()):
+        if code | 0x8080 not in two:
+            exit(f"GB 2312: 0x{code:04X} is not a GB18030 code")
+        if two[code | 0x8080] != code_point:
+            changes.append((code, code_point))
+        bit = ((code >> 8) - 0x21) * 94 + (code & 0xFF) - 0x21
+        assigned[bit >> 3] |= 1 << (bit & 7)
+    definitions.append(format_values("uint8_t", "GB2312_ASSIGNED", assigned, 2))
+    definitions.append(
+        "const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT] = {\n"
+        + "\n".join(f"    {{0x{c:04X}, 0x{cp:04X}}}," for c, cp in changes)
+        + "\n};"
+    )
+    declarations.append("// A bit for each GB 2312 code with a character, row by row.")
+    declarations.append(f"extern const uint8_t GB2312_ASSIGNED[{len(assigned)}];")
+    declarations.append("// The GB 2312 codes GB18030 reads as other characters.")
+    declarations.append(f"constexpr size_t GB2312_CHANGE_COUNT = {len(changes)};")
+    declarations.append("extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];")
+    return definitions, declarations
+
+
 def japanese_tables(mappings: str) -> tuple[list[str], list[str]]:
     """The definitions and declarations of the Japanese sets' tables."""
     file_name, _, changes = JIS_X0208
@@ -836,6 +984,9 @@ def main() -> None:
         )
 
     definitions, declarations = japanese_tables(mappings)
+    chinese = chinese_tables(mappings)
+    definitions += chinese[0]
+    declarations += chinese[1]
     write_cjk_tables(root, definitions, declarations)
 
     title = "//===-- Tables for iconv's single byte sets "
