@@ -36,6 +36,7 @@ endif()
 add_header_library(
   conversion
   HDRS
+    chinese.h
     conversion.h
     japanese.h
     status.h

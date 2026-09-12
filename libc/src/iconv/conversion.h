@@ -26,6 +26,7 @@
 #include "src/__support/macros/config.h"
 #include "src/iconv/charsets.h"
 #ifndef LIBC_COPT_ICONV_DISABLE_CJK
+#include "src/iconv/chinese.h"
 #include "src/iconv/japanese.h"
 #endif
 #include "src/iconv/status.h"
@@ -350,6 +351,14 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return read_shift_jis(in, inleft, out, used);
   case Encoding::CP932:
     return read_cp932(in, inleft, out, used);
+  case Encoding::GB2312:
+    return read_gb2312(in, inleft, out, used);
+  case Encoding::EUC_CN:
+    return read_euc_cn(in, inleft, out, used);
+  case Encoding::GBK:
+    return read_gbk(in, inleft, out, used);
+  case Encoding::GB18030:
+    return read_gb18030(in, inleft, out, used);
 #endif
 
   case Encoding::UTF8: {
@@ -684,6 +693,7 @@ LIBC_INLINE size_t narrowest(Encoding encoding) {
   case Encoding::UCS2_BOM:
   case Encoding::JIS_X0208:
   case Encoding::JIS_X0212:
+  case Encoding::GB2312:
     return 2;
   case Encoding::UTF32LE:
   case Encoding::UTF32BE:
@@ -760,6 +770,14 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     return write_shift_jis(cp, out, outleft, made);
   case Encoding::CP932:
     return write_cp932(cp, out, outleft, made);
+  case Encoding::GB2312:
+    return write_gb2312(cp, out, outleft, made);
+  case Encoding::EUC_CN:
+    return write_euc_cn(cp, out, outleft, made);
+  case Encoding::GBK:
+    return write_gbk(cp, out, outleft, made);
+  case Encoding::GB18030:
+    return write_gb18030(cp, out, outleft, made);
 #endif
 
   case Encoding::UTF8: {
