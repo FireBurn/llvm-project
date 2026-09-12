@@ -78,6 +78,7 @@ enum class Encoding {
   EUC_CN,
   GBK,
   GB18030,
+  ISO_IR_165,
   // The Traditional Chinese sets.
   BIG5,
   BIG5_HKSCS_1999,
@@ -414,6 +415,8 @@ constexpr Charset CHARSETS[] = {
     {"MS936", Encoding::GBK, nullptr},
     {"WINDOWS936", Encoding::GBK, nullptr},
     {"GB18030", Encoding::GB18030, nullptr},
+    {"ISOIR165", Encoding::ISO_IR_165, nullptr},
+    {"CNGBISOIR165", Encoding::ISO_IR_165, nullptr},
     {"KSC5601", Encoding::KS_X_1001, nullptr},
     {"KSC56011987", Encoding::KS_X_1001, nullptr},
     {"KSC56011989", Encoding::KS_X_1001, nullptr},
