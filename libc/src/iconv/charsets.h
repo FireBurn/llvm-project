@@ -70,6 +70,11 @@ enum class Encoding {
   EUC_JP,
   SHIFT_JIS,
   CP932,
+  // GB 2312 by itself, and the Simplified Chinese sets built on it.
+  GB2312,
+  EUC_CN,
+  GBK,
+  GB18030,
 };
 
 struct Charset {
@@ -357,6 +362,19 @@ constexpr Charset CHARSETS[] = {
     {"MSKANJI", Encoding::SHIFT_JIS, nullptr},
     {"CSSHIFTJIS", Encoding::SHIFT_JIS, nullptr},
     {"CP932", Encoding::CP932, nullptr},
+    {"GB231280", Encoding::GB2312, nullptr},
+    {"ISOIR58", Encoding::GB2312, nullptr},
+    {"CSISO58GB231280", Encoding::GB2312, nullptr},
+    {"CHINESE", Encoding::GB2312, nullptr},
+    {"EUCCN", Encoding::EUC_CN, nullptr},
+    {"GB2312", Encoding::EUC_CN, nullptr},
+    {"CNGB", Encoding::EUC_CN, nullptr},
+    {"CSGB2312", Encoding::EUC_CN, nullptr},
+    {"GBK", Encoding::GBK, nullptr},
+    {"CP936", Encoding::GBK, nullptr},
+    {"MS936", Encoding::GBK, nullptr},
+    {"WINDOWS936", Encoding::GBK, nullptr},
+    {"GB18030", Encoding::GB18030, nullptr},
 #endif // LIBC_COPT_ICONV_DISABLE_CJK
 };
 
