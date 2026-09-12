@@ -54,9 +54,8 @@ LLVM_LIBC_FUNCTION(iconv_t, iconv_open,
   conv->to_table = to->table;
   conv->ignore = iconv_internal::has_flag(tocode, "IGNORE");
   // Until a byte order mark says otherwise, input is in the host's order.
-  conv->read_mark = true;
+  iconv_internal::reset_state(*conv);
   conv->read_big = !Endian::IS_LITTLE;
-  conv->write_mark = true;
   return reinterpret_cast<iconv_t>(conv);
 }
 
