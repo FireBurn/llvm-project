@@ -16,9 +16,22 @@ package(
 licenses(["notice"])
 
 libc_support_library(
+    name = "sequences",
+    hdrs = ["sequences.h"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "charsets",
     hdrs = ["charsets.h", "combining.h", "single_byte_tables.h"],
     deps = [
+        ":sequences",
         "//libc/hdr/types:char32_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr:stdint_proxy",
@@ -33,6 +46,7 @@ libc_support_library(
     hdrs = ["conversion.h"],
     deps = [
         ":charsets",
+        ":sequences",
         "//libc/hdr/types:char32_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr:errno_macros",
