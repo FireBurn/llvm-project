@@ -17,7 +17,7 @@ licenses(["notice"])
 
 libc_support_library(
     name = "charsets",
-    hdrs = ["charsets.h"],
+    hdrs = ["charsets.h", "single_byte_tables.h"],
     deps = [
         "//libc/hdr/types:char32_t",
         "//libc/hdr/types:size_t",
