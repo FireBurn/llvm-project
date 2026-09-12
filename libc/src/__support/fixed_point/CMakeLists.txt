@@ -21,6 +21,7 @@ add_header_library(
     libc.src.__support.CPP.bit
     libc.src.__support.CPP.limits
     libc.src.__support.CPP.type_traits
+    libc.src.__support.libc_assert
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
