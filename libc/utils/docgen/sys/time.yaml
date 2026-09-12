@@ -1,4 +1,6 @@
 functions:
+  futimes:
+    c-definition: 'TODO: BSD extension'
   lutimes:
     c-definition: 'TODO: BSD extension'
   select:
