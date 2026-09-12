@@ -363,6 +363,8 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return read_cp932(in, inleft, out, used);
   case Encoding::GB2312:
     return read_gb2312(in, inleft, out, used);
+  case Encoding::ISO_IR_165:
+    return read_iso_ir_165(in, inleft, out, used);
   case Encoding::EUC_CN:
     return read_euc_cn(in, inleft, out, used);
   case Encoding::GBK:
@@ -737,6 +739,7 @@ LIBC_INLINE size_t narrowest(Encoding encoding) {
   case Encoding::JIS_X0208:
   case Encoding::JIS_X0212:
   case Encoding::GB2312:
+  case Encoding::ISO_IR_165:
   case Encoding::KS_X_1001:
     return 2;
   case Encoding::UTF32LE:
@@ -816,6 +819,8 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     return write_cp932(cp, out, outleft, made);
   case Encoding::GB2312:
     return write_gb2312(cp, out, outleft, made);
+  case Encoding::ISO_IR_165:
+    return write_iso_ir_165(cp, out, outleft, made);
   case Encoding::EUC_CN:
     return write_euc_cn(cp, out, outleft, made);
   case Encoding::GBK:
