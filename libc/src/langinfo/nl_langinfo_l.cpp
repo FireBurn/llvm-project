@@ -12,7 +12,6 @@
 #include "hdr/types/locale_t.h"
 #include "hdr/types/nl_item.h"
 #include "hdr/types/size_t.h"
-#include "src/__support/CPP/string_view.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/langinfo/langinfo_table.h"
@@ -21,15 +20,6 @@
 namespace LIBC_NAMESPACE_DECL {
 
 namespace {
-
-// What CODESET reports: the character set the name of the locale in force
-// states, which is either UTF-8 or the one the C locale means.
-const char *codeset_name() {
-  if (internal::name_states_utf8(
-          cpp::string_view(internal::current_locale_name())))
-    return "UTF-8";
-  return langinfo::CTYPE_ITEMS[0];
-}
 
 // Every item is a string constant, and POSIX says the caller must not write
 // through the pointer, so handing back a pointer into read only data is
@@ -45,7 +35,7 @@ char *lookup(nl_item item) {
     // than being fixed, and callers read it to decide whether to write
     // characters that take more than one byte.
     if (index == 0)
-      return const_cast<char *>(codeset_name());
+      return const_cast<char *>(internal::current_codeset());
     table = langinfo::CTYPE_ITEMS;
     count = sizeof(langinfo::CTYPE_ITEMS) / sizeof(*langinfo::CTYPE_ITEMS);
     break;
