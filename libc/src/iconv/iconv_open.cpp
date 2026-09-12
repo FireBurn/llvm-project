@@ -57,6 +57,8 @@ LLVM_LIBC_FUNCTION(iconv_t, iconv_open,
   conv->from_sequences = from->sequences;
   conv->to_sequences = to->sequences;
   conv->ignore = iconv_internal::has_flag(tocode, "IGNORE");
+  conv->translit = iconv_internal::has_flag(tocode, "TRANSLIT");
+  conv->irreversible = 0;
   // Until a byte order mark says otherwise, input is in the host's order.
   iconv_internal::reset_state(*conv);
   conv->read_big = !Endian::IS_LITTLE;
