@@ -7,9 +7,9 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// BIG5, which glibc also calls CP950, and BIG5-HKSCS. |used| is how many bytes
-/// a character took, or for input which is not a character, how many are
-/// skipped, which follows glibc.
+/// BIG5, which glibc also calls CP950, BIG5-HKSCS and EUC-TW. |used| is how
+/// many bytes a character took, or for input which is not a character, how many
+/// are skipped, which follows glibc.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -170,6 +170,78 @@ LIBC_INLINE Status write_big5_hkscs(unsigned year, char32_t cp,
   if (code == 0 || hkscs_edition(code) > year)
     return Status::INVALID;
   return put_code(code, 2, out, outleft, made);
+}
+
+// EUC-TW: ASCII, plane 1 of CNS 11643 with both bytes from 0xA1, and a plane
+// from 1 to 16 as 0x8E, 0xA0 plus the plane, and two bytes from 0xA1. glibc
+// has planes 1 to 7 and 15.
+LIBC_INLINE const WideTable *cns_plane(unsigned plane) {
+  if (plane >= 1 && plane <= 7)
+    return &CNS_11643[plane - 1];
+  return plane == 15 ? &CNS_11643[7] : nullptr;
+}
+
+LIBC_INLINE Status read_euc_tw(const unsigned char *in, size_t inleft,
+                               char32_t &out, size_t &used) {
+  const unsigned lead = in[0];
+  used = 1;
+  if (lead < 0x80) {
+    out = lead;
+    return Status::OK;
+  }
+  if (lead == 0x8E) {
+    if (inleft < 2)
+      return Status::INCOMPLETE;
+    const unsigned plane = in[1];
+    if (plane < 0xA1 || plane > 0xB0)
+      return Status::INVALID;
+    if (inleft < 4)
+      return Status::INCOMPLETE;
+    // As in glibc, a four byte code with no character is skipped by its first
+    // byte.
+    const WideTable *table = cns_plane(plane - 0xA0);
+    if (table == nullptr || in[2] < 0xA1 || in[3] < 0xA1)
+      return Status::INVALID;
+    const char32_t cp = look_up(*table, in[2] - 0x80, in[3] - 0x80);
+    if (cp == 0)
+      return Status::INVALID;
+    used = 4;
+    out = cp;
+    return Status::OK;
+  }
+  if (lead < 0xA1 || lead == 0xFF)
+    return Status::INVALID;
+  if (inleft < 2)
+    return Status::INCOMPLETE;
+  const unsigned trail = in[1];
+  if (trail < 0xA1 || trail == 0xFF)
+    return Status::INVALID;
+  // A pair with no character is skipped whole.
+  used = 2;
+  const char32_t cp = look_up(CNS_11643[0], lead - 0x80, trail - 0x80);
+  if (cp == 0)
+    return Status::INVALID;
+  out = cp;
+  return Status::OK;
+}
+
+LIBC_INLINE Status write_euc_tw(char32_t cp, unsigned char *out, size_t outleft,
+                                size_t &made) {
+  if (cp < 0x80)
+    return put_code(cp, 1, out, outleft, made);
+  for (unsigned plane = 1; plane <= 15; ++plane) {
+    const WideTable *table = cns_plane(plane);
+    if (table == nullptr)
+      continue;
+    const uint16_t code = find_code(*table, cp);
+    if (code == 0)
+      continue;
+    if (plane == 1)
+      return put_code(code | 0x8080, 2, out, outleft, made);
+    return put_code(0x8E000000 | (0xA0 + plane) << 16 | code | 0x8080, 4, out,
+                    outleft, made);
+  }
+  return Status::INVALID;
 }
 
 } // namespace iconv_internal
