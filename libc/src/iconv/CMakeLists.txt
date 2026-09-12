@@ -14,12 +14,34 @@ add_header_library(
     libc.src.__support.macros.config
 )
 
+# The tables of the Chinese, Japanese and Korean sets are most of iconv's size.
+if(NOT LIBC_CONF_ICONV_DISABLE_CJK)
+  add_object_library(
+    cjk_tables
+    HDRS
+      cjk_tables.h
+      code_table.h
+    SRCS
+      cjk_tables.cpp
+    DEPENDS
+      libc.hdr.stdint_proxy
+      libc.hdr.types.char32_t
+      libc.hdr.types.size_t
+      libc.src.__support.macros.attributes
+      libc.src.__support.macros.config
+  )
+  set(cjk_tables .cjk_tables)
+endif()
+
 add_header_library(
   conversion
   HDRS
     conversion.h
+    japanese.h
+    status.h
   DEPENDS
     .charsets
+    ${cjk_tables}
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.types.char32_t
