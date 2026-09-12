@@ -1099,3 +1099,86 @@ TEST_F(LlvmLibcIconvTest, ErrorsPartWayThroughASequence) {
   EXPECT_EQ(wide[7], '\xb7');
   ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
 }
+
+TEST_F(LlvmLibcIconvTest, JapaneseSets) {
+  struct Case {
+    const char *name;
+    const char *bytes;
+    size_t length;
+    const char *utf8;
+    size_t utf8_length;
+  };
+  const Case cases[] = {
+      // Hiragana a.
+      {"EUC-JP", "\xa4\xa2", 2, "\xe3\x81\x82", 3},
+      {"SHIFT_JIS", "\x82\xa0", 2, "\xe3\x81\x82", 3},
+      {"CP932", "\x82\xa0", 2, "\xe3\x81\x82", 3},
+      {"JIS_X0208", "\x24\x22", 2, "\xe3\x81\x82", 3},
+      // Half-width katakana a.
+      {"EUC-JP", "\x8e\xb1", 2, "\xef\xbd\xb1", 3},
+      {"SHIFT_JIS", "\xb1", 1, "\xef\xbd\xb1", 3},
+      // The first kanji of JIS X 0212.
+      {"EUC-JP", "\x8f\xb0\xa1", 3, "\xe4\xb8\x82", 3},
+      {"JIS_X0212", "\x30\x21", 2, "\xe4\xb8\x82", 3},
+      // Shift_JIS has a yen sign where CP932 has ASCII's reverse solidus.
+      {"SHIFT_JIS", "\x5c", 1, "\xc2\xa5", 2},
+      {"CP932", "\x5c", 1, "\x5c", 1},
+      // The wave dash, which Microsoft reads as a fullwidth tilde.
+      {"SHIFT_JIS", "\x81\x60", 2, "\xe3\x80\x9c", 3},
+      {"CP932", "\x81\x60", 2, "\xef\xbd\x9e", 3},
+      // NEC's circled digit one, and the first user-defined character.
+      {"CP932", "\x87\x40", 2, "\xe2\x91\xa0", 3},
+      {"CP932", "\xf0\x40", 2, "\xee\x80\x80", 3},
+  };
+  for (const Case &c : cases) {
+    char out[8] = {};
+    ASSERT_EQ(convert("UTF-8", c.name, c.bytes, c.length, out, sizeof(out)),
+              static_cast<ssize_t>(c.utf8_length));
+    for (size_t i = 0; i < c.utf8_length; ++i)
+      EXPECT_EQ(out[i], c.utf8[i]);
+    expect_bytes(c.name, "UTF-8", c.utf8, c.utf8_length, c.bytes, c.length);
+  }
+
+  // Like glibc, CP932 writes a character it reads differently as its JIS
+  // X 0208 code, and EUC-JP writes JIS X 0201's yen sign as ASCII.
+  expect_bytes("CP932", "UTF-8", "\xe3\x80\x9c", 3, "\x81\x60", 2);
+  expect_bytes("EUC-JP", "UTF-8", "\xc2\xa5", 2, "\x5c", 1);
+  // Small roman numeral one is both NEC's and IBM's. Microsoft writes IBM's.
+  expect_bytes("CP932", "UTF-8", "\xe2\x85\xb0", 3, "\xfa\x40", 2);
+}
+
+TEST_F(LlvmLibcIconvTest, JapaneseErrors) {
+  char out[16] = {};
+  // A lead byte with nothing after it is incomplete.
+  EXPECT_EQ(convert("UTF-8", "EUC-JP", "\xa4", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+  EXPECT_EQ(convert("UTF-8", "SHIFT_JIS", "\x82", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+
+  // What //IGNORE skips follows glibc. A trail byte which cannot be one is
+  // read again by itself.
+  const char space_after_lead[] = {'\x82', ' '};
+  Result r = convert_all_from("UTF-8//IGNORE", "SHIFT_JIS", space_after_lead, 2,
+                              out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.made, size_t(1));
+  // A code with no character is skipped whole...
+  const char unassigned[] = {'\x85', '\x40'};
+  r = convert_all_from("UTF-8//IGNORE", "SHIFT_JIS", unassigned, 2, out,
+                       sizeof(out));
+  EXPECT_EQ(r.made, size_t(0));
+  // ...but in CP932, only up to the last code its lead byte has, so after it
+  // the trail byte is read again, here as a half-width katakana.
+  const char past_the_row[] = {'\x84', '\xbf'};
+  r = convert_all_from("UTF-8//IGNORE", "CP932", past_the_row, 2, out,
+                       sizeof(out));
+  EXPECT_EQ(r.made, size_t(3));
+  // An EUC-JP code for JIS X 0212 with no character only skips the 0x8F.
+  const char not_in_jis_x0212[] = {'\x8f', '\xa1', '\xa1'};
+  r = convert_all_from("UTF-8//IGNORE", "EUC-JP", not_in_jis_x0212, 3, out,
+                       sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.made, size_t(3));
+}
