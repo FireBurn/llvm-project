@@ -28,9 +28,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "cjk_tables",
+    srcs = ["cjk_tables.cpp"],
+    hdrs = ["cjk_tables.h", "code_table.h"],
+    deps = [
+        ":sequences",
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "charsets",
     hdrs = ["charsets.h", "combining.h", "single_byte_tables.h"],
     deps = [
+        ":cjk_tables",
         ":sequences",
         "//libc/hdr/types:char32_t",
         "//libc/hdr/types:size_t",
@@ -43,9 +58,10 @@ libc_support_library(
 
 libc_support_library(
     name = "conversion",
-    hdrs = ["conversion.h"],
+    hdrs = ["conversion.h", "japanese.h", "status.h"],
     deps = [
         ":charsets",
+        ":cjk_tables",
         ":sequences",
         "//libc/hdr/types:char32_t",
         "//libc/hdr/types:size_t",
