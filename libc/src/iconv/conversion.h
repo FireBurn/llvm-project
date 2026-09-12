@@ -37,6 +37,9 @@ struct Conversion {
   // For a set which joins a letter and the marks after it: what it joins.
   const Combining *from_combining;
   const Combining *to_combining;
+  // For a set with codes which stand for several characters: those codes.
+  const Sequences *from_sequences;
+  const Sequences *to_sequences;
   // Whether what cannot be converted is left out rather than reported.
   bool ignore;
   // For input which may begin with a byte order mark: whether one may still
@@ -58,6 +61,12 @@ struct Conversion {
   uint32_t write_bits;
   // A character read but held back while a mark may still join it, or 0.
   char32_t held;
+  // Characters still to be written from a code which stands for several.
+  char32_t pending[2];
+  uint8_t pending_count;
+  // Characters written but held back while they may begin a sequence.
+  char32_t write_held[2];
+  uint8_t write_held_count;
 };
 
 // Puts a conversion back in its initial state, dropping whatever it had
@@ -73,6 +82,8 @@ LIBC_INLINE void reset_state(Conversion &conv) {
   conv.write_bit_count = 0;
   conv.write_bits = 0;
   conv.held = 0;
+  conv.pending_count = 0;
+  conv.write_held_count = 0;
 }
 
 // A name matches without regard to case, or to the punctuation between its
@@ -140,6 +151,7 @@ enum class Status {
   NONE,       // The bytes were a byte order mark rather than a character.
   INCOMPLETE, // The input ran out part way through a character.
   INVALID,    // The bytes are not a character in this set.
+  SEQUENCE,   // The bytes stand for several characters. |out| is their code.
   FULL,       // There is no room in the output.
 };
 
@@ -312,6 +324,10 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     uint16_t mapped = table[in[0] - 0x80];
     if (mapped == UNASSIGNED)
       return Status::INVALID;
+    if (mapped == MULTIPLE) {
+      out = in[0];
+      return Status::SEQUENCE;
+    }
     out = mapped;
     return Status::OK;
   }
@@ -321,6 +337,10 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     uint16_t mapped = table[in[0]];
     if (mapped == UNASSIGNED)
       return Status::INVALID;
+    if (mapped == MULTIPLE) {
+      out = in[0];
+      return Status::SEQUENCE;
+    }
     out = mapped;
     return Status::OK;
   }
@@ -687,8 +707,9 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
       made = 1;
       return Status::OK;
     }
-    // U+FFFD in the table marks a byte the set does not assign.
-    if (cp > 0xFFFF || cp == UNASSIGNED)
+    // U+FFFD in the table marks a byte the set does not assign, and U+FFFF one
+    // which stands for several characters.
+    if (cp > 0xFFFF || cp == UNASSIGNED || cp == MULTIPLE)
       return Status::INVALID;
     // The table is small enough that a walk costs less than a second table
     // to invert it would.
@@ -705,7 +726,7 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
   }
 
   case Encoding::SINGLE_BYTE_FULL: {
-    if (cp > 0xFFFF || cp == UNASSIGNED)
+    if (cp > 0xFFFF || cp == UNASSIGNED || cp == MULTIPLE)
       return Status::INVALID;
     for (size_t i = 0; i < 256; ++i) {
       if (table[i] != cp)
