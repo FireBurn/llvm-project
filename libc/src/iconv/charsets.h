@@ -75,6 +75,8 @@ enum class Encoding {
   EUC_CN,
   GBK,
   GB18030,
+  // The Traditional Chinese sets.
+  BIG5,
   // KS X 1001 by itself, and the Korean sets built on it.
   KS_X_1001,
   EUC_KR,
@@ -384,6 +386,11 @@ constexpr Charset CHARSETS[] = {
     {"CSGB2312", Encoding::EUC_CN, nullptr},
     {"GBK", Encoding::GBK, nullptr},
     {"CP936", Encoding::GBK, nullptr},
+    {"BIG5", Encoding::BIG5, nullptr},
+    {"BIGFIVE", Encoding::BIG5, nullptr},
+    {"CNBIG5", Encoding::BIG5, nullptr},
+    {"CSBIG5", Encoding::BIG5, nullptr},
+    {"CP950", Encoding::BIG5, nullptr},
     {"MS936", Encoding::GBK, nullptr},
     {"WINDOWS936", Encoding::GBK, nullptr},
     {"GB18030", Encoding::GB18030, nullptr},
