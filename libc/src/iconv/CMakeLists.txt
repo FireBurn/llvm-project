@@ -20,6 +20,7 @@ add_header_library(
     libc.hdr.stdint_proxy
     libc.hdr.types.char32_t
     libc.hdr.types.size_t
+    libc.src.__support.common
     libc.src.__support.ctype_utils
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
