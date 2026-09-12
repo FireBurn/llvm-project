@@ -25,6 +25,10 @@
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/charsets.h"
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+#include "src/iconv/japanese.h"
+#endif
+#include "src/iconv/status.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace iconv_internal {
@@ -144,16 +148,6 @@ LIBC_INLINE const Charset *find_charset(const char *name) {
       return &CHARSETS[i];
   return nullptr;
 }
-
-// What a step of a conversion ended up doing.
-enum class Status {
-  OK,
-  NONE,       // The bytes were a byte order mark rather than a character.
-  INCOMPLETE, // The input ran out part way through a character.
-  INVALID,    // The bytes are not a character in this set.
-  SEQUENCE,   // The bytes stand for several characters. |out| is their code.
-  FULL,       // There is no room in the output.
-};
 
 // The units of UTF-16, UCS-2 and UTF-32, in either byte order.
 LIBC_INLINE uint32_t get16(const unsigned char *p, bool big) {
@@ -344,6 +338,19 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     out = mapped;
     return Status::OK;
   }
+
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  case Encoding::JIS_X0208:
+    return read_jis(JIS_X0208, in, inleft, out, used);
+  case Encoding::JIS_X0212:
+    return read_jis(JIS_X0212, in, inleft, out, used);
+  case Encoding::EUC_JP:
+    return read_euc_jp(in, inleft, out, used);
+  case Encoding::SHIFT_JIS:
+    return read_shift_jis(in, inleft, out, used);
+  case Encoding::CP932:
+    return read_cp932(in, inleft, out, used);
+#endif
 
   case Encoding::UTF8: {
     unsigned char lead = in[0];
@@ -675,6 +682,8 @@ LIBC_INLINE size_t narrowest(Encoding encoding) {
   case Encoding::UCS2LE:
   case Encoding::UCS2BE:
   case Encoding::UCS2_BOM:
+  case Encoding::JIS_X0208:
+  case Encoding::JIS_X0212:
     return 2;
   case Encoding::UTF32LE:
   case Encoding::UTF32BE:
@@ -739,6 +748,19 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     }
     return Status::INVALID;
   }
+
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+  case Encoding::JIS_X0208:
+    return write_jis(JIS_X0208, cp, out, outleft, made);
+  case Encoding::JIS_X0212:
+    return write_jis(JIS_X0212, cp, out, outleft, made);
+  case Encoding::EUC_JP:
+    return write_euc_jp(cp, out, outleft, made);
+  case Encoding::SHIFT_JIS:
+    return write_shift_jis(cp, out, outleft, made);
+  case Encoding::CP932:
+    return write_cp932(cp, out, outleft, made);
+#endif
 
   case Encoding::UTF8: {
     size_t length = cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;
