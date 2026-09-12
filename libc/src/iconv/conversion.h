@@ -135,6 +135,32 @@ LIBC_INLINE void put32(unsigned char *p, uint32_t unit, bool big) {
     p[big ? i : 3 - i] = static_cast<unsigned char>(unit >> (24 - 8 * i));
 }
 
+// The value of a hex digit, or -1.
+LIBC_INLINE int hex_digit(unsigned char c) {
+  if (c >= '0' && c <= '9')
+    return c - '0';
+  if (c >= 'a' && c <= 'f')
+    return c - 'a' + 10;
+  if (c >= 'A' && c <= 'F')
+    return c - 'A' + 10;
+  return -1;
+}
+
+// Reads the hex digits of an escape. Returns how many of |count| digits were
+// there before the input or the digits ran out.
+LIBC_INLINE size_t read_hex(const unsigned char *in, size_t inleft,
+                            size_t count, char32_t &value) {
+  value = 0;
+  size_t i = 0;
+  for (; i < count && i < inleft; ++i) {
+    int digit = hex_digit(in[i]);
+    if (digit < 0)
+      break;
+    value = (value << 4) | static_cast<char32_t>(digit);
+  }
+  return i;
+}
+
 // Whether |encoding| may carry a byte order mark, and the unit it counts in.
 LIBC_INLINE bool has_mark(Encoding encoding) {
   return encoding == Encoding::UTF16 || encoding == Encoding::UTF32 ||
@@ -269,6 +295,67 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     if (value > 0x10FFFF || (value >= 0xD800 && value <= 0xDFFF))
       return Status::INVALID;
     out = value;
+    return Status::OK;
+  }
+
+  case Encoding::C99:
+  case Encoding::JAVA: {
+    const bool java = from == Encoding::JAVA;
+    used = 1;
+    if (in[0] != '\\') {
+      // Java reads any other byte as the character of that value; C99 takes
+      // only ASCII.
+      if (in[0] >= 0x80 && !java)
+        return Status::INVALID;
+      out = in[0];
+      return Status::OK;
+    }
+    // A backslash which does not begin an escape stands for itself.
+    out = '\\';
+    if (inleft < 2)
+      return Status::INCOMPLETE;
+    const size_t digits = in[1] == 'u' ? 4 : in[1] == 'U' && !java ? 8 : 0;
+    if (digits == 0)
+      return Status::OK;
+    char32_t value;
+    size_t got = read_hex(in + 2, inleft - 2, digits, value);
+    if (got < digits)
+      return got == inleft - 2 ? Status::INCOMPLETE : Status::OK;
+
+    if (!java) {
+      // C99 names no surrogate, nothing past Unicode, and nothing below U+00A0
+      // but '$', '@' and '`'.
+      if ((value >= 0xD800 && value <= 0xDFFF) || value > 0x10FFFF ||
+          (value < 0xA0 && value != '$' && value != '@' && value != '`'))
+        return Status::INVALID;
+      out = value;
+      used = 2 + digits;
+      return Status::OK;
+    }
+
+    // In Java a surrogate is half a character: a high one needs the escape of
+    // a low one right after it, and either on its own is left as text.
+    if (value >= 0xDC00 && value <= 0xDFFF)
+      return Status::OK;
+    if (value < 0xD800 || value > 0xDBFF) {
+      out = value;
+      used = 6;
+      return Status::OK;
+    }
+    const unsigned char *low = in + 6;
+    const size_t lowleft = inleft - 6;
+    if (lowleft == 0 || low[0] != '\\')
+      return lowleft == 0 ? Status::INCOMPLETE : Status::OK;
+    if (lowleft == 1 || low[1] != 'u')
+      return lowleft == 1 ? Status::INCOMPLETE : Status::OK;
+    char32_t second;
+    got = read_hex(low + 2, lowleft - 2, 4, second);
+    if (got < 4)
+      return got == lowleft - 2 ? Status::INCOMPLETE : Status::OK;
+    if (second < 0xDC00 || second > 0xDFFF)
+      return Status::OK;
+    out = 0x10000 + ((value - 0xD800) << 10) + (second - 0xDC00);
+    used = 12;
     return Status::OK;
   }
 
@@ -425,6 +512,48 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
       return Status::FULL;
     put32(out, cp, to == Encoding::UTF32BE);
     made = 4;
+    return Status::OK;
+  }
+
+  case Encoding::C99:
+  case Encoding::JAVA: {
+    const bool java = to == Encoding::JAVA;
+    // C99 cannot name a character below U+00A0 with an escape, so writes it
+    // as it is. Java escapes everything past ASCII.
+    if (cp < (java ? 0x80u : 0xA0u)) {
+      if (outleft < 1)
+        return Status::FULL;
+      out[0] = static_cast<unsigned char>(cp);
+      made = 1;
+      return Status::OK;
+    }
+    static constexpr char HEX[] = "0123456789abcdef";
+    auto escape = [](unsigned char *p, char kind, char32_t value,
+                     size_t digits) {
+      p[0] = '\\';
+      p[1] = static_cast<unsigned char>(kind);
+      for (size_t i = 0; i < digits; ++i)
+        p[2 + i] = static_cast<unsigned char>(
+            HEX[(value >> (4 * (digits - 1 - i))) & 0xF]);
+    };
+    if (cp < 0x10000) {
+      if (outleft < 6)
+        return Status::FULL;
+      escape(out, 'u', cp, 4);
+      made = 6;
+    } else if (!java) {
+      if (outleft < 10)
+        return Status::FULL;
+      escape(out, 'U', cp, 8);
+      made = 10;
+    } else {
+      if (outleft < 12)
+        return Status::FULL;
+      char32_t rest = cp - 0x10000;
+      escape(out, 'u', 0xD800 + (rest >> 10), 4);
+      escape(out + 6, 'u', 0xDC00 + (rest & 0x3FF), 4);
+      made = 12;
+    }
     return Status::OK;
   }
 

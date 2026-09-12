@@ -409,6 +409,10 @@ enum class Encoding {
   UTF16,
   UTF32,
   UCS2_BOM,
+  // ASCII with every other character written as a \u escape, the way C99 and
+  // Java source name them.
+  C99,
+  JAVA,
   ASCII,
   SINGLE_BYTE, // One of the tables above.
 };
@@ -564,6 +568,8 @@ constexpr Charset CHARSETS[] = {
     {"850", Encoding::SINGLE_BYTE, CP850_HIGH},
     {"CSPC850MULTILINGUAL", Encoding::SINGLE_BYTE, CP850_HIGH},
     {"UNICODE", Encoding::UCS2_BOM, nullptr},
+    {"C99", Encoding::C99, nullptr},
+    {"JAVA", Encoding::JAVA, nullptr},
     {"WCHART", Endian::IS_LITTLE ? Encoding::UTF32LE : Encoding::UTF32BE,
      nullptr},
     {"CP437", Encoding::SINGLE_BYTE, CP437_HIGH},
