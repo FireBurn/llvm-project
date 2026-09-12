@@ -58,6 +58,52 @@ struct CodeTable {
   uint16_t count;
 };
 
+// A set of 94 rows of 94 characters from 0x2121, some of them beyond the Basic
+// Multilingual Plane.
+struct WideTable {
+  // The low 16 bits of the code point at each code, row by row.
+  const uint16_t *code_points;
+  // The plane of each of those, two bits to a code and four codes to a byte.
+  const uint8_t *planes;
+  // The positions of the characters, in order of code point.
+  const uint16_t *order;
+  uint16_t count;
+};
+
+// The character at |position| in |table|, or 0.
+LIBC_INLINE char32_t wide_character(const WideTable &table, unsigned position) {
+  const unsigned plane = (table.planes[position / 4] >> (position % 4 * 2)) & 3;
+  return static_cast<char32_t>(plane << 16 | table.code_points[position]);
+}
+
+// The character at |row| and |column|, or 0.
+LIBC_INLINE char32_t look_up(const WideTable &table, unsigned row,
+                             unsigned column) {
+  if (row - 0x21 >= 94 || column - 0x21 >= 94)
+    return 0;
+  return wide_character(table, (row - 0x21) * 94 + (column - 0x21));
+}
+
+// The code |cp| has in |table|, or 0.
+LIBC_INLINE uint16_t find_code(const WideTable &table, char32_t cp) {
+  if (cp == 0)
+    return 0;
+  size_t low = 0;
+  size_t high = table.count;
+  while (low < high) {
+    size_t mid = low + (high - low) / 2;
+    if (wide_character(table, table.order[mid]) < cp)
+      low = mid + 1;
+    else
+      high = mid;
+  }
+  if (low == table.count || wide_character(table, table.order[low]) != cp)
+    return 0;
+  const unsigned position = table.order[low];
+  return static_cast<uint16_t>((0x21 + position / 94) << 8 |
+                               (0x21 + position % 94));
+}
+
 // The character at |lead| and |trail|, or 0.
 LIBC_INLINE char32_t look_up(const CodeTable &table, unsigned lead,
                              unsigned trail) {

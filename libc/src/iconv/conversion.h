@@ -379,6 +379,8 @@ LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
     return read_big5_hkscs(2004, in, inleft, out, used);
   case Encoding::BIG5_HKSCS:
     return read_big5_hkscs(2008, in, inleft, out, used);
+  case Encoding::EUC_TW:
+    return read_euc_tw(in, inleft, out, used);
   case Encoding::KS_X_1001:
     return read_jis(KS_X_1001, in, inleft, out, used);
   case Encoding::EUC_KR:
@@ -830,6 +832,8 @@ LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
     return write_big5_hkscs(2004, cp, out, outleft, made);
   case Encoding::BIG5_HKSCS:
     return write_big5_hkscs(2008, cp, out, outleft, made);
+  case Encoding::EUC_TW:
+    return write_euc_tw(cp, out, outleft, made);
   case Encoding::KS_X_1001:
     return write_jis(KS_X_1001, cp, out, outleft, made);
   case Encoding::EUC_KR:
