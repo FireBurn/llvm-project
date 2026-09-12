@@ -23818,7 +23818,7 @@ libc_support_library(
 
 libc_support_library(
     name = "iconv_conversion",
-    hdrs = ["src/iconv/chinese.h", "src/iconv/conversion.h", "src/iconv/iso2022.h", "src/iconv/japanese.h", "src/iconv/korean.h", "src/iconv/status.h"],
+    hdrs = ["src/iconv/chinese.h", "src/iconv/conversion.h", "src/iconv/iso2022.h", "src/iconv/japanese.h", "src/iconv/korean.h", "src/iconv/status.h", "src/iconv/traditional_chinese.h"],
     deps = [
         ":__support_common",
         ":__support_ctype_utils",
