@@ -31,6 +31,7 @@ constexpr size_t CP932_CHANGE_COUNT = 6;
 extern const CodePair CP932_CHANGES[CP932_CHANGE_COUNT];
 constexpr size_t CP932_AREA_COUNT = 6;
 extern const CodeRange CP932_AREAS[CP932_AREA_COUNT];
+extern const CodeTable ISO2022_JP_MS_IBM;
 extern const CodeTable GB18030_TWO_BYTE;
 constexpr size_t GB18030_RUN_COUNT = 221;
 constexpr uint32_t GB18030_FOUR_BYTE_COUNT = 39420;
