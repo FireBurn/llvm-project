@@ -538,18 +538,90 @@ LIBC_INLINE Status unshift_iso2022(Iso2022State &state, bool korean,
   return Status::OK;
 }
 
-// ISO-2022-JP-1 is ISO-2022-JP with JIS X 0212 as well. glibc does not have
-// it, so it is read and written as GNU libiconv does: an escape sequence it
-// does not know is not a character, a byte in a set of two byte characters
-// waits for the next, a pair which is not a character is skipped by its first
-// byte, and writing goes back to ASCII for every character ASCII has.
+// ISO-2022-JP-1 is ISO-2022-JP with JIS X 0212 as well. ISO-2022-JP-MS adds
+// half-width katakana and what CP932 has beyond JIS X 0208: NEC's row 13 in row
+// 0x2D, the NEC-selected IBM extensions in rows 0x79 to 0x7C, the rest of IBM's
+// in rows 0x73 and 0x74 of JIS X 0212, and private use characters in the rows
+// from 0x75 of both. glibc has neither, so they are read and written as GNU
+// libiconv does: an escape sequence it does not know is not a character, a byte
+// in a set of two byte characters waits for the next, a pair which is not a
+// character is skipped by its first byte, and writing goes back to ASCII for
+// every character ASCII has. In ISO-2022-JP-MS a shift out goes from JIS X 0201
+// Roman to katakana and a shift in comes back, and otherwise they do nothing.
 constexpr Iso2022Escape ISO2022_JP1_ESCAPES[] = {
-    {"(B", 2, Iso2022Set::ASCII},      {"(J", 2, Iso2022Set::JIS_ROMAN},
-    {"$B", 2, Iso2022Set::JIS_X0208},  {"$@", 2, Iso2022Set::JIS_X0208},
+    {"(B", 2, Iso2022Set::ASCII},
+    {"(J", 2, Iso2022Set::JIS_ROMAN},
+    {"$B", 2, Iso2022Set::JIS_X0208},
+    {"$@", 2, Iso2022Set::JIS_X0208},
     {"$(D", 3, Iso2022Set::JIS_X0212},
+    // ISO-2022-JP-MS only.
+    {"(I", 2, Iso2022Set::JIS_KANA},
 };
+constexpr size_t ISO2022_JP1_ESCAPE_COUNT = 5;
 
-LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
+// The character of a JIS X 0208 or JIS X 0212 code in ISO-2022-JP-MS, or 0.
+LIBC_INLINE char32_t iso2022_jp_ms_character(Iso2022Set set, unsigned row,
+                                             unsigned column) {
+  if (set == Iso2022Set::JIS_X0212) {
+    if (char32_t cp = look_up(JIS_X0212, row, column))
+      return cp;
+    if (char32_t cp = look_up(ISO2022_JP_MS_IBM, row, column))
+      return cp;
+    return row >= 0x75 ? 0xE3AC + (row - 0x75) * 94 + (column - 0x21) : 0;
+  }
+  if (char32_t cp = look_up(JIS_X0208, row, column))
+    return cp;
+  const uint16_t code =
+      shift_jis_from_jis(static_cast<uint16_t>(row << 8 | column));
+  if (row == 0x2D) {
+    // GNU libiconv reads 0x2D60 as U+301E where CP932 has U+301D, and not the
+    // symbols row 13 repeats from JIS X 0208.
+    if (column == 0x60)
+      return 0x301E;
+    char32_t cp = look_up(CP932_NEC_ROW_13, code >> 8, code & 0xFF);
+    return find_code(JIS_X0208, cp) ? 0 : cp;
+  }
+  if (row >= 0x79 && row <= 0x7C)
+    if (char32_t cp = look_up(CP932_NEC_SELECTED_IBM, code >> 8, code & 0xFF))
+      return cp;
+  return row >= 0x75 ? 0xE000 + (row - 0x75) * 94 + (column - 0x21) : 0;
+}
+
+// The set and code ISO-2022-JP-MS writes a character beyond ASCII and
+// katakana as, trying JIS X 0208, row 13, JIS X 0212 and then NEC's selection.
+LIBC_INLINE bool iso2022_jp_ms_code(char32_t cp, Iso2022Set &set,
+                                    uint16_t &code) {
+  set = Iso2022Set::JIS_X0208;
+  code = cp == 0x301E ? 0x2D60 : find_code(JIS_X0208, cp);
+  if (code)
+    return true;
+  if (uint16_t shift_jis = find_code(CP932_NEC_ROW_13, cp)) {
+    code = jis_from_shift_jis(shift_jis >> 8, shift_jis & 0xFF);
+    return true;
+  }
+  set = Iso2022Set::JIS_X0212;
+  code = find_code(JIS_X0212, cp);
+  if (!code)
+    code = find_code(ISO2022_JP_MS_IBM, cp);
+  if (code)
+    return true;
+  set = Iso2022Set::JIS_X0208;
+  if (uint16_t shift_jis = find_code(CP932_NEC_SELECTED_IBM, cp)) {
+    code = jis_from_shift_jis(shift_jis >> 8, shift_jis & 0xFF);
+    return true;
+  }
+  if (cp < 0xE000 || cp >= 0xE000 + 20 * 94)
+    return false;
+  unsigned index = cp - 0xE000;
+  if (index >= 10 * 94) {
+    set = Iso2022Set::JIS_X0212;
+    index -= 10 * 94;
+  }
+  code = static_cast<uint16_t>((0x75 + index / 94) << 8 | (0x21 + index % 94));
+  return true;
+}
+
+LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state, bool ms,
                                     const unsigned char *in, size_t inleft,
                                     char32_t &out, size_t &used) {
   const unsigned byte = in[0];
@@ -558,7 +630,9 @@ LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
     if (inleft < 3)
       return Status::INCOMPLETE;
     bool waiting = false;
-    for (const Iso2022Escape &escape : ISO2022_JP1_ESCAPES) {
+    const size_t count = ISO2022_JP1_ESCAPE_COUNT + (ms ? 1 : 0);
+    for (size_t e = 0; e < count; ++e) {
+      const Iso2022Escape &escape = ISO2022_JP1_ESCAPES[e];
       const size_t have =
           inleft - 1 < escape.length ? inleft - 1 : escape.length;
       size_t same = 0;
@@ -577,6 +651,13 @@ LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
     }
     return waiting ? Status::INCOMPLETE : Status::INVALID;
   }
+  if (ms && (byte == SO || byte == SI)) {
+    if (byte == SO && state.read_g0 == Iso2022Set::JIS_ROMAN)
+      state.read_g0 = Iso2022Set::JIS_KANA;
+    else if (byte == SI && state.read_g0 == Iso2022Set::JIS_KANA)
+      state.read_g0 = Iso2022Set::JIS_ROMAN;
+    return Status::NONE;
+  }
   if (state.read_g0 == Iso2022Set::ASCII ||
       state.read_g0 == Iso2022Set::JIS_ROMAN) {
     if (byte >= 0x80)
@@ -587,6 +668,12 @@ LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
                                              : byte;
     return Status::OK;
   }
+  if (state.read_g0 == Iso2022Set::JIS_KANA) {
+    if (byte < 0x21 || byte > 0x5F)
+      return Status::INVALID;
+    out = 0xFF40 + byte;
+    return Status::OK;
+  }
   // In a two byte set every byte waits for the next before it is judged.
   if (inleft < 2)
     return Status::INCOMPLETE;
@@ -595,11 +682,36 @@ LIBC_INLINE Status read_iso2022_jp1(Iso2022State &state,
   const unsigned second = in[1];
   if (second < 0x21 || second >= 0x7F)
     return Status::INVALID;
-  char32_t cp = iso2022_character(state.read_g0, byte, second);
+  char32_t cp = ms ? iso2022_jp_ms_character(state.read_g0, byte, second)
+                   : iso2022_character(state.read_g0, byte, second);
   if (cp == 0)
     return Status::INVALID;
   used = 2;
   out = cp;
+  return Status::OK;
+}
+
+// Writes |code| in |set|, switching G0 to it first.
+LIBC_INLINE Status write_in_g0(Iso2022State &state, Iso2022Set set,
+                               uint16_t code, unsigned char *out,
+                               size_t outleft, size_t &made) {
+  unsigned char bytes[6];
+  size_t length = 0;
+  if (state.write_g0 != set) {
+    const Iso2022Escape &escape = iso2022_escape(set);
+    bytes[length++] = ESC;
+    for (size_t i = 0; i < escape.length; ++i)
+      bytes[length++] = static_cast<unsigned char>(escape.bytes[i]);
+  }
+  if (set == Iso2022Set::JIS_X0208 || set == Iso2022Set::JIS_X0212)
+    bytes[length++] = static_cast<unsigned char>(code >> 8);
+  bytes[length++] = static_cast<unsigned char>(code & 0xFF);
+  if (outleft < length)
+    return Status::FULL;
+  for (size_t i = 0; i < length; ++i)
+    out[i] = bytes[i];
+  made = length;
+  state.write_g0 = set;
   return Status::OK;
 }
 
@@ -614,29 +726,27 @@ LIBC_INLINE Status write_iso2022_jp1(Iso2022State &state, char32_t cp,
       Iso2022Set::ASCII, Iso2022Set::JIS_ROMAN, Iso2022Set::JIS_X0208,
       Iso2022Set::JIS_X0212};
   uint16_t code = 0;
-  for (const Iso2022Set set : ORDER) {
-    if (!iso2022_code(set, cp, code))
-      continue;
-    unsigned char bytes[6];
-    size_t length = 0;
-    if (state.write_g0 != set) {
-      const Iso2022Escape &escape = iso2022_escape(set);
-      bytes[length++] = ESC;
-      for (size_t i = 0; i < escape.length; ++i)
-        bytes[length++] = static_cast<unsigned char>(escape.bytes[i]);
-    }
-    if (set == Iso2022Set::JIS_X0208 || set == Iso2022Set::JIS_X0212)
-      bytes[length++] = static_cast<unsigned char>(code >> 8);
-    bytes[length++] = static_cast<unsigned char>(code & 0xFF);
-    if (outleft < length)
-      return Status::FULL;
-    for (size_t i = 0; i < length; ++i)
-      out[i] = bytes[i];
-    made = length;
-    state.write_g0 = set;
-    return Status::OK;
-  }
+  for (const Iso2022Set set : ORDER)
+    if (iso2022_code(set, cp, code))
+      return write_in_g0(state, set, code, out, outleft, made);
   return Status::INVALID;
+}
+
+LIBC_INLINE Status write_iso2022_jp_ms(Iso2022State &state, char32_t cp,
+                                       unsigned char *out, size_t outleft,
+                                       size_t &made) {
+  made = 0;
+  if (cp >= 0xE0000 && cp <= 0xE007F)
+    return Status::OK;
+  Iso2022Set set = Iso2022Set::ASCII;
+  uint16_t code = static_cast<uint16_t>(cp);
+  if (cp >= 0xFF61 && cp <= 0xFF9F) {
+    set = Iso2022Set::JIS_KANA;
+    code = static_cast<uint16_t>(cp - 0xFF40);
+  } else if (cp >= 0x80 && !iso2022_jp_ms_code(cp, set, code)) {
+    return Status::INVALID;
+  }
+  return write_in_g0(state, set, code, out, outleft, made);
 }
 
 // HZ: ASCII, and GB 2312 between "~{" and "~}". "~~" is a tilde, and a "~" at

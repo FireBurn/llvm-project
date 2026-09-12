@@ -684,8 +684,10 @@ LIBC_INLINE Status decode(Conversion &conv, const unsigned char *in,
                            inleft, out, used);
   if (conv.from == Encoding::ISO2022_KR)
     return read_iso2022_kr(conv.iso2022, in, inleft, out, used);
-  if (conv.from == Encoding::ISO2022_JP1)
-    return read_iso2022_jp1(conv.iso2022, in, inleft, out, used);
+  if (conv.from == Encoding::ISO2022_JP1 ||
+      conv.from == Encoding::ISO2022_JP_MS)
+    return read_iso2022_jp1(conv.iso2022, conv.from == Encoding::ISO2022_JP_MS,
+                            in, inleft, out, used);
   if (conv.from == Encoding::HZ)
     return read_hz(conv.iso2022, in, inleft, out, used);
 #endif
@@ -1012,7 +1014,8 @@ LIBC_INLINE Status unshift(Conversion &conv, unsigned char *out, size_t outleft,
   if (conv.to == Encoding::HZ)
     return unshift_hz(conv.iso2022, out, outleft, made);
   if (conv.to == Encoding::ISO2022_JP || conv.to == Encoding::ISO2022_JP1 ||
-      conv.to == Encoding::ISO2022_JP2 || conv.to == Encoding::ISO2022_KR)
+      conv.to == Encoding::ISO2022_JP2 || conv.to == Encoding::ISO2022_JP_MS ||
+      conv.to == Encoding::ISO2022_KR)
     return unshift_iso2022(conv.iso2022, conv.to == Encoding::ISO2022_KR, out,
                            outleft, made);
 #endif
@@ -1044,6 +1047,8 @@ LIBC_INLINE Status encode(Conversion &conv, char32_t cp, unsigned char *out,
     return write_iso2022_kr(conv.iso2022, cp, out, outleft, made);
   if (conv.to == Encoding::ISO2022_JP1)
     return write_iso2022_jp1(conv.iso2022, cp, out, outleft, made);
+  if (conv.to == Encoding::ISO2022_JP_MS)
+    return write_iso2022_jp_ms(conv.iso2022, cp, out, outleft, made);
   if (conv.to == Encoding::HZ)
     return write_hz(conv.iso2022, cp, out, outleft, made);
 #endif
