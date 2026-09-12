@@ -21,6 +21,7 @@
 #include "hdr/types/char32_t.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/ctype_utils.h"
+#include "src/__support/endian_internal.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/charsets.h"
@@ -35,6 +36,13 @@ struct Conversion {
   const uint16_t *to_table;
   // Whether what cannot be converted is left out rather than reported.
   bool ignore;
+  // For input which may begin with a byte order mark: whether one may still
+  // come, and the order the input is read in.
+  bool read_mark;
+  bool read_big;
+  // For output which begins with a byte order mark: whether it is still to be
+  // written.
+  bool write_mark;
 };
 
 // A name matches without regard to case, or to the punctuation between its
@@ -99,19 +107,61 @@ LIBC_INLINE const Charset *find_charset(const char *name) {
 // What a step of a conversion ended up doing.
 enum class Status {
   OK,
+  NONE,       // The bytes were a byte order mark rather than a character.
   INCOMPLETE, // The input ran out part way through a character.
   INVALID,    // The bytes are not a character in this set.
   FULL,       // There is no room in the output.
 };
 
-// Reads one character. |used| is how many bytes it took, or for input which is
-// not a character, how many bytes are passed over to skip it.
-LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
-                          size_t inleft, char32_t &out, size_t &used) {
-  if (inleft == 0)
-    return Status::INCOMPLETE;
+// The units of UTF-16, UCS-2 and UTF-32, in either byte order.
+LIBC_INLINE uint32_t get16(const unsigned char *p, bool big) {
+  return big ? (uint32_t(p[0]) << 8) | p[1] : (uint32_t(p[1]) << 8) | p[0];
+}
 
-  switch (conv.from) {
+LIBC_INLINE uint32_t get32(const unsigned char *p, bool big) {
+  uint32_t value = 0;
+  for (size_t i = 0; i < 4; ++i)
+    value = (value << 8) | p[big ? i : 3 - i];
+  return value;
+}
+
+LIBC_INLINE void put16(unsigned char *p, uint32_t unit, bool big) {
+  p[big ? 0 : 1] = static_cast<unsigned char>(unit >> 8);
+  p[big ? 1 : 0] = static_cast<unsigned char>(unit & 0xFF);
+}
+
+LIBC_INLINE void put32(unsigned char *p, uint32_t unit, bool big) {
+  for (size_t i = 0; i < 4; ++i)
+    p[big ? i : 3 - i] = static_cast<unsigned char>(unit >> (24 - 8 * i));
+}
+
+// Whether |encoding| may carry a byte order mark, and the unit it counts in.
+LIBC_INLINE bool has_mark(Encoding encoding) {
+  return encoding == Encoding::UTF16 || encoding == Encoding::UTF32 ||
+         encoding == Encoding::UCS2_BOM;
+}
+
+// The form of |encoding| with its byte order settled.
+LIBC_INLINE Encoding in_order(Encoding encoding, bool big) {
+  switch (encoding) {
+  case Encoding::UTF16:
+    return big ? Encoding::UTF16BE : Encoding::UTF16LE;
+  case Encoding::UTF32:
+    return big ? Encoding::UTF32BE : Encoding::UTF32LE;
+  case Encoding::UCS2_BOM:
+    return big ? Encoding::UCS2BE : Encoding::UCS2LE;
+  default:
+    return encoding;
+  }
+}
+
+// Reads one character of a set whose byte order is settled. |used| is how
+// many bytes it took, or for input which is not a character, how many bytes
+// are passed over to skip it.
+LIBC_INLINE Status decode_as(Encoding from, const uint16_t *table,
+                             const unsigned char *in, size_t inleft,
+                             char32_t &out, size_t &used) {
+  switch (from) {
   case Encoding::ASCII:
     used = 1;
     if (in[0] > 0x7F)
@@ -125,7 +175,7 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
       out = in[0];
       return Status::OK;
     }
-    uint16_t mapped = conv.from_table[in[0] - 0x80];
+    uint16_t mapped = table[in[0] - 0x80];
     if (mapped == UNASSIGNED)
       return Status::INVALID;
     out = mapped;
@@ -178,11 +228,8 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
   case Encoding::UTF16BE: {
     if (inleft < 2)
       return Status::INCOMPLETE;
-    const bool big = conv.from == Encoding::UTF16BE;
-    auto unit = [big](const unsigned char *p) -> uint32_t {
-      return big ? (uint32_t(p[0]) << 8) | p[1] : (uint32_t(p[1]) << 8) | p[0];
-    };
-    uint32_t first = unit(in);
+    const bool big = from == Encoding::UTF16BE;
+    uint32_t first = get16(in, big);
     // A unit which does not begin a character is passed over on its own.
     used = 2;
     if (first < 0xD800 || first > 0xDFFF) {
@@ -193,7 +240,7 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
       return Status::INVALID; // A low surrogate with no high one before it.
     if (inleft < 4)
       return Status::INCOMPLETE;
-    uint32_t second = unit(in + 2);
+    uint32_t second = get16(in + 2, big);
     if (second < 0xDC00 || second > 0xDFFF)
       return Status::INVALID;
     out = 0x10000 + ((first - 0xD800) << 10) + (second - 0xDC00);
@@ -206,9 +253,7 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
     if (inleft < 2)
       return Status::INCOMPLETE;
     used = 2;
-    uint32_t value = conv.from == Encoding::UCS2BE
-                         ? (uint32_t(in[0]) << 8) | in[1]
-                         : (uint32_t(in[1]) << 8) | in[0];
+    uint32_t value = get16(in, from == Encoding::UCS2BE);
     if (value >= 0xD800 && value <= 0xDFFF)
       return Status::INVALID;
     out = value;
@@ -219,21 +264,42 @@ LIBC_INLINE Status decode(const Conversion &conv, const unsigned char *in,
   case Encoding::UTF32BE: {
     if (inleft < 4)
       return Status::INCOMPLETE;
-    uint32_t value;
-    if (conv.from == Encoding::UTF32BE)
-      value = (uint32_t(in[0]) << 24) | (uint32_t(in[1]) << 16) |
-              (uint32_t(in[2]) << 8) | in[3];
-    else
-      value = (uint32_t(in[3]) << 24) | (uint32_t(in[2]) << 16) |
-              (uint32_t(in[1]) << 8) | in[0];
+    uint32_t value = get32(in, from == Encoding::UTF32BE);
     used = 4;
     if (value > 0x10FFFF || (value >= 0xD800 && value <= 0xDFFF))
       return Status::INVALID;
     out = value;
     return Status::OK;
   }
+
+  default:
+    return Status::INVALID;
   }
-  return Status::INVALID;
+}
+
+// Reads one character, or the byte order mark ahead of the first one.
+LIBC_INLINE Status decode(Conversion &conv, const unsigned char *in,
+                          size_t inleft, char32_t &out, size_t &used) {
+  if (inleft == 0)
+    return Status::INCOMPLETE;
+
+  if (has_mark(conv.from) && conv.read_mark) {
+    const bool wide = conv.from == Encoding::UTF32;
+    const size_t unit = wide ? 4 : 2;
+    if (inleft < unit)
+      return Status::INCOMPLETE;
+    // Only the first unit can be a mark. Further in, FEFF is the character
+    // U+FEFF.
+    conv.read_mark = false;
+    uint32_t first = wide ? get32(in, true) : get16(in, true);
+    if (first == 0xFEFF || first == (wide ? 0xFFFE0000 : 0xFFFE)) {
+      conv.read_big = first == 0xFEFF;
+      used = unit;
+      return Status::NONE;
+    }
+  }
+  return decode_as(in_order(conv.from, conv.read_big), conv.from_table, in,
+                   inleft, out, used);
 }
 
 // The fewest bytes a character takes in |encoding|. With less room than
@@ -242,21 +308,25 @@ LIBC_INLINE size_t narrowest(Encoding encoding) {
   switch (encoding) {
   case Encoding::UTF16LE:
   case Encoding::UTF16BE:
+  case Encoding::UTF16:
   case Encoding::UCS2LE:
   case Encoding::UCS2BE:
+  case Encoding::UCS2_BOM:
     return 2;
   case Encoding::UTF32LE:
   case Encoding::UTF32BE:
+  case Encoding::UTF32:
     return 4;
   default:
     return 1;
   }
 }
 
-// Writes one character. |made| is how many bytes it took.
-LIBC_INLINE Status encode(const Conversion &conv, char32_t cp,
-                          unsigned char *out, size_t outleft, size_t &made) {
-  switch (conv.to) {
+// Writes one character of a set whose byte order is settled. |made| is how
+// many bytes it took.
+LIBC_INLINE Status encode_as(Encoding to, const uint16_t *table, char32_t cp,
+                             unsigned char *out, size_t outleft, size_t &made) {
+  switch (to) {
   case Encoding::ASCII:
     if (cp > 0x7F)
       return Status::INVALID;
@@ -280,7 +350,7 @@ LIBC_INLINE Status encode(const Conversion &conv, char32_t cp,
     // The table is small enough that a walk costs less than a second table
     // to invert it would.
     for (size_t i = 0; i < 128; ++i) {
-      if (conv.to_table[i] != cp)
+      if (table[i] != cp)
         continue;
       if (outleft < 1)
         return Status::FULL;
@@ -321,23 +391,19 @@ LIBC_INLINE Status encode(const Conversion &conv, char32_t cp,
 
   case Encoding::UTF16LE:
   case Encoding::UTF16BE: {
-    const bool big = conv.to == Encoding::UTF16BE;
-    auto put = [big](unsigned char *p, uint32_t unit) {
-      p[big ? 0 : 1] = static_cast<unsigned char>(unit >> 8);
-      p[big ? 1 : 0] = static_cast<unsigned char>(unit & 0xFF);
-    };
+    const bool big = to == Encoding::UTF16BE;
     if (cp < 0x10000) {
       if (outleft < 2)
         return Status::FULL;
-      put(out, cp);
+      put16(out, cp, big);
       made = 2;
       return Status::OK;
     }
     if (outleft < 4)
       return Status::FULL;
     uint32_t rest = cp - 0x10000;
-    put(out, 0xD800 + (rest >> 10));
-    put(out + 2, 0xDC00 + (rest & 0x3FF));
+    put16(out, 0xD800 + (rest >> 10), big);
+    put16(out + 2, 0xDC00 + (rest & 0x3FF), big);
     made = 4;
     return Status::OK;
   }
@@ -348,9 +414,7 @@ LIBC_INLINE Status encode(const Conversion &conv, char32_t cp,
       return Status::FULL;
     if (cp > 0xFFFF)
       return Status::INVALID;
-    const bool big = conv.to == Encoding::UCS2BE;
-    out[big ? 0 : 1] = static_cast<unsigned char>(cp >> 8);
-    out[big ? 1 : 0] = static_cast<unsigned char>(cp & 0xFF);
+    put16(out, cp, to == Encoding::UCS2BE);
     made = 2;
     return Status::OK;
   }
@@ -359,22 +423,43 @@ LIBC_INLINE Status encode(const Conversion &conv, char32_t cp,
   case Encoding::UTF32BE: {
     if (outleft < 4)
       return Status::FULL;
-    if (conv.to == Encoding::UTF32BE) {
-      out[0] = static_cast<unsigned char>(cp >> 24);
-      out[1] = static_cast<unsigned char>((cp >> 16) & 0xFF);
-      out[2] = static_cast<unsigned char>((cp >> 8) & 0xFF);
-      out[3] = static_cast<unsigned char>(cp & 0xFF);
-    } else {
-      out[0] = static_cast<unsigned char>(cp & 0xFF);
-      out[1] = static_cast<unsigned char>((cp >> 8) & 0xFF);
-      out[2] = static_cast<unsigned char>((cp >> 16) & 0xFF);
-      out[3] = static_cast<unsigned char>(cp >> 24);
-    }
+    put32(out, cp, to == Encoding::UTF32BE);
     made = 4;
     return Status::OK;
   }
+
+  default:
+    return Status::INVALID;
   }
-  return Status::INVALID;
+}
+
+// Writes one character, after the byte order mark if the output still owes
+// one. |made| counts the mark as well, and a mark once written stays written
+// even when the character after it cannot be.
+LIBC_INLINE Status encode(Conversion &conv, char32_t cp, unsigned char *out,
+                          size_t outleft, size_t &made) {
+  made = 0;
+  // Output with a mark is in the host's byte order, which the mark says.
+  const bool big = !Endian::IS_LITTLE;
+  if (has_mark(conv.to) && conv.write_mark) {
+    const bool wide = conv.to == Encoding::UTF32;
+    const size_t unit = wide ? 4 : 2;
+    if (outleft < unit)
+      return Status::FULL;
+    if (wide)
+      put32(out, 0xFEFF, big);
+    else
+      put16(out, 0xFEFF, big);
+    conv.write_mark = false;
+    made = unit;
+    out += unit;
+    outleft -= unit;
+  }
+  size_t wrote = 0;
+  Status status =
+      encode_as(in_order(conv.to, big), conv.to_table, cp, out, outleft, wrote);
+  made += wrote;
+  return status;
 }
 
 } // namespace iconv_internal
