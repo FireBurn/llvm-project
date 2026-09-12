@@ -7,6 +7,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/errno_macros.h"
+#include "hdr/locale_macros.h"
 #include "hdr/types/iconv_t.h"
 #include "hdr/types/ssize_t.h"
 #include "src/__support/endian_internal.h"
@@ -14,6 +15,7 @@
 #include "src/iconv/iconv.h"
 #include "src/iconv/iconv_close.h"
 #include "src/iconv/iconv_open.h"
+#include "src/locale/setlocale.h"
 #include "src/string/string_utils.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
@@ -93,6 +95,24 @@ TEST_F(LlvmLibcIconvTest, OtherNamesForTheSameSets) {
     for (size_t i = 0; i < c.length; ++i)
       EXPECT_EQ(out[i], c.bytes[i]);
   }
+}
+
+TEST_F(LlvmLibcIconvTest, TheLocalesOwnSet) {
+  // An empty name, and libiconv's "CHAR", are the set of the locale in force
+  // when the conversion is opened. In the C locale that is ASCII.
+  const char *names[] = {"", "CHAR"};
+  char out[16] = {};
+  for (const char *name : names) {
+    EXPECT_EQ(convert("UTF-16LE", name, "A\xc3\xa9", 3, out, sizeof(out)),
+              ssize_t(-1));
+    ASSERT_ERRNO_EQ(EILSEQ);
+  }
+
+  ASSERT_TRUE(LIBC_NAMESPACE::setlocale(LC_ALL, "C.UTF-8") != nullptr);
+  for (const char *name : names)
+    EXPECT_EQ(convert("UTF-16LE", name, "A\xc3\xa9", 3, out, sizeof(out)),
+              ssize_t(4));
+  LIBC_NAMESPACE::setlocale(LC_ALL, "C");
 }
 
 TEST_F(LlvmLibcIconvTest, AnUnknownSetIsRejected) {
