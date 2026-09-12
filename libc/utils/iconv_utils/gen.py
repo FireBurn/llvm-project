@@ -233,6 +233,14 @@ ICU_MAPPINGS = "https://github.com/unicode-org/icu/tree/main/icu4c/source/data/m
 GB18030 = ("gb18030-2022.ucm", ICU_MAPPINGS)
 CP936 = ("CP936.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS")
 GB2312 = ("GB2312%UCS.src", f"{CITRUS}/GB")
+# ISO-IR-165 is GB 2312 with the additions of GB 6345.1 and GB 8565.2, as
+# Citrus has them, and GB 1988 in row 0x2A, as glibc and GNU libiconv have it
+# where Citrus leaves the row out. 0x283C is U+1E3F, where Citrus has a private
+# use character. glibc and GNU libiconv read a few codes otherwise: glibc five
+# of GB 2312's, 0x283F, 0x2840 and 0x2A67, GNU libiconv six of row 0x28's and
+# 0x7C38, and both have characters in row 0x2B.
+ISO_IR_165 = ("ISO-IR-165EXT%UCS.src", f"{CITRUS}/GB")
+GB_1988 = ("ISO646-CN%UCS.646", f"{CITRUS}/ISO646")
 
 # BIG5, which glibc also calls CP950, is Microsoft's CP950. Where several codes
 # read as the same character, it is written as Microsoft's best fit table gives,
@@ -794,6 +802,20 @@ def chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
     declarations.append("// The GB 2312 codes GB18030 reads as other characters.")
     declarations.append(f"constexpr size_t GB2312_CHANGE_COUNT = {len(changes)};")
     declarations.append("extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];")
+
+    additions = read_citrus_mapping(f"{mappings}/{ISO_IR_165[0]}")
+    if additions.get(0x283C) != 0xE7C7:
+        exit("ISO-IR-165: 0x283C is not the private use character")
+    additions[0x283C] = 0x1E3F
+    gb_1988 = read_iso646_mapping(f"{mappings}/{GB_1988[0]}")
+    for byte in range(0x21, 0x7F):
+        additions[0x2A00 | byte] = gb_1988.get(byte, byte)
+    if any(code in gb2312 for code in additions):
+        exit("ISO-IR-165: an addition has a GB 2312 code")
+    arrays, declaration = format_code_list("ISO_IR_165_ADDITIONS", additions)
+    definitions.append(arrays)
+    declarations.append("// The characters ISO-IR-165 has beyond GB 2312.")
+    declarations.append(declaration)
     return definitions, declarations
 
 
@@ -828,6 +850,30 @@ def johab_from_ks_x_1001(code: int) -> int:
     if not trail_row:
         return lead << 8 | (column + 0xA0)
     return lead << 8 | (column + (0x30 if column <= 0x4E else 0x42))
+
+
+def format_code_list(name: str, mapping: dict[int, int]) -> tuple[str, str]:
+    """A CodeList of |mapping|, whose values fit in 16 bits and differ, and its
+    declaration."""
+    pairs = sorted(mapping.items())
+    if any(not 0 <= value <= 0xFFFF for _, value in pairs):
+        exit(f"{name}: a value does not fit")
+    if len({value for _, value in pairs}) != len(pairs):
+        exit(f"{name}: a value has two codes")
+    order = sorted(range(len(pairs)), key=lambda i: pairs[i][1])
+    arrays = "\n".join(
+        [
+            "namespace {",
+            f"const CodePair {name}_PAIRS[{len(pairs)}] = {{",
+            "\n".join(f"    {{0x{c:04X}, 0x{v:04X}}}," for c, v in pairs),
+            "};",
+            format_values("uint16_t", f"{name}_ORDER", order, 4),
+            "} // namespace",
+            "",
+            f"const CodeList {name} = {{{name}_PAIRS, {name}_ORDER, {len(pairs)}}};",
+        ]
+    )
+    return arrays, f"extern const CodeList {name};"
 
 
 def format_wide_table(name: str, mapping: dict[int, int]) -> tuple[str, str]:
@@ -915,25 +961,20 @@ def traditional_chinese_tables(mappings: str) -> tuple[list[str], list[str]]:
         exit("HKSCS: a character is beyond the Supplementary Ideographic Plane")
     if len(set(plane_2.values())) != len(plane_2):
         exit("HKSCS: a character of the Supplementary Ideographic Plane has two codes")
-    pairs = sorted(plane_2.items())
-    order = sorted(range(len(pairs)), key=lambda i: pairs[i][1])
+    plane_2_arrays, plane_2_declaration = format_code_list(
+        "BIG5_HKSCS_PLANE_2", {code: cp - 0x20000 for code, cp in plane_2.items()}
+    )
     definitions += [
         format_code_table(
             "BIG5_HKSCS", hkscs, (0x87, 0xFE), (0x40, 0xFE), hkscs_writes
         ),
-        "const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT] = {\n"
-        + "\n".join(f"    {{0x{c:04X}, 0x{cp - 0x20000:04X}}}," for c, cp in pairs)
-        + "\n};",
-        format_values("uint16_t", "BIG5_HKSCS_PLANE_2_ORDER", order, 4),
+        plane_2_arrays,
     ]
     declarations += [
         "extern const CodeTable BIG5_HKSCS;",
-        f"constexpr size_t BIG5_HKSCS_PLANE_2_COUNT = {len(pairs)};",
-        "// The characters of the Supplementary Ideographic Plane, in order of",
-        "// code, as their offset from U+20000, and their positions in order of",
-        "// code point.",
-        "extern const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT];",
-        "extern const uint16_t BIG5_HKSCS_PLANE_2_ORDER[BIG5_HKSCS_PLANE_2_COUNT];",
+        "// The characters of the Supplementary Ideographic Plane, as their",
+        "// offset from U+20000.",
+        plane_2_declaration,
         format_sequences("BIG5_HKSCS", sequences),
     ]
 
