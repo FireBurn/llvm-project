@@ -404,6 +404,11 @@ enum class Encoding {
   // U+FFFF.
   UCS2LE,
   UCS2BE,
+  // UTF-16, UTF-32 and UCS-2 whose byte order a mark at the start of the input
+  // may give. Output is in the host's order and begins with the mark.
+  UTF16,
+  UTF32,
+  UCS2_BOM,
   ASCII,
   SINGLE_BYTE, // One of the tables above.
 };
@@ -419,16 +424,18 @@ struct Charset {
 // "iso88591" and "ISO_8859-1" are all the same set.
 constexpr Charset CHARSETS[] = {
     {"UTF8", Encoding::UTF8, nullptr},
-    {"UTF16", Encoding::UTF16LE, nullptr},
+    {"UTF16", Encoding::UTF16, nullptr},
     {"UTF16LE", Encoding::UTF16LE, nullptr},
     {"UTF16BE", Encoding::UTF16BE, nullptr},
-    {"UTF32", Encoding::UTF32LE, nullptr},
+    {"UTF32", Encoding::UTF32, nullptr},
     {"UTF32LE", Encoding::UTF32LE, nullptr},
     {"UTF32BE", Encoding::UTF32BE, nullptr},
     // Plain UCS-2 is in the host's byte order, as glibc has it.
     {"UCS2", Endian::IS_LITTLE ? Encoding::UCS2LE : Encoding::UCS2BE, nullptr},
     {"UCS2LE", Encoding::UCS2LE, nullptr},
     {"UCS2BE", Encoding::UCS2BE, nullptr},
+    // glibc's name for UCS-2 with a byte order mark.
+    {"UNICODE", Encoding::UCS2_BOM, nullptr},
     {"UCS4", Encoding::UTF32BE, nullptr},
     {"UCS4LE", Encoding::UTF32LE, nullptr},
     {"UCS4BE", Encoding::UTF32BE, nullptr},
