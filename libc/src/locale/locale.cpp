@@ -148,6 +148,11 @@ const char *set_locale_name(int category, cpp::string_view name) {
 
 const char *current_locale_name() { return current.name; }
 
+const char *current_codeset() {
+  return name_states_utf8(cpp::string_view(current.name)) ? "UTF-8"
+                                                          : "ANSI_X3.4-1968";
+}
+
 } // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
