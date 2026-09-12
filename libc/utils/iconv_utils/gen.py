@@ -11,6 +11,7 @@
 from sys import argv, exit
 
 UNICODE = "https://www.unicode.org/Public/MAPPINGS"
+UCD = "https://www.unicode.org/Public/UCD/latest/ucd"
 CITRUS = "https://github.com/freebsd/freebsd-src/tree/main/share/i18n/csmapper"
 ICU = "https://github.com/unicode-org/icu-data/tree/main/charset/data/ucm"
 
@@ -159,6 +160,20 @@ SINGLE_BYTE += [
     ("MAC_ARABIC", "APPLE-ARABIC.TXT", APPLE, {"controls": True}),
 ]
 
+# The sets which write some characters as a letter followed by combining marks.
+# See COMBINING.
+SINGLE_BYTE += [
+    ("CP1258", "CP1258.TXT", f"{UNICODE}/VENDORS/MICSFT/WINDOWS"),
+    # Windows has since assigned 0xCA, as Microsoft's best fit table for the
+    # set gives.
+    (
+        "CP1255",
+        "CP1255.TXT",
+        f"{UNICODE}/VENDORS/MICSFT/WINDOWS",
+        {"changes": {0xCA: 0x05BA}},
+    ),
+]
+
 # The sets which do not agree with ASCII below 0x80, so are written out for
 # all 256 bytes. The same rules apply as for SINGLE_BYTE.
 FULL = [
@@ -173,7 +188,23 @@ FULL = [
         f"{UNICODE}/OBSOLETE/EASTASIA/JIS",
         {"controls": True},
     ),
+    # A table of two bytes, a row for each byte and a column for the one after
+    # it. Row 0 gives each byte alone, except for a letter which a mark may
+    # follow, which is given in its own row.
+    ("TCVN", "TCVN5712-1%UCS.src", f"{CITRUS}/TCVN", {"rows": True}),
 ]
+
+# The sets which join a letter and the combining mark after it into one
+# character, and write a character they have no byte for as a letter and marks.
+# What they join is what UnicodeData.txt, from the Unicode Character Database
+# at UCD, gives as canonically equivalent: the letter may already be joined,
+# and a character which decomposes to a single other one is only a second name
+# for it. That takes in the Hebrew presentation forms, which Unicode leaves out
+# of NFC but glibc joins. It leaves out O, U and O with a diaeresis followed by
+# a tilde, which glibc and Citrus's TCVN table join to the letters with a tilde
+# and then another mark: marks of the same class in another order are
+# different text.
+COMBINING = ["CP1258", "CP1255", "TCVN"]
 
 # The value a table holds for a byte the set does not assign.
 UNASSIGNED = 0xFFFD
@@ -278,6 +309,149 @@ def read_mapping(path: str) -> dict[int, int]:
     return read_unicode_mapping(path)
 
 
+def read_unicode_data(path: str) -> tuple[dict[int, int], dict[int, list[int]]]:
+    """Reads each character's canonical combining class, where it is not 0,
+    and its canonical decomposition, where it has one."""
+    classes, decompositions = {}, {}
+    with open(path, encoding="utf-8") as file:
+        for line in file:
+            fields = line.split(";")
+            code_point = int(fields[0], 16)
+            if fields[3] != "0":
+                classes[code_point] = int(fields[3])
+            if fields[5] and not fields[5].startswith("<"):
+                decompositions[code_point] = [
+                    int(part, 16) for part in fields[5].split()
+                ]
+    return classes, decompositions
+
+
+def decompose(code_points, classes, decompositions) -> tuple[int, ...]:
+    """The canonical decomposition of a string, with its marks in canonical
+    order."""
+    result = []
+    for code_point in code_points:
+        if code_point in decompositions:
+            result += decompose(decompositions[code_point], classes, decompositions)
+        else:
+            result.append(code_point)
+    for end in range(len(result), 1, -1):
+        for i in range(1, end):
+            if 0 < classes.get(result[i], 0) < classes.get(result[i - 1], 0):
+                result[i - 1], result[i] = result[i], result[i - 1]
+    return tuple(result)
+
+
+def combining_tables(name: str, mapping: dict[int, int], classes, decompositions):
+    """Works out which characters the set joins from a character and a mark,
+    and the bytes each joined character the set has no byte for is written
+    as."""
+    byte_of = {}
+    for byte in sorted(mapping):
+        byte_of.setdefault(mapping[byte], byte)
+    joined = {}
+    for code_point, parts in decompositions.items():
+        if len(parts) > 1:
+            key = decompose([code_point], classes, decompositions)
+            joined.setdefault(key, []).append(code_point)
+
+    characters = sorted(byte_of)
+    compositions = {}
+    level = {code_point: 0 for code_point in characters}
+    queue = list(characters)
+    for held in queue:
+        for mark in characters:
+            found = joined.get(decompose([held, mark], classes, decompositions), [])
+            if len(found) > 1:
+                exit(f"{name}: U+{held:04X} U+{mark:04X} could join to more than one")
+            if not found:
+                continue
+            compositions[(held, mark)] = found[0]
+            if found[0] not in level:
+                level[found[0]] = level[held] + 1
+                queue.append(found[0])
+
+    # The fewest bytes, and of those, marks in canonical order.
+    def order(data: bytes):
+        return len(data), [classes.get(mapping[byte], 0) for byte in data[1:]], data
+
+    written = {code_point: bytes([byte_of[code_point]]) for code_point in characters}
+    for code_point in sorted(level, key=lambda c: (level[c], c)):
+        if code_point in written:
+            continue
+        candidates = [
+            written[held] + bytes([byte_of[mark]])
+            for (held, mark), result in compositions.items()
+            if result == code_point and held in written
+        ]
+        written[code_point] = min(candidates, key=order)
+
+    # Read each back the way iconv does, holding a character while a mark may
+    # still join it.
+    bases = {held for held, _ in compositions}
+
+    def read(data: bytes) -> list[int]:
+        out, held = [], None
+        for byte in data:
+            code_point = mapping[byte]
+            if held is not None and (held, code_point) in compositions:
+                code_point, held = compositions[(held, code_point)], None
+            elif held is not None:
+                out.append(held)
+                held = None
+            if code_point in bases:
+                held = code_point
+            else:
+                out.append(code_point)
+        return out + ([held] if held is not None else [])
+
+    for code_point, data in written.items():
+        if read(data) != [code_point] or len(data) > 3 or code_point > 0xFFFF:
+            exit(f"{name}: U+{code_point:04X} is not written as {data.hex()}")
+    if 0 in bases:
+        exit(f"{name}: U+0000 cannot be held")
+    decompositions_out = sorted(
+        (code_point, data) for code_point, data in written.items() if len(data) > 1
+    )
+    return sorted(compositions.items()), decompositions_out
+
+
+def format_combining(name: str, compositions, decompositions) -> str:
+    lines = [f"constexpr Composition {name}_COMPOSITIONS[{len(compositions)}] = {{"]
+    for start in range(0, len(compositions), 2):
+        row = compositions[start : start + 2]
+        lines.append(
+            "    "
+            + " ".join(
+                f"{{0x{held:04X}, 0x{mark:04X}, 0x{result:04X}}},"
+                for (held, mark), result in row
+            )
+        )
+    lines.append("};")
+    lines.append("")
+    lines.append(
+        f"constexpr Decomposition {name}_DECOMPOSITIONS[{len(decompositions)}] = {{"
+    )
+    for start in range(0, len(decompositions), 2):
+        row = decompositions[start : start + 2]
+        entries = []
+        for code_point, data in row:
+            padded = list(data) + [0] * (3 - len(data))
+            entries.append(
+                f"{{0x{code_point:04X}, {len(data)}, {{"
+                + ", ".join(f"0x{byte:02X}" for byte in padded)
+                + "}},"
+            )
+        lines.append("    " + " ".join(entries))
+    lines.append("};")
+    lines.append("")
+    lines.append(f"constexpr Combining {name}_COMBINING = {{")
+    lines.append(f"    {name}_COMPOSITIONS, {len(compositions)},")
+    lines.append(f"    {name}_DECOMPOSITIONS, {len(decompositions)},")
+    lines.append("};")
+    return "\n".join(lines)
+
+
 def high_half(name: str, mapping: dict[int, int]) -> list[int]:
     for byte in range(0x80):
         if mapping.get(byte, byte) != byte:
@@ -303,6 +477,12 @@ def main() -> None:
 
     def apply_rules(file_name, rules):
         mapping = read_mapping(f"{mappings}/{file_name}")
+        if rules.get("rows"):
+            mapping = {
+                byte: mapping.get((byte << 8) | byte) if value == 0 and byte else value
+                for byte, value in mapping.items()
+                if byte < 0x100
+            }
         if rules.get("controls"):
             for byte in list(range(0x20)) + [0x7F]:
                 mapping.setdefault(byte, byte)
@@ -318,13 +498,26 @@ def main() -> None:
             mapping.pop(byte, None)
         return mapping
 
+    mappings_by_name = {}
     for name, file_name, _, *rules in SINGLE_BYTE:
         mapping = apply_rules(file_name, rules[0] if rules else {})
+        mappings_by_name[name] = mapping
         tables.append(format_table(name, high_half(name, mapping)))
     for name, file_name, _, *rules in FULL:
         mapping = apply_rules(file_name, rules[0] if rules else {})
+        mappings_by_name[name] = mapping
         tables.append(
             format_table(name, [mapping.get(byte, UNASSIGNED) for byte in range(256)])
+        )
+    classes, decompositions = read_unicode_data(f"{mappings}/UnicodeData.txt")
+    for name in COMBINING:
+        tables.append(
+            format_combining(
+                name,
+                *combining_tables(
+                    name, mappings_by_name[name], classes, decompositions
+                ),
+            )
         )
 
     title = "//===-- Tables for iconv's single byte sets "
@@ -347,6 +540,11 @@ def main() -> None:
             + "// agrees with ASCII below them; a _FULL table gives all 256. 0xFFFD marks a\n"
             + "// byte the set does not assign.\n"
             + "//\n"
+            + "// For a set which joins a character and the combining mark after it, a\n"
+            + "// _COMPOSITIONS table gives the pairs it joins and what they make, in the\n"
+            + "// order of the pair, and a _DECOMPOSITIONS table gives the bytes it writes a\n"
+            + "// character it has no byte for as, in the order of the character.\n"
+            + "//\n"
             + "//===----------------------------------------------------------------------===//\n"
             + "\n"
             + "#ifndef LLVM_LIBC_SRC_ICONV_SINGLE_BYTE_TABLES_H\n"
@@ -354,6 +552,7 @@ def main() -> None:
             + "\n"
             + '#include "hdr/stdint_proxy.h"\n'
             + '#include "src/__support/macros/config.h"\n'
+            + '#include "src/iconv/combining.h"\n'
             + "\n"
             + "namespace LIBC_NAMESPACE_DECL {\n"
             + "namespace iconv_internal {\n"
