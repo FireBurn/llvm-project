@@ -1283,3 +1283,48 @@ TEST_F(LlvmLibcIconvTest, KoreanSets) {
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EINVAL);
 }
+
+TEST_F(LlvmLibcIconvTest, Iso2022Sets) {
+  // Hiragana a, then ASCII, and back to ASCII at the end.
+  const char hiragana_a[] = {'\x1b', '$', 'B', '\x24', '\x22',
+                             '\x1b', '(', 'B', 'A'};
+  char out[32] = {};
+  ASSERT_EQ(convert_and_finish("UTF-8", "ISO-2022-JP", hiragana_a,
+                               sizeof(hiragana_a), out, sizeof(out)),
+            ssize_t(4));
+  EXPECT_EQ(out[0], '\xe3');
+  EXPECT_EQ(out[3], 'A');
+  expect_bytes("ISO-2022-JP", "UTF-8",
+               "\xe3\x81\x82"
+               "A",
+               4, hiragana_a, sizeof(hiragana_a));
+
+  // What the output has switched to is undone when the state is reset.
+  const char alone[] = {'\x1b', '$', 'B', '\x24', '\x22', '\x1b', '(', 'B'};
+  ASSERT_EQ(convert_and_finish("ISO-2022-JP", "UTF-8", "\xe3\x81\x82", 3, out,
+                               sizeof(out)),
+            ssize_t(sizeof(alone)));
+  for (size_t i = 0; i < sizeof(alone); ++i)
+    EXPECT_EQ(out[i], alone[i]);
+
+  // ISO-2022-JP-2 has ISO-8859-1's upper half through G2.
+  const char no_break_space[] = {'\x1b', '.', 'A', '\x1b', 'N', ' '};
+  expect_bytes("ISO-2022-JP-2", "UTF-8", "\xc2\xa0", 2, no_break_space,
+               sizeof(no_break_space));
+  // ISO-2022-JP has not.
+  EXPECT_EQ(convert("ISO-2022-JP", "UTF-8", "\xc2\xa0", 2, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+
+  // ISO-2022-KR announces KS C 5601 and shifts out for it.
+  const char ga[] = {'\x1b', '$', ')', 'C', '\x0e', '\x30', '\x21', '\x0f'};
+  ASSERT_EQ(convert_and_finish("ISO-2022-KR", "UTF-8", "\xea\xb0\x80", 3, out,
+                               sizeof(out)),
+            ssize_t(sizeof(ga)));
+  for (size_t i = 0; i < sizeof(ga); ++i)
+    EXPECT_EQ(out[i], ga[i]);
+  ASSERT_EQ(convert_and_finish("UTF-8", "ISO-2022-KR", ga, sizeof(ga), out,
+                               sizeof(out)),
+            ssize_t(3));
+  EXPECT_EQ(out[0], '\xea');
+}
