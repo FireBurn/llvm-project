@@ -52,6 +52,8 @@ LLVM_LIBC_FUNCTION(iconv_t, iconv_open,
   conv->to = to->encoding;
   conv->from_table = from->table;
   conv->to_table = to->table;
+  conv->from_combining = from->combining;
+  conv->to_combining = to->combining;
   conv->ignore = iconv_internal::has_flag(tocode, "IGNORE");
   // Until a byte order mark says otherwise, input is in the host's order.
   iconv_internal::reset_state(*conv);
