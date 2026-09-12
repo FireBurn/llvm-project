@@ -1439,3 +1439,16 @@ TEST_F(LlvmLibcIconvTest, EucTw) {
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EILSEQ);
 }
+
+TEST_F(LlvmLibcIconvTest, IsoIr165) {
+  // ISO-IR-165 is GB 2312 with more letters and GB 1988 in row 0x2A.
+  expect_bytes("ISO-IR-165", "UTF-8", "\xe5\x95\x8a", 3, "\x30\x21", 2);
+  expect_bytes("ISO-IR-165", "UTF-8", "\xc9\x91", 2, "\x28\x3b", 2);
+  expect_bytes("CN-GB-ISOIR165", "UTF-8", "A\xc2\xa5", 3, "\x2a\x41\x2a\x24",
+               4);
+  // A byte from 0x21 waits for a second.
+  char out[8] = {};
+  EXPECT_EQ(convert("UTF-8", "ISO-IR-165", "A", 1, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EINVAL);
+}
