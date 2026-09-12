@@ -18,6 +18,7 @@
 #include "hdr/types/size_t.h"
 #include "src/__support/macros/config.h"
 #include "src/iconv/code_table.h"
+#include "src/iconv/sequences.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace iconv_internal {
@@ -47,6 +48,21 @@ extern const uint8_t GB2312_ASSIGNED[1105];
 constexpr size_t GB2312_CHANGE_COUNT = 2;
 extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];
 extern const CodeTable BIG5_TWO_BYTE;
+extern const CodeTable BIG5_HKSCS;
+constexpr size_t BIG5_HKSCS_PLANE_2_COUNT = 1713;
+// The characters of the Supplementary Ideographic Plane, in order of
+// code, as their offset from U+20000, and their positions in order of
+// code point.
+extern const CodePair BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_COUNT];
+extern const uint16_t BIG5_HKSCS_PLANE_2_ORDER[BIG5_HKSCS_PLANE_2_COUNT];
+constexpr Sequence BIG5_HKSCS_SEQUENCE_LIST[4] = {
+    {0x8862, 2, {0x00CA, 0x0304, 0x0000}},
+    {0x8864, 2, {0x00CA, 0x030C, 0x0000}},
+    {0x88A3, 2, {0x00EA, 0x0304, 0x0000}},
+    {0x88A5, 2, {0x00EA, 0x030C, 0x0000}},
+};
+
+constexpr Sequences BIG5_HKSCS_SEQUENCES = {BIG5_HKSCS_SEQUENCE_LIST, 4};
 extern const CodeTable KS_X_1001;
 // The JOHAB codes of a Hangul letter by itself.
 constexpr size_t JOHAB_LETTER_COUNT = 51;

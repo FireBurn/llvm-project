@@ -1406,3 +1406,23 @@ TEST_F(LlvmLibcIconvTest, Big5) {
             ssize_t(-1));
   ASSERT_ERRNO_EQ(EILSEQ);
 }
+
+TEST_F(LlvmLibcIconvTest, Big5Hkscs) {
+  // HKSCS has characters from lead byte 0x87, some beyond the Basic
+  // Multilingual Plane, and writes box drawing lines as its own codes.
+  expect_bytes("BIG5-HKSCS", "UTF-8", "\xe4\x8f\xb0", 3, "\x87\x40", 2);
+  expect_bytes("BIG5-HKSCS", "UTF-8", "\xf0\xa0\x84\x8c", 4, "\x88\x45", 2);
+  expect_bytes("BIG5HKSCS", "UTF-8", "\xe2\x95\x90", 3, "\xf9\xf9", 2);
+  // 0x8862 stands for E with a circumflex and a macron above it.
+  expect_bytes("UTF-8", "BIG5-HKSCS", "\x88\x62", 2, "\xc3\x8a\xcc\x84", 4);
+  expect_bytes("BIG5-HKSCS", "UTF-8", "\xc3\x8a\xcc\x84", 4, "\x88\x62", 2);
+  // 0x8740 came with the 2004 edition.
+  char out[8] = {};
+  EXPECT_EQ(
+      convert("UTF-8", "BIG5-HKSCS:2001", "\x87\x40", 2, out, sizeof(out)),
+      ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+  EXPECT_EQ(
+      convert("UTF-8", "BIG5-HKSCS:2004", "\x87\x40", 2, out, sizeof(out)),
+      ssize_t(3));
+}
