@@ -46,6 +46,7 @@ extern const uint8_t GB2312_ASSIGNED[1105];
 // The GB 2312 codes GB18030 reads as other characters.
 constexpr size_t GB2312_CHANGE_COUNT = 2;
 extern const CodePair GB2312_CHANGES[GB2312_CHANGE_COUNT];
+extern const CodeTable BIG5_TWO_BYTE;
 extern const CodeTable KS_X_1001;
 // The JOHAB codes of a Hangul letter by itself.
 constexpr size_t JOHAB_LETTER_COUNT = 51;
