@@ -98,6 +98,8 @@ enum class Encoding {
   ISO2022_JP1,
   HZ,
   ISO2022_JP_MS,
+  ISO2022_CN,
+  ISO2022_CN_EXT,
 };
 
 struct Charset {
@@ -440,6 +442,9 @@ constexpr Charset CHARSETS[] = {
     {"HZGB2312", Encoding::HZ, nullptr},
     {"ISO2022JPMS", Encoding::ISO2022_JP_MS, nullptr},
     {"CP50221", Encoding::ISO2022_JP_MS, nullptr},
+    {"ISO2022CN", Encoding::ISO2022_CN, nullptr},
+    {"CSISO2022CN", Encoding::ISO2022_CN, nullptr},
+    {"ISO2022CNEXT", Encoding::ISO2022_CN_EXT, nullptr},
 #endif // LIBC_COPT_ICONV_DISABLE_CJK
 };
 
