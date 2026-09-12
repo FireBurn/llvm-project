@@ -92,40 +92,19 @@ LIBC_INLINE unsigned hkscs_edition(unsigned code) {
   return 1999;
 }
 
-// The characters of the Supplementary Ideographic Plane are kept apart, in
-// order of code, as their offset from U+20000.
+// The characters of the Supplementary Ideographic Plane are kept apart, as
+// their offset from U+20000.
 LIBC_INLINE char32_t hkscs_plane_2_character(unsigned code) {
-  size_t low = 0;
-  size_t high = BIG5_HKSCS_PLANE_2_COUNT;
-  while (low < high) {
-    size_t mid = low + (high - low) / 2;
-    if (BIG5_HKSCS_PLANE_2[mid].code < code)
-      low = mid + 1;
-    else
-      high = mid;
-  }
-  if (low == BIG5_HKSCS_PLANE_2_COUNT || BIG5_HKSCS_PLANE_2[low].code != code)
+  uint16_t offset = 0;
+  if (!look_up(BIG5_HKSCS_PLANE_2, code, offset))
     return 0;
-  return 0x20000 + BIG5_HKSCS_PLANE_2[low].code_point;
+  return 0x20000 + offset;
 }
 
 LIBC_INLINE uint16_t hkscs_plane_2_code(char32_t cp) {
   if (cp < 0x20000 || cp > 0x2FFFF)
     return 0;
-  const unsigned offset = cp - 0x20000;
-  size_t low = 0;
-  size_t high = BIG5_HKSCS_PLANE_2_COUNT;
-  while (low < high) {
-    size_t mid = low + (high - low) / 2;
-    if (BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_ORDER[mid]].code_point < offset)
-      low = mid + 1;
-    else
-      high = mid;
-  }
-  if (low == BIG5_HKSCS_PLANE_2_COUNT)
-    return 0;
-  const CodePair &pair = BIG5_HKSCS_PLANE_2[BIG5_HKSCS_PLANE_2_ORDER[low]];
-  return pair.code_point == offset ? pair.code : 0;
+  return find_code(BIG5_HKSCS_PLANE_2, cp - 0x20000);
 }
 
 LIBC_INLINE Status read_big5_hkscs(unsigned year, const unsigned char *in,
