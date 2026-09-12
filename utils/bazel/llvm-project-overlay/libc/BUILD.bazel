@@ -23777,7 +23777,7 @@ libc_support_library(
 
 libc_support_library(
     name = "iconv_charsets",
-    hdrs = ["src/iconv/charsets.h", "src/iconv/single_byte_tables.h"],
+    hdrs = ["src/iconv/charsets.h", "src/iconv/combining.h", "src/iconv/single_byte_tables.h"],
     deps = [
         ":__support_common",
         ":__support_macros_attributes",
