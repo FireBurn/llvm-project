@@ -87,6 +87,9 @@ TEST_F(LlvmLibcIconvTest, OtherNamesForTheSameSets) {
       {"UCS-2-SWAPPED", little ? "\0A" : "A\0", 2},
       {"UCS-4-SWAPPED", little ? "\0\0\0A" : "A\0\0\0", 4},
       {"WCHAR_T", little ? "A\0\0\0" : "\0\0\0A", 4},
+      {"WINDOWS-1258", "A", 1},
+      {"MS-HEBR", "A", 1},
+      {"TCVN5712-1:1993", "A", 1},
   };
   for (const Case &c : cases) {
     char out[8] = {};
@@ -878,4 +881,161 @@ TEST_F(LlvmLibcIconvTest, Utf7Errors) {
   EXPECT_EQ(r.used, size_t(8));
   ASSERT_EQ(r.made, size_t(1));
   EXPECT_EQ(out[0], 'C');
+}
+
+// Converts |in|, then goes back to the initial state with room to write what
+// that owes, and reports how many bytes came out, or -1.
+ssize_t convert_and_finish(const char *to, const char *from, const char *in,
+                           size_t inlen, char *out, size_t outlen) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open(to, from);
+  if (cd == FAILED)
+    return -2;
+  char input[64];
+  for (size_t i = 0; i < inlen; ++i)
+    input[i] = in[i];
+  char *ip = input;
+  char *op = out;
+  size_t il = inlen;
+  size_t ol = outlen;
+  size_t result = LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol);
+  if (result != static_cast<size_t>(-1))
+    result = LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol);
+  LIBC_NAMESPACE::iconv_close(cd);
+  if (result == static_cast<size_t>(-1))
+    return -1;
+  return op - out;
+}
+
+void expect_utf8(const char *from, const char *in, size_t inlen,
+                 const char *utf8, size_t length) {
+  char out[16] = {};
+  ASSERT_EQ(convert_and_finish("UTF-8", from, in, inlen, out, sizeof(out)),
+            static_cast<ssize_t>(length));
+  for (size_t i = 0; i < length; ++i)
+    EXPECT_EQ(out[i], utf8[i]);
+}
+
+TEST_F(LlvmLibcIconvTest, ReadingJoinsALetterAndAMark) {
+  // a and a combining grave accent.
+  expect_utf8("CP1258", "a\xcc", 2, "\xc3\xa0", 2);
+  // a and a combining dot below, which CP1258 has no byte for together.
+  expect_utf8("CP1258", "a\xf2", 2, "\xe1\xba\xa1", 3);
+  expect_utf8("TCVN", "a\xb3", 2, "\xc3\xa1", 2);
+  // A letter already joined may take another mark: O with a tilde and then an
+  // acute.
+  expect_utf8("CP1258", "O\xde\xec", 3, "\xe1\xb9\x8c", 3);
+  // The same marks the other way round are other text, so stay apart.
+  expect_utf8("CP1258", "\xd3\xde", 2, "\xc3\x93\xcc\x83", 4);
+  // Hebrew shin with a dagesh and a shin dot, in either order.
+  expect_utf8("CP1255", "\xf9\xcc\xd1", 3, "\xef\xac\xac", 3);
+  expect_utf8("CP1255", "\xf9\xd1\xcc", 3, "\xef\xac\xac", 3);
+  // A mark which does not join the letter before it, or has none, is read as
+  // it is.
+  expect_utf8("CP1258", "b\xcc", 2, "b\xcc\x80", 3);
+  expect_utf8("CP1258", "\xcc", 1, "\xcc\x80", 2);
+}
+
+TEST_F(LlvmLibcIconvTest, WritingSplitsWhatASetHasNoByteFor) {
+  // a with a dot below: a letter and a mark in CP1258, one byte in TCVN.
+  expect_bytes("CP1258", "UTF-8", "\xe1\xba\xa1", 3, "a\xf2", 2);
+  expect_bytes("TCVN", "UTF-8", "\xe1\xba\xa1", 3, "\xb9", 1);
+  // O with a tilde and an acute. TCVN has O with a tilde; CP1258 has only O.
+  expect_bytes("TCVN", "UTF-8", "\xe1\xb9\x8c", 3, "\x94\xb3", 2);
+  expect_bytes("CP1258", "UTF-8", "\xe1\xb9\x8c", 3, "O\xde\xec", 3);
+  // Marks come out in canonical order.
+  expect_bytes("CP1255", "UTF-8", "\xef\xac\xac", 3, "\xf9\xcc\xd1", 3);
+
+  // With room for the letter but not the mark, nothing is written.
+  char out[1] = {};
+  EXPECT_EQ(convert("CP1258", "UTF-8", "\xe1\xba\xa1", 3, out, sizeof(out)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  // CP1258 has no mark to make O with a tilde and a diaeresis from.
+  char more[8] = {};
+  EXPECT_EQ(convert("CP1258", "UTF-8", "\xe1\xb9\x8e", 3, more, sizeof(more)),
+            ssize_t(-1));
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
+
+TEST_F(LlvmLibcIconvTest, ALetterWaitsForAMark) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-8", "CP1258");
+  ASSERT_TRUE(cd != FAILED);
+  char input[] = "a1";
+  char out[8] = {};
+  char *ip = input;
+  size_t il = 1;
+  char *op = out;
+  size_t ol = sizeof(out);
+  // A mark may still join a, so it is used but not yet written.
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol), size_t(0));
+  EXPECT_EQ(il, size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 0L);
+  // Going back to the initial state with somewhere to write it writes it.
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol), size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 1L);
+  EXPECT_EQ(out[0], 'a');
+
+  // Without, it is dropped.
+  ip = input;
+  il = 1;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol), size_t(0));
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, nullptr, nullptr),
+            size_t(0));
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol), size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 1L);
+
+  // No mark joins 1, so it is written at once.
+  il = 1;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol), size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 2L);
+  EXPECT_EQ(out[1], '1');
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+}
+
+TEST_F(LlvmLibcIconvTest, AnErrorHandsBackAHeldLetter) {
+  iconv_t cd = LIBC_NAMESPACE::iconv_open("UTF-32BE", "CP1258");
+  ASSERT_TRUE(cd != FAILED);
+  char input[] = "abc";
+  char out[8] = {};
+  char *ip = input;
+  size_t il = 3;
+  char *op = out;
+  size_t ol = 4;
+  // b shows that no mark joins a, so a is written and b held. c would write b,
+  // which there is no room for.
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  EXPECT_EQ(il, size_t(1));
+  EXPECT_EQ(static_cast<long>(op - out), 4L);
+  EXPECT_EQ(out[3], 'a');
+  ol = 4;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol), size_t(0));
+  EXPECT_EQ(out[7], 'b');
+
+  // Nothing is written after a, so the error hands a back as well.
+  ip = input;
+  il = 2;
+  op = out;
+  ol = 1;
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, &ip, &il, &op, &ol),
+            static_cast<size_t>(-1));
+  ASSERT_ERRNO_EQ(E2BIG);
+  EXPECT_EQ(il, size_t(2));
+  ol = sizeof(out);
+  EXPECT_EQ(LIBC_NAMESPACE::iconv(cd, nullptr, nullptr, &op, &ol), size_t(0));
+  EXPECT_EQ(static_cast<long>(op - out), 0L);
+  ASSERT_EQ(LIBC_NAMESPACE::iconv_close(cd), 0);
+
+  // The same when the letter has no place in the target set: A with a breve
+  // in ASCII.
+  const char breve[] = {'\xc3', 'a'};
+  Result r = convert_all_from("ASCII", "CP1258", breve, 2, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(0));
+  // Under //IGNORE it is left out, and the letter after it waits for a mark.
+  r = convert_all_from("ASCII//IGNORE", "CP1258", breve, 2, out, sizeof(out));
+  EXPECT_EQ(r.error, EILSEQ);
+  EXPECT_EQ(r.used, size_t(2));
+  EXPECT_EQ(r.made, size_t(0));
 }
