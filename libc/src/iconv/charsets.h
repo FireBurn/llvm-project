@@ -63,6 +63,13 @@ enum class Encoding {
   SINGLE_BYTE,      // A table of the bytes from 0x80 up.
   SINGLE_BYTE_FULL, // A table of all 256 bytes, for a set which is not ASCII
                     // below 0x80.
+  // JIS X 0208 and JIS X 0212 by themselves, and the Japanese sets built on
+  // them.
+  JIS_X0208,
+  JIS_X0212,
+  EUC_JP,
+  SHIFT_JIS,
+  CP932,
 };
 
 struct Charset {
@@ -327,6 +334,30 @@ constexpr Charset CHARSETS[] = {
     {"TCVN5712", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
     {"TCVN57121", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
     {"TCVN57121:1993", Encoding::SINGLE_BYTE_FULL, TCVN_FULL, &TCVN_COMBINING},
+#ifndef LIBC_COPT_ICONV_DISABLE_CJK
+    {"JISX0208", Encoding::JIS_X0208, nullptr},
+    {"JISX02081983", Encoding::JIS_X0208, nullptr},
+    {"JISX02081990", Encoding::JIS_X0208, nullptr},
+    {"JIS0208", Encoding::JIS_X0208, nullptr},
+    {"X0208", Encoding::JIS_X0208, nullptr},
+    {"ISOIR87", Encoding::JIS_X0208, nullptr},
+    {"JISC62261983", Encoding::JIS_X0208, nullptr},
+    {"CSISO87JISX0208", Encoding::JIS_X0208, nullptr},
+    {"JISX0212", Encoding::JIS_X0212, nullptr},
+    {"JISX0212.19900", Encoding::JIS_X0212, nullptr},
+    {"JISX02121990", Encoding::JIS_X0212, nullptr},
+    {"X0212", Encoding::JIS_X0212, nullptr},
+    {"ISOIR159", Encoding::JIS_X0212, nullptr},
+    {"CSISO159JISX02121990", Encoding::JIS_X0212, nullptr},
+    {"EUCJP", Encoding::EUC_JP, nullptr},
+    {"EXTENDEDUNIXCODEPACKEDFORMATFORJAPANESE", Encoding::EUC_JP, nullptr},
+    {"CSEUCPKDFMTJAPANESE", Encoding::EUC_JP, nullptr},
+    {"SHIFTJIS", Encoding::SHIFT_JIS, nullptr},
+    {"SJIS", Encoding::SHIFT_JIS, nullptr},
+    {"MSKANJI", Encoding::SHIFT_JIS, nullptr},
+    {"CSSHIFTJIS", Encoding::SHIFT_JIS, nullptr},
+    {"CP932", Encoding::CP932, nullptr},
+#endif // LIBC_COPT_ICONV_DISABLE_CJK
 };
 
 constexpr size_t CHARSET_COUNT = sizeof(CHARSETS) / sizeof(CHARSETS[0]);
