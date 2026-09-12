@@ -80,6 +80,10 @@ enum class Encoding {
   EUC_KR,
   CP949,
   JOHAB,
+  // Sets which switch between others with escape sequences and shifts.
+  ISO2022_JP,
+  ISO2022_JP2,
+  ISO2022_KR,
 };
 
 struct Charset {
@@ -392,6 +396,12 @@ constexpr Charset CHARSETS[] = {
     {"UHC", Encoding::CP949, nullptr},
     {"JOHAB", Encoding::JOHAB, nullptr},
     {"CP1361", Encoding::JOHAB, nullptr},
+    {"ISO2022JP", Encoding::ISO2022_JP, nullptr},
+    {"CSISO2022JP", Encoding::ISO2022_JP, nullptr},
+    {"ISO2022JP2", Encoding::ISO2022_JP2, nullptr},
+    {"CSISO2022JP2", Encoding::ISO2022_JP2, nullptr},
+    {"ISO2022KR", Encoding::ISO2022_KR, nullptr},
+    {"CSISO2022KR", Encoding::ISO2022_KR, nullptr},
 #endif // LIBC_COPT_ICONV_DISABLE_CJK
 };
 
