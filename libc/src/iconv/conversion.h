@@ -34,6 +34,9 @@ struct Conversion {
   Encoding to;
   const uint16_t *from_table;
   const uint16_t *to_table;
+  // For a set which joins a letter and the marks after it: what it joins.
+  const Combining *from_combining;
+  const Combining *to_combining;
   // Whether what cannot be converted is left out rather than reported.
   bool ignore;
   // For input which may begin with a byte order mark: whether one may still
@@ -53,6 +56,8 @@ struct Conversion {
   bool write_run;
   uint8_t write_bit_count;
   uint32_t write_bits;
+  // A character read but held back while a mark may still join it, or 0.
+  char32_t held;
 };
 
 // Puts a conversion back in its initial state, dropping whatever it had
@@ -67,6 +72,7 @@ LIBC_INLINE void reset_state(Conversion &conv) {
   conv.write_run = false;
   conv.write_bit_count = 0;
   conv.write_bits = 0;
+  conv.held = 0;
 }
 
 // A name matches without regard to case, or to the punctuation between its
@@ -942,6 +948,18 @@ LIBC_INLINE Status encode(Conversion &conv, char32_t cp, unsigned char *out,
   size_t wrote = 0;
   Status status =
       encode_as(in_order(conv.to, big), conv.to_table, cp, out, outleft, wrote);
+  // A character the set has no byte for may be a letter and marks it has.
+  if (status == Status::INVALID && conv.to_combining != nullptr) {
+    const Decomposition *parts = decompose(*conv.to_combining, cp);
+    if (parts != nullptr && outleft < parts->length) {
+      status = Status::FULL;
+    } else if (parts != nullptr) {
+      for (size_t i = 0; i < parts->length; ++i)
+        out[i] = parts->bytes[i];
+      wrote = parts->length;
+      status = Status::OK;
+    }
+  }
   made += wrote;
   return status;
 }
