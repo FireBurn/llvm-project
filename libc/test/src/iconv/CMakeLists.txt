@@ -8,6 +8,7 @@ add_libc_test(
     iconv_test.cpp
   DEPENDS
     libc.hdr.errno_macros
+    libc.hdr.locale_macros
     libc.hdr.types.iconv_t
     libc.hdr.types.ssize_t
     libc.src.__support.common
@@ -15,5 +16,6 @@ add_libc_test(
     libc.src.iconv.iconv
     libc.src.iconv.iconv_close
     libc.src.iconv.iconv_open
+    libc.src.locale.setlocale
     libc.test.UnitTest.ErrnoCheckingTest
 )
