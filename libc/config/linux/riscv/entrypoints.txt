@@ -589,6 +589,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.swap.swapon
 
     # sys/time.h entrypoints
+    libc.src.sys.time.futimes
     libc.src.sys.time.utimes
 
     # sys/timerfd.h entrypoints
