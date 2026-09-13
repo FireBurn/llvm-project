@@ -971,6 +971,22 @@ TEST(LlvmLibcFileTest, ATerminalIsLineBuffered) {
   ASSERT_EQ(tty->close(), 0);
 }
 
+// A line put together from several writes, as a shell's echo puts one
+// together, still goes out in a single write once it is complete.
+TEST(LlvmLibcFileTest, ALineGoesOutInOneWrite) {
+  char buffer[64];
+  LIBC_NAMESPACE::AllocChecker ac;
+  MaybeTerminalFile *tty =
+      new (ac) MaybeTerminalFile(buffer, sizeof(buffer), /*is_terminal=*/true);
+  ASSERT_FALSE(tty == nullptr);
+  ASSERT_EQ(tty->write("1234 0", 6).value, size_t(6));
+  ASSERT_EQ(tty->get_writes(), size_t(0));
+  ASSERT_EQ(tty->write("\n", 1).value, size_t(1));
+  ASSERT_EQ(tty->get_writes(), size_t(1));
+  ASSERT_EQ(tty->get_pos(), size_t(7));
+  ASSERT_EQ(tty->close(), 0);
+}
+
 TEST(LlvmLibcFileTest, FileLockRAII) {
   StringFile *f = new_string_file(nullptr, 0, _IONBF, false, "w+");
   ASSERT_FALSE(f == nullptr);
