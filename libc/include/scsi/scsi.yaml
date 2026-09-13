@@ -1,0 +1,19 @@
+header: scsi/scsi.h
+standards:
+  - linux
+macros:
+  - macro_name: INQUIRY
+    macro_header: scsi-scsi-macros.h
+  - macro_name: CHECK_CONDITION
+    macro_header: scsi-scsi-macros.h
+  - macro_name: NO_SENSE
+    macro_header: scsi-scsi-macros.h
+  - macro_name: TYPE_DISK
+    macro_header: scsi-scsi-macros.h
+  - macro_name: SCSI_IOCTL_GET_IDLUN
+    macro_header: scsi-scsi-macros.h
+types:
+  - type_name: struct_ccs_modesel_head
+enums: []
+objects: []
+functions: []

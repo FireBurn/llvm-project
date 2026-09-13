@@ -1,0 +1,14 @@
+header: scsi/scsi_ioctl.h
+standards:
+  - linux
+macros:
+  - macro_name: SCSI_IOCTL_SEND_COMMAND
+    macro_header: scsi-scsi-ioctl-macros.h
+  - macro_name: SCSI_IOCTL_DOORLOCK
+    macro_header: scsi-scsi-ioctl-macros.h
+  - macro_name: SCSI_IOCTL_DOORUNLOCK
+    macro_header: scsi-scsi-ioctl-macros.h
+types: []
+enums: []
+objects: []
+functions: []
