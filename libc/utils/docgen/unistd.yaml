@@ -633,6 +633,8 @@ functions:
     c-definition: 'TODO: BSD extension'
   isatty:
     in-latest-posix: ""
+  issetugid:
+    in-latest-posix: ""
   lchown:
     in-latest-posix: ""
   link:
