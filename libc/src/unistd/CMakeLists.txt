@@ -323,6 +323,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  issetugid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.issetugid
+)
+
+add_entrypoint_object(
   link
   ALIAS
   DEPENDS
