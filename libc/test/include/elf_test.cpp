@@ -28,6 +28,14 @@ TEST(LlvmLibcElfTest, RelocationsTakeApartWhatTheyPutTogether) {
   EXPECT_EQ(Elf32_Word(ELF32_R_TYPE(info32)), Elf32_Word(type32));
 }
 
+TEST(LlvmLibcElfTest, SignedTypesHoldNegativeValues) {
+  // An addend can point below the symbol it is relative to, and the ELF
+  // specification gives these types a sign for that.
+  EXPECT_LT(Elf64_Sxword(-8), Elf64_Sxword(0));
+  EXPECT_LT(Elf64_Sword(-8), Elf64_Sword(0));
+  EXPECT_LT(Elf32_Sword(-8), Elf32_Sword(0));
+}
+
 TEST(LlvmLibcElfTest, TheRecordsAreTheSizesTheyAreOnTheWire) {
   EXPECT_EQ(sizeof(Elf64_Section), size_t(2));
   EXPECT_EQ(sizeof(Elf32_Section), size_t(2));
