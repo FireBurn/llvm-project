@@ -1009,6 +1009,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  issetugid_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    issetugid_test.cpp
+  DEPENDS
+    libc.src.unistd.issetugid
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   geteuid_test
   SUITE
     libc-unistd-tests
