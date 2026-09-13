@@ -766,6 +766,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.endusershell
     libc.src.unistd.getuid
     libc.src.unistd.isatty
+    libc.src.unistd.issetugid
     libc.src.unistd.link
     libc.src.unistd.linkat
     libc.src.unistd.lseek
