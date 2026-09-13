@@ -593,6 +593,12 @@ functions:
       - type: const char *
       - type: uid_t
       - type: gid_t
+  - name: issetugid
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: void
   - name: link
     standards:
       - posix
