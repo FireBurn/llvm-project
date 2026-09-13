@@ -168,14 +168,19 @@ add_header_library(
     search.h
   DEPENDS
     libc.hdr.elf_macros
+    libc.hdr.fcntl_macros
     libc.hdr.link_macros
     libc.hdr.types.size_t
     libc.src.__support.CPP.optional
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.src.__support.elf.load_module
     libc.src.__support.elf.module
     libc.src.__support.elf.run_path
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
+    libc.src.__support.macros.properties.architectures
 )
 
 

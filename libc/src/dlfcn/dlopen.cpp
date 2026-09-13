@@ -143,6 +143,7 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
 
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
+  elf::SystemPaths system_paths;
 
   const elf::Module *caller_module = nullptr;
   size_t caller_index = 0;
@@ -163,7 +164,7 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
         caller_module->name(), executable_path, sizeof(executable_path));
 
   auto loaded = elf::find_and_load(path, caller_module, caller_origin,
-                                   library_path, set.page_size);
+                                   library_path, &system_paths, set.page_size);
   if (!loaded.has_value()) {
     dl::set_error("cannot open shared object");
     return nullptr;
@@ -194,8 +195,9 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
         missing = name;
         return;
       }
-      auto dependency = elf::find_and_load(name, &requester, nullptr,
-                                           library_path, set.page_size);
+      auto dependency =
+          elf::find_and_load(name, &requester, nullptr, library_path,
+                             &system_paths, set.page_size);
       if (!dependency.has_value()) {
         failed = true;
         missing = name;
