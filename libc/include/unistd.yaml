@@ -675,6 +675,12 @@ functions:
       - type: int
     guard: null
     attributes: []
+  - name: issetugid
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: void
   - name: link
     standards:
       - posix
