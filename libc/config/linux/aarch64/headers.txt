@@ -47,6 +47,9 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.printf
     libc.include.pwd
     libc.include.sched
+    libc.include.scsi_scsi
+    libc.include.scsi_scsi_ioctl
+    libc.include.scsi_sg
     libc.include.search
     libc.include.semaphore
     libc.include.setjmp

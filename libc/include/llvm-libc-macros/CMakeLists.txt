@@ -560,6 +560,24 @@ add_macro_header(
 )
 
 add_macro_header(
+  scsi_scsi_macros
+  HDR
+    scsi-scsi-macros.h
+)
+
+add_macro_header(
+  scsi_scsi_ioctl_macros
+  HDR
+    scsi-scsi-ioctl-macros.h
+)
+
+add_macro_header(
+  scsi_sg_macros
+  HDR
+    scsi-sg-macros.h
+)
+
+add_macro_header(
   printf_macros
   HDR
     printf-macros.h
