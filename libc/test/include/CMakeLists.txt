@@ -32,6 +32,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  scsi_sg_test
+  SUITE
+    libc_include_tests
+  SRCS
+    scsi_sg_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.scsi_sg_macros
+    libc.include.llvm-libc-types.struct_ccs_modesel_head
+    libc.include.llvm-libc-types.struct_sg_header
+    libc.include.llvm-libc-types.struct_sg_io_hdr
+    libc.include.llvm-libc-types.struct_sg_iovec
+    libc.include.llvm-libc-types.struct_sg_req_info
+    libc.include.llvm-libc-types.struct_sg_scsi_id
+)
+
+add_libc_test(
   arpa_nameser_test
   SUITE
     libc_include_tests
