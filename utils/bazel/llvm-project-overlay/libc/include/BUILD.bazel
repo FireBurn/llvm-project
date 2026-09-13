@@ -75,6 +75,9 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("paths"),
     libc_header_info("printf"),
     libc_header_info("resolv"),
+    libc_header_info("scsi/scsi"),
+    libc_header_info("scsi/scsi_ioctl"),
+    libc_header_info("scsi/sg"),
     libc_header_info("shadow"),
     libc_header_info(
         "stdbit",
