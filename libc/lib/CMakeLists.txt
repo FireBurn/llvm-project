@@ -131,7 +131,7 @@ endforeach()
 # glibc leaves in their place for the same reason.
 set(added_empty_archives "")
 if(LLVM_LIBC_FULL_BUILD AND ${LIBC_TARGET_OS} STREQUAL "linux")
-  list(APPEND libc_empty_archive_names pthread dl rt util)
+  list(APPEND libc_empty_archive_names pthread dl resolv rt util)
   foreach(archive ${libc_empty_archive_names})
     set(empty_archive_path ${LIBC_LIBRARY_DIR}/lib${archive}.a)
     add_custom_command(
