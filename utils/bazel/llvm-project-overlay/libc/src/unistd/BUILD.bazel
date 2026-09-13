@@ -887,6 +887,18 @@ libc_function(
 )
 
 libc_function(
+    name = "issetugid",
+    srcs = ["linux/issetugid.cpp"],
+    hdrs = ["issetugid.h"],
+    deps = [
+        ":unistd_issetugid",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "sbrk",
     srcs = ["linux/sbrk.cpp"],
     hdrs = ["sbrk.h"],
@@ -1051,6 +1063,14 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:pid_t",
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_issetugid",
+    hdrs = ["issetugid.h"],
+    deps = [
         "//libc/src/__support/macros:config",
     ],
 )
