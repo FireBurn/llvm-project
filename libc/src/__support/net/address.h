@@ -27,6 +27,11 @@ namespace net {
 
 cpp::optional<in_addr_t> inet_addr(cpp::string_view src);
 
+/// Parses a network number written as up to four parts separated by dots,
+/// each a byte in C notation. The parts fill the number from the low end, so
+/// "10.1" is 0x0a01. The result is in host byte order.
+cpp::optional<in_addr_t> inet_network(cpp::string_view src);
+
 /// Writes a string representation (including the terminating \0) of the
 /// provided address into the destination buffer. In case of error, returns
 /// false and does not modify the buffer.
