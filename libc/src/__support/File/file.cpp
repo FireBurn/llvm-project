@@ -242,10 +242,30 @@ FileIOResult File::write_unlocked_lbf(const uint8_t *data, size_t len) {
 
   size_t written = 0;
 
-  written = write_unlocked_nbf(primary.data(), primary.size());
-  if (written < primary.size()) {
-    err = true;
-    return written;
+  // A line that fits beside what is already buffered joins it, so the whole
+  // line reaches the platform in one write. Lines that several processes write
+  // to one pipe then arrive whole instead of interleaved.
+  if (primary.size() <= bufsize - pos) {
+    const size_t init_pos = pos;
+    inline_memcpy(static_cast<uint8_t *>(buf) + pos, primary.data(),
+                  primary.size());
+    pos += primary.size();
+    const size_t write_size = pos;
+    FileIOResult buf_result =
+        write_all(static_cast<const uint8_t *>(buf), write_size);
+    pos = 0;
+    if (buf_result.has_error() || buf_result.value < write_size) {
+      err = true;
+      return {buf_result.value <= init_pos ? 0 : buf_result.value - init_pos,
+              buf_result.error};
+    }
+    written = primary.size();
+  } else {
+    written = write_unlocked_nbf(primary.data(), primary.size());
+    if (written < primary.size()) {
+      err = true;
+      return written;
+    }
   }
 
   flush_unlocked();
