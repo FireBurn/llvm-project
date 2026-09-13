@@ -1,0 +1,23 @@
+header: scsi/sg.h
+standards:
+  - linux
+macros:
+  - macro_name: SG_IO
+    macro_header: scsi-sg-macros.h
+  - macro_name: SG_DXFER_NONE
+    macro_header: scsi-sg-macros.h
+  - macro_name: SG_INFO_OK_MASK
+    macro_header: scsi-sg-macros.h
+  - macro_name: SG_MAX_SENSE
+    macro_header: scsi-sg-macros.h
+  - macro_name: SG_DEFAULT_TIMEOUT
+    macro_header: scsi-sg-macros.h
+types:
+  - type_name: struct_sg_iovec
+  - type_name: struct_sg_io_hdr
+  - type_name: struct_sg_scsi_id
+  - type_name: struct_sg_req_info
+  - type_name: struct_sg_header
+enums: []
+objects: []
+functions: []
