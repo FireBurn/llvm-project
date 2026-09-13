@@ -21634,6 +21634,11 @@ libc_function(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_Elf64_Sxword",
+    hdrs = ["include/llvm-libc-types/Elf64_Sxword.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["include/llvm-libc-types/struct_dl_phdr_info.h"],
 )
