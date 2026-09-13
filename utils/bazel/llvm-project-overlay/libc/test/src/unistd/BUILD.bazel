@@ -121,6 +121,12 @@ libc_test(
 )
 
 libc_test(
+    name = "issetugid_test",
+    srcs = ["issetugid_test.cpp"],
+    deps = ["//libc:issetugid"],
+)
+
+libc_test(
     name = "pread_pwrite_test",
     srcs = ["pread_pwrite_test.cpp"],
     deps = [
