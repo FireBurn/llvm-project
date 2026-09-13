@@ -6192,6 +6192,33 @@ libc_function(
 )
 
 libc_function(
+    name = "inet_makeaddr",
+    srcs = ["src/arpa/inet/inet_makeaddr.cpp"],
+    hdrs = ["src/arpa/inet/inet_makeaddr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_in_addr_t",
+        ":types_struct_in_addr",
+    ],
+)
+
+libc_function(
+    name = "inet_network",
+    srcs = ["src/arpa/inet/inet_network.cpp"],
+    hdrs = ["src/arpa/inet/inet_network.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_optional",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_net_address",
+        ":hdr_netinet_in_macros",
+        ":types_in_addr_t",
+    ],
+)
+
+libc_function(
     name = "inet_ntoa",
     srcs = ["src/arpa/inet/inet_ntoa.cpp"],
     hdrs = ["src/arpa/inet/inet_ntoa.h"],
