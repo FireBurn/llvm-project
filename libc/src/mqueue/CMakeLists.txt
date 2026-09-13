@@ -132,6 +132,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.mqd_t
     libc.hdr.types.struct_sigevent
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timer_create
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno

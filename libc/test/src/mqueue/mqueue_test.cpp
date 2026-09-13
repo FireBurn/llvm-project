@@ -8,10 +8,14 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
+#include "hdr/signal_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "hdr/time_macros.h"
 #include "hdr/types/mqd_t.h"
+#include "hdr/types/siginfo_t.h"
+#include "hdr/types/sigset_t.h"
 #include "hdr/types/struct_mq_attr.h"
+#include "hdr/types/struct_sigevent.h"
 #include "hdr/types/struct_timespec.h"
 #include "src/__support/libc_errno.h"
 #include "src/mqueue/mq_close.h"
@@ -24,6 +28,10 @@
 #include "src/mqueue/mq_timedreceive.h"
 #include "src/mqueue/mq_timedsend.h"
 #include "src/mqueue/mq_unlink.h"
+#include "src/signal/sigaddset.h"
+#include "src/signal/sigemptyset.h"
+#include "src/signal/sigprocmask.h"
+#include "src/signal/sigtimedwait.h"
 #include "src/string/memcmp.h"
 #include "src/time/clock_gettime.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
@@ -39,6 +47,10 @@ constexpr size_t MESSAGE_SIZE = sizeof(MESSAGE);
 // mqueue at /dev/mqueue. Where there is none the call fails and the test has
 // nothing to say rather than something to fail.
 bool have_queues() {
+  // A queue left behind by a run that did not finish would make the name
+  // look taken, so it goes first.
+  LIBC_NAMESPACE::mq_unlink(NAME);
+  LIBC_NAMESPACE::libc_errno = 0;
   struct mq_attr attr = {};
   attr.mq_maxmsg = 4;
   attr.mq_msgsize = 64;
@@ -164,6 +176,40 @@ TEST_F(LlvmLibcMqueueTest, AskingToBeToldAndTakingItBack) {
   // A null event withdraws a registration; there is none, which is allowed.
   ASSERT_EQ(LIBC_NAMESPACE::mq_notify(q, nullptr), 0);
 
+  ASSERT_EQ(LIBC_NAMESPACE::mq_close(q), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::mq_unlink(NAME), 0);
+}
+
+TEST_F(LlvmLibcMqueueTest, BeingToldWithASignal) {
+  if (!have_queues())
+    return;
+
+  mqd_t q = make_queue();
+  ASSERT_NE(q, static_cast<mqd_t>(-1));
+
+  // The signal is blocked rather than handled, so that it waits to be taken.
+  sigset_t wanted;
+  sigset_t was;
+  ASSERT_EQ(LIBC_NAMESPACE::sigemptyset(&wanted), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::sigaddset(&wanted, SIGUSR1), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::sigprocmask(SIG_BLOCK, &wanted, &was), 0);
+
+  struct sigevent event = {};
+  event.sigev_notify = SIGEV_SIGNAL;
+  event.sigev_signo = SIGUSR1;
+  event.sigev_value.sival_int = 42;
+  ASSERT_EQ(LIBC_NAMESPACE::mq_notify(q, &event), 0);
+
+  // A message arriving on an empty queue is what raises it, carrying the
+  // value it was registered with.
+  ASSERT_EQ(LIBC_NAMESPACE::mq_send(q, MESSAGE, MESSAGE_SIZE, 0), 0);
+  siginfo_t info = {};
+  struct timespec wait = {1, 0};
+  ASSERT_EQ(LIBC_NAMESPACE::sigtimedwait(&wanted, &info, &wait), SIGUSR1);
+  EXPECT_EQ(info.si_signo, SIGUSR1);
+  EXPECT_EQ(info.si_value.sival_int, 42);
+
+  ASSERT_EQ(LIBC_NAMESPACE::sigprocmask(SIG_SETMASK, &was, nullptr), 0);
   ASSERT_EQ(LIBC_NAMESPACE::mq_close(q), 0);
   ASSERT_EQ(LIBC_NAMESPACE::mq_unlink(NAME), 0);
 }
