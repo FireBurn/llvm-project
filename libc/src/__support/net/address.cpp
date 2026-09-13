@@ -110,6 +110,34 @@ cpp::optional<in_addr_t> inet_addr(cpp::string_view src) {
   return Endian::to_big_endian(result);
 }
 
+cpp::optional<in_addr_t> inet_network(cpp::string_view src) {
+  constexpr int IPV4_MAX_PARTS = 4;
+  in_addr_t network = 0;
+
+  for (int part = 0;; ++part) {
+    // The same numbers inet_addr takes, with nothing in front of them.
+    if (part == IPV4_MAX_PARTS || src.empty() || !internal::isdigit(src[0]) ||
+        src.starts_with("0b") || src.starts_with("0B"))
+      return cpp::nullopt;
+
+    auto result = internal::strtointeger<in_addr_t>(src.data(), 0, src.size());
+    if (result.has_error() || result.parsed_len == 0 || result.value > 0xff)
+      return cpp::nullopt;
+    network = (network << 8) | result.value;
+    src.remove_prefix(result.parsed_len);
+    if (src.empty() || src[0] != '.')
+      break;
+    src.remove_prefix(1);
+  }
+
+  // Space may follow the number, but nothing else.
+  while (!src.empty() && internal::isspace(src[0]))
+    src.remove_prefix(1);
+  if (!src.empty())
+    return cpp::nullopt;
+  return network;
+}
+
 namespace {
 
 size_t ipv4_num_bytes(cpp::span<const uint8_t> src) {
