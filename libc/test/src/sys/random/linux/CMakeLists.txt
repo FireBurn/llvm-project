@@ -8,6 +8,7 @@ add_libc_test(
     getrandom_test.cpp
   DEPENDS
     libc.include.sys_random
+    libc.src.__support.libc_errno
     libc.src.errno.errno
     libc.src.math.fabs
     libc.src.sys.random.getrandom
