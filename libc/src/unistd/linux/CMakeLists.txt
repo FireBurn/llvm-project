@@ -642,6 +642,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+
+  issetugid
+  SRCS
+    issetugid.cpp
+  HDRS
+    ../issetugid.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.auxv
+)
+
+add_entrypoint_object(
   link
   SRCS
     link.cpp
