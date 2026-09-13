@@ -11,6 +11,6 @@
 
 #include "../llvm-libc-macros/stdint-macros.h"
 
-typedef uint64_t Elf64_Sxword;
+typedef int64_t Elf64_Sxword;
 
 #endif // LLVM_LIBC_TYPES_ELF64_SXWORD_H
