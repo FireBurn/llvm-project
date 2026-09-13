@@ -35,6 +35,11 @@ namespace elf {
 // room for it. So each thread grows this instead, a block at a time, the
 // first time it reaches for one of that module's thread locals.
 //
+// A block stays where it is for as long as its module is loaded. The address
+// of a thread local can be kept anywhere, a destructor registered to run as
+// the thread ends among them, so the only block given back early is one made
+// for a module that has since been closed and had its index given to another.
+//
 // The storage comes from the kernel rather than from malloc. A thread gives
 // these back as it ends, which is also when the allocator is taking its own
 // per thread state apart, and the order of the two is not something either
@@ -45,16 +50,19 @@ public:
   // from the module's initial image if this is the first time. Null if there
   // is no room to be had or the module has no thread local storage.
   LIBC_INLINE void *block_for(const ModuleSet &modules, size_t module_index) {
-    const size_t now = modules.generation;
-    if (now != generation_) {
-      // Something has been opened or closed since these were made, and an
-      // index freed by one goes to the next, so what is here may belong to a
-      // module that is no longer loaded.
-      release();
-      generation_ = now;
+    if (module_index >= modules.count)
+      return nullptr;
+    if (module_index < count_) {
+      Entry &entry = entries_[module_index];
+      if (entry.storage != nullptr) {
+        if (entry.generation >= modules.mappings[module_index].generation)
+          return entry.block;
+        // Made before the module now at this index was opened, so for the
+        // one that was there before it.
+        linux_syscalls::munmap(entry.storage, entry.size);
+        entry = Entry{};
+      }
     }
-    if (module_index < count_ && entries_[module_index].storage != nullptr)
-      return entries_[module_index].block;
     return make_block(modules, module_index);
   }
 
@@ -79,6 +87,8 @@ private:
     // Where within it the module's thread locals begin, which is the first
     // point far enough in to have the alignment they need.
     void *block;
+    // The generation of the module set when this was made.
+    size_t generation;
   };
 
   LIBC_INLINE static void *map(size_t size) {
@@ -143,7 +153,7 @@ private:
       inline_memcpy(block, image, tls->p_filesz);
     }
 
-    entries_[module_index] = Entry{storage, size, block};
+    entries_[module_index] = Entry{storage, size, block, modules.generation};
     return block;
   }
 
@@ -152,8 +162,6 @@ private:
   Entry *entries_ = nullptr;
   size_t count_ = 0;
   size_t capacity_ = 0;
-  // Which generation of the module set these were made for.
-  size_t generation_ = 0;
 };
 
 } // namespace elf

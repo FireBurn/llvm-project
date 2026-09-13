@@ -224,9 +224,12 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
     return nullptr;
   }
 
-  // What any thread kept for a module that used to be at one of these indices
-  // is no longer anything to do with what is there now.
+  // A thread may still hold a block for a module that used to be at one of
+  // these indices. Stamping them with the generation this reaches is what
+  // tells it that block is not for what is there now.
   ++set.generation;
+  for (size_t i = first; i < set.count; ++i)
+    set.mappings[i].generation = set.generation;
 
   // Dependencies are initialised before what needs them, so the new modules
   // are run backwards.

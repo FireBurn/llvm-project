@@ -46,10 +46,9 @@ struct ModuleSet {
   // each thread is given; anything past this was opened later and takes a
   // block of its own per thread.
   size_t static_count;
-  // Bumped whenever a module is added or dropped after startup. A thread
-  // holding blocks for modules opened later checks this: an index freed by
-  // dlclose is given to the next dlopen, so a block kept from before then
-  // belongs to something that is no longer there.
+  // Bumped whenever a module is added or dropped after startup. Each module
+  // opened later records the value its opening reached, and a thread's block
+  // for an index made before then was made for a module that is gone.
   size_t generation;
   size_t capacity;
   // Whether the arrays above were allocated rather than being the fixed block

@@ -41,12 +41,21 @@ public:
     set_.linked = true;
   }
 
-  size_t lend(const Module &module) {
-    modules_[1] = module;
-    return 1;
+  size_t lend(const Module &module) { return lend_at(1, module); }
+
+  // Puts a module at `index` the way dlopen does, stamping the index with the
+  // generation its opening reaches.
+  size_t lend_at(size_t index, const Module &module) {
+    modules_[index] = module;
+    if (index >= set_.count)
+      set_.count = index + 1;
+    ++set_.generation;
+    mappings_[index].generation = set_.generation;
+    return index;
   }
 
-  void reopen() { ++set_.generation; }
+  // Something opened or closed that has nothing to do with the modules here.
+  void open_elsewhere() { ++set_.generation; }
 
   const ModuleSet &get() const { return set_; }
 
@@ -82,7 +91,7 @@ TEST(LlvmLibcElfDtvTest, NothingForAModuleThatIsNotThere) {
   vector.release();
 }
 
-TEST(LlvmLibcElfDtvTest, GivesTheSameBlockBackUntilSomethingChanges) {
+TEST(LlvmLibcElfDtvTest, KeepsABlockWhileItsModuleIsLoaded) {
   auto loaded = load_module(LIBC_PATH, PAGE);
   ASSERT_TRUE(loaded.has_value());
   LoadedModule c = loaded.value();
@@ -98,18 +107,45 @@ TEST(LlvmLibcElfDtvTest, GivesTheSameBlockBackUntilSomethingChanges) {
   // Asking again is the same block: a thread local keeps its value.
   EXPECT_EQ(static_cast<void *>(vector.block_for(record.get(), index)),
             static_cast<void *>(first));
+  first[0] = static_cast<unsigned char>(first[0] + 1);
+  const unsigned char now = first[0];
 
+  // Opening another module and reaching for its block leaves this one where
+  // it is, as does anything else being opened or closed. The address of a
+  // thread local may be kept anywhere, a destructor registered to run as the
+  // thread ends among them.
+  const size_t other = record.lend_at(index + 1, c.module);
+  ASSERT_TRUE(vector.block_for(record.get(), other) != nullptr);
+  record.open_elsewhere();
+  EXPECT_EQ(static_cast<void *>(vector.block_for(record.get(), index)),
+            static_cast<void *>(first));
+  EXPECT_EQ(first[0], now);
+
+  vector.release();
+  unmap_module(c.mapping);
+}
+
+TEST(LlvmLibcElfDtvTest, MakesTheBlockAgainWhenItsIndexIsReused) {
+  auto loaded = load_module(LIBC_PATH, PAGE);
+  ASSERT_TRUE(loaded.has_value());
+  LoadedModule c = loaded.value();
+  ASSERT_TRUE(c.module.tls() != nullptr);
+
+  Record record;
+  const size_t index = record.lend(c.module);
+
+  DynamicThreadVector vector;
+  auto *first =
+      static_cast<unsigned char *>(vector.block_for(record.get(), index));
+  ASSERT_TRUE(first != nullptr);
   const unsigned char was = first[0];
   first[0] = static_cast<unsigned char>(was + 1);
-  EXPECT_EQ(
-      static_cast<unsigned char *>(vector.block_for(record.get(), index))[0],
-      static_cast<unsigned char>(was + 1));
 
-  // Once something has been opened or closed, an index may name a different
-  // module, so what was kept for it is given up and made again from the
-  // module's own image. The kernel may hand back the same memory, so what
+  // The module at the index was closed and the index given to one opened
+  // since, so what was kept belonged to the one before and is made again from
+  // the new module's image. The kernel may hand back the same memory, so what
   // says this happened is the contents rather than the address.
-  record.reopen();
+  record.lend_at(index, c.module);
   auto *second =
       static_cast<unsigned char *>(vector.block_for(record.get(), index));
   ASSERT_TRUE(second != nullptr);
