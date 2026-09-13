@@ -941,6 +941,41 @@ add_header_macro(
 # TODO: Not all platforms will have a include/sys directory. Add the sys
 # directory and the targets for sys/*.h files conditional to the OS requiring
 # them.
+file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/scsi)
+
+add_header_macro(
+  scsi_scsi
+  ../libc/include/scsi/scsi.yaml
+  scsi/scsi.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.scsi_scsi_macros
+    .llvm-libc-types.struct_ccs_modesel_head
+)
+
+add_header_macro(
+  scsi_scsi_ioctl
+  ../libc/include/scsi/scsi_ioctl.yaml
+  scsi/scsi_ioctl.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.scsi_scsi_ioctl_macros
+)
+
+add_header_macro(
+  scsi_sg
+  ../libc/include/scsi/sg.yaml
+  scsi/sg.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.scsi_sg_macros
+    .llvm-libc-types.struct_sg_header
+    .llvm-libc-types.struct_sg_io_hdr
+    .llvm-libc-types.struct_sg_iovec
+    .llvm-libc-types.struct_sg_req_info
+    .llvm-libc-types.struct_sg_scsi_id
+)
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/sys)
 
 add_header_macro(
