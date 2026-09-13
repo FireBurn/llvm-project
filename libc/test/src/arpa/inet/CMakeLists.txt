@@ -45,6 +45,28 @@ add_libc_test(
 )
 
 add_libc_test(
+  inet_makeaddr
+  SUITE
+    libc-arpa-inet-tests
+  SRCS
+    inet_makeaddr_test.cpp
+  DEPENDS
+    libc.src.arpa.inet.htonl
+    libc.src.arpa.inet.inet_makeaddr
+    libc.src.arpa.inet.inet_network
+)
+
+add_libc_test(
+  inet_network
+  SUITE
+    libc-arpa-inet-tests
+  SRCS
+    inet_network_test.cpp
+  DEPENDS
+    libc.src.arpa.inet.inet_network
+)
+
+add_libc_test(
   inet_ntoa
   SUITE
     libc-arpa-inet-tests
