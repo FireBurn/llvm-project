@@ -6,7 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "include/llvm-libc-macros/sys-random-macros.h"
 #include "src/__support/CPP/array.h"
+#include "src/__support/libc_errno.h"
 #include "src/math/fabs.h"
 #include "src/sys/random/getrandom.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
@@ -20,6 +22,24 @@ TEST_F(LlvmLibcGetRandomTest, InvalidFlag) {
   LIBC_NAMESPACE::cpp::array<char, 10> buffer;
   ASSERT_THAT(LIBC_NAMESPACE::getrandom(buffer.data(), buffer.size(), -1),
               Fails<ssize_t>(EINVAL));
+}
+
+TEST_F(LlvmLibcGetRandomTest, FlagsMeanWhatTheKernelTakesThemToMean) {
+  LIBC_NAMESPACE::cpp::array<char, 10> buffer;
+  // A kernel from before GRND_INSECURE has nothing to say here.
+  if (LIBC_NAMESPACE::getrandom(buffer.data(), buffer.size(), GRND_INSECURE) <
+      0) {
+    LIBC_NAMESPACE::libc_errno = 0;
+    return;
+  }
+  // The flags go to the kernel as they are. It refuses insecure bytes from
+  // the blocking pool, and gives them without blocking.
+  ASSERT_THAT(LIBC_NAMESPACE::getrandom(buffer.data(), buffer.size(),
+                                        GRND_INSECURE | GRND_RANDOM),
+              Fails<ssize_t>(EINVAL));
+  ASSERT_EQ(LIBC_NAMESPACE::getrandom(buffer.data(), buffer.size(),
+                                      GRND_INSECURE | GRND_NONBLOCK),
+            static_cast<ssize_t>(buffer.size()));
 }
 
 TEST_F(LlvmLibcGetRandomTest, InvalidBuffer) {
