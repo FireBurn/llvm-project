@@ -12,6 +12,7 @@
 
 using LIBC_NAMESPACE::cpp::string_view;
 using LIBC_NAMESPACE::elf::directory_length;
+using LIBC_NAMESPACE::elf::executable_origin;
 using LIBC_NAMESPACE::elf::expand_run_path;
 
 namespace {
@@ -96,4 +97,21 @@ TEST(LlvmLibcElfRunPathTest, DirectoryLength) {
   EXPECT_EQ(directory_length("tool"), size_t(0));
   EXPECT_EQ(directory_length("/tool"), size_t(1));
   EXPECT_EQ(directory_length(""), size_t(0));
+}
+
+// The executable's origin is the file it really is, which /proc gives as an
+// absolute path, rather than whatever it was started by.
+TEST(LlvmLibcElfRunPathTest, ExecutableOriginIsTheFileItReallyIs) {
+  char buffer[4096];
+  const char *origin =
+      executable_origin("/started/through/a/link", buffer, sizeof(buffer));
+  ASSERT_TRUE(origin == buffer);
+  EXPECT_EQ(origin[0], '/');
+}
+
+TEST(LlvmLibcElfRunPathTest, ExecutableOriginWithoutRoomIsHowItWasStarted) {
+  char buffer[4];
+  EXPECT_TRUE(
+      string_view(executable_origin("/bin/tool", buffer, sizeof(buffer))) ==
+      string_view("/bin/tool"));
 }

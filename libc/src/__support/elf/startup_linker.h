@@ -53,6 +53,11 @@ public:
     // them even its init array bounds point at the wrong addresses.
     modules_[0].relocations().apply_relative(bias);
 
+    // A program started through a link looks for its libraries beside the
+    // file it really is.
+    executable_origin_ = executable_origin(modules_[0].name(), executable_path_,
+                                           sizeof(executable_path_));
+
     // What LD_PRELOAD names goes in before anything the program asked for.
     // Lookup walks the modules in the order they were added, so these sit
     // ahead of the libraries the executable names and what they define is
@@ -68,7 +73,8 @@ public:
       requester.for_each_needed([&](const char *name) {
         if (failed || already_loaded(name))
           return;
-        if (!load_dependency(requester, name))
+        if (!load_dependency(requester, i == 0 ? executable_origin_ : nullptr,
+                             name))
           failed = true;
       });
       if (failed)
@@ -183,21 +189,24 @@ private:
       }
       // The executable is what a relative run path is taken against, and it
       // is the only module loaded at this point.
-      auto loaded = find_and_load(name, &modules_[0], library_path_,
-                                  &system_paths_, page_size_);
+      auto loaded = find_and_load(name, &modules_[0], executable_origin_,
+                                  library_path_, &system_paths_, page_size_);
       if (loaded.has_value())
         remember(loaded.value());
     }
     return true;
   }
 
-  LIBC_INLINE bool load_dependency(const Module &from, const char *name) {
+  // `origin` is what $ORIGIN in `from`'s run path stands for, or null for the
+  // directory of its own name.
+  LIBC_INLINE bool load_dependency(const Module &from, const char *origin,
+                                   const char *name) {
     if (count_ >= MAX_STARTUP_MODULES) {
       report("too many shared objects\n");
       return false;
     }
-    auto loaded =
-        find_and_load(name, &from, library_path_, &system_paths_, page_size_);
+    auto loaded = find_and_load(name, &from, origin, library_path_,
+                                &system_paths_, page_size_);
     if (!loaded.has_value())
       return missing(name);
     return remember(loaded.value());
@@ -298,6 +307,9 @@ private:
   const char *library_path_;
   // Read the first time a dependency is not found anywhere nearer.
   SystemPaths system_paths_;
+  // Where the executable really is, for $ORIGIN in its run path.
+  char executable_path_[MAX_EXECUTABLE_PATH];
+  const char *executable_origin_ = nullptr;
   const char *preload_list_;
   Module modules_[MAX_STARTUP_MODULES];
   MappedModule mappings_[MAX_STARTUP_MODULES];

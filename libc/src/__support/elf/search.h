@@ -225,12 +225,13 @@ load_from_path_list(const char *list, const char *name, size_t page_size,
 // LD_LIBRARY_PATH, which is what tells them apart.
 //
 // `requester` is the module whose run path applies, or null where none does.
-// `system_paths` is null where no path file is to be read.
-LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
-                                                      const Module *requester,
-                                                      const char *library_path,
-                                                      SystemPaths *system_paths,
-                                                      size_t page_size) {
+// `origin` is what $ORIGIN in that run path stands for, or null for the
+// directory of the requester's own name. `system_paths` is null where no path
+// file is to be read.
+LIBC_INLINE cpp::optional<LoadedModule>
+find_and_load(const char *name, const Module *requester, const char *origin,
+              const char *library_path, SystemPaths *system_paths,
+              size_t page_size) {
   if (name == nullptr)
     return cpp::nullopt;
 
@@ -242,17 +243,19 @@ LIBC_INLINE cpp::optional<LoadedModule> find_and_load(const char *name,
       return cpp::nullopt;
     }
 
+  if (requester != nullptr && origin == nullptr)
+    origin = requester->name();
   if (requester != nullptr) {
-    auto loaded = load_from_path_list(rpath_of(*requester), name, page_size,
-                                      requester->name());
+    auto loaded =
+        load_from_path_list(rpath_of(*requester), name, page_size, origin);
     if (loaded.has_value())
       return loaded;
   }
   if (auto loaded = load_from_path_list(library_path, name, page_size))
     return loaded;
   if (requester != nullptr) {
-    auto loaded = load_from_path_list(runpath_of(*requester), name, page_size,
-                                      requester->name());
+    auto loaded =
+        load_from_path_list(runpath_of(*requester), name, page_size, origin);
     if (loaded.has_value())
       return loaded;
   }

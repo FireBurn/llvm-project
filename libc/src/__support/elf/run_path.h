@@ -10,6 +10,7 @@
 #define LLVM_LIBC_SRC___SUPPORT_ELF_RUN_PATH_H
 
 #include "hdr/types/size_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/readlink.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 
@@ -34,6 +35,29 @@ LIBC_INLINE size_t directory_length(const char *path) {
   if (last == 0 && path[0] == '/')
     return 1;
   return last;
+}
+
+// The longest path the executable is resolved to. A longer one keeps the path
+// the program was started by.
+constexpr size_t MAX_EXECUTABLE_PATH = 4096;
+
+// What $ORIGIN stands for in the executable's own run paths: the directory of
+// the file the program really is. A command is often started through a link,
+// such as a versioned tool's name under /usr/bin, and its libraries sit beside
+// the file the link leads to, which is where glibc and musl look as well. The
+// kernel says which file that is through /proc. Where there is no /proc to ask,
+// as early in boot, or the path does not fit, the path the program was started
+// by is kept.
+LIBC_INLINE const char *executable_origin(const char *started_as, char *buffer,
+                                          size_t capacity) {
+  if (capacity < 2)
+    return started_as;
+  auto length = linux_syscalls::readlink("/proc/self/exe", buffer, capacity);
+  if (!length.has_value() || length.value() <= 0 ||
+      static_cast<size_t>(length.value()) >= capacity)
+    return started_as;
+  buffer[length.value()] = '\0';
+  return buffer;
 }
 
 // Copies one run path entry into `out`, replacing $ORIGIN with the directory
