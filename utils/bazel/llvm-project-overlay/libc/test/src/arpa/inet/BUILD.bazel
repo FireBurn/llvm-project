@@ -106,3 +106,24 @@ libc_test(
         "//libc/src/arpa/inet:ntohs",
     ],
 )
+
+libc_test(
+    name = "inet_makeaddr",
+    srcs = ["inet_makeaddr_test.cpp"],
+    deps = [
+        "//libc/hdr/types:in_addr_t",
+        "//libc/hdr/types:struct_in_addr",
+        "//libc/src/arpa/inet:htonl",
+        "//libc/src/arpa/inet:inet_makeaddr",
+        "//libc/src/arpa/inet:inet_network",
+    ],
+)
+
+libc_test(
+    name = "inet_network",
+    srcs = ["inet_network_test.cpp"],
+    deps = [
+        "//libc/hdr/types:in_addr_t",
+        "//libc/src/arpa/inet:inet_network",
+    ],
+)

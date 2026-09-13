@@ -142,3 +142,30 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "inet_makeaddr",
+    srcs = ["inet_makeaddr.cpp"],
+    hdrs = ["inet_makeaddr.h"],
+    deps = [
+        "//libc/hdr/types:in_addr_t",
+        "//libc/hdr/types:struct_in_addr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "inet_network",
+    srcs = ["inet_network.cpp"],
+    hdrs = ["inet_network.h"],
+    deps = [
+        "//libc/hdr/types:in_addr_t",
+        "//libc/hdr:netinet_in_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
+    ],
+)
