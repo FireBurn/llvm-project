@@ -196,7 +196,7 @@ private:
       // The executable is what a relative run path is taken against, and it
       // is the only module loaded at this point.
       auto loaded = find_and_load(name, &modules_[0], executable_origin_,
-                                  library_path_, page_size_);
+                                  library_path_, &system_paths_, page_size_);
       if (loaded.has_value())
         remember(loaded.value());
     }
@@ -211,7 +211,8 @@ private:
       report("too many shared objects\n");
       return false;
     }
-    auto loaded = find_and_load(name, &from, origin, library_path_, page_size_);
+    auto loaded = find_and_load(name, &from, origin, library_path_,
+                                &system_paths_, page_size_);
     if (!loaded.has_value())
       return missing(name);
     return remember(loaded.value());
@@ -311,6 +312,8 @@ private:
 
   size_t page_size_;
   const char *library_path_;
+  // Read the first time a dependency is not found anywhere nearer.
+  SystemPaths system_paths_;
   // Where the executable really is, for $ORIGIN in its run path.
   char executable_path_[MAX_EXECUTABLE_PATH];
   const char *executable_origin_ = nullptr;
