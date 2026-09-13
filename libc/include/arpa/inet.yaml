@@ -38,6 +38,19 @@ functions:
     arguments:
       - type: const char *
       - type: struct in_addr *
+  - name: inet_makeaddr
+    standards:
+      - bsd
+    return_type: struct in_addr
+    arguments:
+      - type: in_addr_t
+      - type: in_addr_t
+  - name: inet_network
+    standards:
+      - bsd
+    return_type: in_addr_t
+    arguments:
+      - type: const char *
   - name: inet_ntoa
     standards:
       - posix
