@@ -13,7 +13,6 @@ licenses(["notice"])
 libc_test(
     name = "sigaction_test",
     srcs = ["sigaction_test.cpp"],
-    full_build_only = True,
     deps = [
         "//libc/hdr:errno_macros",
         "//libc/hdr:signal_macros",
