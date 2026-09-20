@@ -222,4 +222,32 @@
 // The section a MIPS object keeps its debug information in.
 #define SHT_MIPS_DWARF 0x7000001e
 
+// The operating system an object was built for, in e_ident[EI_OSABI].
+#define ELFOSABI_NONE 0
+#define ELFOSABI_SYSV 0
+#define ELFOSABI_HPUX 1
+#define ELFOSABI_NETBSD 2
+#define ELFOSABI_GNU 3
+#define ELFOSABI_LINUX ELFOSABI_GNU
+#define ELFOSABI_SOLARIS 6
+#define ELFOSABI_AIX 7
+#define ELFOSABI_IRIX 8
+#define ELFOSABI_FREEBSD 9
+#define ELFOSABI_TRU64 10
+#define ELFOSABI_MODESTO 11
+#define ELFOSABI_OPENBSD 12
+#define ELFOSABI_ARM_AEABI 64
+#define ELFOSABI_ARM 97
+#define ELFOSABI_STANDALONE 255
+
+// The names a note section is written under.
+#define ELF_NOTE_SOLARIS "SUNW Solaris"
+#define ELF_NOTE_GNU "GNU"
+
+// The operating systems an NT_VERSION note can name in its first word.
+#define ELF_NOTE_OS_LINUX 0
+#define ELF_NOTE_OS_GNU 1
+#define ELF_NOTE_OS_SOLARIS2 2
+#define ELF_NOTE_OS_FREEBSD 3
+
 #endif // LLVM_LIBC_MACROS_ELF_MACROS_H
