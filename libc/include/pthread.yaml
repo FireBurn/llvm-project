@@ -76,6 +76,8 @@ macros:
     macro_header: pthread-macros.h
 types:
   - type_name: pthread_t
+  - type_name: clockid_t
+  - type_name: struct_timespec
   - type_name: pthread_once_t
   - type_name: pthread_mutex_t
   - type_name: pthread_mutexattr_t
@@ -383,6 +385,20 @@ functions:
     arguments:
       - type: pthread_mutex_t *__restrict
       - type: const pthread_mutexattr_t *__restrict
+  - name: pthread_mutex_timedlock
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_mutex_t *__restrict
+      - type: const struct timespec *__restrict
+  - name: pthread_getcpuclockid
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: clockid_t *
   - name: pthread_mutex_lock
     return_type: int
     arguments:
