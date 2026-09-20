@@ -457,6 +457,15 @@ functions:
     arguments:
       - type: wint_t
       - type: FILE *
+  - name: vswprintf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: wchar_t *__restrict
+      - type: size_t
+      - type: const wchar_t *__restrict
+      - type: va_list
   - name: swprintf
     standards:
       - stdc
