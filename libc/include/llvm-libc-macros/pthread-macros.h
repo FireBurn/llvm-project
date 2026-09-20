@@ -14,6 +14,11 @@
 #define PTHREAD_CREATE_JOINABLE 0
 #define PTHREAD_CREATE_DETACHED 1
 
+// A thread here is scheduled against every other thread on the machine, so
+// the system scope is the only one on offer.
+#define PTHREAD_SCOPE_SYSTEM 0
+#define PTHREAD_SCOPE_PROCESS 1
+
 // Whether a thread may be cancelled at all.
 #define PTHREAD_CANCEL_ENABLE 0
 #define PTHREAD_CANCEL_DISABLE 1
@@ -40,9 +45,6 @@
 
 #define PTHREAD_PROCESS_PRIVATE 0
 #define PTHREAD_PROCESS_SHARED 1
-
-#define PTHREAD_SCOPE_SYSTEM 0
-#define PTHREAD_SCOPE_PROCESS 1
 
 #define PTHREAD_INHERIT_SCHED 0
 #define PTHREAD_EXPLICIT_SCHED 1
