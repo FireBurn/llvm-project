@@ -165,5 +165,6 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.sys_ttydefaults
     libc.include.sys_vt
     libc.include.utmp
+    libc.include.wordexp
   )
 endif()
