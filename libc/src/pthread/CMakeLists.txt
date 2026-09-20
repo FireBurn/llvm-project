@@ -732,7 +732,6 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
 )
 
-
 add_entrypoint_object(
   pthread_setcancelstate
   SRCS
@@ -768,7 +767,6 @@ add_entrypoint_object(
   DEPENDS
     libc.src.__support.threads.cancel
 )
-
 
 add_entrypoint_object(
   pthread_equal
