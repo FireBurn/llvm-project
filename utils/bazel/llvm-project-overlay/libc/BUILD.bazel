@@ -21956,6 +21956,22 @@ libc_function(
 )
 
 libc_function(
+    name = "vswprintf",
+    srcs = ["src/wchar/vswprintf.cpp"],
+    hdrs = ["src/wchar/vswprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_free",
+        ":hdr_errno_macros",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wide_format",
+    ],
+)
+
+libc_function(
     name = "wcpcpy",
     srcs = ["src/wchar/wcpcpy.cpp"],
     hdrs = ["src/wchar/wcpcpy.h"],
@@ -22641,6 +22657,25 @@ libc_support_library(
         ":__support_macros_config",
         ":hdr_stdint_proxy",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_wide_format",
+    srcs = ["src/wchar/wide_format.cpp"],
+    hdrs = ["src/wchar/wide_format.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcrtomb",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_errno_macros",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":vsnprintf",
     ],
 )
 
@@ -23977,6 +24012,19 @@ libc_function(
         ":__support_threads_cancel",
         ":types_struct_timespec",
         ":types_time_t",
+    ],
+)
+
+libc_function(
+    name = "swprintf",
+    srcs = ["src/wchar/swprintf.cpp"],
+    hdrs = ["src/wchar/swprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":vswprintf",
     ],
 )
 
