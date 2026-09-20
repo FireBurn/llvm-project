@@ -147,6 +147,20 @@ functions:
     return_type: int
     arguments:
       - type: pthread_attr_t *
+  - name: pthread_attr_setscope
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_attr_t *
+      - type: int
+  - name: pthread_attr_getscope
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const pthread_attr_t *
+      - type: int *
   - name: pthread_attr_setdetachstate
     return_type: int
     arguments:

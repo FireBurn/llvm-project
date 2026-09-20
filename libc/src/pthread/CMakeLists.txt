@@ -29,6 +29,28 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_attr_setscope
+  SRCS
+    pthread_attr_setscope.cpp
+  HDRS
+    pthread_attr_setscope.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_attr_getscope
+  SRCS
+    pthread_attr_getscope.cpp
+  HDRS
+    pthread_attr_getscope.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+)
+
+add_entrypoint_object(
   pthread_attr_setdetachstate
   SRCS
     pthread_attr_setdetachstate.cpp
