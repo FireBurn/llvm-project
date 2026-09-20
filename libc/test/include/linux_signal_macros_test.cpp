@@ -42,3 +42,7 @@ TEST(LlvmLibcLinuxSignalMacrosTest, AddSegv_AccadiSegv_AdiderrAndSegv_Adiper) {
   EXPECT_EQ(static_cast<long long>(SEGV_ADIDERR), 6LL);
   EXPECT_EQ(static_cast<long long>(SEGV_ADIPERR), 7LL);
 }
+
+TEST(LlvmLibcLinuxSignalMacrosTest, DefineSa_Nomask) {
+  EXPECT_EQ(static_cast<long long>(SA_NOMASK), 0x40000000LL);
+}
