@@ -214,6 +214,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
+    libc_header_info("sys/soundcard"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/timeb"),
     libc_header_info("sys/timerfd"),
