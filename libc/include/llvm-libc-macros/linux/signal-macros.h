@@ -180,4 +180,7 @@
 #define SIGEV_THREAD 2
 #define SIGEV_THREAD_ID 4
 
+// The name SA_NODEFER had before POSIX, still used by a good deal of code.
+#define SA_NOMASK SA_NODEFER
+
 #endif // LLVM_LIBC_MACROS_LINUX_SIGNAL_MACROS_H
