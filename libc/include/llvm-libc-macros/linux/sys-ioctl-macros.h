@@ -32,4 +32,19 @@
 #define N_SYNC_PPP 14     // synchronous PPP
 #define N_HCI 15          // Bluetooth HCI UART
 
+// The modem control lines, which glibc declares in bits/ioctl-types.h and
+// its sys/ioctl.h includes. Taking them from asm/termios.h instead would
+// redefine struct termios.
+#define TIOCM_LE 0x001
+#define TIOCM_DTR 0x002
+#define TIOCM_RTS 0x004
+#define TIOCM_ST 0x008
+#define TIOCM_SR 0x010
+#define TIOCM_CTS 0x020
+#define TIOCM_CAR 0x040
+#define TIOCM_RNG 0x080
+#define TIOCM_DSR 0x100
+#define TIOCM_CD TIOCM_CAR
+#define TIOCM_RI TIOCM_RNG
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_IOCTL_MACROS_H
