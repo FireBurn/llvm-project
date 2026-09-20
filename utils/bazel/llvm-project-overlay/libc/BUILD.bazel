@@ -27040,6 +27040,18 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_time_abs_timeout",
+    hdrs = ["src/__support/time/abs_timeout.h"],
+    deps = [
+        ":__support_cpp_expected",
+        ":__support_macros_config",
+        ":__support_time_units",
+        ":hdr_time_macros",
+        ":types_struct_timespec",
+    ],
+)
+
 libc_function(
     name = "syscall",
     srcs = ["src/compat/syscall.cpp"],
@@ -29993,6 +30005,34 @@ libc_function(
         ":__support_macros_null_check",
         ":pthread_pthread_attr",
         ":types_pthread_attr_t",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_timedlock",
+    srcs = ["src/pthread/pthread_mutex_timedlock.cpp"],
+    hdrs = ["src/pthread/pthread_mutex_timedlock.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":__support_time_abs_timeout",
+        ":hdr_errno_macros",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "pthread_getcpuclockid",
+    srcs = ["src/pthread/pthread_getcpuclockid.cpp"],
+    hdrs = ["src/pthread/pthread_getcpuclockid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":types_clockid_t",
     ],
 )
 
