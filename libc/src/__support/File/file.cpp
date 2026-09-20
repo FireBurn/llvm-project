@@ -579,6 +579,16 @@ int File::set_buffer(void *buffer, size_t size, int buffer_mode) {
     return EINVAL;
   }
 
+  // Whatever is waiting in the old buffer has to go out before the buffer
+  // under it is replaced, or it is lost. The standard says to call this
+  // before anything else is done with the stream, but a caller which does
+  // not should not silently lose what it already wrote.
+  if (buf != nullptr && pos > 0) {
+    int flush_result = flush_unlocked();
+    if (flush_result != 0)
+      return flush_result;
+  }
+
   // A caller which names no buffer is asking for one to be provided, and a
   // size of zero leaves that choice here too. _IONBF is excluded because a
   // stream which is not buffered needs nothing.
