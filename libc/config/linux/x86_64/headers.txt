@@ -162,6 +162,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.sys_kd
     libc.include.sys_klog
     libc.include.sys_ptrace
+    libc.include.sys_procfs
     libc.include.sys_soundcard
     libc.include.sys_ttydefaults
     libc.include.sys_vt
