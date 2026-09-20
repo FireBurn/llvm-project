@@ -216,6 +216,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "malloc",
         other_srcs = ["stdlib-malloc.yaml"],
     ),
+    libc_header_info("wordexp"),
 ]
 
 [
@@ -1244,6 +1245,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_wordexp_t",
+    hdrs = ["llvm-libc-types/wordexp_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_locale_macros",
     hdrs = ["llvm-libc-macros/locale-macros.h"],
     deps = [
@@ -1269,6 +1275,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_glob_macros",
     hdrs = ["llvm-libc-macros/glob-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_wordexp_macros",
+    hdrs = ["llvm-libc-macros/wordexp-macros.h"],
 )
 
 libc_support_library(

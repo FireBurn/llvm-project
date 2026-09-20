@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 void globfree(glob_t *pglob);
 
+namespace internal {
+void globfree_impl(glob_t *pglob);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_GLOB_GLOBFREE_H

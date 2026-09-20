@@ -1,0 +1,51 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "wordexp",
+    srcs = ["wordexp.cpp"],
+    hdrs = ["wordexp.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:glob_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:wordexp_t",
+        "//libc/hdr:glob_macros",
+        "//libc/hdr:wordexp_macros",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/glob:glob",
+        "//libc/src/glob:globfree",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdlib:environ_internal",
+    ],
+)
+
+libc_function(
+    name = "wordfree",
+    srcs = ["wordfree.cpp"],
+    hdrs = ["wordfree.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/types:wordexp_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
