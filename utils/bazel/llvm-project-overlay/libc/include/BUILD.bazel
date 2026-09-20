@@ -106,6 +106,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/prctl",
         has_def_template = True,
     ),
+    libc_header_info("sys/procfs"),
     libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),

@@ -571,6 +571,18 @@ add_libc_test(
   DEPENDS
     libc.include.sys_soundcard
 )
+# Its structures are written for x86_64 alone.
+if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+  add_libc_test(
+    sys_procfs_test
+    SUITE
+      libc-include-tests
+    SRCS
+      sys_procfs_test.cpp
+    DEPENDS
+      libc.include.sys_procfs
+  )
+endif()
 
 add_libc_test(
   alloca_test
