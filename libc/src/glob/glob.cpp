@@ -415,10 +415,10 @@ void Walk::expand(string_view prefix, string_view pattern, PathList &out) {
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(int, glob,
-                   (const char *__restrict pattern, int flags,
-                    int (*errfunc)(const char *, int),
-                    glob_t *__restrict pglob)) {
+namespace internal {
+
+int glob_impl(const char *__restrict pattern, int flags,
+              int (*errfunc)(const char *, int), glob_t *__restrict pglob) {
   if (pattern == nullptr || pglob == nullptr)
     return GLOB_NOSPACE;
 
@@ -490,6 +490,15 @@ LLVM_LIBC_FUNCTION(int, glob,
   pglob->gl_pathv = paths;
   pglob->gl_pathc = previous + added;
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, glob,
+                   (const char *__restrict pattern, int flags,
+                    int (*errfunc)(const char *, int),
+                    glob_t *__restrict pglob)) {
+  return internal::glob_impl(pattern, flags, errfunc, pglob);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
