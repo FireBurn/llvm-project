@@ -43,6 +43,36 @@ libc_function(
 )
 
 libc_function(
+    name = "mutex_timedlock",
+    srcs = ["pthread_mutex_timedlock.cpp"],
+    hdrs = ["pthread_mutex_timedlock.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getcpuclockid",
+    srcs = ["pthread_getcpuclockid.cpp"],
+    hdrs = ["pthread_getcpuclockid.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:pthread_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "create",
     srcs = ["pthread_create.cpp"],
     hdrs = ["pthread_create.h"],
