@@ -178,6 +178,13 @@ functions:
     return_type: int
     arguments:
       - type: pthread_attr_t *
+  - name: pthread_attr_setscope
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_attr_t *
+      - type: int
   - name: pthread_attr_setdetachstate
     return_type: int
     arguments:
@@ -201,13 +208,6 @@ functions:
       - type: pthread_attr_t *__restrict
       - type: const struct sched_param *__restrict
   - name: pthread_attr_setschedpolicy
-    return_type: int
-    arguments:
-      - type: pthread_attr_t *
-      - type: int
-  - name: pthread_attr_setscope
-    standards:
-      - posix
     return_type: int
     arguments:
       - type: pthread_attr_t *
