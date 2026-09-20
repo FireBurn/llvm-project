@@ -28,7 +28,12 @@
 #define WEXITSTATUS(status) (((status) & 0xff00) >> 8)
 #define WIFCONTINUED(status) ((status) == 0xffff)
 #define WIFEXITED(status) (WTERMSIG(status) == 0)
-#define WIFSIGNALED(status) ((WTERMSIG(status) + 1) >= 2)
+// A child which was signalled carries a termination signal which is
+// neither zero, which says it exited, nor 0x7f, which says it stopped.
+// Reading it as anything non-zero makes this true for a stopped child
+// as well, when the two are meant to be exclusive.
+#define WIFSIGNALED(status)                                                    \
+  (WTERMSIG(status) != 0 && WTERMSIG(status) != 0x7f)
 #define WIFSTOPPED(status) (WTERMSIG(status) == 0x7f)
 #define WSTOPSIG(status) WEXITSTATUS(status)
 #define WTERMSIG(status) ((status) & 0x7f)
