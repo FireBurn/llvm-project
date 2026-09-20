@@ -398,3 +398,18 @@ add_libc_test(
   DEPENDS
     libc.src.string.strverscmp
 )
+
+add_libc_test(
+  strerror_l_test
+  SUITE
+    libc-string-tests
+  SRCS
+    strerror_l_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.locale_macros
+    libc.src.string.strerror
+    libc.src.string.strerror_l
+    libc.src.string.strcmp
+)
+
