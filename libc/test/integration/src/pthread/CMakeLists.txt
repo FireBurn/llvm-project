@@ -1,6 +1,41 @@
 add_libc_testsuite(libc-pthread-integration-tests PARENT libc-integration-tests)
 
 add_integration_test(
+  pthread_mutex_timedlock_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_mutex_timedlock_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+    libc.src.pthread.pthread_mutex_init
+    libc.src.pthread.pthread_mutex_lock
+    libc.src.pthread.pthread_mutex_timedlock
+    libc.src.pthread.pthread_mutex_unlock
+    libc.src.time.clock_gettime
+)
+
+add_integration_test(
+  pthread_getcpuclockid_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_getcpuclockid_test.cpp
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_getcpuclockid
+    libc.src.pthread.pthread_join
+    libc.src.pthread.pthread_self
+    libc.src.time.clock_gettime
+)
+
+add_integration_test(
   pthread_mutex_test
   SUITE
     libc-pthread-integration-tests
