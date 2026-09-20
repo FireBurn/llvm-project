@@ -2239,6 +2239,10 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.libintl.ngettext_l
       libc.src.libintl.textdomain
 
+      # wordexp.h entrypoints
+      libc.src.wordexp.wordexp
+      libc.src.wordexp.wordfree
+
       # net/if.h entrypoints
       libc.src.net.if.if_freenameindex
       libc.src.net.if.if_nameindex

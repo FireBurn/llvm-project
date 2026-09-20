@@ -20,7 +20,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(void, globfree, (glob_t * pglob)) {
+namespace internal {
+
+void globfree_impl(glob_t *pglob) {
   if (pglob == nullptr || pglob->gl_pathv == nullptr)
     return;
   // The slots GLOB_DOOFFS reserved at the front were never filled in here,
@@ -30,6 +32,12 @@ LLVM_LIBC_FUNCTION(void, globfree, (glob_t * pglob)) {
   ::free(pglob->gl_pathv);
   pglob->gl_pathv = nullptr;
   pglob->gl_pathc = 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void, globfree, (glob_t * pglob)) {
+  internal::globfree_impl(pglob);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
