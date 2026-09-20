@@ -20,6 +20,11 @@ int vsnprintf(char *__restrict buffer, size_t buffsz,
 int __vsnprintf_modular(char *__restrict buffer, size_t buffsz,
                         const char *__restrict format, va_list vlist);
 
+namespace internal {
+int vsnprintf_impl(char *__restrict buffer, size_t buffsz,
+                   const char *__restrict format, va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_VSNPRINTF_H
