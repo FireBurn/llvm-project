@@ -834,3 +834,17 @@ add_libc_test(
     libc.hdr.func.mallopt
     libc.src.stdlib.malloc_trim
 )
+
+add_libc_test(
+  free_sized_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    free_sized_test.cpp
+  DEPENDS
+    libc.src.stdlib.aligned_alloc
+    libc.src.stdlib.free_aligned_sized
+    libc.src.stdlib.free_sized
+    libc.src.stdlib.malloc
+)
+
