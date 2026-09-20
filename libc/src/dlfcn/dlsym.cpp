@@ -92,6 +92,16 @@ LLVM_LIBC_FUNCTION(void *, dlsym,
     return nullptr;
   }
 
+  // dlopen was given a null path for this handle, which asks for the main
+  // program, and a lookup through that is a lookup through the whole of the
+  // program's scope rather than the executable on its own.
+  if (index == 0) {
+    if (void *found = search_from(set, 0, name))
+      return found;
+    dl::set_error("symbol not found");
+    return nullptr;
+  }
+
   const elf::Module &module = set.modules[index];
   const ElfW(Sym) *symbol = module.symbols().lookup(name);
   // A symbol the object only references does not count as finding it.
