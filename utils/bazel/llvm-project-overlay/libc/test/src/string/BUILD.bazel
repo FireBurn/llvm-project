@@ -345,3 +345,15 @@ libc_test(
     srcs = ["strverscmp_test.cpp"],
     deps = ["//libc/src/string:strverscmp"],
 )
+
+libc_test(
+    name = "strerror_l_test",
+    srcs = ["strerror_l_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:locale_macros",
+        "//libc/src/string:strcmp",
+        "//libc/src/string:strerror",
+        "//libc/src/string:strerror_l",
+    ],
+)
