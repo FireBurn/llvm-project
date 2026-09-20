@@ -252,3 +252,16 @@ libc_test(
         "//libc:wmemset",
     ],
 )
+
+libc_test(
+    name = "swprintf_test",
+    srcs = ["swprintf_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_wchar_macros",
+        "//libc:swprintf",
+        "//libc:types_size_t",
+        "//libc:types_wchar_t",
+        "//libc:types_wint_t",
+    ],
+)
