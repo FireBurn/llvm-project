@@ -16893,6 +16893,32 @@ libc_function(
 )
 
 libc_function(
+    name = "free_aligned_sized",
+    srcs = ["src/stdlib/free_aligned_sized.cpp"],
+    hdrs = ["src/stdlib/free_aligned_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":stdlib_free_aligned_sized",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "free_sized",
+    srcs = ["src/stdlib/free_sized.cpp"],
+    hdrs = ["src/stdlib/free_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":stdlib_free_sized",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "getsubopt",
     srcs = ["src/stdlib/getsubopt.cpp"],
     hdrs = ["src/stdlib/getsubopt.h"],
@@ -27135,5 +27161,29 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_free_aligned_sized",
+    srcs = ["src/stdlib/free_aligned_sized.cpp"],
+    hdrs = ["src/stdlib/free_aligned_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "stdlib_free_sized",
+    srcs = ["src/stdlib/free_sized.cpp"],
+    hdrs = ["src/stdlib/free_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_size_t",
     ],
 )
