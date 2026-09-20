@@ -461,6 +461,7 @@ add_header_macro(
   setjmp.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros.setjmp_macros
     .llvm-libc-types.jmp_buf
     .llvm-libc-types.sigjmp_buf
 )
@@ -700,6 +701,14 @@ add_header_macro(
     .llvm-libc-types.rsize_t
     .llvm-libc-types.size_t
     .llvm-libc-types.wchar_t
+    .llvm_libc_common_h
+)
+
+add_header_macro(
+  sys_soundcard
+  ../libc/include/sys/soundcard.yaml
+  sys/soundcard.h
+  DEPENDS
     .llvm_libc_common_h
 )
 
