@@ -115,6 +115,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  wordexp_macros
+  HDRS
+    wordexp_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.wordexp_macros
+)
+
+add_proxy_header_library(
   inet_address_macros
   HDRS
     inet-address-macros.h
