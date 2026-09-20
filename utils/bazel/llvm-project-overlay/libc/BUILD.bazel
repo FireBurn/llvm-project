@@ -17760,6 +17760,30 @@ libc_function(
 )
 
 libc_function(
+    name = "free_aligned_sized",
+    srcs = ["src/stdlib/free_aligned_sized.cpp"],
+    hdrs = ["src/stdlib/free_aligned_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "free_sized",
+    srcs = ["src/stdlib/free_sized.cpp"],
+    hdrs = ["src/stdlib/free_sized.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "getsubopt",
     srcs = ["src/stdlib/getsubopt.cpp"],
     hdrs = ["src/stdlib/getsubopt.h"],
