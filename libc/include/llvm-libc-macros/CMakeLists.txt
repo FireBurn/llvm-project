@@ -624,6 +624,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  wordexp_macros
+  HDR
+    wordexp-macros.h
+)
+
+add_macro_header(
   sys_file_macros
   HDR
     sys-file-macros.h
