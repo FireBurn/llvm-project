@@ -1,0 +1,11 @@
+header: sys/soundcard.h
+standards:
+  - linux
+public_includes:
+  # Everything in it belongs to the kernel, which is where glibc goes too.
+  - linux/soundcard.h
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
