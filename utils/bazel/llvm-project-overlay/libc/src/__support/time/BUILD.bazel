@@ -106,3 +106,15 @@ libc_support_library(
         "//libc/src/__support:common",
     ],
 )
+
+libc_support_library(
+    name = "abs_timeout",
+    hdrs = ["abs_timeout.h"],
+    deps = [
+        ":units",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/CPP:expected",
+        "//libc/src/__support/macros:config",
+    ],
+)

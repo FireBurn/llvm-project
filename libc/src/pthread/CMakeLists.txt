@@ -563,18 +563,6 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
-  pthread_mutex_lock
-  SRCS
-    pthread_mutex_lock.cpp
-  HDRS
-    pthread_mutex_lock.h
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.include.pthread
-    libc.src.__support.threads.mutex
-)
-
-add_entrypoint_object(
   pthread_mutex_timedlock
   SRCS
     pthread_mutex_timedlock.cpp
@@ -584,11 +572,37 @@ add_entrypoint_object(
     libc.hdr.errno_macros
     libc.hdr.types.struct_timespec
     libc.include.pthread
+    libc.src.__support.threads.mutex
+    libc.src.__support.time.abs_timeout
+)
+
+add_entrypoint_object(
+  pthread_getcpuclockid
+  SRCS
+    pthread_getcpuclockid.cpp
+  HDRS
+    pthread_getcpuclockid.h
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.hdr.types.pthread_t
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
+    libc.src.__support.threads.thread
+    libc.hdr.errno_macros
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_mutex_lock
+  SRCS
+    pthread_mutex_lock.cpp
+  HDRS
+    pthread_mutex_lock.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
     libc.src.__support.threads.mutex
-    libc.src.__support.time.abs_timeout
 )
 
 add_entrypoint_object(
@@ -1209,21 +1223,6 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.pthread_t
     libc.hdr.types.struct_sched_param
-    libc.src.__support.macros.null_check
-    libc.src.__support.threads.thread
-)
-
-add_entrypoint_object(
-  pthread_getcpuclockid
-  SRCS
-    pthread_getcpuclockid.cpp
-  HDRS
-    pthread_getcpuclockid.h
-  DEPENDS
-    libc.hdr.types.clockid_t
-    libc.hdr.types.pthread_t
-    libc.src.__support.common
-    libc.src.__support.macros.config
     libc.src.__support.macros.null_check
     libc.src.__support.threads.thread
 )
