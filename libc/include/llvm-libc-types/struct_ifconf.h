@@ -27,11 +27,17 @@
 // the block; on the way out it is how much of it was used.
 struct ifconf {
   int ifc_len;
-  __extension__ union {
-    char *ifc_buf;
-    struct ifreq *ifc_req;
-  };
+  union {
+    char *ifcu_buf;
+    struct ifreq *ifcu_req;
+  } ifc_ifcu;
 };
+
+// The short names everything reaches for, spelled the way glibc and the
+// kernel's own <linux/if.h> spell them, so that code naming either the
+// union or the field through it finds what it expects.
+#define ifc_buf ifc_ifcu.ifcu_buf
+#define ifc_req ifc_ifcu.ifcu_req
 
 // Say the definition here is the one, so <linux/if.h> skips its own if it
 // is read after this.
