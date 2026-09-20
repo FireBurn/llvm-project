@@ -148,3 +148,26 @@ TEST(LlvmLibcElfMacrosTest, CompleteTheX86RelocationTypesAndAddThose) {
   EXPECT_EQ(static_cast<long long>(R_SPARC_UA32), 23LL);
   EXPECT_EQ(static_cast<long long>(SHT_MIPS_DWARF), 0x7000001eLL);
 }
+
+TEST(LlvmLibcElfMacrosTest, AddTheElfOsAbiAndNoteConstants) {
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_NONE), 0LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_SYSV), 0LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_HPUX), 1LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_NETBSD), 2LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_GNU), 3LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_LINUX), 3LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_SOLARIS), 6LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_AIX), 7LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_IRIX), 8LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_FREEBSD), 9LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_TRU64), 10LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_MODESTO), 11LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_OPENBSD), 12LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_ARM_AEABI), 64LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_ARM), 97LL);
+  EXPECT_EQ(static_cast<long long>(ELFOSABI_STANDALONE), 255LL);
+  EXPECT_EQ(static_cast<long long>(ELF_NOTE_OS_LINUX), 0LL);
+  EXPECT_EQ(static_cast<long long>(ELF_NOTE_OS_GNU), 1LL);
+  EXPECT_EQ(static_cast<long long>(ELF_NOTE_OS_SOLARIS2), 2LL);
+  EXPECT_EQ(static_cast<long long>(ELF_NOTE_OS_FREEBSD), 3LL);
+}
