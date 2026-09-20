@@ -11,6 +11,12 @@
 
 #define __LLVM_LIBC__ 1
 
+// wchar_t holds a Unicode code point here, which is what this says. A
+// program which needs to know reads it rather than guessing from the
+// width of the type, and a fair amount of code refuses to build without
+// it. glibc names the same revision of the standard.
+#define __STDC_ISO_10646__ 201706L
+
 // Feature test macros. An application selects a view of the library by
 // defining one of these before including anything; where it has not, or
 // where it asked for all of them at once, the rest of the set is settled
