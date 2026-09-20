@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_EPOLL_EVENT_H
 #define LLVM_LIBC_TYPES_STRUCT_EPOLL_EVENT_H
 
+#include "../llvm-libc-macros/stdint-macros.h"
 #include "struct_epoll_data.h"
 
 typedef struct
@@ -16,7 +17,7 @@ typedef struct
     [[gnu::packed]] // Necessary for compatibility.
 #endif
     epoll_event {
-  __UINT32_TYPE__ events;
+  uint32_t events;
   epoll_data_t data;
 } epoll_event;
 
