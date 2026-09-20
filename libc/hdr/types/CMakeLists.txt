@@ -152,7 +152,6 @@ add_proxy_header_library(
     libc.include.llvm-libc-types.__nftw_func_t
 )
 
-
 add_proxy_header_library(
   struct_epoll_event
   HDRS
@@ -1413,6 +1412,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  wordexp_t
+  HDRS
+    wordexp_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.wordexp_t
+)
+
+add_proxy_header_library(
   regex_t
   HDRS
     regex_t.h
@@ -1733,7 +1740,6 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_servent
 )
-
 
 add_proxy_header_library(
   struct_tms
