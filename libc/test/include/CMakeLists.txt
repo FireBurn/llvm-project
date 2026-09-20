@@ -51,6 +51,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  setjmp_underscore_names_test
+  SUITE
+    libc-include-tests
+  SRCS
+    setjmp_underscore_names_test.cpp
+  DEPENDS
+    libc.include.setjmp
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
