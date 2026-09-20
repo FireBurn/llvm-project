@@ -241,6 +241,7 @@ LLVM_LIBC_HEADERS = [
         "wait",
         has_def_template = True,
     ),
+    libc_header_info("wordexp"),
     libc_header_info(
         "assert",
         has_def_template = True,
@@ -29340,6 +29341,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_wordexp_t",
+    hdrs = ["include/llvm-libc-types/wordexp_t.h"],
+)
+
+libc_support_library(
+    name = "types_wordexp_t",
+    hdrs = ["hdr/types/wordexp_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_wordexp_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "dirent_alphasort",
     srcs = ["src/dirent/alphasort.cpp"],
     hdrs = ["src/dirent/alphasort.h"],
@@ -35443,6 +35458,40 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "wordexp",
+    srcs = ["src/wordexp/wordexp.cpp"],
+    hdrs = ["src/wordexp/wordexp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+        ":glob",
+        ":globfree",
+        ":hdr_glob_macros",
+        ":hdr_wordexp_macros",
+        ":pwd_pwd_utils",
+        ":stdlib_environ_internal",
+        ":types_glob_t",
+        ":types_struct_passwd",
+        ":types_wordexp_t",
+    ],
+)
+
+libc_function(
+    name = "wordfree",
+    srcs = ["src/wordexp/wordfree.cpp"],
+    hdrs = ["src/wordexp/wordfree.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_wordexp_t",
+    ],
+)
+
 
 
 libc_function(
@@ -35578,6 +35627,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_glob_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_wordexp_macros",
+    hdrs = ["include/llvm-libc-macros/wordexp-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_wordexp_macros",
+    hdrs = ["hdr/wordexp_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_wordexp_macros",
         ],
         "//conditions:default": [],
     }),
