@@ -130,6 +130,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  setjmp_macros
+  HDR
+    setjmp-macros.h
+)
+
+add_macro_header(
   file_seek_macros
   HDR
     file-seek-macros.h
