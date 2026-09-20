@@ -71,6 +71,9 @@
 #define RES_PRF_REPLY 0x00002000
 #define RES_PRF_INIT 0x00004000
 
+// Where the resolver reads its configuration from.
+#define _PATH_RESCONF "/etc/resolv.conf"
+
 // The one state every program shares. It is per thread, so two threads
 // looking things up at once do not tread on each other.
 #define _res (*__res_state())
