@@ -712,6 +712,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  wordexp
+  ../libc/include/wordexp.yaml
+  wordexp.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.wordexp_macros
+    .llvm-libc-types.wordexp_t
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   mntent
   ../libc/include/mntent.yaml
   mntent.h
