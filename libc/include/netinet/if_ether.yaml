@@ -3,6 +3,7 @@ standards:
   - bsd
 public_includes:
   - net/ethernet.h
+  - linux/if_ether.h
 macros:
   - macro_name: ARPHRD_ETHER
     macro_header: netinet-if-ether-macros.h
