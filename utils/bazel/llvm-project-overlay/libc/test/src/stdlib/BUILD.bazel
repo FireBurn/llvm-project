@@ -498,3 +498,12 @@ libc_test(
         "//libc/test/UnitTest:Utf8Locale",
     ],
 )
+
+libc_test(
+    name = "free_sized_test",
+    srcs = ["free_sized_test.cpp"],
+    deps = [
+        "//libc/src/stdlib:free_aligned_sized",
+        "//libc/src/stdlib:free_sized",
+    ],
+)
