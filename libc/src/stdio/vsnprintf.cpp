@@ -22,9 +22,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, vsnprintf,
-                   (char *__restrict buffer, size_t buffsz,
-                    const char *__restrict format, va_list vlist)) {
+namespace internal {
+
+int vsnprintf_impl(char *__restrict buffer, size_t buffsz,
+                   const char *__restrict format, va_list vlist) {
   internal::ArgList args(vlist); // This holder class allows for easier copying
                                  // and pointer semantics, as well as handling
                                  // destruction automatically.
@@ -53,6 +54,14 @@ LLVM_LIBC_FUNCTION(int, vsnprintf,
   }
 
   return static_cast<int>(ret_val.value());
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, vsnprintf,
+                   (char *__restrict buffer, size_t buffsz,
+                    const char *__restrict format, va_list vlist)) {
+  return internal::vsnprintf_impl(buffer, buffsz, format, vlist);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
