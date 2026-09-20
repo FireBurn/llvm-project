@@ -751,6 +751,8 @@ add_libc_test(
     libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.hdr.types.wchar_t
+    libc.hdr.types.wint_t
+    libc.hdr.wchar_macros
     libc.src.wchar.swprintf
     libc.test.UnitTest.ErrnoCheckingTest
 )
