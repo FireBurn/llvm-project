@@ -188,6 +188,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  setjmp_macros
+  HDR
+    setjmp-macros.h
+)
+
+add_macro_header(
   wordexp_macros
   HDR
     wordexp-macros.h
