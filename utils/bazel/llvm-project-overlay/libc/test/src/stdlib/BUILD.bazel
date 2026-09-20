@@ -480,3 +480,12 @@ libc_test(
         "//libc:wcstombs",
     ],
 )
+
+libc_test(
+    name = "free_sized_test",
+    srcs = ["free_sized_test.cpp"],
+    deps = [
+        "//libc:free_aligned_sized",
+        "//libc:free_sized",
+    ],
+)
