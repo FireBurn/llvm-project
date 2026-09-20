@@ -703,6 +703,30 @@ if(NOT LIBC_TARGET_OS_IS_BAREMETAL AND NOT LIBC_TARGET_OS_IS_GPU)
       DEPENDS
         ${SCUDO_DEPS}
     )
+    add_entrypoint_object(
+      free_sized
+      SRCS
+        free_sized.cpp
+      HDRS
+        free_sized.h
+      DEPENDS
+        libc.hdr.func.free
+        libc.hdr.types.size_t
+        libc.src.__support.common
+        libc.src.__support.macros.config
+    )
+    add_entrypoint_object(
+      free_aligned_sized
+      SRCS
+        free_aligned_sized.cpp
+      HDRS
+        free_aligned_sized.h
+      DEPENDS
+        libc.hdr.func.free
+        libc.hdr.types.size_t
+        libc.src.__support.common
+        libc.src.__support.macros.config
+    )
     add_entrypoint_external(
       mallopt
       DEPENDS
