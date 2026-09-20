@@ -123,3 +123,9 @@ TEST(LlvmLibcNetinetInMacrosTest, FillInTheMissingSocketAndIpOptionMacros) {
 TEST(LlvmLibcNetinetInMacrosTest, AddIpproto_Max) {
   EXPECT_EQ(static_cast<long long>(IPPROTO_MAX), 263LL);
 }
+
+TEST(LlvmLibcNetinetInMacrosTest, AddTheRemainingIpSocketOptions) {
+  EXPECT_EQ(static_cast<long long>(IP_UNICAST_IF), 50LL);
+  EXPECT_EQ(static_cast<long long>(IP_LOCAL_PORT_RANGE), 51LL);
+  EXPECT_EQ(static_cast<long long>(IP_PROTOCOL), 52LL);
+}
