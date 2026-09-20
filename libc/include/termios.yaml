@@ -151,4 +151,4 @@ functions:
     arguments:
       - type: int
       - type: int
-      - type: struct termios *
+      - type: const struct termios *
