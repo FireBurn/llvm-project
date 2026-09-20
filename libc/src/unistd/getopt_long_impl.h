@@ -138,6 +138,13 @@ LIBC_INLINE int getopt_long_scan(int argc, char *const argv[],
                                  const char *optstring,
                                  const struct option *longopts, int *longindex,
                                  bool long_only, GetoptContext &ctx) {
+  // Putting optind back to zero asks for the scan to start again, the same
+  // way it does for the short-only getopt.
+  if (ctx.optind == 0) {
+    ctx.optind.get() = 1;
+    ctx.optpos.get() = 0;
+  }
+
   if (ctx.optind >= argc || argv[ctx.optind] == nullptr)
     return -1;
 
