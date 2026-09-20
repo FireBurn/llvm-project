@@ -1,0 +1,24 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc wordexp.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "wordexp_test",
+    srcs = ["wordexp_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wordexp_t",
+        "//libc/hdr:wordexp_macros",
+        "//libc/src/stdlib:setenv",
+        "//libc/src/stdlib:unsetenv",
+        "//libc/src/wordexp:wordexp",
+        "//libc/src/wordexp:wordfree",
+    ],
+)

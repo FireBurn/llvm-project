@@ -23,6 +23,11 @@ int glob(const char *__restrict pattern, int flags,
          int (*errfunc)(const char *epath, int eerrno),
          glob_t *__restrict pglob);
 
+namespace internal {
+int glob_impl(const char *__restrict pattern, int flags,
+              int (*errfunc)(const char *, int), glob_t *__restrict pglob);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_GLOB_GLOB_H
