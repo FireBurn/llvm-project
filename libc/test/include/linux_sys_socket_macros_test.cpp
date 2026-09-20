@@ -56,3 +56,31 @@ TEST(LlvmLibcLinuxSysSocketMacrosTest,
   EXPECT_EQ(static_cast<long long>(SCM_WIFI_STATUS), 41LL);
   EXPECT_EQ(static_cast<long long>(SCM_TXTIME), 61LL);
 }
+
+TEST(LlvmLibcLinuxSysSocketMacrosTest, AddTheRemainingSetsockoptLevels) {
+  EXPECT_EQ(static_cast<long long>(SOL_DECNET), 261LL);
+  EXPECT_EQ(static_cast<long long>(SOL_X25), 262LL);
+  EXPECT_EQ(static_cast<long long>(SOL_ATM), 264LL);
+  EXPECT_EQ(static_cast<long long>(SOL_AAL), 265LL);
+  EXPECT_EQ(static_cast<long long>(SOL_IRDA), 266LL);
+  EXPECT_EQ(static_cast<long long>(SOL_NETBEUI), 267LL);
+  EXPECT_EQ(static_cast<long long>(SOL_LLC), 268LL);
+  EXPECT_EQ(static_cast<long long>(SOL_DCCP), 269LL);
+  EXPECT_EQ(static_cast<long long>(SOL_TIPC), 271LL);
+  EXPECT_EQ(static_cast<long long>(SOL_RXRPC), 272LL);
+  EXPECT_EQ(static_cast<long long>(SOL_PPPOL2TP), 273LL);
+  EXPECT_EQ(static_cast<long long>(SOL_BLUETOOTH), 274LL);
+  EXPECT_EQ(static_cast<long long>(SOL_PNPIPE), 275LL);
+  EXPECT_EQ(static_cast<long long>(SOL_RDS), 276LL);
+  EXPECT_EQ(static_cast<long long>(SOL_IUCV), 277LL);
+  EXPECT_EQ(static_cast<long long>(SOL_CAIF), 278LL);
+  EXPECT_EQ(static_cast<long long>(SOL_ALG), 279LL);
+  EXPECT_EQ(static_cast<long long>(SOL_NFC), 280LL);
+  EXPECT_EQ(static_cast<long long>(SOL_KCM), 281LL);
+  EXPECT_EQ(static_cast<long long>(SOL_TLS), 282LL);
+  EXPECT_EQ(static_cast<long long>(SOL_XDP), 283LL);
+  EXPECT_EQ(static_cast<long long>(SOL_MPTCP), 284LL);
+  EXPECT_EQ(static_cast<long long>(SOL_MCTP), 285LL);
+  EXPECT_EQ(static_cast<long long>(SOL_SMC), 286LL);
+  EXPECT_EQ(static_cast<long long>(SOL_VSOCK), 287LL);
+}
