@@ -23,6 +23,7 @@
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/stdio_macros.h"
 
 using LlvmLibcSetvbufTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
@@ -186,6 +187,25 @@ TEST(LlvmLibcSetbufTest, InvalidBufferMode) {
   ASSERT_ERRNO_EQ(EINVAL);
 
   ASSERT_EQ(0, LIBC_NAMESPACE::fclose(f));
+}
+
+TEST_F(LlvmLibcSetvbufTest, WhatIsWaitingInTheOldBufferIsNotLost) {
+  auto FILENAME = libc_make_test_file_path("setvbuf_flush.test");
+
+  ::FILE *fw = LIBC_NAMESPACE::fopen(FILENAME, "w");
+  ASSERT_FALSE(fw == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fwrite("abc", 1, 3, fw), size_t(3));
+  // The three bytes are still in the stream's own buffer here.
+  static char buffer[BUFSIZ];
+  ASSERT_EQ(LIBC_NAMESPACE::setvbuf(fw, buffer, _IOFBF, BUFSIZ), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(fw), 0);
+
+  ::FILE *fr = LIBC_NAMESPACE::fopen(FILENAME, "r");
+  ASSERT_FALSE(fr == nullptr);
+  char data[4] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::fread(data, 1, 3, fr), size_t(3));
+  ASSERT_STREQ(data, "abc");
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(fr), 0);
 }
 
 TEST_F(LlvmLibcSetvbufTest, AnUnbufferedWriteThatFailsSaysWhy) {
