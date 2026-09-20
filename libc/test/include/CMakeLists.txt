@@ -315,6 +315,16 @@ add_libc_test(
     libc.include.llvm-libc-macros.netinet_in_macros
 )
 
+add_libc_test(
+  sys_wait_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_wait_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_wait_macros
+)
+
 add_subdirectory(net)
 
 add_libc_test(
