@@ -166,4 +166,47 @@
 #define NOTIMP ns_r_notimpl
 #define REFUSED ns_r_refused
 
+// Reading and writing the fields of a message. The sizes and the names are
+// above; these are what a caller moves the bytes with.
+#define NS_GET16(s, cp)                                                        \
+  do {                                                                         \
+    const unsigned char *t_cp = (const unsigned char *)(cp);                   \
+    (s) = (__UINT16_TYPE__)(((unsigned)t_cp[0] << 8) | (unsigned)t_cp[1]);     \
+    (cp) += NS_INT16SZ;                                                        \
+  } while (0)
+
+#define NS_GET32(l, cp)                                                        \
+  do {                                                                         \
+    const unsigned char *t_cp = (const unsigned char *)(cp);                   \
+    (l) = (__UINT32_TYPE__)(((unsigned)t_cp[0] << 24) |                        \
+                            ((unsigned)t_cp[1] << 16) |                        \
+                            ((unsigned)t_cp[2] << 8) | (unsigned)t_cp[3]);     \
+    (cp) += NS_INT32SZ;                                                        \
+  } while (0)
+
+#define NS_PUT16(s, cp)                                                        \
+  do {                                                                         \
+    __UINT16_TYPE__ t_s = (__UINT16_TYPE__)(s);                                \
+    unsigned char *t_cp = (unsigned char *)(cp);                               \
+    *t_cp++ = (unsigned char)(t_s >> 8);                                       \
+    *t_cp = (unsigned char)t_s;                                                \
+    (cp) += NS_INT16SZ;                                                        \
+  } while (0)
+
+#define NS_PUT32(l, cp)                                                        \
+  do {                                                                         \
+    __UINT32_TYPE__ t_l = (__UINT32_TYPE__)(l);                                \
+    unsigned char *t_cp = (unsigned char *)(cp);                               \
+    *t_cp++ = (unsigned char)(t_l >> 24);                                      \
+    *t_cp++ = (unsigned char)(t_l >> 16);                                      \
+    *t_cp++ = (unsigned char)(t_l >> 8);                                       \
+    *t_cp = (unsigned char)t_l;                                                \
+    (cp) += NS_INT32SZ;                                                        \
+  } while (0)
+
+#define GETSHORT NS_GET16
+#define GETLONG NS_GET32
+#define PUTSHORT NS_PUT16
+#define PUTLONG NS_PUT32
+
 #endif // LLVM_LIBC_MACROS_ARPA_NAMESER_MACROS_H
