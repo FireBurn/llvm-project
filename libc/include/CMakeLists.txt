@@ -838,6 +838,7 @@ add_header_macro(
     .llvm-libc-types.struct___pthread_cleanup_frame
     .llvm-libc-types.clockid_t
     .llvm-libc-types.pthread_attr_t
+    .llvm-libc-types.struct_timespec
     .llvm-libc-types.pthread_cond_t
     .llvm-libc-types.pthread_condattr_t
     .llvm-libc-types.pthread_key_t
