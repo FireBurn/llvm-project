@@ -26,6 +26,7 @@ add_subdirectory(langinfo)
 add_subdirectory(uchar)
 add_subdirectory(wchar)
 add_subdirectory(wctype)
+add_subdirectory(wordexp)
 add_subdirectory(time)
 add_subdirectory(unistd)
 
