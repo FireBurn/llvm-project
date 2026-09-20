@@ -218,6 +218,16 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  strerror_l
+  SRCS
+    strerror_l.cpp
+  HDRS
+    strerror_l.h
+  DEPENDS
+    libc.src.__support.StringUtil.error_to_string
+)
+
+add_entrypoint_object(
   strerror_r
   SRCS
     strerror_r.cpp
