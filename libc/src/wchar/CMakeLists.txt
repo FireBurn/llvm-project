@@ -754,6 +754,24 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  vswprintf
+  SRCS
+    vswprintf.cpp
+  HDRS
+    vswprintf.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.stdio.vsnprintf
+)
+
+add_entrypoint_object(
   swprintf
   SRCS
     swprintf.cpp
@@ -762,10 +780,9 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.size_t
     libc.hdr.types.wchar_t
-    libc.hdr.errno_macros
     libc.src.__support.common
     libc.src.__support.macros.config
-    libc.src.errno.errno
+    libc.src.wchar.vswprintf
 )
 
 add_header_library(
