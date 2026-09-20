@@ -1,0 +1,31 @@
+add_entrypoint_object(
+  wordexp
+  SRCS
+    wordexp.cpp
+  HDRS
+    wordexp.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.func.realloc
+    libc.hdr.glob_macros
+    libc.hdr.types.glob_t
+    libc.hdr.types.struct_passwd
+    libc.hdr.types.wordexp_t
+    libc.hdr.wordexp_macros
+    libc.src.glob.glob
+    libc.src.glob.globfree
+    libc.src.pwd.getpwnam
+    libc.src.stdlib.getenv
+)
+
+add_entrypoint_object(
+  wordfree
+  SRCS
+    wordfree.cpp
+  HDRS
+    wordfree.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.types.wordexp_t
+)
