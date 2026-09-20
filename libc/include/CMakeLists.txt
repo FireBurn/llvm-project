@@ -724,6 +724,27 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_procfs
+  ../libc/include/sys/procfs.yaml
+  sys/procfs.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.elf_fpregset_t
+    .llvm-libc-types.elf_gregset_t
+    .llvm-libc-types.lwpid_t
+    .llvm-libc-types.pid_t
+    .llvm-libc-types.prpsinfo_t
+    .llvm-libc-types.prstatus_t
+    .llvm-libc-types.psaddr_t
+    .llvm-libc-types.struct_elf_prpsinfo
+    .llvm-libc-types.struct_elf_prstatus
+    .llvm-libc-types.struct_elf_siginfo
+    .llvm-libc-types.struct_timeval
+    .llvm-libc-types.struct_user_fpregs_struct
+    .llvm-libc-types.struct_user_regs_struct
+)
+
+add_header_macro(
   sys_soundcard
   ../libc/include/sys/soundcard.yaml
   sys/soundcard.h
