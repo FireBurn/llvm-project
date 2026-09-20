@@ -574,6 +574,16 @@ if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
 endif()
 
 add_libc_test(
+  sys_soundcard_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_soundcard_test.cpp
+  DEPENDS
+    libc.include.sys_soundcard
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
