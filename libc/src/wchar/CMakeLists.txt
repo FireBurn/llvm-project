@@ -878,3 +878,22 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.types.wchar_t
 )
+
+add_entrypoint_object(
+  wcsftime
+  SRCS
+    wcsftime.cpp
+  HDRS
+    wcsftime.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_tm
+    libc.hdr.types.wchar_t
+    libc.src.__support.CPP.new
+    libc.src.__support.alloc_checker
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.__support.printf_core.writer
+    libc.src.time.strftime_core.strftime_main
+)
