@@ -1315,6 +1315,7 @@ add_header_macro(
     .llvm-libc-types.wint_t
     .llvm-libc-types.wchar_t
     .llvm-libc-types.FILE
+    .llvm-libc-types.locale_t
     .llvm-libc-types.struct_tm
 )
 
@@ -1326,6 +1327,7 @@ add_header_macro(
     .llvm_libc_common_h
     .llvm-libc-types.wint_t
     .llvm-libc-types.wctype_t
+    .llvm-libc-types.locale_t
 )
 
 add_header_macro(
