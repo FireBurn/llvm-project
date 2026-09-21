@@ -1,0 +1,209 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "iswalnum_l",
+    srcs = ["iswalnum_l.cpp"],
+    hdrs = ["iswalnum_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswalpha_l",
+    srcs = ["iswalpha_l.cpp"],
+    hdrs = ["iswalpha_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswblank_l",
+    srcs = ["iswblank_l.cpp"],
+    hdrs = ["iswblank_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswcntrl_l",
+    srcs = ["iswcntrl_l.cpp"],
+    hdrs = ["iswcntrl_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswdigit_l",
+    srcs = ["iswdigit_l.cpp"],
+    hdrs = ["iswdigit_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswgraph_l",
+    srcs = ["iswgraph_l.cpp"],
+    hdrs = ["iswgraph_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswlower_l",
+    srcs = ["iswlower_l.cpp"],
+    hdrs = ["iswlower_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswprint_l",
+    srcs = ["iswprint_l.cpp"],
+    hdrs = ["iswprint_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswpunct_l",
+    srcs = ["iswpunct_l.cpp"],
+    hdrs = ["iswpunct_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswspace_l",
+    srcs = ["iswspace_l.cpp"],
+    hdrs = ["iswspace_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswupper_l",
+    srcs = ["iswupper_l.cpp"],
+    hdrs = ["iswupper_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswxdigit_l",
+    srcs = ["iswxdigit_l.cpp"],
+    hdrs = ["iswxdigit_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "towlower_l",
+    srcs = ["towlower_l.cpp"],
+    hdrs = ["towlower_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "towupper_l",
+    srcs = ["towupper_l.cpp"],
+    hdrs = ["towupper_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+    ],
+)
+
+libc_function(
+    name = "iswctype_l",
+    srcs = ["iswctype_l.cpp"],
+    hdrs = ["iswctype_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wctype_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_impl",
+    ],
+)
+
+libc_function(
+    name = "l",
+    srcs = ["wctype_l.cpp"],
+    hdrs = ["wctype_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wctype_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_impl",
+    ],
+)

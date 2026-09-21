@@ -736,3 +736,17 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "wctype_impl",
+    hdrs = ["wctype_impl.h"],
+    deps = [
+        ":wctype_utils",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wctype_t",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
