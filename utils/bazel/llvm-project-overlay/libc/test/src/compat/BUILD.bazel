@@ -10,6 +10,22 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+
+
+
+
+
+libc_test(
+    name = "rt_signals_test",
+    srcs = ["rt_signals_test.cpp"],
+    deps = [
+        "//libc:__ctype_get_mb_cur_max",
+        "//libc:__libc_current_sigrtmax",
+        "//libc:__libc_current_sigrtmin",
+        "//libc:hdr_signal_macros",
+    ],
+)
+
 libc_test(
     name = "syscall_test",
     srcs = ["syscall_test.cpp"],
