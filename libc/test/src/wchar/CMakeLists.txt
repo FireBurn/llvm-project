@@ -779,3 +779,16 @@ add_libc_test(
     libc.src.wchar.wcswidth
     libc.src.wchar.wcwidth
 )
+
+add_libc_test(
+  wcsftime_test
+  SUITE
+    libc-wchar-tests
+  SRCS
+    wcsftime_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_tm
+    libc.hdr.types.wchar_t
+    libc.src.wchar.wcsftime
+    libc.test.UnitTest.ErrnoCheckingTest
+)
