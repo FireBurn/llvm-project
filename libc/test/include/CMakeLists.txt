@@ -120,6 +120,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  unistd_posix_timeouts_test
+  SUITE
+    libc-include-tests
+  SRCS
+    unistd_posix_timeouts_test.cpp
+  DEPENDS
+    libc.include.unistd
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
