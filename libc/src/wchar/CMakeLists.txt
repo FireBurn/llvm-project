@@ -329,6 +329,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wcscoll_l
+  SRCS
+    wcscoll_l.cpp
+  HDRS
+    wcscoll_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   wcsdup
   SRCS
     wcsdup.cpp
@@ -569,6 +582,17 @@ add_entrypoint_object(
     libc.hdr.wchar_macros
 )
 
+add_header_library(
+  wcsxfrm_impl
+  HDRS
+    wcsxfrm_impl.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   wcsxfrm
   SRCS
@@ -576,6 +600,22 @@ add_entrypoint_object(
   HDRS
     wcsxfrm.h
   DEPENDS
+    .wcsxfrm_impl
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.macros.config
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  wcsxfrm_l
+  SRCS
+    wcsxfrm_l.cpp
+  HDRS
+    wcsxfrm_l.h
+  DEPENDS
+    .wcsxfrm_impl
+    libc.hdr.types.locale_t
     libc.hdr.types.size_t
     libc.hdr.types.wchar_t
     libc.src.__support.macros.config
