@@ -1,6 +1,32 @@
 add_libc_testsuite(libc-wctype-tests)
 
 add_libc_test(
+  wctype_l_test
+  SUITE
+    libc-wctype-tests
+  SRCS
+    wctype_l_test.cpp
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.wctype.iswalnum_l
+    libc.src.wctype.iswalpha_l
+    libc.src.wctype.iswblank_l
+    libc.src.wctype.iswcntrl_l
+    libc.src.wctype.iswctype_l
+    libc.src.wctype.iswdigit_l
+    libc.src.wctype.iswgraph_l
+    libc.src.wctype.iswlower_l
+    libc.src.wctype.iswprint_l
+    libc.src.wctype.iswpunct_l
+    libc.src.wctype.iswspace_l
+    libc.src.wctype.iswupper_l
+    libc.src.wctype.iswxdigit_l
+    libc.src.wctype.towlower_l
+    libc.src.wctype.towupper_l
+    libc.src.wctype.wctype_l
+)
+
+add_libc_test(
   iswalpha_test
   SUITE
     libc-wctype-tests
