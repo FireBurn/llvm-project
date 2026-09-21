@@ -17512,6 +17512,7 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":__support_stringutil",
+        ":llvm_libc_types_locale_t",
     ],
 )
 
@@ -20915,6 +20916,20 @@ libc_function(
 )
 
 libc_function(
+    name = "wcscoll_l",
+    srcs = ["src/wchar/wcscoll_l.cpp"],
+    hdrs = ["src/wchar/wcscoll_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_locale_t",
+        ":types_wchar_t",
+        ":wchar_wcscoll_l",
+    ],
+)
+
+libc_function(
     name = "wcscpy",
     srcs = ["src/wchar/wcscpy.cpp"],
     hdrs = ["src/wchar/wcscpy.h"],
@@ -21080,6 +21095,21 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":wchar_wcwidth",
+    ],
+)
+
+libc_function(
+    name = "wcsxfrm_l",
+    srcs = ["src/wchar/wcsxfrm_l.cpp"],
+    hdrs = ["src/wchar/wcsxfrm_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_locale_t",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wcsxfrm_impl",
+        ":wchar_wcsxfrm_l",
     ],
 )
 
@@ -21784,5 +21814,57 @@ libc_support_library(
         ":types_size_t",
         ":types_wchar_t",
         ":wchar_wide_format",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_locale_t",
+    hdrs = ["include/llvm-libc-types/locale_t.h"],
+)
+
+libc_support_library(
+    name = "types_locale_t",
+    hdrs = ["hdr/types/locale_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_locale_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "wchar_wcscoll_l",
+    srcs = ["src/wchar/wcscoll_l.cpp"],
+    hdrs = ["src/wchar/wcscoll_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_locale_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_wcsxfrm_l",
+    srcs = ["src/wchar/wcsxfrm_l.cpp"],
+    hdrs = ["src/wchar/wcsxfrm_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_locale_t",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wcsxfrm_impl",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_wcsxfrm_impl",
+    hdrs = ["src/wchar/wcsxfrm_impl.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_wchar_t",
     ],
 )
