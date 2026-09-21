@@ -130,3 +130,40 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  __libc_current_sigrtmin
+  SRCS
+    __libc_current_sigrtmin.cpp
+  HDRS
+    __libc_current_sigrtmin.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  __libc_current_sigrtmax
+  SRCS
+    __libc_current_sigrtmax.cpp
+  HDRS
+    __libc_current_sigrtmax.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  __ctype_get_mb_cur_max
+  SRCS
+    __ctype_get_mb_cur_max.cpp
+  HDRS
+    __ctype_get_mb_cur_max.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.mb_cur_max
+)
