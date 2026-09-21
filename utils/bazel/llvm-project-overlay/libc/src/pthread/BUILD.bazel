@@ -359,6 +359,18 @@ libc_function(
 )
 
 libc_function(
+    name = "equal",
+    srcs = ["pthread_equal.cpp"],
+    hdrs = ["pthread_equal.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "__pthread_cleanup_pop",
     srcs = ["__pthread_cleanup_pop.cpp"],
     hdrs = ["__pthread_cleanup_pop.h"],
