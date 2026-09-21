@@ -248,6 +248,8 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
     return _POSIX_CLOCK_SELECTION;
   case _SC_SEMAPHORES:
     return _POSIX_SEMAPHORES;
+  case _SC_TIMEOUTS:
+    return _POSIX_TIMEOUTS;
   case _SC_MAPPED_FILES:
     return _POSIX_MAPPED_FILES;
   case _SC_MEMORY_PROTECTION:
