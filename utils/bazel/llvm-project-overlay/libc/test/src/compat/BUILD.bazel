@@ -72,3 +72,16 @@ libc_test(
         "//libc:types_cpu_set_t",
     ],
 )
+
+libc_test(
+    name = "init_main_thread_test",
+    srcs = ["init_main_thread_test.cpp"],
+    deps = [
+        "//libc:__llvm_libc_init_main_thread",
+        "//libc:__support_osutil_linux_syscall_wrappers_gettid",
+        "//libc:__support_threads_thread_headers",
+        "//libc:hdr_pthread_macros",
+        "//libc:pthread_equal",
+        "//libc:pthread_self",
+    ],
+)
