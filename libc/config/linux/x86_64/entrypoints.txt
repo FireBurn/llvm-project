@@ -671,6 +671,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.utimes
 
     # sys/sysinfo.h entrypoints
+    libc.src.sys.sysinfo.get_nprocs
+    libc.src.sys.sysinfo.get_nprocs_conf
     libc.src.sys.sysinfo.sysinfo
 
     # sys/utsname.h entrypoints
@@ -1736,6 +1738,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.alphasort
     libc.src.dirent.closedir
     libc.src.dirent.dirfd
+    libc.src.dirent.getdents
     libc.src.dirent.getdents64
     libc.src.dirent.opendir
     libc.src.dirent.readdir
@@ -1796,8 +1799,10 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_getstack_np
     libc.src.compat.__ctype_get_mb_cur_max
     libc.src.compat.__errno_location
+    libc.src.compat.__fpclassifyf
     libc.src.compat.__libc_current_sigrtmax
     libc.src.compat.__libc_current_sigrtmin
+    libc.src.compat.__sched_cpucount
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.gnu_get_libc_release
     libc.src.compat.gnu_get_libc_version
@@ -2156,6 +2161,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.locale.uselocale
 
     # unistd.h entrypoints
+    libc.src.unistd._Fork
     libc.src.unistd.__llvm_libc_syscall
     libc.src.unistd._exit
     libc.src.unistd.confstr
@@ -2292,7 +2298,9 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getprotoent
     libc.src.netdb.getservbyname
+    libc.src.netdb.getservbyname_r
     libc.src.netdb.getservbyport
+    libc.src.netdb.getservbyport_r
     libc.src.netdb.getservent
     libc.src.netdb.herror
     libc.src.netdb.hstrerror

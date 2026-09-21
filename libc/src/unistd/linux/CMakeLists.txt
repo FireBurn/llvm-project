@@ -827,6 +827,22 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  _Fork
+  SRCS
+    _Fork.cpp
+  HDRS
+    ../_Fork.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fork
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.threads.identifier
+)
+
+add_entrypoint_object(
   pipe
   SRCS
     pipe.cpp
