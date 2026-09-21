@@ -84,6 +84,16 @@ libc_test(
 )
 
 libc_test(
+    name = "wcsftime_test",
+    srcs = ["wcsftime_test.cpp"],
+    deps = [
+        "//libc:types_struct_tm",
+        "//libc:types_wchar_t",
+        "//libc:wcsftime",
+    ],
+)
+
+libc_test(
     name = "wcslcat_test",
     srcs = ["wcslcat_test.cpp"],
     deps = [
