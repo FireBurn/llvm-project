@@ -434,6 +434,20 @@ functions:
     return_type: int
     arguments:
       - type: pthread_mutexattr_t *
+  - name: pthread_mutexattr_setprotocol
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_mutexattr_t *
+      - type: int
+  - name: pthread_mutexattr_getprotocol
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const pthread_mutexattr_t *
+      - type: int *
   - name: pthread_mutexattr_setpshared
     return_type: int
     arguments:
