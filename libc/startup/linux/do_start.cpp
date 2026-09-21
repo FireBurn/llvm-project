@@ -228,8 +228,20 @@ static TLSDescriptor tls;
   }
 
   // Whichever set the thread pointer, the loader or the code above, the
-  // control block is reached through it.
-  get_tcb()->attrib = &main_thread_attrib;
+  // control block is reached through it. Where there is a loader, libc
+  // described this thread before the initialisers of what it loaded ran, and
+  // they may already hold the pthread_t it gave them. That description is
+  // kept, with what only this code knows added to it.
+  ThreadAttributes *attrib = get_tcb()->attrib;
+  if (attrib == nullptr) {
+    get_tcb()->attrib = &main_thread_attrib;
+  } else {
+    attrib->tid = main_thread_attrib.tid;
+    attrib->platform_data = main_thread_attrib.platform_data;
+    attrib->detach_state.store(main_thread_attrib.detach_state.load());
+    attrib->stack = main_thread_attrib.stack;
+    attrib->stacksize = main_thread_attrib.stacksize;
+  }
 
   // We want the fini array callbacks to be run after other atexit
   // callbacks are run. So, we register them before running the init

@@ -1741,6 +1741,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.compat.__libc_current_sigrtmin
     libc.src.compat.__libc_current_sigrtmax
     libc.src.compat.__ctype_get_mb_cur_max
+    libc.src.compat.__llvm_libc_init_main_thread
     libc.src.compat.__sched_cpucount
     libc.src.compat.__fpclassifyf
     libc.src.pthread.pthread_getthreadid_np
