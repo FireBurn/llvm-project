@@ -189,3 +189,31 @@ add_entrypoint_object(
     libc.hdr.termios_macros
     libc.hdr.types.struct_termios
 )
+
+add_entrypoint_object(
+  tcgetwinsize
+  SRCS
+    tcgetwinsize.cpp
+  HDRS
+    ../tcgetwinsize.h
+  DEPENDS
+    libc.hdr.types.struct_winsize
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.null_check
+)
+
+add_entrypoint_object(
+  tcsetwinsize
+  SRCS
+    tcsetwinsize.cpp
+  HDRS
+    ../tcsetwinsize.h
+  DEPENDS
+    libc.hdr.types.struct_winsize
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.null_check
+)

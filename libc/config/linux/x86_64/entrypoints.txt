@@ -659,6 +659,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/sysinfo.h entrypoints
     libc.src.sys.sysinfo.sysinfo
+    libc.src.sys.sysinfo.get_nprocs
+    libc.src.sys.sysinfo.get_nprocs_conf
 
     # sys/utsname.h entrypoints
     libc.src.sys.utsname.uname
@@ -708,6 +710,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.termios.tcflow
     libc.src.termios.tcflush
     libc.src.termios.tcgetattr
+    libc.src.termios.tcgetwinsize
+    libc.src.termios.tcsetwinsize
     libc.src.termios.tcgetsid
     libc.src.termios.tcsendbreak
     libc.src.termios.tcsetattr
@@ -1669,6 +1673,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.dirfd
     libc.src.dirent.opendir
     libc.src.dirent.getdents64
+    libc.src.dirent.getdents
     libc.src.dirent.alphasort
     libc.src.dirent.readdir
     libc.src.dirent.scandir
@@ -1735,6 +1740,8 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.compat.__libc_current_sigrtmin
     libc.src.compat.__libc_current_sigrtmax
     libc.src.compat.__ctype_get_mb_cur_max
+    libc.src.compat.__sched_cpucount
+    libc.src.compat.__fpclassifyf
     libc.src.pthread.pthread_getthreadid_np
     libc.src.pthread.pthread_getunique_np
     libc.src.pthread.pthread_join
@@ -2092,6 +2099,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.unistd.execvp
     libc.src.unistd.execvpe
     libc.src.unistd.fork
+    libc.src.unistd._Fork
     libc.src.unistd.vfork
     libc.src.unistd.lockf
     libc.src.unistd.getopt
@@ -2197,10 +2205,12 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.setprotoent
     libc.src.netdb.endprotoent
     libc.src.netdb.getservbyport
+    libc.src.netdb.getservbyport_r
     libc.src.netdb.getservent
     libc.src.netdb.setservent
     libc.src.netdb.endservent
     libc.src.netdb.getservbyname
+    libc.src.netdb.getservbyname_r
 
       # regex.h entrypoints
       libc.src.regex.regcomp

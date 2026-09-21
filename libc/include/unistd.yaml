@@ -956,3 +956,9 @@ functions:
       - type: size_t
     guard: null
     attributes: []
+  - name: _Fork
+    standards:
+      - posix
+    return_type: pid_t
+    arguments:
+      - type: void

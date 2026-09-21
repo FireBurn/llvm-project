@@ -265,3 +265,25 @@ functions:
       - type: const char *__restrict
       - type: const struct addrinfo *__restrict
       - type: struct addrinfo **__restrict
+  - name: getservbyname_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+      - type: struct servent *
+      - type: char *
+      - type: size_t
+      - type: struct servent **
+  - name: getservbyport_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: struct servent *
+      - type: char *
+      - type: size_t
+      - type: struct servent **

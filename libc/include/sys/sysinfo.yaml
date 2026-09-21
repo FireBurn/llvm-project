@@ -8,3 +8,15 @@ functions:
     return_type: int
     arguments:
       - type: struct sysinfo *
+  - name: get_nprocs
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void
+  - name: get_nprocs_conf
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void

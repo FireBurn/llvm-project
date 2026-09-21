@@ -116,3 +116,11 @@ functions:
     return_type: long
     arguments:
       - type: DIR *
+  - name: getdents
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: void *
+      - type: size_t
