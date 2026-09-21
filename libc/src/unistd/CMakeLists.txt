@@ -429,6 +429,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  _Fork
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}._Fork
+)
+
+add_entrypoint_object(
   pipe
   ALIAS
   DEPENDS
