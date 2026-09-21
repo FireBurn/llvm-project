@@ -9,3 +9,27 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "wctype_l_test",
+    srcs = ["wctype_l_test.cpp"],
+    deps = [
+        "//libc:iswalnum_l",
+        "//libc:iswalpha_l",
+        "//libc:iswblank_l",
+        "//libc:iswcntrl_l",
+        "//libc:iswctype_l",
+        "//libc:iswdigit_l",
+        "//libc:iswgraph_l",
+        "//libc:iswlower_l",
+        "//libc:iswprint_l",
+        "//libc:iswpunct_l",
+        "//libc:iswspace_l",
+        "//libc:iswupper_l",
+        "//libc:iswxdigit_l",
+        "//libc:towlower_l",
+        "//libc:towupper_l",
+        "//libc:types_locale_t",
+        "//libc:wctype_l",
+    ],
+)
