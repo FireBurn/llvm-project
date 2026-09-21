@@ -68,6 +68,7 @@ macros:
     macro_header: unistd-macros.h
   - macro_name: _POSIX_THREAD_SAFE_FUNCTIONS
     macro_header: unistd-macros.h
+  - macro_name: _POSIX_TIMEOUTS
   - macro_name: _POSIX_THREAD_ATTR_STACKADDR
     macro_header: unistd-macros.h
   - macro_name: _POSIX_THREAD_ATTR_STACKSIZE
