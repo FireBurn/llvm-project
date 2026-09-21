@@ -115,6 +115,9 @@
 #define _POSIX_MONOTONIC_CLOCK 202405L
 #define _POSIX_CLOCK_SELECTION 202405L
 #define _POSIX_SEMAPHORES 202405L
+// sem_timedwait, pthread_mutex_timedlock, the rwlock pair and
+// mq_timedsend are all here, which is the whole of this option.
+#define _POSIX_TIMEOUTS 202405L
 #define _POSIX_SHELL 1
 #define _POSIX_PIPE_BUF 512
 #define _POSIX_NO_TRUNC 1
