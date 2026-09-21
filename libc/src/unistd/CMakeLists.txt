@@ -274,6 +274,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  gethostid
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.gethostid
+)
+
+add_entrypoint_object(
   gethostname
   ALIAS
   DEPENDS
