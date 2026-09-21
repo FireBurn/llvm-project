@@ -362,11 +362,60 @@ libc_function(
 )
 
 libc_function(
+    name = "vswprintf",
+    srcs = ["vswprintf.cpp"],
+    hdrs = ["vswprintf.h"],
+    deps = [
+        ":wide_format",
+        "//libc/hdr/func:free",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_core_structs",
+        "//libc/src/__support/printf_core:printf_error_mapper",
+        "//libc/src/__support/printf_core:printf_main",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "wcscoll_l",
+    srcs = ["wcscoll_l.cpp"],
+    hdrs = ["wcscoll_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "wcswidth",
     srcs = ["wcswidth.cpp"],
     hdrs = ["wcswidth.h"],
     deps = [
         ":wcwidth",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "wcsxfrm_l",
+    srcs = ["wcsxfrm_l.cpp"],
+    hdrs = ["wcsxfrm_l.h"],
+    deps = [
+        ":wcsxfrm_impl",
+        "//libc/hdr/types:locale_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
         "//libc/src/__support/macros:config",
@@ -395,5 +444,69 @@ libc_support_library(
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "wide_format",
+    srcs = ["wide_format.cpp"],
+    hdrs = ["wide_format.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcrtomb",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/stdio:vsnprintf",
+    ],
+)
+
+libc_support_library(
+    name = "wcsxfrm_impl",
+    hdrs = ["wcsxfrm_impl.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "wcsxfrm",
+    srcs = ["wcsxfrm.cpp"],
+    hdrs = ["wcsxfrm.h"],
+    deps = [
+        ":wcsxfrm_impl",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "swprintf",
+    srcs = ["swprintf.cpp"],
+    hdrs = ["swprintf.h"],
+    deps = [
+        ":vswprintf",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_core_structs",
+        "//libc/src/__support/printf_core:printf_error_mapper",
+        "//libc/src/__support/printf_core:printf_main",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
