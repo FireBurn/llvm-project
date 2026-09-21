@@ -9,3 +9,29 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.sysinfo
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  get_nprocs
+  SRCS
+    get_nprocs.cpp
+  HDRS
+    ../get_nprocs.h
+  DEPENDS
+    libc.hdr.types.cpu_set_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.sched.sched_getaffinity
+    libc.src.sched.__sched_getcpucount
+)
+
+add_entrypoint_object(
+  get_nprocs_conf
+  SRCS
+    get_nprocs_conf.cpp
+  HDRS
+    ../get_nprocs_conf.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.sys.sysinfo.get_nprocs
+)
