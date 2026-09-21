@@ -1,6 +1,21 @@
 add_libc_testsuite(libc-compat-tests)
 
 add_libc_test(
+  rt_signals_test
+  SUITE
+    libc-compat-tests
+  SRCS
+    rt_signals_test.cpp
+  DEPENDS
+    libc.hdr.locale_macros
+    libc.hdr.signal_macros
+    libc.src.compat.__ctype_get_mb_cur_max
+    libc.src.compat.__libc_current_sigrtmax
+    libc.src.compat.__libc_current_sigrtmin
+    libc.src.locale.setlocale
+)
+
+add_libc_test(
   compat_test
   SUITE
     libc-compat-tests

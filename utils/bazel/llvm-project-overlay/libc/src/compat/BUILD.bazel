@@ -16,6 +16,40 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "__ctype_get_mb_cur_max",
+    srcs = ["__ctype_get_mb_cur_max.cpp"],
+    hdrs = ["__ctype_get_mb_cur_max.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdlib:mb_cur_max",
+    ],
+)
+
+libc_function(
+    name = "__libc_current_sigrtmax",
+    srcs = ["__libc_current_sigrtmax.cpp"],
+    hdrs = ["__libc_current_sigrtmax.h"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__libc_current_sigrtmin",
+    srcs = ["__libc_current_sigrtmin.cpp"],
+    hdrs = ["__libc_current_sigrtmin.h"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "__xpg_strerror_r",
     srcs = ["__xpg_strerror_r.cpp"],
     hdrs = ["__xpg_strerror_r.h"],
