@@ -496,6 +496,28 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_mutexattr_setprotocol
+  SRCS
+    pthread_mutexattr_setprotocol.cpp
+  HDRS
+    pthread_mutexattr_setprotocol.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_mutexattr_getprotocol
+  SRCS
+    pthread_mutexattr_getprotocol.cpp
+  HDRS
+    pthread_mutexattr_getprotocol.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+)
+
+add_entrypoint_object(
   pthread_mutexattr_setpshared
   SRCS
     pthread_mutexattr_setpshared.cpp
