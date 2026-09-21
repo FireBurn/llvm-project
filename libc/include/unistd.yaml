@@ -132,6 +132,8 @@ macros:
     macro_header: unistd-macros.h
   - macro_name: _POSIX_SEMAPHORES
     macro_header: unistd-macros.h
+  - macro_name: _POSIX_TIMEOUTS
+    macro_header: unistd-macros.h
   - macro_name: _POSIX_SHELL
     macro_header: unistd-macros.h
   - macro_name: _SC_CHILD_MAX
