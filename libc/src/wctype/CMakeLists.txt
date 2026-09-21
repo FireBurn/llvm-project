@@ -177,3 +177,171 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.wctype_utils
 )
+
+add_entrypoint_object(
+  iswalnum_l
+  SRCS
+    iswalnum_l.cpp
+  HDRS
+    iswalnum_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswalpha_l
+  SRCS
+    iswalpha_l.cpp
+  HDRS
+    iswalpha_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswblank_l
+  SRCS
+    iswblank_l.cpp
+  HDRS
+    iswblank_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswcntrl_l
+  SRCS
+    iswcntrl_l.cpp
+  HDRS
+    iswcntrl_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswdigit_l
+  SRCS
+    iswdigit_l.cpp
+  HDRS
+    iswdigit_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswgraph_l
+  SRCS
+    iswgraph_l.cpp
+  HDRS
+    iswgraph_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswlower_l
+  SRCS
+    iswlower_l.cpp
+  HDRS
+    iswlower_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswprint_l
+  SRCS
+    iswprint_l.cpp
+  HDRS
+    iswprint_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswpunct_l
+  SRCS
+    iswpunct_l.cpp
+  HDRS
+    iswpunct_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswspace_l
+  SRCS
+    iswspace_l.cpp
+  HDRS
+    iswspace_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswupper_l
+  SRCS
+    iswupper_l.cpp
+  HDRS
+    iswupper_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  iswxdigit_l
+  SRCS
+    iswxdigit_l.cpp
+  HDRS
+    iswxdigit_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  towlower_l
+  SRCS
+    towlower_l.cpp
+  HDRS
+    towlower_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
+
+add_entrypoint_object(
+  towupper_l
+  SRCS
+    towupper_l.cpp
+  HDRS
+    towupper_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_utils
+)
