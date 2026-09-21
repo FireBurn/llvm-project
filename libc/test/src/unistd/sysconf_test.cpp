@@ -43,6 +43,11 @@ TEST_F(LlvmLibcSysconfTest, PosixVersionTest) {
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_VERSION), 202405L);
 }
 
+TEST_F(LlvmLibcSysconfTest, PosixTimeoutsTest) {
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_TIMEOUTS),
+              Succeeds(static_cast<long>(_POSIX_TIMEOUTS)));
+}
+
 TEST_F(LlvmLibcSysconfTest, PosixThreadsConstantsTest) {
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREADS), Succeeds(202405L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_ATTR_STACKADDR),
