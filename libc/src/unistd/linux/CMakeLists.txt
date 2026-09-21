@@ -461,6 +461,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  gethostid
+  SRCS
+    gethostid.cpp
+  HDRS
+    ../gethostid.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.hdr.fcntl_macros
+    libc.src.__support.OSUtil.osutil
+)
+
+add_entrypoint_object(
   gethostname
   SRCS
     gethostname.cpp
