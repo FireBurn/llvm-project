@@ -14,6 +14,21 @@ add_libc_test(
 )
 
 add_libc_test(
+  init_main_thread_test
+  SUITE
+    libc-compat-tests
+  SRCS
+    init_main_thread_test.cpp
+  DEPENDS
+    libc.hdr.pthread_macros
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.threads.thread
+    libc.src.compat.__llvm_libc_init_main_thread
+    libc.src.pthread.pthread_equal
+    libc.src.pthread.pthread_self
+)
+
+add_libc_test(
   cpucount_test
   SUITE
     libc-compat-tests
