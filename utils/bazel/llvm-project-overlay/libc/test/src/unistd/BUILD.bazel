@@ -100,6 +100,12 @@ libc_test(
 )
 
 libc_test(
+    name = "gethostid_test",
+    srcs = ["gethostid_test.cpp"],
+    deps = ["//libc:gethostid"],
+)
+
+libc_test(
     name = "getopt_long_test",
     srcs = ["getopt_long_test.cpp"],
     deps = [

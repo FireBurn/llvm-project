@@ -1285,3 +1285,14 @@ add_libc_test(
     libc.src.unistd.sbrk
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  gethostid_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    gethostid_test.cpp
+  DEPENDS
+    libc.src.unistd.gethostid
+)
+
