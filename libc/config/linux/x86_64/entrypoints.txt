@@ -836,6 +836,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcsncmp
     libc.src.wchar.wcsxfrm
     libc.src.wchar.wcsxfrm_l
+    libc.src.wchar.wcsftime
     libc.src.wchar.wcscmp
     libc.src.wchar.wcscoll
     libc.src.wchar.wcscoll_l
