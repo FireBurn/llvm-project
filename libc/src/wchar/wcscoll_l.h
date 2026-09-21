@@ -1,4 +1,4 @@
-//===-- Implementation of wcsxfrm -----------------------------------------===//
+//===-- Implementation header for wcscoll_l ---------------------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,20 +6,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "src/wchar/wcsxfrm.h"
+#ifndef LLVM_LIBC_SRC_WCHAR_WCSCOLL_L_H
+#define LLVM_LIBC_SRC_WCHAR_WCSCOLL_L_H
 
-#include "hdr/types/size_t.h"
+#include "hdr/types/locale_t.h"
 #include "hdr/types/wchar_t.h"
-#include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/wchar/wcsxfrm_impl.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(size_t, wcsxfrm,
-                   (wchar_t *__restrict dest, const wchar_t *__restrict src,
-                    size_t n)) {
-  return internal::wcsxfrm_impl(dest, src, n);
-}
+int wcscoll_l(const wchar_t *s1, const wchar_t *s2, locale_t locale);
 
 } // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_WCHAR_WCSCOLL_L_H

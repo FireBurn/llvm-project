@@ -831,8 +831,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcschr
     libc.src.wchar.wcsncmp
     libc.src.wchar.wcsxfrm
+    libc.src.wchar.wcsxfrm_l
     libc.src.wchar.wcscmp
     libc.src.wchar.wcscoll
+    libc.src.wchar.wcscoll_l
     libc.src.wchar.wcspbrk
     libc.src.wchar.wcsrchr
     libc.src.wchar.wcsspn
@@ -877,6 +879,20 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wctype.wctype
     libc.src.wctype.towlower
     libc.src.wctype.towupper
+    libc.src.wctype.iswalnum_l
+    libc.src.wctype.iswalpha_l
+    libc.src.wctype.iswblank_l
+    libc.src.wctype.iswcntrl_l
+    libc.src.wctype.iswdigit_l
+    libc.src.wctype.iswgraph_l
+    libc.src.wctype.iswlower_l
+    libc.src.wctype.iswprint_l
+    libc.src.wctype.iswpunct_l
+    libc.src.wctype.iswspace_l
+    libc.src.wctype.iswupper_l
+    libc.src.wctype.iswxdigit_l
+    libc.src.wctype.towlower_l
+    libc.src.wctype.towupper_l
 
     # sys/uio.h entrypoints
     libc.src.sys.uio.writev
