@@ -27,6 +27,7 @@ namespace elf {
 // handled before this point, or unsupported.
 #if defined(LIBC_TARGET_ARCH_IS_X86_64)
 constexpr uint32_t RELOC_ABSOLUTE = R_X86_64_64;
+constexpr uint32_t RELOC_COPY = R_X86_64_COPY;
 constexpr uint32_t RELOC_GLOB_DAT = R_X86_64_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_X86_64_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_X86_64_TPOFF64;
@@ -37,6 +38,7 @@ constexpr uint32_t RELOC_TLS_MODULE = R_X86_64_DTPMOD64;
 constexpr uint32_t RELOC_TLS_MODULE_OFFSET = R_X86_64_DTPOFF64;
 #elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
 constexpr uint32_t RELOC_ABSOLUTE = R_AARCH64_ABS64;
+constexpr uint32_t RELOC_COPY = R_AARCH64_COPY;
 constexpr uint32_t RELOC_GLOB_DAT = R_AARCH64_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_AARCH64_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_AARCH64_TLS_TPREL64;
@@ -44,6 +46,7 @@ constexpr uint32_t RELOC_TLS_MODULE = R_AARCH64_TLS_DTPMOD;
 constexpr uint32_t RELOC_TLS_MODULE_OFFSET = R_AARCH64_TLS_DTPREL;
 #elif defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
 constexpr uint32_t RELOC_ABSOLUTE = R_RISCV_64;
+constexpr uint32_t RELOC_COPY = R_RISCV_COPY;
 constexpr uint32_t RELOC_GLOB_DAT = R_RISCV_JUMP_SLOT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_RISCV_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_RISCV_TLS_TPREL64;
@@ -51,6 +54,7 @@ constexpr uint32_t RELOC_TLS_MODULE = R_RISCV_TLS_DTPMOD64;
 constexpr uint32_t RELOC_TLS_MODULE_OFFSET = R_RISCV_TLS_DTPREL64;
 #elif defined(LIBC_TARGET_ARCH_IS_ARM)
 constexpr uint32_t RELOC_ABSOLUTE = R_ARM_ABS32;
+constexpr uint32_t RELOC_COPY = R_ARM_COPY;
 constexpr uint32_t RELOC_GLOB_DAT = R_ARM_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_ARM_JUMP_SLOT;
 // ARM uses a different TLS model; not handled here yet.
@@ -93,8 +97,12 @@ public:
     ElfW(Addr) value;
   };
 
-  LIBC_INLINE cpp::optional<Resolved> find(const char *name) const {
-    for (size_t i = 0; i < count_; ++i) {
+  // `first` skips the modules before it, which is what a copy relocation
+  // needs: the executable reserved the space and must not satisfy its own
+  // lookup with it.
+  LIBC_INLINE cpp::optional<Resolved> find(const char *name,
+                                           size_t first = 0) const {
+    for (size_t i = first; i < count_; ++i) {
       const ElfW(Sym) *symbol = modules_[i].symbols().lookup(name);
       if (symbol == nullptr)
         continue;
@@ -156,8 +164,9 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
     const bool is_tls = type == RELOC_TLS_OFFSET;
     const bool is_tls_module = type == RELOC_TLS_MODULE;
     const bool is_tls_module_offset = type == RELOC_TLS_MODULE_OFFSET;
+    const bool is_copy = type == RELOC_COPY;
     if (type != RELOC_ABSOLUTE && type != RELOC_GLOB_DAT &&
-        type != RELOC_JUMP_SLOT && !is_tls && !is_tls_module &&
+        type != RELOC_JUMP_SLOT && !is_copy && !is_tls && !is_tls_module &&
         !is_tls_module_offset)
       continue;
 
@@ -226,6 +235,28 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
           reinterpret_cast<ElfW(Addr) *>(target.load_bias() + rela->r_offset);
       *slot = static_cast<ElfW(Addr)>(block + static_cast<intptr_t>(value) +
                                       rela->r_addend);
+      ++result.bound;
+      continue;
+    }
+
+    if (is_copy) {
+      // An executable that is not position independent reserves space for a
+      // data symbol it imports and takes a copy of it, so that its own
+      // references can be plain absolute addresses. The definition has to
+      // come from somewhere other than the executable itself.
+      auto defined = order.find(name, target_index + 1);
+      if (!defined) {
+        ++result.unresolved;
+        if (result.missing == nullptr)
+          result.missing = name;
+        continue;
+      }
+      auto *dest = reinterpret_cast<unsigned char *>(target.load_bias() +
+                                                     rela->r_offset);
+      const auto *src =
+          reinterpret_cast<const unsigned char *>(defined->address);
+      for (size_t i = 0; i < symbol.st_size; ++i)
+        dest[i] = src[i];
       ++result.bound;
       continue;
     }
