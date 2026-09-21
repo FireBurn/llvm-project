@@ -511,6 +511,12 @@ functions:
     arguments:
       - type: const char *
       - type: size_t
+  - name: gethostid
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: void
   - name: gethostname
     standards:
       - posix
