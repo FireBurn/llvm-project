@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -28,6 +28,141 @@ libc_function(
         "//libc/src/__support/time:clock_gettime",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_num_converter",
+    hdrs = ["strftime_core/num_converter.h"],
+    deps = [
+        ":strftime_core_core_structs",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:integer_to_string",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_str_converter",
+    hdrs = ["strftime_core/str_converter.h"],
+    deps = [
+        ":strftime_core_core_structs",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_composite_converter",
+    hdrs = ["strftime_core/composite_converter.h"],
+    deps = [
+        ":strftime_core_core_structs",
+        ":strftime_core_num_converter",
+        ":strftime_core_str_converter",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_core_structs",
+    hdrs = ["strftime_core/core_structs.h"],
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:string_view",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_parser",
+    hdrs = ["strftime_core/parser.h"],
+    deps = [
+        ":strftime_core_core_structs",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
+    ],
+)
+
+libc_support_library(
+    name = "time_constants",
+    hdrs = ["time_constants.h"],
+    deps = [
+        "//libc/hdr/types:time_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:string_view",
+    ],
+)
+
+libc_support_library(
+    name = "time_utils",
+    srcs = ["time_utils.cpp"],
+    hdrs = ["time_utils.h"],
+    deps = [
+        ":time_constants",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:uint128",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_converter",
+    hdrs = ["strftime_core/converter.h", "strftime_core/num_converter.h", "strftime_core/str_converter.h", "strftime_core/composite_converter.h"],
+    deps = [
+        ":strftime_core_composite_converter",
+        ":strftime_core_core_structs",
+        ":strftime_core_num_converter",
+        ":strftime_core_str_converter",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:integer_to_string",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_core_strftime_main",
+    hdrs = ["strftime_core/strftime_main.h"],
+    deps = [
+        ":strftime_core_converter",
+        ":strftime_core_core_structs",
+        ":strftime_core_parser",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:error_or",
     ],
 )
 

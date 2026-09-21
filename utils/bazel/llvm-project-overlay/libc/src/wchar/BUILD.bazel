@@ -397,6 +397,22 @@ libc_function(
 )
 
 libc_function(
+    name = "wcsftime",
+    srcs = ["wcsftime.cpp"],
+    hdrs = ["wcsftime.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:common",
+        "//libc/src/time:strftime_core_strftime_main",
+    ],
+)
+
+libc_function(
     name = "wcswidth",
     srcs = ["wcswidth.cpp"],
     hdrs = ["wcswidth.h"],
