@@ -10,6 +10,24 @@ package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
 
+
+
+
+
+
+libc_test(
+    name = "rt_signals_test",
+    srcs = ["rt_signals_test.cpp"],
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/src/compat:__ctype_get_mb_cur_max",
+        "//libc/src/compat:__libc_current_sigrtmax",
+        "//libc/src/compat:__libc_current_sigrtmin",
+        "//libc/src/locale:setlocale",
+    ],
+)
+
 libc_test(
     name = "compat_test",
     srcs = ["compat_test.cpp"],
