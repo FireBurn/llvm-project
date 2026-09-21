@@ -1,6 +1,18 @@
 add_libc_testsuite(libc-wchar-tests)
 
 add_libc_test(
+  wcsxfrm_l_test
+  SUITE
+    libc-wchar-tests
+  SRCS
+    wcsxfrm_l_test.cpp
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.wchar.wcscoll_l
+    libc.src.wchar.wcsxfrm_l
+)
+
+add_libc_test(
   wcslen_test
   SUITE
     libc-wchar-tests
