@@ -36,6 +36,21 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_mutexattr_protocol_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_mutexattr_protocol_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.pthread.pthread_mutexattr_destroy
+    libc.src.pthread.pthread_mutexattr_getprotocol
+    libc.src.pthread.pthread_mutexattr_init
+    libc.src.pthread.pthread_mutexattr_setprotocol
+)
+
+add_integration_test(
   pthread_mutex_test
   SUITE
     libc-pthread-integration-tests
