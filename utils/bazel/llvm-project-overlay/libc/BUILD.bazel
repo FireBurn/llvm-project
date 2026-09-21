@@ -28405,6 +28405,23 @@ libc_function(
 )
 
 libc_function(
+    name = "__llvm_libc_init_main_thread",
+    srcs = ["src/compat/__llvm_libc_init_main_thread.cpp"],
+    hdrs = ["src/compat/__llvm_libc_init_main_thread.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_auxv",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_threads_tcb",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_pthread_macros",
+        ":hdr_sys_auxv_macros",
+    ],
+)
+
+libc_function(
     name = "__sched_cpucount",
     srcs = ["src/compat/__sched_cpucount.cpp"],
     hdrs = ["src/compat/__sched_cpucount.h"],
@@ -32465,6 +32482,18 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":__support_threads_cancel",
+    ],
+)
+
+libc_function(
+    name = "pthread_equal",
+    srcs = ["src/pthread/pthread_equal.cpp"],
+    hdrs = ["src/pthread/pthread_equal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
     ],
 )
 
