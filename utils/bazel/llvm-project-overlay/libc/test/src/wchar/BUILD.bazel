@@ -178,6 +178,16 @@ libc_test(
 )
 
 libc_test(
+    name = "wcsxfrm_l_test",
+    srcs = ["wcsxfrm_l_test.cpp"],
+    deps = [
+        "//libc:types_locale_t",
+        "//libc:wcscoll_l",
+        "//libc:wcsxfrm_l",
+    ],
+)
+
+libc_test(
     name = "wctob_test",
     srcs = ["wctob_test.cpp"],
     deps = [

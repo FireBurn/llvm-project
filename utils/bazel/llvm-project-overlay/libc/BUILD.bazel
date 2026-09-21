@@ -22037,6 +22037,19 @@ libc_function(
 )
 
 libc_function(
+    name = "wcscoll_l",
+    srcs = ["src/wchar/wcscoll_l.cpp"],
+    hdrs = ["src/wchar/wcscoll_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_locale_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
     name = "wcscpy",
     srcs = ["src/wchar/wcscpy.cpp"],
     hdrs = ["src/wchar/wcscpy.h"],
@@ -22202,6 +22215,20 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":wcwidth",
+    ],
+)
+
+libc_function(
+    name = "wcsxfrm_l",
+    srcs = ["src/wchar/wcsxfrm_l.cpp"],
+    hdrs = ["src/wchar/wcsxfrm_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_locale_t",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wcsxfrm_impl",
     ],
 )
 
@@ -22695,6 +22722,17 @@ libc_support_library(
         ":full_build": [],
         "//conditions:default": ["@platforms//:incompatible"],
     }),
+)
+
+libc_support_library(
+    name = "wchar_wcsxfrm_impl",
+    hdrs = ["src/wchar/wcsxfrm_impl.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
 )
 
 libc_support_library(
@@ -23317,6 +23355,20 @@ libc_function(
         ":__support_osutil_linux_stat_stat_via_statx",
         ":hdr_fcntl_macros",
         ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "__support_wctype_impl",
+    hdrs = ["src/__support/wctype_impl.h"],
+    deps = [
+        ":__support_cpp_array",
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_wctype_utils",
+        ":types_wchar_t",
+        ":types_wctype_t",
     ],
 )
 
@@ -24016,6 +24068,19 @@ libc_function(
 )
 
 libc_function(
+    name = "wcsxfrm",
+    srcs = ["src/wchar/wcsxfrm.cpp"],
+    hdrs = ["src/wchar/wcsxfrm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wcsxfrm_impl",
+    ],
+)
+
+libc_function(
     name = "swprintf",
     srcs = ["src/wchar/swprintf.cpp"],
     hdrs = ["src/wchar/swprintf.h"],
@@ -24025,6 +24090,199 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":vswprintf",
+    ],
+)
+
+libc_function(
+    name = "iswalnum_l",
+    srcs = ["src/wctype/iswalnum_l.cpp"],
+    hdrs = ["src/wctype/iswalnum_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswalpha_l",
+    srcs = ["src/wctype/iswalpha_l.cpp"],
+    hdrs = ["src/wctype/iswalpha_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswblank_l",
+    srcs = ["src/wctype/iswblank_l.cpp"],
+    hdrs = ["src/wctype/iswblank_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswcntrl_l",
+    srcs = ["src/wctype/iswcntrl_l.cpp"],
+    hdrs = ["src/wctype/iswcntrl_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswdigit_l",
+    srcs = ["src/wctype/iswdigit_l.cpp"],
+    hdrs = ["src/wctype/iswdigit_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswgraph_l",
+    srcs = ["src/wctype/iswgraph_l.cpp"],
+    hdrs = ["src/wctype/iswgraph_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswlower_l",
+    srcs = ["src/wctype/iswlower_l.cpp"],
+    hdrs = ["src/wctype/iswlower_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswprint_l",
+    srcs = ["src/wctype/iswprint_l.cpp"],
+    hdrs = ["src/wctype/iswprint_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswpunct_l",
+    srcs = ["src/wctype/iswpunct_l.cpp"],
+    hdrs = ["src/wctype/iswpunct_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswspace_l",
+    srcs = ["src/wctype/iswspace_l.cpp"],
+    hdrs = ["src/wctype/iswspace_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswupper_l",
+    srcs = ["src/wctype/iswupper_l.cpp"],
+    hdrs = ["src/wctype/iswupper_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswxdigit_l",
+    srcs = ["src/wctype/iswxdigit_l.cpp"],
+    hdrs = ["src/wctype/iswxdigit_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "towlower_l",
+    srcs = ["src/wctype/towlower_l.cpp"],
+    hdrs = ["src/wctype/towlower_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "towupper_l",
+    srcs = ["src/wctype/towupper_l.cpp"],
+    hdrs = ["src/wctype/towupper_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_utils",
+        ":types_locale_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "iswctype_l",
+    srcs = ["src/wctype/iswctype_l.cpp"],
+    hdrs = ["src/wctype/iswctype_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_impl",
+        ":types_locale_t",
+        ":types_wctype_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "wctype_l",
+    srcs = ["src/wctype/wctype_l.cpp"],
+    hdrs = ["src/wctype/wctype_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_wctype_impl",
+        ":types_locale_t",
+        ":types_wctype_t",
     ],
 )
 
