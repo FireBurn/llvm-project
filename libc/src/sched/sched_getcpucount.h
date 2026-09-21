@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 // macro and will be applied to client files, this must be a public entrypoint.
 int __sched_getcpucount(size_t cpuset_size, const cpu_set_t *mask);
 
+namespace internal {
+int sched_getcpucount_impl(size_t cpuset_size, const cpu_set_t *mask);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SCHED_SCHED_GETCPUCOUNT_H
