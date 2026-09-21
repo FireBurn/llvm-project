@@ -23,6 +23,10 @@
 #define SCHED_IDLE 5
 #define SCHED_DEADLINE 6
 
+// Asked for alongside a policy, to say that a child should not inherit
+// the elevated one. The kernel reads it from the same word.
+#define SCHED_RESET_ON_FORK 0x40000000
+
 // Linux-specific flags for clone.
 #define CLONE_CHILD_CLEARTID 0x00200000
 #define CLONE_CHILD_SETTID 0x01000000
