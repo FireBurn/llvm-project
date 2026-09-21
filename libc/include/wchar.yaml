@@ -139,6 +139,14 @@ functions:
     arguments:
       - type: const wchar_t *
       - type: const wchar_t *
+  - name: wcscoll_l
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const wchar_t *
+      - type: const wchar_t *
+      - type: locale_t
   - name: wcspbrk
     standards:
       - stdc
@@ -390,6 +398,15 @@ functions:
       - type: wchar_t *__restrict
       - type: const wchar_t *__restrict
       - type: size_t
+  - name: wcsxfrm_l
+    standards:
+      - posix
+    return_type: size_t
+    arguments:
+      - type: wchar_t *__restrict
+      - type: const wchar_t *__restrict
+      - type: size_t
+      - type: locale_t
   - name: fgetwc
     standards:
       - stdc
