@@ -1,6 +1,19 @@
 add_libc_testsuite(libc-compat-tests)
 
 add_libc_test(
+  rt_signals_test
+  SUITE
+    libc-compat-tests
+  SRCS
+    rt_signals_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.compat.__ctype_get_mb_cur_max
+    libc.src.compat.__libc_current_sigrtmax
+    libc.src.compat.__libc_current_sigrtmin
+)
+
+add_libc_test(
   syscall_test
   SUITE
     libc-compat-tests
