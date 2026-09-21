@@ -58,6 +58,12 @@
 #define PTHREAD_PROCESS_PRIVATE 0
 #define PTHREAD_PROCESS_SHARED 1
 
+// What a mutex does about the priority of whoever holds it. Only the first
+// is on offer here; see pthread_mutexattr_setprotocol.
+#define PTHREAD_PRIO_NONE 0
+#define PTHREAD_PRIO_INHERIT 1
+#define PTHREAD_PRIO_PROTECT 2
+
 #ifdef __linux__
 #define PTHREAD_MUTEX_INITIALIZER                                              \
   {                                                                            \
