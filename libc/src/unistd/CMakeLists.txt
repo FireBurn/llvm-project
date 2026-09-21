@@ -905,3 +905,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.pause
 )
+
+add_entrypoint_object(
+  _Fork
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}._Fork
+)
