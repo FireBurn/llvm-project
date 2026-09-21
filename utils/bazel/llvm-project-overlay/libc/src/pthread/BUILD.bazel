@@ -42,6 +42,39 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "pthread_mutexattr",
+    hdrs = ["pthread_mutexattr.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "mutexattr_setprotocol",
+    srcs = ["pthread_mutexattr_setprotocol.cpp"],
+    hdrs = ["pthread_mutexattr_setprotocol.h"],
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "mutexattr_getprotocol",
+    srcs = ["pthread_mutexattr_getprotocol.cpp"],
+    hdrs = ["pthread_mutexattr_getprotocol.h"],
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_function(
     name = "mutex_timedlock",
     srcs = ["pthread_mutex_timedlock.cpp"],
