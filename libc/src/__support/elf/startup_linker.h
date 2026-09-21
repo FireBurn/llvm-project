@@ -123,6 +123,11 @@ public:
     // finds it already set.
     publish_environ(order, stack);
 
+    // An initialiser may ask which thread it is on and keep the answer, as Qt
+    // does to tell its threads apart, so the thread is described before any
+    // of them runs and not later by the program's startup code.
+    describe_main_thread(order);
+
     run_initialisers();
     return true;
   }
@@ -287,6 +292,12 @@ private:
     if (!address)
       return; // Nothing in the process has one.
     *reinterpret_cast<char ***>(*address) = stack.envp();
+  }
+
+  LIBC_INLINE static void describe_main_thread(const SearchOrder &order) {
+    auto address = order.resolve("__llvm_libc_init_main_thread");
+    if (address)
+      reinterpret_cast<int (*)()>(*address)();
   }
 
   // Copies what was loaded into libc's storage, found by symbol lookup since

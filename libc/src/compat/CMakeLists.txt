@@ -194,3 +194,19 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  __llvm_libc_init_main_thread
+  SRCS
+    __llvm_libc_init_main_thread.cpp
+  HDRS
+    __llvm_libc_init_main_thread.h
+  DEPENDS
+    libc.hdr.pthread_macros
+    libc.hdr.sys_auxv_macros
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.threads.tcb
+    libc.src.__support.threads.thread
+)
