@@ -28504,6 +28504,40 @@ libc_support_library(
 )
 
 libc_function(
+    name = "__ctype_get_mb_cur_max",
+    srcs = ["src/compat/__ctype_get_mb_cur_max.cpp"],
+    hdrs = ["src/compat/__ctype_get_mb_cur_max.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":mb_cur_max",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "__libc_current_sigrtmax",
+    srcs = ["src/compat/__libc_current_sigrtmax.cpp"],
+    hdrs = ["src/compat/__libc_current_sigrtmax.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_signal_macros",
+    ],
+)
+
+libc_function(
+    name = "__libc_current_sigrtmin",
+    srcs = ["src/compat/__libc_current_sigrtmin.cpp"],
+    hdrs = ["src/compat/__libc_current_sigrtmin.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_signal_macros",
+    ],
+)
+
+libc_function(
     name = "__xpg_strerror_r",
     srcs = ["src/compat/__xpg_strerror_r.cpp"],
     hdrs = ["src/compat/__xpg_strerror_r.h"],
