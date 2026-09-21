@@ -62,6 +62,23 @@ libc_function(
 )
 
 libc_function(
+    name = "__llvm_libc_init_main_thread",
+    srcs = ["__llvm_libc_init_main_thread.cpp"],
+    hdrs = ["__llvm_libc_init_main_thread.h"],
+    deps = [
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr:sys_auxv_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:gettid",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:tcb",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "__sched_cpucount",
     srcs = ["__sched_cpucount.cpp"],
     hdrs = ["__sched_cpucount.h"],
