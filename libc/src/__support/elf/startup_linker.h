@@ -83,7 +83,8 @@ public:
 
     // Thread local storage is laid out before binding, because a relocation
     // against a thread local stores an offset from the thread pointer and
-    // that offset is not known until the layout is fixed.
+    // that offset is not known until the layout is fixed. Only the layout
+    // though: what goes in the blocks is copied once binding is done.
     if (!setup_tls())
       return false;
 
@@ -102,6 +103,11 @@ public:
         return false;
       }
     }
+
+    // The initialisation images are part of the modules' data, so they are
+    // only what they should be once the modules have been relocated. A
+    // thread local holding the address of anything is written by one.
+    copy_tls_images(modules_, count_, tls_block_.thread_pointer, tls_offsets_);
 
     // Only once everything is bound may any of it run.
     if (!install_thread_pointer())
@@ -227,7 +233,8 @@ private:
   }
 
   LIBC_INLINE bool setup_tls() {
-    auto block = allocate_tls_block(modules_, count_, tls_offsets_);
+    auto block = allocate_tls_block(modules_, count_, tls_offsets_,
+                                    /*copy_images=*/false);
     if (!block.has_value()) {
       report("cannot allocate thread local storage\n");
       return false;
