@@ -467,3 +467,35 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.netdb.resolv.services
 )
+
+add_entrypoint_object(
+  getservbyname_r
+  SRCS
+    getservbyname_r.cpp
+  HDRS
+    getservbyname_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_servent
+    libc.src.__support.CPP.new
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
+
+add_entrypoint_object(
+  getservbyport_r
+  SRCS
+    getservbyport_r.cpp
+  HDRS
+    getservbyport_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_servent
+    libc.src.__support.CPP.new
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.services
+)
