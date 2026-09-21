@@ -20,6 +20,9 @@
 #define CLOCK_BOOTTIME 7
 #define CLOCK_REALTIME_ALARM 8
 #define CLOCK_BOOTTIME_ALARM 9
+#define CLOCK_SGI_CYCLE 10 // Not on this architecture, but the number
+                           // after it is what the kernel gives TAI.
+#define CLOCK_TAI 11
 
 #define CLOCKS_PER_SEC 1000000
 
