@@ -436,6 +436,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  _Fork
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}._Fork
+)
+
+add_entrypoint_object(
   pipe
   ALIAS
   DEPENDS
@@ -836,19 +843,6 @@ add_entrypoint_object(
   ALIAS
   DEPENDS
     .${LIBC_TARGET_OS}.getentropy
-)
-
-add_entrypoint_object(
-  getgroups
-  ALIAS
-  DEPENDS
-    .${LIBC_TARGET_OS}.getgroups
-)
-  ALIAS
-  DEPENDS
-)
-  ALIAS
-  DEPENDS
 )
 
 add_entrypoint_object(
