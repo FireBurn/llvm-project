@@ -26341,6 +26341,20 @@ libc_function(
 )
 
 libc_function(
+    name = "__llvm_libc_syscall",
+    srcs = ["src/unistd/linux/syscall.cpp"],
+    hdrs = ["src/unistd/syscall.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":errno",
+        ":hdr_unistd_macros",
+    ],
+)
+
+libc_function(
     name = "mbsinit",
     srcs = ["src/wchar/mbsinit.cpp"],
     hdrs = ["src/wchar/mbsinit.h"],
