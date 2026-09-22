@@ -46,8 +46,6 @@
 #define PTHREAD_PROCESS_PRIVATE 0
 #define PTHREAD_PROCESS_SHARED 1
 
-#define PTHREAD_INHERIT_SCHED 0
-#define PTHREAD_EXPLICIT_SCHED 1
 // What a mutex does about the priority of whoever holds it. Only the first
 // is on offer here; see pthread_mutexattr_setprotocol.
 #define PTHREAD_PRIO_NONE 0
@@ -116,5 +114,10 @@
 
 // llvm libc extensions
 #define PTHREAD_STACK_DYNAMIC_NP 0
+
+// Whether a thread takes its scheduling from the attributes it is created
+// with, or from the thread creating it.
+#define PTHREAD_INHERIT_SCHED 0
+#define PTHREAD_EXPLICIT_SCHED 1
 
 #endif // LLVM_LIBC_MACROS_PTHREAD_MACRO_H
