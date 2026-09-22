@@ -1196,10 +1196,12 @@ if(LIBC_TYPES_HAS_NATIVE_FLOAT128)
     libc.src.math.fsqrtf128
     libc.src.math.fsubf128
     libc.src.math.ldexpf128
+    libc.src.math.log2l
     libc.src.math.modff128
     libc.src.math.nextafterf128
     libc.src.math.nextdownf128
     libc.src.math.nextupf128
+    libc.src.math.powl
     libc.src.math.remainderf128
     libc.src.math.remquof128
     libc.src.math.scalblnf128
