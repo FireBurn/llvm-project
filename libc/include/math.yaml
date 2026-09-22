@@ -143,6 +143,19 @@ functions:
     arguments:
       - type: long double
       - type: long double
+  - name: log2l
+    standards:
+      - stdc
+    return_type: long double
+    arguments:
+      - type: long double
+  - name: powl
+    standards:
+      - stdc
+    return_type: long double
+    arguments:
+      - type: long double
+      - type: long double
   - name: atan2f128
     standards:
       - stdc
