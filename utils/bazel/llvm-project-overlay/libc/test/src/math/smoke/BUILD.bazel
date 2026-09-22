@@ -2758,3 +2758,7 @@ math_test(name = "atanh")
 math_test(name = "erf")
 
 math_test(name = "erfc")
+
+math_test(name = "log2l")
+
+math_test(name = "powl")
