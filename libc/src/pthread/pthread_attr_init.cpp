@@ -22,6 +22,9 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_init, (pthread_attr_t * attr)) {
       nullptr,                     // Let the thread manage its stack
       Thread::default_stacksize(), // stack size, as the process is allowed.
       Thread::DEFAULT_GUARDSIZE,   // Default page size for the guard size.
+      PTHREAD_INHERIT_SCHED,       // Scheduling comes from the creating thread
+      SCHED_OTHER,                 // which makes these two unused until a
+      {0},                         // caller asks for the explicit form.
   };
   return 0;
 }

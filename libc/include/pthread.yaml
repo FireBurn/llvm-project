@@ -612,3 +612,31 @@ functions:
     arguments:
       - type: const pthread_t *__restrict
       - type: pthread_id_np_t *__restrict
+  - name: pthread_attr_setschedpolicy
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_attr_t *
+      - type: int
+  - name: pthread_attr_getschedpolicy
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const pthread_attr_t *__restrict
+      - type: int *__restrict
+  - name: pthread_attr_setinheritsched
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_attr_t *
+      - type: int
+  - name: pthread_attr_getinheritsched
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const pthread_attr_t *__restrict
+      - type: int *__restrict

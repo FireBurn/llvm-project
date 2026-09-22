@@ -13,6 +13,9 @@
 
 #include "pthread_attr_getdetachstate.h"
 #include "pthread_attr_getguardsize.h"
+#include "pthread_attr_getinheritsched.h"
+#include "pthread_attr_getschedparam.h"
+#include "pthread_attr_getschedpolicy.h"
 #include "pthread_attr_getstack.h"
 
 #include "src/__support/common.h"
@@ -58,6 +61,17 @@ LLVM_LIBC_FUNCTION(int, pthread_create,
           LIBC_NAMESPACE::pthread_attr_getdetachstate(attr, &detachstate) != 0))
     return EINVAL;
 
+  int inheritsched, schedpolicy;
+  struct sched_param schedparam;
+  if (LIBC_UNLIKELY(LIBC_NAMESPACE::pthread_attr_getinheritsched(
+                        attr, &inheritsched) != 0) ||
+      LIBC_UNLIKELY(
+          LIBC_NAMESPACE::pthread_attr_getschedpolicy(attr, &schedpolicy) !=
+          0) ||
+      LIBC_UNLIKELY(
+          LIBC_NAMESPACE::pthread_attr_getschedparam(attr, &schedparam) != 0))
+    return EINVAL;
+
   if (attr == &default_attr)
     // Should we fail here? Its non-issue as the moment as pthread_attr_destroy
     // can only succeed.
@@ -82,7 +96,19 @@ LLVM_LIBC_FUNCTION(int, pthread_create,
                            detachstate == PTHREAD_CREATE_DETACHED);
   if (result != 0 && result != EPERM && result != EINVAL)
     return EAGAIN;
-  return result;
+  if (result != 0)
+    return result;
+
+  // A thread inherits its creator's scheduling unless the attributes say to
+  // use their own. Asking for a policy the process may not have is the
+  // kernel's to refuse, and it refuses here rather than when it was set.
+  if (inheritsched == PTHREAD_EXPLICIT_SCHED) {
+    int sched_result =
+        thread->setschedparam(SchedParameters{schedpolicy, schedparam});
+    if (sched_result != 0)
+      return sched_result;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

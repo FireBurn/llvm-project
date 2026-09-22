@@ -117,4 +117,9 @@
 // llvm libc extensions
 #define PTHREAD_STACK_DYNAMIC_NP 0
 
+// Whether a thread takes its scheduling from the attributes it is created
+// with, or from the thread creating it.
+#define PTHREAD_INHERIT_SCHED 0
+#define PTHREAD_EXPLICIT_SCHED 1
+
 #endif // LLVM_LIBC_MACROS_PTHREAD_MACRO_H

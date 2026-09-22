@@ -579,6 +579,9 @@ add_entrypoint_object(
     libc.src.pthread.pthread_attr_init
     libc.src.pthread.pthread_attr_getdetachstate
     libc.src.pthread.pthread_attr_getguardsize
+    libc.src.pthread.pthread_attr_getinheritsched
+    libc.src.pthread.pthread_attr_getschedparam
+    libc.src.pthread.pthread_attr_getschedpolicy
     libc.src.pthread.pthread_attr_getstack
     libc.src.errno.errno
   COMPILE_OPTIONS
@@ -1208,4 +1211,52 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
     libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
+  pthread_attr_setschedpolicy
+  SRCS
+    pthread_attr_setschedpolicy.cpp
+  HDRS
+    pthread_attr_setschedpolicy.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.include.sched
+)
+
+add_entrypoint_object(
+  pthread_attr_getschedpolicy
+  SRCS
+    pthread_attr_getschedpolicy.cpp
+  HDRS
+    pthread_attr_getschedpolicy.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.include.sched
+)
+
+add_entrypoint_object(
+  pthread_attr_setinheritsched
+  SRCS
+    pthread_attr_setinheritsched.cpp
+  HDRS
+    pthread_attr_setinheritsched.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.include.sched
+)
+
+add_entrypoint_object(
+  pthread_attr_getinheritsched
+  SRCS
+    pthread_attr_getinheritsched.cpp
+  HDRS
+    pthread_attr_getinheritsched.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.include.sched
 )
