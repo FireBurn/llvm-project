@@ -6542,3 +6542,28 @@ add_header_library(
     libc.src.__support.macros.optimization
     libc.src.errno.errno
 )
+
+add_header_library(
+  log2l_impl
+  HDRS
+    log2l_impl.h
+  DEPENDS
+    .log2
+    libc.src.__support.FPUtil.dyadic_float
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.macros.config
+    libc.src.__support.macros.properties.types
+)
+
+add_header_library(
+  powl_impl
+  HDRS
+    powl_impl.h
+  DEPENDS
+    .exp2_accurate_128
+    libc.src.__support.FPUtil.dyadic_float
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.macros.config
+    libc.src.__support.sign
+    libc.src.__support.uint128
+)
