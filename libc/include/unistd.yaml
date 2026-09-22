@@ -189,6 +189,13 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: syscall
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: long
+      - type: '...'
   - name: __llvm_libc_syscall
     standards:
       - posix
