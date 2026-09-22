@@ -259,6 +259,13 @@ functions:
       - type: int
       - type: char *
       - type: size_t
+  - name: syscall
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: long
+      - type: '...'
   - name: __llvm_libc_syscall
     standards:
       - posix
