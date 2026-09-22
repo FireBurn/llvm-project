@@ -290,6 +290,16 @@ libc_test(
 )
 
 libc_test(
+    name = "syscall_test",
+    srcs = ["syscall_test.cpp"],
+    deps = [
+        "//libc:__llvm_libc_syscall",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+    ],
+)
+
+libc_test(
     name = "confstr_test",
     srcs = ["confstr_test.cpp"],
     deps = [
