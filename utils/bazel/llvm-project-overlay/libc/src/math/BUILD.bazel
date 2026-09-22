@@ -3709,3 +3709,26 @@ libc_math_function(
     name = "erfc",
     additional_deps = ["//libc/src/__support/math:erfc"],
 )
+
+libc_math_function(
+    name = "log2l",
+    additional_deps = [
+        "//libc/hdr:fenv_macros",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/math:log2l_impl",
+    ],
+)
+
+libc_math_function(
+    name = "powl",
+    additional_deps = [
+        "//libc/hdr:fenv_macros",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/FPUtil:dyadic_float",
+        "//libc/src/__support/FPUtil:sqrt",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/math:log2l_impl",
+        "//libc/src/__support/math:powl_impl",
+        "//libc/src/__support:uint128",
+    ],
+)

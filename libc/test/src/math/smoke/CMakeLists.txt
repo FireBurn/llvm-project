@@ -1,6 +1,28 @@
 add_libc_testsuite(libc-math-smoke-tests PARENT libc-math-tests)
 
 add_fp_unittest(
+  powl_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    powl_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.powl
+)
+
+add_fp_unittest(
+  log2l_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    log2l_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.log2l
+)
+
+add_fp_unittest(
   cosf_test
   SUITE
     libc-math-smoke-tests
