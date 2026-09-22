@@ -841,7 +841,9 @@ LIBC_INLINE_VAR constexpr DFloat128 BIG_COEFFS[4]{
 
 // Reuse the output of the fast pass range reduction.
 // -2^-8 <= m_x < 2^-7
-LIBC_INLINE double log2_accurate(int e_x, int index, double m_x) {
+// The accurate pass, before it is rounded to a double. A caller working in
+// more precision than a double carries needs the value as it is here.
+LIBC_INLINE DFloat128 log2_dyadic(int e_x, int index, double m_x) {
 
   DFloat128 sum(static_cast<float>(e_x));
   sum = fputil::quick_add(sum, LOG2_TABLE.step_1[index]);
@@ -854,9 +856,11 @@ LIBC_INLINE double log2_accurate(int e_x, int index, double m_x) {
   p = fputil::quick_mul(v_f128, fputil::quick_add(p, BIG_COEFFS[2]));
   p = fputil::quick_mul(v_f128, fputil::quick_add(p, BIG_COEFFS[3]));
 
-  DFloat128 r = fputil::quick_add(sum, p);
+  return fputil::quick_add(sum, p);
+}
 
-  return static_cast<double>(r);
+LIBC_INLINE double log2_accurate(int e_x, int index, double m_x) {
+  return static_cast<double>(log2_dyadic(e_x, index, m_x));
 }
 #endif // LIBC_MATH_HAS_SKIP_ACCURATE_PASS
 
