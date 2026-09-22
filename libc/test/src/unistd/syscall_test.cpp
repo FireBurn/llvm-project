@@ -23,12 +23,17 @@ using LlvmLibcSyscallTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 // done by the unit tests of the syscall wrappers like mmap.
 // The goal is to test syscalls with a wide number of args.
 
-// There is no function named "syscall" in llvm-libc, we instead use a macro to
-// set up the arguments properly. We still need to specify the namespace though
-// because the macro generates a call to the actual internal function
-// (__llvm_libc_syscall) which is inside the namespace.
+// The public syscall is variadic and is not in the namespace, so the tests
+// call the internal function it forwards to, with the unused arguments zero.
+template <typename... Args>
+static long call_syscall(long number, Args... args) {
+  long a[6] = {(long)args...};
+  return LIBC_NAMESPACE::__llvm_libc_syscall(number, a[0], a[1], a[2], a[3],
+                                             a[4], a[5]);
+}
+
 TEST_F(LlvmLibcSyscallTest, TrivialCall) {
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_gettid), 0l);
+  ASSERT_GE(call_syscall(SYS_gettid), 0l);
   ASSERT_ERRNO_SUCCESS();
 }
 
@@ -37,10 +42,9 @@ TEST_F(LlvmLibcSyscallTest, SymlinkCreateDestroy) {
   constexpr const char LINK[] = "testdata/syscall_readlink.test.link";
 
 #ifdef SYS_symlink
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_symlink, LINK_VAL, LINK), 0l);
+  ASSERT_GE(call_syscall(SYS_symlink, LINK_VAL, LINK), 0l);
 #elif defined(SYS_symlinkat)
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_symlinkat, LINK_VAL, AT_FDCWD, LINK),
-            0l);
+  ASSERT_GE(call_syscall(SYS_symlinkat, LINK_VAL, AT_FDCWD, LINK), 0l);
 #else
 #error "symlink and symlinkat syscalls not available."
 #endif
@@ -49,18 +53,16 @@ TEST_F(LlvmLibcSyscallTest, SymlinkCreateDestroy) {
   char buf[sizeof(LINK_VAL)];
 
 #ifdef SYS_readlink
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_readlink, LINK, buf, sizeof(buf)), 0l);
+  ASSERT_GE(call_syscall(SYS_readlink, LINK, buf, sizeof(buf)), 0l);
 #elif defined(SYS_readlinkat)
-  ASSERT_GE(
-      LIBC_NAMESPACE::syscall(SYS_readlinkat, AT_FDCWD, LINK, buf, sizeof(buf)),
-      0l);
+  ASSERT_GE(call_syscall(SYS_readlinkat, AT_FDCWD, LINK, buf, sizeof(buf)), 0l);
 #endif
   ASSERT_ERRNO_SUCCESS();
 
 #ifdef SYS_unlink
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_unlink, LINK), 0l);
+  ASSERT_GE(call_syscall(SYS_unlink, LINK), 0l);
 #elif defined(SYS_unlinkat)
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_unlinkat, AT_FDCWD, LINK, 0), 0l);
+  ASSERT_GE(call_syscall(SYS_unlinkat, AT_FDCWD, LINK, 0), 0l);
 #else
 #error "unlink and unlinkat syscalls not available."
 #endif
@@ -74,25 +76,23 @@ TEST_F(LlvmLibcSyscallTest, FileReadWrite) {
   constexpr const char *TEST_FILE = "testdata/syscall_pread_pwrite.test";
 
 #ifdef SYS_open
-  long fd =
-      LIBC_NAMESPACE::syscall(SYS_open, TEST_FILE, O_WRONLY | O_CREAT, S_IRWXU);
+  long fd = call_syscall(SYS_open, TEST_FILE, O_WRONLY | O_CREAT, S_IRWXU);
 #elif defined(SYS_openat)
-  long fd = LIBC_NAMESPACE::syscall(SYS_openat, AT_FDCWD, TEST_FILE,
-                                    O_WRONLY | O_CREAT, S_IRWXU);
+  long fd = call_syscall(SYS_openat, AT_FDCWD, TEST_FILE, O_WRONLY | O_CREAT,
+                         S_IRWXU);
 #else
 #error "open and openat syscalls not available."
 #endif
   ASSERT_GT(fd, 0l);
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_pwrite64, fd, HELLO, HELLO_SIZE, 0),
-            0l);
+  ASSERT_GE(call_syscall(SYS_pwrite64, fd, HELLO, HELLO_SIZE, 0), 0l);
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_fsync, fd), 0l);
+  ASSERT_GE(call_syscall(SYS_fsync, fd), 0l);
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_close, fd), 0l);
+  ASSERT_GE(call_syscall(SYS_close, fd), 0l);
   ASSERT_ERRNO_SUCCESS();
 }
 
@@ -111,41 +111,39 @@ TEST_F(LlvmLibcSyscallTest, FileLinkCreateDestroy) {
   //   4. Cleanup the file and its link.
 
 #ifdef SYS_open
-  long write_fd = LIBC_NAMESPACE::syscall(SYS_open, TEST_FILE_PATH,
-                                          O_WRONLY | O_CREAT, S_IRWXU);
+  long write_fd =
+      call_syscall(SYS_open, TEST_FILE_PATH, O_WRONLY | O_CREAT, S_IRWXU);
 #elif defined(SYS_openat)
-  long write_fd = LIBC_NAMESPACE::syscall(SYS_openat, AT_FDCWD, TEST_FILE_PATH,
-                                          O_WRONLY | O_CREAT, S_IRWXU);
+  long write_fd = call_syscall(SYS_openat, AT_FDCWD, TEST_FILE_PATH,
+                               O_WRONLY | O_CREAT, S_IRWXU);
 #else
 #error "open and openat syscalls not available."
 #endif
   ASSERT_GT(write_fd, 0l);
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_close, write_fd), 0l);
+  ASSERT_GE(call_syscall(SYS_close, write_fd), 0l);
   ASSERT_ERRNO_SUCCESS();
 
 #ifdef SYS_open
-  long dir_fd = LIBC_NAMESPACE::syscall(SYS_open, TEST_DIR, O_DIRECTORY, 0);
+  long dir_fd = call_syscall(SYS_open, TEST_DIR, O_DIRECTORY, 0);
 #elif defined(SYS_openat)
-  long dir_fd =
-      LIBC_NAMESPACE::syscall(SYS_openat, AT_FDCWD, TEST_DIR, O_DIRECTORY, 0);
+  long dir_fd = call_syscall(SYS_openat, AT_FDCWD, TEST_DIR, O_DIRECTORY, 0);
 #else
 #error "open and openat syscalls not available."
 #endif
   ASSERT_GT(dir_fd, 0l);
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_linkat, dir_fd, TEST_FILE, dir_fd,
-                                    TEST_FILE_LINK, 0),
-            0l);
+  ASSERT_GE(
+      call_syscall(SYS_linkat, dir_fd, TEST_FILE, dir_fd, TEST_FILE_LINK, 0),
+      0l);
   ASSERT_ERRNO_SUCCESS();
 #ifdef SYS_open
-  long link_fd =
-      LIBC_NAMESPACE::syscall(SYS_open, TEST_FILE_LINK_PATH, O_PATH, 0);
+  long link_fd = call_syscall(SYS_open, TEST_FILE_LINK_PATH, O_PATH, 0);
 #elif defined(SYS_openat)
-  long link_fd = LIBC_NAMESPACE::syscall(SYS_openat, AT_FDCWD,
-                                         TEST_FILE_LINK_PATH, O_PATH, 0);
+  long link_fd =
+      call_syscall(SYS_openat, AT_FDCWD, TEST_FILE_LINK_PATH, O_PATH, 0);
 #else
 #error "open and openat syscalls not available."
 #endif
@@ -153,26 +151,23 @@ TEST_F(LlvmLibcSyscallTest, FileLinkCreateDestroy) {
   ASSERT_ERRNO_SUCCESS();
 
 #ifdef SYS_unlink
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_unlink, TEST_FILE_PATH), 0l);
+  ASSERT_GE(call_syscall(SYS_unlink, TEST_FILE_PATH), 0l);
 #elif defined(SYS_unlinkat)
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_unlinkat, AT_FDCWD, TEST_FILE_PATH, 0),
-            0l);
+  ASSERT_GE(call_syscall(SYS_unlinkat, AT_FDCWD, TEST_FILE_PATH, 0), 0l);
 #else
 #error "unlink and unlinkat syscalls not available."
 #endif
   ASSERT_ERRNO_SUCCESS();
 
 #ifdef SYS_unlink
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_unlink, TEST_FILE_LINK_PATH), 0l);
+  ASSERT_GE(call_syscall(SYS_unlink, TEST_FILE_LINK_PATH), 0l);
 #elif defined(SYS_unlinkat)
-  ASSERT_GE(
-      LIBC_NAMESPACE::syscall(SYS_unlinkat, AT_FDCWD, TEST_FILE_LINK_PATH, 0),
-      0l);
+  ASSERT_GE(call_syscall(SYS_unlinkat, AT_FDCWD, TEST_FILE_LINK_PATH, 0), 0l);
 #else
 #error "unlink and unlinkat syscalls not available."
 #endif
   ASSERT_ERRNO_SUCCESS();
 
-  ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_close, dir_fd), 0l);
+  ASSERT_GE(call_syscall(SYS_close, dir_fd), 0l);
   ASSERT_ERRNO_SUCCESS();
 }
