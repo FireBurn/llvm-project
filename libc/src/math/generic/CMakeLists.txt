@@ -5153,3 +5153,35 @@ add_entrypoint_object(
   DEPENDS
     libc.src.__support.math.erfc
 )
+
+add_entrypoint_object(
+  log2l
+  SRCS
+    log2l.cpp
+  HDRS
+    ../log2l.h
+  DEPENDS
+    libc.hdr.fenv_macros
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.common
+    libc.src.__support.macros.optimization
+    libc.src.__support.math.log2l_impl
+)
+
+add_entrypoint_object(
+  powl
+  SRCS
+    powl.cpp
+  HDRS
+    ../powl.h
+  DEPENDS
+    libc.hdr.fenv_macros
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.FPUtil.dyadic_float
+    libc.src.__support.common
+    libc.src.__support.macros.optimization
+    libc.src.__support.math.log2l_impl
+    libc.src.__support.math.powl_impl
+)
