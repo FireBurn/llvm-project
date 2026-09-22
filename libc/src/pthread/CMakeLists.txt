@@ -667,6 +667,21 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.threads.thread
+<<<<<<< HEAD
+=======
+    libc.src.pthread.pthread_attr_destroy
+    libc.src.pthread.pthread_attr_init
+    libc.src.pthread.pthread_attr_getdetachstate
+    libc.src.pthread.pthread_attr_getguardsize
+    libc.src.pthread.pthread_attr_getinheritsched
+    libc.src.pthread.pthread_attr_getschedparam
+    libc.src.pthread.pthread_attr_getschedpolicy
+    libc.src.pthread.pthread_attr_getstack
+    libc.src.errno.errno
+  COMPILE_OPTIONS
+    ${libc_opt_high_flag}
+    -fno-omit-frame-pointer
+>>>>>>> e5a9bca417e8 ([libc] Add the pthread_attr scheduling attributes)
 )
 
 add_entrypoint_object(
@@ -1301,3 +1316,6 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
 )
 
+<<<<<<< HEAD
+=======
+>>>>>>> e5a9bca417e8 ([libc] Add the pthread_attr scheduling attributes)
