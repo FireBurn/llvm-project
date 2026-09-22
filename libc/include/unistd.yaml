@@ -195,6 +195,20 @@ objects:
   - object_name: optopt
     object_type: int
 functions:
+  - name: getgroups
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: gid_t *
+  - name: syscall
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: long
+      - type: '...'
   - name: __llvm_libc_syscall
     standards:
       - posix
@@ -490,13 +504,6 @@ functions:
     return_type: uid_t
     arguments:
       - type: void
-  - name: getgroups
-    standards:
-      - posix
-    return_type: int
-    arguments:
-      - type: int
-      - type: gid_t *
   - name: getdomainname
     standards:
       - gnu
