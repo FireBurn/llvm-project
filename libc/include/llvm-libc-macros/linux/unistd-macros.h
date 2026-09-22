@@ -151,7 +151,11 @@
 #define __syscall_helper(sysno, arg1, arg2, arg3, arg4, arg5, arg6, ...)       \
   __llvm_libc_syscall((long)(sysno), (long)(arg1), (long)(arg2), (long)(arg3), \
                       (long)(arg4), (long)(arg5), (long)(arg6))
-#define syscall(...) __syscall_helper(__VA_ARGS__, 0, 1, 2, 3, 4, 5, 6)
+// syscall itself is not defined here. It is a name a program is entitled to
+// give a member or a function of its own, and a function like macro would
+// take it over wherever it appeared, so unistd.h declares the function that
+// glibc and musl also declare. __syscall_helper is left for anything that
+// wants to pass the arguments out in full.
 
 #ifndef TEMP_FAILURE_RETRY
 #define TEMP_FAILURE_RETRY(expression)                                         \
