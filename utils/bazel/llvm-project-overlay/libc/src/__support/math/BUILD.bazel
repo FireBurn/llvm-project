@@ -6956,3 +6956,31 @@ libc_support_library(
         "//libc/src/errno:errno",
     ],
 )
+
+libc_support_library(
+    name = "log2l_impl",
+    hdrs = ["log2l_impl.h"],
+    deps = [
+        ":log2",
+        "//libc/src/__support/FPUtil:double_double",
+        "//libc/src/__support/FPUtil:dyadic_float",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:multiply_add",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_support_library(
+    name = "powl_impl",
+    hdrs = ["powl_impl.h"],
+    deps = [
+        ":exp2_accurate_128",
+        "//libc/src/__support/FPUtil:dyadic_float",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:sign",
+        "//libc/src/__support:uint128",
+    ],
+)
