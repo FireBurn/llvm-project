@@ -127,6 +127,8 @@ LIBC_INLINE ErrorOr<void> stat_via_statx(int dirfd, const char *__restrict path,
     return Error(result.error());
   }
 
+  // Clears the padding and reserved words as well.
+  *statbuf = {};
   statbuf->st_dev = encode_dev(xbuf.stx_dev_major, xbuf.stx_dev_minor);
   statbuf->st_ino = static_cast<decltype(statbuf->st_ino)>(xbuf.stx_ino);
   statbuf->st_mode = xbuf.stx_mode;
