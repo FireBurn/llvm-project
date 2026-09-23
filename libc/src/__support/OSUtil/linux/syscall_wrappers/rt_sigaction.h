@@ -27,7 +27,7 @@ namespace linux_syscalls {
 LIBC_INLINE ErrorOr<int> rt_sigaction(int signum, const void *act,
                                       void *oldact) {
   return syscall_checked<int>(SYS_rt_sigaction, signum, act, oldact,
-                              sizeof(sigset_t));
+                              __KERNEL_SIGSET_BYTES);
 }
 
 } // namespace linux_syscalls
