@@ -228,9 +228,10 @@ if(LIBC_ENABLE_SHARED AND NOT LLVM_LIBC_FULL_BUILD)
     "LIBC_ENABLE_SHARED requires LLVM_LIBC_FULL_BUILD. The overlay build "
     "produces a static archive that is linked ahead of the system libc.")
 endif()
-# Bumped when the shared object ABI changes incompatibly. LLVM-libc does not
-# offer ABI stability yet, so this stays at 0 until it does.
-set(LIBC_ABI_VERSION 0 CACHE STRING
+# Bumped when the shared object ABI changes incompatibly, so that programs
+# built before the change keep the library they were built against. 1 is
+# the ABI with glibc's type layouts and constants.
+set(LIBC_ABI_VERSION 1 CACHE STRING
   "SOVERSION for the LLVM-libc shared objects")
 if(LIBC_ENABLE_SHARED)
   execute_process(
