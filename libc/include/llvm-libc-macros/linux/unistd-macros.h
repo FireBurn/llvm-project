@@ -81,26 +81,28 @@
 #define _SC_TIMEOUTS 164
 #define _SC_SHELL 157
 
-#define _PC_FILESIZEBITS 0
-#define _PC_LINK_MAX 1
-#define _PC_MAX_CANON 2
-#define _PC_MAX_INPUT 3
-#define _PC_NAME_MAX 4
-#define _PC_PATH_MAX 5
-#define _PC_PIPE_BUF 6
-#define _PC_2_SYMLINKS 7
-#define _PC_ALLOC_SIZE_MIN 8
-#define _PC_REC_INCR_XFER_SIZE 9
-#define _PC_REC_MAX_XFER_SIZE 10
-#define _PC_REC_MIN_XFER_SIZE 11
-#define _PC_REC_XFER_ALIGN 12
-#define _PC_SYMLINK_MAX 13
-#define _PC_CHOWN_RESTRICTED 14
-#define _PC_NO_TRUNC 15
-#define _PC_VDISABLE 16
-#define _PC_ASYNC_IO 17
-#define _PC_PRIO_IO 18
-#define _PC_SYNC_IO 19
+// glibc's numbers.
+#define _PC_LINK_MAX 0
+#define _PC_MAX_CANON 1
+#define _PC_MAX_INPUT 2
+#define _PC_NAME_MAX 3
+#define _PC_PATH_MAX 4
+#define _PC_PIPE_BUF 5
+#define _PC_CHOWN_RESTRICTED 6
+#define _PC_NO_TRUNC 7
+#define _PC_VDISABLE 8
+#define _PC_SYNC_IO 9
+#define _PC_ASYNC_IO 10
+#define _PC_PRIO_IO 11
+#define _PC_SOCK_MAXBUF 12
+#define _PC_FILESIZEBITS 13
+#define _PC_REC_INCR_XFER_SIZE 14
+#define _PC_REC_MAX_XFER_SIZE 15
+#define _PC_REC_MIN_XFER_SIZE 16
+#define _PC_REC_XFER_ALIGN 17
+#define _PC_ALLOC_SIZE_MIN 18
+#define _PC_SYMLINK_MAX 19
+#define _PC_2_SYMLINKS 20
 
 // TODO: Move these limit macros to a separate file
 // The edition of POSIX these interfaces follow. This is what a program reads
