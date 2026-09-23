@@ -8,72 +8,48 @@
 
 #include "src/__support/threads/linux/barrier.h"
 #include "hdr/errno_macros.h"
-#include "src/__support/CPP/new.h"
-#include "src/__support/threads/CndVar.h"
-#include "src/__support/threads/mutex.h"
+#include "src/__support/threads/sleep.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-int Barrier::init(Barrier *b,
-                  [[maybe_unused]] const pthread_barrierattr_t *attr,
+int Barrier::init(Barrier *b, const pthread_barrierattr_t *attr,
                   unsigned count) {
-  LIBC_ASSERT(attr == nullptr); // TODO implement barrierattr
   if (count == 0)
     return EINVAL;
 
+  RawMutex::init(&b->lock);
   b->expected = count;
-  b->waiting = 0;
-  b->blocking = true;
-
-  new (&b->entering) CndVar(attr ? attr->pshared : false);
-  new (&b->exiting) CndVar(attr ? attr->pshared : false);
-
-  new (&b->m) Mutex(/*is_priority_inherit=*/false, /*is_recursive=*/false,
-                    /*is_robust=*/false,
-                    /*is_pshared=*/attr ? attr->pshared : false);
-
+  b->arrived = 0;
+  b->round = 0;
+  b->inside = 0;
+  b->pshared = attr ? attr->pshared == PTHREAD_PROCESS_SHARED : false;
   return 0;
 }
 
 int Barrier::wait() {
-  m.lock();
-
-  // if the barrier is emptying out threads, wait until it finishes
-  while (!blocking)
-    entering.wait(&m);
-  waiting++;
-
-  if (waiting < expected) {
-    // block threads until waiting = expected
-    while (blocking)
-      exiting.wait(&m);
-  } else {
-    // this is the last thread to call wait(), so lets wake everyone up
-    blocking = false;
-    exiting.broadcast();
-  }
-  waiting--;
-
-  if (waiting == 0) {
-    // all threads have exited the barrier, let's let the ones waiting to enter
-    // continue
-    blocking = true;
-    entering.broadcast();
-    m.unlock();
-
-    // POSIX dictates that the barrier should return a special value to just one
-    // thread, so we can arbitrarily choose this thread
+  lock.lock(cpp::nullopt, pshared);
+  FutexWordType this_round = round.load(cpp::MemoryOrder::RELAXED);
+  if (++arrived == expected) {
+    arrived = 0;
+    round.store(this_round + 1, cpp::MemoryOrder::RELEASE);
+    lock.unlock(pshared);
+    round.notify_all(pshared);
     return PTHREAD_BARRIER_SERIAL_THREAD;
   }
-  m.unlock();
+  inside.fetch_add(1, cpp::MemoryOrder::RELAXED);
+  lock.unlock(pshared);
 
+  while (round.load(cpp::MemoryOrder::ACQUIRE) == this_round)
+    round.wait(this_round, cpp::nullopt, pshared);
+
+  // The last access to the barrier, after which destroy may proceed.
+  inside.fetch_sub(1, cpp::MemoryOrder::RELEASE);
   return 0;
 }
 
 int Barrier::destroy(Barrier *b) {
-  b->entering.reset();
-  b->exiting.reset();
-  Mutex::destroy(&b->m);
+  while (b->inside.load(cpp::MemoryOrder::ACQUIRE) != 0)
+    sleep_briefly();
   return 0;
 }
 

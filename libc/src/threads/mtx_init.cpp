@@ -16,10 +16,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(Mutex) == sizeof(mtx_t) &&
-                  alignof(Mutex) == alignof(mtx_t),
-              "The public mtx_t type must exactly match the internal mutex "
-              "type.");
+static_assert(sizeof(Mutex) <= sizeof(mtx_t) &&
+                  alignof(Mutex) <= alignof(mtx_t),
+              "The public mtx_t type must be at least as large and as aligned "
+              "as the internal mutex type.");
 
 LLVM_LIBC_FUNCTION(int, mtx_init, (mtx_t * m, int type)) {
   new (m) Mutex(/*is_priority_inherit=*/false,
