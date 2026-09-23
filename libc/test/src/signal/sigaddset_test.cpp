@@ -22,10 +22,8 @@ TEST(LlvmLibcSignalTest, SigaddsetInvalid) {
   sigset_t sigset;
   EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, -1), Fails(EINVAL));
 
-  constexpr int bitsInSigsetT = 8 * sizeof(sigset_t);
-
-  EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, bitsInSigsetT + 1),
-              Fails(EINVAL));
+  // sigset_t has room for more signals than there are, as glibc's does.
+  EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, NSIG), Fails(EINVAL));
   EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, 0), Fails(EINVAL));
-  EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, bitsInSigsetT), Succeeds());
+  EXPECT_THAT(LIBC_NAMESPACE::sigaddset(&sigset, NSIG - 1), Succeeds());
 }

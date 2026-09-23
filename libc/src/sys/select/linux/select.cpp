@@ -49,7 +49,7 @@ LLVM_LIBC_FUNCTION(int, select,
     }
     tsp = &ts;
   }
-  internal::pselect6_sigset_t pss{nullptr, sizeof(sigset_t)};
+  internal::pselect6_sigset_t pss{nullptr, __KERNEL_SIGSET_BYTES};
   int ret = internal::pselect6(nfds, read_set, write_set, error_set, tsp, &pss);
   if (ret == -EINTR)
     internal::cancel_point();
