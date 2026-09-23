@@ -17,6 +17,8 @@
 #include "hdr/types/struct_r_debug.h"
 #include "src/__support/OSUtil/linux/auxv.h"
 #include "src/__support/OSUtil/syscall.h"
+#include "src/__support/elf/module.h"
+#include "src/__support/elf/passive_abi.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/linux/futex_utils.h"
 #include "src/__support/threads/tcb.h"
@@ -78,12 +80,29 @@ static void call_init_array_callbacks(int argc, char **argv, char **env) {
     reinterpret_cast<InitCallback *>(__init_array_start[i])(argc, argv, env);
 }
 
+// The finalisers of the shared objects still loaded, which run after the
+// executable's own, as glibc runs them. Those opened later and never closed
+// go first, the last opened first; then those loaded at startup, in the
+// reverse of the order they were initialised in. The executable is index zero
+// and has run its own already.
+static void call_module_finalisers() {
+  elf::ModuleSet *set = elf::process_modules();
+  if (set == nullptr || !set->linked)
+    return;
+  for (size_t i = set->count; i > set->static_count; --i)
+    if (set->references[i - 1] != 0)
+      elf::run_fini_array(set->modules[i - 1]);
+  for (size_t i = 1; i < set->static_count; ++i)
+    elf::run_fini_array(set->modules[i]);
+}
+
 static void call_fini_array_callbacks() {
   size_t fini_array_size = __fini_array_end - __fini_array_start;
   for (size_t i = fini_array_size; i > 0; --i)
     reinterpret_cast<FiniCallback *>(__fini_array_start[i - 1])();
   if (_fini)
     _fini();
+  call_module_finalisers();
 }
 
 static ThreadAttributes main_thread_attrib;
