@@ -23,7 +23,6 @@ libc_function(
         ":sys_signalfd_signalfd",
         "//libc/hdr/types:sigset_t",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:signalfd",
-        "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",

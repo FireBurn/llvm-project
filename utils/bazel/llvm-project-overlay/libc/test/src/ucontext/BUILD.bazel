@@ -14,6 +14,7 @@ libc_test(
     name = "swapcontext_test",
     srcs = ["swapcontext_test.cpp"],
     deps = [
+        "//libc/include:llvm_libc_types_ucontext_t",
         "//libc/src/ucontext:getcontext",
         "//libc/src/ucontext:makecontext",
         "//libc/src/ucontext:swapcontext",
