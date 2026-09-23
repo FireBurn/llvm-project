@@ -10,9 +10,11 @@
 
 #include "clockid_t.h"
 
+// The four bytes glibc gives the type. Bit 0 is pshared, and the clock is in
+// the bits above it, as in glibc. Use the accessors in
+// src/pthread/pthread_condattr_bits.h.
 typedef struct {
-  clockid_t clock;
-  int pshared;
+  unsigned int __value;
 } pthread_condattr_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_CONDATTR_T_H
