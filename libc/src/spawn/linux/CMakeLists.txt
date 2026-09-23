@@ -12,10 +12,28 @@ add_entrypoint_object(
     libc.include.spawn
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.execve
     libc.src.__support.OSUtil.linux.syscall_wrappers.exit_group
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fchdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fcntl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pipe2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigaction
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setparam
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setscheduler
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setpgid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setsid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.spawn.file_actions
     libc.src.signal.linux.signal_utils
     libc.src.unistd.linux.exec_utils
