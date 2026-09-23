@@ -34,7 +34,7 @@ LIBC_INLINE ErrorOr<int> rt_sigtimedwait(const sigset_t *set, siginfo_t *info,
       "SYS_rt_sigtimedwait_time64 requires struct timespec with 64-bit "
       "members.");
   return syscall_checked<int>(SYS_rt_sigtimedwait_time64, set, info, timeout,
-                              sizeof(sigset_t));
+                              __KERNEL_SIGSET_BYTES);
 #elif defined(SYS_rt_sigtimedwait)
   static_assert(
       sizeof(timespec::tv_nsec) == sizeof(long),
@@ -42,7 +42,7 @@ LIBC_INLINE ErrorOr<int> rt_sigtimedwait(const sigset_t *set, siginfo_t *info,
       "matches the register size (long). It is unsafe on 32-bit platforms "
       "with 64-bit tv_nsec.");
   return syscall_checked<int>(SYS_rt_sigtimedwait, set, info, timeout,
-                              sizeof(sigset_t));
+                              __KERNEL_SIGSET_BYTES);
 #else
 #error "rt_sigtimedwait and rt_sigtimedwait_time64 syscalls not available."
 #endif
