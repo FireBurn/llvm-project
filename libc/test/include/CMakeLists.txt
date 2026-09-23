@@ -731,6 +731,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  signal_sigevent_layout_test
+  SUITE
+    libc-include-tests
+  SRCS
+    signal_sigevent_layout_test.cpp
+  DEPENDS
+    libc.include.signal
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
