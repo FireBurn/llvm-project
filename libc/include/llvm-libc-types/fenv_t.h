@@ -22,7 +22,7 @@ typedef struct {
 } fenv_t;
 #endif
 #elif defined(__x86_64__)
-typedef struct {
+typedef struct __attribute__((aligned(4))) {
   unsigned char __x86_status[28];
   unsigned char __mxcsr[4];
 } fenv_t;
