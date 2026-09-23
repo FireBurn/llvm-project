@@ -80,20 +80,39 @@ static void call_init_array_callbacks(int argc, char **argv, char **env) {
     reinterpret_cast<InitCallback *>(__init_array_start[i])(argc, argv, env);
 }
 
+// Runs the finalisers of modules[first, count) in the reverse of the order
+// they were initialised in, leaving out the executable and anything closed.
+static void finalise_range(const elf::ModuleSet &set, size_t first,
+                           size_t count) {
+  constexpr size_t MAX_ORDERED = 256;
+  if (count <= first)
+    return;
+  if (count - first > MAX_ORDERED) {
+    for (size_t i = count; i > first; --i)
+      if (i - 1 != 0 && set.references[i - 1] != 0)
+        elf::run_fini_array(set.modules[i - 1]);
+    return;
+  }
+  size_t order[MAX_ORDERED];
+  bool visited[MAX_ORDERED];
+  elf::init_order(set.modules, first, count, order, visited);
+  for (size_t i = count - first; i > 0; --i) {
+    size_t index = order[i - 1];
+    if (index != 0 && set.references[index] != 0)
+      elf::run_fini_array(set.modules[index]);
+  }
+}
+
 // The finalisers of the shared objects still loaded, which run after the
-// executable's own, as glibc runs them. Those opened later and never closed
-// go first, the last opened first; then those loaded at startup, in the
-// reverse of the order they were initialised in. The executable is index zero
-// and has run its own already.
+// executable's own, as glibc runs them: those opened later and never closed
+// first, then those loaded at startup, each in the reverse of the order they
+// were initialised in.
 static void call_module_finalisers() {
   elf::ModuleSet *set = elf::process_modules();
   if (set == nullptr || !set->linked)
     return;
-  for (size_t i = set->count; i > set->static_count; --i)
-    if (set->references[i - 1] != 0)
-      elf::run_fini_array(set->modules[i - 1]);
-  for (size_t i = 1; i < set->static_count; ++i)
-    elf::run_fini_array(set->modules[i]);
+  finalise_range(*set, set->static_count, set->count);
+  finalise_range(*set, 0, set->static_count);
 }
 
 static void call_fini_array_callbacks() {

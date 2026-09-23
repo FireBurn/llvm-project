@@ -150,6 +150,53 @@ private:
   DynamicTable dynamic_;
 };
 
+namespace init_order_internal {
+
+LIBC_INLINE bool names(const char *have, const char *want) {
+  if (have == nullptr)
+    return false;
+  for (; *have == *want; ++have, ++want)
+    if (*have == '\0')
+      return true;
+  return false;
+}
+
+LIBC_INLINE void visit(const Module *modules, size_t first, size_t count,
+                       size_t index, size_t *order, bool *visited,
+                       size_t &emitted) {
+  visited[index - first] = true;
+  modules[index].for_each_needed([&](const char *needed) {
+    for (size_t i = first; i < count; ++i) {
+      if (!names(modules[i].soname(), needed) &&
+          !names(modules[i].name(), needed))
+        continue;
+      if (!visited[i - first])
+        visit(modules, first, count, i, order, visited, emitted);
+      return;
+    }
+  });
+  order[emitted++] = index;
+}
+
+} // namespace init_order_internal
+
+// The order to initialise modules[first, count) in: each after every module
+// in that range it names in DT_NEEDED, found by walking the dependencies
+// depth first from each module in turn and emitting a module once all it
+// needs has been. A cycle is broken where the walk meets it, as glibc breaks
+// it. Finalisers run in the reverse of the same order. order and visited
+// need room for count - first entries each.
+LIBC_INLINE void init_order(const Module *modules, size_t first, size_t count,
+                            size_t *order, bool *visited) {
+  for (size_t i = first; i < count; ++i)
+    visited[i - first] = false;
+  size_t emitted = 0;
+  for (size_t i = first; i < count; ++i)
+    if (!visited[i - first])
+      init_order_internal::visit(modules, first, count, i, order, visited,
+                                 emitted);
+}
+
 // Runs a module's DT_INIT, the single initialiser that came before
 // DT_INIT_ARRAY. It runs first, as it does with glibc.
 LIBC_INLINE void run_init_function(const Module &module) {

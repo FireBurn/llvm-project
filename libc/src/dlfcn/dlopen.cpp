@@ -244,10 +244,21 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int)) {
   for (size_t i = first; i < set.count; ++i)
     set.mappings[i].generation = set.generation;
 
-  // Dependencies are initialised before what needs them, so the new modules
-  // are run backwards.
-  for (size_t i = set.count; i > first; --i)
-    run_init_array(set.modules[i - 1]);
+  // Dependencies are initialised before what needs them. More new modules than
+  // the order can hold at once, which nothing opens, are run backwards, which
+  // puts each after those loaded on its behalf.
+  constexpr size_t MAX_ORDERED = 256;
+  const size_t added = set.count - first;
+  if (added <= MAX_ORDERED) {
+    size_t order[MAX_ORDERED];
+    bool visited[MAX_ORDERED];
+    elf::init_order(set.modules, first, set.count, order, visited);
+    for (size_t i = 0; i < added; ++i)
+      run_init_array(set.modules[order[i]]);
+  } else {
+    for (size_t i = set.count; i > first; --i)
+      run_init_array(set.modules[i - 1]);
+  }
   return dl::handle_for(first);
 }
 
