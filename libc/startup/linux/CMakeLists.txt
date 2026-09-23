@@ -131,6 +131,8 @@ add_object_library(
     libc.include.sys_syscall
     libc.src.__support.OSUtil.linux.auxv
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.elf.module
+    libc.src.__support.elf.passive_abi
     libc.src.__support.threads.tcb
     libc.src.__support.threads.thread
     libc.src.__support.threads.linux.futex_utils
