@@ -1,4 +1,4 @@
-//===-- Implementation of lgamma_r function               ---------------------===//
+//===-- Implementation of lgamma_r function -------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -13,6 +13,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(double, lgamma_r, (double x, int *signp)) { return math::lgamma_r(x, signp); }
+LLVM_LIBC_FUNCTION(double, lgamma_r, (double x, int *signp)) {
+  return math::lgamma_r(x, signp);
+}
 
 } // namespace LIBC_NAMESPACE_DECL
