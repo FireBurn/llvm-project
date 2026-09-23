@@ -25,7 +25,7 @@ TEST_F(LlvmLibcStatTest, CreatAndReadMode) {
   // that it indeed can be opened for writing. Next, we close the file and
   // make it readonly using chmod. We test that chmod actually succeeded by
   // trying to open the file for writing and failing.
-  constexpr const char *TEST_FILE = "testdata/stat.test";
+  auto TEST_FILE = libc_make_test_file_path("stat.test");
 
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_WRONLY, S_IRWXU);
   ASSERT_GT(fd, 0);
@@ -44,4 +44,12 @@ TEST_F(LlvmLibcStatTest, NonExistentFile) {
   struct stat statbuf;
   ASSERT_THAT(LIBC_NAMESPACE::stat("non-existent-file", &statbuf),
               Fails(ENOENT));
+}
+
+TEST_F(LlvmLibcStatTest, DeviceNumbersAreEncodedAsMakedevDoes) {
+  // /dev/null is character device 1,3, which makedev(1, 3) encodes as 0x103.
+  struct stat statbuf;
+  ASSERT_THAT(LIBC_NAMESPACE::stat("/dev/null", &statbuf), Succeeds(0));
+  ASSERT_TRUE(S_ISCHR(statbuf.st_mode));
+  ASSERT_EQ(static_cast<unsigned long>(statbuf.st_rdev), 0x103UL);
 }
