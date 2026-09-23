@@ -8,6 +8,7 @@
 
 #include "src/regex/regexec.h"
 
+#include "hdr/limits_macros.h"
 #include "hdr/regex_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
@@ -26,6 +27,9 @@ LLVM_LIBC_FUNCTION(int, regexec,
 
   const auto *compiled = static_cast<const regex::Compiled *>(preg->__internal);
   const size_t length = internal::string_length(string);
+  // An offset has to fit in a regoff_t, which is an int as in glibc.
+  if (length > static_cast<size_t>(INT_MAX))
+    return REG_ESPACE;
 
   regex::Matcher matcher(*compiled, string, length, eflags);
   regex::Matcher::Span groups[regex::MAX_GROUPS];
@@ -39,8 +43,8 @@ LLVM_LIBC_FUNCTION(int, regexec,
 
   for (size_t i = 0; i < nmatch; ++i) {
     if (i < regex::MAX_GROUPS) {
-      pmatch[i].rm_so = groups[i].start;
-      pmatch[i].rm_eo = groups[i].end;
+      pmatch[i].rm_so = static_cast<regoff_t>(groups[i].start);
+      pmatch[i].rm_eo = static_cast<regoff_t>(groups[i].end);
     } else {
       pmatch[i].rm_so = -1;
       pmatch[i].rm_eo = -1;
