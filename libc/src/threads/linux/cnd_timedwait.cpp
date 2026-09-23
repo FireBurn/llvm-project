@@ -18,9 +18,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(CndVar) == sizeof(cnd_t));
-static_assert(sizeof(Mutex) == sizeof(mtx_t) &&
-              alignof(Mutex) == alignof(mtx_t));
+static_assert(sizeof(CndVar) <= sizeof(cnd_t));
+static_assert(sizeof(Mutex) <= sizeof(mtx_t) &&
+              alignof(Mutex) <= alignof(mtx_t));
 
 LLVM_LIBC_FUNCTION(int, cnd_timedwait,
                    (cnd_t *__restrict cond, mtx_t *__restrict mtx,

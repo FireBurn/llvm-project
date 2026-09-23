@@ -28,6 +28,9 @@ typedef struct {
 
   pid_t __owner;
   size_t __lock_count;
+  // Unused. glibc's mutex is forty bytes, and structures laid out around one
+  // expect that.
+  char __reserved[16];
 } __mutex_type;
 
 #endif // LLVM_LIBC_TYPES___MUTEX_TYPE_H
