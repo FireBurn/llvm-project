@@ -28,9 +28,9 @@ namespace LIBC_NAMESPACE_DECL {
 namespace pthread_cond_utils {
 
 static_assert(
-    sizeof(CndVar) == sizeof(pthread_cond_t) &&
-        alignof(CndVar) == alignof(pthread_cond_t),
-    "The public pthread_cond_t type must be of the same size and alignment "
+    sizeof(CndVar) <= sizeof(pthread_cond_t) &&
+        alignof(CndVar) <= alignof(pthread_cond_t),
+    "The public pthread_cond_t type must be at least as large and as aligned "
     "as the internal condition variable type.");
 
 LIBC_INLINE CndVar *to_cndvar(pthread_cond_t *cond) {

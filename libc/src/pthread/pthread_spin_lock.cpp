@@ -8,40 +8,30 @@
 
 #include "src/pthread/pthread_spin_lock.h"
 #include "hdr/errno_macros.h"
+#include "src/__support/CPP/atomic.h"
 #include "src/__support/common.h"
 #include "src/__support/threads/identifier.h"
-#include "src/__support/threads/spin_lock.h"
+#include "src/__support/threads/sleep.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(pthread_spinlock_t::__lockword) == sizeof(SpinLock) &&
-                  alignof(decltype(pthread_spinlock_t::__lockword)) ==
-                      alignof(SpinLock),
-              "pthread_spinlock_t::__lockword and SpinLock must be of the same "
-              "size and alignment");
-
 LLVM_LIBC_FUNCTION(int, pthread_spin_lock, (pthread_spinlock_t * lock)) {
-  // If an implementation detects that the value specified by the lock argument
-  // to pthread_spin_lock() or pthread_spin_trylock() does not refer to an
-  // initialized spin lock object, it is recommended that the function should
-  // fail and report an [EINVAL] error.
   if (!lock)
     return EINVAL;
-  auto spin_lock = reinterpret_cast<SpinLock *>(&lock->__lockword);
-  if (spin_lock->is_invalid())
-    return EINVAL;
-
-  pid_t self_tid = internal::gettid();
-  // If an implementation detects that the value specified by the lock argument
-  // to pthread_spin_lock() refers to a spin lock object for which the calling
-  // thread already holds the lock, it is recommended that the function should
-  // fail and report an [EDEADLK] error.
-  if (lock->__owner == self_tid)
-    return EDEADLK;
-
-  spin_lock->lock();
-  lock->__owner = self_tid;
-  return 0;
+  cpp::AtomicRef<int> word(*lock);
+  int self = static_cast<int>(internal::gettid());
+  for (;;) {
+    int holder = 0;
+    if (word.compare_exchange_strong(holder, self, cpp::MemoryOrder::ACQUIRE,
+                                     cpp::MemoryOrder::RELAXED))
+      return 0;
+    if (holder == self)
+      return EDEADLK;
+    if (holder == -1)
+      return EINVAL;
+    while (word.load(cpp::MemoryOrder::RELAXED) > 0)
+      sleep_briefly();
+  }
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -20,6 +20,8 @@ typedef struct {
   void *__stack;
   size_t __stacksize;
   size_t __guardsize;
+  // Unused. glibc's type is fifty six bytes, and programs allocate that.
+  char __reserved[16];
 } pthread_attr_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_ATTR_T_H

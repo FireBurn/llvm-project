@@ -165,7 +165,9 @@ private:
   };
 
   const bool is_shared;
-  const bool is_realtime;
+  // Stored this way round so that zero means CLOCK_REALTIME and a condition
+  // variable of all zeros is valid.
+  const bool is_monotonic;
 
   LIBC_INLINE void notify(bool is_broadcast) {
     if (LIBC_UNLIKELY(is_shared)) {
@@ -228,7 +230,7 @@ private:
 public:
   LIBC_INLINE constexpr CndVar(bool is_shared, bool is_realtime = false)
       : waiter_queue{}, queue_lock{}, is_shared(is_shared),
-        is_realtime(is_realtime) {
+        is_monotonic(!is_realtime) {
     if (is_shared) {
       new (&shared_waiters) cpp::Atomic<size_t>(0);
       new (&shared_futex) Futex(0);
@@ -246,9 +248,9 @@ public:
     waiter_queue.next = nullptr;
   }
 
-  // The is_realtime field is just a field we spared for pthread_cond_t
+  // The is_monotonic field is just a field we spared for pthread_cond_t
   // It is not used in wait directly.
-  LIBC_INLINE bool default_clock_is_realtime() const { return is_realtime; }
+  LIBC_INLINE bool default_clock_is_realtime() const { return !is_monotonic; }
 
   // TODO: register callback for pthread cancellation
   LIBC_INLINE CndVarResult wait(Mutex *mutex,

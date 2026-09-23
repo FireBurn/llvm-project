@@ -12,6 +12,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_condattr_bits.h"
 
 #include <pthread.h> // pthread_condattr_t
 
@@ -23,7 +24,7 @@ LLVM_LIBC_FUNCTION(int, pthread_condattr_setclock,
   if (clock != CLOCK_MONOTONIC && clock != CLOCK_REALTIME)
     return EINVAL;
 
-  attr->clock = clock;
+  condattr::set_clock(*attr, clock);
   return 0;
 }
 

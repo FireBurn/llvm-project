@@ -27,8 +27,8 @@
 #define PTHREAD_CANCELED ((void *)-1)
 
 #define PTHREAD_MUTEX_NORMAL 0
-#define PTHREAD_MUTEX_ERRORCHECK 1
-#define PTHREAD_MUTEX_RECURSIVE 2
+#define PTHREAD_MUTEX_RECURSIVE 1
+#define PTHREAD_MUTEX_ERRORCHECK 2
 #define PTHREAD_MUTEX_DEFAULT PTHREAD_MUTEX_NORMAL
 
 #define PTHREAD_MUTEX_STALLED 0
@@ -75,15 +75,14 @@
       /* .__waiter_queue = */ {{NULL, NULL}},                                  \
       /* .__futex = */ {0},                                                    \
       /* .__is_shared = */ 0,                                                  \
-      /* .__is_realtime = */ 1,                                                \
+      /* .__is_monotonic = */ 0,                                               \
       /* .__padding = */ {0},                                                  \
   }
 
 #define PTHREAD_RWLOCK_INITIALIZER                                             \
   {                                                                            \
       /* .__raw = */ {                                                         \
-          /* .__is_pshared = */ 0,                                             \
-          /* .__preference = */ 0,                                             \
+          /* .__flags = */ 0,                                                  \
           /* .__state = */ 0,                                                  \
           /* .__wait_queue_mutex = */ {0},                                     \
           /* .__pending_readers = */ {0},                                      \
