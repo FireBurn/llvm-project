@@ -12,22 +12,25 @@
 #include "hdr/pthread_macros.h"
 #include "include/llvm-libc-types/pthread_barrier_t.h"
 #include "include/llvm-libc-types/pthread_barrierattr_t.h"
-#include "src/__support/threads/CndVar.h"
-#include "src/__support/threads/mutex.h"
+#include "src/__support/threads/linux/futex_utils.h"
+#include "src/__support/threads/raw_mutex.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-// NOTE: if the size of this class changes, you must ensure that the size of
-// pthread_barrier_t (found in include/llvm-libc/types/pthread_barrier_t.h) is
-// the same size
+// A round ends when the last of the expected threads arrives. It starts the
+// next round at once and moves the round counter on, which is what the
+// others are waiting on. The threads still inside are counted so that
+// destroy can wait for them to leave: the one that returns
+// PTHREAD_BARRIER_SERIAL_THREAD may destroy the barrier while the others
+// have yet to see the counter move.
 class Barrier {
 private:
+  RawMutex lock;
   unsigned expected;
-  unsigned waiting;
-  bool blocking;
-  CndVar entering;
-  CndVar exiting;
-  Mutex m;
+  unsigned arrived;
+  Futex round;
+  Futex inside;
+  bool pshared;
 
 public:
   static int init(Barrier *b, const pthread_barrierattr_t *attr,
@@ -43,12 +46,6 @@ static_assert(sizeof(Barrier) <= sizeof(pthread_barrier_t),
 static_assert(alignof(Barrier) <= alignof(pthread_barrier_t),
               "The public pthread_barrier_t type has insufficient alignment "
               "for the internal barrier type.");
-
-static_assert(sizeof(CndVar) <= 24,
-              "CndVar size exceeds the size in __barrier_type.h");
-
-static_assert(sizeof(Mutex) <= 24,
-              "Mutex size exceeds the size in __barrier_type.h");
 
 } // namespace LIBC_NAMESPACE_DECL
 
