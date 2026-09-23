@@ -32,7 +32,7 @@ LIBC_INLINE ErrorOr<int> epoll_wait(int epfd, struct epoll_event *events,
   return syscall_checked<int>(SYS_epoll_wait, epfd, events, maxevents, timeout);
 #elif defined(SYS_epoll_pwait)
   return syscall_checked<int>(SYS_epoll_pwait, epfd, events, maxevents, timeout,
-                              nullptr, NSIG / 8);
+                              nullptr, __KERNEL_SIGSET_BYTES);
 #else
 #error "epoll_wait and epoll_pwait are unavailable. Unable to build epoll_wait."
 #endif
