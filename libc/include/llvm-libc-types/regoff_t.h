@@ -14,6 +14,6 @@
 #ifndef LLVM_LIBC_TYPES_REGOFF_T_H
 #define LLVM_LIBC_TYPES_REGOFF_T_H
 
-typedef __PTRDIFF_TYPE__ regoff_t;
+typedef int regoff_t;
 
 #endif // LLVM_LIBC_TYPES_REGOFF_T_H
