@@ -115,7 +115,7 @@ void apply_attributes(const posix_spawnattr_t *attr) {
       if (!LIBC_NAMESPACE::sigismember(&attr->__sigdefault, sig))
         continue;
       LIBC_NAMESPACE::syscall_impl<long>(SYS_rt_sigaction, sig, &action,
-                                         nullptr, sizeof(sigset_t));
+                                         nullptr, __KERNEL_SIGSET_BYTES);
     }
   }
 
@@ -136,7 +136,7 @@ void apply_attributes(const posix_spawnattr_t *attr) {
   if (flags & POSIX_SPAWN_SETSIGMASK) {
     long result = LIBC_NAMESPACE::syscall_impl<long>(
         SYS_rt_sigprocmask, SIG_SETMASK, &attr->__sigmask, nullptr,
-        sizeof(sigset_t));
+        __KERNEL_SIGSET_BYTES);
     if (result < 0)
       exit(static_cast<int>(-result));
   }
