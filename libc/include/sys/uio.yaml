@@ -2,6 +2,8 @@ header: sys/uio.h
 standards:
   - posix
 macros:
+  - macro_name: UIO_MAXIOV
+    macro_header: sys-uio-macros.h
   - macro_name: preadv64
     macro_header: lfs64-macros.h
   - macro_name: pwritev64

@@ -1735,6 +1735,16 @@ add_libc_test(
     libc.include.llvm-libc-types.struct_f_owner_ex
 )
 
+add_libc_test(
+  sys_uio_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_uio_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_uio_macros
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.
