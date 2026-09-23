@@ -23,7 +23,7 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, setcontext,
       # ucp is in rdi
       
       # Restore the signal mask using rt_sigprocmask syscall.
-      # rt_sigprocmask(SIG_SETMASK, &ucp->uc_sigmask, NULL, sizeof(sigset_t))
+      # rt_sigprocmask(SIG_SETMASK, &ucp->uc_sigmask, NULL, __KERNEL_SIGSET_BYTES)
       # Note: Restoring the signal mask early means that if a signal
       # arrives before the context switch is complete, it will run on
       # the old stack with the new mask. Doing this later is difficult
@@ -36,14 +36,17 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, setcontext,
       pushq %%rdi # Save ucp
       leaq %c[sigmask](%%rdi), %%rsi # set = &ucp->uc_sigmask
       xorq %%rdx, %%rdx # oldset = NULL
-      movq $%c[sigset_size], %%r10 # sigsetsize = sizeof(sigset_t)
+      movq $%c[sigset_size], %%r10 # sigsetsize, the kernel's
       movq $%c[sig_setmask], %%rdi # how = SIG_SETMASK
       movq $%c[syscall_num], %%rax
       syscall
       popq %%rdi # Restore ucp
 
-      # Restore floating point state
-      fxrstorq %c[fpregs_mem](%%rdi)
+      # Restore the floating point environment, the control state the ABI
+      # has a function preserve, the way glibc does.
+      movq %c[fpregs_ptr](%%rdi), %%rcx
+      fldenv (%%rcx)
+      ldmxcsr %c[mxcsr](%%rdi)
 
       # Restore other general purpose registers
       mov %c[r8](%%rdi), %%r8
@@ -70,7 +73,7 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, setcontext,
       mov %c[rdi](%%rdi), %%rdi
 
       retq
-      )" ::[sigset_size] "i"(sizeof(sigset_t)),
+      )" ::[sigset_size] "i"(__KERNEL_SIGSET_BYTES),
       [syscall_num] "i"(SYS_rt_sigprocmask), [sig_setmask] "i"(SIG_SETMASK),
       [r8] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_R8])),
       [r9] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_R9])),
@@ -89,7 +92,8 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, setcontext,
       [rcx] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_RCX])),
       [rsp] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_RSP])),
       [rip] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_RIP])),
-      [fpregs_mem] "i"(__builtin_offsetof(ucontext_t, __fpregs_mem)),
+      [fpregs_ptr] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.fpregs)),
+      [mxcsr] "i"(__builtin_offsetof(ucontext_t, __fpregs_mem.mxcsr)),
       [sigmask] "i"(__builtin_offsetof(ucontext_t, uc_sigmask))
       : "memory", "rcx", "r11");
 }

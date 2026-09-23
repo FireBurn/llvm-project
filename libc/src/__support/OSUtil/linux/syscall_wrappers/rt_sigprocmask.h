@@ -27,7 +27,7 @@ namespace linux_syscalls {
 LIBC_INLINE ErrorOr<int> rt_sigprocmask(int how, const sigset_t *set,
                                         sigset_t *oldset) {
   return syscall_checked<int>(SYS_rt_sigprocmask, how, set, oldset,
-                              sizeof(sigset_t));
+                              __KERNEL_SIGSET_BYTES);
 }
 
 } // namespace linux_syscalls

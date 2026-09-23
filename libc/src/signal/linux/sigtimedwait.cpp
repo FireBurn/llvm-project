@@ -17,13 +17,11 @@
 #include "hdr/types/siginfo_t.h"
 #include "hdr/types/sigset_t.h"
 #include "hdr/types/struct_timespec.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigtimedwait.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/cancel.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 namespace internal {
@@ -34,16 +32,15 @@ int sigtimedwait_impl(const sigset_t *__restrict set,
   internal::cancel_point();
   // The kernel wants to be told how wide the set is, since its own is
   // narrower than the one the library hands out.
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_rt_sigtimedwait, set, info,
-                                              timeout, sizeof(sigset_t));
-  if (ret == -EINTR)
+  ErrorOr<int> ret = linux_syscalls::rt_sigtimedwait(set, info, timeout);
+  if (!ret && ret.error() == EINTR)
     internal::cancel_point();
 
-  if (ret < 0) {
-    libc_errno = -ret;
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace internal

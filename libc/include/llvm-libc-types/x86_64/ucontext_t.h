@@ -32,9 +32,9 @@ typedef struct ucontext_t {
   // On x86_64, uc_mcontext contains a pointer to the floating point state
   // rather than the state itself. To make ucontext_t self-contained, we
   // provide space here for the FP state, and the pointer in uc_mcontext
-  // can be set to point here. 64 long ints provide 512 bytes, which is
-  // the size required for FXSAVE.
-  _Alignas(16) long int __fpregs_mem[64];
+  // can be set to point here. As in glibc it is only eight byte aligned,
+  // so getcontext saves the environment into it rather than an FXSAVE.
+  struct _libc_fpstate __fpregs_mem;
 
   // Support for Shadow Stack Pointer (Intel CET).
   unsigned long long __ssp[4];
