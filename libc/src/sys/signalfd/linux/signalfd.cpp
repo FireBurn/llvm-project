@@ -24,14 +24,14 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, signalfd, (int fd, const sigset_t *mask, int flags)) {
 #ifdef SYS_signalfd4
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_signalfd4, fd, mask,
-                                              sizeof(sigset_t), flags);
+                                              __KERNEL_SIGSET_BYTES, flags);
 #elif defined(SYS_signalfd)
   if (flags != 0) {
     libc_errno = EINVAL;
     return -1;
   }
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_signalfd, fd, mask,
-                                              sizeof(sigset_t));
+                                              __KERNEL_SIGSET_BYTES);
 #else
 #error "signalfd and signalfd4 syscalls not available."
 #endif
