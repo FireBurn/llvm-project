@@ -1,6 +1,18 @@
 add_libc_testsuite(libc-math-smoke-tests PARENT libc-math-tests)
 
 add_fp_unittest(
+  lgamma_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    lgamma_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.lgamma
+    libc.src.math.lgamma_r
+)
+
+add_fp_unittest(
   powl_test
   SUITE
     libc-math-smoke-tests
