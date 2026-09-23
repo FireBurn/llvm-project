@@ -43,6 +43,10 @@ extern uintptr_t __init_array_start[];
 extern uintptr_t __init_array_end[];
 extern uintptr_t __fini_array_start[];
 extern uintptr_t __fini_array_end[];
+// The executable's DT_INIT and DT_FINI, from crti.o and crtn.o. Weak, since
+// an executable linked without them has neither.
+[[gnu::weak, gnu::visibility("hidden")]] void _init(void);
+[[gnu::weak, gnu::visibility("hidden")]] void _fini(void);
 // https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html#dynamic_section
 // This symbol is provided by the dynamic linker. It can be undefined depending
 // on how the program is loaded exactly.
@@ -66,6 +70,9 @@ static void call_init_array_callbacks(int argc, char **argv, char **env) {
   size_t preinit_array_size = __preinit_array_end - __preinit_array_start;
   for (size_t i = 0; i < preinit_array_size; ++i)
     reinterpret_cast<InitCallback *>(__preinit_array_start[i])(argc, argv, env);
+  // Between the two arrays, where glibc runs it.
+  if (_init)
+    _init();
   size_t init_array_size = __init_array_end - __init_array_start;
   for (size_t i = 0; i < init_array_size; ++i)
     reinterpret_cast<InitCallback *>(__init_array_start[i])(argc, argv, env);
@@ -75,6 +82,8 @@ static void call_fini_array_callbacks() {
   size_t fini_array_size = __fini_array_end - __fini_array_start;
   for (size_t i = fini_array_size; i > 0; --i)
     reinterpret_cast<FiniCallback *>(__fini_array_start[i - 1])();
+  if (_fini)
+    _fini();
 }
 
 static ThreadAttributes main_thread_attrib;
