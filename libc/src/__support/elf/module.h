@@ -150,17 +150,26 @@ private:
   DynamicTable dynamic_;
 };
 
+// Runs a module's DT_INIT, the single initialiser that came before
+// DT_INIT_ARRAY. It runs first, as it does with glibc.
+LIBC_INLINE void run_init_function(const Module &module) {
+  if (auto init = module.dynamic().address(DT_INIT))
+    reinterpret_cast<void (*)()>(*init)();
+}
+
 // Runs a module's DT_FINI_ARRAY, in reverse of the order it was built, which
-// is what the ABI requires.
+// is what the ABI requires, and then its DT_FINI.
 LIBC_INLINE void run_fini_array(const Module &module) {
   auto array = module.dynamic().address(DT_FINI_ARRAY);
   auto size = module.dynamic().value(DT_FINI_ARRAYSZ);
-  if (!array || !size)
-    return;
-  auto **functions = reinterpret_cast<void (**)()>(*array);
-  for (size_t i = *size / sizeof(void *); i > 0; --i)
-    if (functions[i - 1] != nullptr)
-      functions[i - 1]();
+  if (array && size) {
+    auto **functions = reinterpret_cast<void (**)()>(*array);
+    for (size_t i = *size / sizeof(void *); i > 0; --i)
+      if (functions[i - 1] != nullptr)
+        functions[i - 1]();
+  }
+  if (auto fini = module.dynamic().address(DT_FINI))
+    reinterpret_cast<void (*)()>(*fini)();
 }
 
 } // namespace elf
