@@ -216,7 +216,7 @@ macros:
   - macro_name: SHT_LOUSER
     macro_value: '0x80000000'
   - macro_name: SHT_HIUSER
-    macro_value: '0xffffffff'
+    macro_value: '0x8fffffff'
   - macro_name: SHF_WRITE
     macro_value: '0x1'
   - macro_name: SHF_ALLOC
