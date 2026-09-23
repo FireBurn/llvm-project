@@ -4277,6 +4277,7 @@ libc_support_library(
         ":hdr_errno_macros",
         ":hdr_fenv_macros",
         ":hdr_math_macros",
+        ":types_size_t",
     ],
 )
 
