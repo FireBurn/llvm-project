@@ -28,3 +28,18 @@ libc_test(
         "//libc/src/unistd:write",
     ],
 )
+
+libc_test(
+    name = "stat_test",
+    srcs = ["stat_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/stat:sys_stat_stat",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+    ],
+)
