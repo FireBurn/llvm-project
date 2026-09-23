@@ -6973,6 +6973,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "lgamma",
+    hdrs = ["lgamma.h"],
+    deps = [
+        ":log2l_impl",
+        "//libc/src/__support/FPUtil:dyadic_float",
+        "//libc/src/__support/FPUtil:fenv_impl",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support/FPUtil:nearest_integer_operations",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_support_library(
     name = "powl_impl",
     hdrs = ["powl_impl.h"],
     deps = [
