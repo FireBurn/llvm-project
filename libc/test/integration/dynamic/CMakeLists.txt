@@ -30,6 +30,13 @@ target_link_options(libc-test-dl-init-object PRIVATE -nostdlib
   -Wl,-init=llvm_libc_dl_init -Wl,-fini=llvm_libc_dl_fini
   -Wl,--unresolved-symbols=ignore-all)
 
+# Reports from its fini array that it ran.
+add_library(libc-test-dl-exit-object SHARED dl_exit_object.cpp)
+target_compile_options(libc-test-dl-exit-object PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-exit-object PRIVATE -nostdlib
+  -Wl,--unresolved-symbols=ignore-all)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -130,6 +137,38 @@ add_libc_dynamic_test(
     -Wl,--export-dynamic
   DEPENDS
     libc-test-dl-init-object
+)
+
+add_libc_dynamic_test(
+  exit_fini_test
+  SRCS
+    exit_fini_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_EXIT_OBJECT="$<TARGET_FILE:libc-test-dl-exit-object>"
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+  DEPENDS
+    libc-test-dl-exit-object
+)
+
+add_library(libc-test-dl-exit-linked SHARED dl_exit_object.cpp)
+target_compile_options(libc-test-dl-exit-linked PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-exit-linked PRIVATE -nostdlib
+  -Wl,--unresolved-symbols=ignore-all)
+
+add_libc_dynamic_test(
+  exit_fini_linked_test
+  SRCS
+    exit_fini_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_LINKED
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+  LINK_LIBRARIES
+    libc-test-dl-exit-linked
+  DEPENDS
+    libc-test-dl-exit-linked
 )
 
 add_libc_dynamic_test(
