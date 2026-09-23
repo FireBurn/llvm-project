@@ -7,10 +7,28 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/spawn/posix_spawn.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/chdir.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/execve.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/exit_group.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fchdir.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fcntl.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/pipe2.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigaction.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigprocmask.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setparam.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setscheduler.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setpgid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setsid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setuid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/wait4.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
@@ -60,8 +78,7 @@ int notify_fd = -1;
 // is left saying the child did not run.
 [[noreturn]] void exit(int error = 0) {
   if (notify_fd >= 0 && error != 0)
-    LIBC_NAMESPACE::syscall_impl<long>(SYS_write, notify_fd, &error,
-                                       sizeof(error));
+    linux_syscalls::write(notify_fd, &error, sizeof(error));
   linux_syscalls::exit_group(127);
 }
 
@@ -75,28 +92,27 @@ void apply_attributes(const posix_spawnattr_t *attr) {
   const short flags = attr->__flags;
 
   if (flags & POSIX_SPAWN_SETSID) {
-    long result = LIBC_NAMESPACE::syscall_impl<long>(SYS_setsid);
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    ErrorOr<pid_t> result = linux_syscalls::setsid();
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_SETPGROUP) {
-    long result =
-        LIBC_NAMESPACE::syscall_impl<long>(SYS_setpgid, 0, attr->__pgroup);
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    ErrorOr<int> result = linux_syscalls::setpgid(0, attr->__pgroup);
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_RESETIDS) {
     // Give up whatever the exec of this program granted, so the child runs
     // as whoever asked for it.
-    long gid = LIBC_NAMESPACE::syscall_impl<long>(SYS_getgid);
-    long uid = LIBC_NAMESPACE::syscall_impl<long>(SYS_getuid);
-    long result = LIBC_NAMESPACE::syscall_impl<long>(SYS_setgid, gid);
-    if (result >= 0)
-      result = LIBC_NAMESPACE::syscall_impl<long>(SYS_setuid, uid);
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    gid_t gid = linux_syscalls::getgid();
+    uid_t uid = linux_syscalls::getuid();
+    ErrorOr<int> result = linux_syscalls::setgid(gid);
+    if (result)
+      result = linux_syscalls::setuid(uid);
+    if (!result)
+      exit(result.error());
   }
 
   if (flags & POSIX_SPAWN_SETSIGDEF) {
@@ -112,31 +128,29 @@ void apply_attributes(const posix_spawnattr_t *attr) {
     for (int sig = 1; sig < NSIG; ++sig) {
       if (!LIBC_NAMESPACE::sigismember(&attr->__sigdefault, sig))
         continue;
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_rt_sigaction, sig, &action,
-                                         nullptr, sizeof(sigset_t));
+      linux_syscalls::rt_sigaction(sig, &action, nullptr);
     }
   }
 
   if (flags & POSIX_SPAWN_SETSCHEDULER) {
-    long result = LIBC_NAMESPACE::syscall_impl<long>(
-        SYS_sched_setscheduler, 0, attr->__policy, &attr->__schedparam);
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    ErrorOr<int> result = linux_syscalls::sched_setscheduler(
+        0, attr->__policy, &attr->__schedparam);
+    if (!result)
+      exit(result.error());
   } else if (flags & POSIX_SPAWN_SETSCHEDPARAM) {
-    long result = LIBC_NAMESPACE::syscall_impl<long>(SYS_sched_setparam, 0,
-                                                     &attr->__schedparam);
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    ErrorOr<int> result =
+        linux_syscalls::sched_setparam(0, &attr->__schedparam);
+    if (!result)
+      exit(result.error());
   }
 
   // The mask goes last, so that anything above which needed a signal
   // through still had one.
   if (flags & POSIX_SPAWN_SETSIGMASK) {
-    long result = LIBC_NAMESPACE::syscall_impl<long>(
-        SYS_rt_sigprocmask, SIG_SETMASK, &attr->__sigmask, nullptr,
-        sizeof(sigset_t));
-    if (result < 0)
-      exit(static_cast<int>(-result));
+    ErrorOr<int> result =
+        linux_syscalls::rt_sigprocmask(SIG_SETMASK, &attr->__sigmask, nullptr);
+    if (!result)
+      exit(result.error());
   }
 }
 
@@ -185,14 +199,14 @@ void child_process(const char *__restrict path,
         // handing a descriptor to a child it is about to start says so this
         // way.
         if (dup2_act->fd == dup2_act->newfd) {
-          long flags = LIBC_NAMESPACE::syscall_impl<long>(
-              SYS_fcntl, dup2_act->fd, F_GETFD, 0);
-          if (flags < 0)
-            exit(static_cast<int>(-flags));
-          long set = LIBC_NAMESPACE::syscall_impl<long>(
-              SYS_fcntl, dup2_act->fd, F_SETFD, flags & ~FD_CLOEXEC);
-          if (set < 0)
-            exit(static_cast<int>(-set));
+          ErrorOr<int> flags = linux_syscalls::fcntl(dup2_act->fd, F_GETFD);
+          if (!flags)
+            exit(flags.error());
+          ErrorOr<int> set = linux_syscalls::fcntl(
+              dup2_act->fd, F_SETFD,
+              reinterpret_cast<void *>(*flags & ~FD_CLOEXEC));
+          if (!set)
+            exit(set.error());
           break;
         }
         auto result = linux_syscalls::dup2(dup2_act->fd, dup2_act->newfd);
@@ -202,18 +216,16 @@ void child_process(const char *__restrict path,
       }
       case BaseSpawnFileAction::CHDIR: {
         auto *chdir_act = reinterpret_cast<SpawnFileChdirAction *>(act);
-        long result =
-            LIBC_NAMESPACE::syscall_impl<long>(SYS_chdir, chdir_act->path);
-        if (result < 0)
-          exit(static_cast<int>(-result));
+        ErrorOr<int> result = linux_syscalls::chdir(chdir_act->path);
+        if (!result)
+          exit(result.error());
         break;
       }
       case BaseSpawnFileAction::FCHDIR: {
         auto *fchdir_act = reinterpret_cast<SpawnFileFchdirAction *>(act);
-        long result =
-            LIBC_NAMESPACE::syscall_impl<long>(SYS_fchdir, fchdir_act->fd);
-        if (result < 0)
-          exit(static_cast<int>(-result));
+        ErrorOr<int> result = linux_syscalls::fchdir(fchdir_act->fd);
+        if (!result)
+          exit(result.error());
         break;
       }
       }
@@ -228,9 +240,8 @@ void child_process(const char *__restrict path,
     exit(result ? 0 : result.error());
   }
 
-  long result =
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_execve, path, argv, envp);
-  exit(static_cast<int>(-result));
+  ErrorOr<int> result = linux_syscalls::execve(path, argv, envp);
+  exit(result.error());
 }
 
 } // anonymous namespace
@@ -248,9 +259,9 @@ int spawn(pid_t *__restrict pid, const char *__restrict path,
   // finds out otherwise from its exit status, which is too late to tell a
   // program that is not there from one that ran and failed.
   int notify[2];
-  long piped = LIBC_NAMESPACE::syscall_impl<long>(SYS_pipe2, notify, O_CLOEXEC);
-  if (piped < 0)
-    return static_cast<int>(-piped);
+  ErrorOr<int> piped = linux_syscalls::pipe2(notify, O_CLOEXEC);
+  if (!piped)
+    return piped.error();
 
   pid_t cpid = fork();
   if (cpid == 0) {
@@ -267,13 +278,13 @@ int spawn(pid_t *__restrict pid, const char *__restrict path,
 
   int error = 0;
   for (;;) {
-    long got = LIBC_NAMESPACE::syscall_impl<long>(SYS_read, notify[0], &error,
-                                                  sizeof(error));
-    if (got == -EINTR)
+    ErrorOr<ssize_t> got =
+        linux_syscalls::read(notify[0], &error, sizeof(error));
+    if (!got && got.error() == EINTR)
       continue;
     // Anything other than the whole of an error number means the child said
     // nothing, which is what a child that ran does.
-    if (got != static_cast<long>(sizeof(error)))
+    if (!got || *got != static_cast<ssize_t>(sizeof(error)))
       error = 0;
     break;
   }
@@ -283,9 +294,11 @@ int spawn(pid_t *__restrict pid, const char *__restrict path,
     // The child is already on its way out. It is reaped here so that a
     // failure leaves nothing behind for the caller to wait on.
     int status;
-    while (LIBC_NAMESPACE::syscall_impl<long>(SYS_wait4, cpid, &status, 0,
-                                              nullptr) == -EINTR)
-      ;
+    for (;;) {
+      ErrorOr<pid_t> waited = linux_syscalls::wait4(cpid, &status, 0, nullptr);
+      if (waited || waited.error() != EINTR)
+        break;
+    }
     return error;
   }
 
