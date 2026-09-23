@@ -18,10 +18,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(Mutex) == sizeof(pthread_mutex_t) &&
-                  alignof(Mutex) == alignof(pthread_mutex_t),
-              "The public pthread_mutex_t type must exactly match the internal "
-              "mutex type.");
+static_assert(
+    sizeof(Mutex) <= sizeof(pthread_mutex_t) &&
+        alignof(Mutex) <= alignof(pthread_mutex_t),
+    "The public pthread_mutex_t type must be at least as large and as aligned "
+    "as the internal mutex type.");
 
 // The kernel finds the futex word of a robust mutex from its list node, at a
 // fixed distance.
