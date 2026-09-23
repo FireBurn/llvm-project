@@ -8,10 +8,8 @@
 
 #ifndef LLVM_LIBC_TYPES_PTHREAD_SPINLOCK_T_H
 #define LLVM_LIBC_TYPES_PTHREAD_SPINLOCK_T_H
-#include "pid_t.h"
-typedef struct {
-  unsigned char __lockword;
-  pid_t __owner;
-} pthread_spinlock_t;
+
+// The thread id of the holder, or zero when free. glibc's type is an int.
+typedef int pthread_spinlock_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_SPINLOCK_T_H
