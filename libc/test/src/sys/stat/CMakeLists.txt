@@ -205,6 +205,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  stat_seccomp_test
+  SUITE
+    libc-sys-stat-tests
+  SRCS
+    stat_seccomp_test.cpp
+  DEPENDS
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.struct_stat
+    libc.src.__support.OSUtil.osutil
+    libc.src.stdlib._Exit
+    libc.src.sys.stat.stat
+    libc.src.sys.wait.waitpid
+    libc.src.unistd.fork
+)
+
+add_libc_test(
   lstat_test
   SUITE
     libc-sys-stat-tests

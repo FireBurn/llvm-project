@@ -27,6 +27,20 @@ libc_test(
 )
 
 libc_test(
+    name = "stat_seccomp_test",
+    srcs = ["stat_seccomp_test.cpp"],
+    deps = [
+        "//libc:__support_osutil_syscall",
+        "//libc:_Exit",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:stat",
+        "//libc:types_struct_stat",
+        "//libc:waitpid",
+        "//libc:fork",
+    ],
+)
+
+libc_test(
     name = "stat_test",
     srcs = ["stat_test.cpp"],
     deps = [
