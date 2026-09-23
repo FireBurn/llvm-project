@@ -379,6 +379,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_uio_macros
+  HDR
+    sys-uio-macros.h
+)
+
+add_macro_header(
   sys_personality_macros
   HDR
     sys-personality-macros.h
