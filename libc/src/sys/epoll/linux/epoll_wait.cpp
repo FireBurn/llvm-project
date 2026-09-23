@@ -30,7 +30,7 @@ LLVM_LIBC_FUNCTION(int, epoll_wait,
 #elif defined(SYS_epoll_pwait)
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
       SYS_epoll_pwait, epfd, reinterpret_cast<long>(events), maxevents, timeout,
-      reinterpret_cast<long>(nullptr), NSIG / 8);
+      reinterpret_cast<long>(nullptr), __KERNEL_SIGSET_BYTES);
 #else
 #error "epoll_wait and epoll_pwait are unavailable. Unable to build epoll_wait."
 #endif
