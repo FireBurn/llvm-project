@@ -22,12 +22,19 @@
 #include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 
-// It is safe to include this kernel header as it is designed to be
-// included from user programs without causing any name pollution.
-#include <linux/kdev_t.h>
-
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
+
+// A device number as makedev encodes it, which is also how the kernel
+// reports one to user space. The kernel header's MKDEV is only right for a
+// minor number below 256.
+LIBC_INLINE dev_t encode_dev(uint32_t major, uint32_t minor) {
+  uint64_t ma = major;
+  uint64_t mi = minor;
+  return static_cast<dev_t>(((ma & 0x00000fff) << 8) |
+                            ((ma & 0xfffff000) << 32) | (mi & 0x000000ff) |
+                            ((mi & 0xffffff00) << 12));
+}
 
 /// Populates `statbuf` via a call to the `statx` syscall.
 LIBC_INLINE ErrorOr<void> stat_via_statx(int dirfd, const char *__restrict path,
@@ -39,13 +46,13 @@ LIBC_INLINE ErrorOr<void> stat_via_statx(int dirfd, const char *__restrict path,
   if (!result)
     return Error(result.error());
 
-  statbuf->st_dev = MKDEV(xbuf.stx_dev_major, xbuf.stx_dev_minor);
+  statbuf->st_dev = encode_dev(xbuf.stx_dev_major, xbuf.stx_dev_minor);
   statbuf->st_ino = static_cast<decltype(statbuf->st_ino)>(xbuf.stx_ino);
   statbuf->st_mode = xbuf.stx_mode;
   statbuf->st_nlink = xbuf.stx_nlink;
   statbuf->st_uid = xbuf.stx_uid;
   statbuf->st_gid = xbuf.stx_gid;
-  statbuf->st_rdev = MKDEV(xbuf.stx_rdev_major, xbuf.stx_rdev_minor);
+  statbuf->st_rdev = encode_dev(xbuf.stx_rdev_major, xbuf.stx_rdev_minor);
   statbuf->st_size = xbuf.stx_size;
   statbuf->st_atim.tv_sec = xbuf.stx_atime.tv_sec;
   statbuf->st_atim.tv_nsec = xbuf.stx_atime.tv_nsec;
