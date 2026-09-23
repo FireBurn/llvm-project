@@ -10,9 +10,10 @@
 
 #include "clockid_t.h"
 
+// Packed into the four bytes glibc gives the type.
 typedef struct {
-  clockid_t clock;
-  int pshared;
+  clockid_t clock : 31;
+  unsigned int pshared : 1;
 } pthread_condattr_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_CONDATTR_T_H

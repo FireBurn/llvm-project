@@ -16,6 +16,8 @@ typedef struct {
   void *__qback;
   __futex_word __qmtx;
   char __padding[4];
+  // Unused, and there to give the type glibc's size.
+  char __reserved[24];
 } cnd_t;
 
 #endif // LLVM_LIBC_TYPES_CND_T_H
