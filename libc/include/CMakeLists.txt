@@ -1680,6 +1680,7 @@ add_header_macro(
   sys/uio.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros.sys_uio_macros
     .llvm-libc-types.pid_t
     .llvm-libc-types.off_t
     .llvm-libc-types.ssize_t
