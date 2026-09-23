@@ -25,7 +25,7 @@ namespace LIBC_NAMESPACE_DECL {
 namespace linux_syscalls {
 
 LIBC_INLINE ErrorOr<int> rt_sigpending(sigset_t *set) {
-  return syscall_checked<int>(SYS_rt_sigpending, set, sizeof(sigset_t));
+  return syscall_checked<int>(SYS_rt_sigpending, set, __KERNEL_SIGSET_BYTES);
 }
 
 } // namespace linux_syscalls
