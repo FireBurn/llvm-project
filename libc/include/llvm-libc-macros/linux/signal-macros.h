@@ -57,12 +57,14 @@
 // SIGRTMAX is the largest allowed value for the runtime signal.
 #define SIGRTMAX (NSIG - 1)
 
-// The kernel sigset is stored as an array of long values. Each bit of this
-// array corresponds to a signal, adjusted by 1. That is, bit 0 corresponds
-// to signal number 1, bit 1 corresponds to signal number 2 and so on. The
-// below macro denotes the size of that array (in number of long words and
-// not bytes).
-#define __NSIGSET_WORDS ((NSIG - 1) / (sizeof(unsigned long) * 8))
+// A sigset_t is an array of long values. Each bit of it corresponds to a
+// signal, adjusted by 1. That is, bit 0 corresponds to signal number 1, bit 1
+// to signal number 2 and so on. It holds 1024 bits, as glibc's and musl's do,
+// of which the kernel reads the first NSIG - 1. The first macro is the size
+// of the array in long words, the second what the kernel is told the size of
+// a signal set is, in bytes.
+#define __NSIGSET_WORDS (1024 / (sizeof(unsigned long) * 8))
+#define __KERNEL_SIGSET_BYTES ((NSIG - 1) / 8)
 
 #define SIG_BLOCK 0   // For blocking signals
 #define SIG_UNBLOCK 1 // For unblocking signals
