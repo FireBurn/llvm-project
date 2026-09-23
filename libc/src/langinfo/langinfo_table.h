@@ -32,7 +32,23 @@ LIBC_INLINE constexpr int index_of(nl_item item) {
 }
 
 // The C locale, which POSIX spells out in full.
+// Indexed as glibc numbers the items. The entries before CODESET are ones
+// glibc keeps for itself and has no name for here.
 LIBC_INLINE_VAR constexpr const char *CTYPE_ITEMS[] = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
     "ANSI_X3.4-1968", // CODESET, the name of the character set.
 };
 
@@ -42,19 +58,6 @@ LIBC_INLINE_VAR constexpr const char *NUMERIC_ITEMS[] = {
 };
 
 LIBC_INLINE_VAR constexpr const char *TIME_ITEMS[] = {
-    "%a %b %e %H:%M:%S %Y", // D_T_FMT
-    "%m/%d/%y",             // D_FMT
-    "%H:%M:%S",             // T_FMT
-    "%I:%M:%S %p",          // T_FMT_AMPM
-    "AM",                   // AM_STR
-    "PM",                   // PM_STR
-    "Sunday",               // DAY_1
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
     "Sun", // ABDAY_1
     "Mon",
     "Tue",
@@ -62,18 +65,13 @@ LIBC_INLINE_VAR constexpr const char *TIME_ITEMS[] = {
     "Thu",
     "Fri",
     "Sat",
-    "January", // MON_1
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Sunday", // DAY_1
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
     "Jan", // ABMON_1
     "Feb",
     "Mar",
@@ -86,11 +84,30 @@ LIBC_INLINE_VAR constexpr const char *TIME_ITEMS[] = {
     "Oct",
     "Nov",
     "Dec",
-    "", // ERA, which the C locale does not have.
-    "", // ERA_D_FMT
-    "", // ERA_D_T_FMT
-    "", // ERA_T_FMT
-    "", // ALT_DIGITS
+    "January", // MON_1
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "AM",                   // AM_STR
+    "PM",                   // PM_STR
+    "%a %b %e %H:%M:%S %Y", // D_T_FMT
+    "%m/%d/%y",             // D_FMT
+    "%H:%M:%S",             // T_FMT
+    "%I:%M:%S %p",          // T_FMT_AMPM
+    "",                     // ERA, which the C locale does not have.
+    "",                     // The era year, which has no name of its own.
+    "",                     // ERA_D_FMT
+    "",                     // ALT_DIGITS
+    "",                     // ERA_D_T_FMT
+    "",                     // ERA_T_FMT
 };
 
 LIBC_INLINE_VAR constexpr const char *MONETARY_ITEMS[] = {
