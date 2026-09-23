@@ -8,29 +8,22 @@
 
 #include "src/pthread/pthread_spin_init.h"
 #include "hdr/errno_macros.h"
-#include "src/__support/CPP/new.h"
+#include "hdr/pthread_macros.h"
+#include "src/__support/CPP/atomic.h"
 #include "src/__support/common.h"
-#include "src/__support/threads/spin_lock.h"
-#include <pthread.h> // for PTHREAD_PROCESS_SHARED, PTHREAD_PROCESS_PRIVATE
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(pthread_spinlock_t::__lockword) == sizeof(SpinLock) &&
-                  alignof(decltype(pthread_spinlock_t::__lockword)) ==
-                      alignof(SpinLock),
-              "pthread_spinlock_t::__lockword and SpinLock must be of the same "
-              "size and alignment");
-
+// A spin lock is the thread id of its holder, zero when free, or -1 once
+// destroyed. It never sleeps, so being shared between processes needs
+// nothing more.
 LLVM_LIBC_FUNCTION(int, pthread_spin_init,
-                   (pthread_spinlock_t * lock, [[maybe_unused]] int pshared)) {
+                   (pthread_spinlock_t * lock, int pshared)) {
   if (!lock)
     return EINVAL;
   if (pshared != PTHREAD_PROCESS_SHARED && pshared != PTHREAD_PROCESS_PRIVATE)
     return EINVAL;
-  // The spin lock here is a simple atomic flag, so we don't need to do any
-  // special handling for pshared.
-  ::new (&lock->__lockword) SpinLock();
-  lock->__owner = 0;
+  cpp::AtomicRef<int>(*lock).store(0, cpp::MemoryOrder::RELEASE);
   return 0;
 }
 
