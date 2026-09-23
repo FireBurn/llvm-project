@@ -23,6 +23,10 @@
 #define MNT_EXPIRE 0x4
 #define UMOUNT_NOFOLLOW 0x8
 
+// glibc spells this one as an unsigned value, the kernel as a signed one.
+#undef MS_NOUSER
+#define MS_NOUSER (1U << 31)
+
 // What mount_setattr may change about a mount, which is a separate set from
 // the flags the older mount call takes.
 #define MOUNT_ATTR_RDONLY 0x00000001

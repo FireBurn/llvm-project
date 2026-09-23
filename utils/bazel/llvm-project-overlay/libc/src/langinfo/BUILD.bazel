@@ -15,11 +15,23 @@ package(
 
 licenses(["notice"])
 
+libc_support_library(
+    name = "langinfo_table",
+    hdrs = ["langinfo_table.h"],
+    deps = [
+        "//libc/hdr/types:nl_item",
+        "//libc/hdr:langinfo_macros",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
 libc_function(
     name = "nl_langinfo_l",
     srcs = ["nl_langinfo_l.cpp"],
     hdrs = ["nl_langinfo_l.h"],
     deps = [
+        ":langinfo_table",
         ":langinfo_utils",
         "//libc/hdr/types:locale_t",
         "//libc/hdr/types:nl_item",
