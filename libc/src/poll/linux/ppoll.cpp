@@ -28,13 +28,13 @@ LLVM_LIBC_FUNCTION(int, ppoll,
   // narrower than the one the library hands out.
 #if defined(SYS_ppoll_time64)
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_ppoll_time64, fds, nfds, timeout, sigmask, sizeof(sigset_t));
+      SYS_ppoll_time64, fds, nfds, timeout, sigmask, __KERNEL_SIGSET_BYTES);
 #elif defined(SYS_ppoll)
   static_assert(
       sizeof(timespec::tv_nsec) == sizeof(long),
       "This syscall is only safe where tv_nsec matches the register size.");
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_ppoll, fds, nfds, timeout,
-                                              sigmask, sizeof(sigset_t));
+                                              sigmask, __KERNEL_SIGSET_BYTES);
 #else
 #error "ppoll and ppoll_time64 syscalls not available."
 #endif

@@ -29,7 +29,7 @@ LLVM_LIBC_FUNCTION(int, pselect,
     ts = *timeout;
     tsp = &ts;
   }
-  internal::pselect6_sigset_t pss{sigmask, sizeof(sigset_t)};
+  internal::pselect6_sigset_t pss{sigmask, __KERNEL_SIGSET_BYTES};
   int ret = internal::pselect6(nfds, read_set, write_set, error_set, tsp, &pss);
   if (ret < 0) {
     libc_errno = -ret;
