@@ -14,6 +14,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
 #include "src/__support/threads/CndVar.h"
+#include "src/pthread/pthread_condattr_bits.h"
 
 #include "hdr/errno_macros.h" // EINVAL
 #include "hdr/time_macros.h"  // CLOCK_MONOTONIC, CLOCK_REALTIME
@@ -26,15 +27,14 @@ LLVM_LIBC_FUNCTION(int, pthread_cond_init,
   LIBC_CRASH_ON_NULLPTR(cond);
   // POSIX.1 says that CLOCK_REALTIME shall be used if the clock is not
   // monotonic explicitly.
-  pthread_condattr_t condattr{
-      /*clock=*/CLOCK_REALTIME,
-      /*pshared=*/PTHREAD_PROCESS_PRIVATE,
-  };
+  pthread_condattr_t condattr{};
+  condattr::set_clock(condattr, CLOCK_REALTIME);
+  condattr::set_pshared(condattr, PTHREAD_PROCESS_PRIVATE);
   if (attr)
     condattr = *attr;
 
   bool is_shared;
-  switch (condattr.pshared) {
+  switch (condattr::pshared(condattr)) {
   case PTHREAD_PROCESS_PRIVATE:
     is_shared = false;
     break;
@@ -46,7 +46,7 @@ LLVM_LIBC_FUNCTION(int, pthread_cond_init,
   }
 
   bool is_realtime;
-  switch (condattr.clock) {
+  switch (condattr::clock(condattr)) {
   case CLOCK_MONOTONIC:
     is_realtime = false;
     break;

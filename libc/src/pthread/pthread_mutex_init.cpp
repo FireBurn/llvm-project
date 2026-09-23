@@ -18,10 +18,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(Mutex) == sizeof(pthread_mutex_t) &&
-                  alignof(Mutex) == alignof(pthread_mutex_t),
-              "The public pthread_mutex_t type must exactly match the internal "
-              "mutex type.");
+static_assert(
+    sizeof(Mutex) <= sizeof(pthread_mutex_t) &&
+        alignof(Mutex) <= alignof(pthread_mutex_t),
+    "The public pthread_mutex_t type must be at least as large and as aligned "
+    "as the internal mutex type.");
 
 LLVM_LIBC_FUNCTION(int, pthread_mutex_init,
                    (pthread_mutex_t * m,

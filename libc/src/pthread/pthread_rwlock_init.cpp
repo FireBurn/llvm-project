@@ -19,9 +19,9 @@
 namespace LIBC_NAMESPACE_DECL {
 
 static_assert(
-    sizeof(RwLock) == sizeof(pthread_rwlock_t) &&
-        alignof(RwLock) == alignof(pthread_rwlock_t),
-    "The public pthread_rwlock_t type must be of the same size and alignment "
+    sizeof(RwLock) <= sizeof(pthread_rwlock_t) &&
+        alignof(RwLock) <= alignof(pthread_rwlock_t),
+    "The public pthread_rwlock_t type must be at least as large and as aligned "
     "as the internal rwlock type.");
 
 LLVM_LIBC_FUNCTION(int, pthread_rwlock_init,
