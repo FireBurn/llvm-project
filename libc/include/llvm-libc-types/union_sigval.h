@@ -14,4 +14,6 @@ union sigval {
   void *sival_ptr;
 };
 
+typedef union sigval sigval_t;
+
 #endif // LLVM_LIBC_TYPES_UNION_SIGVAL_H
