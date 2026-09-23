@@ -10,6 +10,7 @@
 
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_condattr_bits.h"
 
 #include "hdr/time_macros.h" // CLOCK_REALTIME
 #include <pthread.h>         // pthread_condattr_t, PTHREAD_PROCESS_PRIVATE
@@ -17,8 +18,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, pthread_condattr_init, (pthread_condattr_t * attr)) {
-  attr->clock = CLOCK_REALTIME;
-  attr->pshared = PTHREAD_PROCESS_PRIVATE;
+  condattr::set_clock(*attr, CLOCK_REALTIME);
+  condattr::set_pshared(*attr, PTHREAD_PROCESS_PRIVATE);
   return 0;
 }
 

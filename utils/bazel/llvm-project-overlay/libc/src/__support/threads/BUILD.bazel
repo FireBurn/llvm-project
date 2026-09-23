@@ -443,3 +443,18 @@ libc_support_library(
         "//libc/src/__support/time:monotonicity",
     ],
 )
+
+libc_support_library(
+    name = "linux_barrier",
+    srcs = ["linux/barrier.cpp"],
+    hdrs = ["linux/barrier.h"],
+    deps = [
+        ":linux_futex_utils",
+        ":raw_mutex",
+        ":sleep",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/include:llvm_libc_types_pthread_barrier_t",
+        "//libc/include:llvm_libc_types_pthread_barrierattr_t",
+    ],
+)
