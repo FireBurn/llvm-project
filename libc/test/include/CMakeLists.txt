@@ -1,6 +1,21 @@
 add_libc_testsuite(libc-include-tests)
 
 add_libc_test(
+  glibc_layouts_test
+  SUITE
+    libc-include-tests
+  SRCS
+    glibc_layouts_test.cpp
+  DEPENDS
+    libc.include.locale
+    libc.include.regex
+    libc.include.spawn
+    libc.include.sys_statvfs
+    libc.include.fenv
+    libc.include.poll
+)
+
+add_libc_test(
   sys_stat_layout_test
   SUITE
     libc-include-tests
