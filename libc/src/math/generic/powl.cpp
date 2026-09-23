@@ -9,6 +9,7 @@
 #include "src/math/powl.h"
 
 #include "hdr/fenv_macros.h"
+#include "src/__support/CPP/bit.h"
 #include "src/__support/FPUtil/FEnvImpl.h"
 #include "src/__support/FPUtil/FPBits.h"
 #include "src/__support/FPUtil/dyadic_float.h"
@@ -17,6 +18,7 @@
 #include "src/__support/macros/optimization.h"
 #include "src/__support/math/log2l_impl.h"
 #include "src/__support/math/powl_impl.h"
+#include "src/__support/uint128.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -52,6 +54,93 @@ LIBC_INLINE Parity parity_of(long double y) {
 
   StorageType unit = StorageType(1) << (MANTISSA_BITS - exponent);
   return (mantissa & unit) != 0 ? Parity::ODD : Parity::EVEN;
+}
+
+
+// An odd number and the power of two it is scaled by.
+struct Dyadic {
+  uint64_t odd;
+  int exponent;
+};
+
+LIBC_INLINE Dyadic dyadic_of(long double v) {
+  FPBits bits(v);
+  uint64_t m = static_cast<uint64_t>(bits.get_explicit_mantissa());
+  int shift = cpp::countr_zero(m);
+  return {m >> shift,
+          bits.get_explicit_exponent() - FPBits::FRACTION_LEN + shift};
+}
+
+// b^n if it is below 2^65, which is as wide as an exact result or a point
+// half way between two long doubles can be.
+LIBC_INLINE bool small_power(uint64_t b, uint64_t n, UInt128 &result) {
+  // b >= 2^(width - 1), so this bounds the power from below. Once it passes,
+  // the power is also known to fit in 128 bits.
+  uint64_t width = static_cast<uint64_t>(cpp::bit_width(b));
+  if (n > 64 || (width - 1) * n > 64)
+    return false;
+  UInt128 p = 1;
+  for (uint64_t i = 0; i < n; ++i)
+    p *= b;
+  if ((p >> 65) != 0)
+    return false;
+  result = p;
+  return true;
+}
+
+LIBC_INLINE bool exact_sqrt(uint64_t v, uint64_t &root) {
+  uint64_t s = static_cast<uint64_t>(__builtin_sqrt(static_cast<double>(v)));
+  for (uint64_t c = (s > 0 ? s - 1 : 0); c <= s + 1; ++c) {
+    if (static_cast<UInt128>(c) * c == v) {
+      root = c;
+      return true;
+    }
+  }
+  return false;
+}
+
+// x^y for a positive x, when it is exact in a hundred and twenty eight bits
+// and not a power of two. These are the results the approximation cannot
+// round: one that is a long double, or half way between two, may come out
+// just either side of where it is. Such results are rational, which needs y
+// to be a whole number, or an odd multiple of 2^-k with x a 2^k-th power.
+// A negative y gives the reciprocal of an odd number, which is not a finite
+// binary fraction.
+LIBC_INLINE bool exact_powl(long double x, long double y,
+                            fputil::DyadicFloat<128> &result) {
+  if (FPBits(y).is_neg())
+    return false;
+  Dyadic dx = dyadic_of(x);
+  Dyadic dy = dyadic_of(y);
+  if (dx.odd == 1)
+    return false;
+
+  uint64_t base = dx.odd;
+  uint64_t n;
+  int exponent;
+  if (dy.exponent >= 0) {
+    if (dy.exponent > 6)
+      return false;
+    n = dy.odd << dy.exponent;
+    exponent = dx.exponent * static_cast<int>(n);
+  } else {
+    int k = -dy.exponent;
+    // 3^32 is already wider than 64 bits.
+    if (k > 5 || (dx.exponent & ((1 << k) - 1)) != 0)
+      return false;
+    for (int i = 0; i < k; ++i)
+      if (!exact_sqrt(base, base))
+        return false;
+    n = dy.odd;
+    exponent = (dx.exponent >> k) * static_cast<int>(n);
+  }
+
+  UInt128 odd;
+  if (!small_power(base, n, odd))
+    return false;
+  result = fputil::DyadicFloat<128>(
+      Sign::POS, exponent, fputil::DyadicFloat<128>::MantissaType(odd));
+  return true;
 }
 
 } // namespace
@@ -120,7 +209,10 @@ LLVM_LIBC_FUNCTION(long double, powl, (long double x, long double y)) {
   // are carried at a hundred and twenty eight bits, which leaves room above
   // the sixty four the result shows: the multiply is where an error would be
   // magnified, since an absolute error there becomes a relative one here.
-  const bool negate_result = x_neg && parity == Parity::ODD;
+  // Given to the result before it is rounded, since in the directed modes
+  // the sign decides which way that goes.
+  const Sign result_sign =
+      (x_neg && parity == Parity::ODD) ? Sign::NEG : Sign::POS;
 
   DFloat128 log2_x = math::log2_dyadic_long(xbits.abs().get_val());
   DFloat128 prod = fputil::quick_mul(DFloat128(y), log2_x);
@@ -130,16 +222,20 @@ LLVM_LIBC_FUNCTION(long double, powl, (long double x, long double y)) {
   if (LIBC_UNLIKELY(prod_d > 16384.0)) {
     fputil::set_errno_if_required(ERANGE);
     fputil::raise_except_if_required(FE_OVERFLOW);
-    return negate_result ? FPBits::inf(Sign::NEG).get_val()
-                         : FPBits::inf().get_val();
+    return static_cast<long double>(DFloat128(
+        result_sign, 2 * FPBits::EXP_BIAS, DFloat128::MantissaType(1)));
   }
   if (LIBC_UNLIKELY(prod_d < -16446.0)) {
     fputil::set_errno_if_required(ERANGE);
     fputil::raise_except_if_required(FE_UNDERFLOW);
-    return negate_result ? -0.0L : 0.0L;
+    return static_cast<long double>(DFloat128(
+        result_sign, -2 * FPBits::EXP_BIAS, DFloat128::MantissaType(1)));
   }
 
-  DFloat128 result = math::exp2_dyadic(prod);
+  DFloat128 result;
+  if (!exact_powl(xbits.abs().get_val(), y, result))
+    result = math::exp2_dyadic(prod);
+  result.sign = result_sign;
   long double r = static_cast<long double>(result);
 
   FPBits rbits(r);
@@ -151,7 +247,7 @@ LLVM_LIBC_FUNCTION(long double, powl, (long double x, long double y)) {
     fputil::raise_except_if_required(FE_UNDERFLOW);
   }
 
-  return negate_result ? -r : r;
+  return r;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
