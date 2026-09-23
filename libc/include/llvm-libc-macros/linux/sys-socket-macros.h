@@ -200,8 +200,8 @@
 #define SO_SNDLOWAT 19
 
 // The "old" options use a 32-bit time_t on 32-bit systems.
-// #define SO_RCVTIMEO_OLD 20
-// #define SO_SNDTIMEO_OLD 21
+#define SO_RCVTIMEO_OLD 20
+#define SO_SNDTIMEO_OLD 21
 
 #define SO_SECURITY_AUTHENTICATION 22
 #define SO_SECURITY_ENCRYPTION_TRANSPORT 23
@@ -211,15 +211,15 @@
 #define SO_DETACH_FILTER 27
 #define SO_GET_FILTER SO_ATTACH_FILTER
 #define SO_PEERNAME 28
-// #define SO_TIMESTAMP_OLD 29
+#define SO_TIMESTAMP_OLD 29
 #define SO_ACCEPTCONN 30
 #define SO_PEERSEC 31
 #define SO_SNDBUFFORCE 32
 #define SO_RCVBUFFORCE 33
 #define SO_PASSSEC 34
-// #define SO_TIMESTAMPNS_OLD 35
+#define SO_TIMESTAMPNS_OLD 35
 #define SO_MARK 36
-// #define SO_TIMESTAMPING_OLD 37
+#define SO_TIMESTAMPING_OLD 37
 #define SO_PROTOCOL 38
 #define SO_DOMAIN 39
 #define SO_RXQ_OVFL 40
@@ -251,17 +251,33 @@
 
 // These are the "new" options, which assume a 64-bit time_t, regardless of the
 // pointer size.
-#define SO_TIMESTAMP 63
-#define SO_TIMESTAMPNS 64
-#define SO_TIMESTAMPING 65
+#define SO_TIMESTAMP_NEW 63
+#define SO_TIMESTAMPNS_NEW 64
+#define SO_TIMESTAMPING_NEW 65
+#define SO_RCVTIMEO_NEW 66
+#define SO_SNDTIMEO_NEW 67
+
+// Where time_t is already 64 bits the old options are the same thing, and
+// they are the ones glibc gives the plain names.
+#if defined(__LP64__)
+#define SO_TIMESTAMP SO_TIMESTAMP_OLD
+#define SO_TIMESTAMPNS SO_TIMESTAMPNS_OLD
+#define SO_TIMESTAMPING SO_TIMESTAMPING_OLD
+#define SO_RCVTIMEO SO_RCVTIMEO_OLD
+#define SO_SNDTIMEO SO_SNDTIMEO_OLD
+#else
+#define SO_TIMESTAMP SO_TIMESTAMP_NEW
+#define SO_TIMESTAMPNS SO_TIMESTAMPNS_NEW
+#define SO_TIMESTAMPING SO_TIMESTAMPING_NEW
+#define SO_RCVTIMEO SO_RCVTIMEO_NEW
+#define SO_SNDTIMEO SO_SNDTIMEO_NEW
+#endif
 
 // The control message a timestamp arrives in is named by the option which
 // asked for it.
 #define SCM_TIMESTAMP SO_TIMESTAMP
 #define SCM_TIMESTAMPNS SO_TIMESTAMPNS
 #define SCM_TIMESTAMPING SO_TIMESTAMPING
-#define SO_RCVTIMEO 66
-#define SO_SNDTIMEO 67
 
 #define SO_DETACH_REUSEPORT_BPF 68
 #define SO_PREFER_BUSY_POLL 69
