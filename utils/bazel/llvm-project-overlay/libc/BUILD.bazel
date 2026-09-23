@@ -21520,7 +21520,6 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_signalfd",
-        ":__support_osutil_syscall",
         ":errno",
         ":sys_signalfd_signalfd",
         ":types_sigset_t",
@@ -29501,6 +29500,33 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_mcontext_t",
+    hdrs = ["include/llvm-libc-types/mcontext_t.h"],
+    textual_hdrs = [
+                        "include/llvm-libc-types/x86_64/mcontext_t.h",
+        "include/llvm-libc-types/x86_64/struct_user_regs_struct.h",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_ucontext_t",
+    hdrs = ["include/llvm-libc-types/ucontext_t.h"],
+    textual_hdrs = [
+                        "include/llvm-libc-types/x86_64/ucontext_t.h",
+    ],
+    deps = [
+        ":llvm_libc_types_mcontext_t",
+        ":llvm_libc_types_sigset_t",
+        ":llvm_libc_types_stack_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_stack_t",
+    hdrs = ["include/llvm-libc-types/stack_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_FTW",
     hdrs = ["include/llvm-libc-types/struct_FTW.h"],
 )
@@ -36067,6 +36093,7 @@ libc_function(
     hdrs = ["src/ucontext/swapcontext.h"],
     full_build_only = True,
     deps = [
+        ":llvm_libc_types_ucontext_t",
         ":__support_common",
         ":__support_libc_errno",
         ":__support_macros_config",
@@ -36087,6 +36114,7 @@ libc_function(
     hdrs = ["src/ucontext/getcontext.h"],
     full_build_only = True,
     deps = [
+        ":llvm_libc_types_ucontext_t",
         ":__support_common",
         ":__support_macros_config",
         ":llvm_libc_macros_signal_macros",
@@ -36105,6 +36133,7 @@ libc_function(
     hdrs = ["src/ucontext/setcontext.h"],
     full_build_only = True,
     deps = [
+        ":llvm_libc_types_ucontext_t",
         ":__support_common",
         ":__support_macros_config",
         ":llvm_libc_macros_signal_macros",
@@ -36123,6 +36152,7 @@ libc_function(
     hdrs = ["src/ucontext/makecontext.h"],
     full_build_only = True,
     deps = [
+        ":llvm_libc_types_ucontext_t",
         ":__support_common",
         ":__support_macros_config",
         ":exit",
