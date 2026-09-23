@@ -8,7 +8,7 @@
 #ifndef LLVM_LIBC_TYPES_PTHREAD_RWLOCKATTR_T_H
 #define LLVM_LIBC_TYPES_PTHREAD_RWLOCKATTR_T_H
 
-typedef struct {
+typedef struct __attribute__((aligned(8))) {
   int pshared;
   int pref;
 } pthread_rwlockattr_t;

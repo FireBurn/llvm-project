@@ -10,6 +10,7 @@
 
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_condattr_bits.h"
 
 #include <pthread.h>
 
@@ -18,7 +19,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, pthread_condattr_getpshared,
                    (const pthread_condattr_t *__restrict attr,
                     int *__restrict pshared)) {
-  *pshared = attr->pshared;
+  *pshared = condattr::pshared(*attr);
   return 0;
 }
 
