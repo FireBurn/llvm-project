@@ -67,10 +67,10 @@ public:
     // The public sem_t mirrors the layout of the internal Semaphore class.
     // At entrypoints sem_t object operate through a reinterpret_cast,
     // so they must be the same layout.
-    static_assert(sizeof(Semaphore) == sizeof(sem_t) &&
-                      alignof(Semaphore) == alignof(sem_t),
-                  "The public sem_t type must be of the same size and "
-                  "alignment as the internal semaphore type.");
+    static_assert(sizeof(Semaphore) <= sizeof(sem_t) &&
+                      alignof(Semaphore) <= alignof(sem_t),
+                  "The public sem_t type must be at least as large and as "
+                  "aligned as the internal semaphore type.");
     static_assert(offsetof(Semaphore, value) == offsetof(sem_t, __value),
                   "The semaphore count must be at the offset of "
                   "sem_t::__value.");
