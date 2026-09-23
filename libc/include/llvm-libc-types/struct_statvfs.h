@@ -24,6 +24,7 @@ struct statvfs {
   unsigned long f_fsid;    /* Filesystem ID */
   unsigned long f_flag;    /* Mount flags */
   unsigned long f_namemax; /* Maximum filename length */
+  int __f_spare[6];
 };
 
 #endif // LLVM_LIBC_TYPES_STRUCT_STATVFS_H

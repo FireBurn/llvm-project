@@ -25,8 +25,9 @@ typedef struct {
   pid_t __pgroup;                  // POSIX_SPAWN_SETPGROUP
   sigset_t __sigdefault;           // POSIX_SPAWN_SETSIGDEF
   sigset_t __sigmask;              // POSIX_SPAWN_SETSIGMASK
-  int __policy;                    // POSIX_SPAWN_SETSCHEDULER
   struct sched_param __schedparam; // POSIX_SPAWN_SETSCHEDPARAM
+  int __policy;                    // POSIX_SPAWN_SETSCHEDULER
+  int __pad[16];                   // Unused, for glibc's size.
 } posix_spawnattr_t;
 
 #endif // LLVM_LIBC_TYPES_POSIX_SPAWNATTR_T_H
