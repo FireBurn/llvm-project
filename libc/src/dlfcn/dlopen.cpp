@@ -92,6 +92,7 @@ bool make_room(elf::ModuleSet &set) {
 }
 
 void run_init_array(const elf::Module &module) {
+  elf::run_init_function(module);
   auto array = module.dynamic().address(DT_INIT_ARRAY);
   auto size = module.dynamic().value(DT_INIT_ARRAYSZ);
   if (!array || !size)
