@@ -701,6 +701,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  signal_handler_values_test
+  SUITE
+    libc-include-tests
+  SRCS
+    signal_handler_values_test.cpp
+  DEPENDS
+    libc.include.signal
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
