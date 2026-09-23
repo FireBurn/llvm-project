@@ -5426,3 +5426,25 @@ add_entrypoint_object(
     libc.src.__support.math.powl_impl
     libc.src.__support.uint128
 )
+
+add_entrypoint_object(
+  lgamma
+  SRCS
+    lgamma.cpp
+  HDRS
+    ../lgamma.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.lgamma
+)
+
+add_entrypoint_object(
+  lgamma_r
+  SRCS
+    lgamma_r.cpp
+  HDRS
+    ../lgamma_r.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.lgamma
+)

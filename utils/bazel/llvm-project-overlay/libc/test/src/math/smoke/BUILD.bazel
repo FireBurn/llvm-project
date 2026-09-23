@@ -2801,3 +2801,10 @@ math_test(name = "erfc")
 math_test(name = "log2l")
 
 math_test(name = "powl")
+
+math_test(
+    name = "lgamma",
+    deps = [
+        "//libc:lgamma_r",
+    ],
+)
