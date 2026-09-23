@@ -36,7 +36,7 @@ TEST(LlvmLibcLimitsMacrosTest, FillInThePosixLimitsHValues) {
   EXPECT_EQ(static_cast<long long>(XATTR_SIZE_MAX), 0x10000LL);
   EXPECT_EQ(static_cast<long long>(XATTR_LIST_MAX), 0x10000LL);
   EXPECT_EQ(static_cast<long long>(CHARCLASS_NAME_MAX), 2048LL);
-  EXPECT_EQ(static_cast<long long>(RE_DUP_MAX), 255LL);
+  EXPECT_EQ(static_cast<long long>(RE_DUP_MAX), 0x7fffLL);
   EXPECT_EQ(static_cast<long long>(_POSIX_AIO_LISTIO_MAX), 2LL);
   EXPECT_EQ(static_cast<long long>(_POSIX_AIO_MAX), 1LL);
   EXPECT_EQ(static_cast<long long>(_POSIX_CHILD_MAX), 25LL);

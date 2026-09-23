@@ -278,6 +278,7 @@ libc_support_library(
         ":fp_bits",
         ":nearest_integer_operations",
         ":normal_float",
+        "//libc/hdr/types:size_t",
         "//libc/hdr:errno_macros",
         "//libc/hdr:fenv_macros",
         "//libc/hdr:math_macros",
