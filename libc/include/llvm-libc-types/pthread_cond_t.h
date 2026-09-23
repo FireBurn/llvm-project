@@ -19,8 +19,12 @@ typedef struct {
   };
   __futex_word __futex;
   char __is_shared;
-  char __is_realtime;
+  // Zero for CLOCK_REALTIME, so that a condition variable that is all zeros
+  // is a valid one, as it is with glibc.
+  char __is_monotonic;
   char __padding[2];
+  // Unused, and there to give the type glibc's size.
+  char __reserved[24];
 } pthread_cond_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_COND_T_H
