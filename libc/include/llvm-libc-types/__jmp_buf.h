@@ -64,12 +64,28 @@ typedef struct {
 #error "__jmp_buf not available for your target architecture."
 #endif
 #if defined(__LIBC_HAS_SIGJMP_BUF)
+#ifdef __x86_64__
+  // glibc's layout and size. The kernel reads and writes only the first word
+  // of the signal mask, so what sigsetjmp keeps goes in the rest of it.
+  int __mask_was_saved;
+  union {
+    sigset_t sigmask;
+    struct {
+      unsigned long __kernel_sigmask;
+      // return address
+      void *sig_retaddr;
+      // extra register buffer to avoid indefinite stack growth in sigsetjmp
+      void *sig_extra;
+    };
+  };
+#else
   // return address
   void *sig_retaddr;
   // extra register buffer to avoid indefinite stack growth in sigsetjmp
   void *sig_extra;
   // signal masks
   sigset_t sigmask;
+#endif
 #endif
 } __jmp_buf;
 
