@@ -249,6 +249,7 @@ add_entrypoint_object(
   HDRS
     pthread_condattr_getclock.h
   DEPENDS
+    .pthread_condattr_bits
     libc.include.pthread
     libc.hdr.types.clockid_t
 )
@@ -260,7 +261,19 @@ add_entrypoint_object(
   HDRS
     pthread_condattr_getpshared.h
   DEPENDS
+    .pthread_condattr_bits
     libc.include.pthread
+)
+
+add_header_library(
+  pthread_condattr_bits
+  HDRS
+    pthread_condattr_bits.h
+  DEPENDS
+    libc.hdr.types.clockid_t
+    libc.include.pthread
+    libc.src.__support.common
+    libc.src.__support.macros.config
 )
 
 add_entrypoint_object(
@@ -270,6 +283,7 @@ add_entrypoint_object(
   HDRS
     pthread_condattr_init.h
   DEPENDS
+    .pthread_condattr_bits
     libc.include.pthread
     libc.include.time
 )
@@ -282,6 +296,7 @@ add_entrypoint_object(
     pthread_condattr_setclock.h
   DEPENDS
     libc.hdr.errno_macros
+    .pthread_condattr_bits
     libc.hdr.time_macros
     libc.hdr.types.clockid_t
     libc.include.pthread
@@ -296,6 +311,7 @@ add_entrypoint_object(
     pthread_condattr_setpshared.h
   DEPENDS
     libc.hdr.errno_macros
+    .pthread_condattr_bits
     libc.include.pthread
 )
 
@@ -360,6 +376,7 @@ add_entrypoint_object(
   HDRS
     pthread_cond_init.h
   DEPENDS
+    .pthread_condattr_bits
     libc.hdr.errno_macros
     libc.hdr.time_macros
     libc.include.llvm-libc-macros.pthread_macros
@@ -1141,9 +1158,9 @@ add_entrypoint_object(
     pthread_spin_init.h
   DEPENDS
     libc.include.pthread
-    libc.src.__support.threads.spin_lock
-    libc.src.__support.threads.identifier
     libc.hdr.errno_macros
+    libc.src.__support.CPP.atomic
+    libc.hdr.pthread_macros
 )
 
 add_entrypoint_object(
@@ -1154,9 +1171,8 @@ add_entrypoint_object(
     pthread_spin_destroy.h
   DEPENDS
     libc.include.pthread
-    libc.src.__support.threads.spin_lock
-    libc.src.__support.threads.identifier
     libc.hdr.errno_macros
+    libc.src.__support.CPP.atomic
 )
 
 add_entrypoint_object(
@@ -1167,9 +1183,10 @@ add_entrypoint_object(
     pthread_spin_lock.h
   DEPENDS
     libc.include.pthread
-    libc.src.__support.threads.spin_lock
-    libc.src.__support.threads.identifier
     libc.hdr.errno_macros
+    libc.src.__support.CPP.atomic
+    libc.src.__support.threads.identifier
+    libc.src.__support.threads.sleep
 )
 
 add_entrypoint_object(
@@ -1180,9 +1197,9 @@ add_entrypoint_object(
     pthread_spin_trylock.h
   DEPENDS
     libc.include.pthread
-    libc.src.__support.threads.spin_lock
-    libc.src.__support.threads.identifier
     libc.hdr.errno_macros
+    libc.src.__support.CPP.atomic
+    libc.src.__support.threads.identifier
 )
 
 add_entrypoint_object(
@@ -1193,9 +1210,9 @@ add_entrypoint_object(
     pthread_spin_unlock.h
   DEPENDS
     libc.include.pthread
-    libc.src.__support.threads.spin_lock
-    libc.src.__support.threads.identifier
     libc.hdr.errno_macros
+    libc.src.__support.CPP.atomic
+    libc.src.__support.threads.identifier
 )
 
 add_entrypoint_object(
