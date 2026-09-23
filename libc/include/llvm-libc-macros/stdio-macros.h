@@ -37,7 +37,7 @@ extern FILE *stderr;
 #define EOF (-1)
 #endif
 
-#define BUFSIZ 1024
+#define BUFSIZ 8192
 
 // The C standard requires these but LLVM-libc did not define them, which
 // meant a translation unit could compile against stdio.h and still fail on

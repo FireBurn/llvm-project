@@ -21,8 +21,8 @@
 // regcomp cflags
 #define REG_EXTENDED 1
 #define REG_ICASE 2
-#define REG_NOSUB 4
-#define REG_NEWLINE 8
+#define REG_NEWLINE 4
+#define REG_NOSUB 8
 
 // regexec eflags
 #define REG_NOTBOL 1

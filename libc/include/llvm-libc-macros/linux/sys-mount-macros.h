@@ -48,6 +48,9 @@
 #define MS_RELATIME (1 << 21)
 #define MS_STRICTATIME (1 << 24)
 #define MS_LAZYTIME (1 << 25)
+// The kernel's spelling overflows an int. glibc's is unsigned.
+#undef MS_NOUSER
+#define MS_NOUSER (1U << 31)
 
 // The flags umount2 takes: whether to give up on a filesystem still in use,
 // to detach it and clean up later, or to refuse to follow a symbolic link.
