@@ -12,6 +12,8 @@
 typedef struct {
   void *__front;
   void *__back;
+  // Unused, and there to give the type glibc's size.
+  int __pad[16];
 } posix_spawn_file_actions_t;
 
 #endif // LLVM_LIBC_TYPES_POSIX_SPAWN_FILE_ACTIONS_T_H
