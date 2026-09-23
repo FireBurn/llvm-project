@@ -29,7 +29,7 @@ namespace linux_syscalls {
 LIBC_INLINE ErrorOr<int> rt_sigtimedwait(const sigset_t *set, siginfo_t *info,
                                          const struct timespec *timeout) {
   return syscall_checked<int>(SYS_rt_sigtimedwait, set, info, timeout,
-                              sizeof(sigset_t));
+                              __KERNEL_SIGSET_BYTES);
 }
 
 } // namespace linux_syscalls
