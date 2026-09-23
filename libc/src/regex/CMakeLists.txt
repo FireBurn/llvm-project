@@ -27,6 +27,7 @@ add_entrypoint_object(
     regex_engine.h
     regex_matcher.h
   DEPENDS
+    libc.hdr.limits_macros
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
     libc.src.__support.ctype_utils
