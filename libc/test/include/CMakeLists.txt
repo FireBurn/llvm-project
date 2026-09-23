@@ -1,6 +1,16 @@
 add_libc_testsuite(libc-include-tests)
 
 add_libc_test(
+  sys_stat_layout_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_stat_layout_test.cpp
+  DEPENDS
+    libc.include.sys_stat
+)
+
+add_libc_test(
   pwd_size_t_test
   SUITE
     libc-include-tests
