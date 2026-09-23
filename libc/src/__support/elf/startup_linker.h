@@ -259,13 +259,16 @@ private:
     return true;
   }
 
-  // Dependencies are initialised before the objects that need them, so the
-  // list is walked backwards. The executable is index zero and is skipped:
-  // its own startup code runs its initialisers, and running them here as well
-  // would run them twice.
+  // Dependencies are initialised before the objects that need them. The
+  // executable is index zero and is skipped: its own startup code runs its
+  // initialisers, and running them here as well would run them twice.
   LIBC_INLINE void run_initialisers() {
-    for (size_t i = count_; i > 1; --i)
-      run_init_array(modules_[i - 1]);
+    size_t order[MAX_STARTUP_MODULES];
+    bool visited[MAX_STARTUP_MODULES];
+    init_order(modules_, 0, count_, order, visited);
+    for (size_t i = 0; i < count_; ++i)
+      if (order[i] != 0)
+        run_init_array(modules_[order[i]]);
   }
 
   LIBC_INLINE static void run_init_array(const Module &module) {
