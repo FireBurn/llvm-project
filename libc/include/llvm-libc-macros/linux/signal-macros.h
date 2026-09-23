@@ -92,10 +92,14 @@
 #error "Signal stack sizes not defined for your platform."
 #endif
 
-#define SIG_ERR __LLVM_LIBC_CAST(reinterpret_cast, void (*)(int), -1)
-#define SIG_DFL __LLVM_LIBC_CAST(reinterpret_cast, void (*)(int), 0)
-#define SIG_IGN __LLVM_LIBC_CAST(reinterpret_cast, void (*)(int), 1)
-#define SIG_HOLD __LLVM_LIBC_CAST(reinterpret_cast, void (*)(int), 2)
+// Plain casts, as glibc spells these, rather than reinterpret_cast in C++:
+// the compiler folds a plain cast of zero into a constant, so SIG_DFL can
+// appear in a static_assert, which programs that check it against the
+// kernel's value rely on.
+#define SIG_ERR ((void (*)(int))-1)
+#define SIG_DFL ((void (*)(int))0)
+#define SIG_IGN ((void (*)(int))1)
+#define SIG_HOLD ((void (*)(int))2)
 
 // SIGILL si_codes
 #define ILL_ILLOPC 1 // Illegal opcode
