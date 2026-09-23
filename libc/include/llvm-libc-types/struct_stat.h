@@ -21,6 +21,26 @@
 #include "uid_t.h"
 
 struct stat {
+#ifdef __x86_64__
+  // The kernel's layout on x86_64, which glibc and musl use too.
+  dev_t st_dev;
+  ino_t st_ino;
+  nlink_t st_nlink;
+  mode_t st_mode;
+  uid_t st_uid;
+  gid_t st_gid;
+  int __pad0;
+  dev_t st_rdev;
+  off_t st_size;
+  blksize_t st_blksize;
+  blkcnt_t st_blocks;
+  struct timespec st_atim;
+  struct timespec st_mtim;
+  struct timespec st_ctim;
+  long __reserved_pad[3];
+#else
+  // The kernel's generic layout, which aarch64 and riscv64 use. It is 128
+  // bytes: statx-less system calls write all of it.
   dev_t st_dev;
   ino_t st_ino;
   mode_t st_mode;
@@ -28,12 +48,16 @@ struct stat {
   uid_t st_uid;
   gid_t st_gid;
   dev_t st_rdev;
+  unsigned long __pad1;
   off_t st_size;
+  blksize_t st_blksize;
+  int __pad2;
+  blkcnt_t st_blocks;
   struct timespec st_atim;
   struct timespec st_mtim;
   struct timespec st_ctim;
-  blksize_t st_blksize;
-  blkcnt_t st_blocks;
+  unsigned int __reserved_pad[2];
+#endif
 // Backwards compatibility macros for older kernel/standards
 // that recorded timestamps in stat with one-second precision.
 #define st_atime st_atim.tv_sec
