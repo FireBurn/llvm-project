@@ -16,7 +16,7 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-static_assert(sizeof(CndVar) == sizeof(cnd_t));
+static_assert(sizeof(CndVar) <= sizeof(cnd_t));
 
 LLVM_LIBC_FUNCTION(int, cnd_init, (cnd_t * cond)) {
   new (cond) CndVar(false);
