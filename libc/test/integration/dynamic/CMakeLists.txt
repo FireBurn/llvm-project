@@ -37,6 +37,29 @@ target_compile_options(libc-test-dl-exit-object PRIVATE
 target_link_options(libc-test-dl-exit-object PRIVATE -nostdlib
   -Wl,--unresolved-symbols=ignore-all)
 
+# B needs A. The programs below load A before B, which a walk of the load
+# order backwards would initialise the wrong way round.
+add_library(libc-test-dl-order-a SHARED dl_order_a.cpp)
+target_compile_options(libc-test-dl-order-a PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-order-a PRIVATE -nostdlib)
+add_library(libc-test-dl-order-b SHARED dl_order_b.cpp)
+target_compile_options(libc-test-dl-order-b PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-order-b PRIVATE -nostdlib
+  -Wl,--unresolved-symbols=ignore-all)
+target_link_libraries(libc-test-dl-order-b PRIVATE libc-test-dl-order-a)
+add_library(libc-test-dl-order-x SHARED dl_order_x.cpp)
+target_compile_options(libc-test-dl-order-x PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-order-x PRIVATE -nostdlib)
+# Given by file, as for the program below, so that A comes first.
+target_link_options(libc-test-dl-order-x PRIVATE
+  $<TARGET_FILE:libc-test-dl-order-a> $<TARGET_FILE:libc-test-dl-order-b>
+  -Wl,-rpath,$<TARGET_FILE_DIR:libc-test-dl-order-a>)
+add_dependencies(libc-test-dl-order-x
+  libc-test-dl-order-a libc-test-dl-order-b)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -169,6 +192,35 @@ add_libc_dynamic_test(
     libc-test-dl-exit-linked
   DEPENDS
     libc-test-dl-exit-linked
+)
+
+add_libc_dynamic_test(
+  init_order_test
+  SRCS
+    init_order_test.cpp
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+    # Given by file, since CMake puts a library after the ones that need it
+    # when they are named as libraries, and this wants A first.
+    $<TARGET_FILE:libc-test-dl-order-a>
+    $<TARGET_FILE:libc-test-dl-order-b>
+    -Wl,-rpath,$<TARGET_FILE_DIR:libc-test-dl-order-a>
+  DEPENDS
+    libc-test-dl-order-a
+    libc-test-dl-order-b
+)
+
+add_libc_dynamic_test(
+  init_order_dlopen_test
+  SRCS
+    init_order_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DLOPEN
+    -DLIBC_TEST_DL_ORDER_OBJECT="$<TARGET_FILE:libc-test-dl-order-x>"
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+  DEPENDS
+    libc-test-dl-order-x
 )
 
 add_libc_dynamic_test(
