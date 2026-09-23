@@ -10,11 +10,20 @@ target_compile_options(libc-test-dl-object PRIVATE
   -fPIC -fno-exceptions -fno-rtti)
 target_link_options(libc-test-dl-object PRIVATE -nostdlib)
 
+# DT_INIT and DT_FINI come from -init and -fini; nothing else asks for them.
+add_library(libc-test-dl-init-object SHARED dl_init_object.cpp)
+target_compile_options(libc-test-dl-init-object PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+# The program defines the symbols this records into.
+target_link_options(libc-test-dl-init-object PRIVATE -nostdlib
+  -Wl,-init=llvm_libc_dl_init -Wl,-fini=llvm_libc_dl_fini
+  -Wl,--unresolved-symbols=ignore-all)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
   cmake_parse_arguments(ARG "NO_PIE" ""
-    "SRCS;COMPILE_OPTIONS;DEPENDS;LINK_LIBRARIES" ${ARGN})
+    "SRCS;COMPILE_OPTIONS;LINK_OPTIONS;DEPENDS;LINK_LIBRARIES" ${ARGN})
   add_executable(${name} ${ARG_SRCS})
   target_include_directories(${name} SYSTEM PRIVATE ${LIBC_INCLUDE_DIR})
   # A program that is not position independent refers to data in a shared
@@ -30,7 +39,7 @@ function(add_libc_dynamic_test name)
     ${pie_compile} -ffreestanding -fno-exceptions -fno-rtti
     ${ARG_COMPILE_OPTIONS})
   target_link_options(${name} PRIVATE
-    -nostdlib ${pie_link}
+    -nostdlib ${pie_link} ${ARG_LINK_OPTIONS}
     -Wl,--dynamic-linker=$<TARGET_FILE:libc-loader>
     -Wl,-rpath,$<TARGET_FILE_DIR:libc-shared>)
   target_link_libraries(${name} PRIVATE
@@ -98,4 +107,16 @@ add_libc_dynamic_test(
     libc-test-dl-object
   DEPENDS
     libc-test-dl-object
+)
+
+add_libc_dynamic_test(
+  init_fini_test
+  SRCS
+    init_fini_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_INIT_OBJECT="$<TARGET_FILE:libc-test-dl-init-object>"
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+  DEPENDS
+    libc-test-dl-init-object
 )
