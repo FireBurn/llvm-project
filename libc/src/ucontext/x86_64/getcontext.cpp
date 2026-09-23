@@ -51,14 +51,17 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, getcontext,
       lea %c[ret_size](%%rsp), %%rax
       mov %%rax, %c[rsp](%%rdi)
 
-      # Save floating point state
-      fxsaveq %c[fpregs_mem](%%rdi)
-      # Point mcontext.fpregs to our internal FP storage
+      # Save the floating point environment, the control state the ABI has
+      # a function preserve, the way glibc does. fnstenv masks exceptions,
+      # so the environment is loaded again straight after.
       lea %c[fpregs_mem](%%rdi), %%rax
       mov %%rax, %c[fpregs_ptr](%%rdi)
+      fnstenv (%%rax)
+      fldenv (%%rax)
+      stmxcsr %c[mxcsr](%%rdi)
 
       # Capture the signal mask using rt_sigprocmask syscall.
-      # rt_sigprocmask(SIG_BLOCK, NULL, &ucp->uc_sigmask, sizeof(sigset_t))
+      # rt_sigprocmask(SIG_BLOCK, NULL, &ucp->uc_sigmask, __KERNEL_SIGSET_BYTES)
       leaq %c[sigmask](%%rdi), %%rdx # oldset = &ucp->uc_sigmask
       xorq %%rsi, %%rsi # set = NULL
       movq $%c[sig_block], %%rdi # SIG_BLOCK (captured mask in oldset)
@@ -71,7 +74,7 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, getcontext,
 
       retq
       )" ::[ret_size] "i"(sizeof(void *)),
-      [sigset_size] "i"(sizeof(sigset_t)),
+      [sigset_size] "i"(__KERNEL_SIGSET_BYTES),
       [syscall_num] "i"(SYS_rt_sigprocmask), [sig_block] "i"(SIG_BLOCK),
       [r8] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_R8])),
       [r9] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_R9])),
@@ -92,6 +95,7 @@ __attribute__((naked)) LLVM_LIBC_FUNCTION(int, getcontext,
       [rip] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.gregs[REG_RIP])),
       [fpregs_mem] "i"(__builtin_offsetof(ucontext_t, __fpregs_mem)),
       [fpregs_ptr] "i"(__builtin_offsetof(ucontext_t, uc_mcontext.fpregs)),
+      [mxcsr] "i"(__builtin_offsetof(ucontext_t, __fpregs_mem.mxcsr)),
       [sigmask] "i"(__builtin_offsetof(ucontext_t, uc_sigmask))
       : "memory", "rcx", "r11", "rdi", "rsi", "rax", "r10");
 }
