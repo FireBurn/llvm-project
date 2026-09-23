@@ -40,7 +40,8 @@ struct KernelSigaction {
   LIBC_INLINE KernelSigaction &operator=(const struct sigaction &sa) {
     sa_flags = sa.sa_flags;
     sa_restorer = sa.sa_restorer;
-    sa_mask = sa.sa_mask;
+    for (size_t i = 0; i < KERNEL_SIGSET_WORDS; ++i)
+      sa_mask[i] = sa.sa_mask.__signals[i];
     if (sa_flags & SA_SIGINFO) {
       sa_sigaction = sa.sa_sigaction;
     } else {
@@ -52,7 +53,9 @@ struct KernelSigaction {
   LIBC_INLINE operator struct sigaction() const {
     struct sigaction sa;
     sa.sa_flags = static_cast<int>(sa_flags);
-    sa.sa_mask = sa_mask;
+    sa.sa_mask = sigset_t{};
+    for (size_t i = 0; i < KERNEL_SIGSET_WORDS; ++i)
+      sa.sa_mask.__signals[i] = sa_mask[i];
     sa.sa_restorer = sa_restorer;
     if (sa_flags & SA_SIGINFO)
       sa.sa_sigaction = sa_sigaction;
@@ -67,9 +70,10 @@ struct KernelSigaction {
   };
   unsigned long sa_flags;
   void (*sa_restorer)(void);
-  // Our public definition of sigset_t matches that of the kernel's definition.
-  // So, we can use the public sigset_t type here.
-  sigset_t sa_mask;
+  // The kernel's signal set, which is the start of the public one.
+  static constexpr size_t KERNEL_SIGSET_WORDS =
+      __KERNEL_SIGSET_BYTES / sizeof(unsigned long);
+  unsigned long sa_mask[KERNEL_SIGSET_WORDS];
 };
 
 static constexpr size_t BITS_PER_SIGWORD = sizeof(unsigned long) * 8;
@@ -179,7 +183,7 @@ unchecked_sigaction(int signal, const struct sigaction *__restrict libc_new,
   KernelSigaction kernel_old;
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
       SYS_rt_sigaction, signal, libc_new ? &kernel_new : nullptr,
-      libc_old ? &kernel_old : nullptr, sizeof(sigset_t));
+      libc_old ? &kernel_old : nullptr, __KERNEL_SIGSET_BYTES);
   if (ret)
     return Error(-ret);
 
