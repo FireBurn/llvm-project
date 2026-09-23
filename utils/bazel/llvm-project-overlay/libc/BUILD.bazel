@@ -29200,6 +29200,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_regoff_t",
+    hdrs = ["include/llvm-libc-types/regoff_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_res_state",
     hdrs = ["include/llvm-libc-types/res_state.h"],
 )
