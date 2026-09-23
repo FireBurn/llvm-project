@@ -34,7 +34,7 @@ char *lookup(nl_item item) {
     // The name of the character set follows from the locale in force rather
     // than being fixed, and callers read it to decide whether to write
     // characters that take more than one byte.
-    if (index == 0)
+    if (index == langinfo::index_of(CODESET))
       return const_cast<char *>(internal::current_codeset());
     table = langinfo::CTYPE_ITEMS;
     count = sizeof(langinfo::CTYPE_ITEMS) / sizeof(*langinfo::CTYPE_ITEMS);

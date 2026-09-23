@@ -27,6 +27,7 @@
 #define LC_COLLATE_MASK (1 << LC_COLLATE)
 #define LC_MONETARY_MASK (1 << LC_MONETARY)
 #define LC_MESSAGES_MASK (1 << LC_MESSAGES)
-#define LC_ALL_MASK 0x7fffffff
+// glibc's value, which has the bits of its six other categories too.
+#define LC_ALL_MASK 8127
 
 #endif // LLVM_LIBC_MACROS_LOCALE_MACROS_H

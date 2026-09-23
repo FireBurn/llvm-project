@@ -35,7 +35,9 @@
 #define FP_ILOGB0 (-INT_MAX - 1)
 #define FP_LLOGB0 (-LONG_MAX - 1)
 
-#ifdef __FP_LOGBNAN_MIN
+// x86 gives the same value for NaN as for zero, which is what its FXTRACT
+// instruction produces and what glibc has there.
+#if defined(__FP_LOGBNAN_MIN) || defined(__x86_64__) || defined(__i386__)
 #define FP_ILOGBNAN (-INT_MAX - 1)
 #define FP_LLOGBNAN (-LONG_MAX - 1)
 #else

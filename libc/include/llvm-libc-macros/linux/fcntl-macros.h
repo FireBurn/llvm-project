@@ -38,7 +38,12 @@
 #define O_DIRECT 000040000
 #define O_DIRECTORY 000200000
 #define O_NOFOLLOW 000400000
+#if defined(__x86_64__)
+// Every open is a large file open here, and glibc makes the flag zero.
+#define O_LARGEFILE 0
+#else
 #define O_LARGEFILE 000100000
+#endif
 #define O_TMPFILE 020200000
 #endif
 

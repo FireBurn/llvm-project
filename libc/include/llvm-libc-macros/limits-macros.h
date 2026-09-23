@@ -25,8 +25,8 @@
 #endif // CHAR_BIT
 
 #ifndef MB_LEN_MAX
-// Represents a single UTF-32 wide character in the default locale.
-#define MB_LEN_MAX 4
+// glibc's value, which leaves room for any multibyte encoding.
+#define MB_LEN_MAX 16
 #endif // MB_LEN_MAX
 
 // *_WIDTH macros
@@ -352,7 +352,7 @@
 /// is what the regex implementation here accepts, which is the minimum POSIX
 /// requires rather than the larger value some other implementations offer.
 #ifndef RE_DUP_MAX
-#define RE_DUP_MAX 255
+#define RE_DUP_MAX 0x7fff
 #endif // RE_DUP_MAX
 
 #endif // __linux__
