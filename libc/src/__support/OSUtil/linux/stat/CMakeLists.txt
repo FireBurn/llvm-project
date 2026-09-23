@@ -13,7 +13,10 @@ add_header_library(
     stat_via_statx.h
   DEPENDS
     .kernel_statx_types
+    libc.hdr.errno_macros
     libc.hdr.stdint_proxy
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
     libc.hdr.types.struct_stat
     libc.src.__support.common
     libc.src.__support.error_or
