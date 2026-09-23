@@ -30,6 +30,20 @@ libc_test(
 )
 
 libc_test(
+    name = "stat_seccomp_test",
+    srcs = ["stat_seccomp_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/stdlib:_Exit",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/wait:waitpid",
+        "//libc/src/unistd:fork",
+    ],
+)
+
+libc_test(
     name = "stat_test",
     srcs = ["stat_test.cpp"],
     deps = [
