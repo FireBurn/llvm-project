@@ -11,7 +11,7 @@
 
 #include "__futex_word.h"
 #include "pid_t.h"
-typedef struct {
+typedef struct __attribute__((aligned(8))) {
   struct {
     unsigned __is_pshared : 1;
     unsigned __preference : 1;
@@ -23,6 +23,8 @@ typedef struct {
     __futex_word __writer_serialization;
   } __raw;
   pid_t __writer_tid;
+  // Unused, and there to give the type glibc's size and alignment.
+  char __reserved[24];
 } pthread_rwlock_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_RWLOCK_T_H
