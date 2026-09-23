@@ -11,6 +11,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_condattr_bits.h"
 
 #include <pthread.h> // pthread_condattr_t, PTHREAD_PROCESS_SHARED, PTHREAD_PROCESS_PRIVATE
 
@@ -22,7 +23,7 @@ LLVM_LIBC_FUNCTION(int, pthread_condattr_setpshared,
   if (pshared != PTHREAD_PROCESS_SHARED && pshared != PTHREAD_PROCESS_PRIVATE)
     return EINVAL;
 
-  attr->pshared = pshared;
+  condattr::set_pshared(*attr, pshared);
   return 0;
 }
 
