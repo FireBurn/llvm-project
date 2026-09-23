@@ -23,6 +23,7 @@ libc_function(
     deps = [
         ":getcontext",
         ":setcontext",
+        "//libc/include:llvm_libc_types_ucontext_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
@@ -43,6 +44,7 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/include:llvm_libc_macros_signal_macros",
+        "//libc/include:llvm_libc_types_ucontext_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -61,6 +63,7 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/include:llvm_libc_macros_signal_macros",
+        "//libc/include:llvm_libc_types_ucontext_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -79,6 +82,7 @@ libc_function(
     deps = [
         ":setcontext",
         "//libc/hdr:stdint_proxy",
+        "//libc/include:llvm_libc_types_ucontext_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/stdlib:exit",
