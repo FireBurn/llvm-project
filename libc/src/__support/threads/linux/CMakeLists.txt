@@ -111,6 +111,9 @@ add_object_library(
   SRCS
     barrier.cpp
   DEPENDS
-    libc.src.__support.threads.CndVar
-    libc.src.__support.threads.mutex
+    .futex_utils
+    libc.hdr.errno_macros
+    libc.hdr.pthread_macros
+    libc.src.__support.threads.raw_mutex
+    libc.src.__support.threads.sleep
 )
