@@ -232,7 +232,7 @@ void clockwait_returns_einval_for_invalid_clockid() {
 }
 
 void initializer_act_the_same_as_null_attr() {
-  constexpr size_t EFFECTIVE_BYTES = sizeof(pthread_cond_t) - 2;
+  constexpr size_t EFFECTIVE_BYTES = offsetof(pthread_cond_t, __padding);
   union {
     pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
     char cond_bytes[EFFECTIVE_BYTES];
