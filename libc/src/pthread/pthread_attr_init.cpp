@@ -19,6 +19,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+static_assert(sizeof(pthread_attr_t) == 56,
+              "pthread_attr_t must be the size glibc gives it");
+
 LLVM_LIBC_FUNCTION(int, pthread_attr_init, (pthread_attr_t * attr)) {
   LIBC_CRASH_ON_NULLPTR(attr);
 
