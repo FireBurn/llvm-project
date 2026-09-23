@@ -31,7 +31,7 @@ LIBC_INLINE ErrorOr<int> epoll_pwait(int epfd, struct epoll_event *events,
                                      int maxevents, int timeout,
                                      const sigset_t *sigmask) {
   return syscall_checked<int>(SYS_epoll_pwait, epfd, events, maxevents, timeout,
-                              sigmask, NSIG / 8);
+                              sigmask, __KERNEL_SIGSET_BYTES);
 }
 
 } // namespace linux_syscalls
