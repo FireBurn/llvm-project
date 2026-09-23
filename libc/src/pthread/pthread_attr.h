@@ -31,6 +31,7 @@ LIBC_INLINE_VAR constexpr pthread_attr_t DEFAULT_PTHREAD_ATTR = {
     nullptr,                   // Let the thread manage its stack
     0,                         // The process default, see default_stacksize.
     Thread::DEFAULT_GUARDSIZE, // Default page size for the guard size.
+    {},                        // Reserved.
 };
 
 } // namespace LIBC_NAMESPACE_DECL
