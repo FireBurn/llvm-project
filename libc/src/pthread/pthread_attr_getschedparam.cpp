@@ -22,7 +22,8 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_getschedparam,
                     struct sched_param *__restrict param)) {
   if (attr == nullptr || param == nullptr)
     return EINVAL;
-  *param = attr->__schedparam;
+  *param = {};
+  param->sched_priority = attr->__schedpriority;
   return 0;
 }
 
