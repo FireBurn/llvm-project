@@ -23856,6 +23856,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_math_lgamma",
+    hdrs = ["src/__support/math/lgamma.h"],
+    deps = [
+        ":__support_fputil_dyadic_float",
+        ":__support_fputil_fenv_impl",
+        ":__support_fputil_fp_bits",
+        ":__support_fputil_nearest_integer_operations",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":__support_math_log2l_impl",
+    ],
+)
+
+libc_support_library(
     name = "__support_math_powl_impl",
     hdrs = ["src/__support/math/powl_impl.h"],
     deps = [
@@ -23891,6 +23905,16 @@ libc_math_function(
 libc_math_function(
     name = "erfc",
     additional_deps = [":__support_math_erfc"],
+)
+
+libc_math_function(
+    name = "lgamma",
+    additional_deps = [":__support_math_lgamma"],
+)
+
+libc_math_function(
+    name = "lgamma_r",
+    additional_deps = [":__support_math_lgamma"],
 )
 
 libc_math_function(
