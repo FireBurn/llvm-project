@@ -3711,6 +3711,16 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "lgamma",
+    additional_deps = ["//libc/src/__support/math:lgamma"],
+)
+
+libc_math_function(
+    name = "lgamma_r",
+    additional_deps = ["//libc/src/__support/math:lgamma"],
+)
+
+libc_math_function(
     name = "log2l",
     additional_deps = [
         "//libc/hdr:fenv_macros",
