@@ -24,10 +24,10 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_setschedparam,
                     const struct sched_param *__restrict param)) {
   if (attr == nullptr || param == nullptr)
     return EINVAL;
-  // Linux priorities run from 0 to 99; the field holds up to 65535.
-  if (param->sched_priority < 0 || param->sched_priority > 0xFFFF)
+  // No policy has a negative priority.
+  if (param->sched_priority < 0)
     return EINVAL;
-  attr->__schedpriority = static_cast<unsigned short>(param->sched_priority);
+  attr->__schedpriority = param->sched_priority;
   return 0;
 }
 

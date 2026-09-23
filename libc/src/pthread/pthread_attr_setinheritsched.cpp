@@ -26,7 +26,7 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_setinheritsched,
   if (inheritsched != PTHREAD_INHERIT_SCHED &&
       inheritsched != PTHREAD_EXPLICIT_SCHED)
     return EINVAL;
-  attr->__inheritsched = static_cast<unsigned char>(inheritsched);
+  attr->__inheritsched = inheritsched;
   return 0;
 }
 

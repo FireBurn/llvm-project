@@ -16,11 +16,8 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-// Programs keep these on their stacks, sized by the header they were built
-// against, so growing it overruns every one of them built before.
-static_assert(sizeof(pthread_attr_t) ==
-                  2 * sizeof(int) + sizeof(void *) + 2 * sizeof(size_t),
-              "pthread_attr_t must keep its size");
+static_assert(sizeof(pthread_attr_t) == 56,
+              "pthread_attr_t must be the size glibc gives it");
 
 LLVM_LIBC_FUNCTION(int, pthread_attr_init, (pthread_attr_t * attr)) {
   *attr = pthread_attr_t{
@@ -31,6 +28,7 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_init, (pthread_attr_t * attr)) {
       nullptr,                     // Let the thread manage its stack
       Thread::default_stacksize(), // stack size, as the process is allowed.
       Thread::DEFAULT_GUARDSIZE,   // Default page size for the guard size.
+      {},
   };
   return 0;
 }

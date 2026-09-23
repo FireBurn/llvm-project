@@ -28,7 +28,7 @@ LLVM_LIBC_FUNCTION(int, pthread_attr_setschedpolicy,
   case SCHED_OTHER:
   case SCHED_FIFO:
   case SCHED_RR:
-    attr->__schedpolicy = static_cast<unsigned char>(policy);
+    attr->__schedpolicy = policy;
     return 0;
   default:
     return EINVAL;
