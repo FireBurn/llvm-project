@@ -26,3 +26,86 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "mtx_init",
+    srcs = ["mtx_init.cpp"],
+    hdrs = ["mtx_init.h"],
+    deps = [
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_init",
+    srcs = ["linux/cnd_init.cpp"],
+    hdrs = ["cnd_init.h"],
+    deps = [
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_destroy",
+    srcs = ["linux/cnd_destroy.cpp"],
+    hdrs = ["cnd_destroy.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_wait",
+    srcs = ["linux/cnd_wait.cpp"],
+    hdrs = ["cnd_wait.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_timedwait",
+    srcs = ["linux/cnd_timedwait.cpp"],
+    hdrs = ["cnd_timedwait.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_signal",
+    srcs = ["linux/cnd_signal.cpp"],
+    hdrs = ["cnd_signal.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cnd_broadcast",
+    srcs = ["linux/cnd_broadcast.cpp"],
+    hdrs = ["cnd_broadcast.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support:common",
+    ],
+)

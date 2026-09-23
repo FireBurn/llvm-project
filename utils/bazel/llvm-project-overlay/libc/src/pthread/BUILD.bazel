@@ -42,6 +42,77 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "condattr_getclock",
+    srcs = ["pthread_condattr_getclock.cpp"],
+    hdrs = ["pthread_condattr_getclock.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/hdr/types:clockid_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "condattr_getpshared",
+    srcs = ["pthread_condattr_getpshared.cpp"],
+    hdrs = ["pthread_condattr_getpshared.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "pthread_condattr_bits",
+    hdrs = ["pthread_condattr_bits.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "condattr_init",
+    srcs = ["pthread_condattr_init.cpp"],
+    hdrs = ["pthread_condattr_init.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "condattr_setclock",
+    srcs = ["pthread_condattr_setclock.cpp"],
+    hdrs = ["pthread_condattr_setclock.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "condattr_setpshared",
+    srcs = ["pthread_condattr_setpshared.cpp"],
+    hdrs = ["pthread_condattr_setpshared.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_support_library(
     name = "pthread_cond_utils",
     hdrs = ["pthread_cond_utils.h"],
@@ -55,6 +126,23 @@ libc_support_library(
         "//libc/src/__support/threads:cndvar",
         "//libc/src/__support/threads:mutex",
         "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "cond_init",
+    srcs = ["pthread_cond_init.cpp"],
+    hdrs = ["pthread_cond_init.h"],
+    deps = [
+        ":pthread_condattr_bits",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/include:llvm_libc_macros_pthread_macros",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cndvar",
         "//libc/src/__support:common",
     ],
 )
@@ -418,6 +506,161 @@ libc_function(
         "//libc/hdr:errno_macros",
         "//libc/include:llvm_libc_types_pthread_t",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_init",
+    srcs = ["pthread_rwlock_init.cpp"],
+    hdrs = ["pthread_rwlock_init.h"],
+    deps = [
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+    ],
+)
+
+libc_function(
+    name = "rwlock_tryrdlock",
+    srcs = ["pthread_rwlock_tryrdlock.cpp"],
+    hdrs = ["pthread_rwlock_tryrdlock.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_trywrlock",
+    srcs = ["pthread_rwlock_trywrlock.cpp"],
+    hdrs = ["pthread_rwlock_trywrlock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_clockrdlock",
+    srcs = ["pthread_rwlock_clockrdlock.cpp"],
+    hdrs = ["pthread_rwlock_clockrdlock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_clockwrlock",
+    srcs = ["pthread_rwlock_clockwrlock.cpp"],
+    hdrs = ["pthread_rwlock_clockwrlock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_timedrdlock",
+    srcs = ["pthread_rwlock_timedrdlock.cpp"],
+    hdrs = ["pthread_rwlock_timedrdlock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+    ],
+)
+
+libc_function(
+    name = "rwlock_rdlock",
+    srcs = ["pthread_rwlock_rdlock.cpp"],
+    hdrs = ["pthread_rwlock_rdlock.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "rwlock_wrlock",
+    srcs = ["pthread_rwlock_wrlock.cpp"],
+    hdrs = ["pthread_rwlock_wrlock.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "spin_init",
+    srcs = ["pthread_spin_init.cpp"],
+    hdrs = ["pthread_spin_init.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "spin_destroy",
+    srcs = ["pthread_spin_destroy.cpp"],
+    hdrs = ["pthread_spin_destroy.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "spin_lock",
+    srcs = ["pthread_spin_lock.cpp"],
+    hdrs = ["pthread_spin_lock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support/threads:sleep",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "spin_trylock",
+    srcs = ["pthread_spin_trylock.cpp"],
+    hdrs = ["pthread_spin_trylock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "spin_unlock",
+    srcs = ["pthread_spin_unlock.cpp"],
+    hdrs = ["pthread_spin_unlock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
         "//libc/src/__support:common",
     ],
 )

@@ -11,10 +11,11 @@
 
 #include "__futex_word.h"
 #include "pid_t.h"
-typedef struct {
+typedef struct __attribute__((aligned(8))) {
   struct {
-    unsigned __is_pshared : 1;
-    unsigned __preference : 1;
+    // Bit 0 is whether the lock is shared between processes, and bit 1 the
+    // reader/writer preference.
+    unsigned int __flags;
     int __state;
     __futex_word __wait_queue_mutex;
     __futex_word __pending_readers;
@@ -23,6 +24,8 @@ typedef struct {
     __futex_word __writer_serialization;
   } __raw;
   pid_t __writer_tid;
+  // Unused, and there to give the type glibc's size and alignment.
+  char __reserved[24];
 } pthread_rwlock_t;
 
 #endif // LLVM_LIBC_TYPES_PTHREAD_RWLOCK_T_H
