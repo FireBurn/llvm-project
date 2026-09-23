@@ -25,3 +25,18 @@ libc_test(
         "//libc:write",
     ],
 )
+
+libc_test(
+    name = "stat_test",
+    srcs = ["stat_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:stat",
+        "//libc:sys_stat_stat",
+        "//libc:types_struct_stat",
+        "//libc:unlink",
+    ],
+)
