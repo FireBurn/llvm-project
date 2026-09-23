@@ -16,9 +16,12 @@
 
 #include "size_t.h"
 
+// glibc's size, with re_nsub where glibc has it.
 typedef struct {
-  size_t re_nsub;
   void *__internal;
+  unsigned char __reserved[40];
+  size_t re_nsub;
+  unsigned char __flags[8];
 } regex_t;
 
 #endif // LLVM_LIBC_TYPES_REGEX_T_H
