@@ -1,6 +1,9 @@
 header: sys/uio.h
 standards:
   - posix
+macros:
+  - macro_name: UIO_MAXIOV
+    macro_header: sys-uio-macros.h
 types:
   - type_name: pid_t
   - type_name: off_t
