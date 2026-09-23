@@ -9,6 +9,6 @@
 #ifndef LLVM_LIBC_TYPES_NFDS_T_H
 #define LLVM_LIBC_TYPES_NFDS_T_H
 
-typedef unsigned int nfds_t;
+typedef unsigned long nfds_t;
 
 #endif // LLVM_LIBC_TYPES_NFDS_T_H
