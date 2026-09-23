@@ -25,7 +25,7 @@ LLVM_LIBC_FUNCTION(int, sigpending, (sigset_t * set)) {
     return -1;
   }
   long result = LIBC_NAMESPACE::syscall_impl<long>(SYS_rt_sigpending, set,
-                                                   sizeof(sigset_t));
+                                                   __KERNEL_SIGSET_BYTES);
   if (result < 0) {
     libc_errno = static_cast<int>(-result);
     return -1;

@@ -28,7 +28,7 @@ LLVM_LIBC_FUNCTION(int, sigtimedwait,
   // The kernel wants to be told how wide the set is, since its own is
   // narrower than the one the library hands out.
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_rt_sigtimedwait, set, info,
-                                              timeout, sizeof(sigset_t));
+                                              timeout, __KERNEL_SIGSET_BYTES);
   if (ret == -EINTR)
     internal::cancel_point();
 
