@@ -12,7 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/netdb_macros.h"
+#include "src/netdb/__h_errno_location.h"
 #include "src/netdb/gai_strerror.h"
+#include "src/netdb/herror.h"
 #include "test/UnitTest/Test.h"
 
 TEST(LlvmLibcGaiStrerrorTest, AllKnownErrors) {

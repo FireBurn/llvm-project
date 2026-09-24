@@ -22,7 +22,7 @@ LLVM_LIBC_FUNCTION(int, pthread_setcancelstate, (int state, int *oldstate)) {
   if (state != PTHREAD_CANCEL_ENABLE && state != PTHREAD_CANCEL_DISABLE)
     return EINVAL;
 
-  ThreadAttributes *attrib = internal::self.attrib;
+  ThreadAttributes *attrib = get_current_thread_attrib();
   if (attrib == nullptr)
     return EINVAL;
 

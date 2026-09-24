@@ -57,11 +57,13 @@ LLVM_LIBC_FUNCTION(size_t, wcsftime,
     return 0;
   }
 
-  printf_core::DropOverflowBuffer wb(narrow, (buffsz > 0 ? buffsz - 1 : 0));
-  printf_core::Writer writer(wb);
+  printf_core::Writer writer = printf_core::make_drop_overflow_writer(
+      narrow, (buffsz > 0 ? buffsz - 1 : 0));
   auto ret = strftime_core::strftime_main(&writer, narrow_format, timeptr);
-  if (buffsz > 0)
+  if (buffsz > 0) {
+    const printf_core::WriteBuffer<char> &wb = writer.get_write_buffer();
     wb.buff[wb.buff_cur] = '\0';
+  }
 
   size_t written = 0;
   if (!ret.has_value() || ret.value() >= buffsz) {

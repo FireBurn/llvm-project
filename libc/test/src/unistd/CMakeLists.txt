@@ -342,6 +342,9 @@ add_libc_test(
   SRCS
     nice_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
+    libc.src.sys.resource.getpriority
     libc.src.unistd.nice
     libc.test.UnitTest.ErrnoCheckingTest
 )

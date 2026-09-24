@@ -33,15 +33,11 @@ macro(add_header_macro TARGET_NAME YAML_FILE GEN_HDR DEPENDS)
 endmacro()
 
 add_header_macro(
-  sys_dir
-  ../libc/include/sys/dir.yaml
-  sys/dir.h
   ctype
   ../libc/include/ctype.yaml
   ctype.h
   DEPENDS
     .llvm_libc_common_h
-    .dirent
     .llvm-libc-types.locale_t
 )
 
@@ -60,6 +56,15 @@ add_header_macro(
     .llvm-libc-types.ssize_t
     .llvm-libc-macros.dirent_macros
     .llvm-libc-macros.lfs64_macros
+)
+
+add_header_macro(
+  sys_dir
+  ../libc/include/sys/dir.yaml
+  sys/dir.h
+  DEPENDS
+    .llvm_libc_common_h
+    .dirent
 )
 
 add_header_macro(

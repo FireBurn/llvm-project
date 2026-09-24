@@ -18,8 +18,8 @@
 #include "hdr/types/struct_sgrp.h"
 #include "src/__support/CPP/span.h"
 #include "src/__support/error_or.h"
-#include "src/__support/field_tokenizer.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/field_tokenizer.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 
@@ -48,19 +48,22 @@ bool parse_line_into(cpp::span<char> line, struct sgrp *entry, char **admins,
 
 } // namespace gshadow
 
-namespace internal {
+namespace pwd {
 
 // The parse the flat file engine calls, which uses the shared arrays and so
 // is not reentrant.
 template <>
-LIBC_INLINE bool parse_line<struct sgrp>(cpp::span<char> line,
-                                         struct sgrp *entry) {
-  return gshadow::parse_line_into(
-      line, entry, gshadow::admin_list, gshadow::GSHADOW_NAME_MAX,
-      gshadow::member_list, gshadow::GSHADOW_NAME_MAX);
+LIBC_INLINE ErrorOr<void> parse_line<struct sgrp>(cpp::span<char> line,
+                                            cpp::span<char> /*scratch*/,
+                                            struct sgrp *entry) {
+  if (!gshadow::parse_line_into(
+          line, entry, gshadow::admin_list, gshadow::GSHADOW_NAME_MAX,
+          gshadow::member_list, gshadow::GSHADOW_NAME_MAX))
+    return Error(EINVAL);
+  return {};
 }
 
-} // namespace internal
+} // namespace pwd
 
 namespace gshadow_db {
 

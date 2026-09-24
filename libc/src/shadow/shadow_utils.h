@@ -19,8 +19,8 @@
 #include "src/__support/CPP/span.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/error_or.h"
-#include "src/__support/field_tokenizer.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/field_tokenizer.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/str_to_integer.h"
@@ -32,7 +32,7 @@ constexpr size_t SHADOW_LINE_SIZE = 1024;
 
 // Reads one of the day counts. The file leaves a field empty where there is
 // no such limit, and that reads as -1.
-LIBC_INLINE bool read_long_field(internal::FieldTokenizer &tokenizer,
+LIBC_INLINE bool read_long_field(pwd::FieldTokenizer &tokenizer,
                                  long *out) {
   auto field = tokenizer.next_field();
   if (!field)
@@ -51,27 +51,28 @@ LIBC_INLINE bool read_long_field(internal::FieldTokenizer &tokenizer,
 
 } // namespace shadow
 
-namespace internal {
+namespace pwd {
 
 // Parses a colon separated shadow line in place. The line is
 // name:hash:lstchg:min:max:warn:inact:expire:flag, and every field past the
 // hash may be empty.
 template <>
-LIBC_INLINE bool parse_line<struct spwd>(cpp::span<char> line,
-                                         struct spwd *entry) {
+LIBC_INLINE ErrorOr<void> parse_line<struct spwd>(cpp::span<char> line,
+                                            cpp::span<char> /*scratch*/,
+                                            struct spwd *entry) {
   if (line.empty() || !entry)
-    return false;
+    return Error(EINVAL);
 
   FieldTokenizer tokenizer(line);
 
   auto name = tokenizer.next_field();
   if (!name || name->empty())
-    return false;
+    return Error(EINVAL);
   entry->sp_namp = name->data();
 
   auto hash = tokenizer.next_field();
   if (!hash)
-    return false;
+    return Error(EINVAL);
   entry->sp_pwdp = hash->data();
 
   if (!shadow::read_long_field(tokenizer, &entry->sp_lstchg) ||
@@ -80,18 +81,20 @@ LIBC_INLINE bool parse_line<struct spwd>(cpp::span<char> line,
       !shadow::read_long_field(tokenizer, &entry->sp_warn) ||
       !shadow::read_long_field(tokenizer, &entry->sp_inact) ||
       !shadow::read_long_field(tokenizer, &entry->sp_expire))
-    return false;
+    return Error(EINVAL);
 
   long flag = 0;
   if (!shadow::read_long_field(tokenizer, &flag))
-    return false;
+    return Error(EINVAL);
   entry->sp_flag = static_cast<unsigned long>(flag);
 
   // A line with a tenth field is not a shadow entry.
-  return tokenizer.exhausted();
+  if (!tokenizer.exhausted())
+    return Error(EINVAL);
+  return {};
 }
 
-} // namespace internal
+} // namespace pwd
 
 namespace shadow_db {
 

@@ -83,6 +83,7 @@ add_entrypoint_object(
   HDRS
     pthread_attr_getinheritsched.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.pthread_attr_t
     libc.src.__support.common
     libc.src.__support.macros.config
@@ -110,6 +111,7 @@ add_entrypoint_object(
   HDRS
     pthread_attr_getschedpolicy.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.pthread_attr_t
     libc.src.__support.common
     libc.src.__support.macros.config
@@ -123,6 +125,7 @@ add_entrypoint_object(
   HDRS
     pthread_attr_getscope.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.pthread_macros
     libc.hdr.types.pthread_attr_t
     libc.src.__support.common
@@ -166,6 +169,7 @@ add_entrypoint_object(
   HDRS
     pthread_attr_setschedpolicy.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.pthread_attr_t
     libc.src.__support.common
     libc.src.__support.macros.config
@@ -667,21 +671,6 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.threads.thread
-<<<<<<< HEAD
-=======
-    libc.src.pthread.pthread_attr_destroy
-    libc.src.pthread.pthread_attr_init
-    libc.src.pthread.pthread_attr_getdetachstate
-    libc.src.pthread.pthread_attr_getguardsize
-    libc.src.pthread.pthread_attr_getinheritsched
-    libc.src.pthread.pthread_attr_getschedparam
-    libc.src.pthread.pthread_attr_getschedpolicy
-    libc.src.pthread.pthread_attr_getstack
-    libc.src.errno.errno
-  COMPILE_OPTIONS
-    ${libc_opt_high_flag}
-    -fno-omit-frame-pointer
->>>>>>> e5a9bca417e8 ([libc] Add the pthread_attr scheduling attributes)
 )
 
 add_entrypoint_object(
@@ -855,21 +844,6 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
 )
 
-add_entrypoint_object(
-  pthread_kill
-  SRCS
-    pthread_kill.cpp
-  HDRS
-    pthread_kill.h
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.hdr.signal_macros
-    libc.include.pthread
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.common
-    libc.src.__support.threads.thread
-)
 
 add_entrypoint_object(
   pthread_self
@@ -1316,6 +1290,3 @@ add_entrypoint_object(
     libc.src.__support.threads.thread
 )
 
-<<<<<<< HEAD
-=======
->>>>>>> e5a9bca417e8 ([libc] Add the pthread_attr scheduling attributes)

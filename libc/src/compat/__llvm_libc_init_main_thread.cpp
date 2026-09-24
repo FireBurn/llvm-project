@@ -14,6 +14,7 @@
 #include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
 
 #include <sys/syscall.h>
@@ -24,13 +25,13 @@ static ThreadAttributes main_thread_attrib;
 
 // The startup code describes the thread it was entered on before anything
 // asks about it, and a program that did not start through it has nobody to
-// do that. Until it is done self.attrib is null, and pthread_self,
+// do that. Until it is done the attributes in the TCB are null, and pthread_self,
 // pthread_equal and everything reached through pthread_once fault on it.
 //
 // Calling this more than once is harmless: the second call sees the work
 // already done and leaves it alone.
 LLVM_LIBC_FUNCTION(int, __llvm_libc_init_main_thread, (void)) {
-  if (internal::self.attrib != nullptr)
+  if (get_current_thread_attrib() != nullptr)
     return 0;
 
   long tid = syscall_impl<long>(SYS_gettid);
@@ -60,9 +61,7 @@ LLVM_LIBC_FUNCTION(int, __llvm_libc_init_main_thread, (void)) {
   // The stack grows as the process runs rather than being a block this
   // library placed, so there is no fixed size to report.
   main_thread_attrib.stacksize = PTHREAD_STACK_DYNAMIC_NP;
-  internal::self.attrib = &main_thread_attrib;
-  main_thread_attrib.atexit_callback_mgr =
-      internal::get_thread_atexit_callback_mgr();
+  get_tcb()->attrib = &main_thread_attrib;
   return 0;
 }
 

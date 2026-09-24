@@ -68,6 +68,7 @@ add_entrypoint_object(
   HDRS
     ../mkfifo.h
   DEPENDS
+    .mkfifoat
     libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.mode_t
@@ -82,6 +83,7 @@ add_entrypoint_object(
   HDRS
     ../mkfifoat.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
     libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.mode_t
@@ -127,6 +129,7 @@ add_entrypoint_object(
   HDRS
     ../mknodat.h
   DEPENDS
+    libc.hdr.fcntl_macros
     libc.hdr.types.dev_t
     libc.hdr.types.mode_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.mknodat
@@ -185,6 +188,7 @@ add_entrypoint_object(
   HDRS
     ../fstatat.h
   DEPENDS
+    libc.src.errno.errno
     libc.hdr.fcntl_macros
     libc.hdr.types.struct_stat
     libc.src.__support.error_or
@@ -212,6 +216,7 @@ add_entrypoint_object(
   HDRS
     ../futimens.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
     libc.hdr.types.struct_timespec
     libc.src.__support.OSUtil.linux.syscall_wrappers.utimensat
     libc.src.__support.common
@@ -225,6 +230,7 @@ add_entrypoint_object(
   HDRS
     ../umask.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
     libc.hdr.types.mode_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.umask
     libc.src.__support.common

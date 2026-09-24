@@ -484,7 +484,7 @@ add_object_library(
     usershell.h
   DEPENDS
     libc.src.__support.CPP.span
-    libc.src.__support.flat_file_db
+    libc.src.__support.pwd.flat_file_db
 )
 
 add_entrypoint_object(

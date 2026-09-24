@@ -22,7 +22,7 @@
 #include "hdr/types/size_t.h"
 #include "hdr/types/struct_spwd.h"
 #include "src/__support/CPP/span.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/shadow/shadow_utils.h"
@@ -40,7 +40,7 @@ LIBC_INLINE int find(struct spwd *entry, char *buffer, size_t buflen,
   if (buflen < 2)
     return ERANGE;
 
-  internal::FlatFileDatabase<struct spwd> db(shadow_db::path());
+  pwd::FlatFileDatabase<struct spwd> db(shadow_db::path());
   if (auto opened = db.setdb(); !opened.has_value())
     return opened.error();
 

@@ -94,7 +94,6 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_random
     libc.include.sys_dir
     libc.include.sys_errno
-    libc.include.sys_file
     libc.include.sys_io
     libc.include.sys_swap
     libc.include.sys_quota
@@ -124,7 +123,6 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_utsname
     libc.include.sys_vfs
     libc.include.sys_wait
-    libc.include.sys_xattr
     libc.include.syscall
     libc.include.sysexits
     libc.include.syslog
@@ -152,7 +150,6 @@ set(TARGET_PUBLIC_HEADERS
 
 if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
   list(APPEND TARGET_PUBLIC_HEADERS
-    libc.include.glob
     libc.include.netdb
     libc.include.netinet_ether
     libc.include.netinet_in_systm

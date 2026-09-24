@@ -877,7 +877,7 @@ TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
   LIBC_NAMESPACE::AllocChecker ac;
   // Two of the three bytes are taken, and then nothing more ever is.
   ShortWriteFile *f = new (ac) ShortWriteFile(
-      nullptr, 0, _IONBF, true, LIBC_NAMESPACE::File::mode_flags("w"),
+      nullptr, 0, _IONBF, true, FileMode("w"),
       /*max_write_bytes=*/2, /*accept_total_bytes=*/2);
   ASSERT_FALSE(f == nullptr);
 
@@ -934,7 +934,7 @@ public:
       : LIBC_NAMESPACE::File(&tty_write, &tty_read, &tty_seek, &tty_close,
                              reinterpret_cast<uint8_t *>(buffer), buflen,
                              _IOFBF, false,
-                             LIBC_NAMESPACE::File::mode_flags("w"),
+                             FileMode("w"),
                              /*static_stream=*/false,
                              /*has_file_descriptor=*/false, &tty_isatty,
                              /*settle_buffer_mode=*/true),
@@ -1067,7 +1067,7 @@ TEST(LlvmLibcFileTest, ShortReadsAreNotTheEndOfTheFile) {
   LIBC_NAMESPACE::AllocChecker ac;
   ShortReadFile *f = new (ac)
       ShortReadFile(buffer, sizeof(buffer), _IOFBF,
-                    LIBC_NAMESPACE::File::mode_flags("r"), /*max_read=*/7);
+                    FileMode("r"), /*max_read=*/7);
   ASSERT_FALSE(f == nullptr);
   f->fill(DATA_SIZE);
 
@@ -1092,7 +1092,7 @@ TEST(LlvmLibcFileTest, ShortReadsUnbuffered) {
   constexpr size_t DATA_SIZE = 100;
   LIBC_NAMESPACE::AllocChecker ac;
   ShortReadFile *f = new (ac)
-      ShortReadFile(nullptr, 0, _IONBF, LIBC_NAMESPACE::File::mode_flags("r"),
+      ShortReadFile(nullptr, 0, _IONBF, FileMode("r"),
                     /*max_read=*/3);
   ASSERT_FALSE(f == nullptr);
   f->fill(DATA_SIZE);

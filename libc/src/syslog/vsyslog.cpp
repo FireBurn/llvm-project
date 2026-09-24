@@ -253,8 +253,8 @@ LLVM_LIBC_FUNCTION(void, vsyslog,
   const char *fmt = expand_errno(format, scratch, FORMAT_MAX);
 
   internal::ArgList args(ap);
-  printf_core::DropOverflowBuffer wb(out.end(), out.room());
-  printf_core::Writer writer(wb);
+  printf_core::Writer writer =
+      printf_core::make_drop_overflow_writer(out.end(), out.room());
   auto written = printf_core::printf_main(&writer, fmt, args);
 
   size_t len = out.size();

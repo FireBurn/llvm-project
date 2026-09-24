@@ -412,7 +412,6 @@ functions:
       - type: const char *
       - type: const char *
       - type: '...'
-      - type: ...
   - name: execlp
     standards:
       - posix

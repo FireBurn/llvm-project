@@ -71,6 +71,9 @@ add_entrypoint_object(
   HDRS
     fmemopen.h
   DEPENDS
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.src.errno.errno
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.stdio_macros
