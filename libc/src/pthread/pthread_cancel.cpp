@@ -32,7 +32,7 @@ namespace {
 // the thread was blocked in return, which takes it to its next cancellation
 // point.
 void on_cancel_signal(int) {
-  ThreadAttributes *attrib = internal::self.attrib;
+  ThreadAttributes *attrib = get_current_thread_attrib();
   if (attrib == nullptr)
     return;
   if (attrib->cancel_state.load() != uint32_t(CancelState::ENABLE))

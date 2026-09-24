@@ -45,7 +45,7 @@ LLVM_LIBC_FUNCTION(int, fgetspent_r,
     if (len == 0 || buf[0] == '#')
       continue;
 
-    if (!internal::parse_line(cpp::span<char>(buf, len + 1), spbuf))
+    if (!pwd::parse_line(cpp::span<char>(buf, len + 1), cpp::span<char>(), spbuf).has_value())
       return EINVAL;
     *spbufp = spbuf;
     return 0;

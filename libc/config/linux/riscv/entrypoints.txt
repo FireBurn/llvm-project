@@ -62,7 +62,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.openat
     libc.src.fcntl.posix_fadvise
     libc.src.fcntl.posix_fadvise64
-    libc.src.fcntl.posix_fallocate
 
     # grp.h entrypoints
     libc.src.grp.endgrent
@@ -95,13 +94,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.ftw.nftw
 
     # grp.h entrypoints
-    libc.src.grp.endgrent
-    libc.src.grp.getgrent
     libc.src.grp.fgetgrent
     libc.src.grp.getgrouplist
-    libc.src.grp.getgrgid
-    libc.src.grp.getgrnam
-    libc.src.grp.getgrnam_r
 
     # gshadow.h entrypoints
     libc.src.gshadow.endsgent
@@ -127,7 +121,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.shadow.sgetspent_r
     libc.src.shadow.ulckpwdf
     libc.src.grp.initgroups
-    libc.src.grp.setgrent
     libc.src.grp.putgrent
     libc.src.grp.setgroups
 
@@ -330,7 +323,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.mkostemp
     libc.src.stdlib.mkstemp
     libc.src.stdlib.mkstemps
-    libc.src.stdlib.mkostemp
     libc.src.stdlib.mkostemps
     libc.src.stdlib.mktemp
     libc.src.stdlib.qsort
@@ -509,7 +501,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.socket.sendmsg
 
     # sys/file.h entrypoints
-    libc.src.sys.file.flock
 
     # sys/eventfd.h entrypoints
     libc.src.sys.eventfd.eventfd
@@ -599,13 +590,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.stat.mkdir
     libc.src.sys.stat.umask
     libc.src.sys.stat.mkdirat
-    libc.src.sys.stat.mkfifo
-    libc.src.sys.stat.mkfifoat
-    libc.src.sys.stat.fstatat
     libc.src.sys.stat.mknod
     libc.src.sys.stat.mknodat
     libc.src.sys.stat.stat
-    libc.src.sys.stat.umask
     libc.src.sys.stat.utimensat
 
     # sys/statfs.h entrypoints
@@ -1758,7 +1745,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.fmemopen
     libc.src.stdio.fopen
     libc.src.stdio.freopen
-    libc.src.stdio.fmemopen
     libc.src.stdio.open_memstream
     libc.src.stdio.fopencookie
     libc.src.stdio.fputc
@@ -1822,7 +1808,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.ptsname_r
     libc.src.stdlib.unlockpt
     libc.src.stdlib.putenv
-    libc.src.stdlib.secure_getenv
     libc.src.stdlib.setenv
     libc.src.stdlib.system
     libc.src.stdlib.unsetenv
@@ -1966,7 +1951,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.unistd._exit
     libc.src.unistd.confstr
     libc.src.unistd.environ
-    libc.src.unistd.execl
     libc.src.unistd.execv
     libc.src.unistd.execvp
     libc.src.unistd.execvpe

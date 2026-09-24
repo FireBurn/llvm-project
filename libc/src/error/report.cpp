@@ -53,6 +53,11 @@ LIBC_INLINE void flush_stdout() {
   reinterpret_cast<File *>(*slot)->flush();
 }
 
+LIBC_INLINE int stderr_sink(cpp::string_view str, void *) {
+  write_to_stderr(str);
+  return printf_core::WRITE_OK;
+}
+
 template <typename W>
 LIBC_INLINE void write_unsigned(W &writer, unsigned int val) {
   char digits[10];
@@ -74,14 +79,9 @@ void report(int err_num, const char *file_name, unsigned int line_number,
   flush_stdout();
 
   char buffer[1024];
-  printf_core::FlushingBuffer wb(
+  printf_core::Writer writer = printf_core::make_writer(
       buffer, sizeof(buffer),
-      [](cpp::string_view str, [[maybe_unused]] void *raw_stream) -> int {
-        write_to_stderr(str);
-        return static_cast<int>(str.size());
-      },
-      nullptr);
-  printf_core::Writer writer(wb);
+      &printf_core::overflow_write_flush_to_sink<char, stderr_sink>);
 
   if (error_print_progname != nullptr) {
     error_print_progname();
@@ -103,7 +103,7 @@ void report(int err_num, const char *file_name, unsigned int line_number,
   }
 
   if (fmt != nullptr && !printf_core::printf_main(&writer, fmt, args)) {
-    wb.flush_to_stream();
+    writer.get_write_buffer().flush_to_sink<stderr_sink>();
     return;
   }
 
@@ -113,7 +113,7 @@ void report(int err_num, const char *file_name, unsigned int line_number,
   }
 
   writer.write("\n");
-  wb.flush_to_stream();
+  writer.get_write_buffer().flush_to_sink<stderr_sink>();
 
   ++error_message_count;
 }

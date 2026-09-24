@@ -142,7 +142,7 @@ add_libc_test(
     libc.src.pthread.pthread_attr_destroy
     libc.src.pthread.pthread_attr_getstack
     libc.src.pthread.pthread_getattr_np
-    libc.src.pthread.pthread_kill
+    libc.src.signal.pthread_kill
     libc.src.pthread.pthread_self
     libc.src.signal.signal
 )

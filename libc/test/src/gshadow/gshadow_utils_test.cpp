@@ -21,7 +21,9 @@ bool parse(char *line, struct sgrp *entry) {
   size_t len = 0;
   while (line[len] != '\0')
     ++len;
-  return LIBC_NAMESPACE::internal::parse_line(span<char>(line, len + 1), entry);
+  return LIBC_NAMESPACE::pwd::parse_line(span<char>(line, len + 1),
+                                         span<char>(), entry)
+      .has_value();
 }
 
 } // anonymous namespace

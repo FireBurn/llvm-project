@@ -57,6 +57,16 @@ add_libc_test(
   SRCS
     getgrnam_r_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.grp.getgrent
+    libc.src.grp.getgrgid_r
+    libc.src.grp.setgrent
+    libc.src.unistd.close
+    libc.src.unistd.write
     libc.hdr.errno_macros
     libc.hdr.signal_macros
     libc.hdr.types.gid_t
@@ -121,6 +131,14 @@ add_libc_test(
   SRCS
     getgrnam_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.CPP.string_view
+    libc.src.fcntl.open
+    libc.src.grp.getgrgid
+    libc.src.grp.setgrent
+    libc.src.unistd.close
+    libc.src.unistd.write
     libc.hdr.errno_macros
     libc.hdr.signal_macros
     libc.hdr.types.gid_t
@@ -206,8 +224,6 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
 )
-<<<<<<< HEAD
-=======
 
 add_libc_test(
   fgetgrent_test
@@ -234,4 +250,3 @@ add_libc_test(
     libc.src.unistd.write
     libc.test.UnitTest.ErrnoCheckingTest
 )
->>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)

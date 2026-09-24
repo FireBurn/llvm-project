@@ -64,6 +64,8 @@ add_entrypoint_object(
   HDRS
     getpwnam_r.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.string.string_utils
     libc.hdr.types.size_t
     libc.hdr.types.struct_passwd
     libc.src.__support.CPP.span
@@ -149,23 +151,7 @@ add_object_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
 )
-<<<<<<< HEAD
-=======
 
-add_header_library(
-  pwd_r_utils
-  HDRS
-    pwd_r_utils.h
-  DEPENDS
-    .pwd_utils
-    libc.hdr.errno_macros
-    libc.hdr.types.size_t
-    libc.hdr.types.struct_passwd
-    libc.src.__support.CPP.span
-    libc.src.__support.flat_file_db
-    libc.src.__support.macros.attributes
-    libc.src.__support.macros.config
-)
 
 add_entrypoint_object(
   fgetpwent
@@ -182,4 +168,3 @@ add_entrypoint_object(
     libc.src.pwd.pwd_utils
     libc.src.stdio.fgets
 )
->>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)

@@ -9,7 +9,7 @@
 #include "src/unistd/usershell.h"
 
 #include "src/__support/CPP/span.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 
@@ -26,7 +26,7 @@ namespace {
 // and nothing needs parsing into an entry.
 struct Line {};
 
-LIBC_CONSTINIT internal::FlatFileDatabase<Line> db(LIBC_COPT_SHELLS_FILE_PATH);
+LIBC_CONSTINIT pwd::FlatFileDatabase<Line> db(LIBC_COPT_SHELLS_FILE_PATH);
 char line_buffer[LINE_SIZE];
 
 // What the list is when there is no file to read, which is what every other

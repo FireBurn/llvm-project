@@ -96,8 +96,6 @@ types:
   - type_name: struct___pthread_cleanup_frame
   - type_name: cpu_set_t
   - type_name: size_t
-  - type_name: struct__pthread_cleanup_buffer
-  - type_name: __pthread_cleanup_routine_t
     standards:
       - llvm_libc_ext
 functions:

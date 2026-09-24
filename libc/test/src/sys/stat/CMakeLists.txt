@@ -87,6 +87,8 @@ add_libc_test(
   SRCS
     mkfifo_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.src.sys.stat.mkfifoat
     libc.hdr.errno_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.mode_t
@@ -213,6 +215,9 @@ add_libc_test(
   SRCS
     fstatat_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.stdio.remove
+    libc.src.unistd.symlink
     libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.mode_t
@@ -256,6 +261,9 @@ add_libc_test(
   SRCS
     futimens_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.sys.stat.fstat
+    libc.src.unistd.unlink
     libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.struct_timespec
@@ -279,6 +287,12 @@ add_libc_test(
   SRCS
     umask_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.src.fcntl.open
+    libc.src.sys.stat.stat
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoSetterMatcher
     libc.hdr.sys_stat_macros
     libc.hdr.types.mode_t
     libc.src.errno.errno

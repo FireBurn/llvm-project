@@ -18,6 +18,7 @@ add_entrypoint_object(
   HDRS
     ../fallocate.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
     libc.src.__support.OSUtil.linux.syscall_wrappers.fallocate
     libc.hdr.types.off_t
@@ -128,6 +129,7 @@ add_entrypoint_object(
   HDRS
     ../posix_fallocate.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
     libc.hdr.errno_macros
     libc.hdr.types.off_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.fallocate

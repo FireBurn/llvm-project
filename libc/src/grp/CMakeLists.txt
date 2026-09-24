@@ -89,6 +89,7 @@ add_entrypoint_object(
   HDRS
     getgrnam_r.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.hdr.types.struct_group
     libc.src.__support.CPP.span
@@ -120,6 +121,8 @@ add_object_library(
   SRCS
     grp_utils.cpp
   DEPENDS
+    libc.src.__support.CPP.optional
+    libc.src.string.string_utils
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.types.gid_t
@@ -165,24 +168,6 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.string.string_utils
 )
-<<<<<<< HEAD
-=======
-
-add_header_library(
-  grp_r_utils
-  HDRS
-    grp_r_utils.h
-  DEPENDS
-    .grp_utils
-    libc.hdr.errno_macros
-    libc.hdr.stdint_proxy
-    libc.hdr.types.size_t
-    libc.hdr.types.struct_group
-    libc.src.__support.CPP.span
-    libc.src.__support.flat_file_db
-    libc.src.__support.macros.attributes
-    libc.src.__support.macros.config
-)
 
 add_entrypoint_object(
   getgrouplist
@@ -210,9 +195,6 @@ add_entrypoint_object(
     libc.src.errno.errno
     libc.src.stdio.fprintf
 )
-<<<<<<< HEAD
->>>>>>> c66ec21f747f ([libc] Add ppoll, preadv, pwritev, copy_file_range and cfmakeraw)
-=======
 
 add_entrypoint_object(
   fgetgrent
@@ -229,4 +211,3 @@ add_entrypoint_object(
     libc.src.grp.grp_utils
     libc.src.stdio.fgets
 )
->>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)

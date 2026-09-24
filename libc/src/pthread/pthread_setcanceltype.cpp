@@ -22,7 +22,7 @@ LLVM_LIBC_FUNCTION(int, pthread_setcanceltype, (int type, int *oldtype)) {
   if (type != PTHREAD_CANCEL_DEFERRED && type != PTHREAD_CANCEL_ASYNCHRONOUS)
     return EINVAL;
 
-  ThreadAttributes *attrib = internal::self.attrib;
+  ThreadAttributes *attrib = get_current_thread_attrib();
   if (attrib == nullptr)
     return EINVAL;
 

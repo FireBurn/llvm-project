@@ -247,6 +247,7 @@ add_entrypoint_object(
   HDRS
     ../execl.h
   DEPENDS
+    libc.src.unistd.execv
     libc.hdr.types.size_t
     libc.src.__support.common
     libc.src.__support.libc_errno
@@ -642,6 +643,8 @@ add_entrypoint_object(
   HDRS
     ../nice.h
   DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.libc_errno
     libc.hdr.errno_macros
     libc.hdr.limits_macros
     libc.hdr.sys_resource_macros

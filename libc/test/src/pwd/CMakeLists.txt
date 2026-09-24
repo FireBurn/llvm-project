@@ -49,6 +49,8 @@ add_libc_test(
   SRCS
     getpwnam_test.cpp
   DEPENDS
+    libc.src.pwd.getpwuid
+    libc.src.pwd.setpwent
     libc.hdr.errno_macros
     libc.hdr.types.gid_t
     libc.hdr.types.size_t
@@ -75,6 +77,16 @@ add_libc_test(
   SRCS
     getpwnam_r_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.CPP.string_view
+    libc.src.errno.errno
+    libc.src.fcntl.open
+    libc.src.pwd.getpwent
+    libc.src.pwd.getpwuid_r
+    libc.src.pwd.setpwent
+    libc.src.unistd.close
+    libc.src.unistd.write
     libc.hdr.errno_macros
     libc.hdr.types.gid_t
     libc.hdr.types.size_t

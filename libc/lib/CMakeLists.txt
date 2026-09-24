@@ -65,14 +65,8 @@ foreach(archive IN ZIP_LISTS
     if(TARGET libc-startup)
       add_dependencies(${archive_1}-shared libc-startup)
     endif()
-    # Thread creation calls init_tls and cleanup_tls, which a static link picks
-    # up from crt1.o. A shared libc has to carry them itself.
-    set(tls_object
-      libc.startup.${LIBC_TARGET_OS}.${LIBC_TARGET_ARCHITECTURE}.tls)
     set(app_object libc.startup.${LIBC_TARGET_OS}.app)
-    if(archive_1 STREQUAL "libc" AND TARGET ${tls_object})
-      target_sources(${archive_1}-shared
-        PRIVATE $<TARGET_OBJECTS:${tls_object}>)
+    if(archive_1 STREQUAL "libc")
       if(TARGET ${app_object})
         target_sources(${archive_1}-shared
           PRIVATE $<TARGET_OBJECTS:${app_object}>
@@ -132,7 +126,6 @@ endforeach()
 set(added_empty_archives "")
 if(LLVM_LIBC_FULL_BUILD AND ${LIBC_TARGET_OS} STREQUAL "linux")
   list(APPEND libc_empty_archive_names pthread dl resolv rt util)
-  list(APPEND libc_empty_archive_names pthread dl rt)
   foreach(archive ${libc_empty_archive_names})
     set(empty_archive_path ${LIBC_LIBRARY_DIR}/lib${archive}.a)
     add_custom_command(

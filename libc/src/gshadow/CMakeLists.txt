@@ -9,8 +9,8 @@ add_object_library(
     libc.hdr.types.struct_sgrp
     libc.src.__support.CPP.span
     libc.src.__support.error_or
-    libc.src.__support.field_tokenizer
-    libc.src.__support.flat_file_db
+    libc.src.__support.pwd.field_tokenizer
+    libc.src.__support.pwd.flat_file_db
 )
 
 add_header_library(
@@ -82,7 +82,7 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.types.struct_sgrp
     libc.src.__support.CPP.span
-    libc.src.__support.flat_file_db
+    libc.src.__support.pwd.flat_file_db
 )
 
 add_entrypoint_object(
