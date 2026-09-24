@@ -46,7 +46,7 @@ LLVM_LIBC_FUNCTION(struct sgrp *, fgetsgent, (::FILE * stream)) {
     if (len == 0 || line[0] == '#')
       continue;
 
-    if (!internal::parse_line(cpp::span<char>(line, len + 1), &entry)) {
+    if (!pwd::parse_line(cpp::span<char>(line, len + 1), cpp::span<char>(), &entry).has_value()) {
       libc_errno = EINVAL;
       return nullptr;
     }

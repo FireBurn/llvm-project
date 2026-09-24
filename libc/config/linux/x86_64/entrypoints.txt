@@ -65,10 +65,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.splice
     libc.src.fcntl.vmsplice
     libc.src.fcntl.tee
-    libc.src.fcntl.posix_fadvise
     libc.src.fcntl.readahead
     libc.src.fcntl.sync_file_range
-    libc.src.fcntl.posix_fallocate
     libc.src.fcntl.fcntl
     libc.src.fcntl.open
     libc.src.fcntl.openat
@@ -77,13 +75,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.fcntl.posix_fallocate
 
     # grp.h entrypoints
-    libc.src.grp.endgrent
-    libc.src.grp.getgrent
-    libc.src.grp.getgrgid
     libc.src.grp.getgrgid_r
-    libc.src.grp.getgrnam
-    libc.src.grp.getgrnam_r
-    libc.src.grp.setgrent
 
     # net/if.h entrypoints
     libc.src.net.if_indextoname
@@ -188,7 +180,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sched.sched_setparam
     libc.src.sched.sched_setscheduler
     libc.src.sched.sched_yield
-    libc.src.sched.clone
 
     # The general dynamic thread local model
     libc.src.tls.__tls_get_addr
@@ -346,7 +337,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.atoll
     libc.src.stdlib.bsearch
     libc.src.stdlib.div
-    libc.src.stdlib.getloadavg
     libc.src.stdlib.l64a
     libc.src.stdlib.labs
     libc.src.stdlib.ldiv
@@ -354,7 +344,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.lldiv
     libc.src.stdlib.memalignment
     libc.src.stdlib.mkdtemp
-    libc.src.stdlib.mkostemp
     libc.src.stdlib.mkstemp
     libc.src.stdlib.mkstemps
     libc.src.stdlib.mkostemp
@@ -491,7 +480,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # libc.src.sys.epoll.epoll_pwait2
 
     # sys/file.h entrypoints
-    libc.src.sys.file.flock
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl
@@ -642,10 +630,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.stat.fchmod
     libc.src.sys.stat.fchmodat
     libc.src.sys.stat.fstat
-    libc.src.sys.stat.fstatat
     libc.src.sys.stat.futimens
-    libc.src.sys.stat.mkfifo
-    libc.src.sys.stat.mkfifoat
     libc.src.sys.stat.statx
     libc.src.sys.stat.lstat
     libc.src.sys.stat.mkdir
@@ -691,13 +676,10 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/xattr.h entrypoints
     libc.src.sys.xattr.fgetxattr
-    libc.src.sys.xattr.flistxattr
     libc.src.sys.xattr.fremovexattr
     libc.src.sys.xattr.fsetxattr
     libc.src.sys.xattr.getxattr
     libc.src.sys.xattr.lgetxattr
-    libc.src.sys.xattr.listxattr
-    libc.src.sys.xattr.llistxattr
     libc.src.sys.xattr.lremovexattr
     libc.src.sys.xattr.lsetxattr
     libc.src.sys.xattr.removexattr
@@ -751,7 +733,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.dup2
     libc.src.unistd.daemon
     libc.src.unistd.dup3
-    libc.src.unistd.execl
     libc.src.unistd.execle
     libc.src.unistd.execlp
     libc.src.unistd.execve
@@ -844,8 +825,6 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # wchar.h entrypoints
     libc.src.wchar.btowc
-    libc.src.wchar.wcscasecmp
-    libc.src.wchar.wcsncasecmp
     libc.src.wchar.wcslen
     libc.src.wchar.wcsnlen
     libc.src.wchar.wctob
@@ -1719,20 +1698,12 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_attr_destroy
     libc.src.pthread.pthread_attr_getdetachstate
     libc.src.pthread.pthread_attr_getguardsize
-    libc.src.pthread.pthread_attr_getinheritsched
-    libc.src.pthread.pthread_attr_getschedparam
-    libc.src.pthread.pthread_attr_getschedpolicy
-    libc.src.pthread.pthread_attr_getscope
     libc.src.pthread.pthread_attr_getstack
     libc.src.pthread.pthread_attr_getstacksize
     libc.src.pthread.pthread_attr_init
     libc.src.pthread.pthread_attr_setdetachstate
-    libc.src.pthread.pthread_attr_setscope
-    libc.src.pthread.pthread_attr_setschedpolicy
     libc.src.pthread.pthread_attr_getschedpolicy
-    libc.src.pthread.pthread_attr_setschedparam
     libc.src.pthread.pthread_attr_getschedparam
-    libc.src.pthread.pthread_attr_setinheritsched
     libc.src.pthread.pthread_attr_getinheritsched
     libc.src.pthread.pthread_attr_getscope
     libc.src.pthread.pthread_attr_setguardsize
@@ -1762,7 +1733,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_detach
     libc.src.pthread.pthread_equal
     libc.src.pthread.pthread_exit
-    libc.src.pthread.pthread_getattr_np
     libc.src.pthread.pthread_getname_np
     libc.src.pthread.pthread_getschedparam
     libc.src.pthread.pthread_getspecific
@@ -1830,7 +1800,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_spin_lock
     libc.src.pthread.pthread_spin_trylock
     libc.src.pthread.pthread_spin_unlock
-    libc.src.pthread.pthread_kill
     libc.src.pthread.pthread_self
     libc.src.pthread.pthread_setname_np
     libc.src.pthread.pthread_setschedparam
@@ -1909,7 +1878,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdio.getline
     libc.src.stdio.fileno
     libc.src.stdio.flockfile
-    libc.src.stdio.fmemopen
     libc.src.stdio.fopen
     libc.src.stdio.freopen
     libc.src.stdio.fmemopen
@@ -1972,7 +1940,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.stdlib.erand48
     libc.src.stdlib.drand48
     libc.src.stdlib.mb_cur_max
-    libc.src.stdlib.secure_getenv
     libc.src.stdlib.grantpt
     libc.src.stdlib.posix_openpt
     libc.src.stdlib.ptsname
@@ -2219,7 +2186,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.netdb.getaddrinfo
       libc.src.netdb.gethostbyname
       libc.src.netdb.gethostbyname2
-      libc.src.netdb.getnameinfo
 
       # resolv.h entrypoints
       libc.src.resolv.__res_state

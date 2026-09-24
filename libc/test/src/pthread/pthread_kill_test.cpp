@@ -12,7 +12,7 @@
 #include "src/pthread/pthread_attr_destroy.h"
 #include "src/pthread/pthread_attr_getstack.h"
 #include "src/pthread/pthread_getattr_np.h"
-#include "src/pthread/pthread_kill.h"
+#include "src/signal/pthread_kill.h"
 #include "src/pthread/pthread_self.h"
 #include "src/signal/signal.h"
 #include "test/UnitTest/Test.h"

@@ -206,5 +206,6 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.__support.threads.tcb
     libc.src.__support.threads.thread
 )

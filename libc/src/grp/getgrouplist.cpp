@@ -55,9 +55,9 @@ LLVM_LIBC_FUNCTION(int, getgrouplist,
 
   add(group);
 
-  if (auto opened = group::open(); opened.has_value()) {
+  if (auto opened = grp::open(); opened.has_value()) {
     for (;;) {
-      auto entry = group::read_next();
+      auto entry = grp::read_next();
       if (!entry.has_value() || entry.value() == nullptr)
         break;
       const struct group *g = entry.value();
@@ -68,7 +68,7 @@ LLVM_LIBC_FUNCTION(int, getgrouplist,
         }
       }
     }
-    group::close();
+    grp::close();
   }
 
   *ngroups = found;

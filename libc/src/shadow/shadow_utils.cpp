@@ -13,7 +13,7 @@
 
 #include "src/shadow/shadow_utils.h"
 #include "hdr/types/struct_spwd.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 
 #ifndef LIBC_COPT_SHADOW_FILE_PATH
@@ -23,7 +23,7 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace shadow_db {
 
-static LIBC_CONSTINIT internal::FlatFileDatabase<struct spwd>
+static LIBC_CONSTINIT pwd::FlatFileDatabase<struct spwd>
     db(LIBC_COPT_SHADOW_FILE_PATH);
 // These are process wide and are not under a lock: getspent is not
 // reentrant, and the _r calls open the file for themselves.

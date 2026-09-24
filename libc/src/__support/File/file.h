@@ -421,9 +421,10 @@ private:
     size_t written = 0;
     while (written < len) {
       FileIOResult result = platform_write(this, data + written, len - written);
+      // A platform may take part of the data and report why it stopped.
+      written += result.value;
       if (result.has_error() || result.value == 0)
         return {written, result.error};
-      written += result.value;
     }
     return written;
   }

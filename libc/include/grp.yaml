@@ -23,16 +23,12 @@ functions:
       - type: gid_t
       - type: gid_t *
       - type: int *
-<<<<<<< HEAD
->>>>>>> c66ec21f747f ([libc] Add ppoll, preadv, pwritev, copy_file_range and cfmakeraw)
-=======
   - name: fgetgrent
     standards:
       - gnu
     return_type: struct group *
     arguments:
       - type: FILE *
->>>>>>> a2415a19e094 ([libc] Add mkostemp, fgetpwent and fgetgrent)
   - name: getgrent
     standards:
       - posix

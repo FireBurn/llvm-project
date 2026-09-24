@@ -1,44 +1,12 @@
 add_custom_target(libc-stdlib-tests)
 
 add_libc_test(
-  rand48_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    rand48_test.cpp
-  DEPENDS
-    libc.src.stdlib.drand48
-    libc.src.stdlib.erand48
-    libc.src.stdlib.jrand48
-    libc.src.stdlib.lcong48
-    libc.src.stdlib.lrand48
-    libc.src.stdlib.mrand48
-    libc.src.stdlib.nrand48
-    libc.src.stdlib.seed48
-    libc.src.stdlib.srand48
-)
-
-add_libc_test(
-  getsubopt_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    getsubopt_test.cpp
-  DEPENDS
-    libc.src.stdlib.getsubopt
-)
-
-add_libc_test(
-  malloc_trim_test
   atof_test
   SUITE
     libc-stdlib-tests
   SRCS
-    malloc_trim_test.cpp
     atof_test.cpp
   DEPENDS
-    libc.hdr.func.mallopt
-    libc.src.stdlib.malloc_trim
     libc.src.errno.errno
     libc.src.stdlib.atof
     libc.test.UnitTest.ErrnoCheckingTest
@@ -403,17 +371,6 @@ add_libc_test(
 )
 
 add_libc_test(
-  rand_r_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    rand_r_test.cpp
-  DEPENDS
-    libc.hdr.stdlib_macros
-    libc.src.stdlib.rand_r
-)
-
-add_libc_test(
   realpath_test
   SUITE
     libc-stdlib-tests
@@ -490,6 +447,7 @@ add_libc_test(
   SRCS
     mkostemp_test.cpp
   DEPENDS
+    libc.src.string.strncmp
     libc.hdr.errno_macros
     libc.hdr.fcntl_macros
     libc.hdr.func.free
@@ -534,26 +492,6 @@ add_libc_test(
     libc.src.unistd.read
     libc.src.unistd.unlink
     libc.src.unistd.write
-    libc.test.UnitTest.ErrnoCheckingTest
-)
-
-add_libc_test(
-  mkstemps_test
-  SUITE
-    libc-stdlib-tests
-  SRCS
-    mkstemps_test.cpp
-  DEPENDS
-    libc.hdr.errno_macros
-    libc.hdr.fcntl_macros
-    libc.hdr.unistd_macros
-    libc.src.stdlib.mkostemps
-    libc.src.stdlib.mkstemps
-    libc.src.string.strdup
-    libc.src.string.strlen
-    libc.src.unistd.access
-    libc.src.unistd.close
-    libc.src.unistd.unlink
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
@@ -638,12 +576,12 @@ if(LLVM_LIBC_FULL_BUILD AND LIBC_TEST_SUBPROCESS_TESTS)
     SRCS
       exit_test.cpp
     DEPENDS
-      libc.hdr.types.FILE
-      libc.src.__support.CPP.string_view
       libc.src.stdio.fclose
       libc.src.stdio.fopen
       libc.src.stdio.fputs
       libc.src.stdio.fread
+      libc.hdr.types.FILE
+      libc.src.__support.CPP.string_view
       libc.src.stdio.remove
       libc.src.stdlib._Exit
       libc.src.stdlib.exit
@@ -741,6 +679,65 @@ add_libc_test(
 )
 
 add_libc_test(
+  rand48_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand48_test.cpp
+  DEPENDS
+    libc.src.stdlib.drand48
+    libc.src.stdlib.erand48
+    libc.src.stdlib.jrand48
+    libc.src.stdlib.lcong48
+    libc.src.stdlib.lrand48
+    libc.src.stdlib.mrand48
+    libc.src.stdlib.nrand48
+    libc.src.stdlib.seed48
+    libc.src.stdlib.srand48
+)
+
+add_libc_test(
+  getsubopt_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    getsubopt_test.cpp
+  DEPENDS
+    libc.src.stdlib.getsubopt
+)
+
+add_libc_test(
+  rand_r_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    rand_r_test.cpp
+  DEPENDS
+    libc.hdr.stdlib_macros
+    libc.src.stdlib.rand_r
+)
+
+add_libc_test(
+  mkstemps_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    mkstemps_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.unistd_macros
+    libc.src.stdlib.mkostemps
+    libc.src.stdlib.mkstemps
+    libc.src.string.strdup
+    libc.src.string.strlen
+    libc.src.unistd.access
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   reallocarray_test
   SUITE
     libc-stdlib-tests
@@ -825,12 +822,13 @@ add_libc_test(
     libc.src.stdlib.setenv
 )
 
-  add_libc_test(
-    SUITE
-      libc-stdlib-tests
-    SRCS
-    DEPENDS
-      libc.src.stdlib.free
-      libc.src.stdlib.malloc
-  )
-endif()
+add_libc_test(
+  malloc_trim_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    malloc_trim_test.cpp
+  DEPENDS
+    libc.hdr.func.mallopt
+    libc.src.stdlib.malloc_trim
+)

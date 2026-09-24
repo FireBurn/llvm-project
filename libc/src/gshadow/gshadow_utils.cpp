@@ -14,8 +14,8 @@
 #include "src/gshadow/gshadow_utils.h"
 #include "hdr/types/struct_sgrp.h"
 #include "src/__support/CPP/span.h"
-#include "src/__support/field_tokenizer.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/field_tokenizer.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/attributes.h"
 
 #ifndef LIBC_COPT_GSHADOW_FILE_PATH
@@ -33,7 +33,7 @@ bool split_names(cpp::span<char> field, char **out, size_t max) {
     return false;
   size_t count = 0;
   if (!field.empty() && field.front() != '\0') {
-    internal::FieldTokenizer tokenizer(field, ',');
+    pwd::FieldTokenizer tokenizer(field, ',');
     while (auto name = tokenizer.next_field()) {
       if (count + 1 >= max)
         return false;
@@ -49,7 +49,7 @@ bool parse_line_into(cpp::span<char> line, struct sgrp *entry, char **admins,
   if (line.empty() || !entry)
     return false;
 
-  internal::FieldTokenizer tokenizer(line);
+  pwd::FieldTokenizer tokenizer(line);
 
   auto name = tokenizer.next_field();
   if (!name || name->empty())
@@ -91,7 +91,7 @@ bool parse_line_into(cpp::span<char> line, struct sgrp *entry, char **admins,
 
 namespace gshadow_db {
 
-static LIBC_CONSTINIT internal::FlatFileDatabase<struct sgrp>
+static LIBC_CONSTINIT pwd::FlatFileDatabase<struct sgrp>
     db(LIBC_COPT_GSHADOW_FILE_PATH);
 // Process wide and not under a lock, the same as the group and shadow
 // databases: getsgent is not reentrant, and the _r calls open their own.

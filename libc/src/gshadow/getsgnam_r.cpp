@@ -12,7 +12,7 @@
 #include "hdr/types/struct_sgrp.h"
 #include "src/__support/CPP/span.h"
 #include "src/__support/common.h"
-#include "src/__support/flat_file_db.h"
+#include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/macros/config.h"
 #include "src/gshadow/gshadow_r_utils.h"
 #include "src/gshadow/gshadow_utils.h"
@@ -47,7 +47,7 @@ LLVM_LIBC_FUNCTION(int, getsgnam_r,
   if (!gshadow_r::split_buffer(buf, buflen, &split))
     return ERANGE;
 
-  internal::FlatFileDatabase<struct sgrp> db(gshadow_db::path());
+  pwd::FlatFileDatabase<struct sgrp> db(gshadow_db::path());
   if (auto opened = db.setdb(); !opened.has_value())
     return opened.error();
 
@@ -60,7 +60,7 @@ LLVM_LIBC_FUNCTION(int, getsgnam_r,
     if (!read.value())
       break; // The end of the file, and no match is not an error.
 
-    if (!gshadow::parse_line_into(split.line.first(read.value() + 1), sgbuf,
+    if (!gshadow::parse_line_into(split.line.first(*read.value() + 1), sgbuf,
                                   split.admins, split.max_admins, split.members,
                                   split.max_members))
       continue; // A line which will not parse is passed over.

@@ -48,7 +48,7 @@ void write_group_file() {
   ASSERT_EQ(LIBC_NAMESPACE::write(fd, contents.data(), contents.size()),
             static_cast<ssize_t>(contents.size()));
   ASSERT_EQ(LIBC_NAMESPACE::close(fd), 0);
-  LIBC_NAMESPACE::group::TESTONLY_set_group_path(GROUP_FILE);
+  LIBC_NAMESPACE::grp::TESTONLY_set_group_path(GROUP_FILE);
 }
 
 } // anonymous namespace

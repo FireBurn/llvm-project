@@ -177,13 +177,10 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.thread)
       .cleanup_stack
       .mutex
       .${LIBC_TARGET_OS}.thread
-<<<<<<< HEAD
       libc.hdr.types.struct___pthread_cleanup_frame
-=======
       libc.hdr.limits_macros
       libc.hdr.stdint_proxy
       libc.src.__support.common
->>>>>>> 68b21acb55b5 ([libc] Run the key destructors the way POSIX states)
       libc.src.__support.fixedvector
       libc.src.__support.CPP.array
       libc.src.__support.CPP.mutex

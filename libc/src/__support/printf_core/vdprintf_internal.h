@@ -52,15 +52,16 @@ LIBC_INLINE ErrorOr<size_t> vdprintf_internal(int fd,
                                               const char *__restrict format,
                                               internal::ArgList args) {
   char buffer[DPRINTF_BUFFER_SIZE];
-  printf_core::FlushingBuffer wb(
-      buffer, DPRINTF_BUFFER_SIZE, write_to_descriptor,
-      reinterpret_cast<void *>(static_cast<size_t>(fd)));
-  printf_core::Writer writer(wb);
+  void *target = reinterpret_cast<void *>(static_cast<size_t>(fd));
+  Writer writer = make_writer(
+      buffer, DPRINTF_BUFFER_SIZE,
+      &overflow_write_flush_to_sink<char, write_to_descriptor>, target);
 
-  auto written = printf_core::printf_main(&writer, format, args);
+  auto written = printf_main(&writer, format, args);
   if (!written.has_value())
     return Error(written.error());
-  int flushed = wb.flush_to_stream();
+  int flushed =
+      writer.get_write_buffer().flush_to_sink<write_to_descriptor>(target);
   if (flushed < 0)
     return Error(-flushed);
   return written.value();

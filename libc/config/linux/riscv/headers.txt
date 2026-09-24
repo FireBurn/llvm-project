@@ -81,7 +81,6 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_random
     libc.include.sys_dir
     libc.include.sys_errno
-    libc.include.sys_file
     libc.include.sys_mount
     libc.include.sys_msg
     libc.include.sys_shm
@@ -136,7 +135,6 @@ set(TARGET_PUBLIC_HEADERS
 
 if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
   list(APPEND TARGET_PUBLIC_HEADERS
-    libc.include.glob
     libc.include.regex
     libc.include.sys_ptrace
   )
