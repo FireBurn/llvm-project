@@ -23853,6 +23853,55 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_math_range_reduction_double",
+    hdrs = ["src/__support/math/range_reduction_double_common.h", "src/__support/math/range_reduction_double_fma.h", "src/__support/math/range_reduction_double_nofma.h"],
+    deps = [
+        ":__support_common",
+        ":__support_fputil_double_double",
+        ":__support_fputil_dyadic_float",
+        ":__support_fputil_fma",
+        ":__support_fputil_fp_bits",
+        ":__support_fputil_multiply_add",
+        ":__support_fputil_nearest_integer",
+        ":__support_integer_literals",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":__support_range_reduction_double",
+    ],
+)
+
+libc_support_library(
+    name = "__support_math_sincos_eval",
+    hdrs = ["src/__support/math/sincos_eval.h"],
+    deps = [
+        ":__support_fputil_double_double",
+        ":__support_fputil_dyadic_float",
+        ":__support_fputil_multiply_add",
+        ":__support_fputil_polyeval",
+        ":__support_integer_literals",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_math_bessel",
+    hdrs = ["src/__support/math/bessel.h"],
+    deps = [
+        ":__support_fputil_dyadic_float",
+        ":__support_fputil_fenv_impl",
+        ":__support_fputil_fp_bits",
+        ":__support_fputil_sqrt",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":__support_math_log2l_impl",
+        ":__support_math_range_reduction_double",
+        ":__support_math_sincos_eval",
+        ":__support_range_reduction_double",
+        ":__support_sincos_eval",
+    ],
+)
+
+libc_support_library(
     name = "__support_math_lgamma",
     hdrs = ["src/__support/math/lgamma.h"],
     deps = [
@@ -23905,6 +23954,36 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "j0",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "j0f",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "j1",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "j1f",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "jn",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "jnf",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
     name = "lgamma",
     additional_deps = [":__support_math_lgamma"],
 )
@@ -23935,6 +24014,36 @@ libc_math_function(
         ":__support_uint128",
         ":hdr_fenv_macros",
     ],
+)
+
+libc_math_function(
+    name = "y0",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "y0f",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "y1",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "y1f",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "yn",
+    additional_deps = [":__support_math_bessel"],
+)
+
+libc_math_function(
+    name = "ynf",
+    additional_deps = [":__support_math_bessel"],
 )
 
 libc_support_library(
