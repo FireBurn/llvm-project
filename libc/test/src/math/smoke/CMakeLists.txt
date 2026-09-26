@@ -1,6 +1,28 @@
 add_libc_testsuite(libc-math-smoke-tests PARENT libc-math-tests)
 
 add_fp_unittest(
+  bessel_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    bessel_test.cpp
+  DEPENDS
+    libc.src.errno.errno
+    libc.src.math.j0
+    libc.src.math.j0f
+    libc.src.math.j1
+    libc.src.math.j1f
+    libc.src.math.jn
+    libc.src.math.jnf
+    libc.src.math.y0
+    libc.src.math.y0f
+    libc.src.math.y1
+    libc.src.math.y1f
+    libc.src.math.yn
+    libc.src.math.ynf
+)
+
+add_fp_unittest(
   lgamma_test
   SUITE
     libc-math-smoke-tests
