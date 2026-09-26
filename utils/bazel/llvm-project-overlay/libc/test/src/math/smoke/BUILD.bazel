@@ -4,6 +4,7 @@
 
 # Smoke tests for LLVM libc math.h functions.
 
+load("//libc/test:libc_test_rules.bzl", "libc_test")
 load("//libc/test/src/math:libc_math_test_rules.bzl", "math_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -2829,5 +2830,27 @@ math_test(
     name = "lgamma",
     deps = [
         "//libc/src/math:lgamma_r",
+    ],
+)
+
+libc_test(
+    name = "bessel_test",
+    srcs = ["bessel_test.cpp"],
+    deps = [
+        "//libc/hdr:math_macros",
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/math:j0",
+        "//libc/src/math:j0f",
+        "//libc/src/math:j1",
+        "//libc/src/math:j1f",
+        "//libc/src/math:jn",
+        "//libc/src/math:jnf",
+        "//libc/src/math:y0",
+        "//libc/src/math:y0f",
+        "//libc/src/math:y1",
+        "//libc/src/math:y1f",
+        "//libc/src/math:yn",
+        "//libc/src/math:ynf",
+        "//libc/test/UnitTest:fp_test_helpers",
     ],
 )

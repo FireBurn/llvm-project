@@ -1060,10 +1060,22 @@ alias(
         "atanh",
         "erf",
         "erfc",
+        "j0",
+        "j0f",
+        "j1",
+        "j1f",
+        "jn",
+        "jnf",
         "lgamma",
         "lgamma_r",
         "log2l",
         "powl",
+        "y0",
+        "y0f",
+        "y1",
+        "y1f",
+        "yn",
+        "ynf",
     ]
 ]
 
