@@ -1124,6 +1124,12 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.math.issignalingf
     libc.src.math.issignalingf128
     libc.src.math.issignalingl
+    libc.src.math.j0
+    libc.src.math.j0f
+    libc.src.math.j1
+    libc.src.math.j1f
+    libc.src.math.jn
+    libc.src.math.jnf
     libc.src.math.ldexp
     libc.src.math.ldexpf
     libc.src.math.ldexpl
@@ -1246,6 +1252,12 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.math.ufromfpx
     libc.src.math.ufromfpxf
     libc.src.math.ufromfpxl
+    libc.src.math.y0
+    libc.src.math.y0f
+    libc.src.math.y1
+    libc.src.math.y1f
+    libc.src.math.yn
+    libc.src.math.ynf
 )
 
 if(LIBC_TYPES_HAS_CFLOAT16)
