@@ -1706,6 +1706,44 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: j0
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: double
+  - name: j0f
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: float
+  - name: j1
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: double
+  - name: j1f
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: float
+  - name: jn
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: int
+      - type: double
+  - name: jnf
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: int
+      - type: float
   - name: ldexp
     standards:
       - stdc
@@ -3007,3 +3045,41 @@ functions:
       - type: long double
       - type: int
       - type: unsigned int
+  - name: y0
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: double
+  - name: y0f
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: float
+  - name: y1
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: double
+  - name: y1f
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: float
+  - name: yn
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: int
+      - type: double
+  - name: ynf
+    standards:
+      - gnu
+    return_type: float
+    arguments:
+      - type: int
+      - type: float
