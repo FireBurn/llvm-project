@@ -3711,6 +3711,36 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "j0",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "j0f",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "j1",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "j1f",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "jn",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "jnf",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
     name = "lgamma",
     additional_deps = ["//libc/src/__support/math:lgamma"],
 )
@@ -3741,4 +3771,34 @@ libc_math_function(
         "//libc/src/__support/math:powl_impl",
         "//libc/src/__support:uint128",
     ],
+)
+
+libc_math_function(
+    name = "y0",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "y0f",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "y1",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "y1f",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "yn",
+    additional_deps = ["//libc/src/__support/math:bessel"],
+)
+
+libc_math_function(
+    name = "ynf",
+    additional_deps = ["//libc/src/__support/math:bessel"],
 )
