@@ -6169,3 +6169,19 @@ add_header_library(
     libc.src.__support.macros.config
     libc.src.__support.macros.optimization
 )
+
+add_header_library(
+  bessel
+  HDRS
+    bessel.h
+  DEPENDS
+    .log2l_impl
+    .range_reduction_double
+    .sincos_eval
+    libc.src.__support.FPUtil.dyadic_float
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.FPUtil.sqrt
+    libc.src.__support.macros.config
+    libc.src.__support.macros.optimization
+)

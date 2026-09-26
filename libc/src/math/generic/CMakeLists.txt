@@ -5207,3 +5207,135 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.math.lgamma
 )
+
+add_entrypoint_object(
+  j0
+  SRCS
+    j0.cpp
+  HDRS
+    ../j0.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  j1
+  SRCS
+    j1.cpp
+  HDRS
+    ../j1.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  y0
+  SRCS
+    y0.cpp
+  HDRS
+    ../y0.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  y1
+  SRCS
+    y1.cpp
+  HDRS
+    ../y1.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  jn
+  SRCS
+    jn.cpp
+  HDRS
+    ../jn.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  yn
+  SRCS
+    yn.cpp
+  HDRS
+    ../yn.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  j0f
+  SRCS
+    j0f.cpp
+  HDRS
+    ../j0f.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  j1f
+  SRCS
+    j1f.cpp
+  HDRS
+    ../j1f.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  y0f
+  SRCS
+    y0f.cpp
+  HDRS
+    ../y0f.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  y1f
+  SRCS
+    y1f.cpp
+  HDRS
+    ../y1f.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  jnf
+  SRCS
+    jnf.cpp
+  HDRS
+    ../jnf.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
+
+add_entrypoint_object(
+  ynf
+  SRCS
+    ynf.cpp
+  HDRS
+    ../ynf.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.bessel
+)
