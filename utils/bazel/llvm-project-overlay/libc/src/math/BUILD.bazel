@@ -3711,6 +3711,14 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "erfcf",
+    additional_deps = [
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/math:erfc",
+    ],
+)
+
+libc_math_function(
     name = "j0",
     additional_deps = ["//libc/src/__support/math:bessel"],
 )
