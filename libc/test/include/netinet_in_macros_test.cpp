@@ -129,3 +129,26 @@ TEST(LlvmLibcNetinetInMacrosTest, AddTheRemainingIpSocketOptions) {
   EXPECT_EQ(static_cast<long long>(IP_LOCAL_PORT_RANGE), 51LL);
   EXPECT_EQ(static_cast<long long>(IP_PROTOCOL), 52LL);
 }
+
+TEST(LlvmLibcNetinetInMacrosTest, GiveNetinetInHTheRestOfGlibcSMacros) {
+  EXPECT_EQ(static_cast<long long>(INADDR_DUMMY), 0xc0000008LL);
+  EXPECT_EQ(static_cast<long long>(INADDR_UNSPEC_GROUP), 0xe0000000LL);
+  EXPECT_EQ(static_cast<long long>(INADDR_ALLHOSTS_GROUP), 0xe0000001LL);
+  EXPECT_EQ(static_cast<long long>(INADDR_ALLRTRS_GROUP), 0xe0000002LL);
+  EXPECT_EQ(static_cast<long long>(INADDR_ALLSNOOPERS_GROUP), 0xe000006aLL);
+  EXPECT_EQ(static_cast<long long>(INADDR_MAX_LOCAL_GROUP), 0xe00000ffLL);
+  EXPECT_EQ(static_cast<long long>(IP_PMTUDISC), 10LL);
+  EXPECT_EQ(static_cast<long long>(IP_RECVERR_RFC4884), 26LL);
+  EXPECT_EQ(static_cast<long long>(IP_RECVRETOPTS), 7LL);
+  EXPECT_EQ(static_cast<long long>(IP_DEFAULT_MULTICAST_TTL), 1LL);
+  EXPECT_EQ(static_cast<long long>(IP_DEFAULT_MULTICAST_LOOP), 1LL);
+  EXPECT_EQ(static_cast<long long>(IP_MAX_MEMBERSHIPS), 20LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_IPSEC_POLICY), 34LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_XFRM_POLICY), 35LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_HDRINCL), 36LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_RXHOPOPTS), 54LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_RXDSTOPTS), 59LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_RTHDR_LOOSE), 0LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_RTHDR_STRICT), 1LL);
+  EXPECT_EQ(static_cast<long long>(IPV6_RTHDR_TYPE_0), 0LL);
+}
