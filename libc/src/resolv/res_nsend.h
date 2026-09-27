@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Implementation header for res_nsend
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_SRC_RESOLV_RES_NSEND_H
+#define LLVM_LIBC_SRC_RESOLV_RES_NSEND_H
+
+#include "src/__support/macros/config.h"
+
+struct __res_state;
+
+namespace LIBC_NAMESPACE_DECL {
+
+int res_nsend(struct __res_state *statp, const unsigned char *message,
+              int msglen, unsigned char *answer, int anslen);
+
+} // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_RESOLV_RES_NSEND_H
