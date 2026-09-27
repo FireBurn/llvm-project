@@ -71,7 +71,6 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
-        "//libc/src/unistd:close",
     ],
 )
 
@@ -134,5 +133,71 @@ libc_function(
         "//libc/src/netdb:__h_errno_location",
         "//libc/src/netdb:resolv_dns_message",
         "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
+    name = "res_ninit",
+    srcs = ["res_ninit.cpp"],
+    hdrs = ["res_ninit.h"],
+    deps = [
+        ":__res_state",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_nclose",
+    srcs = ["res_nclose.cpp"],
+    hdrs = ["res_nclose.h"],
+    deps = [
+        ":res_close",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_nquery",
+    srcs = ["res_nquery.cpp"],
+    hdrs = ["res_nquery.h"],
+    deps = [
+        ":res_query",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_nsearch",
+    srcs = ["res_nsearch.cpp"],
+    hdrs = ["res_nsearch.h"],
+    deps = [
+        ":res_search",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_nsend",
+    srcs = ["res_nsend.cpp"],
+    hdrs = ["res_nsend.h"],
+    deps = [
+        ":res_send",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "res_nmkquery",
+    srcs = ["res_nmkquery.cpp"],
+    hdrs = ["res_nmkquery.h"],
+    deps = [
+        ":res_mkquery",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
