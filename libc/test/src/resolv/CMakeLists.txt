@@ -5,6 +5,22 @@ if(NOT TARGET libc.src.resolv.dn_expand)
 endif()
 
 add_libc_test(
+  res_n_test
+  SUITE
+    libc-resolv-tests
+  SRCS
+    res_n_test.cpp
+  DEPENDS
+    libc.hdr.types.struct___res_state
+    libc.src.netdb.resolv.dns_message
+    libc.src.resolv.res_nclose
+    libc.src.resolv.res_ninit
+    libc.src.resolv.res_nmkquery
+    libc.src.resolv.res_nquery
+    libc.src.string.memset
+)
+
+add_libc_test(
   dn_expand_test
   SUITE
     libc-resolv-tests
