@@ -292,6 +292,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  stdlib_wait_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    stdlib_wait_macros_test.cpp
+  DEPENDS
+    libc.include.stdlib
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
