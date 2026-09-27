@@ -1750,6 +1750,12 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.resolv.res_close
     libc.src.resolv.res_init
     libc.src.resolv.res_mkquery
+    libc.src.resolv.res_nclose
+    libc.src.resolv.res_ninit
+    libc.src.resolv.res_nmkquery
+    libc.src.resolv.res_nquery
+    libc.src.resolv.res_nsearch
+    libc.src.resolv.res_nsend
     libc.src.resolv.res_query
     libc.src.resolv.res_search
     libc.src.resolv.res_send
