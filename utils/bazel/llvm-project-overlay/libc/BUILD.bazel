@@ -19483,6 +19483,21 @@ libc_function(
 )
 
 libc_function(
+    name = "ftime",
+    srcs = ["src/sys/timeb/ftime.cpp"],
+    hdrs = ["src/sys/timeb/ftime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":hdr_time_macros",
+        ":sys_timeb_ftime",
+        ":types_struct_timeb",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
     name = "futimes",
     srcs = ["src/sys/time/linux/futimes.cpp"],
     hdrs = ["src/sys/time/futimes.h"],
@@ -26494,5 +26509,33 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_struct_timeval",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_timeb",
+    hdrs = ["include/llvm-libc-types/struct_timeb.h"],
+)
+
+libc_support_library(
+    name = "types_struct_timeb",
+    hdrs = ["hdr/types/struct_timeb.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_timeb"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "sys_timeb_ftime",
+    srcs = ["src/sys/timeb/ftime.cpp"],
+    hdrs = ["src/sys/timeb/ftime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":hdr_time_macros",
+        ":types_struct_timeb",
+        ":types_struct_timespec",
     ],
 )

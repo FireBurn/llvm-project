@@ -761,6 +761,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.uio.pwritev
     libc.src.sys.uio.writev
     libc.src.sys.uio.readv
+    libc.src.sys.timeb.ftime
 
     # sys/times.h entrypoints
     libc.src.sys.times.times
