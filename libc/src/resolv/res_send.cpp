@@ -16,19 +16,15 @@
 #include "src/resolv/res_state.h"
 
 namespace LIBC_NAMESPACE_DECL {
+namespace internal {
 
-// Sends a message that has already been written and hands back what came
-// back, without reading either. What the answer means is the caller's to
-// work out.
-LLVM_LIBC_FUNCTION(int, res_send,
-                   (const unsigned char *message, int msglen,
-                    unsigned char *answer, int anslen)) {
+int res_send_with(struct __res_state *state, const unsigned char *message,
+                  int msglen, unsigned char *answer, int anslen) {
   if (message == nullptr || answer == nullptr || msglen <= 0 || anslen <= 0) {
     libc_errno = EINVAL;
     return -1;
   }
 
-  struct __res_state *state = LIBC_NAMESPACE::__res_state();
   if (!internal::res_ready(*state)) {
     libc_errno = ECONNREFUSED;
     return -1;
@@ -49,6 +45,18 @@ LLVM_LIBC_FUNCTION(int, res_send,
     return -1;
   }
   return length;
+}
+
+} // namespace internal
+
+// Sends a message that has already been written and hands back what came
+// back, without reading either. What the answer means is the caller's to
+// work out.
+LLVM_LIBC_FUNCTION(int, res_send,
+                   (const unsigned char *message, int msglen,
+                    unsigned char *answer, int anslen)) {
+  return internal::res_send_with(LIBC_NAMESPACE::__res_state(), message, msglen,
+                                 answer, anslen);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

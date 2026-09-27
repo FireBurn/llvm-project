@@ -1,4 +1,4 @@
-//===-- Implementation header of res_close --------------------------------===//
+//===-- Implementation of res_nclose --------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,21 +6,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H
-#define LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H
+#include "src/resolv/res_nclose.h"
 
+#include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-
-struct __res_state;
+#include "src/resolv/res_close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-void res_close(void);
-
-namespace internal {
-void res_close_with(struct __res_state *state);
-} // namespace internal
+// Closes what a state the caller keeps holds open.
+LLVM_LIBC_FUNCTION(void, res_nclose, (struct __res_state * statp)) {
+  internal::res_close_with(statp);
+}
 
 } // namespace LIBC_NAMESPACE_DECL
-
-#endif // LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H

@@ -2207,6 +2207,12 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.resolv.res_query
       libc.src.resolv.res_search
       libc.src.resolv.res_send
+      libc.src.resolv.res_ninit
+      libc.src.resolv.res_nclose
+      libc.src.resolv.res_nquery
+      libc.src.resolv.res_nsearch
+      libc.src.resolv.res_nsend
+      libc.src.resolv.res_nmkquery
 
     # netdb.h entrypoints
     libc.src.netdb.herror

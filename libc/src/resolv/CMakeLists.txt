@@ -131,3 +131,75 @@ add_entrypoint_object(
     libc.src.netdb.resolv.dns_message
     libc.src.string.memory_utils.inline_memcpy
 )
+
+add_entrypoint_object(
+  res_ninit
+  SRCS
+    res_ninit.cpp
+  HDRS
+    res_ninit.h
+  DEPENDS
+    .__res_state
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_nclose
+  SRCS
+    res_nclose.cpp
+  HDRS
+    res_nclose.h
+  DEPENDS
+    .res_close
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_nquery
+  SRCS
+    res_nquery.cpp
+  HDRS
+    res_nquery.h
+  DEPENDS
+    .res_query
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_nsearch
+  SRCS
+    res_nsearch.cpp
+  HDRS
+    res_nsearch.h
+  DEPENDS
+    .res_search
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_nsend
+  SRCS
+    res_nsend.cpp
+  HDRS
+    res_nsend.h
+  DEPENDS
+    .res_send
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  res_nmkquery
+  SRCS
+    res_nmkquery.cpp
+  HDRS
+    res_nmkquery.h
+  DEPENDS
+    .res_mkquery
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)

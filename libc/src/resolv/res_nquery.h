@@ -1,4 +1,4 @@
-//===-- Implementation header of res_close --------------------------------===//
+//===-- Implementation header for res_nquery ------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -6,8 +6,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H
-#define LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H
+#ifndef LLVM_LIBC_SRC_RESOLV_RES_NQUERY_H
+#define LLVM_LIBC_SRC_RESOLV_RES_NQUERY_H
 
 #include "src/__support/macros/config.h"
 
@@ -15,12 +15,9 @@ struct __res_state;
 
 namespace LIBC_NAMESPACE_DECL {
 
-void res_close(void);
-
-namespace internal {
-void res_close_with(struct __res_state *state);
-} // namespace internal
+int res_nquery(struct __res_state *statp, const char *name, int rr_class,
+               int type, unsigned char *answer, int anslen);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_RESOLV_RES_CLOSE_H
+#endif // LLVM_LIBC_SRC_RESOLV_RES_NQUERY_H
