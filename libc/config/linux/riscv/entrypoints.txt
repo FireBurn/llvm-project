@@ -841,6 +841,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.uio.readv
     libc.src.sys.uio.process_vm_readv
     libc.src.sys.uio.process_vm_writev
+    libc.src.sys.timeb.ftime
 
     # sys/time.h entrypoints
     libc.src.sys.time.setitimer
