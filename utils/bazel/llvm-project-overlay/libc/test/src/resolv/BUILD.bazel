@@ -11,6 +11,20 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "res_n_test",
+    srcs = ["res_n_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct___res_state",
+        "//libc/src/netdb:resolv_dns_message",
+        "//libc/src/resolv:res_nclose",
+        "//libc/src/resolv:res_ninit",
+        "//libc/src/resolv:res_nmkquery",
+        "//libc/src/resolv:res_nquery",
+        "//libc/src/string:memset",
+    ],
+)
+
+libc_test(
     name = "dn_expand_test",
     srcs = ["dn_expand_test.cpp"],
     deps = [
