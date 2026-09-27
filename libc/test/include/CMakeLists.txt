@@ -342,6 +342,15 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_cdefs_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_cdefs_test.cpp
+  DEPENDS
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
