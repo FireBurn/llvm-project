@@ -11,11 +11,20 @@
 
 #include "src/__support/macros/config.h"
 
+struct __res_state;
+
 namespace LIBC_NAMESPACE_DECL {
 
 int res_mkquery(int op, const char *dname, int rr_class, int type,
                 const unsigned char *data, int datalen,
                 const unsigned char *newrr, unsigned char *buf, int buflen);
+
+namespace internal {
+int res_mkquery_with(struct __res_state *state, int op, const char *dname,
+                     int rr_class, int type, const unsigned char *data,
+                     int datalen, const unsigned char *newrr,
+                     unsigned char *buf, int buflen);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
