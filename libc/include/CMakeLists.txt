@@ -1644,6 +1644,9 @@ add_header_macro(
     .llvm-libc-types.fsfilcnt64_t
 )
 
+# <stdlib.h> includes <sys/types.h>, which has to be generated first.
+add_dependencies(libc.include.stdlib libc.include.sys_types)
+
 add_header_macro(
   sys_kd
   ../libc/include/sys/kd.yaml
