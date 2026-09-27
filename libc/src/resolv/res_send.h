@@ -11,10 +11,17 @@
 
 #include "src/__support/macros/config.h"
 
+struct __res_state;
+
 namespace LIBC_NAMESPACE_DECL {
 
 int res_send(const unsigned char *message, int msglen, unsigned char *answer,
              int anslen);
+
+namespace internal {
+int res_send_with(struct __res_state *state, const unsigned char *message,
+                  int msglen, unsigned char *answer, int anslen);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
