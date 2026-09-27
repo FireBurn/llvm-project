@@ -11,7 +11,12 @@ macros:
     macro_header: sys-mtio-macros.h
   - macro_name: MTIOCPOS
     macro_header: sys-mtio-macros.h
-types: []
+  - macro_name: MTIOCGETCONFIG
+    macro_header: sys-mtio-macros.h
+  - macro_name: MTIOCSETCONFIG
+    macro_header: sys-mtio-macros.h
+types:
+  - type_name: struct_mtconfiginfo
 enums: []
 objects: []
 functions: []
