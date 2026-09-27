@@ -442,6 +442,22 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "time",
+    srcs = ["time.cpp"],
+    hdrs = ["time_func.h"],
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
 libc_support_library(
     name = "strptime_core_parser",
     hdrs = ["strptime_core/parser.h"],
