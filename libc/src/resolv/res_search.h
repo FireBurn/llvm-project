@@ -11,10 +11,17 @@
 
 #include "src/__support/macros/config.h"
 
+struct __res_state;
+
 namespace LIBC_NAMESPACE_DECL {
 
 int res_search(const char *name, int rr_class, int type, unsigned char *answer,
                int anslen);
+
+namespace internal {
+int res_search_with(struct __res_state *state, const char *name, int rr_class,
+                    int type, unsigned char *answer, int anslen);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
