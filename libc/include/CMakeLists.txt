@@ -1250,6 +1250,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_mtio_macros
+    .llvm-libc-types.struct_mtconfiginfo
 )
 
 add_header_macro(
