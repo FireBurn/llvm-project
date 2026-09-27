@@ -55,21 +55,16 @@ bool join(const char *name, const char *domain, char *out, size_t capacity) {
 }
 
 } // anonymous namespace
+namespace internal {
 
-// Asks about a name, trying it in the search domains where it is not already
-// qualified. A name with at least ndots dots in it, or one written with a
-// trailing dot, is asked about as it stands first, since it is already meant
-// to be complete.
-LLVM_LIBC_FUNCTION(int, res_search,
-                   (const char *name, int rr_class, int type,
-                    unsigned char *answer, int anslen)) {
-  int *h_errno_location = LIBC_NAMESPACE::__h_errno_location();
+int res_search_with(struct __res_state *state, const char *name, int rr_class,
+                    int type, unsigned char *answer, int anslen) {
+  int *h_errno_location = internal::h_errno_location_impl();
   if (name == nullptr || answer == nullptr || anslen <= 0) {
     *h_errno_location = NO_RECOVERY;
     return -1;
   }
 
-  struct __res_state *state = LIBC_NAMESPACE::__res_state();
   internal::res_ready(*state);
 
   const size_t length = length_of(name);
@@ -78,7 +73,7 @@ LLVM_LIBC_FUNCTION(int, res_search,
 
   if (qualified) {
     const int taken =
-        LIBC_NAMESPACE::res_query(name, rr_class, type, answer, anslen);
+        internal::res_query_with(state, name, rr_class, type, answer, anslen);
     if (taken >= 0)
       return taken;
     // A name written with a trailing dot names itself and nothing else, so
@@ -93,8 +88,8 @@ LLVM_LIBC_FUNCTION(int, res_search,
       char tried[resolv::MAX_MESSAGE];
       if (!join(name, state->dnsrch[i], tried, sizeof(tried)))
         continue;
-      const int taken =
-          LIBC_NAMESPACE::res_query(tried, rr_class, type, answer, anslen);
+      const int taken = internal::res_query_with(state, tried, rr_class, type,
+                                                 answer, anslen);
       if (taken >= 0)
         return taken;
       // The first refusal is the one worth reporting: a later domain saying
@@ -108,11 +103,24 @@ LLVM_LIBC_FUNCTION(int, res_search,
 
   if (!qualified) {
     const int taken =
-        LIBC_NAMESPACE::res_query(name, rr_class, type, answer, anslen);
+        internal::res_query_with(state, name, rr_class, type, answer, anslen);
     if (taken >= 0)
       return taken;
   }
   return -1;
+}
+
+} // namespace internal
+
+// Asks about a name, trying it in the search domains where it is not already
+// qualified. A name with at least ndots dots in it, or one written with a
+// trailing dot, is asked about as it stands first, since it is already meant
+// to be complete.
+LLVM_LIBC_FUNCTION(int, res_search,
+                   (const char *name, int rr_class, int type,
+                    unsigned char *answer, int anslen)) {
+  return internal::res_search_with(internal::res_state_impl(), name, rr_class,
+                                   type, answer, anslen);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

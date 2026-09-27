@@ -21,15 +21,12 @@
 #include "src/resolv/res_state.h"
 
 namespace LIBC_NAMESPACE_DECL {
+namespace internal {
 
-// Writes the question that would be sent to ask about |dname|, without
-// sending it. |data| and |newrr| belong to the update opcode, which is not
-// written here.
-LLVM_LIBC_FUNCTION(int, res_mkquery,
-                   (int op, const char *dname, int rr_class, int type,
-                    const unsigned char *data, int datalen,
-                    const unsigned char *newrr, unsigned char *buf,
-                    int buflen)) {
+int res_mkquery_with(struct __res_state *state, int op, const char *dname,
+                     int rr_class, int type, const unsigned char *data,
+                     int datalen, const unsigned char *newrr,
+                     unsigned char *buf, int buflen) {
   (void)data;
   (void)datalen;
   (void)newrr;
@@ -37,7 +34,6 @@ LLVM_LIBC_FUNCTION(int, res_mkquery,
       buflen <= 0)
     return -1;
 
-  struct __res_state *state = LIBC_NAMESPACE::__res_state();
   internal::res_ready(*state);
 
   // Each question carries an identifier the answer must repeat, so that a
@@ -51,6 +47,21 @@ LLVM_LIBC_FUNCTION(int, res_mkquery,
                                             static_cast<uint16_t>(rr_class), id,
                                             buf, static_cast<size_t>(buflen));
   return length == 0 ? -1 : static_cast<int>(length);
+}
+
+} // namespace internal
+
+// Writes the question that would be sent to ask about |dname|, without
+// sending it. |data| and |newrr| belong to the update opcode, which is not
+// written here.
+LLVM_LIBC_FUNCTION(int, res_mkquery,
+                   (int op, const char *dname, int rr_class, int type,
+                    const unsigned char *data, int datalen,
+                    const unsigned char *newrr, unsigned char *buf,
+                    int buflen)) {
+  return internal::res_mkquery_with(internal::res_state_impl(), op, dname,
+                                    rr_class, type, data, datalen, newrr, buf,
+                                    buflen);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
