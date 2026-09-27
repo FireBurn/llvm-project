@@ -45,6 +45,13 @@ bool res_setup(struct __res_state &state) {
   state.res_h_errno = 0;
   state._vcsock = -1;
   state._flags = 0;
+  state.ipv6_unavail = 0;
+  state.__glibc_unused_qhook = nullptr;
+  state.__glibc_unused_rhook = nullptr;
+  // No socket is kept open to any server, and none is described here.
+  state._u = {};
+  for (int &fd : state._u._ext.nssocks)
+    fd = -1;
   state.id = 0;
   state.defdname[0] = '\0';
 
