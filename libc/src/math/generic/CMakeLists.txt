@@ -5155,6 +5155,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  erfcf
+  SRCS
+    erfcf.cpp
+  HDRS
+    ../erfcf.h
+  DEPENDS
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.macros.optimization
+    libc.src.__support.math.erfc
+)
+
+add_entrypoint_object(
   log2l
   SRCS
     log2l.cpp
