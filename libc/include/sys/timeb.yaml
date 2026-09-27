@@ -1,0 +1,16 @@
+header: sys/timeb.h
+standards:
+  - posix
+macros: []
+types:
+  - type_name: struct_timeb
+  - type_name: time_t
+enums: []
+objects: []
+functions:
+  - name: ftime
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: struct timeb *
