@@ -69,6 +69,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.stdlib
     libc.include.string
     libc.include.strings
+    libc.include.sys_cdefs
     libc.include.sys_auxv
     libc.include.sys_epoll
     libc.include.sys_fcntl
