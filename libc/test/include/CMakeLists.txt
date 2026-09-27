@@ -1,6 +1,16 @@
 add_libc_testsuite(libc-include-tests)
 
 add_libc_test(
+  resolv_state_layout_test
+  SUITE
+    libc-include-tests
+  SRCS
+    resolv_state_layout_test.cpp
+  DEPENDS
+    libc.include.resolv
+)
+
+add_libc_test(
   glibc_layouts_test
   SUITE
     libc-include-tests
