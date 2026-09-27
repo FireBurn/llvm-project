@@ -16,9 +16,15 @@
 
 #include "src/__support/macros/config.h"
 
+struct __res_state;
+
 namespace LIBC_NAMESPACE_DECL {
 
 void res_close(void);
+
+namespace internal {
+void res_close_with(struct __res_state *state);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
