@@ -25,4 +25,12 @@
 
 #define RAND_MAX 2147483647
 
+// glibc's <stdlib.h> brings in <sys/types.h> for anything but a strict
+// standard view, and a good deal of code counts on finding dev_t and the rest
+// of its types there. Only the public header does; the library's own sources
+// include what they use.
+#if defined(_DEFAULT_SOURCE) && defined(_LLVM_LIBC_STDLIB_H)
+#include "../sys/types.h"
+#endif
+
 #endif // LLVM_LIBC_MACROS_STDLIB_MACROS_H
