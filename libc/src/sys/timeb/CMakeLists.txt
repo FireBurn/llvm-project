@@ -1,0 +1,13 @@
+add_entrypoint_object(
+  ftime
+  SRCS
+    ftime.cpp
+  HDRS
+    ftime.h
+  DEPENDS
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timeb
+    libc.hdr.types.struct_timespec
+    libc.src.__support.common
+    libc.src.__support.time.clock_gettime
+)
