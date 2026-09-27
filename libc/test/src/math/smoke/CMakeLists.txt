@@ -7313,3 +7313,15 @@ add_fp_unittest(
     libc.src.errno.errno
     libc.src.math.erfc
 )
+
+add_fp_unittest(
+  erfcf_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    erfcf_test.cpp
+  DEPENDS
+    libc.src.math.erfcf
+    libc.src.__support.FPUtil.fp_bits
+)
+
