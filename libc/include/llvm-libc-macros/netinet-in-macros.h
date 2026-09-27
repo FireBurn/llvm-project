@@ -117,6 +117,17 @@
 #define INADDR_NONE __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
 // Not specified by POSIX, added in SVR4
 #define INADDR_LOOPBACK __LLVM_LIBC_CAST(static_cast, in_addr_t, 0x7f000001)
+#define INADDR_DUMMY __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xc0000008)
+
+// The multicast groups every host and router belongs to.
+#define INADDR_UNSPEC_GROUP __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xe0000000)
+#define INADDR_ALLHOSTS_GROUP                                                  \
+  __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xe0000001)
+#define INADDR_ALLRTRS_GROUP __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xe0000002)
+#define INADDR_ALLSNOOPERS_GROUP                                               \
+  __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xe000006a)
+#define INADDR_MAX_LOCAL_GROUP                                                 \
+  __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xe00000ff)
 
 #define IN6ADDR_ANY_INIT                                                       \
   {                                                                            \
@@ -346,5 +357,26 @@
 #define IPV6_PMTUDISC_PROBE 3
 #define IPV6_PMTUDISC_INTERFACE 4
 #define IPV6_PMTUDISC_OMIT 5
+
+// The rest of what glibc's header has: older names, and values a program
+// compares against.
+#define IP_PMTUDISC 10
+#define IP_RECVERR_RFC4884 26
+#define IP_RECVRETOPTS IP_RETOPTS
+#define IP_DEFAULT_MULTICAST_TTL 1
+#define IP_DEFAULT_MULTICAST_LOOP 1
+#define IP_MAX_MEMBERSHIPS 20
+#define IP_MSFILTER_SIZE(numsrc)                                               \
+  (sizeof(struct ip_msfilter) - sizeof(struct in_addr) +                       \
+   (numsrc) * sizeof(struct in_addr))
+
+#define IPV6_IPSEC_POLICY 34
+#define IPV6_XFRM_POLICY 35
+#define IPV6_HDRINCL 36
+#define IPV6_RXHOPOPTS IPV6_HOPOPTS
+#define IPV6_RXDSTOPTS IPV6_DSTOPTS
+#define IPV6_RTHDR_LOOSE 0
+#define IPV6_RTHDR_STRICT 1
+#define IPV6_RTHDR_TYPE_0 0
 
 #endif // LLVM_LIBC_MACROS_NETINET_IN_MACROS_H
