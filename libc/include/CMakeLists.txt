@@ -1093,6 +1093,16 @@ add_header_macro(
 
 
 add_header_macro(
+  sys_timeb
+  ../libc/include/sys/timeb.yaml
+  sys/timeb.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_timeb
+    .llvm-libc-types.time_t
+)
+
+add_header_macro(
   sys_reboot
   ../libc/include/sys/reboot.yaml
   sys/reboot.h
