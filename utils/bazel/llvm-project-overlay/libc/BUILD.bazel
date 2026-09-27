@@ -193,6 +193,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
+    libc_header_info("sys/timeb"),
     libc_header_info("sys/timerfd"),
     libc_header_info("sys/times"),
     libc_header_info("sys/timex"),
@@ -20444,6 +20445,20 @@ libc_function(
 )
 
 libc_function(
+    name = "ftime",
+    srcs = ["src/sys/timeb/ftime.cpp"],
+    hdrs = ["src/sys/timeb/ftime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":hdr_time_macros",
+        ":types_struct_timeb",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
     name = "futimes",
     srcs = ["src/sys/time/linux/futimes.cpp"],
     hdrs = ["src/sys/time/futimes.h"],
@@ -26867,6 +26882,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_timeb",
+    hdrs = ["include/llvm-libc-types/struct_timeb.h"],
+)
+
+libc_support_library(
+    name = "types_struct_timeb",
+    hdrs = ["hdr/types/struct_timeb.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_timeb"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["include/llvm-libc-types/struct_termios.h"],
 )
@@ -31317,6 +31346,22 @@ libc_function(
         ":__support_macros_config",
         ":time_strptime_core_parser",
         ":types_struct_tm",
+    ],
+)
+
+libc_function(
+    name = "time",
+    srcs = ["src/time/time.cpp"],
+    hdrs = ["src/time/time_func.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":errno",
+        ":hdr_time_macros",
+        ":types_struct_tm",
+        ":types_time_t",
     ],
 )
 
