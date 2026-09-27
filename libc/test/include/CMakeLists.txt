@@ -806,6 +806,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  stdlib_sys_types_test
+  SUITE
+    libc-include-tests
+  SRCS
+    stdlib_sys_types_test.cpp
+  DEPENDS
+    libc.include.stdlib
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
