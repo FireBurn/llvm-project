@@ -18,12 +18,19 @@ namespace LIBC_NAMESPACE_DECL {
 // Lets go of whatever the resolver was holding open. Each question is asked
 // over a socket of its own here, so there is only ever the connection
 // RES_STAYOPEN asked to be kept.
-LLVM_LIBC_FUNCTION(void, res_close, (void)) {
-  struct __res_state *state = LIBC_NAMESPACE::__res_state();
+namespace internal {
+
+void res_close_with(struct __res_state *state) {
   if (state->_vcsock >= 0) {
     LIBC_NAMESPACE::close(state->_vcsock);
     state->_vcsock = -1;
   }
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void, res_close, (void)) {
+  internal::res_close_with(LIBC_NAMESPACE::__res_state());
 }
 
 } // namespace LIBC_NAMESPACE_DECL
