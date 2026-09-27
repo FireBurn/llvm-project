@@ -248,6 +248,7 @@ add_header(
 )
 add_header(struct_tm HDR struct_tm.h)
 add_header(struct_tms HDR struct_tms.h DEPENDS .clock_t)
+add_header(struct_timeb HDR struct_timeb.h DEPENDS .time_t)
 add_header(struct_mtconfiginfo HDR struct_mtconfiginfo.h)
 add_header(struct_passwd HDR struct_passwd.h DEPENDS .uid_t .gid_t)
 add_header(struct_group HDR struct_group.h DEPENDS .gid_t)
