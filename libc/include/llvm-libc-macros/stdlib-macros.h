@@ -25,4 +25,10 @@
 
 #define RAND_MAX 2147483647
 
+// POSIX has <stdlib.h> define the macros that take apart the status system()
+// returns, as <sys/wait.h> does.
+#ifdef _LLVM_LIBC_STDLIB_H
+#include "sys-wait-macros.h"
+#endif
+
 #endif // LLVM_LIBC_MACROS_STDLIB_MACROS_H
