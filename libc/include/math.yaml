@@ -501,6 +501,12 @@ functions:
     return_type: double
     arguments:
       - type: double
+  - name: erfcf
+    standards:
+      - stdc
+    return_type: float
+    arguments:
+      - type: float
   - name: erfcf16
     standards:
       - stdc
