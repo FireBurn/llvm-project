@@ -113,6 +113,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_syslog
     libc.include.sys_time
     libc.include.sys_times
+    libc.include.sys_timeb
     libc.include.sys_types
     libc.include.sys_ucontext
     libc.include.sys_uio
