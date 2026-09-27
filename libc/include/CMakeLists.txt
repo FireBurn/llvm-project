@@ -1176,6 +1176,14 @@ add_header_macro(
 )
 
 add_header(
+  sys_cdefs
+  HDR
+    sys/cdefs.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header(
   sys_queue
   HDR
     sys/queue.h
