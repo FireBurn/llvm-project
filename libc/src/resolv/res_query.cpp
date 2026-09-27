@@ -25,20 +25,16 @@
 #include "src/resolv/res_state.h"
 
 namespace LIBC_NAMESPACE_DECL {
+namespace internal {
 
-// Asks the name servers about one name and hands back the whole answer as it
-// arrived. What is in it is the caller's to read: this is the way in for code
-// that wants a record kind the library knows nothing about.
-LLVM_LIBC_FUNCTION(int, res_query,
-                   (const char *name, int rr_class, int type,
-                    unsigned char *answer, int anslen)) {
-  int *h_errno_location = LIBC_NAMESPACE::__h_errno_location();
+int res_query_with(struct __res_state *state, const char *name, int rr_class,
+                   int type, unsigned char *answer, int anslen) {
+  int *h_errno_location = internal::h_errno_location_impl();
   if (name == nullptr || answer == nullptr || anslen <= 0) {
     *h_errno_location = NO_RECOVERY;
     return -1;
   }
 
-  struct __res_state *state = LIBC_NAMESPACE::__res_state();
   if (!internal::res_ready(*state)) {
     *h_errno_location = NO_RECOVERY;
     return -1;
@@ -96,6 +92,18 @@ LLVM_LIBC_FUNCTION(int, res_query,
   }
 
   return taken;
+}
+
+} // namespace internal
+
+// Asks the name servers about one name and hands back the whole answer as it
+// arrived. What is in it is the caller's to read: this is the way in for code
+// that wants a record kind the library knows nothing about.
+LLVM_LIBC_FUNCTION(int, res_query,
+                   (const char *name, int rr_class, int type,
+                    unsigned char *answer, int anslen)) {
+  return internal::res_query_with(internal::res_state_impl(), name, rr_class,
+                                  type, answer, anslen);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
