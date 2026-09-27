@@ -1060,6 +1060,7 @@ alias(
         "atanh",
         "erf",
         "erfc",
+        "erfcf",
         "j0",
         "j0f",
         "j1",
