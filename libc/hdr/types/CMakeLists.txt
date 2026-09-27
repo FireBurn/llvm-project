@@ -1730,6 +1730,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  struct_timeb
+  HDRS
+    struct_timeb.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_timeb
+)
+
+add_proxy_header_library(
   struct_tms
   HDRS
     struct_tms.h
