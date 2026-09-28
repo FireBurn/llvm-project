@@ -420,8 +420,11 @@ bool Thread::wait_once() {
   return true;
 }
 
+// A thread is its attributes, so the handles are compared rather than what
+// they point at. A handle that was never set, as some callers keep for a lock
+// with no owner, then compares unequal to every thread instead of faulting.
 bool Thread::operator==(const Thread &thread) const {
-  return attrib->tid == thread.attrib->tid;
+  return attrib == thread.attrib;
 }
 
 static constexpr cpp::string_view THREAD_NAME_PATH_PREFIX("/proc/self/task/");
