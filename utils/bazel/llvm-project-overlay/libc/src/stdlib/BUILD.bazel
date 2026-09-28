@@ -21,6 +21,8 @@ libc_support_library(
     # Full-build only, as overlay mode must use the host libc's cleanup.
     full_build_only = True,
     deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/CPP:new",
         "//libc/src/__support/macros:config",
