@@ -19,6 +19,7 @@
 #include "src/__support/elf/search.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
+#include "src/dlfcn/lazy_bind.h"
 #include "src/unistd/environ.h"
 
 #include <fcntl.h>
@@ -209,7 +210,7 @@ void run_init_array(const elf::Module &module) {
 
 namespace internal {
 
-void *dlopen_impl(const char *path, int) {
+void *dlopen_impl(const char *path, int mode) {
   // The run path that applies is the one belonging to whatever called, which
   // is found from where the call is returning to. Taken before anything else,
   // so nothing stands between this and the caller.
@@ -321,12 +322,21 @@ void *dlopen_impl(const char *path, int) {
 
   // Bind against everything now loaded, the new objects included, so they can
   // refer to themselves and to each other as well as to what was there.
+  // Under RTLD_LAZY a call nothing loaded defines yet is bound when first
+  // made, by which time something opened since may define it.
+  constexpr int BINDING_MASK = 3;
+  constexpr int LAZY = 1;
+  const bool lazy = (mode & BINDING_MASK) == LAZY;
   elf::BindResult result;
   if (!failed) {
     elf::SearchOrder order(set.modules, set.count);
     order.set_tls_offsets(set.tls_offsets);
     for (size_t i = first; i < set.count; ++i) {
-      const elf::BindResult one = elf::bind_module(set.modules[i], i, order);
+      const bool defer = lazy && dl::can_bind_lazily(set.modules[i]);
+      const elf::BindResult one =
+          elf::bind_module(set.modules[i], i, order, defer);
+      if (one.deferred != 0)
+        dl::enable_lazy_binding(set.modules[i]);
       result.bound += one.bound;
       result.unresolved += one.unresolved;
     }
