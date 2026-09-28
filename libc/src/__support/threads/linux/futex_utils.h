@@ -156,6 +156,56 @@ public:
       return cpp::unexpected<int>(-ret);
     return static_cast<int>(ret);
   }
+
+  // A priority-inheriting lock holds its owner's thread id, which the kernel
+  // reads to lend the owner the priority of whoever waits. These take the
+  // lock through the kernel once taking it in place has failed, and give it
+  // back through the kernel when there are waiters. A timeout is absolute.
+  LIBC_INLINE ErrorOr<int> lock_pi(cpp::optional<Timeout> timeout,
+                                   bool is_shared = false) {
+    // FUTEX_LOCK_PI only measures against the realtime clock. FUTEX_LOCK_PI2
+    // measures against either, but needs Linux 5.14.
+    uint32_t op = FUTEX_LOCK_PI;
+    if (timeout && !timeout->is_realtime())
+      op = FUTEX_LOCK_PI2;
+    if (!is_shared)
+      op |= FUTEX_PRIVATE_FLAG;
+
+    void *timeout_ptr = nullptr;
+#if defined(SYS_futex_time64)
+    __kernel_timespec ts64;
+    if (timeout) {
+      ts64.tv_sec = timeout->get_timespec().tv_sec;
+      ts64.tv_nsec = timeout->get_timespec().tv_nsec;
+      timeout_ptr = &ts64;
+    }
+#else
+    timespec ts;
+    if (timeout) {
+      ts = timeout->get_timespec();
+      timeout_ptr = &ts;
+    }
+#endif
+    for (;;) {
+      int ret = syscall_impl<int>(FUTEX_SYSCALL_ID, this, op, 0, timeout_ptr,
+                                  nullptr, 0);
+      if (ret == -EINTR)
+        continue;
+      if (ret < 0)
+        return cpp::unexpected(-ret);
+      return ret;
+    }
+  }
+
+  LIBC_INLINE ErrorOr<int> unlock_pi(bool is_shared = false) {
+    int ret =
+        syscall_impl<int>(FUTEX_SYSCALL_ID, this,
+                          is_shared ? FUTEX_UNLOCK_PI : FUTEX_UNLOCK_PI_PRIVATE,
+                          0, nullptr, nullptr, 0);
+    if (ret < 0)
+      return cpp::unexpected(-ret);
+    return ret;
+  }
 };
 
 static_assert(__is_standard_layout(Futex),
