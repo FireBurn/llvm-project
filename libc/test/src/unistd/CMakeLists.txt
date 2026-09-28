@@ -1108,7 +1108,11 @@ add_libc_test(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.limits_macros
+    libc.hdr.signal_macros
+    libc.hdr.sys_resource_macros
+    libc.hdr.types.struct_rlimit
     libc.hdr.unistd_macros
+    libc.src.sys.resource.getrlimit
     libc.src.unistd.sysconf
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher

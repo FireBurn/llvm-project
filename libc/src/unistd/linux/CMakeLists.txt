@@ -1194,6 +1194,7 @@ add_entrypoint_object(
     ../sysconf.h
   DEPENDS
     libc.hdr.limits_macros
+    libc.hdr.signal_macros
     libc.hdr.unistd_macros
     libc.hdr.sys_auxv_macros
     libc.hdr.sys_resource_macros
