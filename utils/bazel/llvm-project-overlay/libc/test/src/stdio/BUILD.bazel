@@ -326,6 +326,28 @@ libc_test(
 )
 
 libc_test(
+    name = "fopencookie_test",
+    srcs = ["fopencookie_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:memory_matcher",
+        "//libc:clearerr",
+        "//libc:fclose",
+        "//libc:feof",
+        "//libc:ferror",
+        "//libc:fflush",
+        "//libc:fopencookie",
+        "//libc:fread",
+        "//libc:fseek",
+        "//libc:fwrite",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:types_off_t",
+        "//libc:types_size_t",
+        "//libc:types_ssize_t",
+    ],
+)
+
+libc_test(
     name = "fputc_test",
     srcs = ["fputc_test.cpp"],
     deps = [
