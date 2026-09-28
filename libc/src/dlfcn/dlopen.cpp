@@ -20,6 +20,7 @@
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
 #include "src/dlfcn/lazy_bind.h"
+#include "src/link/link_maps.h"
 #include "src/unistd/environ.h"
 
 #include <fcntl.h>
@@ -249,6 +250,8 @@ void *dlopen_impl(const char *path, int mode) {
     return nullptr;
   }
 
+  link::announce_link_maps(RT_ADD);
+
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
   elf::SystemPaths system_paths;
@@ -274,6 +277,7 @@ void *dlopen_impl(const char *path, int mode) {
   auto loaded = elf::find_and_load(path, caller_module, caller_origin,
                                    library_path, &system_paths, set.page_size);
   if (!loaded.has_value()) {
+    link::announce_link_maps(RT_CONSISTENT);
     dl::set_error(path, "cannot open shared object file");
     return nullptr;
   }
@@ -348,6 +352,7 @@ void *dlopen_impl(const char *path, int mode) {
       elf::unmap_module(set.mappings[i - 1]);
     elf::set_module_count(set, first);
     ++set.generation;
+    link::announce_link_maps(RT_CONSISTENT);
     dl::set_error(failed ? "cannot open a shared object it was linked against"
                          : "shared object has undefined symbols");
     (void)missing;
@@ -360,6 +365,11 @@ void *dlopen_impl(const char *path, int mode) {
   ++set.generation;
   for (size_t i = first; i < set.count; ++i)
     set.mappings[i].generation = set.generation;
+
+  // A debugger reads the new modules' symbols here, before their
+  // constructors run.
+  link::publish_link_maps();
+  link::announce_link_maps(RT_CONSISTENT);
 
   // Dependencies are initialised before what needs them. More new modules than
   // the order can hold at once, which nothing opens, are run backwards, which
