@@ -20135,6 +20135,38 @@ libc_function(
 )
 
 libc_function(
+    name = "fremovexattr",
+    srcs = ["src/sys/xattr/linux/fremovexattr.cpp"],
+    hdrs = ["src/sys/xattr/fremovexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fremovexattr",
+        ":errno",
+        ":sys_xattr_fremovexattr",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
+    name = "lremovexattr",
+    srcs = ["src/sys/xattr/linux/lremovexattr.cpp"],
+    hdrs = ["src/sys/xattr/lremovexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_lremovexattr",
+        ":errno",
+        ":sys_xattr_lremovexattr",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
     name = "mount",
     srcs = ["src/sys/mount/linux/mount.cpp"],
     hdrs = ["src/sys/mount/mount.h"],
@@ -20145,6 +20177,22 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_mount",
         ":errno",
         ":sys_mount_mount",
+    ],
+)
+
+libc_function(
+    name = "removexattr",
+    srcs = ["src/sys/xattr/linux/removexattr.cpp"],
+    hdrs = ["src/sys/xattr/removexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_removexattr",
+        ":errno",
+        ":sys_xattr_removexattr",
+        ":types_size_t",
+        ":types_ssize_t",
     ],
 )
 
@@ -24976,6 +25024,69 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fremovexattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fremovexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_lremovexattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/lremovexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_removexattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/removexattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_fremovexattr",
+    hdrs = ["src/sys/xattr/fremovexattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_lremovexattr",
+    hdrs = ["src/sys/xattr/lremovexattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_removexattr",
+    hdrs = ["src/sys/xattr/removexattr.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -26326,6 +26437,56 @@ libc_support_library(
         ":__support_wctype_utils",
         ":types_wchar_t",
         ":types_wctype_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fgetxattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fgetxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_getxattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/getxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fsetxattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fsetxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setxattr",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
     ],
 )
 
@@ -27919,6 +28080,68 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "fgetxattr",
+    srcs = ["src/sys/xattr/linux/fgetxattr.cpp"],
+    hdrs = ["src/sys/xattr/fgetxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_fgetxattr",
+        ":errno",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
+    name = "getxattr",
+    srcs = ["src/sys/xattr/linux/getxattr.cpp"],
+    hdrs = ["src/sys/xattr/getxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_getxattr",
+        ":errno",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
+    name = "fsetxattr",
+    srcs = ["src/sys/xattr/linux/fsetxattr.cpp"],
+    hdrs = ["src/sys/xattr/fsetxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_fsetxattr",
+        ":errno",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "setxattr",
+    srcs = ["src/sys/xattr/linux/setxattr.cpp"],
+    hdrs = ["src/sys/xattr/setxattr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_setxattr",
+        ":errno",
+        ":types_size_t",
+    ],
+)
+
 libc_support_library(
     name = "termios_linux_speed_utils",
     hdrs = ["src/termios/linux/speed_utils.h"],
@@ -28911,6 +29134,22 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_spawn_macros",
     hdrs = ["include/llvm-libc-macros/spawn-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_xattr_macros",
+    hdrs = ["include/llvm-libc-macros/sys-xattr-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_xattr_macros",
+    hdrs = ["hdr/sys_xattr_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_sys_xattr_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
