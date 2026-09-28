@@ -272,6 +272,22 @@ add_header_library(
 )
 
 add_header_library(
+  link_map_chain
+  HDRS
+    link_map_chain.h
+  DEPENDS
+    libc.hdr.elf_macros
+    libc.hdr.link_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_link_map
+    libc.hdr.types.struct_r_debug
+    libc.src.__support.elf.module
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_header_library(
   dtv
   HDRS
     dtv.h

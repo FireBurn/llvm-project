@@ -48,6 +48,7 @@ add_entrypoint_object(
     libc.src.__support.elf.passive_abi
     libc.src.__support.threads.mutex
     libc.src.dlfcn.dl_internal
+    libc.src.link.link_maps
 )
 
 add_entrypoint_object(
@@ -85,6 +86,7 @@ add_entrypoint_object(
     libc.src.dlfcn.dl_internal
     libc.src.__support.elf.bind
     libc.src.__support.elf.load_module
+    libc.src.link.link_maps
     libc.include.dlfcn
 )
 

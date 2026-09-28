@@ -33,6 +33,15 @@ constexpr size_t FALLBACK_PAGE_SIZE = 4096;
 
 } // anonymous namespace
 
+extern "C" {
+// Debuggers break on this, and look for it in the loader by name.
+[[gnu::noinline]] void __llvm_libc_debug_state() {
+  asm volatile("" ::: "memory");
+}
+[[gnu::alias("__llvm_libc_debug_state"), gnu::visibility("default")]] void
+_dl_debug_state();
+}
+
 uintptr_t loader_link(void *stack_pointer) {
   elf::StartupStack stack = elf::StartupStack::from(stack_pointer);
 
@@ -48,7 +57,7 @@ uintptr_t loader_link(void *stack_pointer) {
   const size_t page_size =
       static_cast<size_t>(stack.auxval(AT_PAGESZ).value_or(FALLBACK_PAGE_SIZE));
 
-  elf::StartupLinker linker(page_size, stack.envp());
+  elf::StartupLinker linker(page_size, stack.envp(), &__llvm_libc_debug_state);
   if (!linker.link(stack, *image))
     die("loader: linking failed\n");
 

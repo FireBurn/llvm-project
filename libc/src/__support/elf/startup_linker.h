@@ -12,9 +12,13 @@
 #include "hdr/elf_macros.h"
 #include "hdr/elf_proxy.h"
 #include "hdr/link_macros.h"
+#include "hdr/sys_mman_macros.h"
 #include "hdr/types/size_t.h"
+#include "hdr/types/struct_r_debug.h"
 #include "src/__support/OSUtil/io.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/mmap.h"
 #include "src/__support/elf/bind.h"
+#include "src/__support/elf/link_map_chain.h"
 #include "src/__support/elf/load_module.h"
 #include "src/__support/elf/module.h"
 #include "src/__support/elf/passive_abi.h"
@@ -34,9 +38,12 @@ constexpr size_t MAX_STARTUP_MODULES = MAX_PROCESS_MODULES;
 
 class StartupLinker {
 public:
-  LIBC_INLINE StartupLinker(size_t page_size, char **envp)
+  // `debug_state` is the function a debugger breaks on to learn the list of
+  // modules has changed.
+  LIBC_INLINE StartupLinker(size_t page_size, char **envp,
+                            void (*debug_state)())
       : page_size_(page_size), library_path_(library_path_from(envp)),
-        preload_list_(preload_list_from(envp)) {}
+        preload_list_(preload_list_from(envp)), debug_state_(debug_state) {}
 
   // Loads the executable's dependency graph, binds it, sets up thread local
   // storage and runs the initialisers. Returns false with a message already
@@ -127,6 +134,9 @@ public:
     // does to tell its threads apart, so the thread is described before any
     // of them runs and not later by the program's startup code.
     describe_main_thread(order);
+
+    // A debugger reads the modules' symbols before any of their code runs.
+    publish_link_maps(order, stack);
 
     run_initialisers();
     return true;
@@ -325,6 +335,34 @@ private:
     set->linked = true;
   }
 
+  // Describes what was loaded to a debugger, through libc's _r_debug and the
+  // executable's DT_DEBUG entry, then calls the function it breaks on. The
+  // chain goes in memory of its own, since the loader's is gone once the
+  // program starts.
+  LIBC_INLINE void publish_link_maps(const SearchOrder &order,
+                                     const StartupStack &stack) {
+    auto address = order.resolve("_r_debug");
+    if (!address)
+      return;
+    auto *debug = reinterpret_cast<struct r_debug *>(*address);
+    const size_t size = link_map_block_size(count_);
+    auto storage = linux_syscalls::mmap(nullptr, size, PROT_READ | PROT_WRITE,
+                                        MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (!storage)
+      return;
+    const ElfW(Addr) loader_base =
+        static_cast<ElfW(Addr)>(stack.auxval(AT_BASE).value_or(0));
+    debug->r_version = 1;
+    debug->r_map =
+        fill_link_maps(modules_, count_, loader_base,
+                       static_cast<LinkMapBlock *>(storage.value()), 0);
+    debug->r_brk = reinterpret_cast<ElfW(Addr)>(debug_state_);
+    debug->r_ldbase = loader_base;
+    debug->r_state = RT_CONSISTENT;
+    point_dt_debug_at(modules_[0], debug);
+    debug_state_();
+  }
+
   size_t page_size_;
   const char *library_path_;
   // Read the first time a dependency is not found anywhere nearer.
@@ -333,6 +371,7 @@ private:
   char executable_path_[MAX_EXECUTABLE_PATH];
   const char *executable_origin_ = nullptr;
   const char *preload_list_;
+  void (*debug_state_)();
   Module modules_[MAX_STARTUP_MODULES];
   MappedModule mappings_[MAX_STARTUP_MODULES];
   intptr_t tls_offsets_[MAX_STARTUP_MODULES] = {};
