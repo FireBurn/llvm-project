@@ -86,3 +86,59 @@ TEST(LlvmLibcElfBindTest, EmptySearchOrderResolvesNothing) {
   SearchOrder order(nullptr, 0);
   EXPECT_FALSE(order.resolve("printf").has_value());
 }
+
+TEST(LlvmLibcElfBindTest, LazyLeavesUnresolvedPltSlotsOnTheirStubs) {
+  // Bound against itself alone, libm cannot find what it calls in libc, so
+  // under lazy binding those PLT slots have to stay on their stubs.
+  auto eager_libm = load_module(LIBM_PATH, PAGE);
+  ASSERT_TRUE(eager_libm.has_value());
+  LoadedModule e = eager_libm.value();
+  Module eager_modules[] = {e.module};
+  SearchOrder eager_order(eager_modules, 1);
+  BindResult eager = bind_module(e.module, 0, eager_order);
+  EXPECT_EQ(eager.deferred, size_t(0));
+  unmap_module(e.mapping);
+
+  auto libm = load_module(LIBM_PATH, PAGE);
+  ASSERT_TRUE(libm.has_value());
+  LoadedModule m = libm.value();
+  Module modules[] = {m.module};
+  SearchOrder order(modules, 1);
+
+  const LIBC_NAMESPACE::elf::RelaTable plt = m.module.plt_relocations();
+  constexpr size_t MAX_SLOTS = 256;
+  ASSERT_LE(plt.size(), MAX_SLOTS);
+  ElfW(Addr) before[MAX_SLOTS];
+  bool outside[MAX_SLOTS];
+  size_t expected = 0;
+  for (size_t i = 0; i < plt.size(); ++i) {
+    const ElfW(Rela) &rela = plt.begin()[i];
+    before[i] =
+        *reinterpret_cast<ElfW(Addr) *>(m.module.load_bias() + rela.r_offset);
+    const char *name =
+        m.module.strtab() +
+        m.module.symtab()[LIBC_NAMESPACE::elf::reloc_symbol(rela.r_info)]
+            .st_name;
+    outside[i] = !order.resolve(name).has_value();
+    if (outside[i])
+      ++expected;
+  }
+  ASSERT_GT(expected, size_t(0));
+
+  BindResult result = bind_module(m.module, 0, order, /*lazy=*/true);
+  EXPECT_EQ(result.deferred, expected);
+  // Only the PLT slots wait. What the rest of the module refers to still has
+  // to be found now.
+  EXPECT_EQ(result.unresolved + expected, eager.unresolved);
+  for (size_t i = 0; i < plt.size(); ++i) {
+    if (!outside[i])
+      continue;
+    const ElfW(Rela) &rela = plt.begin()[i];
+    // Relocated, but still pointing into libm's own PLT.
+    ElfW(Addr) slot =
+        *reinterpret_cast<ElfW(Addr) *>(m.module.load_bias() + rela.r_offset);
+    EXPECT_EQ(slot, before[i] + m.module.load_bias());
+    EXPECT_TRUE(m.module.contains(slot));
+  }
+  unmap_module(m.mapping);
+}
