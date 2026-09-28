@@ -93,3 +93,24 @@ functions:
       - type: int
       - type: char *
       - type: size_t
+  - name: removexattr
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+  - name: lremovexattr
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+  - name: fremovexattr
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
