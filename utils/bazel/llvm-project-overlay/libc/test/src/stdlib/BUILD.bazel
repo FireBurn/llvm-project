@@ -489,3 +489,16 @@ libc_test(
         "//libc:free_sized",
     ],
 )
+
+libc_test(
+    name = "atexit_test",
+    srcs = ["atexit_test.cpp"],
+    deps = [
+        "//libc:_Exit",
+        "//libc:__support_cpp_array",
+        "//libc:__support_cpp_utility",
+        "//libc:atexit",
+        "//libc:exit",
+        "//libc:stdlib_exit_handler",
+    ],
+)
