@@ -76,7 +76,6 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # grp.h entrypoints
     libc.src.grp.getgrgid_r
-    libc.src.grp.getgrnam_r
 
     # net/if.h entrypoints
     libc.src.net.if_indextoname
