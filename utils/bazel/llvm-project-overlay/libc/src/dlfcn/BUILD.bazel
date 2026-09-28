@@ -29,11 +29,41 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "lazy_bind",
+    srcs = ["lazy_bind.cpp"],
+    hdrs = ["lazy_bind.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/OSUtil:exit_hdrs",
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:elf_bind",
+        "//libc/src/__support:elf_dynamic_blocks",
+        "//libc/src/__support:elf_module",
+        "//libc/src/__support:elf_passive_abi",
+        "//libc/src/__support:elf_thread_pointer",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_support_library(
     name = "dlopen",
     srcs = ["dlopen.cpp"],
     hdrs = ["dlopen.h"],
     deps = [
         ":dl_internal",
+        ":lazy_bind",
         "//libc/hdr/func:free",
         "//libc/hdr/func:malloc",
         "//libc/hdr/types:struct_stat",
