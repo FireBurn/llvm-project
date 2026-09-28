@@ -13,12 +13,15 @@
 #include "src/pthread/pthread_mutex_destroy.h"
 #include "src/pthread/pthread_mutex_init.h"
 #include "src/pthread/pthread_mutex_lock.h"
+#include "src/pthread/pthread_mutex_timedlock.h"
 #include "src/pthread/pthread_mutex_trylock.h"
 #include "src/pthread/pthread_mutex_unlock.h"
 #include "src/pthread/pthread_mutexattr_destroy.h"
 #include "src/pthread/pthread_mutexattr_init.h"
+#include "src/pthread/pthread_mutexattr_setprotocol.h"
 #include "src/pthread/pthread_mutexattr_settype.h"
 #include "src/string/memory_utils/inline_memcpy.h"
+#include "src/time/clock_gettime.h"
 #include "test/IntegrationTest/test.h"
 
 #include <pthread.h>
@@ -53,8 +56,8 @@ void *counter([[maybe_unused]] void *arg) {
   return nullptr;
 }
 
-void relay_counter() {
-  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, nullptr), 0);
+void relay_counter(const pthread_mutexattr_t *attr = nullptr) {
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, attr), 0);
 
   // The idea of this test is that two competing threads will update
   // a counter only if the other thread has updated it.
@@ -322,6 +325,77 @@ void multiple_waiters() {
   LIBC_NAMESPACE::pthread_mutex_destroy(&counter_lock);
 }
 
+void *timedlock_other_thread(void *arg) {
+  auto *mutex = reinterpret_cast<pthread_mutex_t *>(arg);
+  timespec deadline;
+  LIBC_NAMESPACE::clock_gettime(CLOCK_REALTIME, &deadline);
+  deadline.tv_nsec += 10'000'000;
+  if (deadline.tv_nsec >= 1'000'000'000) {
+    deadline.tv_nsec -= 1'000'000'000;
+    ++deadline.tv_sec;
+  }
+  int result = LIBC_NAMESPACE::pthread_mutex_timedlock(mutex, &deadline);
+  if (result == 0)
+    ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(mutex), 0);
+  return reinterpret_cast<void *>(uintptr_t(result));
+}
+
+void priority_inherit_test() {
+  pthread_mutexattr_t attr;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_init(&attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr,
+                                                          PTHREAD_PRIO_INHERIT),
+            0);
+
+  // Two threads handing a counter back and forth contend for the lock all
+  // the time, so the kernel takes and gives it on their behalf.
+  shared_int = START;
+  relay_counter(&attr);
+
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, &attr), 0);
+  ASSERT_TRUE(snapshot_mutex(&mutex).__priority_inherit);
+  // The word holds the owner, which is what the kernel boosts.
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
+  ASSERT_NE(snapshot_mutex(&mutex).__ftxw.__word, 0u);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
+  ASSERT_EQ(snapshot_mutex(&mutex).__ftxw.__word, 0u);
+
+  pthread_t thread;
+  void *retval = nullptr;
+  // Held here, another thread neither takes it nor waits past its deadline.
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&thread, nullptr,
+                                           trylock_other_thread, &mutex),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(thread, &retval), 0);
+  ASSERT_EQ(uintptr_t(retval), uintptr_t(EBUSY));
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&thread, nullptr,
+                                           timedlock_other_thread, &mutex),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(thread, &retval), 0);
+  ASSERT_EQ(uintptr_t(retval), uintptr_t(ETIMEDOUT));
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_destroy(&mutex), 0);
+
+  // Recursion is counted as for any other mutex.
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE),
+      0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, &attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&thread, nullptr,
+                                           trylock_other_thread, &mutex),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(thread, &retval), 0);
+  ASSERT_EQ(uintptr_t(retval), uintptr_t(EBUSY));
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), EPERM);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_destroy(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_destroy(&attr), 0);
+}
+
 TEST_MAIN() {
   relay_counter();
   wait_and_step();
@@ -330,5 +404,6 @@ TEST_MAIN() {
   initializer_acts_the_same_as_null_attr();
   error_checking_mutex_test();
   multiple_waiters();
+  priority_inherit_test();
   return 0;
 }
