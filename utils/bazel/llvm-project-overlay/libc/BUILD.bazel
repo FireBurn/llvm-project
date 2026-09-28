@@ -33420,6 +33420,28 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_getattr_np",
+    srcs = ["src/pthread/pthread_getattr_np.cpp"],
+    hdrs = ["src/pthread/pthread_getattr_np.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_atomic",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_prlimit",
+        ":__support_threads_thread",
+        ":__support_threads_thread_attributes",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":hdr_pthread_macros",
+        ":hdr_sys_resource_macros",
+        ":types_pthread_attr_t",
+        ":types_pthread_t",
+        ":types_struct_rlimit",
+    ],
+)
+
+libc_function(
     name = "openpty",
     srcs = ["src/pty/openpty.cpp"],
     hdrs = ["src/pty/openpty.h"],
