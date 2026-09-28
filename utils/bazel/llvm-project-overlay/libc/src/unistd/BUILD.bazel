@@ -685,6 +685,7 @@ libc_function(
         "//libc/hdr/types:struct_rlimit",
         "//libc/hdr/types:struct_sysinfo",
         "//libc/hdr:limits_macros",
+        "//libc/hdr:signal_macros",
         "//libc/hdr:sys_auxv_macros",
         "//libc/hdr:sys_resource_macros",
         "//libc/hdr:unistd_macros",
@@ -1154,5 +1155,21 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:cancel",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__llvm_libc_syscall",
+    srcs = ["linux/syscall.cpp"],
+    hdrs = ["syscall.h"],
+    deps = [
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
