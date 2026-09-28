@@ -110,7 +110,10 @@
 #define _POSIX2_VERSION 202405L
 #define _XOPEN_VERSION 800
 
-// POSIX threads features.
+// The options which are supported. Leaving one undefined means it has to be
+// asked about at run time with sysconf; a value of -1 would mean it is not
+// available at all.
+#define _POSIX_CHOWN_RESTRICTED 1
 #define _POSIX_THREADS _POSIX_VERSION
 #define _POSIX_THREAD_SAFE_FUNCTIONS _POSIX_VERSION
 #define _POSIX_THREAD_ATTR_STACKADDR _POSIX_VERSION
