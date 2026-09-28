@@ -29755,6 +29755,35 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dlfcn_lazy_bind",
+    srcs = ["src/dlfcn/lazy_bind.cpp"],
+    hdrs = ["src/dlfcn/lazy_bind.h"],
+    deps = [
+        ":__support_cpp_mutex",
+        ":__support_cpp_string_view",
+        ":__support_elf_bind",
+        ":__support_elf_dynamic_blocks",
+        ":__support_elf_module",
+        ":__support_elf_passive_abi",
+        ":__support_elf_thread_pointer",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_exit",
+        ":__support_osutil_exit_hdrs",
+        ":__support_osutil_io",
+        ":__support_osutil_syscall",
+        ":__support_threads_mutex",
+        ":dlfcn_dl_internal",
+        ":environ",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_registry",
     hdrs = ["src/__support/elf/registry.h"],
     deps = [
@@ -29800,6 +29829,7 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_newfstatat",
         ":dlfcn_dl_internal",
+        ":dlfcn_lazy_bind",
         ":environ",
         ":func_free",
         ":func_malloc",
