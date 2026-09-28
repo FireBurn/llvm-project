@@ -1940,7 +1940,6 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.unistd._exit
     libc.src.unistd.confstr
     libc.src.unistd.environ
-    libc.src.unistd.execl
     libc.src.unistd.execv
     libc.src.unistd.execvp
     libc.src.unistd.execvpe
