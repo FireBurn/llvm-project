@@ -56,6 +56,12 @@ TEST_MAIN() {
             0);
   // This new thread should of course not be equal to the main thread.
   ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(th, main_thread), 0);
+
+  // A handle nothing was stored in is equal only to another such handle.
+  pthread_t unset = {};
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(unset, main_thread), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_equal(main_thread, unset), 0);
+  ASSERT_NE(LIBC_NAMESPACE::pthread_equal(unset, unset), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_getunique_np(&th, &th_id), 0);
   ASSERT_NE(th_id, main_thread_id);
 
