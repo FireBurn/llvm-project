@@ -10,6 +10,29 @@ add_object_library(
     libc.src.__support.threads.mutex
 )
 
+add_object_library(
+  lazy_bind
+  SRCS
+    lazy_bind.cpp
+  HDRS
+    lazy_bind.h
+  DEPENDS
+    libc.hdr.elf_macros
+    libc.hdr.elf_proxy
+    libc.hdr.link_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.mutex
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.elf.bind
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.properties.architectures
+    libc.src.__support.threads.mutex
+    libc.src.dlfcn.dl_internal
+    libc.src.unistd.environ
+)
+
 add_entrypoint_object(
   dlclose
   SRCS
@@ -51,6 +74,7 @@ add_entrypoint_object(
   HDRS
     dlopen.h
   DEPENDS
+    libc.src.dlfcn.lazy_bind
     libc.src.__support.elf.search
     libc.src.unistd.environ
     libc.src.__support.CPP.mutex
