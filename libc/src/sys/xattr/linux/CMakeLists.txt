@@ -132,3 +132,48 @@ add_entrypoint_object(
     libc.src.__support.macros.null_check
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  removexattr
+  SRCS
+    removexattr.cpp
+  HDRS
+    ../removexattr.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  lremovexattr
+  SRCS
+    lremovexattr.cpp
+  HDRS
+    ../lremovexattr.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  fremovexattr
+  SRCS
+    fremovexattr.cpp
+  HDRS
+    ../fremovexattr.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
