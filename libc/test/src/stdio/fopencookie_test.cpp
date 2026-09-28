@@ -247,3 +247,49 @@ TEST_F(LlvmLibcFOpenCookieTest, WriteUpdateCookieTest) {
   ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
   free(ss);
 }
+
+ssize_t failing_read(void *, char *, size_t) {
+  libc_errno = EIO;
+  return -1;
+}
+
+ssize_t failing_write(void *, const char *, size_t) {
+  libc_errno = ENOSPC;
+  return -1;
+}
+
+int failing_seek(void *, off_t *, int) {
+  libc_errno = ESPIPE;
+  return -1;
+}
+
+TEST_F(LlvmLibcFOpenCookieTest, FailingCallbacksAreErrors) {
+  constexpr cookie_io_functions_t FAILING_FUNCS = {
+      &failing_read, &failing_write, &failing_seek, nullptr};
+
+  ::FILE *f = LIBC_NAMESPACE::fopencookie(nullptr, "r", FAILING_FUNCS);
+  ASSERT_TRUE(f != nullptr);
+  char data[4];
+  // A read of -1 is an error, not a count, so nothing is taken from the
+  // buffer, now or on the next read.
+  ASSERT_EQ(size_t(0), LIBC_NAMESPACE::fread(data, 1, sizeof(data), f));
+  ASSERT_NE(LIBC_NAMESPACE::ferror(f), 0);
+  ASSERT_ERRNO_EQ(EIO);
+  LIBC_NAMESPACE::clearerr(f);
+  ASSERT_EQ(size_t(0), LIBC_NAMESPACE::fread(data, 1, 1, f));
+  ASSERT_NE(LIBC_NAMESPACE::ferror(f), 0);
+  ASSERT_ERRNO_EQ(EIO);
+
+  ASSERT_EQ(-1, LIBC_NAMESPACE::fseek(f, 0, SEEK_SET));
+  ASSERT_ERRNO_EQ(ESPIPE);
+  ASSERT_EQ(0, LIBC_NAMESPACE::fclose(f));
+
+  f = LIBC_NAMESPACE::fopencookie(nullptr, "w", FAILING_FUNCS);
+  ASSERT_TRUE(f != nullptr);
+  ASSERT_EQ(sizeof(data), LIBC_NAMESPACE::fwrite(data, 1, sizeof(data), f));
+  ASSERT_EQ(EOF, LIBC_NAMESPACE::fflush(f));
+  ASSERT_NE(LIBC_NAMESPACE::ferror(f), 0);
+  ASSERT_ERRNO_EQ(ENOSPC);
+  LIBC_NAMESPACE::fclose(f);
+  libc_errno = 0;
+}
