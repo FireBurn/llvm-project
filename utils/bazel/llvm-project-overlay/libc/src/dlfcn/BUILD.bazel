@@ -76,6 +76,7 @@ libc_support_library(
         "//libc/src/__support:elf_load_module",
         "//libc/src/__support:elf_passive_abi",
         "//libc/src/__support:elf_search",
+        "//libc/src/link:link_maps",
         "//libc/src/unistd:environ",
     ],
 )
@@ -91,6 +92,7 @@ libc_support_library(
         "//libc/src/__support:common",
         "//libc/src/__support:elf_map_segments",
         "//libc/src/__support:elf_passive_abi",
+        "//libc/src/link:link_maps",
         "//libc/src/stdlib:exit_handler",
     ],
 )
