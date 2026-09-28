@@ -201,7 +201,10 @@ add_header_library(
   bind
   HDRS
     bind.h
+    tlsdesc.h
   DEPENDS
+    libc.src.__support.elf.elf_types
+    libc.src.__support.macros.properties.architectures
     libc.hdr.elf_macros
     libc.hdr.elf_proxy
     libc.hdr.link_macros

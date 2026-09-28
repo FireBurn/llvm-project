@@ -29890,6 +29890,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_tlsdesc",
+    hdrs = ["src/__support/elf/tlsdesc.h"],
+    deps = [
+        ":__support_macros_properties_architectures",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_bind",
     hdrs = ["src/__support/elf/bind.h"],
     deps = [
@@ -29897,6 +29905,7 @@ libc_support_library(
         ":__support_elf_elf_types",
         ":__support_elf_module",
         ":__support_elf_relocation",
+        ":__support_elf_tlsdesc",
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_macros_properties_architectures",
