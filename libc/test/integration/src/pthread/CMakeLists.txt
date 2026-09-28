@@ -451,6 +451,28 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_attr_sched_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_attr_sched_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sched_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.pthread_t
+    libc.hdr.types.struct_sched_param
+    libc.include.pthread
+    libc.src.pthread.pthread_attr_init
+    libc.src.pthread.pthread_attr_setinheritsched
+    libc.src.pthread.pthread_attr_setschedparam
+    libc.src.pthread.pthread_attr_setschedpolicy
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.sched.sched_getscheduler
+)
+
+add_integration_test(
   pthread_setschedparam_test
   SUITE
     libc-pthread-integration-tests
