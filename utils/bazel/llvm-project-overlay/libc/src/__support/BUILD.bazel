@@ -433,6 +433,7 @@ libc_support_library(
     hdrs = ["elf/dynamic.h"],
     deps = [
         ":elf_elf_types",
+        "//libc/hdr/types:size_t",
         "//libc/hdr:elf_macros",
         "//libc/hdr:elf_proxy",
         "//libc/hdr:link_macros",
@@ -826,6 +827,22 @@ libc_support_library(
         "//libc/hdr:link_macros",
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "elf_link_map_chain",
+    hdrs = ["elf/link_map_chain.h"],
+    deps = [
+        ":elf_module",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_link_map",
+        "//libc/hdr/types:struct_r_debug",
+        "//libc/hdr:elf_macros",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
