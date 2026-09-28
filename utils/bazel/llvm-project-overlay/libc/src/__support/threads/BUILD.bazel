@@ -93,6 +93,7 @@ libc_support_library(
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/time",
+        "//libc/src/__support/time:abs_timeout",
         "//libc/src/__support:error_or",
     ],
 )

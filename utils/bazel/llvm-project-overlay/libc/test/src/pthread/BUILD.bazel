@@ -11,6 +11,24 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "pthread_mutexattr_test",
+    srcs = ["pthread_mutexattr_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/pthread:mutexattr_destroy",
+        "//libc/src/pthread:mutexattr_getprotocol",
+        "//libc/src/pthread:mutexattr_getpshared",
+        "//libc/src/pthread:mutexattr_getrobust",
+        "//libc/src/pthread:mutexattr_gettype",
+        "//libc/src/pthread:mutexattr_init",
+        "//libc/src/pthread:mutexattr_setprotocol",
+        "//libc/src/pthread:mutexattr_setpshared",
+        "//libc/src/pthread:mutexattr_setrobust",
+        "//libc/src/pthread:mutexattr_settype",
+    ],
+)
+
+libc_test(
     name = "pthread_cancel_test",
     srcs = ["pthread_cancel_test.cpp"],
     deps = [
