@@ -78,3 +78,32 @@ add_libc_test(
 )
 
 add_subdirectory(testdata)
+
+add_libc_test(
+  removexattr_test
+  SUITE
+    libc_sys_xattr_unittests
+  SRCS
+    removexattr_test.cpp
+  DEPENDS
+    libc.hdr.sys_stat_macros
+    libc.hdr.sys_xattr_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.CPP.scope
+    libc.src.__support.libc_errno
+    libc.src.errno.errno
+    libc.src.fcntl.creat
+    libc.src.sys.xattr.fgetxattr
+    libc.src.sys.xattr.fremovexattr
+    libc.src.sys.xattr.fsetxattr
+    libc.src.sys.xattr.getxattr
+    libc.src.sys.xattr.lremovexattr
+    libc.src.sys.xattr.removexattr
+    libc.src.sys.xattr.setxattr
+    libc.src.unistd.close
+    libc.src.unistd.symlink
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
