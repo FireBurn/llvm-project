@@ -154,6 +154,33 @@ cleanup_thread_resources(ThreadAttributes *attrib) {
     free_stack(attrib->stack, attrib->stacksize, attrib->guardsize);
 }
 
+// Detached threads which have finished but whose stacks are still to be given
+// back. They are linked through `joiner`, which nothing reads once a thread is
+// detached, and the list takes no lock so that a fork cannot leave one held.
+static cpp::Atomic<ThreadAttributes *> unreaped(nullptr);
+
+static void push_unreaped(ThreadAttributes *attrib) {
+  ThreadAttributes *head = unreaped.load(cpp::MemoryOrder::RELAXED);
+  do {
+    attrib->joiner.store(head, cpp::MemoryOrder::RELAXED);
+  } while (!unreaped.compare_exchange_strong(
+      head, attrib, cpp::MemoryOrder::RELEASE, cpp::MemoryOrder::RELAXED));
+}
+
+static void reap_detached_threads() {
+  ThreadAttributes *list =
+      unreaped.exchange(nullptr, cpp::MemoryOrder::ACQUIRE);
+  while (list != nullptr) {
+    ThreadAttributes *next = list->joiner.load(cpp::MemoryOrder::RELAXED);
+    auto *clear_tid = reinterpret_cast<Futex *>(list->platform_data);
+    if (clear_tid->load(cpp::MemoryOrder::ACQUIRE) == 0)
+      cleanup_thread_resources(list);
+    else
+      push_unreaped(list);
+    list = next;
+  }
+}
+
 static int start_thread(void *arg) {
   auto *start_args = reinterpret_cast<StartArgs *>(arg);
   auto *attrib = start_args->thread_attrib;
@@ -191,6 +218,7 @@ size_t Thread::default_stacksize() {
 
 int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
                 size_t stacksize, size_t guardsize, bool detached) {
+  reap_detached_threads();
   bool owned_stack = false;
   if (stack == nullptr) {
     // TODO: Should we return EINVAL here? Should we have a generic concept of a
@@ -628,15 +656,10 @@ void thread_exit(ThreadReturnValue retval, ThreadStyle style) {
   uint32_t joinable_state = uint32_t(DetachState::JOINABLE);
   if (!attrib->detach_state.compare_exchange_strong(
           joinable_state, uint32_t(DetachState::EXITING))) {
-    // Thread is detached so cleanup the resources.
-    cleanup_thread_resources(attrib);
-
-    // Set the CLEAR_TID address to nullptr to prevent the kernel
-    // from signalling at a non-existent futex location.
-    LIBC_NAMESPACE::syscall_impl<long>(SYS_set_tid_address, 0);
-    // Return value for detached thread should be unused. We need to avoid
-    // referencing `style` or `retval.*` because they may be stored on the stack
-    // and we have deallocated our stack!
+    // Thread is detached. It cannot give back the stack it is running on,
+    // so the next thread to be created does, once the kernel has cleared the
+    // tid to say this one is gone.
+    push_unreaped(attrib);
     LIBC_NAMESPACE::syscall_impl<long>(SYS_exit, 0);
     __builtin_unreachable();
   }
