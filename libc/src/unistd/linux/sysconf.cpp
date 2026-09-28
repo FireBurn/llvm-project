@@ -250,6 +250,34 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
     return _POSIX_SEMAPHORES;
   case _SC_TIMEOUTS:
     return _POSIX_TIMEOUTS;
+  case _SC_REALTIME_SIGNALS:
+    return _POSIX_REALTIME_SIGNALS;
+  case _SC_PRIORITY_SCHEDULING:
+    return _POSIX_PRIORITY_SCHEDULING;
+  case _SC_MEMLOCK:
+    return _POSIX_MEMLOCK;
+  case _SC_MEMLOCK_RANGE:
+    return _POSIX_MEMLOCK_RANGE;
+  case _SC_MESSAGE_PASSING:
+    return _POSIX_MESSAGE_PASSING;
+  case _SC_SHARED_MEMORY_OBJECTS:
+    return _POSIX_SHARED_MEMORY_OBJECTS;
+  case _SC_ADVISORY_INFO:
+    return _POSIX_ADVISORY_INFO;
+  case _SC_CPUTIME:
+    return _POSIX_CPUTIME;
+  case _SC_READER_WRITER_LOCKS:
+    return _POSIX_READER_WRITER_LOCKS;
+  case _SC_SPIN_LOCKS:
+    return _POSIX_SPIN_LOCKS;
+  case _SC_REGEXP:
+    return _POSIX_REGEXP;
+  case _SC_SPAWN:
+    return _POSIX_SPAWN;
+  case _SC_IPV6:
+    return _POSIX_IPV6;
+  case _SC_RAW_SOCKETS:
+    return _POSIX_RAW_SOCKETS;
   case _SC_MAPPED_FILES:
     return _POSIX_MAPPED_FILES;
   case _SC_MEMORY_PROTECTION:
