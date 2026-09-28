@@ -504,6 +504,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.include.pthread
+    .pthread_mutexattr
 )
 
 add_entrypoint_object(
@@ -515,6 +516,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.include.pthread
+    .pthread_mutexattr
 )
 
 add_entrypoint_object(
