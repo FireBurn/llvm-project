@@ -548,14 +548,6 @@ add_macro_header(
 )
 
 add_macro_header(
-  netinet_icmp6_macros
-  HDR
-    netinet-icmp6-macros.h
-  DEPENDS
-    .endian_macros
-)
-
-add_macro_header(
   sys_timex_macros
   HDR
     sys-timex-macros.h
@@ -737,6 +729,14 @@ add_macro_header(
     endian-macros.h
   DEPENDS
     .stdint_macros
+)
+
+add_macro_header(
+  netinet_icmp6_macros
+  HDR
+    netinet-icmp6-macros.h
+  DEPENDS
+    .endian_macros
 )
 
 add_macro_header(
