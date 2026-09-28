@@ -235,6 +235,29 @@ libc_test(
 )
 
 libc_test(
+    name = "fopencookie_test",
+    srcs = ["fopencookie_test.cpp"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/stdio:clearerr",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fileno",
+        "//libc/src/stdio:fopencookie",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fwrite",
+        "//libc/test/UnitTest:memory_matcher",
+    ],
+)
+
+libc_test(
     name = "fputc_test",
     srcs = ["fputc_test.cpp"],
     deps = [
@@ -398,6 +421,7 @@ libc_test(
         "//libc/src/stdio:ferror",
         "//libc/src/stdio:fmemopen",
         "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fseek",
         "//libc/src/stdio:fwrite",
         "//libc/src/stdio:getdelim",
         "//libc/src/stdio:getline",

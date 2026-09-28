@@ -707,6 +707,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_cookie_io_functions_t",
+    hdrs = ["llvm-libc-types/cookie_io_functions_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_fd_set",
     hdrs = ["llvm-libc-types/fd_set.h"],
 )

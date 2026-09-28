@@ -951,6 +951,24 @@ libc_support_library(
 )
 
 libc_function(
+    name = "fopencookie",
+    srcs = ["fopencookie.cpp"],
+    hdrs = ["fopencookie.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:cookie_io_functions_t",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:alloc_checker",
+    ],
+)
+
+libc_function(
     name = "setvbuf",
     srcs = ["setvbuf.cpp"],
     hdrs = ["setvbuf.h"],
@@ -1009,6 +1027,20 @@ libc_function(
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fseek",
+    srcs = ["generic/fseek.cpp"],
+    hdrs = ["fseek.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
 
