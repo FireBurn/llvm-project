@@ -24601,6 +24601,7 @@ libc_support_library(
         ":hdr_elf_proxy",
         ":hdr_link_macros",
         ":hdr_stdint_proxy",
+        ":types_size_t",
     ],
 )
 
@@ -29792,6 +29793,39 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_link_map_chain",
+    hdrs = ["src/__support/elf/link_map_chain.h"],
+    deps = [
+        ":__support_elf_module",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_elf_macros",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+        ":types_struct_link_map",
+        ":types_struct_r_debug",
+    ],
+)
+
+libc_support_library(
+    name = "link_link_maps",
+    srcs = ["src/link/link_maps.cpp"],
+    hdrs = ["src/link/link_maps.h"],
+    deps = [
+        ":__support_elf_link_map_chain",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":_r_debug",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_link_macros",
+        ":types_struct_link_map",
+        ":types_struct_r_debug",
+    ],
+)
+
+libc_support_library(
     name = "dlfcn_dlopen",
     srcs = ["src/dlfcn/dlopen.cpp"],
     hdrs = ["src/dlfcn/dlopen.h"],
@@ -29810,6 +29844,7 @@ libc_support_library(
         ":func_free",
         ":func_malloc",
         ":hdr_fcntl_macros",
+        ":link_link_maps",
         ":types_struct_stat",
     ],
 )
@@ -29825,6 +29860,7 @@ libc_support_library(
         ":__support_elf_passive_abi",
         ":__support_macros_config",
         ":dlfcn_dl_internal",
+        ":link_link_maps",
         ":stdlib_exit_handler",
     ],
 )
