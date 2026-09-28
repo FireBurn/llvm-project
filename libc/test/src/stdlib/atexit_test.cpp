@@ -11,6 +11,7 @@
 #include "src/stdlib/_Exit.h"
 #include "src/stdlib/atexit.h"
 #include "src/stdlib/exit.h"
+#include "src/stdlib/exit_handler.h"
 #include "test/UnitTest/Test.h"
 
 static int a;
@@ -87,4 +88,59 @@ TEST(LlvmLibcAtExit, HandlerCallsAtExit) {
     LIBC_NAMESPACE::exit(0);
   };
   EXPECT_EXITS(test, 1);
+}
+
+extern "C" int __cxa_atexit(void (*)(void *), void *, void *);
+extern "C" void __cxa_finalize(void *);
+
+static int unloaded_module, other_module;
+static int order[4];
+static int ran;
+
+static void record(void *which) { order[ran++] = *static_cast<int *>(which); }
+
+TEST(LlvmLibcAtExit, FinalizeRunsOnlyWhatTheObjectRegistered) {
+  ran = 0;
+  auto test = [] {
+    static int first = 1, second = 2, other = 3;
+    // At exit, what was left: only the other object's handler, and nothing
+    // of the one already finalized ran twice.
+    LIBC_NAMESPACE::atexit(+[] {
+      if (ran != 3 || order[2] != 3)
+        __builtin_trap();
+    });
+    __cxa_atexit(record, &other, &other_module);
+    __cxa_atexit(record, &first, &unloaded_module);
+    __cxa_atexit(record, &second, &unloaded_module);
+
+    __cxa_finalize(&unloaded_module);
+    if (ran != 2 || order[0] != 2 || order[1] != 1)
+      __builtin_trap();
+    __cxa_finalize(&unloaded_module);
+    if (ran != 2)
+      __builtin_trap();
+    LIBC_NAMESPACE::exit(0);
+  };
+  EXPECT_EXITS(test, 0);
+}
+
+static void handler_in_unloaded_range() { ++ran; }
+
+TEST(LlvmLibcAtExit, HandlersInAnUnmappedRangeRunOnce) {
+  ran = 0;
+  auto test = [] {
+    LIBC_NAMESPACE::atexit(+[] {
+      if (ran != 1)
+        __builtin_trap();
+    });
+    LIBC_NAMESPACE::atexit(handler_in_unloaded_range);
+
+    // What dlclose does for a module that registered with plain atexit.
+    LIBC_NAMESPACE::call_exit_callbacks_in(
+        reinterpret_cast<void *>(handler_in_unloaded_range), 1);
+    if (ran != 1)
+      __builtin_trap();
+    LIBC_NAMESPACE::exit(0);
+  };
+  EXPECT_EXITS(test, 0);
 }
