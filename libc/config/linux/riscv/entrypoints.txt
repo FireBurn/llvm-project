@@ -756,6 +756,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wctype.towupper
     libc.src.wctype.wctype_l
 
+    # sys/xattr.h entrypoints
+    libc.src.sys.xattr.fremovexattr
+    libc.src.sys.xattr.lremovexattr
+    libc.src.sys.xattr.removexattr
+
     # sys/uio.h entrypoints
     libc.src.sys.uio.writev
     libc.src.sys.uio.readv
