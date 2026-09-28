@@ -18,7 +18,9 @@
 #include "src/__support/OSUtil/exit.h"
 #include "src/__support/OSUtil/io.h"
 #include "src/__support/elf/bind.h"
+#include "src/__support/elf/dynamic_blocks.h"
 #include "src/__support/elf/passive_abi.h"
+#include "src/__support/elf/thread_pointer.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/properties/architectures.h"
 #include "src/dlfcn/dl_internal.h"
@@ -31,11 +33,14 @@
 extern "C" {
 // Read only by the stubs below, which the optimiser cannot see into.
 [[gnu::visibility("hidden"), gnu::used]] size_t __llvm_libc_dl_state_size = 512;
-[[gnu::visibility("hidden"), gnu::used]] unsigned char __llvm_libc_dl_use_xsave =
-    0;
+[[gnu::visibility("hidden"),
+  gnu::used]] unsigned char __llvm_libc_dl_use_xsave = 0;
 [[gnu::visibility("hidden")]] ElfW(Addr)
     __llvm_libc_dl_lazy_bind(ElfW(Addr) got, size_t index);
 [[gnu::visibility("hidden")]] void __llvm_libc_dl_lazy_entry();
+[[gnu::visibility("hidden")]] uintptr_t
+__llvm_libc_tlsdesc_dynamic_offset(uintptr_t argument);
+[[gnu::visibility("hidden")]] void __llvm_libc_tlsdesc_dynamic();
 }
 
 // Reached from PLT0 with GOT[1] and the relocation index pushed above the
@@ -107,6 +112,75 @@ __llvm_libc_dl_lazy_entry:
   .size __llvm_libc_dl_lazy_entry, . - __llvm_libc_dl_lazy_entry
 )");
 
+// The descriptor function for a thread local of a module opened after
+// startup. It calls into C to find or make the thread's block, so it saves
+// every register but %rax, and the vector state, as the convention requires.
+asm(R"(
+  .text
+  .p2align 4
+  .globl __llvm_libc_tlsdesc_dynamic
+  .hidden __llvm_libc_tlsdesc_dynamic
+  .type __llvm_libc_tlsdesc_dynamic, @function
+__llvm_libc_tlsdesc_dynamic:
+  endbr64
+  pushq %rbx
+  movq %rsp, %rbx
+  pushq %rdi
+  pushq %rsi
+  pushq %rdx
+  pushq %rcx
+  pushq %r8
+  pushq %r9
+  pushq %r10
+  pushq %r11
+  pushq $0
+  movq 8(%rax), %rdi
+  andq $-64, %rsp
+  subq __llvm_libc_dl_state_size(%rip), %rsp
+  cmpb $0, __llvm_libc_dl_use_xsave(%rip)
+  je 1f
+  xorl %eax, %eax
+  movq %rax, 512(%rsp)
+  movq %rax, 520(%rsp)
+  movq %rax, 528(%rsp)
+  movq %rax, 536(%rsp)
+  movq %rax, 544(%rsp)
+  movq %rax, 552(%rsp)
+  movq %rax, 560(%rsp)
+  movq %rax, 568(%rsp)
+  movl $-1, %eax
+  movl $-1, %edx
+  xsave64 (%rsp)
+  jmp 2f
+1:
+  fxsave64 (%rsp)
+2:
+  call __llvm_libc_tlsdesc_dynamic_offset
+  movq %rax, -72(%rbx)
+  cmpb $0, __llvm_libc_dl_use_xsave(%rip)
+  je 3f
+  movl $-1, %eax
+  movl $-1, %edx
+  xrstor64 (%rsp)
+  jmp 4f
+3:
+  fxrstor64 (%rsp)
+4:
+  leaq -72(%rbx), %rsp
+  popq %rax
+  popq %r11
+  popq %r10
+  popq %r9
+  popq %r8
+  popq %rcx
+  popq %rdx
+  popq %rsi
+  popq %rdi
+  popq %rbx
+  ret
+  .size __llvm_libc_tlsdesc_dynamic, . - __llvm_libc_tlsdesc_dynamic
+)");
+
 namespace LIBC_NAMESPACE_DECL {
 namespace {
 
@@ -119,8 +193,26 @@ namespace {
   internal::exit(127);
 }
 
+[[noreturn]] void no_tls_block(const char *module) {
+  write_to_stderr("cannot allocate thread local storage for ");
+  write_to_stderr(module != nullptr ? module : "?");
+  write_to_stderr("\n");
+  internal::exit(127);
+}
+
 } // anonymous namespace
 } // namespace LIBC_NAMESPACE_DECL
+
+extern "C" [[gnu::used]] uintptr_t
+__llvm_libc_tlsdesc_dynamic_offset(uintptr_t argument) {
+  using namespace LIBC_NAMESPACE;
+  const size_t module = argument >> elf::TLS_DESCRIPTOR_MODULE_SHIFT;
+  const uintptr_t offset = argument & elf::TLS_DESCRIPTOR_OFFSET_MASK;
+  void *block = elf::dynamic_block_for(module);
+  if (block == nullptr)
+    no_tls_block(elf::loaded_modules().modules[module].name());
+  return reinterpret_cast<uintptr_t>(block) + offset - elf::thread_pointer();
+}
 
 // Called only from the stub above, which the optimiser cannot see into.
 extern "C" [[gnu::used]] ElfW(Addr)
@@ -207,6 +299,11 @@ void measure_saved_state() {
 
 } // anonymous namespace
 
+ElfW(Addr) dynamic_tls_descriptor() {
+  measure_saved_state();
+  return reinterpret_cast<ElfW(Addr)>(&__llvm_libc_tlsdesc_dynamic);
+}
+
 bool can_bind_lazily(const elf::Module &module) {
   if (elf::binds_now(module) || bind_now_requested())
     return false;
@@ -230,6 +327,8 @@ void enable_lazy_binding(const elf::Module &module) {
 
 namespace LIBC_NAMESPACE_DECL {
 namespace dl {
+
+ElfW(Addr) dynamic_tls_descriptor() { return 0; }
 
 bool can_bind_lazily(const elf::Module &) { return false; }
 
