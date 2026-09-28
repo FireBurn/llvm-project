@@ -60,6 +60,15 @@ target_link_options(libc-test-dl-order-x PRIVATE
 add_dependencies(libc-test-dl-order-x
   libc-test-dl-order-a libc-test-dl-order-b)
 
+# Reaches its thread local through a TLS descriptor, which only x86_64 has
+# support for here.
+if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+  add_library(libc-test-dl-tlsdesc-object SHARED dl_tlsdesc_object.cpp)
+  target_compile_options(libc-test-dl-tlsdesc-object PRIVATE
+    -fPIC -fno-exceptions -fno-rtti -mtls-dialect=gnu2)
+  target_link_options(libc-test-dl-tlsdesc-object PRIVATE -nostdlib)
+endif()
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -222,6 +231,29 @@ add_libc_dynamic_test(
   DEPENDS
     libc-test-dl-order-x
 )
+
+if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+  add_libc_dynamic_test(
+    tlsdesc_test
+    SRCS
+      tlsdesc_test.cpp
+    LINK_LIBRARIES
+      libc-test-dl-tlsdesc-object
+    DEPENDS
+      libc-test-dl-tlsdesc-object
+  )
+
+  add_libc_dynamic_test(
+    tlsdesc_dlopen_test
+    SRCS
+      tlsdesc_test.cpp
+    COMPILE_OPTIONS
+      -DLIBC_TEST_DLOPEN
+      -DLIBC_TEST_DL_TLSDESC_OBJECT="$<TARGET_FILE:libc-test-dl-tlsdesc-object>"
+    DEPENDS
+      libc-test-dl-tlsdesc-object
+  )
+endif()
 
 add_libc_dynamic_test(
   lock_in_init_test
