@@ -413,6 +413,31 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_detach_signal_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_detach_signal_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_sigaction
+    libc.include.pthread
+    libc.src.__support.CPP.atomic
+    libc.src.__support.OSUtil.osutil
+    libc.src.pthread.pthread_attr_init
+    libc.src.pthread.pthread_attr_setdetachstate
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.signal.kill
+    libc.src.signal.pthread_sigmask
+    libc.src.signal.sigaction
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.unistd.getpid
+)
+
+add_integration_test(
   pthread_kill_test
   SUITE
     libc-pthread-integration-tests
