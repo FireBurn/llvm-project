@@ -15,6 +15,7 @@
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
 #include "src/link/link_maps.h"
+#include "src/stdlib/exit_handler.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -50,6 +51,8 @@ LLVM_LIBC_FUNCTION(int, dlclose, (void *handle)) {
   // opening it again hands back the same module without initializing it.
   if (index + 1 == set.count) {
     elf::run_fini_array(set.modules[index]);
+    call_exit_callbacks_in(set.mappings[index].reservation,
+                           set.mappings[index].reservation_size);
     link::announce_link_maps(RT_DELETE);
     elf::unmap_module(set.mappings[index]);
     // The index goes back to the next dlopen, which stamps what it puts there
