@@ -25,7 +25,7 @@ namespace LIBC_NAMESPACE_DECL {
 // TODO: support shared/recursive/robust mutexes.
 class Mutex final : private RawMutex {
   // Use bitfields to allow encoding more attributes.
-  // TODO: the robustness and priority inheritance will need to be implemented.
+  // TODO: the robustness will need to be implemented.
   //       See also https://github.com/llvm/llvm-project/issues/194396
   LIBC_PREFERED_TYPE(bool) unsigned int priority_inherit : 1;
   LIBC_PREFERED_TYPE(bool) unsigned int recursive : 1;
@@ -64,6 +64,66 @@ class Mutex final : private RawMutex {
     return res;
   }
 
+#if defined(__linux__)
+  // A priority-inheriting mutex keeps its owner's thread id in the futex word
+  // rather than the states RawMutex uses, since that is what the kernel reads.
+  LIBC_INLINE bool pi_try_lock() {
+    FutexWordType expected = 0;
+    return futex.compare_exchange_strong(
+        expected, static_cast<FutexWordType>(internal::gettid()),
+        cpp::MemoryOrder::ACQUIRE, cpp::MemoryOrder::RELAXED);
+  }
+
+  LIBC_INLINE MutexError pi_lock(cpp::optional<internal::AbsTimeout> timeout) {
+    if (pi_try_lock())
+      return MutexError::NONE;
+    ErrorOr<int> result = futex.lock_pi(timeout, this->pshared);
+    if (result.has_value())
+      return MutexError::NONE;
+    if (result.error() == ETIMEDOUT)
+      return MutexError::TIMEOUT;
+    if (result.error() == EDEADLK)
+      return MutexError::DEADLOCK;
+    return MutexError::BAD_LOCK_STATE;
+  }
+
+  LIBC_INLINE bool pi_unlock() {
+    FutexWordType expected = static_cast<FutexWordType>(internal::gettid());
+    // Anything but the bare thread id means there are waiters for the kernel
+    // to hand the lock to.
+    if (futex.compare_exchange_strong(expected, 0, cpp::MemoryOrder::RELEASE,
+                                      cpp::MemoryOrder::RELAXED))
+      return true;
+    return futex.unlock_pi(this->pshared).has_value();
+  }
+#endif
+
+  LIBC_INLINE MutexError raw_lock(cpp::optional<internal::AbsTimeout> timeout) {
+#if defined(__linux__)
+    if (this->priority_inherit)
+      return pi_lock(timeout);
+#endif
+    if (this->RawMutex::lock(timeout, this->pshared))
+      return MutexError::NONE;
+    return MutexError::TIMEOUT;
+  }
+
+  LIBC_INLINE bool raw_try_lock() {
+#if defined(__linux__)
+    if (this->priority_inherit)
+      return pi_try_lock();
+#endif
+    return this->RawMutex::try_lock();
+  }
+
+  LIBC_INLINE bool raw_unlock() {
+#if defined(__linux__)
+    if (this->priority_inherit)
+      return pi_unlock();
+#endif
+    return this->RawMutex::unlock(this->pshared);
+  }
+
 public:
   LIBC_INLINE constexpr Mutex(bool is_priority_inherit, bool is_recursive,
                               bool is_robust, bool is_pshared,
@@ -91,20 +151,15 @@ public:
 
   LIBC_INLINE MutexError lock() {
     return lock_impl([this] {
-      // Since timeout is not specified, we do not need to check the return
-      // value.
       // TODO: check deadlock? POSIX made it optional.
-      this->RawMutex::lock(/* timeout=*/cpp::nullopt, this->pshared);
-      return MutexError::NONE;
+      return raw_lock(/*timeout=*/cpp::nullopt);
     });
   }
 
   LIBC_INLINE MutexError timed_lock(internal::AbsTimeout abs_time) {
     return lock_impl([this, abs_time] {
       // TODO: check deadlock? POSIX made it optional.
-      if (this->RawMutex::lock(abs_time, this->pshared))
-        return MutexError::NONE;
-      return MutexError::TIMEOUT;
+      return raw_lock(abs_time);
     });
   }
 
@@ -125,14 +180,14 @@ public:
         return MutexError::UNLOCK_WITHOUT_LOCK;
       owner = 0;
     }
-    if (this->RawMutex::unlock(this->pshared))
+    if (raw_unlock())
       return MutexError::NONE;
     return MutexError::UNLOCK_WITHOUT_LOCK;
   }
 
   LIBC_INLINE MutexError try_lock() {
     return lock_impl([this] {
-      if (this->RawMutex::try_lock())
+      if (raw_try_lock())
         return MutexError::NONE;
       return MutexError::BUSY;
     });
