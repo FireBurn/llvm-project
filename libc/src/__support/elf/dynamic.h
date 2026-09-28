@@ -35,6 +35,7 @@ public:
       : entries_(entries), load_bias_(load_bias) {}
 
   LIBC_INLINE constexpr bool empty() const { return entries_ == nullptr; }
+  LIBC_INLINE constexpr const ElfW(Dyn) * entries() const { return entries_; }
   LIBC_INLINE constexpr ElfW(Addr) load_bias() const { return load_bias_; }
 
   // The d_un.d_val of the first entry with this tag.
