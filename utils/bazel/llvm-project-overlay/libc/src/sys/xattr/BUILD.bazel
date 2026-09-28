@@ -1,0 +1,156 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "fremovexattr",
+    srcs = ["linux/fremovexattr.cpp"],
+    hdrs = ["fremovexattr.h"],
+    deps = [
+        ":sys_xattr_fremovexattr",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fremovexattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "lremovexattr",
+    srcs = ["linux/lremovexattr.cpp"],
+    hdrs = ["lremovexattr.h"],
+    deps = [
+        ":sys_xattr_lremovexattr",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lremovexattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "removexattr",
+    srcs = ["linux/removexattr.cpp"],
+    hdrs = ["removexattr.h"],
+    deps = [
+        ":sys_xattr_removexattr",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:removexattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_fremovexattr",
+    hdrs = ["fremovexattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_lremovexattr",
+    hdrs = ["lremovexattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_xattr_removexattr",
+    hdrs = ["removexattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fgetxattr",
+    srcs = ["linux/fgetxattr.cpp"],
+    hdrs = ["fgetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fgetxattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "getxattr",
+    srcs = ["linux/getxattr.cpp"],
+    hdrs = ["getxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getxattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fsetxattr",
+    srcs = ["linux/fsetxattr.cpp"],
+    hdrs = ["fsetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsetxattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setxattr",
+    srcs = ["linux/setxattr.cpp"],
+    hdrs = ["setxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setxattr",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
