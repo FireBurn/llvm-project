@@ -5485,6 +5485,7 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":__support_threads_linux_futex_word_type",
         ":__support_time",
+        ":__support_time_abs_timeout",
         ":types_struct_timespec",
     ],
 )
@@ -30273,6 +30274,85 @@ libc_support_library(
 )
 
 libc_function(
+    name = "pthread_mutexattr_init",
+    srcs = ["src/pthread/pthread_mutexattr_init.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_gettype",
+    srcs = ["src/pthread/pthread_mutexattr_gettype.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_gettype.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_settype",
+    srcs = ["src/pthread/pthread_mutexattr_settype.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_settype.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_destroy",
+    srcs = ["src/pthread/pthread_mutexattr_destroy.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_destroy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_getrobust",
+    srcs = ["src/pthread/pthread_mutexattr_getrobust.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_getrobust.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_setrobust",
+    srcs = ["src/pthread/pthread_mutexattr_setrobust.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_setrobust.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_getpshared",
+    srcs = ["src/pthread/pthread_mutexattr_getpshared.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_getpshared.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
     name = "pthread_mutexattr_setprotocol",
     srcs = ["src/pthread/pthread_mutexattr_setprotocol.cpp"],
     hdrs = ["src/pthread/pthread_mutexattr_setprotocol.h"],
@@ -30292,6 +30372,31 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":hdr_errno_macros",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_setpshared",
+    srcs = ["src/pthread/pthread_mutexattr_setpshared.cpp"],
+    hdrs = ["src/pthread/pthread_mutexattr_setpshared.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":pthread_pthread_mutexattr",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_init",
+    srcs = ["src/pthread/pthread_mutex_init.cpp"],
+    hdrs = ["src/pthread/pthread_mutex_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
         ":pthread_pthread_mutexattr",
     ],
 )
