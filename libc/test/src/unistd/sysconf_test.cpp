@@ -13,7 +13,11 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/limits_macros.h"
+#include "hdr/signal_macros.h"
+#include "hdr/sys_resource_macros.h"
+#include "hdr/types/struct_rlimit.h"
 #include "hdr/unistd_macros.h"
+#include "src/sys/resource/getrlimit.h"
 #include "src/unistd/sysconf.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"
@@ -54,7 +58,7 @@ TEST_F(LlvmLibcSysconfTest, PosixThreadsConstantsTest) {
               Succeeds(202405L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_ATTR_STACKSIZE),
               Succeeds(202405L));
-  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_CPUTIME), Succeeds(-1L));
+  EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_CPUTIME), Succeeds(202405L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_PRIO_INHERIT), Succeeds(-1L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_PRIO_PROTECT), Succeeds(-1L));
   EXPECT_THAT(LIBC_NAMESPACE::sysconf(_SC_THREAD_PRIORITY_SCHEDULING),
@@ -167,6 +171,14 @@ TEST_F(LlvmLibcSysconfTest, OptionGroupsTest) {
 TEST(LlvmLibcSysconfTest, VersionsTest) {
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_VERSION), (long)_POSIX2_VERSION);
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_VERSION), (long)_XOPEN_VERSION);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_UNIX), 1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_CRYPT), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_ENH_I18N), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_SHM), 1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_LEGACY), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_REALTIME), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_REALTIME_THREADS), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_STREAMS), -1L);
 }
 
 // The limits which do not change report what <limits.h> states.
@@ -176,4 +188,101 @@ TEST(LlvmLibcSysconfTest, FixedLimitsTest) {
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_SEM_VALUE_MAX), (long)SEM_VALUE_MAX);
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_DELAYTIMER_MAX), (long)DELAYTIMER_MAX);
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_MQ_PRIO_MAX), (long)MQ_PRIO_MAX);
+}
+
+TEST_F(LlvmLibcSysconfTest, OptionsWhoseInterfacesArePresent) {
+  // Each is declared in <unistd.h>, and sysconf has to give the same answer.
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_REALTIME_SIGNALS),
+            long(_POSIX_REALTIME_SIGNALS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_PRIORITY_SCHEDULING),
+            long(_POSIX_PRIORITY_SCHEDULING));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_MEMLOCK), long(_POSIX_MEMLOCK));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_MEMLOCK_RANGE),
+            long(_POSIX_MEMLOCK_RANGE));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_MESSAGE_PASSING),
+            long(_POSIX_MESSAGE_PASSING));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SHARED_MEMORY_OBJECTS),
+            long(_POSIX_SHARED_MEMORY_OBJECTS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_ADVISORY_INFO),
+            long(_POSIX_ADVISORY_INFO));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_CPUTIME), long(_POSIX_CPUTIME));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_READER_WRITER_LOCKS),
+            long(_POSIX_READER_WRITER_LOCKS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SPIN_LOCKS), long(_POSIX_SPIN_LOCKS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_REGEXP), long(_POSIX_REGEXP));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SPAWN), long(_POSIX_SPAWN));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_IPV6), long(_POSIX_IPV6));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_RAW_SOCKETS), long(_POSIX_RAW_SOCKETS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_THREAD_CPUTIME),
+            long(_POSIX_THREAD_CPUTIME));
+  EXPECT_GT(long(_POSIX_ADVISORY_INFO), 0L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BARRIERS), long(_POSIX_BARRIERS));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_C_BIND), long(_POSIX2_C_BIND));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_C_DEV), long(_POSIX2_C_DEV));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_CHAR_TERM), long(_POSIX2_CHAR_TERM));
+}
+
+TEST(LlvmLibcSysconfTest, UnsupportedOptionsAreMinusOne) {
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_FORT_DEV), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_FORT_RUN), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_SW_DEV), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_LOCALEDEF), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_UPE), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS_ACCOUNTING), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS_LOCATE), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS_MESSAGE), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS_TRACK), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_PBS_CHECKPOINT), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_ASYNCHRONOUS_IO), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SPORADIC_SERVER), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_EVENT_FILTER), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_INHERIT), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_LOG), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TYPED_MEMORY_OBJECTS), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SS_REPL_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_EVENT_NAME_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_NAME_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_SYS_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TRACE_USER_EVENT_MAX), -1L);
+}
+
+TEST(LlvmLibcSysconfTest, ProgrammingEnvironments) {
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_ILP32_OFF32), -1L);
+  if (sizeof(long) == 8 && sizeof(void *) == 8) {
+    EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_LP64_OFF64), 1L);
+    EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_LPBIG_OFFBIG), 1L);
+    EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_ILP32_OFFBIG), -1L);
+  }
+}
+
+TEST(LlvmLibcSysconfTest, LimitsTheStandardLeavesToTheSystem) {
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_AIO_LISTIO_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_AIO_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_AIO_PRIO_DELTA_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_MQ_OPEN_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SEM_NSEMS_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_TIMER_MAX), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_RTSIG_MAX),
+            static_cast<long>(SIGRTMAX - SIGRTMIN + 1));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BC_BASE_MAX), 99L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BC_DIM_MAX), 2048L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BC_SCALE_MAX), 99L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BC_STRING_MAX), 1000L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_COLL_WEIGHTS_MAX), 255L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_EXPR_NEST_MAX), 32L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_UIO_MAXIOV),
+            LIBC_NAMESPACE::sysconf(_SC_IOV_MAX));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_LEVEL1_DCACHE_SIZE), 0L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_LEVEL4_CACHE_LINESIZE), 0L);
+}
+
+TEST(LlvmLibcSysconfTest, SigqueueMaxIsTheSignalLimit) {
+  struct rlimit limits;
+  ASSERT_EQ(LIBC_NAMESPACE::getrlimit(RLIMIT_SIGPENDING, &limits), 0);
+  long expected = limits.rlim_cur == RLIM_INFINITY
+                      ? -1L
+                      : static_cast<long>(limits.rlim_cur);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_SIGQUEUE_MAX), expected);
 }

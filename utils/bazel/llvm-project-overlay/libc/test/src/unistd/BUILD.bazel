@@ -314,10 +314,14 @@ libc_test(
     name = "sysconf_test",
     srcs = ["sysconf_test.cpp"],
     deps = [
+        "//libc:getrlimit",
         "//libc:hdr_errno_macros",
         "//libc:hdr_limits_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:hdr_sys_resource_macros",
         "//libc:hdr_unistd_macros",
         "//libc:sysconf",
+        "//libc:types_struct_rlimit",
     ],
 )
 
