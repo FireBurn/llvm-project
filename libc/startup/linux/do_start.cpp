@@ -232,17 +232,20 @@ static TLSDescriptor tls;
     // TODO: adjust PT_GNU_STACK
   }
 
-  main_map.l_addr = base;
-  main_map.l_name = const_cast<char *>("");
-  main_map.l_ld = const_cast<ElfW(Dyn) *>(_DYNAMIC);
-  main_map.l_next = nullptr;
-  main_map.l_prev = nullptr;
+  // A loader has already described every module it mapped.
+  if (_r_debug.r_map == nullptr) {
+    main_map.l_addr = base;
+    main_map.l_name = const_cast<char *>("");
+    main_map.l_ld = const_cast<ElfW(Dyn) *>(_DYNAMIC);
+    main_map.l_next = nullptr;
+    main_map.l_prev = nullptr;
 
-  _r_debug.r_version = 1;
-  _r_debug.r_map = &main_map;
-  _r_debug.r_brk = reinterpret_cast<uintptr_t>(&_r_debug_state);
-  _r_debug.r_state = RT_CONSISTENT;
-  _r_debug.r_ldbase = base;
+    _r_debug.r_version = 1;
+    _r_debug.r_map = &main_map;
+    _r_debug.r_brk = reinterpret_cast<uintptr_t>(&_r_debug_state);
+    _r_debug.r_state = RT_CONSISTENT;
+    _r_debug.r_ldbase = base;
+  }
 
   // Process IRELATIVE relocations (ifunc resolvers).
   // Skips when no ifuncs are present in the binary.
