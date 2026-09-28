@@ -25,13 +25,15 @@ Mutex handler_list_mtx(/*is_priority_inherit=*/false, /*is_recursive=*/false,
 extern "C" {
 
 LIBC_SHARED_INTERNAL int __cxa_atexit(AtExitCallback *callback, void *payload,
-                                      void *) {
-  return add_atexit_unit(atexit_callbacks, {callback, payload});
+                                      void *dso) {
+  return add_atexit_unit(atexit_callbacks, {callback, payload, dso});
 }
 
 LIBC_SHARED_INTERNAL void __cxa_finalize(void *dso) {
   if (!dso)
     call_exit_callbacks(atexit_callbacks);
+  else
+    call_dso_exit_callbacks(atexit_callbacks, dso);
 }
 
 } // extern "C"
