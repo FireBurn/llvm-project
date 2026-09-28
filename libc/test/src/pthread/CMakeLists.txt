@@ -42,9 +42,11 @@ add_libc_test(
     libc.include.pthread
     libc.src.pthread.pthread_mutexattr_destroy
     libc.src.pthread.pthread_mutexattr_init
+    libc.src.pthread.pthread_mutexattr_getprotocol
     libc.src.pthread.pthread_mutexattr_getpshared
     libc.src.pthread.pthread_mutexattr_getrobust
     libc.src.pthread.pthread_mutexattr_gettype
+    libc.src.pthread.pthread_mutexattr_setprotocol
     libc.src.pthread.pthread_mutexattr_setpshared
     libc.src.pthread.pthread_mutexattr_setrobust
     libc.src.pthread.pthread_mutexattr_settype
