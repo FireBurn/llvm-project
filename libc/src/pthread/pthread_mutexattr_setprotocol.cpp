@@ -11,6 +11,7 @@
 #include "hdr/errno_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_mutexattr.h"
 
 #include <pthread.h>
 
@@ -22,16 +23,24 @@ LLVM_LIBC_FUNCTION(int, pthread_mutexattr_setprotocol,
     return EINVAL;
   switch (protocol) {
   case PTHREAD_PRIO_NONE:
-    return 0;
+    break;
   case PTHREAD_PRIO_INHERIT:
+#if defined(__linux__)
+    break;
+#else
+    return ENOTSUP;
+#endif
   case PTHREAD_PRIO_PROTECT:
-    // Nothing here raises the priority of a lock holder: the mutex does not
-    // take the kernel's priority-inheriting futex. Saying so is better than
-    // taking the request and leaving a caller to find out under load.
+    // Nothing here raises a lock holder to a ceiling. Saying so is better
+    // than taking the request and leaving a caller to find out under load.
     return ENOTSUP;
   default:
     return EINVAL;
   }
+  pthread_mutexattr_t old = *attr;
+  old &= ~unsigned(PThreadMutexAttrPos::PROTOCOL_MASK);
+  *attr = old | (protocol << unsigned(PThreadMutexAttrPos::PROTOCOL_SHIFT));
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
