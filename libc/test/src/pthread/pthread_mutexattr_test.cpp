@@ -8,10 +8,12 @@
 
 #include "hdr/errno_macros.h"
 #include "src/pthread/pthread_mutexattr_destroy.h"
+#include "src/pthread/pthread_mutexattr_getprotocol.h"
 #include "src/pthread/pthread_mutexattr_getpshared.h"
 #include "src/pthread/pthread_mutexattr_getrobust.h"
 #include "src/pthread/pthread_mutexattr_gettype.h"
 #include "src/pthread/pthread_mutexattr_init.h"
+#include "src/pthread/pthread_mutexattr_setprotocol.h"
 #include "src/pthread/pthread_mutexattr_setpshared.h"
 #include "src/pthread/pthread_mutexattr_setrobust.h"
 #include "src/pthread/pthread_mutexattr_settype.h"
@@ -88,4 +90,34 @@ TEST(LlvmLibcPThreadMutexAttrTest, SetAndGetPShared) {
   ASSERT_EQ(pshared, int(PTHREAD_PROCESS_PRIVATE));
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setpshared(&attr, 0xBAD), EINVAL);
+}
+
+TEST(LlvmLibcPThreadMutexAttrTest, SetAndGetProtocol) {
+  int protocol;
+  pthread_mutexattr_t attr;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_init(&attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_getprotocol(&attr, &protocol), 0);
+  ASSERT_EQ(protocol, int(PTHREAD_PRIO_NONE));
+
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr,
+                                                          PTHREAD_PRIO_INHERIT),
+            0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_getprotocol(&attr, &protocol), 0);
+  ASSERT_EQ(protocol, int(PTHREAD_PRIO_INHERIT));
+
+  // A ceiling is not supported, and asking for one leaves the attribute as
+  // it was.
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr,
+                                                          PTHREAD_PRIO_PROTECT),
+            ENOTSUP);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_getprotocol(&attr, &protocol), 0);
+  ASSERT_EQ(protocol, int(PTHREAD_PRIO_INHERIT));
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr, 0xBAD),
+            EINVAL);
+
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_NONE),
+      0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_getprotocol(&attr, &protocol), 0);
+  ASSERT_EQ(protocol, int(PTHREAD_PRIO_NONE));
 }
