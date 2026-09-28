@@ -24,6 +24,10 @@ bool can_bind_lazily(const elf::Module &module);
 // deferred.
 void enable_lazy_binding(const elf::Module &module);
 
+// The descriptor function for a thread local of a module opened after
+// startup, or zero where there is none for this target.
+ElfW(Addr) dynamic_tls_descriptor();
+
 } // namespace dl
 } // namespace LIBC_NAMESPACE_DECL
 

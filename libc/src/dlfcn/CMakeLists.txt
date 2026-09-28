@@ -26,7 +26,9 @@ add_object_library(
     libc.src.__support.CPP.string_view
     libc.src.__support.OSUtil.osutil
     libc.src.__support.elf.bind
+    libc.src.__support.elf.dynamic_blocks
     libc.src.__support.elf.passive_abi
+    libc.src.__support.elf.thread_pointer
     libc.src.__support.macros.properties.architectures
     libc.src.__support.threads.mutex
     libc.src.dlfcn.dl_internal
