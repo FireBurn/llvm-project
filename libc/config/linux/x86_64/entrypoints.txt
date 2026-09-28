@@ -483,7 +483,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # libc.src.sys.epoll.epoll_pwait2
 
     # sys/file.h entrypoints
-    libc.src.sys.file.flock
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl

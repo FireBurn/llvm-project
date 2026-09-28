@@ -404,7 +404,6 @@ set(TARGET_LIBC_ENTRYPOINTS
     # libc.src.sys.epoll.epoll_pwait2
 
     # sys/file.h entrypoints
-    libc.src.sys.file.flock
 
     # sys/eventfd.h entrypoints
     libc.src.sys.eventfd.eventfd
