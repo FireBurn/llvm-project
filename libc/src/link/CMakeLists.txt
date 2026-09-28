@@ -23,3 +23,21 @@ add_entrypoint_object(
     libc.include.llvm-libc-macros.link_macros
     libc.src.__support.OSUtil.linux.auxv
 )
+
+add_object_library(
+  link_maps
+  SRCS
+    link_maps.cpp
+  HDRS
+    link_maps.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.link_macros
+    libc.hdr.types.struct_link_map
+    libc.hdr.types.struct_r_debug
+    libc.src.__support.elf.link_map_chain
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.config
+    libc.src.link._r_debug
+)
