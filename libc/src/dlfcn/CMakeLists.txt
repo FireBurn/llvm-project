@@ -43,6 +43,7 @@ add_entrypoint_object(
     dlclose.h
   DEPENDS
     libc.include.dlfcn
+    libc.src.stdlib.atexit
     libc.src.__support.CPP.mutex
     libc.src.__support.elf.map_segments
     libc.src.__support.elf.passive_abi
