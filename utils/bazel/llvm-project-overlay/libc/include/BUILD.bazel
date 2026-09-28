@@ -948,6 +948,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_sys_xattr_macros",
+    hdrs = ["llvm-libc-macros/sys-xattr-macros.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_regex_macros",
     hdrs = ["llvm-libc-macros/regex-macros.h"],
 )
