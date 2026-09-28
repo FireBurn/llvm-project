@@ -38,21 +38,22 @@ add_object_library(
     libc.src.unistd.environ
 )
 
-add_entrypoint_object(
-  dlclose
-  SRCS
-    dlclose.cpp
-  HDRS
-    dlclose.h
-  DEPENDS
-    libc.include.dlfcn
-    libc.src.__support.CPP.mutex
-    libc.src.__support.elf.map_segments
-    libc.src.__support.elf.passive_abi
-    libc.src.__support.threads.mutex
-    libc.src.dlfcn.dl_internal
-    libc.src.link.link_maps
-)
+  add_entrypoint_object(
+    dlclose
+    SRCS
+      dlclose.cpp
+    HDRS
+      dlclose.h
+    DEPENDS
+      libc.include.dlfcn
+      libc.src.stdlib.atexit
+      libc.src.__support.CPP.mutex
+      libc.src.__support.elf.map_segments
+      libc.src.__support.elf.passive_abi
+      libc.src.__support.threads.mutex
+      libc.src.dlfcn.dl_internal
+      libc.src.link.link_maps
+  )
 
   add_entrypoint_object(
     dlerror
