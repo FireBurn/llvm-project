@@ -225,6 +225,7 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int mode)) {
   if (!failed) {
     elf::SearchOrder order(set.modules, set.count);
     order.set_tls_offsets(set.tls_offsets);
+    order.set_static_tls(set.static_count, dl::dynamic_tls_descriptor());
     for (size_t i = first; i < set.count; ++i) {
       const bool defer = lazy && dl::can_bind_lazily(set.modules[i]);
       const elf::BindResult one =
