@@ -31,13 +31,19 @@ LLVM_LIBC_FUNCTION(int, pthread_create,
                    (pthread_t *__restrict th,
                     const pthread_attr_t *__restrict attr,
                     __pthread_start_t func, void *arg)) {
-  if (attr == nullptr)
+  // Without attributes a thread gets the stack the process is allowed, which
+  // Thread::run works out when asked for no particular size.
+  bool defaulted = attr == nullptr;
+  if (defaulted)
     attr = &DEFAULT_PTHREAD_ATTR;
 
   void *stack = attr->__stack;
-  size_t stacksize = attr->__stacksize;
+  size_t stacksize = defaulted ? 0 : attr->__stacksize;
   size_t guardsize = attr->__guardsize;
   int detachstate = attr->__detachstate;
+  int inheritsched = attr->__inheritsched;
+  int schedpolicy = attr->__schedpolicy;
+  struct sched_param schedparam = attr->__schedparam;
 
   if (stacksize && stacksize < PTHREAD_STACK_MIN)
     return EINVAL;
@@ -53,8 +59,14 @@ LLVM_LIBC_FUNCTION(int, pthread_create,
   // universal, not sure a pthread requirement).
 
   auto *thread = reinterpret_cast<LIBC_NAMESPACE::Thread *>(th);
+  // A thread inherits its creator's scheduling unless the attributes say to
+  // use their own. Asking for a policy the process may not have is the
+  // kernel's to refuse, and it refuses here rather than when it was set.
+  SchedParameters sched{schedpolicy, schedparam};
   int result = thread->run(func, arg, stack, stacksize, guardsize,
-                           detachstate == PTHREAD_CREATE_DETACHED);
+                           detachstate == PTHREAD_CREATE_DETACHED,
+                           inheritsched == PTHREAD_EXPLICIT_SCHED ? &sched
+                                                                  : nullptr);
   if (result != 0 && result != EPERM && result != EINVAL)
     return EAGAIN;
   return result;

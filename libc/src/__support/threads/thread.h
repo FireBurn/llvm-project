@@ -81,20 +81,22 @@ struct Thread {
 
   int run(ThreadRunnerPosix *func, void *arg, void *stack = nullptr,
           size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
-          bool detached = DEFAULT_DETACHED) {
+          bool detached = DEFAULT_DETACHED,
+          const SchedParameters *sched = nullptr) {
     ThreadRunner runner;
     runner.posix_runner = func;
     return run(ThreadStyle::POSIX, runner, arg, stack, stacksize, guardsize,
-               detached);
+               detached, sched);
   }
 
   int run(ThreadRunnerStdc *func, void *arg, void *stack = nullptr,
           size_t stacksize = 0, size_t guardsize = DEFAULT_GUARDSIZE,
-          bool detached = DEFAULT_DETACHED) {
+          bool detached = DEFAULT_DETACHED,
+          const SchedParameters *sched = nullptr) {
     ThreadRunner runner;
     runner.stdc_runner = func;
     return run(ThreadStyle::STDC, runner, arg, stack, stacksize, guardsize,
-               detached);
+               detached, sched);
   }
 
   int join(int *val) {
@@ -129,9 +131,12 @@ struct Thread {
 
   // Platform should implement the functions below.
 
-  // Return 0 on success or an error value on failure.
+  // Return 0 on success or an error value on failure. A thread given |sched|
+  // is held back until that policy has been applied to it, so it never runs
+  // under any other, and does not run at all where the kernel refuses it.
   int run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
-          size_t stacksize, size_t guardsize, bool detached);
+          size_t stacksize, size_t guardsize, bool detached,
+          const SchedParameters *sched = nullptr);
 
   // Return 0 on success or an error value on failure.
   int join(ThreadReturnValue &retval);

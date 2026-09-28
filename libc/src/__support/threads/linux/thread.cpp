@@ -145,7 +145,14 @@ struct alignas(STACK_ALIGNMENT) StartArgs {
   ThreadAttributes *thread_attrib;
   ThreadRunner runner;
   void *arg;
+  // Where a thread waits to be given its scheduling before it runs. Zero
+  // holds it, GATE_OPEN lets it go and GATE_ABORT has it exit unrun.
+  Futex gate;
+  bool gated;
 };
+
+static constexpr FutexWordType GATE_OPEN = 1;
+static constexpr FutexWordType GATE_ABORT = 2;
 
 // This must always be inlined as we may be freeing the calling threads stack in
 // which case a normal return from the top the stack would cause an invalid
@@ -162,6 +169,13 @@ cleanup_thread_resources(ThreadAttributes *attrib) {
 static int start_thread(void *arg) {
   auto *start_args = reinterpret_cast<StartArgs *>(arg);
   auto *attrib = start_args->thread_attrib;
+
+  if (start_args->gated) {
+    while (start_args->gate.load() == 0)
+      start_args->gate.wait(0);
+    if (start_args->gate.load() == GATE_ABORT)
+      thread_exit(ThreadReturnValue(), attrib->style);
+  }
 
   if (attrib->style == ThreadStyle::POSIX) {
     ThreadReturnValue retval = start_args->runner.posix_runner(start_args->arg);
@@ -195,7 +209,8 @@ size_t Thread::default_stacksize() {
 }
 
 int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
-                size_t stacksize, size_t guardsize, bool detached) {
+                size_t stacksize, size_t guardsize, bool detached,
+                const SchedParameters *sched) {
   bool owned_stack = false;
   if (stack == nullptr) {
     // TODO: Should we return EINVAL here? Should we have a generic concept of a
@@ -287,6 +302,8 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
   start_args->thread_attrib = attrib;
   start_args->runner = runner;
   start_args->arg = arg;
+  start_args->gate.set(0);
+  start_args->gated = sched != nullptr;
 
   auto clear_tid = reinterpret_cast<Futex *>(
       adjusted_stack + sizeof(StartArgs) + sizeof(ThreadAttributes));
@@ -306,7 +323,18 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
     return clone_result.error();
   }
 
-  return 0;
+  if (sched == nullptr)
+    return 0;
+
+  int error = setschedparam(*sched);
+  start_args->gate.store(error == 0 ? GATE_OPEN : GATE_ABORT);
+  start_args->gate.notify_one();
+  if (error != 0 && !detached) {
+    // It exits without running, and nobody else holds its handle.
+    ThreadReturnValue unused;
+    join(unused);
+  }
+  return error;
 }
 
 // Take the exclusive right to join |attrib|, or return the error which stops
