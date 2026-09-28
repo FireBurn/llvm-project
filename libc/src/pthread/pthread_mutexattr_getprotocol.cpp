@@ -11,6 +11,7 @@
 #include "hdr/errno_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/pthread/pthread_mutexattr.h"
 
 #include <pthread.h>
 
@@ -20,8 +21,7 @@ LLVM_LIBC_FUNCTION(int, pthread_mutexattr_getprotocol,
                    (const pthread_mutexattr_t *attr, int *protocol)) {
   if (attr == nullptr || protocol == nullptr)
     return EINVAL;
-  // The only one a mutex here is ever given.
-  *protocol = PTHREAD_PRIO_NONE;
+  *protocol = get_mutexattr_protocol(*attr);
   return 0;
 }
 
