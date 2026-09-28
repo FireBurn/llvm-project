@@ -139,6 +139,8 @@ private:
 struct BindResult {
   size_t bound = 0;
   size_t unresolved = 0;
+  // PLT slots left pointing at their lazy stubs, to be bound on first call.
+  size_t deferred = 0;
   // The first symbol that could not be found, so that whoever gives up can
   // say which one it was. A count on its own leaves the reader to work that
   // out with a disassembler.
@@ -148,11 +150,14 @@ struct BindResult {
 // Applies one table of symbol relocations against the search order.
 //
 // A strong symbol that cannot be found is counted rather than fatal, so the
-// caller decides whether to fail the load.
+// caller decides whether to fail the load. With `lazy`, a PLT slot whose
+// symbol cannot be found yet is left pointing at its stub instead, so that it
+// is looked up again when it is first called.
 LIBC_INLINE BindResult bind_relocations(const Module &target,
                                         size_t target_index,
                                         const RelaTable &table,
-                                        const SearchOrder &order) {
+                                        const SearchOrder &order,
+                                        bool lazy = false) {
   BindResult result;
   const ElfW(Sym) *symtab = target.symtab();
   const char *strtab = target.strtab();
@@ -268,6 +273,15 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
     ElfW(Addr) value = 0;
     if (found) {
       value = *found;
+    } else if (lazy && type == RELOC_JUMP_SLOT) {
+      // The linker left the slot holding the link time address of the
+      // instruction after the stub's first jump, which is where it pushes
+      // the relocation's index and enters the resolver.
+      auto *where =
+          reinterpret_cast<ElfW(Addr) *>(target.load_bias() + rela->r_offset);
+      *where += target.load_bias();
+      ++result.deferred;
+      continue;
     } else if (symbol_binding(symbol.st_info) != STB_WEAK) {
       ++result.unresolved;
       if (result.missing == nullptr)
@@ -287,15 +301,30 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
   return result;
 }
 
-// Binds both a module's ordinary and PLT relocations.
+// Binds both a module's ordinary and PLT relocations. Only the PLT ones can
+// be deferred.
 LIBC_INLINE BindResult bind_module(const Module &target, size_t target_index,
-                                   const SearchOrder &order) {
+                                   const SearchOrder &order,
+                                   bool lazy = false) {
   BindResult a =
       bind_relocations(target, target_index, target.relocations(), order);
-  BindResult b =
-      bind_relocations(target, target_index, target.plt_relocations(), order);
-  return BindResult{a.bound + b.bound, a.unresolved + b.unresolved,
+  BindResult b = bind_relocations(target, target_index,
+                                  target.plt_relocations(), order, lazy);
+  return BindResult{a.bound + b.bound, a.unresolved + b.unresolved, b.deferred,
                     a.missing != nullptr ? a.missing : b.missing};
+}
+
+// Whether the module was linked to have everything bound at load time, which
+// rules out deferring any of it.
+LIBC_INLINE bool binds_now(const Module &module) {
+  const DynamicTable &dynamic = module.dynamic();
+  if (dynamic.contains(DT_BIND_NOW))
+    return true;
+  if (auto flags = dynamic.value(DT_FLAGS); flags && (*flags & DF_BIND_NOW))
+    return true;
+  if (auto flags = dynamic.value(DT_FLAGS_1); flags && (*flags & DF_1_NOW))
+    return true;
+  return false;
 }
 
 } // namespace elf
