@@ -16949,6 +16949,7 @@ libc_support_library(
         ":__support_fixedvector",
         ":__support_macros_config",
         ":__support_threads_mutex",
+        ":hdr_stdint_proxy",
     ],
 )
 
