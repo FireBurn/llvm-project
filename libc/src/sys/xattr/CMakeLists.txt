@@ -64,3 +64,24 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.llistxattr
 )
+
+add_entrypoint_object(
+  removexattr
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.removexattr
+)
+
+add_entrypoint_object(
+  lremovexattr
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.lremovexattr
+)
+
+add_entrypoint_object(
+  fremovexattr
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.fremovexattr
+)
