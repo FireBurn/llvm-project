@@ -842,6 +842,12 @@ functions:
     arguments:
       - type: pid_t
       - type: pid_t
+  - name: setpgrp
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: void
   - name: setregid
     standards:
       - posix
