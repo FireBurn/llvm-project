@@ -21959,6 +21959,36 @@ libc_function(
 )
 
 libc_function(
+    name = "fwprintf",
+    srcs = ["src/wchar/fwprintf.cpp"],
+    hdrs = ["src/wchar/fwprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":vfwprintf",
+    ],
+)
+
+libc_function(
+    name = "vfwprintf",
+    srcs = ["src/wchar/vfwprintf.cpp"],
+    hdrs = ["src/wchar/vfwprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_free",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_wchar_t",
+        ":wchar_wide_format",
+    ],
+)
+
+libc_function(
     name = "vswprintf",
     srcs = ["src/wchar/vswprintf.cpp"],
     hdrs = ["src/wchar/vswprintf.h"],
@@ -21971,6 +22001,19 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":wchar_wide_format",
+    ],
+)
+
+libc_function(
+    name = "vwprintf",
+    srcs = ["src/wchar/vwprintf.cpp"],
+    hdrs = ["src/wchar/vwprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdout",
+        ":types_wchar_t",
+        ":vfwprintf",
     ],
 )
 
@@ -22351,6 +22394,18 @@ libc_function(
         ":__support_macros_config",
         ":types_size_t",
         ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "wprintf",
+    srcs = ["src/wchar/wprintf.cpp"],
+    hdrs = ["src/wchar/wprintf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_wchar_t",
+        ":vwprintf",
     ],
 )
 
