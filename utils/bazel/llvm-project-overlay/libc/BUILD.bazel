@@ -34062,6 +34062,28 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "sys_auxv_linux_set_auxv",
+    srcs = ["src/sys/auxv/linux/set_auxv.cpp"],
+    hdrs = ["src/sys/auxv/linux/set_auxv.h"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_osutil_linux_auxv",
+    ],
+)
+
+libc_function(
+    name = "getauxval",
+    srcs = ["src/sys/auxv/linux/getauxval.cpp"],
+    hdrs = ["src/sys/auxv/getauxval.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_auxv",
+        ":hdr_sys_auxv_macros",
+    ],
+)
+
 libc_function(
     name = "select",
     srcs = ["src/sys/select/linux/select.cpp"],
