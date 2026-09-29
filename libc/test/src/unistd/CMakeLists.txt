@@ -467,6 +467,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  setpgrp_test
+  SUITE
+    libc_unistd_unittests
+  SRCS
+    setpgrp_test.cpp
+  DEPENDS
+    libc.src.unistd.getpgrp
+    libc.src.unistd.getpid
+    libc.src.unistd.setpgrp
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   setregid_test
   SUITE
     libc_unistd_unittests

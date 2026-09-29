@@ -882,6 +882,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  setpgrp
+  SRCS
+    setpgrp.cpp
+  HDRS
+    ../setpgrp.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setpgid
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   setregid
   SRCS
     setregid.cpp
