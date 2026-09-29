@@ -20,6 +20,9 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/readlink.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/termios/linux/kernel_termios.h"
+
+#include <asm/ioctls.h> // Safe to include without the risk of name pollution.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -57,8 +60,8 @@ LLVM_LIBC_FUNCTION(int, ttyname_r, (int fd, char *buf, size_t buflen)) {
 
   // Only a terminal has a terminal name. This is the check isatty makes: a
   // character device which is not a tty, /dev/null among them, fails it.
-  int line_discipline = 0;
-  auto tty = linux_syscalls::ioctl(fd, TIOCGETD, &line_discipline);
+  LIBC_NAMESPACE::kernel_termios attributes;
+  auto tty = linux_syscalls::ioctl(fd, TCGETS, &attributes);
   if (!tty)
     return tty.error();
 
