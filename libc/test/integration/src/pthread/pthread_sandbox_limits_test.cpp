@@ -16,6 +16,7 @@
 #include "src/pthread/pthread_self.h"
 #include "src/sys/resource/getrlimit.h"
 #include "src/sys/resource/setrlimit.h"
+#include "src/unistd/isatty.h"
 #include "src/unistd/sysconf.h"
 #include "test/IntegrationTest/test.h"
 
@@ -23,6 +24,7 @@
 #include <linux/prctl.h>
 #include <linux/seccomp.h>
 #include <pthread.h>
+#include <sys/ioctl.h>
 #include <sys/resource.h>
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -49,6 +51,27 @@ static void refuse(long number) {
             0L);
 }
 
+// Firefox's plugin sandbox lets ioctl through only for the request that asks
+// for a terminal's attributes, so isatty must ask that and nothing else.
+static void refuse_ioctl_line_discipline() {
+  sock_filter filter[] = {
+      BPF_STMT(BPF_LD | BPF_W | BPF_ABS, __builtin_offsetof(seccomp_data, nr)),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SYS_ioctl, 0, 3),
+      BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
+               __builtin_offsetof(seccomp_data, args[1])),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, TIOCGETD, 0, 1),
+      BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL_PROCESS),
+      BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
+  };
+  sock_fprog program = {sizeof(filter) / sizeof(filter[0]), filter};
+  ASSERT_EQ(LIBC_NAMESPACE::syscall_impl<long>(SYS_prctl, PR_SET_NO_NEW_PRIVS,
+                                               1, 0, 0, 0),
+            0L);
+  ASSERT_EQ(LIBC_NAMESPACE::syscall_impl<long>(
+                SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &program),
+            0L);
+}
+
 static void *idle(void *) { return nullptr; }
 
 TEST_MAIN() {
@@ -57,6 +80,7 @@ TEST_MAIN() {
   LIBC_NAMESPACE::__llvm_libc_init_main_thread();
 
   refuse(SYS_prlimit64);
+  refuse_ioctl_line_discipline();
 
   struct rlimit limit;
   ASSERT_EQ(LIBC_NAMESPACE::getrlimit(RLIMIT_CORE, &limit), 0);
@@ -65,6 +89,10 @@ TEST_MAIN() {
   ASSERT_TRUE(LIBC_NAMESPACE::sysconf(_SC_OPEN_MAX) != 0);
   ASSERT_TRUE(LIBC_NAMESPACE::sysconf(_SC_CHILD_MAX) != 0);
   ASSERT_TRUE(LIBC_NAMESPACE::sysconf(_SC_ARG_MAX) != 0);
+
+  // Whether a terminal or not, this must not be answered with a kill.
+  LIBC_NAMESPACE::isatty(0);
+  LIBC_NAMESPACE::isatty(1);
 
   // Now no limit may be read at all.
   refuse(SYS_getrlimit);
