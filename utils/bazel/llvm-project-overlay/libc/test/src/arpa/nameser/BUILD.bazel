@@ -1,0 +1,29 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc arpa/nameser.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "ns_parse_test",
+    srcs = ["ns_parse_test.cpp"],
+    deps = [
+        "//libc:ns_get16",
+        "//libc:ns_get32",
+        "//libc:ns_name_uncompress",
+        "//libc:ns_put16",
+        "//libc:ns_put32",
+        "//libc:ns_skiprr",
+        "//libc:hdr_errno_macros",
+        "//libc:ns_initparse",
+        "//libc:ns_parserr",
+        "//libc:types_ns_msg",
+        "//libc:types_ns_rr",
+    ],
+)
