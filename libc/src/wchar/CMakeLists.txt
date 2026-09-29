@@ -844,6 +844,65 @@ add_entrypoint_object(
     libc.src.wchar.vswprintf
 )
 
+add_entrypoint_object(
+  vfwprintf
+  SRCS
+    vfwprintf.cpp
+  HDRS
+    vfwprintf.h
+  DEPENDS
+    libc.hdr.func.free
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.File.file
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    .wide_format
+)
+
+add_entrypoint_object(
+  fwprintf
+  SRCS
+    fwprintf.cpp
+  HDRS
+    fwprintf.h
+  DEPENDS
+    libc.hdr.types.FILE
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.wchar.vfwprintf
+)
+
+add_entrypoint_object(
+  vwprintf
+  SRCS
+    vwprintf.cpp
+  HDRS
+    vwprintf.h
+  DEPENDS
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdio.stdout
+    libc.src.wchar.vfwprintf
+)
+
+add_entrypoint_object(
+  wprintf
+  SRCS
+    wprintf.cpp
+  HDRS
+    wprintf.h
+  DEPENDS
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.wchar.vwprintf
+)
+
 add_header_library(
   wcwidth_table
   HDRS

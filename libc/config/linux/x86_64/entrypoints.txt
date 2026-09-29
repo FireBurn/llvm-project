@@ -1889,8 +1889,12 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.unistd.setuid
 
       # wchar.h entrypoints
+      libc.src.wchar.fwprintf
       libc.src.wchar.swprintf
+      libc.src.wchar.vfwprintf
       libc.src.wchar.vswprintf
+      libc.src.wchar.vwprintf
+      libc.src.wchar.wprintf
     )
   endif()
 endif()
