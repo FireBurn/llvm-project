@@ -1,0 +1,126 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "ns_get16",
+    srcs = ["ns_get16.cpp"],
+    hdrs = ["ns_get16.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "ns_get32",
+    srcs = ["ns_get32.cpp"],
+    hdrs = ["ns_get32.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "ns_initparse",
+    srcs = ["ns_initparse.cpp"],
+    hdrs = ["ns_initparse.h"],
+    deps = [
+        ":ns_parse_state",
+        ":ns_skiprr",
+        "//libc/hdr/types:ns_msg",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_uncompress",
+    srcs = ["ns_name_uncompress.cpp"],
+    hdrs = ["ns_name_uncompress.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/netdb:resolv_dns_message",
+    ],
+)
+
+libc_function(
+    name = "ns_parserr",
+    srcs = ["ns_parserr.cpp"],
+    hdrs = ["ns_parserr.h"],
+    deps = [
+        ":ns_name_uncompress",
+        ":ns_parse_state",
+        ":ns_skiprr",
+        "//libc/hdr/types:ns_msg",
+        "//libc/hdr/types:ns_rr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_put16",
+    srcs = ["ns_put16.cpp"],
+    hdrs = ["ns_put16.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "ns_put32",
+    srcs = ["ns_put32.cpp"],
+    hdrs = ["ns_put32.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "ns_skiprr",
+    srcs = ["ns_skiprr.cpp"],
+    hdrs = ["ns_skiprr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/netdb:resolv_dns_message",
+    ],
+)
+
+libc_support_library(
+    name = "ns_parse_state",
+    hdrs = ["ns_parse_state.h"],
+    deps = [
+        "//libc/hdr/types:ns_msg",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
