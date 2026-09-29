@@ -6270,6 +6270,106 @@ libc_function(
 )
 
 libc_function(
+    name = "ns_get16",
+    srcs = ["src/arpa/nameser/ns_get16.cpp"],
+    hdrs = ["src/arpa/nameser/ns_get16.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "ns_get32",
+    srcs = ["src/arpa/nameser/ns_get32.cpp"],
+    hdrs = ["src/arpa/nameser/ns_get32.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "ns_initparse",
+    srcs = ["src/arpa/nameser/ns_initparse.cpp"],
+    hdrs = ["src/arpa/nameser/ns_initparse.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_parse_state",
+        ":ns_skiprr",
+        ":hdr_errno_macros",
+        ":types_ns_msg",
+    ],
+)
+
+libc_function(
+    name = "ns_name_uncompress",
+    srcs = ["src/arpa/nameser/ns_name_uncompress.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_uncompress.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_resolv_dns_message",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_parserr",
+    srcs = ["src/arpa/nameser/ns_parserr.cpp"],
+    hdrs = ["src/arpa/nameser/ns_parserr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":ns_name_uncompress",
+        ":arpa_nameser_ns_parse_state",
+        ":ns_skiprr",
+        ":hdr_errno_macros",
+        ":types_ns_msg",
+        ":types_ns_rr",
+    ],
+)
+
+libc_function(
+    name = "ns_put16",
+    srcs = ["src/arpa/nameser/ns_put16.cpp"],
+    hdrs = ["src/arpa/nameser/ns_put16.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "ns_put32",
+    srcs = ["src/arpa/nameser/ns_put32.cpp"],
+    hdrs = ["src/arpa/nameser/ns_put32.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "ns_skiprr",
+    srcs = ["src/arpa/nameser/ns_skiprr.cpp"],
+    hdrs = ["src/arpa/nameser/ns_skiprr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_resolv_dns_message",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "ntohl",
     srcs = ["src/arpa/inet/ntohl.cpp"],
     hdrs = ["src/arpa/inet/ntohl.h"],
@@ -27880,6 +27980,44 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":netdb_resolv_hosts",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_ns_msg",
+    hdrs = ["include/llvm-libc-types/ns_msg.h"],
+)
+
+libc_support_library(
+    name = "types_ns_msg",
+    hdrs = ["hdr/types/ns_msg.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_ns_msg"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_ns_rr",
+    hdrs = ["include/llvm-libc-types/ns_rr.h"],
+)
+
+libc_support_library(
+    name = "types_ns_rr",
+    hdrs = ["hdr/types/ns_rr.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_ns_rr"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "arpa_nameser_ns_parse_state",
+    hdrs = ["src/arpa/nameser/ns_parse_state.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_ns_msg",
     ],
 )
 
