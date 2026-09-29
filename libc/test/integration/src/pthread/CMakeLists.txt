@@ -118,7 +118,9 @@ add_integration_test(
     libc.src.pthread.pthread_mutex_unlock
     libc.src.pthread.pthread_mutexattr_destroy
     libc.src.pthread.pthread_mutexattr_init
+    libc.src.pthread.pthread_mutexattr_setprotocol
     libc.src.pthread.pthread_mutexattr_setpshared
+    libc.src.pthread.pthread_mutexattr_setrobust
     libc.src.time.clock_gettime
 )
 
