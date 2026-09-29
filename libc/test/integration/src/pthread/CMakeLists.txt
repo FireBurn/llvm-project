@@ -459,6 +459,7 @@ add_integration_test(
     libc.src.pthread.pthread_self
     libc.src.sys.resource.getrlimit
     libc.src.sys.resource.setrlimit
+    libc.src.unistd.isatty
     libc.src.unistd.sysconf
 )
 
