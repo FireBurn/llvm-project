@@ -1,3 +1,14 @@
+add_object_library(
+  set_auxv
+  SRCS
+    set_auxv.cpp
+  HDRS
+    set_auxv.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.auxv
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   getauxval
   SRCS
@@ -7,4 +18,5 @@ add_entrypoint_object(
   DEPENDS
     libc.src.__support.OSUtil.linux.auxv
     libc.src.__support.libc_errno
+    .set_auxv
 )
