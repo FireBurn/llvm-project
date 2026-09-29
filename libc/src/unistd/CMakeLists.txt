@@ -499,6 +499,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  setpgrp
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.setpgrp
+)
+
+add_entrypoint_object(
   setregid
   ALIAS
   DEPENDS
