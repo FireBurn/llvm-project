@@ -44,16 +44,17 @@ namespace math {
 // instruction by clang is only correct for the default rounding mode.
 // See https://github.com/llvm/llvm-project/issues/140252
 // So we will only use `__builtin_round` with clang on x86-64 if we assume
-// default rounding mode (FE_TONEAREST) only.
+// default rounding mode (FE_TONEAREST) only, whether or not ROUND_OPT asked
+// for the builtin.
 
 LIBC_INLINE LIBC_CONSTEXPR float roundf(float x) {
 #if __has_builtin(__builtin_roundf) && !defined(LIBC_USE_CONSTEXPR) &&         \
+    (!defined(LIBC_TARGET_ARCH_IS_X86) ||                                      \
+     defined(LIBC_MATH_HAS_ASSUME_ROUND_NEAREST_ONLY)) &&                      \
     (defined(__LIBC_USE_BUILTIN_ROUND) ||                                      \
      (defined(LIBC_COMPILER_IS_CLANG) &&                                       \
       defined(LIBC_TARGET_CPU_HAS_FPU_FLOAT) &&                                \
-      (!defined(__ARM_ARCH) || (__ARM_ARCH >= 8)) &&                           \
-      (!defined(LIBC_TARGET_ARCH_IS_X86) ||                                    \
-       defined(LIBC_MATH_HAS_ASSUME_ROUND_NEAREST_ONLY))))
+      (!defined(__ARM_ARCH) || (__ARM_ARCH >= 8))))
   return __builtin_roundf(x);
 #else
   return fputil::round(x);
