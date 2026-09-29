@@ -963,6 +963,20 @@ libc_function(
 )
 
 libc_function(
+    name = "setpgrp",
+    srcs = ["linux/setpgrp.cpp"],
+    hdrs = ["setpgrp.h"],
+    deps = [
+        ":unistd_setpgrp",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "vfork",
     srcs = ["linux/vfork.cpp"],
     hdrs = ["vfork.h"],
@@ -1095,6 +1109,14 @@ libc_support_library(
 libc_support_library(
     name = "unistd_gethostid",
     hdrs = ["gethostid.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setpgrp",
+    hdrs = ["setpgrp.h"],
     deps = [
         "//libc/src/__support/macros:config",
     ],
