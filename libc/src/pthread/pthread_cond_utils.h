@@ -44,9 +44,7 @@ LIBC_INLINE Mutex *to_mutex(pthread_mutex_t *mutex) {
   LIBC_CRASH_ON_NULLPTR(mutex);
   // TODO: use cpp:start_lifetime_as once
   // https://github.com/llvm/llvm-project/pull/193326 is merged
-  Mutex *m = reinterpret_cast<Mutex *>(mutex);
-  LIBC_ASSERT(!m->is_robust() && "Robust mutex not supported yet");
-  return m;
+  return reinterpret_cast<Mutex *>(mutex);
 }
 
 LIBC_INLINE bool is_supported_clock(clockid_t clock_id) {
