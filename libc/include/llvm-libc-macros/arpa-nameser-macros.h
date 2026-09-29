@@ -204,6 +204,19 @@
     (cp) += NS_INT32SZ;                                                        \
   } while (0)
 
+// What ns_initparse and ns_parserr found.
+#define ns_msg_id(handle) ((handle)._id + 0)
+#define ns_msg_base(handle) ((handle)._msg + 0)
+#define ns_msg_end(handle) ((handle)._eom + 0)
+#define ns_msg_size(handle) ((handle)._eom - (handle)._msg)
+#define ns_msg_count(handle, section) ((handle)._counts[section] + 0)
+#define ns_rr_name(rr) (((rr).name[0] != '\0') ? (rr).name : ".")
+#define ns_rr_type(rr) ((ns_type)((rr).type + 0))
+#define ns_rr_class(rr) ((ns_class)((rr).rr_class + 0))
+#define ns_rr_ttl(rr) ((rr).ttl + 0)
+#define ns_rr_rdlen(rr) ((rr).rdlength + 0)
+#define ns_rr_rdata(rr) ((rr).rdata + 0)
+
 #define GETSHORT NS_GET16
 #define GETLONG NS_GET32
 #define PUTSHORT NS_PUT16
