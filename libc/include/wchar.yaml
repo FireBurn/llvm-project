@@ -492,6 +492,36 @@ functions:
       - type: size_t
       - type: const wchar_t *__restrict
       - type: '...'
+  - name: vfwprintf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: FILE *__restrict
+      - type: const wchar_t *__restrict
+      - type: va_list
+  - name: fwprintf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: FILE *__restrict
+      - type: const wchar_t *__restrict
+      - type: '...'
+  - name: vwprintf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: va_list
+  - name: wprintf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: '...'
   - name: wcsftime
     standards:
       - stdc
