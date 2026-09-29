@@ -1,0 +1,22 @@
+add_custom_target(libc_arpa_nameser_unittests)
+
+add_libc_test(
+  ns_parse_test
+  SUITE
+    libc_arpa_nameser_unittests
+  SRCS
+    ns_parse_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.hdr.types.ns_rr
+    libc.src.arpa.nameser.ns_get16
+    libc.src.arpa.nameser.ns_get32
+    libc.src.arpa.nameser.ns_initparse
+    libc.src.arpa.nameser.ns_name_uncompress
+    libc.src.arpa.nameser.ns_parserr
+    libc.src.arpa.nameser.ns_put16
+    libc.src.arpa.nameser.ns_put32
+    libc.src.arpa.nameser.ns_skiprr
+    libc.test.UnitTest.ErrnoCheckingTest
+)
