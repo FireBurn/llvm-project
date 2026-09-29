@@ -11,6 +11,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.arpa.inet.inet_pton
     libc.src.arpa.inet.ntohl
     libc.src.arpa.inet.ntohs
+    libc.src.arpa.nameser.ns_get16
+    libc.src.arpa.nameser.ns_get32
+    libc.src.arpa.nameser.ns_initparse
+    libc.src.arpa.nameser.ns_name_uncompress
+    libc.src.arpa.nameser.ns_parserr
+    libc.src.arpa.nameser.ns_put16
+    libc.src.arpa.nameser.ns_put32
+    libc.src.arpa.nameser.ns_skiprr
 
     # ctype.h entrypoints
     libc.src.ctype.isalnum
