@@ -627,7 +627,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     # wchar.h entrypoints
     libc.src.wchar.btowc
     libc.src.wchar.swprintf
+    libc.src.wchar.vfwprintf
     libc.src.wchar.vswprintf
+    libc.src.wchar.vwprintf
+    libc.src.wchar.wprintf
     libc.src.wchar.wcscasecmp
     libc.src.wchar.wcscoll_l
     libc.src.wchar.wcsftime
@@ -1978,6 +1981,7 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
 
       # time.h entrypoints
       libc.src.time.strptime
+      libc.src.wchar.fwprintf
       libc.src.time.tz_variables
       libc.src.time.tzset
 
