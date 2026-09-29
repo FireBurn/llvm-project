@@ -900,6 +900,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_ns_msg",
+    hdrs = ["llvm-libc-types/ns_msg.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_ns_rr",
+    hdrs = ["llvm-libc-types/ns_rr.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )

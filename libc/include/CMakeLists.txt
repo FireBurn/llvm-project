@@ -1702,6 +1702,9 @@ add_header_macro(
     .llvm-libc-types.ns_sect
     .llvm-libc-types.ns_type
     .llvm-libc-types.HEADER
+    .llvm-libc-types.ns_msg
+    .llvm-libc-types.ns_rr
+    .llvm-libc-types.size_t
 )
 
 add_header_macro(
