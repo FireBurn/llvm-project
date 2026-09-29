@@ -21895,6 +21895,7 @@ libc_function(
         ":errno",
         ":hdr_errno_macros",
         ":sys_ioctl_macros",
+        ":termios_kernel_termios",
         ":termios_linux_kernel_termios",
         ":types_size_t",
     ],
