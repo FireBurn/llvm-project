@@ -13,15 +13,18 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/termios/linux/kernel_termios.h"
+
+#include <asm/ioctls.h> // Safe to include without the risk of name pollution.
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, isatty, (int fd)) {
-  constexpr int INIT_VAL = 0x1234abcd;
-  int line_d_val = INIT_VAL;
-  // This gets the line dicipline of the terminal. When called on something that
-  // isn't a terminal it doesn't change line_d_val and returns -1.
-  auto result = linux_syscalls::ioctl(fd, TIOCGETD, &line_d_val);
+  // Asking for the terminal's attributes is how glibc and musl tell, and the
+  // one thing the sandboxes of Firefox and Chromium answer with ENOTTY rather
+  // than kill the process for.
+  LIBC_NAMESPACE::kernel_termios attributes;
+  auto result = linux_syscalls::ioctl(fd, TCGETS, &attributes);
   if (result.has_value())
     return 1;
 
