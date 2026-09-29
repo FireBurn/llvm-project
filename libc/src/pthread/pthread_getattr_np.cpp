@@ -13,11 +13,11 @@
 
 #include "src/pthread/pthread_getattr_np.h"
 #include "hdr/pthread_macros.h"
+#include "hdr/sys_resource_macros.h"
 #include "hdr/types/pthread_attr_t.h"
 #include "hdr/types/pthread_t.h"
-#include "src/__support/CPP/atomic.h"
-#include "hdr/sys_resource_macros.h"
 #include "hdr/types/struct_rlimit.h"
+#include "src/__support/CPP/atomic.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/prlimit.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
@@ -55,12 +55,11 @@ LLVM_LIBC_FUNCTION(int, pthread_getattr_np,
   // this to know where the stack ends, so the limit is what to report, and
   // the low address follows from it.
   if (attr->__stacksize == PTHREAD_STACK_DYNAMIC_NP) {
-    rlimit limit;
-    auto result = linux_syscalls::prlimit(0, RLIMIT_STACK, nullptr, &limit);
-    if (!result.has_value())
-      return static_cast<int>(result.error());
+    unsigned long soft = 0;
+    if (int error = Thread::stack_limit(&soft))
+      return error;
 
-    size_t room = limit.rlim_cur;
+    size_t room = soft;
     // Without a limit there is no low address to state, so a size is chosen
     // that describes the stack rather than the whole of memory.
     if (room == RLIM_INFINITY)

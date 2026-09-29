@@ -43,9 +43,9 @@
 #include "hdr/stdint_proxy.h"
 #include "hdr/sys_mman_macros.h" // For PROT_* and MAP_* definitions.
 #include "hdr/sys_resource_macros.h"
-#include <linux/param.h>         // For EXEC_PAGESIZE.
-#include <linux/prctl.h>         // For PR_SET_NAME
-#include <sys/syscall.h>         // For syscall numbers.
+#include <linux/param.h> // For EXEC_PAGESIZE.
+#include <linux/prctl.h> // For PR_SET_NAME
+#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -195,24 +195,38 @@ static int start_thread(void *arg) {
   return 0;
 }
 
-size_t Thread::default_stacksize() {
-  static cpp::Atomic<size_t> cached(0);
-  size_t size = cached.load(cpp::MemoryOrder::RELAXED);
-  if (size != 0)
-    return size;
+int Thread::stack_limit(unsigned long *soft) {
+  // Unread, read, or failed to read.
+  static cpp::Atomic<int> state(0);
+  static cpp::Atomic<unsigned long> value(0);
+  static cpp::Atomic<int> error(0);
 
+  if (state.load(cpp::MemoryOrder::ACQUIRE) == 0) {
+    rlimit limit;
+    auto result = linux_syscalls::getrlimit(RLIMIT_STACK, &limit);
+    if (result.has_value()) {
+      value.store(limit.rlim_cur, cpp::MemoryOrder::RELAXED);
+      state.store(1, cpp::MemoryOrder::RELEASE);
+    } else {
+      error.store(static_cast<int>(result.error()), cpp::MemoryOrder::RELAXED);
+      state.store(2, cpp::MemoryOrder::RELEASE);
+    }
+  }
+  if (state.load(cpp::MemoryOrder::ACQUIRE) == 2)
+    return error.load(cpp::MemoryOrder::RELAXED);
+  *soft = value.load(cpp::MemoryOrder::RELAXED);
+  return 0;
+}
+
+size_t Thread::default_stacksize() {
   // The limit set on the process is what glibc gives a thread that asks for
   // no particular size, so it is what is given here.
-  size = FALLBACK_STACKSIZE;
-  rlimit limit;
-  auto result = linux_syscalls::prlimit(0, RLIMIT_STACK, nullptr, &limit);
-  if (result.has_value() && limit.rlim_cur != RLIM_INFINITY &&
-      limit.rlim_cur != 0)
-    size = static_cast<size_t>(limit.rlim_cur);
+  size_t size = FALLBACK_STACKSIZE;
+  unsigned long soft = 0;
+  if (stack_limit(&soft) == 0 && soft != RLIM_INFINITY && soft != 0)
+    size = static_cast<size_t>(soft);
   if (size < MINIMUM_STACKSIZE)
     size = MINIMUM_STACKSIZE;
-
-  cached.store(size, cpp::MemoryOrder::RELAXED);
   return size;
 }
 
@@ -598,7 +612,6 @@ ErrorOr<void> Thread::kill(int sig) {
   }
   return {};
 }
-
 
 namespace internal {
 

@@ -66,6 +66,11 @@ struct Thread {
   static constexpr size_t FALLBACK_STACKSIZE = size_t(8) << 20;
   static constexpr size_t MINIMUM_STACKSIZE = size_t(16) << 10;
   static size_t default_stacksize();
+  // The soft limit on the stack, which is RLIM_INFINITY where there is none.
+  // It is read once and kept, since a sandbox that forbids reading limits
+  // kills the process at any later read, and startup asks for it before one
+  // is in place. Returns zero, or the error number the read failed with.
+  static int stack_limit(unsigned long *soft);
   static constexpr size_t DEFAULT_GUARDSIZE = EXEC_PAGESIZE;
   static constexpr bool DEFAULT_DETACHED = false;
 
