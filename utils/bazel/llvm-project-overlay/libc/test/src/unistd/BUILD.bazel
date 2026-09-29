@@ -192,6 +192,16 @@ libc_test(
 )
 
 libc_test(
+    name = "setpgrp_test",
+    srcs = ["setpgrp_test.cpp"],
+    deps = [
+        "//libc:getpgrp",
+        "//libc:getpid",
+        "//libc:setpgrp",
+    ],
+)
+
+libc_test(
     name = "swab_test",
     srcs = ["swab_test.cpp"],
     deps = [
