@@ -22,9 +22,12 @@ namespace LIBC_NAMESPACE_DECL {
 namespace math {
 
 LIBC_INLINE LIBC_CONSTEXPR float16 roundf16(float16 x) {
+// See round.h: the x86 expansion is only right when rounding to nearest.
 #if defined(__LIBC_USE_BUILTIN_ROUND) &&                                       \
     defined(LIBC_TARGET_CPU_HAS_FAST_FLOAT16_OPS) &&                           \
-    !defined(LIBC_USE_CONSTEXPR)
+    !defined(LIBC_USE_CONSTEXPR) &&                                            \
+    (!defined(LIBC_TARGET_ARCH_IS_X86) ||                                      \
+     defined(LIBC_MATH_HAS_ASSUME_ROUND_NEAREST_ONLY))
   return fputil::cast<float16>(__builtin_roundf(x));
 #else
   return fputil::round(x);
