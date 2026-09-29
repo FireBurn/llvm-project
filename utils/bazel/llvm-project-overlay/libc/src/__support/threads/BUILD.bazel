@@ -418,3 +418,28 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "cndvar",
+    hdrs = ["CndVar.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":futex_utils",
+        ":identifier",
+        ":mutex",
+        ":mutex_common",
+        ":raw_mutex",
+        ":sleep",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:expected",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:abs_timeout",
+        "//libc/src/__support/time:monotonicity",
+    ],
+)
