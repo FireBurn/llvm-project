@@ -20352,6 +20352,20 @@ libc_function(
 )
 
 libc_function(
+    name = "setpgrp",
+    srcs = ["src/unistd/linux/setpgrp.cpp"],
+    hdrs = ["src/unistd/setpgrp.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setpgid",
+        ":errno",
+        ":unistd_setpgrp",
+    ],
+)
+
+libc_function(
     name = "symlink",
     srcs = ["src/unistd/linux/symlink.cpp"],
     hdrs = ["src/unistd/symlink.h"],
@@ -24116,6 +24130,26 @@ libc_support_library(
     hdrs = ["src/unistd/gethostid.h"],
     deps = [
         ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setpgrp",
+    hdrs = ["src/unistd/setpgrp.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setpgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setpgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
     ],
 )
 
