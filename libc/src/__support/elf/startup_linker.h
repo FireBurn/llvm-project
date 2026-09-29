@@ -129,6 +129,7 @@ public:
     // own startup code runs. That code therefore leaves `environ` alone if it
     // finds it already set.
     publish_environ(order, stack);
+    publish_auxv(order, stack);
 
     // An initialiser may ask which thread it is on and keep the answer, as Qt
     // does to tell its threads apart, so the thread is described before any
@@ -306,6 +307,15 @@ private:
     if (!address)
       return; // Nothing in the process has one.
     *reinterpret_cast<char ***>(*address) = stack.envp();
+  }
+
+  // The vector on the stack is the one the program was given, which need not
+  // be the one the kernel first passed.
+  LIBC_INLINE static void publish_auxv(const SearchOrder &order,
+                                       const StartupStack &stack) {
+    auto address = order.resolve("__llvm_libc_set_auxv");
+    if (address)
+      reinterpret_cast<void (*)(const void *)>(*address)(stack.auxv());
   }
 
   LIBC_INLINE static void describe_main_thread(const SearchOrder &order) {
