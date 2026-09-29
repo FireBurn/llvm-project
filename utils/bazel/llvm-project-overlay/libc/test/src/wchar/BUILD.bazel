@@ -20,6 +20,19 @@ libc_test(
 )
 
 libc_test(
+    name = "fwprintf_test",
+    srcs = ["fwprintf_test.cpp"],
+    deps = [
+        "//libc:fclose",
+        "//libc:fopen",
+        "//libc:fread",
+        "//libc:fwide",
+        "//libc:fwprintf",
+        "//libc:hdr_errno_macros",
+    ],
+)
+
+libc_test(
     name = "wcpcpy_test",
     srcs = ["wcpcpy_test.cpp"],
     deps = [
