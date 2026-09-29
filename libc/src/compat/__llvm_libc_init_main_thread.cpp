@@ -33,6 +33,12 @@ static ThreadAttributes main_thread_attrib;
 // Calling this more than once is harmless: the second call sees the work
 // already done and leaves it alone.
 LLVM_LIBC_FUNCTION(int, __llvm_libc_init_main_thread, (void)) {
+  // Read the stack limit now, while nothing forbids it: a process that puts
+  // itself in a sandbox before starting a thread would otherwise be killed
+  // when the first one asks.
+  unsigned long stack_limit;
+  Thread::stack_limit(&stack_limit);
+
   if (get_current_thread_attrib() != nullptr)
     return 0;
 
