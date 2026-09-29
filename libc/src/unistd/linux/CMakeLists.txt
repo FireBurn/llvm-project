@@ -697,6 +697,7 @@ add_entrypoint_object(
     libc.hdr.sys_ioctl_macros
     libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
     libc.src.errno.errno
+    libc.src.termios.linux.kernel_termios
 )
 
 add_entrypoint_object(
@@ -1404,6 +1405,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
     libc.src.__support.OSUtil.linux.syscall_wrappers.readlink
     libc.src.errno.errno
+    libc.src.termios.linux.kernel_termios
 )
 
 add_entrypoint_object(
