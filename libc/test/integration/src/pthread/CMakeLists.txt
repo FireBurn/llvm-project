@@ -440,6 +440,29 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_sandbox_limits_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_sandbox_limits_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_rlimit
+    libc.include.pthread
+    libc.include.sys_resource
+    libc.include.unistd
+    libc.src.__support.OSUtil.osutil
+    libc.src.compat.__llvm_libc_init_main_thread
+    libc.src.pthread.pthread_attr_destroy
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_getattr_np
+    libc.src.pthread.pthread_join
+    libc.src.pthread.pthread_self
+    libc.src.sys.resource.getrlimit
+    libc.src.sys.resource.setrlimit
+    libc.src.unistd.sysconf
+)
+
+add_integration_test(
   pthread_kill_test
   SUITE
     libc-pthread-integration-tests
