@@ -34,6 +34,12 @@ macros:
     macro_header: arpa-nameser-macros.h
 types:
   - type_name: HEADER
+  - type_name: ns_class
+  - type_name: ns_msg
+  - type_name: ns_rr
+  - type_name: ns_sect
+  - type_name: ns_type
+  - type_name: size_t
 enums:
   - name: ns_s_qd
     value: 0
@@ -252,4 +258,66 @@ enums:
   - name: ns_t_any
     value: 255
 objects: []
-functions: []
+functions:
+  - name: ns_get16
+    standards:
+      - bsd
+    return_type: unsigned int
+    arguments:
+      - type: const unsigned char *
+  - name: ns_get32
+    standards:
+      - bsd
+    return_type: unsigned long
+    arguments:
+      - type: const unsigned char *
+  - name: ns_put16
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: unsigned int
+      - type: unsigned char *
+  - name: ns_put32
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: unsigned long
+      - type: unsigned char *
+  - name: ns_initparse
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const unsigned char *
+      - type: int
+      - type: ns_msg *
+  - name: ns_skiprr
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const unsigned char *
+      - type: const unsigned char *
+      - type: ns_sect
+      - type: int
+  - name: ns_parserr
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: ns_msg *
+      - type: ns_sect
+      - type: int
+      - type: ns_rr *
+  - name: ns_name_uncompress
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const unsigned char *
+      - type: const unsigned char *
+      - type: const unsigned char *
+      - type: char *
+      - type: size_t
