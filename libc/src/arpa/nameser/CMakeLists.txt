@@ -1,0 +1,121 @@
+add_header_library(
+  ns_parse_state
+  HDRS
+    ns_parse_state.h
+  DEPENDS
+    libc.hdr.types.ns_msg
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_get16
+  SRCS
+    ns_get16.cpp
+  HDRS
+    ns_get16.h
+  DEPENDS
+    libc.include.arpa_nameser
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_get32
+  SRCS
+    ns_get32.cpp
+  HDRS
+    ns_get32.h
+  DEPENDS
+    libc.include.arpa_nameser
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_put16
+  SRCS
+    ns_put16.cpp
+  HDRS
+    ns_put16.h
+  DEPENDS
+    libc.include.arpa_nameser
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_put32
+  SRCS
+    ns_put32.cpp
+  HDRS
+    ns_put32.h
+  DEPENDS
+    libc.include.arpa_nameser
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_skiprr
+  SRCS
+    ns_skiprr.cpp
+  HDRS
+    ns_skiprr.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.dns_message
+)
+
+add_entrypoint_object(
+  ns_name_uncompress
+  SRCS
+    ns_name_uncompress.cpp
+  HDRS
+    ns_name_uncompress.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.netdb.resolv.dns_message
+)
+
+add_entrypoint_object(
+  ns_initparse
+  SRCS
+    ns_initparse.cpp
+  HDRS
+    ns_initparse.h
+  DEPENDS
+    .ns_parse_state
+    .ns_skiprr
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_parserr
+  SRCS
+    ns_parserr.cpp
+  HDRS
+    ns_parserr.h
+  DEPENDS
+    .ns_name_uncompress
+    .ns_parse_state
+    .ns_skiprr
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.hdr.types.ns_rr
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)

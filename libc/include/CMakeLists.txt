@@ -1820,6 +1820,12 @@ add_header_macro(
     .llvm_libc_common_h
     .llvm-libc-macros.arpa_nameser_macros
     .llvm-libc-types.HEADER
+    .llvm-libc-types.ns_class
+    .llvm-libc-types.ns_msg
+    .llvm-libc-types.ns_rr
+    .llvm-libc-types.ns_sect
+    .llvm-libc-types.ns_type
+    .llvm-libc-types.size_t
 )
 
 add_header_macro(

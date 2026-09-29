@@ -1690,6 +1690,22 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  ns_msg
+  HDRS
+    ns_msg.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.ns_msg
+)
+
+add_proxy_header_library(
+  ns_rr
+  HDRS
+    ns_rr.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.ns_rr
+)
+
+add_proxy_header_library(
   struct_ether_addr
   HDRS
     struct_ether_addr.h
