@@ -758,6 +758,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  fwprintf_test
+  SUITE
+    libc_wchar_unittests
+  SRCS
+    fwprintf_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fread
+    libc.src.wchar.fwide
+    libc.src.wchar.fwprintf
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   wcwidth_test
   SUITE
     libc_wchar_unittests
