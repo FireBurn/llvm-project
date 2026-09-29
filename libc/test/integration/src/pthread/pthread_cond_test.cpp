@@ -27,7 +27,9 @@
 #include "src/pthread/pthread_mutex_unlock.h"
 #include "src/pthread/pthread_mutexattr_destroy.h"
 #include "src/pthread/pthread_mutexattr_init.h"
+#include "src/pthread/pthread_mutexattr_setprotocol.h"
 #include "src/pthread/pthread_mutexattr_setpshared.h"
+#include "src/pthread/pthread_mutexattr_setrobust.h"
 #include "src/time/clock_gettime.h"
 #include "test/IntegrationTest/test.h"
 
@@ -231,6 +233,36 @@ void clockwait_returns_einval_for_invalid_clockid() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_cond_destroy(&cond), 0);
 }
 
+// Wine's PulseAudio driver waits on a condition variable with a mutex that
+// is both priority-inheriting and robust.
+void waits_on_a_robust_priority_inheriting_mutex() {
+  pthread_mutexattr_t attr;
+  pthread_mutex_t mutex;
+  pthread_cond_t cond;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_init(&attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_setprotocol(&attr,
+                                                          PTHREAD_PRIO_INHERIT),
+            0);
+  ASSERT_EQ(
+      LIBC_NAMESPACE::pthread_mutexattr_setrobust(&attr, PTHREAD_MUTEX_ROBUST),
+      0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, &attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_cond_init(&cond, nullptr), 0);
+
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
+  timespec ts{};
+  ASSERT_EQ(LIBC_NAMESPACE::clock_gettime(CLOCK_REALTIME, &ts), 0);
+  add_ns(ts, 1000);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_cond_timedwait(&cond, &mutex, &ts),
+            ETIMEDOUT);
+  // The mutex is held again when the wait returns.
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
+
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_destroy(&mutex), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_cond_destroy(&cond), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_destroy(&attr), 0);
+}
+
 void initializer_act_the_same_as_null_attr() {
   constexpr size_t EFFECTIVE_BYTES = offsetof(pthread_cond_t, __padding);
   union {
@@ -254,5 +286,6 @@ TEST_MAIN() {
   run_shared_modes<true>();
   initializer_act_the_same_as_null_attr();
   clockwait_returns_einval_for_invalid_clockid();
+  waits_on_a_robust_priority_inheriting_mutex();
   return 0;
 }
