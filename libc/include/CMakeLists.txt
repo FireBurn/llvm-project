@@ -1767,6 +1767,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  netinet_igmp
+  ../libc/include/netinet/igmp.yaml
+  netinet/igmp.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.netinet_igmp_macros
+    .llvm-libc-types.struct_igmp
+    .netinet_in
+)
+
+add_header_macro(
   resolv
   ../libc/include/resolv.yaml
   resolv.h
