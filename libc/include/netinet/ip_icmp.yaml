@@ -35,6 +35,7 @@ macros:
     macro_header: netinet-ip-icmp-macros.h
 types:
   - type_name: struct_icmphdr
+  - type_name: struct_icmp
 enums: []
 objects: []
 functions: []
