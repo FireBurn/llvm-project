@@ -47,3 +47,16 @@ TEST(LlvmLibcLinuxFcntlMacrosTest, StopAskingTheKernelForALockCommandItDoes) {
   EXPECT_EQ(static_cast<long long>(F_SETLK64), 6LL);
   EXPECT_EQ(static_cast<long long>(F_SETLKW64), 7LL);
 }
+
+TEST(LlvmLibcLinuxFcntlMacrosTest, DefineF_SetleaseF_GetleaseF_NotifyAndThe) {
+  EXPECT_EQ(static_cast<long long>(F_SETLEASE), 1024LL);
+  EXPECT_EQ(static_cast<long long>(F_GETLEASE), 1025LL);
+  EXPECT_EQ(static_cast<long long>(F_NOTIFY), 1026LL);
+  EXPECT_EQ(static_cast<long long>(DN_ACCESS), 1LL);
+  EXPECT_EQ(static_cast<long long>(DN_MODIFY), 2LL);
+  EXPECT_EQ(static_cast<long long>(DN_CREATE), 4LL);
+  EXPECT_EQ(static_cast<long long>(DN_DELETE), 8LL);
+  EXPECT_EQ(static_cast<long long>(DN_RENAME), 16LL);
+  EXPECT_EQ(static_cast<long long>(DN_ATTRIB), 32LL);
+  EXPECT_EQ(static_cast<long long>(DN_MULTISHOT), 0x80000000LL);
+}
