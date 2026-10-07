@@ -6,6 +6,7 @@ macros:
     macro_header: sys-uio-macros.h
 types:
   - type_name: pid_t
+  - type_name: loff_t
   - type_name: off_t
   - type_name: struct_iovec
   - type_name: ssize_t
