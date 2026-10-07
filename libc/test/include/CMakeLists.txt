@@ -522,6 +522,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netinet_ip_icmp_struct_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_ip_icmp_struct_test.cpp
+  DEPENDS
+    libc.include.netinet_ip_icmp
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
