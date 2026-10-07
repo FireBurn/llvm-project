@@ -4,6 +4,8 @@ standards:
 macros:
   - macro_name: "NULL"
     macro_header: null-macro.h
+  - macro_name: _PATH_LOG
+    macro_header: syslog-macros.h
   - macro_name: LOG_PID
     macro_header: syslog-macros.h
   - macro_name: LOG_CONS
