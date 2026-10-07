@@ -7,6 +7,12 @@ macros: []
 types:
   - type_name: struct_ip6_hdr
   - type_name: struct_ip6_hbh
+  - type_name: struct_ip6_ext
+  - type_name: struct_ip6_dest
+  - type_name: struct_ip6_rthdr
+  - type_name: struct_ip6_rthdr0
+  - type_name: struct_ip6_frag
+  - type_name: struct_ip6_opt
   - type_name: struct_in6_addr
 enums: []
 objects: []
