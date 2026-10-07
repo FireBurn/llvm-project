@@ -456,6 +456,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  netinet_igmp_macros
+  HDR
+    netinet-igmp-macros.h
+)
+
+add_macro_header(
   netdb_macros
   HDR
     netdb-macros.h
