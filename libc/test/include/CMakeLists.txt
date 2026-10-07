@@ -671,6 +671,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_socket_loff_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_socket_loff_t_test.cpp
+  DEPENDS
+    libc.include.sys_socket
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
