@@ -1507,6 +1507,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_socket_macros
+    .llvm-libc-types.loff_t
     .llvm-libc-types.sa_family_t
     .llvm-libc-types.socklen_t
     .llvm-libc-types.ssize_t
@@ -1686,6 +1687,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.sys_uio_macros
+    .llvm-libc-types.loff_t
     .llvm-libc-types.off_t
     .llvm-libc-types.pid_t
     .llvm-libc-types.struct_iovec
