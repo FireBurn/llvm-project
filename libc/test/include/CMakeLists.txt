@@ -491,6 +491,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netinet_igmp_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_igmp_test.cpp
+  DEPENDS
+    libc.include.netinet_igmp
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
