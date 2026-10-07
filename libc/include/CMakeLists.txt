@@ -1800,6 +1800,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-types.struct_in6_addr
+    .llvm-libc-types.struct_ip6_hbh
     .llvm-libc-types.struct_ip6_hdr
 )
 
