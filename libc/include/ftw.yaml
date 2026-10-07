@@ -1,4 +1,8 @@
 header: ftw.h
+public_includes:
+  # glibc's <ftw.h> includes <sys/stat.h>, and callers use lstat and fstat
+  # without including it themselves.
+  - sys/stat.h
 standards:
   - posix
 macros:
