@@ -368,6 +368,7 @@ add_header(struct_ip6_mtuinfo HDR struct_ip6_mtuinfo.h DEPENDS libc.include.llvm
 add_header(struct_ether_arp HDR struct_ether_arp.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros .struct_arphdr)
 add_header(struct_iphdr HDR struct_iphdr.h DEPENDS libc.include.llvm-libc-macros.endian_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_ip HDR struct_ip.h DEPENDS libc.include.llvm-libc-macros.endian_macros libc.include.llvm-libc-macros.stdint_macros .struct_in_addr)
+add_header(struct_igmp HDR struct_igmp.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_in_addr)
 add_header(struct_icmp HDR struct_icmp.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_in_addr .struct_ip)
 add_header(struct_ip6_hdr HDR struct_ip6_hdr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros .struct_in6_addr)
 add_header(struct_ip6_hbh HDR struct_ip6_hbh.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
