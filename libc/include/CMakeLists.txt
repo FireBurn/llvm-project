@@ -1663,8 +1663,14 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-types.struct_in6_addr
+    .llvm-libc-types.struct_ip6_dest
+    .llvm-libc-types.struct_ip6_ext
+    .llvm-libc-types.struct_ip6_frag
     .llvm-libc-types.struct_ip6_hbh
     .llvm-libc-types.struct_ip6_hdr
+    .llvm-libc-types.struct_ip6_opt
+    .llvm-libc-types.struct_ip6_rthdr
+    .llvm-libc-types.struct_ip6_rthdr0
 )
 
 add_header_macro(
