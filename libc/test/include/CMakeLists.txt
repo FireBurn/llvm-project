@@ -597,6 +597,16 @@ if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
 endif()
 
 add_libc_test(
+  syslog_path_log_test
+  SUITE
+    libc-include-tests
+  SRCS
+    syslog_path_log_test.cpp
+  DEPENDS
+    libc.include.syslog
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
