@@ -1805,6 +1805,7 @@ add_header_macro(
   DEPENDS
     .llvm_libc_common_h
     .llvm-libc-macros.netinet_ip_icmp_macros
+    .llvm-libc-types.struct_icmp
     .llvm-libc-types.struct_icmphdr
     .netinet_ip
 )
