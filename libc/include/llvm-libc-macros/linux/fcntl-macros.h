@@ -128,6 +128,20 @@
 #define F_ADD_SEALS (F_LINUX_SPECIFIC_BASE + 9)
 #define F_GET_SEALS (F_LINUX_SPECIFIC_BASE + 10)
 
+// File leases, and notification of changes to a directory.
+#define F_SETLEASE (F_LINUX_SPECIFIC_BASE + 0)
+#define F_GETLEASE (F_LINUX_SPECIFIC_BASE + 1)
+#define F_NOTIFY (F_LINUX_SPECIFIC_BASE + 2)
+
+// What F_NOTIFY can be asked to report.
+#define DN_ACCESS 0x00000001
+#define DN_MODIFY 0x00000002
+#define DN_CREATE 0x00000004
+#define DN_DELETE 0x00000008
+#define DN_RENAME 0x00000010
+#define DN_ATTRIB 0x00000020
+#define DN_MULTISHOT 0x80000000
+
 // The seals a memfd can be given, which say what may no longer be done to
 // it.
 #define F_SEAL_SEAL 0x0001
