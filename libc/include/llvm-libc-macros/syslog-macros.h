@@ -14,6 +14,9 @@
 #ifndef LLVM_LIBC_MACROS_SYSLOG_MACROS_H
 #define LLVM_LIBC_MACROS_SYSLOG_MACROS_H
 
+// Where syslogd listens.
+#define _PATH_LOG "/dev/log"
+
 // Options for openlog
 #define LOG_PID 0x01
 #define LOG_CONS 0x02
