@@ -1,0 +1,61 @@
+header: netinet/igmp.h
+standards:
+  - bsd
+public_includes:
+  # glibc's <netinet/igmp.h> includes <netinet/in.h>, and the message is built
+  # from an in_addr.
+  - netinet/in.h
+macros:
+  - macro_name: IGMP_MINLEN
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_MEMBERSHIP_QUERY
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_V1_MEMBERSHIP_REPORT
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_V2_MEMBERSHIP_REPORT
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_V2_LEAVE_GROUP
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_DVMRP
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_PIM
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_TRACE
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_MTRACE_RESP
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_MTRACE
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_MRDISC_ADV
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_MAX_HOST_REPORT_DELAY
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_TIMER_SCALE
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_DELAYING_MEMBER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_IDLE_MEMBER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_LAZY_MEMBER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_SLEEPING_MEMBER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_AWAKENING_MEMBER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_v1_ROUTER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_v2_ROUTER
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_HOST_MEMBERSHIP_QUERY
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_HOST_MEMBERSHIP_REPORT
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_HOST_NEW_MEMBERSHIP_REPORT
+    macro_header: netinet-igmp-macros.h
+  - macro_name: IGMP_HOST_LEAVE_MESSAGE
+    macro_header: netinet-igmp-macros.h
+types:
+  - type_name: struct_igmp
+enums: []
+objects: []
+functions: []
