@@ -702,6 +702,10 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.complex.cabsf
     libc.src.complex.carg
     libc.src.complex.cargf
+    libc.src.complex.ccos
+    libc.src.complex.ccosf
+    libc.src.complex.ccosh
+    libc.src.complex.ccoshf
     libc.src.complex.creal
     libc.src.complex.crealf
     libc.src.complex.creall
@@ -714,9 +718,17 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.complex.cproj
     libc.src.complex.cprojf
     libc.src.complex.cprojl
+    libc.src.complex.csin
+    libc.src.complex.csinf
+    libc.src.complex.csinh
+    libc.src.complex.csinhf
     libc.src.complex.csqrt
     libc.src.complex.csqrtf
     libc.src.complex.csqrtl
+    libc.src.complex.ctan
+    libc.src.complex.ctanf
+    libc.src.complex.ctanh
+    libc.src.complex.ctanhf
 
     # fenv.h entrypoints
     libc.src.fenv.feclearexcept
