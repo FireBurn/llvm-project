@@ -122,6 +122,7 @@ LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
   // Relative relocations are the ones a module can apply to itself. Anything
   // that names a symbol needs the other modules to be loaded first.
   loaded.module.relocations().apply_relative(loaded.mapping.load_bias);
+  loaded.module.relr_relocations().apply(loaded.mapping.load_bias);
   return loaded;
 }
 
