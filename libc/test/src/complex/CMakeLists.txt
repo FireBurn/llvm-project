@@ -294,3 +294,159 @@ add_fp_unittest(
     libc.src.__support.FPUtil.sqrt
     libc.src.complex.csqrtl
 )
+
+add_fp_unittest(
+  csin_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    csin_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.csin
+)
+
+add_fp_unittest(
+  csinf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    csinf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.csinf
+)
+
+add_fp_unittest(
+  ccos_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ccos_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ccos
+)
+
+add_fp_unittest(
+  ccosf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ccosf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ccosf
+)
+
+add_fp_unittest(
+  ctan_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ctan_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ctan
+)
+
+add_fp_unittest(
+  ctanf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ctanf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ctanf
+)
+
+add_fp_unittest(
+  csinh_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    csinh_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.csinh
+)
+
+add_fp_unittest(
+  csinhf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    csinhf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.csinhf
+)
+
+add_fp_unittest(
+  ccosh_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ccosh_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ccosh
+)
+
+add_fp_unittest(
+  ccoshf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ccoshf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ccoshf
+)
+
+add_fp_unittest(
+  ctanh_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ctanh_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ctanh
+)
+
+add_fp_unittest(
+  ctanhf_test
+  SUITE
+    libc-complex-tests
+  SRCS
+    ctanhf_test.cpp
+  HDRS
+    CHyperbolicTest.h
+  DEPENDS
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.complex.ctanhf
+)
