@@ -23,7 +23,7 @@ LLVM_LIBC_FUNCTION(locale_t, newlocale,
   // There is one locale, so any name it can honour is answered with it.
   // Refusing the names the environment states would leave callers with
   // nothing where they ask for the locale the machine is set to.
-  if (!internal::codeset_is_supported(cpp::string_view(locale_name)))
+  if (!internal::locale_name_is_supported(cpp::string_view(locale_name)))
     return nullptr;
 
   return &c_locale;
