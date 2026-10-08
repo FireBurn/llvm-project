@@ -139,6 +139,304 @@ macros:
     macro_value: 252
   - macro_name: EM_LOONGARCH
     macro_value: 258
+  - macro_name: EM_IAMCU
+    macro_value: 6
+  - macro_name: EM_VPP500
+    macro_value: 17
+  - macro_name: EM_960
+    macro_value: 19
+  - macro_name: EM_V800
+    macro_value: 36
+  - macro_name: EM_FR20
+    macro_value: 37
+  - macro_name: EM_RH32
+    macro_value: 38
+  - macro_name: EM_RCE
+    macro_value: 39
+  - macro_name: EM_TRICORE
+    macro_value: 44
+  - macro_name: EM_ARC
+    macro_value: 45
+  - macro_name: EM_H8_300
+    macro_value: 46
+  - macro_name: EM_H8_300H
+    macro_value: 47
+  - macro_name: EM_H8S
+    macro_value: 48
+  - macro_name: EM_H8_500
+    macro_value: 49
+  - macro_name: EM_MIPS_X
+    macro_value: 51
+  - macro_name: EM_COLDFIRE
+    macro_value: 52
+  - macro_name: EM_68HC12
+    macro_value: 53
+  - macro_name: EM_MMA
+    macro_value: 54
+  - macro_name: EM_PCP
+    macro_value: 55
+  - macro_name: EM_NCPU
+    macro_value: 56
+  - macro_name: EM_NDR1
+    macro_value: 57
+  - macro_name: EM_STARCORE
+    macro_value: 58
+  - macro_name: EM_ME16
+    macro_value: 59
+  - macro_name: EM_ST100
+    macro_value: 60
+  - macro_name: EM_TINYJ
+    macro_value: 61
+  - macro_name: EM_PDSP
+    macro_value: 63
+  - macro_name: EM_PDP10
+    macro_value: 64
+  - macro_name: EM_PDP11
+    macro_value: 65
+  - macro_name: EM_FX66
+    macro_value: 66
+  - macro_name: EM_ST9PLUS
+    macro_value: 67
+  - macro_name: EM_ST7
+    macro_value: 68
+  - macro_name: EM_68HC16
+    macro_value: 69
+  - macro_name: EM_68HC11
+    macro_value: 70
+  - macro_name: EM_68HC08
+    macro_value: 71
+  - macro_name: EM_68HC05
+    macro_value: 72
+  - macro_name: EM_SVX
+    macro_value: 73
+  - macro_name: EM_ST19
+    macro_value: 74
+  - macro_name: EM_VAX
+    macro_value: 75
+  - macro_name: EM_CRIS
+    macro_value: 76
+  - macro_name: EM_JAVELIN
+    macro_value: 77
+  - macro_name: EM_FIREPATH
+    macro_value: 78
+  - macro_name: EM_ZSP
+    macro_value: 79
+  - macro_name: EM_MMIX
+    macro_value: 80
+  - macro_name: EM_HUANY
+    macro_value: 81
+  - macro_name: EM_PRISM
+    macro_value: 82
+  - macro_name: EM_AVR
+    macro_value: 83
+  - macro_name: EM_FR30
+    macro_value: 84
+  - macro_name: EM_D10V
+    macro_value: 85
+  - macro_name: EM_D30V
+    macro_value: 86
+  - macro_name: EM_V850
+    macro_value: 87
+  - macro_name: EM_M32R
+    macro_value: 88
+  - macro_name: EM_MN10300
+    macro_value: 89
+  - macro_name: EM_MN10200
+    macro_value: 90
+  - macro_name: EM_PJ
+    macro_value: 91
+  - macro_name: EM_OPENRISC
+    macro_value: 92
+  - macro_name: EM_ARC_COMPACT
+    macro_value: 93
+  - macro_name: EM_VIDEOCORE
+    macro_value: 95
+  - macro_name: EM_TMM_GPP
+    macro_value: 96
+  - macro_name: EM_NS32K
+    macro_value: 97
+  - macro_name: EM_TPC
+    macro_value: 98
+  - macro_name: EM_SNP1K
+    macro_value: 99
+  - macro_name: EM_ST200
+    macro_value: 100
+  - macro_name: EM_IP2K
+    macro_value: 101
+  - macro_name: EM_MAX
+    macro_value: 102
+  - macro_name: EM_CR
+    macro_value: 103
+  - macro_name: EM_F2MC16
+    macro_value: 104
+  - macro_name: EM_MSP430
+    macro_value: 105
+  - macro_name: EM_SE_C33
+    macro_value: 107
+  - macro_name: EM_SEP
+    macro_value: 108
+  - macro_name: EM_ARCA
+    macro_value: 109
+  - macro_name: EM_UNICORE
+    macro_value: 110
+  - macro_name: EM_EXCESS
+    macro_value: 111
+  - macro_name: EM_DXP
+    macro_value: 112
+  - macro_name: EM_CRX
+    macro_value: 114
+  - macro_name: EM_XGATE
+    macro_value: 115
+  - macro_name: EM_C166
+    macro_value: 116
+  - macro_name: EM_M16C
+    macro_value: 117
+  - macro_name: EM_DSPIC30F
+    macro_value: 118
+  - macro_name: EM_CE
+    macro_value: 119
+  - macro_name: EM_M32C
+    macro_value: 120
+  - macro_name: EM_TSK3000
+    macro_value: 131
+  - macro_name: EM_RS08
+    macro_value: 132
+  - macro_name: EM_SHARC
+    macro_value: 133
+  - macro_name: EM_ECOG2
+    macro_value: 134
+  - macro_name: EM_SCORE7
+    macro_value: 135
+  - macro_name: EM_DSP24
+    macro_value: 136
+  - macro_name: EM_VIDEOCORE3
+    macro_value: 137
+  - macro_name: EM_LATTICEMICO32
+    macro_value: 138
+  - macro_name: EM_SE_C17
+    macro_value: 139
+  - macro_name: EM_TI_C2000
+    macro_value: 141
+  - macro_name: EM_TI_C5500
+    macro_value: 142
+  - macro_name: EM_TI_ARP32
+    macro_value: 143
+  - macro_name: EM_TI_PRU
+    macro_value: 144
+  - macro_name: EM_MMDSP_PLUS
+    macro_value: 160
+  - macro_name: EM_CYPRESS_M8C
+    macro_value: 161
+  - macro_name: EM_R32C
+    macro_value: 162
+  - macro_name: EM_TRIMEDIA
+    macro_value: 163
+  - macro_name: EM_QDSP6
+    macro_value: 164
+  - macro_name: EM_8051
+    macro_value: 165
+  - macro_name: EM_STXP7X
+    macro_value: 166
+  - macro_name: EM_NDS32
+    macro_value: 167
+  - macro_name: EM_ECOG1X
+    macro_value: 168
+  - macro_name: EM_MAXQ30
+    macro_value: 169
+  - macro_name: EM_XIMO16
+    macro_value: 170
+  - macro_name: EM_MANIK
+    macro_value: 171
+  - macro_name: EM_CRAYNV2
+    macro_value: 172
+  - macro_name: EM_RX
+    macro_value: 173
+  - macro_name: EM_METAG
+    macro_value: 174
+  - macro_name: EM_MCST_ELBRUS
+    macro_value: 175
+  - macro_name: EM_ECOG16
+    macro_value: 176
+  - macro_name: EM_CR16
+    macro_value: 177
+  - macro_name: EM_ETPU
+    macro_value: 178
+  - macro_name: EM_SLE9X
+    macro_value: 179
+  - macro_name: EM_L10M
+    macro_value: 180
+  - macro_name: EM_K10M
+    macro_value: 181
+  - macro_name: EM_AVR32
+    macro_value: 185
+  - macro_name: EM_STM8
+    macro_value: 186
+  - macro_name: EM_TILE64
+    macro_value: 187
+  - macro_name: EM_CUDA
+    macro_value: 190
+  - macro_name: EM_CLOUDSHIELD
+    macro_value: 192
+  - macro_name: EM_COREA_1ST
+    macro_value: 193
+  - macro_name: EM_COREA_2ND
+    macro_value: 194
+  - macro_name: EM_ARCV2
+    macro_value: 195
+  - macro_name: EM_OPEN8
+    macro_value: 196
+  - macro_name: EM_RL78
+    macro_value: 197
+  - macro_name: EM_VIDEOCORE5
+    macro_value: 198
+  - macro_name: EM_78KOR
+    macro_value: 199
+  - macro_name: EM_56800EX
+    macro_value: 200
+  - macro_name: EM_BA1
+    macro_value: 201
+  - macro_name: EM_BA2
+    macro_value: 202
+  - macro_name: EM_XCORE
+    macro_value: 203
+  - macro_name: EM_MCHP_PIC
+    macro_value: 204
+  - macro_name: EM_INTELGT
+    macro_value: 205
+  - macro_name: EM_KM32
+    macro_value: 210
+  - macro_name: EM_KMX32
+    macro_value: 211
+  - macro_name: EM_EMX16
+    macro_value: 212
+  - macro_name: EM_EMX8
+    macro_value: 213
+  - macro_name: EM_KVARC
+    macro_value: 214
+  - macro_name: EM_CDP
+    macro_value: 215
+  - macro_name: EM_COGE
+    macro_value: 216
+  - macro_name: EM_COOL
+    macro_value: 217
+  - macro_name: EM_NORC
+    macro_value: 218
+  - macro_name: EM_CSR_KALIMBA
+    macro_value: 219
+  - macro_name: EM_Z80
+    macro_value: 220
+  - macro_name: EM_VISIUM
+    macro_value: 221
+  - macro_name: EM_FT32
+    macro_value: 222
+  - macro_name: EM_MOXIE
+    macro_value: 223
+  - macro_name: EM_AMDGPU
+    macro_value: 224
+  - macro_name: EM_NUM
+    macro_value: 259
+  - macro_name: EM_ARC_A5
+    macro_value: 93
   # Alpha was never given a number by the registry. 41 was written into the
   # early objects and is kept under the name glibc gives it; 0x9026 is what
   # everything since uses.
