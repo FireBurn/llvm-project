@@ -126,6 +126,17 @@ public:
     return RelaTable(reinterpret_cast<const ElfW(Rela) *>(*addr), *size);
   }
 
+  // The DT_RELR table, which holds relative relocations a linker packed with
+  // -z pack-relative-relocs. It does not replace DT_RELA: a module can have
+  // both, and both have to be applied.
+  LIBC_INLINE RelrTable relr_relocations() const {
+    auto addr = dynamic_.address(DT_RELR);
+    auto size = dynamic_.value(DT_RELRSZ);
+    if (!addr || !size)
+      return RelrTable();
+    return RelrTable(reinterpret_cast<const ElfW(Addr) *>(*addr), *size);
+  }
+
   LIBC_INLINE RelaTable plt_relocations() const {
     auto addr = dynamic_.address(DT_JMPREL);
     auto size = dynamic_.value(DT_PLTRELSZ);
