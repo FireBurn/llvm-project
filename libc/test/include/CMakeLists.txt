@@ -681,6 +681,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  link_em_machine_numbers_test
+  SUITE
+    libc-include-tests
+  SRCS
+    link_em_machine_numbers_test.cpp
+  DEPENDS
+    libc.include.link
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
