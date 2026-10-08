@@ -54,6 +54,14 @@ libc_test(
 )
 
 libc_test(
+    name = "relr_test",
+    srcs = ["relr_test.cpp"],
+    deps = [
+        "//libc:__support_elf_relocation",
+    ],
+)
+
+libc_test(
     name = "tls_layout_test",
     srcs = ["tls_layout_test.cpp"],
     deps = [
