@@ -38,7 +38,7 @@ LLVM_LIBC_FUNCTION(locale_t, newlocale,
   // Any name whose character set can be honoured is answered with the locale
   // that has that character set. Refusing the names the environment states
   // would leave callers with nothing where they ask for the machine's locale.
-  if (internal::codeset_is_supported(name))
+  if (internal::locale_name_is_supported(name))
     return internal::name_states_utf8(name) ? &utf8_locale : &c_locale;
 
   libc_errno = ENOENT;
