@@ -21,3 +21,15 @@ libc_test(
         "//libc/src/uchar:mbrtoc32",
     ],
 )
+
+libc_test(
+    name = "mbrtoc16_test",
+    srcs = ["mbrtoc16_test.cpp"],
+    deps = [
+        "//libc/hdr/types:char16_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/src/locale:locale_data",
+        "//libc/src/uchar:c16rtomb",
+        "//libc/src/uchar:mbrtoc16",
+    ],
+)
