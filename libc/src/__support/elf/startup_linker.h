@@ -64,6 +64,7 @@ public:
     // independent one still has relative relocations of its own, and without
     // them even its init array bounds point at the wrong addresses.
     modules_[0].relocations().apply_relative(bias);
+    modules_[0].relr_relocations().apply(bias);
 
     // A program started through a link looks for its libraries beside the
     // file it really is.
