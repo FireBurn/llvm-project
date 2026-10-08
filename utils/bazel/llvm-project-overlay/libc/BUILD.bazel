@@ -484,6 +484,46 @@ alias(
 )
 
 alias(
+    name = "ccos",
+    actual = "//libc/src/complex:ccos",
+)
+
+alias(
+    name = "ccosf",
+    actual = "//libc/src/complex:ccosf",
+)
+
+alias(
+    name = "ccosh",
+    actual = "//libc/src/complex:ccosh",
+)
+
+alias(
+    name = "ccoshf",
+    actual = "//libc/src/complex:ccoshf",
+)
+
+alias(
+    name = "csin",
+    actual = "//libc/src/complex:csin",
+)
+
+alias(
+    name = "csinf",
+    actual = "//libc/src/complex:csinf",
+)
+
+alias(
+    name = "csinh",
+    actual = "//libc/src/complex:csinh",
+)
+
+alias(
+    name = "csinhf",
+    actual = "//libc/src/complex:csinhf",
+)
+
+alias(
     name = "csqrt",
     actual = "//libc/src/complex:csqrt",
 )
@@ -499,6 +539,26 @@ alias(
 )
 
 alias(
+    name = "ctan",
+    actual = "//libc/src/complex:ctan",
+)
+
+alias(
+    name = "ctanf",
+    actual = "//libc/src/complex:ctanf",
+)
+
+alias(
+    name = "ctanh",
+    actual = "//libc/src/complex:ctanh",
+)
+
+alias(
+    name = "ctanhf",
+    actual = "//libc/src/complex:ctanhf",
+)
+
+alias(
     name = "complex_csqrt",
     actual = "//libc/src/complex:complex_csqrt",
 )
@@ -511,6 +571,66 @@ alias(
 alias(
     name = "complex_csqrtl",
     actual = "//libc/src/complex:complex_csqrtl",
+)
+
+alias(
+    name = "complex_ccos",
+    actual = "//libc/src/complex:complex_ccos",
+)
+
+alias(
+    name = "complex_ccosf",
+    actual = "//libc/src/complex:complex_ccosf",
+)
+
+alias(
+    name = "complex_ccosh",
+    actual = "//libc/src/complex:complex_ccosh",
+)
+
+alias(
+    name = "complex_ccoshf",
+    actual = "//libc/src/complex:complex_ccoshf",
+)
+
+alias(
+    name = "complex_csin",
+    actual = "//libc/src/complex:complex_csin",
+)
+
+alias(
+    name = "complex_csinf",
+    actual = "//libc/src/complex:complex_csinf",
+)
+
+alias(
+    name = "complex_csinh",
+    actual = "//libc/src/complex:complex_csinh",
+)
+
+alias(
+    name = "complex_csinhf",
+    actual = "//libc/src/complex:complex_csinhf",
+)
+
+alias(
+    name = "complex_ctan",
+    actual = "//libc/src/complex:complex_ctan",
+)
+
+alias(
+    name = "complex_ctanf",
+    actual = "//libc/src/complex:complex_ctanf",
+)
+
+alias(
+    name = "complex_ctanh",
+    actual = "//libc/src/complex:complex_ctanh",
+)
+
+alias(
+    name = "complex_ctanhf",
+    actual = "//libc/src/complex:complex_ctanhf",
 )
 
 ################################ link targets ##################################

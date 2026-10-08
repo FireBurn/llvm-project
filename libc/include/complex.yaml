@@ -191,3 +191,75 @@ functions:
     return_type: _Complex long double
     arguments:
       - type: _Complex long double
+  - name: csin
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: csinf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: ccos
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: ccosf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: ctan
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: ctanf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: csinh
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: csinhf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: ccosh
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: ccoshf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
+  - name: ctanh
+    standards:
+      - stdc
+    return_type: _Complex double
+    arguments:
+      - type: _Complex double
+  - name: ctanhf
+    standards:
+      - stdc
+    return_type: _Complex float
+    arguments:
+      - type: _Complex float
