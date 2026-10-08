@@ -29,3 +29,36 @@ add_entrypoint_object(
     libc.src.__support.wchar.wcrtomb
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  mbrtoc16
+  SRCS
+    mbrtoc16.cpp
+  HDRS
+    mbrtoc16.h
+  DEPENDS
+    libc.hdr.types.char16_t
+    libc.hdr.types.mbstate_t
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.wchar.mbrtowc
+    libc.src.__support.wchar.mbstate
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  c16rtomb
+  SRCS
+    c16rtomb.cpp
+  HDRS
+    c16rtomb.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.char16_t
+    libc.hdr.types.mbstate_t
+    libc.hdr.types.size_t
+    libc.hdr.types.wchar_t
+    libc.src.__support.wchar.mbstate
+    libc.src.__support.wchar.wcrtomb
+    libc.src.errno.errno
+)
