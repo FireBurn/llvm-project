@@ -345,6 +345,28 @@ add_header_library(
 
 
 add_header_library(
+  complex_hyperbolic
+  HDRS
+    complex_hyperbolic.h
+  DEPENDS
+    .complex_type
+    libc.hdr.fenv_macros
+    libc.src.__support.FPUtil.basic_operations
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.FPUtil.manipulation_functions
+    libc.src.__support.FPUtil.sqrt
+    libc.src.__support.macros.config
+    libc.src.__support.math.cos
+    libc.src.__support.math.cosh
+    libc.src.__support.math.exp
+    libc.src.__support.math.sin
+    libc.src.__support.math.sinh
+    libc.src.__support.math.tan
+    libc.src.__support.math.tanh
+)
+
+add_header_library(
   complex_basic_ops
   HDRS
     complex_basic_ops.h
