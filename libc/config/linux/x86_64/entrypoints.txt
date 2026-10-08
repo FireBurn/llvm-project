@@ -969,6 +969,18 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.complex.csqrt
     libc.src.complex.csqrtf
     libc.src.complex.csqrtl
+    libc.src.complex.csin
+    libc.src.complex.csinf
+    libc.src.complex.ccos
+    libc.src.complex.ccosf
+    libc.src.complex.ctan
+    libc.src.complex.ctanf
+    libc.src.complex.csinh
+    libc.src.complex.csinhf
+    libc.src.complex.ccosh
+    libc.src.complex.ccoshf
+    libc.src.complex.ctanh
+    libc.src.complex.ctanhf
     libc.src.complex.cprojf
     libc.src.complex.cprojl
 
