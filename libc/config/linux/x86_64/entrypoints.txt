@@ -580,7 +580,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.write
 
     # uchar.h entrypoints
+    libc.src.uchar.c16rtomb
     libc.src.uchar.c32rtomb
+    libc.src.uchar.mbrtoc16
     libc.src.uchar.mbrtoc32
 
     # wchar.h entrypoints
