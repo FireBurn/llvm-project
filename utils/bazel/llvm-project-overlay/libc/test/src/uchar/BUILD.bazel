@@ -20,3 +20,14 @@ libc_test(
         "//libc:types_mbstate_t",
     ],
 )
+
+libc_test(
+    name = "mbrtoc16_test",
+    srcs = ["mbrtoc16_test.cpp"],
+    deps = [
+        "//libc:c16rtomb",
+        "//libc:mbrtoc16",
+        "//libc:types_char16_t",
+        "//libc:types_mbstate_t",
+    ],
+)
