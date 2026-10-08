@@ -23022,6 +23022,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_char16_t",
+    hdrs = ["include/llvm-libc-types/char16_t.h"],
+)
+
+libc_support_library(
+    name = "types_char16_t",
+    hdrs = ["hdr/types/char16_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_char16_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_cookie_io_functions_t",
     hdrs = ["include/llvm-libc-types/cookie_io_functions_t.h"],
 )
@@ -24177,6 +24191,43 @@ libc_function(
         ":__support_wchar_wcrtomb",
         ":errno",
         ":types_char32_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "mbrtoc16",
+    srcs = ["src/uchar/mbrtoc16.cpp"],
+    hdrs = ["src/uchar/mbrtoc16.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":errno",
+        ":types_char16_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "c16rtomb",
+    srcs = ["src/uchar/c16rtomb.cpp"],
+    hdrs = ["src/uchar/c16rtomb.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcrtomb",
+        ":errno",
+        ":hdr_errno_macros",
+        ":types_char16_t",
         ":types_mbstate_t",
         ":types_size_t",
         ":types_wchar_t",
