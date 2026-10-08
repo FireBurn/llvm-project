@@ -54,6 +54,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  relr_test
+  SUITE
+    libc-support-tests
+  SRCS
+    relr_test.cpp
+  DEPENDS
+    libc.src.__support.elf.relocation
+)
+
+add_libc_test(
   tls_layout_test
   SUITE
     libc-support-tests
