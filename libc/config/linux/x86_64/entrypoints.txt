@@ -837,7 +837,9 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # uchar.h entrypoints
     libc.src.uchar.c32rtomb
+    libc.src.uchar.c16rtomb
     libc.src.uchar.mbrtoc32
+    libc.src.uchar.mbrtoc16
 
     # wchar.h entrypoints
     libc.src.wchar.btowc
