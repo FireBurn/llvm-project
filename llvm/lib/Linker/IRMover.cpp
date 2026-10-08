@@ -1571,7 +1571,18 @@ Error IRLinker::run() {
     // Import any symver directives for symbols in DstM.
     ModuleSymbolTable::CollectAsmSymvers(*SrcM,
                                          [&](StringRef Name, StringRef Alias) {
-      if (DstM.getNamedValue(Name)) {
+      GlobalValue *GV = DstM.getNamedValue(Name);
+      // A default version (foo@@V, not foo@@@V) names a definition, and the
+      // assembler rejects it for a symbol the module does not define, which
+      // includes an available_externally function imported only to be
+      // inlined. The module that defines the symbol keeps its own directive.
+      // A non-default version on an undefined symbol is a reference to that
+      // version, and the importing module needs it.
+      size_t At = Alias.find('@');
+      StringRef Version = At == StringRef::npos ? StringRef() : Alias.substr(At);
+      bool IsDefaultVersion =
+          Version.starts_with("@@") && !Version.starts_with("@@@");
+      if (GV && !(IsDefaultVersion && GV->isDeclarationForLinker())) {
         SmallString<256> S(".symver ");
         S += Name;
         S += ", ";
