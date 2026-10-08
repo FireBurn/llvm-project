@@ -592,9 +592,11 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.unlinkat
     libc.src.unistd.usleep
     libc.src.unistd.write
+    libc.src.uchar.c16rtomb
 
     # uchar.h entrypoints
     libc.src.uchar.c32rtomb
+    libc.src.uchar.mbrtoc16
     libc.src.uchar.mbrtoc32
 
     # wchar.h entrypoints
