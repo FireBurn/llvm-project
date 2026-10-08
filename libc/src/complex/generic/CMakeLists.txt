@@ -320,3 +320,171 @@ add_entrypoint_object(
     libc.src.__support.complex_type
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  csin
+  SRCS
+    csin.cpp
+  HDRS
+    ../csin.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  csinf
+  SRCS
+    csinf.cpp
+  HDRS
+    ../csinf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ccos
+  SRCS
+    ccos.cpp
+  HDRS
+    ../ccos.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ccosf
+  SRCS
+    ccosf.cpp
+  HDRS
+    ../ccosf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ctan
+  SRCS
+    ctan.cpp
+  HDRS
+    ../ctan.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ctanf
+  SRCS
+    ctanf.cpp
+  HDRS
+    ../ctanf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  csinh
+  SRCS
+    csinh.cpp
+  HDRS
+    ../csinh.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  csinhf
+  SRCS
+    csinhf.cpp
+  HDRS
+    ../csinhf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ccosh
+  SRCS
+    ccosh.cpp
+  HDRS
+    ../ccosh.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ccoshf
+  SRCS
+    ccoshf.cpp
+  HDRS
+    ../ccoshf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ctanh
+  SRCS
+    ctanh.cpp
+  HDRS
+    ../ctanh.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ctanhf
+  SRCS
+    ctanhf.cpp
+  HDRS
+    ../ctanhf.h
+  DEPENDS
+    libc.src.__support.CPP.bit
+    libc.src.__support.common
+    libc.src.__support.complex_hyperbolic
+    libc.src.__support.complex_type
+    libc.src.__support.macros.config
+)
