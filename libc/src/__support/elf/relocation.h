@@ -92,6 +92,55 @@ private:
   size_t count_ = 0;
 };
 
+// The DT_RELR table: relative relocations packed so that a run of them costs
+// a word, as the linker's -z pack-relative-relocs writes them. An even word is
+// the address of one word to relocate. An odd word is a bitmap: bit n, from 1,
+// says that the n-th word after the address last reached is to be relocated
+// too, and the address moves on by the 63 words (31 on a 32 bit target) the
+// bitmap covers. Relocating a word means adding the load bias to what is
+// already stored there, since this form has no addend of its own.
+class RelrTable {
+public:
+  LIBC_INLINE constexpr RelrTable() = default;
+  LIBC_INLINE constexpr RelrTable(const ElfW(Addr) * entries, size_t size_bytes)
+      : entries_(entries), count_(size_bytes / sizeof(ElfW(Addr))) {}
+
+  LIBC_INLINE constexpr size_t size() const { return count_; }
+  LIBC_INLINE constexpr bool empty() const { return count_ == 0; }
+
+  // Applies every relocation in the table, and returns how many were applied.
+  // Like apply_relative this runs before the module is relocated, so it must
+  // not call anything through the GOT or PLT.
+  LIBC_INLINE size_t apply(ElfW(Addr) load_bias) const {
+    constexpr size_t WORD_BITS = 8 * sizeof(ElfW(Addr));
+    size_t applied = 0;
+    ElfW(Addr) *where = nullptr;
+    for (size_t i = 0; i < count_; ++i) {
+      const ElfW(Addr) entry = entries_[i];
+      if ((entry & 1) == 0) {
+        where = reinterpret_cast<ElfW(Addr) *>(load_bias + entry);
+        *where += load_bias;
+        ++where;
+        ++applied;
+        continue;
+      }
+      ElfW(Addr) *word = where;
+      for (ElfW(Addr) bits = entry >> 1; bits != 0; bits >>= 1, ++word) {
+        if (bits & 1) {
+          *word += load_bias;
+          ++applied;
+        }
+      }
+      where += WORD_BITS - 1;
+    }
+    return applied;
+  }
+
+private:
+  const ElfW(Addr) *entries_ = nullptr;
+  size_t count_ = 0;
+};
+
 } // namespace elf
 } // namespace LIBC_NAMESPACE_DECL
 
