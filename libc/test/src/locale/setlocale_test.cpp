@@ -113,3 +113,56 @@ TEST_F(LlvmLibcSetlocale, TheCLocaleWhenTheEnvironmentSaysNothing) {
   ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, ""), "C");
   ASSERT_EQ(LIBC_NAMESPACE::__llvm_libc_mb_cur_max, size_t(1));
 }
+
+TEST_F(LlvmLibcSetlocale, ACategoryIsSetOnItsOwn) {
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "C.UTF-8"), "C.UTF-8");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, nullptr), "C.UTF-8");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_NUMERIC, nullptr), "C");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_MESSAGES, nullptr), "C");
+  ASSERT_EQ(LIBC_NAMESPACE::__llvm_libc_mb_cur_max, size_t(4));
+}
+
+TEST_F(LlvmLibcSetlocale, OnlyCtypeSetsTheCharacterWidth) {
+  LIBC_NAMESPACE::setlocale(LC_TIME, "C.UTF-8");
+  ASSERT_EQ(LIBC_NAMESPACE::__llvm_libc_mb_cur_max, size_t(1));
+}
+
+TEST_F(LlvmLibcSetlocale, AllIsCompositeWhereTheCategoriesDiffer) {
+  LIBC_NAMESPACE::setlocale(LC_CTYPE, "C.UTF-8");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr),
+               "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C;LC_COLLATE=C;"
+               "LC_MONETARY=C;LC_MESSAGES=C");
+}
+
+TEST_F(LlvmLibcSetlocale, AllIsOneNameOnceTheCategoriesAgreeAgain) {
+  LIBC_NAMESPACE::setlocale(LC_CTYPE, "C.UTF-8");
+  LIBC_NAMESPACE::setlocale(LC_CTYPE, "C");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
+}
+
+TEST_F(LlvmLibcSetlocale, ACompositeIsTaken) {
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(
+                   LC_ALL, "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C;"
+                           "LC_COLLATE=C;LC_MONETARY=C;LC_MESSAGES=C.UTF-8"),
+               "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C;LC_COLLATE=C;"
+               "LC_MONETARY=C;LC_MESSAGES=C.UTF-8");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_MESSAGES, nullptr), "C.UTF-8");
+  ASSERT_EQ(LIBC_NAMESPACE::__llvm_libc_mb_cur_max, size_t(4));
+}
+
+TEST_F(LlvmLibcSetlocale, ABadCompositeChangesNothing) {
+  ASSERT_EQ(LIBC_NAMESPACE::setlocale(
+                LC_ALL, "LC_CTYPE=C.UTF-8;LC_TIME=ja_JP.EUC-JP"),
+            static_cast<char *>(nullptr));
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
+  ASSERT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "LC_BOGUS=C"),
+            static_cast<char *>(nullptr));
+}
+
+TEST_F(LlvmLibcSetlocale, EachCategoryLooksToTheEnvironmentForItself) {
+  LIBC_NAMESPACE::setenv("LC_CTYPE", "C.UTF-8", 1);
+  LIBC_NAMESPACE::setenv("LANG", "C", 1);
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, ""),
+               "LC_CTYPE=C.UTF-8;LC_NUMERIC=C;LC_TIME=C;LC_COLLATE=C;"
+               "LC_MONETARY=C;LC_MESSAGES=C");
+}
