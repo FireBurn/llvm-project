@@ -13357,6 +13357,64 @@ libc_support_library(
 ############################### complex targets ################################
 
 libc_function(
+    name = "ccos",
+    srcs = ["src/complex/generic/ccos.cpp"],
+    hdrs = ["src/complex/ccos.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ccos",
+    ],
+)
+
+libc_function(
+    name = "ccosf",
+    srcs = ["src/complex/generic/ccosf.cpp"],
+    hdrs = ["src/complex/ccosf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ccosf",
+    ],
+)
+
+libc_function(
+    name = "ccosh",
+    srcs = ["src/complex/generic/ccosh.cpp"],
+    hdrs = ["src/complex/ccosh.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ccosh",
+    ],
+)
+
+libc_function(
+    name = "ccoshf",
+    srcs = ["src/complex/generic/ccoshf.cpp"],
+    hdrs = ["src/complex/ccoshf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ccoshf",
+    ],
+)
+
+############################### complex targets ################################
+
+libc_function(
     name = "cimag",
     srcs = ["src/complex/generic/cimag.cpp"],
     hdrs = ["src/complex/cimag.h"],
@@ -13600,6 +13658,62 @@ libc_function(
 )
 
 libc_function(
+    name = "csin",
+    srcs = ["src/complex/generic/csin.cpp"],
+    hdrs = ["src/complex/csin.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_csin",
+    ],
+)
+
+libc_function(
+    name = "csinf",
+    srcs = ["src/complex/generic/csinf.cpp"],
+    hdrs = ["src/complex/csinf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_csinf",
+    ],
+)
+
+libc_function(
+    name = "csinh",
+    srcs = ["src/complex/generic/csinh.cpp"],
+    hdrs = ["src/complex/csinh.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_csinh",
+    ],
+)
+
+libc_function(
+    name = "csinhf",
+    srcs = ["src/complex/generic/csinhf.cpp"],
+    hdrs = ["src/complex/csinhf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_csinhf",
+    ],
+)
+
+libc_function(
     name = "csqrt",
     srcs = ["src/complex/generic/csqrt.cpp"],
     hdrs = ["src/complex/csqrt.h"],
@@ -13638,6 +13752,62 @@ libc_function(
         ":__support_cpp_bit",
         ":__support_macros_config",
         ":complex_csqrtl",
+    ],
+)
+
+libc_function(
+    name = "ctan",
+    srcs = ["src/complex/generic/ctan.cpp"],
+    hdrs = ["src/complex/ctan.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ctan",
+    ],
+)
+
+libc_function(
+    name = "ctanf",
+    srcs = ["src/complex/generic/ctanf.cpp"],
+    hdrs = ["src/complex/ctanf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ctanf",
+    ],
+)
+
+libc_function(
+    name = "ctanh",
+    srcs = ["src/complex/generic/ctanh.cpp"],
+    hdrs = ["src/complex/ctanh.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ctanh",
+    ],
+)
+
+libc_function(
+    name = "ctanhf",
+    srcs = ["src/complex/generic/ctanhf.cpp"],
+    hdrs = ["src/complex/ctanhf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_complex_hyperbolic",
+        ":__support_complex_type",
+        ":__support_cpp_bit",
+        ":__support_macros_config",
+        ":complex_ctanhf",
     ],
 )
 
@@ -23272,6 +23442,124 @@ libc_support_library(
         ":__support_fputil_multiply_add",
         ":__support_fputil_sqrt",
         ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ccos",
+    hdrs = ["src/complex/ccos.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ccosf",
+    hdrs = ["src/complex/ccosf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ccosh",
+    hdrs = ["src/complex/ccosh.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ccoshf",
+    hdrs = ["src/complex/ccoshf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csin",
+    hdrs = ["src/complex/csin.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csinf",
+    hdrs = ["src/complex/csinf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csinh",
+    hdrs = ["src/complex/csinh.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_csinhf",
+    hdrs = ["src/complex/csinhf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ctan",
+    hdrs = ["src/complex/ctan.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ctanf",
+    hdrs = ["src/complex/ctanf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ctanh",
+    hdrs = ["src/complex/ctanh.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "complex_ctanhf",
+    hdrs = ["src/complex/ctanhf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_complex_hyperbolic",
+    hdrs = ["src/__support/complex_hyperbolic.h"],
+    deps = [
+        ":__support_complex_type",
+        ":__support_fputil_basic_operations",
+        ":__support_fputil_fenv_impl",
+        ":__support_fputil_fp_bits",
+        ":__support_fputil_manipulation_functions",
+        ":__support_fputil_sqrt",
+        ":__support_macros_config",
+        ":__support_math_cos",
+        ":__support_math_cosh",
+        ":__support_math_exp",
+        ":__support_math_sin",
+        ":__support_math_sinh",
+        ":__support_math_tan",
+        ":__support_math_tanh",
+        ":hdr_fenv_macros",
     ],
 )
 
