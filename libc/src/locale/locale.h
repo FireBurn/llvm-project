@@ -49,6 +49,9 @@ bool name_states_utf8(cpp::string_view name);
 // rather than answered with the wrong encoding.
 bool codeset_is_supported(cpp::string_view name);
 
+// A single name, or a composite such as "LC_CTYPE=a;LC_NUMERIC=b".
+bool locale_name_is_supported(cpp::string_view name);
+
 // What the environment says the given category should be: LC_ALL where it is
 // set to anything, then the variable for the category itself, then LANG. A
 // null return means none of them said.
@@ -62,7 +65,7 @@ const char *locale_from_environment(int category);
 const char *set_locale_name(int category, cpp::string_view name);
 
 // The name in force, which setlocale reports when asked rather than told.
-const char *current_locale_name();
+const char *current_locale_name(int category);
 
 // The name of the character set the locale in force uses: "UTF-8", or the
 // ASCII the C locale means, under the name glibc gives it.

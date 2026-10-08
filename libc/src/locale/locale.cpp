@@ -24,9 +24,18 @@ locale_t locale = nullptr;
 
 namespace {
 
-// The name the locale goes by and how wide a character is in it, which is all
-// of a locale that is kept.
-__locale_data current = {{'C', '\0'}, false};
+// Each category keeps its own name, which is what callers are told when they
+// ask, and what a composite LC_ALL string is built from.
+__locale_data current[NUM_LOCALE_CATEGORIES] = {
+    {{'C', '\0'}, false}, {{'C', '\0'}, false}, {{'C', '\0'}, false},
+    {{'C', '\0'}, false}, {{'C', '\0'}, false}, {{'C', '\0'}, false}};
+
+const char *const CATEGORY_NAMES[NUM_LOCALE_CATEGORIES] = {
+    "LC_CTYPE",   "LC_NUMERIC",  "LC_TIME",
+    "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES"};
+
+// "LC_CTYPE=a;LC_NUMERIC=b;..." at its longest.
+char composite[NUM_LOCALE_CATEGORIES * (MAX_LOCALE_NAME_SIZE + 16)];
 
 } // anonymous namespace
 
@@ -101,11 +110,8 @@ const char *locale_from_environment(int category) {
   if (all != nullptr && *all != '\0')
     return all;
 
-  static const char *const NAMES[NUM_LOCALE_CATEGORIES] = {
-      "LC_CTYPE",   "LC_NUMERIC",  "LC_TIME",
-      "LC_COLLATE", "LC_MONETARY", "LC_MESSAGES"};
   if (category >= 0 && category < NUM_LOCALE_CATEGORIES) {
-    const char *named = environment_value(NAMES[category]);
+    const char *named = environment_value(CATEGORY_NAMES[category]);
     if (named != nullptr && *named != '\0')
       return named;
   }
@@ -120,37 +126,144 @@ bool name_states_utf8(cpp::string_view name) {
   return same_codeset(codeset_of(name), "utf8");
 }
 
-const char *set_locale_name(int category, cpp::string_view name) {
-  if (name.empty()) {
-    // The empty name means whatever the environment states, and the C locale
-    // where it states nothing.
-    const char *from_environment = locale_from_environment(category);
-    name = from_environment == nullptr ? cpp::string_view("C")
-                                       : cpp::string_view(from_environment);
-  }
+namespace {
 
-  if (!codeset_is_supported(name))
-    return nullptr;
-
+void store_name(int category, cpp::string_view name) {
+  __locale_data &entry = current[category];
   size_t length = name.size();
   if (length >= MAX_LOCALE_NAME_SIZE)
     length = MAX_LOCALE_NAME_SIZE - 1;
   for (size_t i = 0; i < length; ++i)
-    current.name[i] = name[i];
-  current.name[length] = '\0';
-  current.utf8 = name_states_utf8(name);
+    entry.name[i] = name[i];
+  entry.name[length] = '\0';
+  entry.utf8 = name_states_utf8(name);
 
-  // How wide a character is follows from the codeset, and callers size their
-  // buffers by it.
-  set_mb_cur_max(current.utf8 ? 4 : 1);
-  return current.name;
+  // How wide a character is follows from the codeset of LC_CTYPE, and
+  // callers size their buffers by it.
+  if (category == LC_CTYPE)
+    set_mb_cur_max(entry.utf8 ? 4 : 1);
 }
 
-const char *current_locale_name() { return current.name; }
+cpp::string_view name_or_environment(int category, cpp::string_view name) {
+  if (!name.empty())
+    return name;
+  // The empty name means whatever the environment states, and the C locale
+  // where it states nothing.
+  const char *from_environment = locale_from_environment(category);
+  return from_environment == nullptr ? cpp::string_view("C")
+                                     : cpp::string_view(from_environment);
+}
+
+int category_named(cpp::string_view name) {
+  for (int i = 0; i < NUM_LOCALE_CATEGORIES; ++i)
+    if (name == cpp::string_view(CATEGORY_NAMES[i]))
+      return i;
+  return -1;
+}
+
+struct CompositePart {
+  int category;
+  cpp::string_view name;
+};
+
+// A composite is "LC_CTYPE=a;LC_NUMERIC=b", the form setlocale answers LC_ALL
+// in when the categories differ. Every part is checked before any is taken.
+bool parse_composite(cpp::string_view text, CompositePart *parts,
+                     size_t &count) {
+  count = 0;
+  while (!text.empty()) {
+    size_t stop = text.find_first_of(';');
+    cpp::string_view part =
+        stop == cpp::string_view::npos ? text : text.substr(0, stop);
+    text = stop == cpp::string_view::npos ? cpp::string_view()
+                                          : text.substr(stop + 1);
+    if (part.empty())
+      continue;
+    size_t equals = part.find_first_of('=');
+    if (equals == cpp::string_view::npos || count == NUM_LOCALE_CATEGORIES)
+      return false;
+    int category = category_named(part.substr(0, equals));
+    cpp::string_view name = part.substr(equals + 1);
+    if (category < 0 || name.empty() || !codeset_is_supported(name))
+      return false;
+    parts[count++] = {category, name};
+  }
+  return count != 0;
+}
+
+bool set_from_composite(cpp::string_view text) {
+  CompositePart parts[NUM_LOCALE_CATEGORIES];
+  size_t count;
+  if (!parse_composite(text, parts, count))
+    return false;
+  for (size_t i = 0; i < count; ++i)
+    store_name(parts[i].category, parts[i].name);
+  return true;
+}
+
+} // anonymous namespace
+
+const char *current_locale_name(int category) {
+  if (category >= 0 && category < NUM_LOCALE_CATEGORIES)
+    return current[category].name;
+
+  // LC_ALL is one name where the categories agree. Where they differ it is
+  // each category's, as glibc gives it.
+  bool all_same = true;
+  for (int i = 1; i < NUM_LOCALE_CATEGORIES; ++i)
+    if (cpp::string_view(current[i].name) != cpp::string_view(current[0].name))
+      all_same = false;
+  if (all_same)
+    return current[0].name;
+
+  size_t at = 0;
+  for (int i = 0; i < NUM_LOCALE_CATEGORIES; ++i) {
+    if (i != 0)
+      composite[at++] = ';';
+    for (const char *c = CATEGORY_NAMES[i]; *c != '\0'; ++c)
+      composite[at++] = *c;
+    composite[at++] = '=';
+    for (const char *c = current[i].name; *c != '\0'; ++c)
+      composite[at++] = *c;
+  }
+  composite[at] = '\0';
+  return composite;
+}
+
+bool locale_name_is_supported(cpp::string_view name) {
+  if (name.find_first_of('=') == cpp::string_view::npos)
+    return codeset_is_supported(name);
+  CompositePart parts[NUM_LOCALE_CATEGORIES];
+  size_t count;
+  return parse_composite(name, parts, count);
+}
+
+const char *set_locale_name(int category, cpp::string_view name) {
+  if (category == LC_ALL) {
+    if (name.find_first_of('=') != cpp::string_view::npos)
+      return set_from_composite(name) ? current_locale_name(LC_ALL) : nullptr;
+
+    // With the empty name each category looks to the environment for its
+    // own, so they can come out different.
+    for (int i = 0; i < NUM_LOCALE_CATEGORIES; ++i)
+      if (!codeset_is_supported(name_or_environment(i, name)))
+        return nullptr;
+    for (int i = 0; i < NUM_LOCALE_CATEGORIES; ++i)
+      store_name(i, name_or_environment(i, name));
+    return current_locale_name(LC_ALL);
+  }
+
+  if (category < 0 || category >= NUM_LOCALE_CATEGORIES)
+    return nullptr;
+  cpp::string_view chosen = name_or_environment(category, name);
+  if (!codeset_is_supported(chosen))
+    return nullptr;
+  store_name(category, chosen);
+  return current[category].name;
+}
 
 const char *current_codeset() {
-  return name_states_utf8(cpp::string_view(current.name)) ? "UTF-8"
-                                                          : "ANSI_X3.4-1968";
+  return current[LC_CTYPE].utf8 ? "UTF-8" : "ANSI_X3.4-1968";
 }
 
 } // namespace internal
