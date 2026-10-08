@@ -14,3 +14,18 @@ add_libc_test(
     libc.src.uchar.mbrtoc32
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  mbrtoc16_test
+  SUITE
+    libc-uchar-tests
+  SRCS
+    mbrtoc16_test.cpp
+  DEPENDS
+    libc.hdr.types.char16_t
+    libc.hdr.types.mbstate_t
+    libc.src.errno.errno
+    libc.src.uchar.c16rtomb
+    libc.src.uchar.mbrtoc16
+    libc.test.UnitTest.ErrnoCheckingTest
+)
