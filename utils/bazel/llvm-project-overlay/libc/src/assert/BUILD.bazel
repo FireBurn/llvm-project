@@ -1,0 +1,30 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "__assert_perror_fail",
+    srcs = ["generic/__assert_perror_fail.cpp"],
+    hdrs = ["__assert_perror_fail.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:integer_to_string",
+        "//libc/src/stdlib:abort_utils",
+    ],
+)
