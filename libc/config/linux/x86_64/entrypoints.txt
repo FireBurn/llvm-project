@@ -44,6 +44,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.dlfcn.dladdr
     libc.src.dlfcn.dlclose
     libc.src.dlfcn.dlerror
+    libc.src.dlfcn.dlinfo
     libc.src.dlfcn.dlopen
     libc.src.dlfcn.dlsym
 
