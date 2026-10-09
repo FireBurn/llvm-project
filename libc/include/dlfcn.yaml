@@ -114,6 +114,14 @@ functions:
     arguments:
       - type: void *__restrict
       - type: const char *__restrict
+  - name: dlvsym
+    standards:
+      - gnu
+    return_type: void *
+    arguments:
+      - type: void *__restrict
+      - type: const char *__restrict
+      - type: const char *__restrict
   - name: dlinfo
     standards:
       - gnu
