@@ -1182,12 +1182,15 @@ LTO::addThinLTO(BitcodeModule BM, ArrayRef<InputFile::Symbol> Syms,
   llvm::TimeTraceScope timeScope("LTO add thin LTO");
   const auto BMID = BM.getModuleIdentifier();
   ArrayRef<SymbolResolution> ResTmp = Res;
-  DenseSet<StringRef> Prevailing;
+  // Maps the IR name of each prevailing symbol to its linker (mangled) name,
+  // which is what GlobalResolutions is keyed by. The two differ on targets with
+  // a global prefix, where the mangled name of foo can be the IR name of _foo.
+  DenseMap<StringRef, StringRef> Prevailing;
   for (const InputFile::Symbol &Sym : Syms) {
     assert(!ResTmp.empty());
     const SymbolResolution &R = ResTmp.consume_front();
     if (!Sym.getIRName().empty() && R.Prevailing)
-      Prevailing.insert(Sym.getIRName());
+      Prevailing.try_emplace(Sym.getIRName(), Sym.getName());
   }
 
   // Track the GUIDs stored in the bitcode GUID table.
@@ -1199,11 +1202,11 @@ LTO::addThinLTO(BitcodeModule BM, ArrayRef<InputFile::Symbol> Syms,
             auto IT = IRSpecifiedGUIDs.insert({VI.name(), VI.getGUID()});
             (void)IT;
             assert(IT.second);
-            if (auto GRIt = GlobalResolutions->find(VI.name());
-                GRIt != GlobalResolutions->end() &&
-                Prevailing.count(VI.name())) {
-              GRIt->second.setGUID(VI.getGUID());
-            }
+            if (auto PrevIt = Prevailing.find(VI.name());
+                PrevIt != Prevailing.end())
+              if (auto GRIt = GlobalResolutions->find(PrevIt->second);
+                  GRIt != GlobalResolutions->end())
+                GRIt->second.setGUID(VI.getGUID());
           }))
     return Err;
   LLVM_DEBUG(dbgs() << "Module " << BMID << "\n");
