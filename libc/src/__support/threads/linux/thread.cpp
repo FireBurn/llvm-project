@@ -41,6 +41,7 @@
 #include "src/__support/threads/cancel.h"
 #include "src/__support/threads/linux/futex_utils.h" // For FutexWordType
 #include "src/__support/threads/linux/futex_word.h"
+#include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/thread_attributes.h"
 
 #include "hdr/errno_macros.h"
@@ -190,6 +191,7 @@ static void reap_detached_threads() {
 static int start_thread(void *arg) {
   auto *start_args = reinterpret_cast<StartArgs *>(arg);
   auto *attrib = start_args->thread_attrib;
+  robust::register_list(attrib);
 
   if (attrib->style == ThreadStyle::POSIX) {
     ThreadReturnValue retval = start_args->runner.posix_runner(start_args->arg);
