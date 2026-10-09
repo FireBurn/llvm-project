@@ -63,6 +63,18 @@ public:
   void emitCOFFSymbolType(int Type) override {}
   void endCOFFSymbolDef() override {}
 
+  // The directives that refer to a symbol in a COFF specific way, such as
+  // .rva, use it as much as any other reference does.
+  void emitCOFFSymbolIndex(const MCSymbol *Symbol) override;
+  void emitCOFFSectionIndex(const MCSymbol *Symbol) override;
+  void emitCOFFSecRel32(const MCSymbol *Symbol, uint64_t Offset) override;
+  void emitCOFFImgRel32(const MCSymbol *Symbol, int64_t Offset) override;
+  void emitCOFFSecNumber(const MCSymbol *Symbol) override;
+  void emitCOFFSecOffset(const MCSymbol *Symbol) override;
+  void emitCOFFSafeSEH(const MCSymbol *Symbol) override;
+  void emitWinEHHandler(const MCSymbol *Sym, bool Unwind, bool Except,
+                        SMLoc Loc) override;
+
   /// Record .symver aliases for later processing.
   void emitELFSymverDirective(const MCSymbol *OriginalSym, StringRef Name,
                               bool KeepOriginalSym) override;

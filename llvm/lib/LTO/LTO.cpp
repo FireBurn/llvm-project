@@ -1006,8 +1006,24 @@ LTO::addRegularLTO(InputFile &Input, ArrayRef<SymbolResolution> InputRes,
 
   UpgradeDebugInfo(M);
 
-  ModuleSymbolTable SymTab;
-  SymTab.addModule(&M);
+  auto SymTab = std::make_unique<ModuleSymbolTable>();
+  SymTab->addModule(&M);
+  // The symbols that inline asm in function bodies defines are only found when
+  // the bodies are read, as they were for the irsymtab. If the irsymtab has more
+  // symbols than the module appears to, read them.
+  auto CountLTOSymbols = [](const ModuleSymbolTable &ST) {
+    return llvm::count_if(ST.symbols(), [&](const ModuleSymbolTable::Symbol &S) {
+      uint32_t Flags = ST.getSymbolFlags(S);
+      return (Flags & object::BasicSymbolRef::SF_Global) &&
+             !(Flags & object::BasicSymbolRef::SF_FormatSpecific);
+    });
+  };
+  if (CountLTOSymbols(*SymTab) < Syms.size()) {
+    if (Error Err = M.materializeAll())
+      return std::move(Err);
+    SymTab = std::make_unique<ModuleSymbolTable>();
+    SymTab->addModule(&M);
+  }
 
   for (GlobalVariable &GV : M.globals())
     if (GV.hasAppendingLinkage())
@@ -1025,10 +1041,10 @@ LTO::addRegularLTO(InputFile &Input, ArrayRef<SymbolResolution> InputRes,
   // InputFile::create we omit some symbols that are irrelevant to LTO. The
   // Skip() function skips the same symbols from the module as InputFile does
   // from the symbol table.
-  auto MsymI = SymTab.symbols().begin(), MsymE = SymTab.symbols().end();
+  auto MsymI = SymTab->symbols().begin(), MsymE = SymTab->symbols().end();
   auto Skip = [&]() {
     while (MsymI != MsymE) {
-      auto Flags = SymTab.getSymbolFlags(*MsymI);
+      auto Flags = SymTab->getSymbolFlags(*MsymI);
       if ((Flags & object::BasicSymbolRef::SF_Global) &&
           !(Flags & object::BasicSymbolRef::SF_FormatSpecific))
         return;

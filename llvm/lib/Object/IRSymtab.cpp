@@ -259,7 +259,9 @@ Error Builder::addSymbol(const ModuleSymbolTable &Msymtab,
   StringRef GVName = GV->getName();
   setStr(Sym.IRName, GVName);
 
-  if (Used.count(GV))
+  // A global symbol that inline asm in the function defines exists only if the
+  // function is emitted.
+  if (Used.count(GV) || Msymtab.definesAsmSymbols(GV))
     Sym.Flags |= 1 << storage::Symbol::FB_used;
   if (GV->isThreadLocal())
     Sym.Flags |= 1 << storage::Symbol::FB_tls;
