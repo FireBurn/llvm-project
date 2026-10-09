@@ -161,6 +161,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("execinfo"),
     libc_header_info("iconv"),
+    libc_header_info("monetary"),
     libc_header_info("printf"),
     libc_header_info("stdio_ext"),
     libc_header_info(
@@ -24122,6 +24123,17 @@ libc_function(
 )
 
 libc_function(
+    name = "localeconv",
+    srcs = ["src/locale/localeconv.cpp"],
+    hdrs = ["src/locale/localeconv.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_limits",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "newlocale",
     srcs = ["src/locale/newlocale.cpp"],
     hdrs = ["src/locale/newlocale.h"],
@@ -24169,6 +24181,49 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":types_locale_t",
+    ],
+)
+
+libc_support_library(
+    name = "monetary_strfmon_impl",
+    hdrs = ["src/monetary/strfmon_impl.h"],
+    deps = [
+        ":__support_cpp_limits",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":localeconv",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":vsnprintf",
+    ],
+)
+
+libc_function(
+    name = "strfmon",
+    srcs = ["src/monetary/strfmon.cpp"],
+    hdrs = ["src/monetary/strfmon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":monetary_strfmon_impl",
+        ":types_locale_t",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
+    name = "strfmon_l",
+    srcs = ["src/monetary/strfmon_l.cpp"],
+    hdrs = ["src/monetary/strfmon_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":monetary_strfmon_impl",
+        ":types_locale_t",
+        ":types_size_t",
+        ":types_ssize_t",
     ],
 )
 
