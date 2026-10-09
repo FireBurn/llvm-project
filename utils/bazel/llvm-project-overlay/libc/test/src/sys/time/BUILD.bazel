@@ -58,3 +58,21 @@ libc_test(
         "//libc/src/unistd:unlink",
     ],
 )
+
+libc_test(
+    name = "futimesat_test",
+    srcs = ["futimesat_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/stat:stat",
+        "//libc/src/sys/stat:sys_stat_stat",
+        "//libc/src/sys/time:futimesat",
+        "//libc/src/sys/time:sys_time_futimesat",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+    ],
+)
