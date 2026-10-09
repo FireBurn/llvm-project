@@ -29,4 +29,18 @@ _Noreturn void __assert_fail(const char *, const char *, unsigned, const char *)
   ((__VA_ARGS__) ? ((void)0) : __assert_fail(#__VA_ARGS__, __FILE__, __LINE__, __PRETTY_FUNCTION__))
 #endif
 
+#ifdef _GNU_SOURCE
+#undef assert_perror
+#ifdef NDEBUG
+#define assert_perror(errnum) ((void)0)
+#else
+#ifdef __cplusplus
+extern "C"
+#endif
+_Noreturn void __assert_perror_fail(int, const char *, unsigned, const char *) __NOEXCEPT;
+#define assert_perror(errnum)  \
+  (!(errnum) ? (void)0 : __assert_perror_fail((errnum), __FILE__, __LINE__, __PRETTY_FUNCTION__))
+#endif
+#endif
+
 %%public_api()
