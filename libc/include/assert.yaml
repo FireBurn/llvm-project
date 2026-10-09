@@ -14,3 +14,12 @@ functions:
       - type: const char *
       - type: unsigned
       - type: const char *
+  - name: __assert_perror_fail
+    standards:
+      - llvm_libc_ext
+    return_type: _Noreturn void
+    arguments:
+      - type: int
+      - type: const char *
+      - type: unsigned
+      - type: const char *
