@@ -40,11 +40,20 @@ add_header_library(
 )
 
 add_header_library(
+  robust_list_types
+  HDRS
+    robust_list_types.h
+  DEPENDS
+    libc.src.__support.macros.config
+)
+
+add_header_library(
   thread_attributes
   HDRS
     thread_attributes.h
   DEPENDS
     .cleanup_stack
+    .robust_list_types
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
     libc.src.__support.CPP.atomic
@@ -115,11 +124,25 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.futex_utils)
   )
 
   add_header_library(
+    robust_list
+    HDRS
+      robust_list.h
+    DEPENDS
+      .robust_list_types
+      .thread_attributes
+      libc.hdr.stdint_proxy
+      libc.src.__support.CPP.atomic
+      libc.src.__support.OSUtil.linux.syscall_wrappers.set_robust_list
+      libc.src.__support.macros.config
+  )
+
+  add_header_library(
     unix_mutex
     HDRS
       unix_mutex.h
     DEPENDS
       .raw_mutex
+      .robust_list
       libc.src.__support.CPP.atomic
   )
 
@@ -176,6 +199,7 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.thread)
     DEPENDS
       .cleanup_stack
       .mutex
+      .robust_list
       .${LIBC_TARGET_OS}.thread
       libc.hdr.limits_macros
       libc.hdr.types.struct___pthread_cleanup_frame

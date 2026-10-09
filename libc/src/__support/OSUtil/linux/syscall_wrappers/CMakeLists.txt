@@ -3265,6 +3265,19 @@ add_header_library(
 )
 
 add_header_library(
+  set_robust_list
+  HDRS
+    set_robust_list.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
   getgid
   HDRS
     getgid.h
