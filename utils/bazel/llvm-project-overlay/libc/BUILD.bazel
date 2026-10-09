@@ -20210,6 +20210,20 @@ libc_function(
 )
 
 libc_function(
+    name = "futimesat",
+    srcs = ["src/sys/time/linux/futimesat.cpp"],
+    hdrs = ["src/sys/time/futimesat.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_utimensat",
+        ":sys_time_futimesat",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+    ],
+)
+
+libc_function(
     name = "init_module",
     srcs = ["src/sys/module/init_module.cpp"],
     hdrs = ["src/sys/module/init_module.h"],
@@ -26633,6 +26647,15 @@ libc_support_library(
         ":full_build": [":llvm_libc_types_struct_timeb"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "sys_time_futimesat",
+    hdrs = ["src/sys/time/futimesat.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_timeval",
+    ],
 )
 
 libc_support_library(
