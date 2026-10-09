@@ -1,0 +1,11 @@
+LLVM_LIBC_DL_1 {
+  global:
+    llvm_libc_dl_value;
+    llvm_libc_dl_add;
+    llvm_libc_dl_read_value;
+};
+
+LLVM_LIBC_DL_2 {
+  global:
+    llvm_libc_dl_versioned;
+} LLVM_LIBC_DL_1;
