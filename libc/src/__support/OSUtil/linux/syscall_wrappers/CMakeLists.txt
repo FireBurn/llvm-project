@@ -1166,6 +1166,18 @@ add_header_library(
 )
 
 add_header_library(
+  acct
+  HDRS
+    acct.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
   chroot
   HDRS
     chroot.h
