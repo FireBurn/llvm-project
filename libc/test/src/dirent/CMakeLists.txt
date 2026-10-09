@@ -146,3 +146,19 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  readdir_r_test
+  SUITE
+    libc-dirent-tests
+  SRCS
+    readdir_r_test.cpp
+  DEPENDS
+    libc.hdr.types.struct_dirent
+    libc.src.dirent.closedir
+    libc.src.dirent.opendir
+    libc.src.dirent.readdir_r
+    libc.src.string.strcmp
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
