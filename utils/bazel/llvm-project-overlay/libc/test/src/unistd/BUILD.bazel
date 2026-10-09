@@ -23,6 +23,16 @@ libc_test(
 )
 
 libc_test(
+    name = "acct_test",
+    srcs = ["acct_test.cpp"],
+    deps = [
+        "//libc:acct",
+        "//libc:geteuid",
+        "//libc:hdr_errno_macros",
+    ],
+)
+
+libc_test(
     name = "dup_test",
     srcs = ["dup_test.cpp"],
     deps = [
