@@ -1701,6 +1701,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  arpa_nameser_compat
+  ../libc/include/arpa/nameser_compat.yaml
+  arpa/nameser_compat.h
+  DEPENDS
+    .llvm_libc_common_h
+    .arpa_nameser
+)
+
+add_header_macro(
   net_if_arp
   ../libc/include/net/if_arp.yaml
   net/if_arp.h
