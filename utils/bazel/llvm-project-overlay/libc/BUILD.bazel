@@ -29913,17 +29913,30 @@ libc_support_library(
 )
 
 libc_support_library(
-    name = "dlfcn_dlsym",
-    srcs = ["src/dlfcn/dlsym.cpp"],
-    hdrs = ["src/dlfcn/dlsym.h"],
+    name = "dlfcn_dl_lookup",
+    srcs = ["src/dlfcn/dl_lookup.cpp"],
+    hdrs = ["src/dlfcn/dl_lookup.h"],
     deps = [
-        ":__support_common",
         ":__support_cpp_mutex",
         ":__support_elf_bind",
         ":__support_elf_passive_abi",
         ":__support_macros_config",
         ":dlfcn_dl_internal",
         ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dlsym",
+    srcs = ["src/dlfcn/dlsym.cpp"],
+    hdrs = ["src/dlfcn/dlsym.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_lookup",
     ],
 )
 
@@ -29941,6 +29954,18 @@ libc_function(
         ":dlfcn_dl_internal",
         ":hdr_stdint_proxy",
         ":hdr_types_lmid_t",
+    ],
+)
+
+libc_function(
+    name = "dlvsym",
+    srcs = ["src/dlfcn/dlvsym.cpp"],
+    hdrs = ["src/dlfcn/dlvsym.h"],
+    deps = [
+        ":__support_common",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_lookup",
     ],
 )
 
