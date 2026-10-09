@@ -16,6 +16,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.ctype.toascii
     libc.src.ctype.tolower
     libc.src.ctype.toupper
+    libc.src.dlfcn.dladdr
+    libc.src.dlfcn.dladdr1
 
     # dlfcn.h entrypoints
     libc.src.dlfcn.dlclose
