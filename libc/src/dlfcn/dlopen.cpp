@@ -236,7 +236,7 @@ void *dlopen_impl(const char *path, int mode) {
     return nullptr;
   }
 
-  link::announce_link_maps(RT_ADD);
+  link::announce_link_maps(r_debug::RT_ADD);
 
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
@@ -263,7 +263,7 @@ void *dlopen_impl(const char *path, int mode) {
   auto loaded = elf::find_and_load(path, caller_module, caller_origin,
                                    library_path, &system_paths, set.page_size);
   if (!loaded.has_value()) {
-    link::announce_link_maps(RT_CONSISTENT);
+    link::announce_link_maps(r_debug::RT_CONSISTENT);
     dl::set_error(path, "cannot open shared object file");
     return nullptr;
   }
@@ -338,7 +338,7 @@ void *dlopen_impl(const char *path, int mode) {
       elf::unmap_module(set.mappings[i - 1]);
     set.count = first;
     ++set.generation;
-    link::announce_link_maps(RT_CONSISTENT);
+    link::announce_link_maps(r_debug::RT_CONSISTENT);
     dl::set_error(failed ? "cannot open a shared object it was linked against"
                          : "shared object has undefined symbols");
     (void)missing;
@@ -355,7 +355,7 @@ void *dlopen_impl(const char *path, int mode) {
   // A debugger reads the new modules' symbols here, before their
   // constructors run.
   link::publish_link_maps();
-  link::announce_link_maps(RT_CONSISTENT);
+  link::announce_link_maps(r_debug::RT_CONSISTENT);
 
   // Dependencies are initialised before what needs them. More new modules than
   // the order can hold at once, which nothing opens, are run backwards, which
