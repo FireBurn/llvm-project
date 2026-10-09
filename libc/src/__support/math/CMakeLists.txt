@@ -6585,6 +6585,33 @@ add_header_library(
 )
 
 add_header_library(
+  tgamma
+  HDRS
+    tgamma.h
+  DEPENDS
+    .lgamma
+    libc.hdr.errno_macros
+    libc.src.__support.FPUtil.dyadic_float
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.macros.config
+    libc.src.__support.macros.optimization
+)
+
+add_header_library(
+  tgammaf
+  HDRS
+    tgammaf.h
+  DEPENDS
+    .tgamma
+    libc.hdr.errno_macros
+    libc.src.__support.FPUtil.fenv_impl
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.macros.config
+    libc.src.__support.macros.optimization
+)
+
+add_header_library(
   bessel
   HDRS
     bessel.h
