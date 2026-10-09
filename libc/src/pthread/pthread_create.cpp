@@ -22,6 +22,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/thread.h"
 #include "src/pthread/pthread_attr.h"
+#include "src/pthread/pthread_default_attr.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -32,8 +33,13 @@ LLVM_LIBC_FUNCTION(int, pthread_create,
                    (pthread_t *__restrict th,
                     const pthread_attr_t *__restrict attr,
                     __pthread_start_t func, void *arg)) {
-  if (attr == nullptr)
-    attr = &DEFAULT_PTHREAD_ATTR;
+  // Without attributes a thread gets the stack the process is allowed, which
+  // Thread::run works out when asked for no particular size.
+  pthread_attr_t process_default;
+  if (attr == nullptr) {
+    process_default = default_thread_attr();
+    attr = &process_default;
+  }
 
   void *stack = attr->__stack;
   size_t stacksize = attr->__stacksize;
