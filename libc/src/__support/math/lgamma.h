@@ -698,6 +698,46 @@ LIBC_INLINE DFloat128 sinpi(double r) {
   return fputil::quick_mul(horner(SINPI, 24, fputil::quick_mul(rd, rd)), rd);
 }
 
+// lgamma(x) as a dyadic float for finite x which is not zero, 1 or 2 and not
+// a negative integer, with the sign of gamma(x) in *signp.
+LIBC_INLINE DFloat128 lgamma_value(double x, int *signp) {
+  DFloat128 result;
+  *signp = 1;
+  if (x > 0.0) {
+    result = lgamma_positive(DFloat128(x), x);
+  } else {
+    double fl = __builtin_floor(x);
+    // gamma changes sign at each negative integer, and is negative on
+    // (-1, 0), where the floor is -1.
+    bool floor_is_even = __builtin_fmod(fl, 2.0) == 0.0;
+    *signp = floor_is_even ? 1 : -1;
+
+    const Zero *zero = nullptr;
+    if (x < -2.0 && x > -20.0) {
+      int n = static_cast<int>(-fl) - 1;
+      for (const Zero *z = &ZEROS[2 * (n - 2)]; z < &ZEROS[2 * (n - 1)]; ++z)
+        if (__builtin_fabs((x - z->x_hi) - static_cast<double>(z->x_lo)) <=
+            z->radius)
+          zero = z;
+    }
+    if (zero != nullptr) {
+      // x - x_hi is exact, the two being within a factor of two.
+      DFloat128 d = fputil::quick_sub(DFloat128(x - zero->x_hi), zero->x_lo);
+      result = fputil::quick_mul(horner(zero->coeffs, 8, d), d);
+    } else {
+      // lgamma(x) = log(pi) - log|sin(pi x)| - lgamma(1 - x).
+      double r = x - __builtin_round(x);
+      DFloat128 s = sinpi(r);
+      s.sign = Sign::POS;
+      DFloat128 one_minus_x = fputil::quick_sub(DFloat128(1.0), DFloat128(x));
+      result = fputil::quick_sub(fputil::quick_sub(LN_PI, log_dyadic(s)),
+                                 lgamma_positive(one_minus_x, 1.0 - x));
+    }
+  }
+
+  return result;
+}
+
 } // namespace lgamma_internal
 
 // The sign of gamma at x, which lgamma reports separately since it returns
@@ -730,43 +770,13 @@ LIBC_INLINE double lgamma_r(double x, int *signp) {
   if (x == 1.0 || x == 2.0)
     return 0.0;
 
-  DFloat128 result;
-  if (!xbits.is_neg()) {
-    result = lgamma_positive(DFloat128(x), x);
-  } else {
-    double fl = __builtin_floor(x);
-    if (LIBC_UNLIKELY(fl == x)) {
-      fputil::set_errno_if_required(ERANGE);
-      fputil::raise_except_if_required(FE_DIVBYZERO);
-      return FPBits::inf().get_val();
-    }
-    // gamma changes sign at each negative integer, and is negative on
-    // (-1, 0), where the floor is -1.
-    bool floor_is_even = __builtin_fmod(fl, 2.0) == 0.0;
-    *signp = floor_is_even ? 1 : -1;
-
-    const Zero *zero = nullptr;
-    if (x < -2.0 && x > -20.0) {
-      int n = static_cast<int>(-fl) - 1;
-      for (const Zero *z = &ZEROS[2 * (n - 2)]; z < &ZEROS[2 * (n - 1)]; ++z)
-        if (__builtin_fabs((x - z->x_hi) - static_cast<double>(z->x_lo)) <=
-            z->radius)
-          zero = z;
-    }
-    if (zero != nullptr) {
-      // x - x_hi is exact, the two being within a factor of two.
-      DFloat128 d = fputil::quick_sub(DFloat128(x - zero->x_hi), zero->x_lo);
-      result = fputil::quick_mul(horner(zero->coeffs, 8, d), d);
-    } else {
-      // lgamma(x) = log(pi) - log|sin(pi x)| - lgamma(1 - x).
-      double r = x - __builtin_round(x);
-      DFloat128 s = sinpi(r);
-      s.sign = Sign::POS;
-      DFloat128 one_minus_x = fputil::quick_sub(DFloat128(1.0), DFloat128(x));
-      result = fputil::quick_sub(fputil::quick_sub(LN_PI, log_dyadic(s)),
-                                 lgamma_positive(one_minus_x, 1.0 - x));
-    }
+  if (xbits.is_neg() && __builtin_floor(x) == x) {
+    fputil::set_errno_if_required(ERANGE);
+    fputil::raise_except_if_required(FE_DIVBYZERO);
+    return FPBits::inf().get_val();
   }
+
+  DFloat128 result = lgamma_value(x, signp);
 
   // The largest finite result needs an exponent of 1023.
   if (LIBC_UNLIKELY(result.exponent + 127 >= 1024)) {
