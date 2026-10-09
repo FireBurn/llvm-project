@@ -163,6 +163,14 @@ LLVM_LIBC_HEADERS = [
         other_srcs = ["include/stdlib-alloca.yaml"],
     ),
     libc_header_info("ar"),
+    libc_header_info(
+        "arpa/nameser",
+        has_def_template = True,
+    ),
+    libc_header_info(
+        "arpa/nameser_compat",
+        has_def_template = True,
+    ),
     libc_header_info("error"),
     libc_header_info("execinfo"),
     libc_header_info("ftw"),
