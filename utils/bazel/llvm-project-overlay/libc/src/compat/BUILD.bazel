@@ -71,6 +71,7 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:gettid",
         "//libc/src/__support/OSUtil:linux_auxv",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:robust_list",
         "//libc/src/__support/threads:tcb",
         "//libc/src/__support/threads:thread",
         "//libc/src/__support/threads:thread_headers",
