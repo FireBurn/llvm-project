@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// BSD header <arpa/nameser.h>
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef _LLVM_LIBC_ARPA_NAMESER_H
+#define _LLVM_LIBC_ARPA_NAMESER_H
+
+#include "../__llvm-libc-common.h"
+
+%%public_api()
+
+// glibc's <arpa/nameser.h> ends with the BIND 4 names, and programs that name
+// T_A or C_IN rely on it.
+#include <arpa/nameser_compat.h>
+
+#endif // _LLVM_LIBC_ARPA_NAMESER_H
