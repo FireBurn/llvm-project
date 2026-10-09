@@ -204,6 +204,7 @@ add_header(
     libc.include.llvm-libc-macros.link_macros
 )
 add_header(dl_info HDR Dl_info.h)
+add_header(lmid_t HDR Lmid_t.h)
 add_header(struct_f_owner_ex HDR struct_f_owner_ex.h DEPENDS .pid_t)
 add_header(struct_flock HDR struct_flock.h DEPENDS .off_t .pid_t)
 add_header(struct_flock64 HDR struct_flock64.h DEPENDS .off64_t .pid_t)
