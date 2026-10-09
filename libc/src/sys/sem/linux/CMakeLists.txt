@@ -44,3 +44,18 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  semtimedop
+  SRCS
+    semtimedop.cpp
+  HDRS
+    ../semtimedop.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_sembuf
+    libc.hdr.types.struct_timespec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.semtimedop
+    libc.src.__support.common
+    libc.src.errno.errno
+)

@@ -60,6 +60,9 @@ types:
   - type_name: struct_seminfo
     standards:
       - linux
+  - type_name: struct_timespec
+    standards:
+      - gnu
 functions:
   - name: semctl
     standards:
@@ -86,3 +89,12 @@ functions:
       - type: int
       - type: struct sembuf *
       - type: size_t
+  - name: semtimedop
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: struct sembuf *
+      - type: size_t
+      - type: const struct timespec *
