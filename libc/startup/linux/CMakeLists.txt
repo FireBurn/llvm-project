@@ -137,6 +137,7 @@ add_object_library(
     libc.src.__support.elf.module
     libc.src.__support.elf.passive_abi
     libc.src.__support.threads.tcb
+    libc.src.__support.threads.robust_list
     libc.src.__support.threads.thread
     libc.src.__support.threads.linux.futex_utils
     libc.src.__support.threads.linux.tls
