@@ -14,6 +14,8 @@ macros:
     macro_header: lfs64-macros.h
   - macro_name: SEEK_DATA
   - macro_name: SEEK_HOLE
+  - macro_name: _CS_GNU_LIBC_VERSION
+  - macro_name: _CS_GNU_LIBPTHREAD_VERSION
   - macro_name: SEEK_SET
     macro_header: file-seek-macros.h
   - macro_name: SEEK_CUR
