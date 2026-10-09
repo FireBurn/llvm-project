@@ -562,6 +562,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  arpa_nameser_compat_test
+  SUITE
+    libc-include-tests
+  SRCS
+    arpa_nameser_compat_test.cpp
+  DEPENDS
+    libc.include.arpa_nameser_compat
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
