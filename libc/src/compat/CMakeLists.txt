@@ -211,5 +211,6 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.threads.tcb
+    libc.src.__support.threads.robust_list
     libc.src.__support.threads.thread
 )
