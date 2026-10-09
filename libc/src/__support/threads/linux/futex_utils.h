@@ -197,6 +197,19 @@ public:
     }
   }
 
+  // Takes the lock if that can be done without waiting, which takes the
+  // kernel when the word names no owner but is not zero, as it is after the
+  // owner of a robust lock exited. Fails with EAGAIN when it is held.
+  LIBC_INLINE ErrorOr<int> trylock_pi(bool is_shared = false) {
+    int ret = syscall_impl<int>(
+        FUTEX_SYSCALL_ID, this,
+        is_shared ? FUTEX_TRYLOCK_PI : FUTEX_TRYLOCK_PI | FUTEX_PRIVATE_FLAG, 0,
+        nullptr, nullptr, 0);
+    if (ret < 0)
+      return cpp::unexpected(-ret);
+    return ret;
+  }
+
   LIBC_INLINE ErrorOr<int> unlock_pi(bool is_shared = false) {
     int ret =
         syscall_impl<int>(FUTEX_SYSCALL_ID, this,

@@ -21,6 +21,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/properties/architectures.h"
 #include "src/__support/threads/cleanup_stack.h"
+#include "src/__support/threads/robust_list_types.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -112,6 +113,9 @@ struct alignas(STACK_ALIGNMENT) ThreadAttributes {
   ThreadReturnValue retval;
   void *platform_data;
   cpp::Atomic<ThreadAttributes *> joiner;
+  // The robust mutexes this thread holds, which the kernel reads when it
+  // exits. See robust_list.h.
+  robust::Head robust_list;
   CleanupStack cleanup_stack;
   // Cancellation. The request is set by whichever thread asks and read by
   // the thread it is asked of, so it is atomic; the state and type are only
@@ -125,7 +129,8 @@ struct alignas(STACK_ALIGNMENT) ThreadAttributes {
       : detach_state(uint32_t(DetachState::DETACHED)), stack(nullptr),
         stacksize(0), guardsize(0), tls(0), tls_size(0), owned_stack(false),
         tid(-1), style(ThreadStyle::POSIX), retval(), platform_data(nullptr),
-        joiner(nullptr), cancel_state(uint32_t(CancelState::ENABLE)),
+        joiner(nullptr), robust_list{nullptr, 0, nullptr},
+        cancel_state(uint32_t(CancelState::ENABLE)),
         cancel_requested(0), cancel_type(uint32_t(CancelType::DEFERRED)) {}
 };
 

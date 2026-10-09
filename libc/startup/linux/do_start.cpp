@@ -22,6 +22,7 @@
 #include "src/__support/elf/passive_abi.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/linux/futex_utils.h"
+#include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
 #include "src/compat/progname.h"
@@ -286,6 +287,7 @@ static TLSDescriptor tls;
   ThreadAttributes *attrib = get_tcb()->attrib;
   if (attrib == nullptr) {
     get_tcb()->attrib = &main_thread_attrib;
+    robust::register_list(&main_thread_attrib);
   } else {
     attrib->tid = main_thread_attrib.tid;
     attrib->platform_data = main_thread_attrib.platform_data;
