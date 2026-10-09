@@ -9,3 +9,17 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "assert_perror_test",
+    srcs = ["assert_perror_test.cpp"],
+    deps = [
+        "//libc:_Exit",
+        "//libc:__assert_perror_fail",
+        "//libc:abort",
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:raise",
+    ],
+)
