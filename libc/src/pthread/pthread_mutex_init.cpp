@@ -23,6 +23,13 @@ static_assert(sizeof(Mutex) == sizeof(pthread_mutex_t) &&
               "The public pthread_mutex_t type must exactly match the internal "
               "mutex type.");
 
+// The kernel finds the futex word of a robust mutex from its list node, at a
+// fixed distance.
+static_assert(__builtin_offsetof(__mutex_type, __reserved) ==
+                  -robust::FUTEX_OFFSET,
+              "The list node of a robust mutex is not where the kernel looks "
+              "for the futex word relative to it.");
+
 LLVM_LIBC_FUNCTION(int, pthread_mutex_init,
                    (pthread_mutex_t * m,
                     const pthread_mutexattr_t *__restrict attr)) {
