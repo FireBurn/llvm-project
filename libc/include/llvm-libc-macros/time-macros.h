@@ -1,10 +1,13 @@
 #ifndef LLVM_LIBC_MACROS_TIME_MACROS_H
 #define LLVM_LIBC_MACROS_TIME_MACROS_H
 
-#if defined(__AMDGPU__) || defined(__NVPTX__) || defined(__SPIRV__)
-#include "gpu/time-macros.h"
-#elif defined(__linux__)
+// A GPU target is the library's own only when there is no operating system.
+// Code for a device that is compiled alongside the host's, as HIP and CUDA
+// are, has __linux__ defined and reads the host's headers.
+#if defined(__linux__)
 #include "linux/time-macros.h"
+#elif defined(__AMDGPU__) || defined(__NVPTX__) || defined(__SPIRV__)
+#include "gpu/time-macros.h"
 #elif defined(__ELF__)
 #include "baremetal/time-macros.h"
 #elif defined(__APPLE__)
