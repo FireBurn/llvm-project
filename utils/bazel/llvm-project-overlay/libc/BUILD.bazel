@@ -30624,6 +30624,20 @@ libc_support_library(
 )
 
 libc_function(
+    name = "__assert_perror_fail",
+    srcs = ["src/assert/generic/__assert_perror_fail.cpp"],
+    hdrs = ["src/assert/__assert_perror_fail.h"],
+    deps = [
+        ":__support_common",
+        ":__support_integer_to_string",
+        ":__support_macros_config",
+        ":__support_osutil_io",
+        ":__support_stringutil",
+        ":stdlib_abort_utils",
+    ],
+)
+
+libc_function(
     name = "opendir",
     srcs = ["src/dirent/opendir.cpp"],
     hdrs = ["src/dirent/opendir.h"],
