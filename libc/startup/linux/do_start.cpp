@@ -244,7 +244,7 @@ static TLSDescriptor tls;
     _r_debug.r_version = 1;
     _r_debug.r_map = &main_map;
     _r_debug.r_brk = reinterpret_cast<uintptr_t>(&_r_debug_state);
-    _r_debug.r_state = RT_CONSISTENT;
+    _r_debug.r_state = r_debug::RT_CONSISTENT;
     _r_debug.r_ldbase = base;
   }
 
