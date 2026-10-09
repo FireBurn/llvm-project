@@ -56,6 +56,7 @@ libc_support_library(
     }),
     deps = [
         ":cleanup_stack",
+        ":robust_list_types",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:struct___pthread_cleanup_frame",
         "//libc/hdr:stdint_proxy",
@@ -139,6 +140,7 @@ libc_support_library(
         ":identifier",
         ":mutex_common",
         ":raw_mutex",
+        ":robust_list",
         ":tcb",
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:size_t",
@@ -270,6 +272,7 @@ libc_support_library(
     deps = [
         ":cleanup_stack",
         ":mutex",
+        ":robust_list",
         ":thread_headers",
         "//libc/hdr/types:struct___pthread_cleanup_frame",
         "//libc/hdr:limits_macros",
@@ -302,6 +305,7 @@ libc_support_library(
         ":linux_tls",
         ":mutex",
         ":raw_mutex",
+        ":robust_list",
         ":thread_attributes",
         ":thread_headers",
         "//libc/config:app_h",
@@ -405,6 +409,31 @@ libc_support_library(
     deps = [
         ":mutex",
         "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "robust_list_types",
+    hdrs = ["robust_list_types.h"],
+    deps = ["//libc/src/__support/macros:config"],
+)
+
+libc_support_library(
+    name = "robust_list",
+    hdrs = ["robust_list.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":robust_list_types",
+        ":thread_attributes",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:set_robust_list",
         "//libc/src/__support/macros:config",
     ],
 )
