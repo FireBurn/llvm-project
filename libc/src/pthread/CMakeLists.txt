@@ -11,6 +11,50 @@ add_header_library(
     libc.src.__support.threads.thread
 )
 
+add_object_library(
+  pthread_default_attr
+  SRCS
+    pthread_default_attr.cpp
+  HDRS
+    pthread_default_attr.h
+  DEPENDS
+    .pthread_attr
+    libc.hdr.types.pthread_attr_t
+    libc.src.__support.CPP.mutex
+    libc.src.__support.macros.config
+    libc.src.__support.threads.mutex
+)
+
+add_entrypoint_object(
+  pthread_setattr_default_np
+  SRCS
+    pthread_setattr_default_np.cpp
+  HDRS
+    pthread_setattr_default_np.h
+  DEPENDS
+    .pthread_attr
+    .pthread_default_attr
+    libc.hdr.errno_macros
+    libc.hdr.pthread_macros
+    libc.hdr.types.pthread_attr_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  pthread_getattr_default_np
+  SRCS
+    pthread_getattr_default_np.cpp
+  HDRS
+    pthread_getattr_default_np.h
+  DEPENDS
+    .pthread_default_attr
+    libc.hdr.errno_macros
+    libc.hdr.types.pthread_attr_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   pthread_attr_init
   SRCS
@@ -672,6 +716,7 @@ add_entrypoint_object(
   HDRS
     pthread_create.h
   DEPENDS
+    .pthread_default_attr
     .pthread_attr
     libc.hdr.errno_macros
     libc.hdr.pthread_macros
