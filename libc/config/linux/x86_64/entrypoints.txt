@@ -1722,6 +1722,7 @@ if(LLVM_LIBC_FULL_BUILD)
 
     # assert.h entrypoints
     libc.src.assert.__assert_fail
+    libc.src.assert.__assert_perror_fail
 
     # compiler entrypoints (no corresponding header)
     libc.src.compiler.__stack_chk_fail
