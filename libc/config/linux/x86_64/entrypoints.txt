@@ -1794,6 +1794,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_equal
     libc.src.pthread.pthread_exit
     libc.src.pthread.pthread_getaffinity_np
+    libc.src.pthread.pthread_getattr_default_np
     libc.src.pthread.pthread_getattr_np
     libc.src.pthread.pthread_getcpuclockid
     libc.src.pthread.pthread_getname_np
@@ -1857,6 +1858,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_rwlockattr_setkind_np
     libc.src.pthread.pthread_rwlockattr_setpshared
     libc.src.pthread.pthread_setaffinity_np
+    libc.src.pthread.pthread_setattr_default_np
     libc.src.pthread.pthread_setcancelstate
     libc.src.pthread.pthread_setcanceltype
     libc.src.pthread.pthread_spin_destroy
