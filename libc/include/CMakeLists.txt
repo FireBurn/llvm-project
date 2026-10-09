@@ -205,6 +205,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  monetary
+  ../libc/include/monetary.yaml
+  monetary.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.locale_t
+    .llvm-libc-types.size_t
+    .llvm-libc-types.ssize_t
+)
+
+add_header_macro(
   limits
   ../libc/include/limits.yaml
   limits.h
