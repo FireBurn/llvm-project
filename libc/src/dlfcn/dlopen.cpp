@@ -11,6 +11,7 @@
 #include "hdr/func/free.h"
 #include "hdr/func/malloc.h"
 #include "src/__support/CPP/mutex.h"
+#include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/load_module.h"
@@ -21,6 +22,10 @@
 #include "src/dlfcn/lazy_bind.h"
 #include "src/link/link_maps.h"
 #include "src/unistd/environ.h"
+
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -35,11 +40,98 @@ bool same_name(const char *a, const char *b) {
   return false;
 }
 
+constexpr size_t PATH_BUFFER = 4096;
+
+// The path with the "." and ".." components and the doubled slashes taken
+// out, without asking the filesystem. Returns false when it does not fit.
+bool normalise(const char *path, char *out) {
+  size_t length = 0;
+  const bool absolute = path[0] == '/';
+  if (absolute)
+    out[length++] = '/';
+  const size_t root = length;
+  for (const char *p = path; *p != '\0';) {
+    while (*p == '/')
+      ++p;
+    const char *start = p;
+    while (*p != '\0' && *p != '/')
+      ++p;
+    const size_t size = static_cast<size_t>(p - start);
+    if (size == 0 || (size == 1 && start[0] == '.'))
+      continue;
+    if (size == 2 && start[0] == '.' && start[1] == '.') {
+      // Back over the last component, unless it is one that stays.
+      size_t end = length;
+      if (end > root && out[end - 1] == '/')
+        --end;
+      size_t begin = end;
+      while (begin > root && out[begin - 1] != '/')
+        --begin;
+      if (begin < end &&
+          !(end - begin == 2 && out[begin] == '.' && out[begin + 1] == '.')) {
+        length = begin;
+        continue;
+      }
+      if (absolute)
+        continue;
+    }
+    if (length + size + 2 >= PATH_BUFFER)
+      return false;
+    if (length > root && out[length - 1] != '/')
+      out[length++] = '/';
+    for (size_t i = 0; i < size; ++i)
+      out[length++] = start[i];
+  }
+  out[length] = '\0';
+  return true;
+}
+
+const char *last_component(const char *path) {
+  const char *last = path;
+  for (const char *p = path; *p != '\0'; ++p)
+    if (*p == '/')
+      last = p + 1;
+  return last;
+}
+
+// Whether two paths name the same file: the same once their "." and ".."
+// are taken out, or, when they end in the same name, the same device and
+// inode, which is what a symbolic link comes to. An object reached by two
+// paths has to be one object, as it holds the program's state of whatever it
+// defines.
+bool same_file(const char *known, const char *wanted) {
+  if (known == nullptr || wanted == nullptr)
+    return false;
+  bool slash = false;
+  for (const char *p = wanted; *p != '\0'; ++p)
+    slash = slash || *p == '/';
+  if (!slash || known[0] != '/')
+    return false;
+  char a[PATH_BUFFER];
+  char b[PATH_BUFFER];
+  if (!normalise(known, a) || !normalise(wanted, b))
+    return false;
+  if (same_name(a, b))
+    return true;
+  if (!same_name(last_component(a), last_component(b)))
+    return false;
+  struct stat one;
+  struct stat two;
+  if (LIBC_NAMESPACE::syscall_impl<int>(SYS_newfstatat, AT_FDCWD, a, &one, 0) !=
+          0 ||
+      LIBC_NAMESPACE::syscall_impl<int>(SYS_newfstatat, AT_FDCWD, b, &two, 0) !=
+          0)
+    return false;
+  return one.st_dev == two.st_dev && one.st_ino == two.st_ino;
+}
+
 // Whether the set already holds something of this name, by either the path
-// it was opened under or the name it says it goes by.
+// it was opened under, the file that path comes to, or the name it says it
+// goes by.
 bool already_loaded(const elf::ModuleSet &set, const char *name) {
   for (size_t i = 0; i < set.count; ++i)
     if (same_name(set.modules[i].name(), name) ||
+        same_file(set.modules[i].name(), name) ||
         same_name(set.modules[i].soname(), name))
       return true;
   return false;
@@ -133,6 +225,7 @@ LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int mode)) {
 
   for (size_t i = 0; i < set.count; ++i) {
     if (same_name(set.modules[i].name(), path) ||
+        same_file(set.modules[i].name(), path) ||
         same_name(set.modules[i].soname(), path)) {
       ++set.references[i];
       return dl::handle_for(i);
