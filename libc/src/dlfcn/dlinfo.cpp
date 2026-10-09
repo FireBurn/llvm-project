@@ -13,8 +13,8 @@
 #include "src/__support/common.h"
 #include "src/__support/elf/passive_abi.h"
 #include "src/__support/macros/config.h"
+#include "src/dlfcn/dl_address.h"
 #include "src/dlfcn/dl_internal.h"
-#include "src/link/_r_debug.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -24,16 +24,6 @@ namespace {
 constexpr int DI_LMID = 1;
 constexpr int DI_LINKMAP = 2;
 constexpr int DI_ORIGIN = 6;
-
-// The entry of the chain a debugger sees which stands for a module. The
-// chain is built from the module set, so the load address tells them apart.
-struct link_map *find_link_map(ElfW(Addr) bias) {
-  for (struct link_map *map = _r_debug.r_map; map != nullptr;
-       map = map->l_next)
-    if (map->l_addr == bias)
-      return map;
-  return nullptr;
-}
 
 } // anonymous namespace
 
@@ -64,7 +54,7 @@ LLVM_LIBC_FUNCTION(int, dlinfo,
     return 0;
   }
 
-  struct link_map *map = find_link_map(modules->modules[index].load_bias());
+  struct link_map *map = dl::link_map_for(modules->modules[index].load_bias());
   if (map == nullptr) {
     dl::set_error("dlinfo could not find the object");
     return -1;
