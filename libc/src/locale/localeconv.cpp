@@ -44,6 +44,14 @@ static struct lconv C_LCONV = {
     .int_n_sign_posn = CHAR_MAX,
 };
 
-LLVM_LIBC_FUNCTION(struct lconv *, localeconv, ()) { return &C_LCONV; }
+namespace internal {
+
+struct lconv *localeconv_impl() { return &C_LCONV; }
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct lconv *, localeconv, ()) {
+  return internal::localeconv_impl();
+}
 
 } // namespace LIBC_NAMESPACE_DECL

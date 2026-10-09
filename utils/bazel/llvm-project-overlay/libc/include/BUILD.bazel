@@ -43,6 +43,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "math",
         has_def_template = True,
     ),
+    libc_header_info("monetary"),
     libc_header_info("printf"),
     libc_header_info(
         "stdbit",
