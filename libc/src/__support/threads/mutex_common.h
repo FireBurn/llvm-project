@@ -21,6 +21,12 @@ enum class MutexError : int {
   UNLOCK_WITHOUT_LOCK,
   BAD_LOCK_STATE,
   OVERFLOW,
+  // The mutex was acquired, but the thread that held it exited without
+  // unlocking it. Robust mutexes only.
+  OWNER_DEAD,
+  // The thread that last held the mutex exited, and the state it protects was
+  // not made consistent again before it was unlocked. Robust mutexes only.
+  NOT_RECOVERABLE,
 };
 
 } // namespace LIBC_NAMESPACE_DECL
