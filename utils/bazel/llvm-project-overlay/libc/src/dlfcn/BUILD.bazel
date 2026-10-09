@@ -138,10 +138,24 @@ libc_support_library(
 )
 
 libc_function(
+    name = "dladdr1",
+    srcs = ["dladdr1.cpp"],
+    hdrs = ["dladdr1.h"],
+    deps = [
+        ":dl_address",
+        "//libc/hdr/types:hdr_types_dl_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)
+
+libc_function(
     name = "dlinfo",
     srcs = ["dlinfo.cpp"],
     hdrs = ["dlinfo.h"],
     deps = [
+        ":dl_address",
         ":dl_internal",
         "//libc/hdr/types:hdr_types_lmid_t",
         "//libc/hdr:stdint_proxy",
@@ -150,7 +164,6 @@ libc_function(
         "//libc/src/__support/threads:mutex",
         "//libc/src/__support:common",
         "//libc/src/__support:elf_passive_abi",
-        "//libc/src/link:_r_debug",
     ],
 )
 
@@ -166,14 +179,28 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "dl_address",
+    srcs = ["dl_address.cpp"],
+    hdrs = ["dl_address.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/types:hdr_types_dl_info",
+        "//libc/hdr/types:struct_link_map",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:elf_passive_abi",
+        "//libc/src/link:_r_debug",
+    ],
+)
+
 libc_function(
     name = "dladdr",
     srcs = ["dladdr.cpp"],
     hdrs = ["dladdr.h"],
     deps = [
-        ":dl_internal",
+        ":dl_address",
         "//libc/hdr/types:hdr_types_dl_info",
-        "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:elf_passive_abi",
