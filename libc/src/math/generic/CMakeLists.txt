@@ -5251,6 +5251,28 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  tgamma
+  SRCS
+    tgamma.cpp
+  HDRS
+    ../tgamma.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.tgamma
+)
+
+add_entrypoint_object(
+  tgammaf
+  SRCS
+    tgammaf.cpp
+  HDRS
+    ../tgammaf.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.math.tgammaf
+)
+
+add_entrypoint_object(
   lgamma_r
   SRCS
     lgamma_r.cpp
