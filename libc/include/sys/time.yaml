@@ -32,6 +32,14 @@ functions:
     arguments:
       - type: int
       - type: const struct timeval*
+  - name: futimesat
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: const char *
+      - type: const struct timeval *
   - name: lutimes
     return_type: int
     arguments:
