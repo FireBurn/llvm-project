@@ -2831,3 +2831,10 @@ libc_test(
         "//libc/test/UnitTest:fp_test_helpers",
     ],
 )
+
+math_test(
+    name = "tgamma",
+    deps = [
+        "//libc:tgammaf",
+    ],
+)
