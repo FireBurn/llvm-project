@@ -126,12 +126,27 @@ add_entrypoint_object(
   HDRS
     dlinfo.h
   DEPENDS
+    .dl_address
     libc.src.__support.CPP.mutex
     libc.src.__support.elf.passive_abi
     libc.src.__support.threads.mutex
     libc.src.dlfcn.dl_internal
-    libc.src.link._r_debug
     libc.include.dlfcn
+)
+
+add_object_library(
+  dl_address
+  SRCS
+    dl_address.cpp
+  HDRS
+    dl_address.h
+  DEPENDS
+    .dl_internal
+    libc.hdr.types.dl_info
+    libc.hdr.types.struct_link_map
+    libc.src.__support.CPP.mutex
+    libc.src.__support.elf.passive_abi
+    libc.src.link._r_debug
 )
 
 add_entrypoint_object(
@@ -141,10 +156,22 @@ add_entrypoint_object(
   HDRS
     dladdr.h
   DEPENDS
-    .dl_internal
+    .dl_address
     libc.include.dlfcn
     libc.hdr.types.dl_info
-    libc.src.__support.CPP.mutex
+    libc.src.__support.elf.passive_abi
+)
+
+add_entrypoint_object(
+  dladdr1
+  SRCS
+    dladdr1.cpp
+  HDRS
+    dladdr1.h
+  DEPENDS
+    .dl_address
+    libc.include.dlfcn
+    libc.hdr.types.dl_info
     libc.src.__support.elf.passive_abi
 )
 
