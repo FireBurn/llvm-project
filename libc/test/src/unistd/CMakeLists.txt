@@ -1,5 +1,19 @@
 add_libc_testsuite(libc-unistd-tests)
 
+add_libc_test(
+  acct_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    acct_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.unistd.acct
+    libc.src.unistd.geteuid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
 add_subdirectory(testdata)
 
 add_libc_test(

@@ -718,6 +718,20 @@ libc_function(
 )
 
 libc_function(
+    name = "acct",
+    srcs = ["linux/acct.cpp"],
+    hdrs = ["acct.h"],
+    deps = [
+        ":unistd_acct",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:acct",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "brk",
     srcs = ["linux/brk.cpp"],
     hdrs = ["brk.h"],
@@ -1117,6 +1131,14 @@ libc_support_library(
 libc_support_library(
     name = "unistd_setpgrp",
     hdrs = ["setpgrp.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_acct",
+    hdrs = ["acct.h"],
     deps = [
         "//libc/src/__support/macros:config",
     ],
