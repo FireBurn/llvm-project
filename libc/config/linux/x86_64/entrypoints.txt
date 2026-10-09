@@ -508,6 +508,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.sem.semget
     libc.src.sys.sem.semctl
     libc.src.sys.sem.semop
+    libc.src.sys.sem.semtimedop
 
     # sys/sendfile.h entrypoints
     libc.src.sys.sendfile.sendfile
