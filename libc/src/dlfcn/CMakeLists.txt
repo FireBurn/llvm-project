@@ -13,30 +13,45 @@ if(LIBC_TARGET_OS_IS_LINUX)
       libc.src.__support.threads.mutex
   )
 
-add_object_library(
-  lazy_bind
-  SRCS
-    lazy_bind.cpp
-  HDRS
-    lazy_bind.h
-  DEPENDS
-    libc.hdr.elf_macros
-    libc.hdr.elf_proxy
-    libc.hdr.link_macros
-    libc.hdr.stdint_proxy
-    libc.hdr.types.size_t
-    libc.src.__support.CPP.mutex
-    libc.src.__support.CPP.string_view
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.elf.bind
-    libc.src.__support.elf.dynamic_blocks
-    libc.src.__support.elf.passive_abi
-    libc.src.__support.elf.thread_pointer
-    libc.src.__support.macros.properties.architectures
-    libc.src.__support.threads.mutex
-    libc.src.dlfcn.dl_internal
-    libc.src.unistd.environ
-)
+  add_object_library(
+    dl_lookup
+    SRCS
+      dl_lookup.cpp
+    HDRS
+      dl_lookup.h
+    DEPENDS
+      libc.hdr.stdint_proxy
+      libc.src.__support.CPP.mutex
+      libc.src.__support.elf.bind
+      libc.src.__support.elf.passive_abi
+      libc.src.__support.macros.config
+      libc.src.dlfcn.dl_internal
+  )
+
+  add_object_library(
+    lazy_bind
+    SRCS
+      lazy_bind.cpp
+    HDRS
+      lazy_bind.h
+    DEPENDS
+      libc.hdr.elf_macros
+      libc.hdr.elf_proxy
+      libc.hdr.link_macros
+      libc.hdr.stdint_proxy
+      libc.hdr.types.size_t
+      libc.src.__support.CPP.mutex
+      libc.src.__support.CPP.string_view
+      libc.src.__support.OSUtil.osutil
+      libc.src.__support.elf.bind
+      libc.src.__support.elf.dynamic_blocks
+      libc.src.__support.elf.passive_abi
+      libc.src.__support.elf.thread_pointer
+      libc.src.__support.macros.properties.architectures
+      libc.src.__support.threads.mutex
+      libc.src.dlfcn.dl_internal
+      libc.src.unistd.environ
+  )
 
   add_entrypoint_object(
     dlclose
@@ -74,41 +89,38 @@ add_object_library(
       libc.include.dlfcn
   )
 
-add_entrypoint_object(
-  dlopen
-  SRCS
-    dlopen.cpp
-  HDRS
-    dlopen.h
-  DEPENDS
-    libc.src.dlfcn.lazy_bind
-    libc.src.__support.OSUtil.linux.syscall_wrappers.newfstatat
-    libc.src.__support.elf.search
-    libc.src.unistd.environ
-    libc.src.__support.CPP.mutex
-    libc.src.__support.elf.passive_abi
-    libc.src.__support.threads.mutex
-    libc.src.dlfcn.dl_internal
-    libc.src.__support.elf.bind
-    libc.src.__support.elf.load_module
-    libc.src.link.link_maps
-    libc.include.dlfcn
-)
+  add_entrypoint_object(
+    dlopen
+    SRCS
+      dlopen.cpp
+    HDRS
+      dlopen.h
+    DEPENDS
+      libc.src.dlfcn.lazy_bind
+      libc.src.__support.OSUtil.linux.syscall_wrappers.newfstatat
+      libc.src.__support.elf.search
+      libc.src.unistd.environ
+      libc.src.__support.CPP.mutex
+      libc.src.__support.elf.passive_abi
+      libc.src.__support.threads.mutex
+      libc.src.dlfcn.dl_internal
+      libc.src.__support.elf.bind
+      libc.src.__support.elf.load_module
+      libc.src.link.link_maps
+      libc.include.dlfcn
+  )
 
-add_entrypoint_object(
-  dlsym
-  SRCS
-    dlsym.cpp
-  HDRS
-    dlsym.h
-  DEPENDS
-    libc.src.__support.CPP.mutex
-    libc.src.__support.elf.passive_abi
-    libc.src.__support.threads.mutex
-    libc.src.dlfcn.dl_internal
-    libc.src.__support.elf.bind
-    libc.include.dlfcn
-)
+  add_entrypoint_object(
+    dlsym
+    SRCS
+      dlsym.cpp
+    HDRS
+      dlsym.h
+    DEPENDS
+      libc.src.__support.elf.passive_abi
+      libc.src.dlfcn.dl_lookup
+      libc.include.dlfcn
+  )
 
 add_entrypoint_object(
   dlinfo
@@ -138,3 +150,16 @@ add_entrypoint_object(
     libc.src.__support.CPP.mutex
     libc.src.__support.elf.passive_abi
 )
+
+  add_entrypoint_object(
+    dlvsym
+    SRCS
+      dlvsym.cpp
+    HDRS
+      dlvsym.h
+    DEPENDS
+      libc.src.__support.elf.passive_abi
+      libc.src.dlfcn.dl_lookup
+      libc.include.dlfcn
+  )
+endif()
