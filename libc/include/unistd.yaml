@@ -260,6 +260,12 @@ functions:
       - type: const char *
       - type: uid_t
       - type: gid_t
+  - name: acct
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
   - name: chroot
     standards:
       - gnu
