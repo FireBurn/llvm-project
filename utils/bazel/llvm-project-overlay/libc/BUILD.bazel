@@ -30863,6 +30863,17 @@ libc_function(
 )
 
 libc_function(
+    name = "readdir_r",
+    srcs = ["src/dirent/readdir_r.cpp"],
+    hdrs = ["src/dirent/readdir_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_dir",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "rewinddir",
     srcs = ["src/dirent/rewinddir.cpp"],
     hdrs = ["src/dirent/rewinddir.h"],
