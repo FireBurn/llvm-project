@@ -91,6 +91,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  math_iszero_templates_test
+  SUITE
+    libc-include-tests
+  SRCS
+    math_iszero_templates_test.cpp
+  DEPENDS
+    libc.include.math
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
