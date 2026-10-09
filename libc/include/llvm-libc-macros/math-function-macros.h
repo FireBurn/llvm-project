@@ -52,11 +52,24 @@
 #define isinf(x) __builtin_isinf(x)
 #define isnan(x) __builtin_isnan(x)
 #define signbit(x) __builtin_signbit(x)
-#define iszero(x) (x == 0)
 #define fpclassify(x)                                                          \
   __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL, FP_SUBNORMAL, FP_ZERO, x)
 #define isnormal(x) __builtin_isnormal(x)
+
+// C++ programs declare functions of these names, as the standard library does
+// for isnan and the rest, so there they are templates rather than macros, as
+// they are in glibc.
+#ifdef __cplusplus
+extern "C++" {
+template <class _T> inline bool iszero(_T __x) { return __x == 0; }
+template <class _T> inline bool issubnormal(_T __x) {
+  return fpclassify(__x) == FP_SUBNORMAL;
+}
+}
+#else
+#define iszero(x) ((x) == 0)
 #define issubnormal(x) (fpclassify(x) == FP_SUBNORMAL)
+#endif
 
 // The relational macros. Unlike the operators they stand for, these do not
 // raise the invalid exception when an argument is a quiet NaN.
