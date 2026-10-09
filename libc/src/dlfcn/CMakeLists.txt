@@ -116,6 +116,12 @@ add_entrypoint_object(
   HDRS
     dlinfo.h
   DEPENDS
+    libc.hdr.types.lmid_t
+    libc.src.__support.CPP.mutex
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.threads.mutex
+    libc.src.dlfcn.dl_internal
+    libc.src.link._r_debug
     libc.include.dlfcn
 )
 
