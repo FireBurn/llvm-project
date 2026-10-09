@@ -11,6 +11,21 @@ add_object_library(
 )
 
 add_object_library(
+  dl_lookup
+  SRCS
+    dl_lookup.cpp
+  HDRS
+    dl_lookup.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.CPP.mutex
+    libc.src.__support.elf.bind
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+)
+
+add_object_library(
   lazy_bind
   SRCS
     lazy_bind.cpp
@@ -99,11 +114,8 @@ add_entrypoint_object(
   HDRS
     dlsym.h
   DEPENDS
-    libc.src.__support.CPP.mutex
     libc.src.__support.elf.passive_abi
-    libc.src.__support.threads.mutex
-    libc.src.dlfcn.dl_internal
-    libc.src.__support.elf.bind
+    libc.src.dlfcn.dl_lookup
     libc.include.dlfcn
 )
 
@@ -134,4 +146,16 @@ add_entrypoint_object(
     libc.hdr.types.dl_info
     libc.src.__support.CPP.mutex
     libc.src.__support.elf.passive_abi
+)
+
+add_entrypoint_object(
+  dlvsym
+  SRCS
+    dlvsym.cpp
+  HDRS
+    dlvsym.h
+  DEPENDS
+    libc.src.__support.elf.passive_abi
+    libc.src.dlfcn.dl_lookup
+    libc.include.dlfcn
 )
