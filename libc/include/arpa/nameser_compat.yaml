@@ -1,0 +1,9 @@
+header: arpa/nameser_compat.h
+header_template: nameser_compat.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
