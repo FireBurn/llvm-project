@@ -215,6 +215,7 @@ add_entrypoint_object(
     libc.include.sys_syscall
     libc.src.__support.threads.fork_callbacks
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.threads.robust_list
     libc.src.__support.threads.thread
     libc.src.errno.errno
     libc.src.__support.threads.identifier
