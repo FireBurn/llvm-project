@@ -232,6 +232,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  time_linux_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    time_linux_macros_test.cpp
+  DEPENDS
+    libc.include.time
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
