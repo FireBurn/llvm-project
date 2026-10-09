@@ -53,13 +53,17 @@ LLVM_LIBC_FUNCTION(int, dlclose, (void *handle)) {
     elf::run_fini_array(set.modules[index]);
     call_exit_callbacks_in(set.mappings[index].reservation,
                            set.mappings[index].reservation_size);
-    link::announce_link_maps(RT_DELETE);
+    link::announce_link_maps(r_debug::RT_DELETE);
+    // Whatever walks the modules without the load lock has to be out of this
+    // one before it is unmapped, and cannot get in again once it is gone.
+    cpp::lock_guard write(dl::dl_write_lock);
+    elf::set_module_count(set, index);
     elf::unmap_module(set.mappings[index]);
     // The index goes back to the next dlopen, which stamps what it puts there
     // with a later generation than any block a thread made for this one.
     ++set.generation;
     link::publish_link_maps();
-    link::announce_link_maps(RT_CONSISTENT);
+    link::announce_link_maps(r_debug::RT_CONSISTENT);
   }
   return 0;
 }
