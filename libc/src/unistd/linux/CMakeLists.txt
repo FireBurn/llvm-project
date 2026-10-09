@@ -48,6 +48,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  acct
+  SRCS
+    acct.cpp
+  HDRS
+    ../acct.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.acct
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   chroot
   SRCS
     chroot.cpp
