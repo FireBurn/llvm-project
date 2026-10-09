@@ -28,6 +28,14 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("ar"),
     libc_header_info(
+        "arpa/nameser",
+        has_def_template = True,
+    ),
+    libc_header_info(
+        "arpa/nameser_compat",
+        has_def_template = True,
+    ),
+    libc_header_info(
         "assert",
         has_def_template = True,
     ),
