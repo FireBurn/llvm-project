@@ -742,6 +742,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.chdir
     libc.src.unistd.chown
     libc.src.unistd.copy_file_range
+    libc.src.unistd.acct
     libc.src.unistd.chroot
     libc.src.unistd.close
     libc.src.unistd.close_range
