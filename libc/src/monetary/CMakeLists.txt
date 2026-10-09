@@ -1,0 +1,43 @@
+add_header_library(
+  strfmon_impl
+  HDRS
+    strfmon_impl.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.CPP.limits
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.locale.localeconv
+    libc.src.stdio.snprintf
+)
+
+add_entrypoint_object(
+  strfmon
+  SRCS
+    strfmon.cpp
+  HDRS
+    strfmon.h
+  DEPENDS
+    .strfmon_impl
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  strfmon_l
+  SRCS
+    strfmon_l.cpp
+  HDRS
+    strfmon_l.h
+  DEPENDS
+    .strfmon_impl
+    libc.hdr.types.locale_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
