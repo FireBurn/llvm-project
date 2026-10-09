@@ -29,6 +29,48 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "pthread_default_attr",
+    srcs = ["pthread_default_attr.cpp"],
+    hdrs = ["pthread_default_attr.h"],
+    deps = [
+        ":pthread_attr",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "setattr_default_np",
+    srcs = ["pthread_setattr_default_np.cpp"],
+    hdrs = ["pthread_setattr_default_np.h"],
+    deps = [
+        ":pthread_attr",
+        ":pthread_default_attr",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getattr_default_np",
+    srcs = ["pthread_getattr_default_np.cpp"],
+    hdrs = ["pthread_getattr_default_np.h"],
+    deps = [
+        ":pthread_default_attr",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_function(
     name = "attr_init",
     srcs = ["pthread_attr_init.cpp"],
@@ -357,6 +399,7 @@ libc_function(
     hdrs = ["pthread_create.h"],
     deps = [
         ":pthread_attr",
+        ":pthread_default_attr",
         "//libc/hdr/types:pthread_attr_t",
         "//libc/hdr/types:pthread_t",
         "//libc/hdr:errno_macros",
