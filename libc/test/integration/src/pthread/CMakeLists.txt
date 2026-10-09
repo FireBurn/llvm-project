@@ -72,6 +72,27 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_attr_default_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_attr_default_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.pthread.pthread_attr_destroy
+    libc.src.pthread.pthread_attr_getstacksize
+    libc.src.pthread.pthread_attr_init
+    libc.src.pthread.pthread_attr_setstacksize
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_getattr_default_np
+    libc.src.pthread.pthread_getattr_np
+    libc.src.pthread.pthread_join
+    libc.src.pthread.pthread_self
+    libc.src.pthread.pthread_setattr_default_np
+)
+
+add_integration_test(
   pthread_mutex_test
   SUITE
     libc-pthread-integration-tests
