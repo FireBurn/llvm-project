@@ -374,7 +374,7 @@ private:
                        static_cast<LinkMapBlock *>(storage.value()), 0);
     debug->r_brk = reinterpret_cast<ElfW(Addr)>(debug_state_);
     debug->r_ldbase = loader_base;
-    debug->r_state = RT_CONSISTENT;
+    debug->r_state = r_debug::RT_CONSISTENT;
     point_dt_debug_at(modules_[0], debug);
     debug_state_();
   }
