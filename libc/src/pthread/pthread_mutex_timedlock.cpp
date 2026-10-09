@@ -57,6 +57,10 @@ LLVM_LIBC_FUNCTION(int, pthread_mutex_timedlock,
     return EDEADLK;
   case MutexError::OVERFLOW:
     return EAGAIN;
+  case MutexError::OWNER_DEAD:
+    return EOWNERDEAD;
+  case MutexError::NOT_RECOVERABLE:
+    return ENOTRECOVERABLE;
   default:
     return EINVAL;
   }
