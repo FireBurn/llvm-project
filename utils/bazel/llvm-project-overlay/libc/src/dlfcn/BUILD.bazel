@@ -110,16 +110,29 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dl_lookup",
+    srcs = ["dl_lookup.cpp"],
+    hdrs = ["dl_lookup.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:elf_bind",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)
+
+libc_support_library(
     name = "dlsym",
     srcs = ["dlsym.cpp"],
     hdrs = ["dlsym.h"],
     deps = [
-        ":dl_internal",
-        "//libc/hdr:stdint_proxy",
+        ":dl_lookup",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
-        "//libc/src/__support:elf_bind",
         "//libc/src/__support:elf_passive_abi",
     ],
 )
@@ -138,6 +151,18 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:elf_passive_abi",
         "//libc/src/link:_r_debug",
+    ],
+)
+
+libc_function(
+    name = "dlvsym",
+    srcs = ["dlvsym.cpp"],
+    hdrs = ["dlvsym.h"],
+    deps = [
+        ":dl_lookup",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:elf_passive_abi",
     ],
 )
 
