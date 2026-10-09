@@ -82,3 +82,15 @@ libc_test(
         "//libc/src/unistd:close",
     ],
 )
+
+libc_test(
+    name = "readdir_r_test",
+    srcs = ["readdir_r_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/src/dirent:closedir",
+        "//libc/src/dirent:opendir",
+        "//libc/src/dirent:readdir_r",
+        "//libc/src/string:strcmp",
+    ],
+)
