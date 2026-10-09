@@ -521,6 +521,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.termios.tcsetwinsize
 
     # unistd.h entrypoints
+    libc.src.unistd.acct
     libc.src.unistd.alarm
     libc.src.unistd.access
     libc.src.unistd.brk
