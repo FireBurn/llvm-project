@@ -97,6 +97,14 @@ functions:
       - type: struct dirent ***
       - type: int (*)(const struct dirent *)
       - type: int (*)(const struct dirent **, const struct dirent **)
+  - name: readdir_r
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: DIR *
+      - type: struct dirent *
+      - type: struct dirent **
   - name: rewinddir
     standards:
       - posix
