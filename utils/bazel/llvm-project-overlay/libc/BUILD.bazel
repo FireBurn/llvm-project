@@ -20595,6 +20595,23 @@ libc_function(
 )
 
 libc_function(
+    name = "semtimedop",
+    srcs = ["src/sys/sem/linux/semtimedop.cpp"],
+    hdrs = ["src/sys/sem/semtimedop.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_semtimedop",
+        ":errno",
+        ":sys_sem_semtimedop",
+        ":types_size_t",
+        ":types_struct_sembuf",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
     name = "shmat",
     srcs = ["src/sys/shm/linux/shmat.cpp"],
     hdrs = ["src/sys/shm/shmat.h"],
@@ -26384,6 +26401,28 @@ libc_support_library(
         ":__support_macros_config",
         ":types_pid_t",
         ":types_struct_rlimit",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_semtimedop",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/semtimedop.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "sys_sem_semtimedop",
+    hdrs = ["src/sys/sem/semtimedop.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_struct_sembuf",
+        ":types_struct_timespec",
     ],
 )
 
