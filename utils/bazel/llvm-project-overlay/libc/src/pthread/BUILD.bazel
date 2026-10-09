@@ -285,6 +285,18 @@ libc_function(
 )
 
 libc_function(
+    name = "mutex_consistent",
+    srcs = ["pthread_mutex_consistent.cpp"],
+    hdrs = ["pthread_mutex_consistent.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "mutex_timedlock",
     srcs = ["pthread_mutex_timedlock.cpp"],
     hdrs = ["pthread_mutex_timedlock.h"],
@@ -310,6 +322,31 @@ libc_function(
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/threads:thread",
         "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "mutex_lock",
+    srcs = ["pthread_mutex_lock.cpp"],
+    hdrs = ["pthread_mutex_lock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "mutex_trylock",
+    srcs = ["pthread_mutex_trylock.cpp"],
+    hdrs = ["pthread_mutex_trylock.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/threads:mutex_common",
         "//libc/src/__support:common",
     ],
 )

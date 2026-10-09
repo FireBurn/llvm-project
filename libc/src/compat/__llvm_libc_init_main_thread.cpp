@@ -19,6 +19,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/gettid.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
 
@@ -67,6 +68,7 @@ LLVM_LIBC_FUNCTION(int, __llvm_libc_init_main_thread, (void)) {
   // library placed, so there is no fixed size to report.
   main_thread_attrib.stacksize = PTHREAD_STACK_DYNAMIC_NP;
   get_tcb()->attrib = &main_thread_attrib;
+  robust::register_list(&main_thread_attrib);
   return 0;
 }
 
