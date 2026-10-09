@@ -14,6 +14,8 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/fork_callbacks.h"
 #include "src/__support/threads/identifier.h"
+#include "src/__support/threads/robust_list.h"
+#include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h" // For thread self object
 
 #include "src/__support/libc_errno.h"
@@ -46,7 +48,11 @@ ErrorOr<pid_t> fork_impl() {
     // The child is created with a single thread whose self object will be a
     // copy of parent process' thread which called fork. So, we have to fix up
     // the child process' self object with the new process' tid.
-    internal::force_set_tid(syscall_impl<pid_t>(SYS_gettid));
+    pid_t child_tid = syscall_impl<pid_t>(SYS_gettid);
+    internal::force_set_tid(child_tid);
+    if (ThreadAttributes *attrib = get_current_thread_attrib())
+      robust::reset_after_fork(attrib, static_cast<uint32_t>(parent_tid),
+                               static_cast<uint32_t>(child_tid));
     invoke_child_callbacks();
     return 0;
   }
