@@ -157,6 +157,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     # libgen.h entrypoints
     libc.src.libgen.basename
     libc.src.libgen.dirname
+    libc.src.locale.localeconv
+    libc.src.monetary.strfmon
+    libc.src.monetary.strfmon_l
 
     # stdbit.h entrypoints
     libc.src.stdbit.stdc_bit_ceil_uc
