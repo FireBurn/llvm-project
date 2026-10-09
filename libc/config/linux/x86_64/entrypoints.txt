@@ -1738,6 +1738,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.dirent.getdents64
     libc.src.dirent.opendir
     libc.src.dirent.readdir
+    libc.src.dirent.readdir_r
     libc.src.dirent.rewinddir
     libc.src.dirent.scandir
     libc.src.dirent.fdopendir
