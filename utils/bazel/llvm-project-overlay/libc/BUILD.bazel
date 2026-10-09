@@ -29941,6 +29941,19 @@ libc_support_library(
 )
 
 libc_function(
+    name = "dladdr1",
+    srcs = ["src/dlfcn/dladdr1.cpp"],
+    hdrs = ["src/dlfcn/dladdr1.h"],
+    deps = [
+        ":__support_common",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":dlfcn_dl_address",
+        ":hdr_types_dl_info",
+    ],
+)
+
+libc_function(
     name = "dlinfo",
     srcs = ["src/dlfcn/dlinfo.cpp"],
     hdrs = ["src/dlfcn/dlinfo.h"],
@@ -29950,7 +29963,7 @@ libc_function(
         ":__support_elf_passive_abi",
         ":__support_macros_config",
         ":__support_threads_mutex",
-        ":_r_debug",
+        ":dlfcn_dl_address",
         ":dlfcn_dl_internal",
         ":hdr_stdint_proxy",
         ":hdr_types_lmid_t",
@@ -30009,6 +30022,21 @@ libc_function(
         ":__support_macros_config",
         ":strverscmp",
         ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
+    name = "dlfcn_dl_address",
+    srcs = ["src/dlfcn/dl_address.cpp"],
+    hdrs = ["src/dlfcn/dl_address.h"],
+    deps = [
+        ":__support_cpp_mutex",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":_r_debug",
+        ":dlfcn_dl_internal",
+        ":hdr_types_dl_info",
+        ":types_struct_link_map",
     ],
 )
 
@@ -30506,10 +30534,9 @@ libc_function(
     hdrs = ["src/dlfcn/dladdr.h"],
     deps = [
         ":__support_common",
-        ":__support_cpp_mutex",
         ":__support_elf_passive_abi",
         ":__support_macros_config",
-        ":dlfcn_dl_internal",
+        ":dlfcn_dl_address",
         ":hdr_types_dl_info",
     ],
 )
