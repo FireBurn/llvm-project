@@ -12,6 +12,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  futimesat
+  SRCS
+    futimesat.cpp
+  HDRS
+    ../futimesat.h
+  DEPENDS
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.struct_timeval
+    libc.src.__support.OSUtil.linux.syscall_wrappers.utimensat
+    libc.src.__support.libc_errno
+)
+
+add_entrypoint_object(
   lutimes
   SRCS
     lutimes.cpp
