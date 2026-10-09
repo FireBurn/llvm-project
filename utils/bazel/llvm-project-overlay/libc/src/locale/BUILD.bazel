@@ -34,6 +34,17 @@ libc_support_library(
 )
 
 libc_function(
+    name = "localeconv",
+    srcs = ["localeconv.cpp"],
+    hdrs = ["localeconv.h"],
+    deps = [
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "newlocale",
     srcs = ["newlocale.cpp"],
     hdrs = ["newlocale.h"],
