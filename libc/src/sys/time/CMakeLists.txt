@@ -10,6 +10,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  futimesat
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.futimesat
+)
+
+add_entrypoint_object(
   lutimes
   ALIAS
   DEPENDS
