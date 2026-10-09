@@ -9,3 +9,20 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "semtimedop_test",
+    srcs = ["semtimedop_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_sembuf",
+        "//libc/hdr/types:struct_semid_ds",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_sem_macros",
+        "//libc/src/sys/sem:semctl",
+        "//libc/src/sys/sem:semget",
+        "//libc/src/sys/sem:semtimedop",
+        "//libc/src/sys/sem:sys_sem_semtimedop",
+    ],
+)
