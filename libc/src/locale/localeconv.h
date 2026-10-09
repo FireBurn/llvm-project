@@ -17,6 +17,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 struct lconv *localeconv();
 
+namespace internal {
+struct lconv *localeconv_impl();
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_LOCALE_LOCALECONV_H
