@@ -14,3 +14,20 @@ add_libc_test(
     libc.src.stdlib._Exit
     libc.src.stdlib.abort
 )
+
+add_libc_test(
+  assert_perror_test
+  SUITE
+    libc-assert-tests
+  SRCS
+    assert_perror_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.src.assert.__assert_perror_fail
+    libc.src.unistd.close
+    libc.src.signal.raise
+    libc.src.stdlib._Exit
+    libc.src.stdlib.abort
+)
+
