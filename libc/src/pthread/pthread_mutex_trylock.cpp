@@ -22,6 +22,10 @@ LLVM_LIBC_FUNCTION(int, pthread_mutex_trylock, (pthread_mutex_t * mutex)) {
     return EDEADLK;
   if (err == MutexError::BUSY)
     return EBUSY;
+  if (err == MutexError::OWNER_DEAD)
+    return EOWNERDEAD;
+  if (err == MutexError::NOT_RECOVERABLE)
+    return ENOTRECOVERABLE;
   return 0;
 }
 
