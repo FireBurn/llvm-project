@@ -8,7 +8,10 @@ endif()
 add_library(libc-test-dl-object SHARED dl_object.cpp)
 target_compile_options(libc-test-dl-object PRIVATE
   -fPIC -fno-exceptions -fno-rtti)
-target_link_options(libc-test-dl-object PRIVATE -nostdlib)
+target_link_options(libc-test-dl-object PRIVATE -nostdlib
+  -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/dl_object.map)
+set_target_properties(libc-test-dl-object PROPERTIES
+  LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dl_object.map)
 
 # Takes a mutex from a constructor, so it needs the library.
 add_library(libc-test-dl-lock-object SHARED dl_lock_object.cpp)
@@ -269,6 +272,16 @@ add_libc_dynamic_test(
   dlinfo_test
   SRCS
     dlinfo_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
+  DEPENDS
+    libc-test-dl-object
+)
+
+add_libc_dynamic_test(
+  dlvsym_test
+  SRCS
+    dlvsym_test.cpp
   COMPILE_OPTIONS
     -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
   DEPENDS
