@@ -744,6 +744,8 @@ add_header_macro(
     .llvm-libc-types.elf_gregset_t
     .llvm-libc-types.lwpid_t
     .llvm-libc-types.pid_t
+    .llvm-libc-types.prfpregset_t
+    .llvm-libc-types.prgregset_t
     .llvm-libc-types.prpsinfo_t
     .llvm-libc-types.prstatus_t
     .llvm-libc-types.psaddr_t

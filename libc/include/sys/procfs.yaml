@@ -10,6 +10,8 @@ types:
   - type_name: elf_gregset_t
   - type_name: lwpid_t
   - type_name: pid_t
+  - type_name: prfpregset_t
+  - type_name: prgregset_t
   - type_name: prpsinfo_t
   - type_name: prstatus_t
   - type_name: psaddr_t

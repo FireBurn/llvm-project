@@ -740,6 +740,8 @@ add_header(struct_elf_prstatus HDR struct_elf_prstatus.h DEPENDS .elf_gregset_t 
 add_header(struct_elf_prpsinfo HDR struct_elf_prpsinfo.h DEPENDS .gid_t .pid_t .uid_t)
 add_header(prstatus_t HDR prstatus_t.h DEPENDS .struct_elf_prstatus)
 add_header(prpsinfo_t HDR prpsinfo_t.h DEPENDS .struct_elf_prpsinfo)
+add_header(prgregset_t HDR prgregset_t.h DEPENDS .elf_gregset_t)
+add_header(prfpregset_t HDR prfpregset_t.h DEPENDS .elf_fpregset_t)
 add_header(psaddr_t HDR psaddr_t.h)
 add_header(lwpid_t HDR lwpid_t.h DEPENDS .pid_t)
 add_type_header(struct_user HDR struct_user.h)
