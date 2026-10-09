@@ -3782,6 +3782,16 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "tgamma",
+    additional_deps = ["//libc/src/__support/math:tgamma"],
+)
+
+libc_math_function(
+    name = "tgammaf",
+    additional_deps = ["//libc/src/__support/math:tgammaf"],
+)
+
+libc_math_function(
     name = "y0",
     additional_deps = ["//libc/src/__support/math:bessel"],
 )
