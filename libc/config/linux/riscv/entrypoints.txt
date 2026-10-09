@@ -472,6 +472,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.resource.prlimit
     libc.src.sys.resource.setpriority
     libc.src.sys.resource.setrlimit
+    libc.src.sys.sem.semtimedop
 
     # sys/sem.h entrypoints
     libc.src.sys.sem.semget
