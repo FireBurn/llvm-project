@@ -19015,6 +19015,20 @@ libc_function(
 )
 
 libc_function(
+    name = "acct",
+    srcs = ["src/unistd/linux/acct.cpp"],
+    hdrs = ["src/unistd/acct.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_acct",
+        ":errno",
+        ":unistd_acct",
+    ],
+)
+
+libc_function(
     name = "brk",
     srcs = ["src/unistd/linux/brk.cpp"],
     hdrs = ["src/unistd/brk.h"],
@@ -24144,6 +24158,25 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_acct",
+    hdrs = ["src/unistd/acct.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_acct",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/acct.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
