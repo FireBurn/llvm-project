@@ -38,6 +38,14 @@ macros:
       - gnu
     macro_value: "((void *) 0)"
 enums:
+  - name: RTLD_DL_SYMENT
+    standards:
+      - gnu
+    value: 1
+  - name: RTLD_DL_LINKMAP
+    standards:
+      - gnu
+    value: 2
   - name: RTLD_DI_LMID
     standards:
       - gnu
@@ -114,6 +122,15 @@ functions:
     arguments:
       - type: void *__restrict
       - type: const char *__restrict
+  - name: dladdr1
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const void *__restrict
+      - type: Dl_info *__restrict
+      - type: void **__restrict
+      - type: int
   - name: dlvsym
     standards:
       - gnu
