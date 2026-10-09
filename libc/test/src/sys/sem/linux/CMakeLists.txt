@@ -17,3 +17,23 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  semtimedop_test
+  SUITE
+    libc-sys-sem-tests
+  SRCS
+    semtimedop_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_ipc_macros
+    libc.hdr.sys_sem_macros
+    libc.hdr.types.struct_sembuf
+    libc.hdr.types.struct_semid_ds
+    libc.hdr.types.struct_timespec
+    libc.src.sys.sem.semctl
+    libc.src.sys.sem.semget
+    libc.src.sys.sem.semtimedop
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
