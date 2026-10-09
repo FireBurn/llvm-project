@@ -930,6 +930,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  lmid_t
+  HDRS
+    lmid_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.lmid_t
+)
+
+add_proxy_header_library(
   struct_rlimit
   HDRS
     struct_rlimit.h

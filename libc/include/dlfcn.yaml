@@ -33,6 +33,14 @@ macros:
     standards:
       - gnu
     macro_value: "((void *) -1l)"
+  - macro_name: LM_ID_BASE
+    standards:
+      - gnu
+    macro_value: "0"
+  - macro_name: LM_ID_NEWLM
+    standards:
+      - gnu
+    macro_value: "-1"
   - macro_name: RTLD_DEFAULT
     standards:
       - gnu
@@ -88,6 +96,7 @@ enums:
     value: 11
 types:
   - type_name: Dl_info
+  - type_name: Lmid_t
 functions:
   - name: dlclose
     standards:
