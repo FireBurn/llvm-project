@@ -3414,6 +3414,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_set_robust_list",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/set_robust_list.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_sendmsg",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/sendmsg.h"],
     target_compatible_with = select({
@@ -5473,6 +5489,31 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_threads_robust_list_types",
+    hdrs = ["src/__support/threads/robust_list_types.h"],
+    deps = [":__support_macros_config"],
+)
+
+libc_support_library(
+    name = "__support_threads_robust_list",
+    hdrs = ["src/__support/threads/robust_list.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_cpp_atomic",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_set_robust_list",
+        ":__support_threads_robust_list_types",
+        ":__support_threads_thread_attributes",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_threads_thread_attributes",
     hdrs = ["src/__support/threads/thread_attributes.h"],
     full_build_only = True,
@@ -5487,6 +5528,7 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_macros_properties_architectures",
         ":__support_threads_cleanup_stack",
+        ":__support_threads_robust_list_types",
         ":hdr_stdint_proxy",
         ":types_size_t",
         ":types_struct___pthread_cleanup_frame",
@@ -5580,6 +5622,7 @@ libc_support_library(
         ":__support_threads_identifier",
         ":__support_threads_mutex_common",
         ":__support_threads_raw_mutex",
+        ":__support_threads_robust_list",
         ":__support_threads_tcb",
         ":types_pid_t",
         ":types_size_t",
@@ -5737,6 +5780,7 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_threads_cleanup_stack",
         ":__support_threads_mutex",
+        ":__support_threads_robust_list",
         ":__support_threads_thread_headers",
         ":hdr_limits_macros",
         ":types_struct___pthread_cleanup_frame",
@@ -5791,6 +5835,7 @@ libc_support_library(
         ":__support_threads_linux_tls",
         ":__support_threads_mutex",
         ":__support_threads_raw_mutex",
+        ":__support_threads_robust_list",
         ":__support_threads_thread_attributes",
         ":__support_threads_thread_headers",
         ":config_app_h",
@@ -20404,6 +20449,7 @@ libc_function(
         ":__support_osutil_syscall",
         ":__support_threads_fork_callbacks",
         ":__support_threads_identifier",
+        ":__support_threads_robust_list",
         ":__support_threads_tcb",
         ":__support_threads_thread",
         ":__support_threads_thread_headers",
@@ -28665,6 +28711,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_auxv",
         ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_threads_robust_list",
         ":__support_threads_tcb",
         ":__support_threads_thread",
         ":__support_threads_thread_headers",
@@ -32844,6 +32891,18 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_mutex_consistent",
+    srcs = ["src/pthread/pthread_mutex_consistent.cpp"],
+    hdrs = ["src/pthread/pthread_mutex_consistent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
     name = "pthread_mutex_timedlock",
     srcs = ["src/pthread/pthread_mutex_timedlock.cpp"],
     hdrs = ["src/pthread/pthread_mutex_timedlock.h"],
@@ -32868,6 +32927,31 @@ libc_function(
         ":__support_threads_thread_headers",
         ":hdr_errno_macros",
         ":types_clockid_t",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_lock",
+    srcs = ["src/pthread/pthread_mutex_lock.cpp"],
+    hdrs = ["src/pthread/pthread_mutex_lock.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_trylock",
+    srcs = ["src/pthread/pthread_mutex_trylock.cpp"],
+    hdrs = ["src/pthread/pthread_mutex_trylock.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":__support_threads_mutex_common",
+        ":hdr_errno_macros",
     ],
 )
 

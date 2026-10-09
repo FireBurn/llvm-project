@@ -41,6 +41,7 @@
 #include "src/__support/threads/cancel.h"
 #include "src/__support/threads/linux/futex_utils.h" // For FutexWordType
 #include "src/__support/threads/linux/futex_word.h"
+#include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/thread_attributes.h"
 
 #include "hdr/errno_macros.h"
@@ -200,6 +201,7 @@ static int start_thread(void *arg) {
   auto *start_args = reinterpret_cast<StartArgs *>(arg);
   auto *attrib = start_args->thread_attrib;
   auto *clear_tid = static_cast<Futex *>(attrib->platform_data);
+  robust::register_list(attrib);
 
   // If explicit scheduling parameters were requested, wait for the parent to
   // apply them via setschedparam. If setschedparam fails, the parent signals
