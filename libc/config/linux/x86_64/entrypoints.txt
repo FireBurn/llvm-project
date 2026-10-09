@@ -42,6 +42,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # dlfcn.h entrypoints
     libc.src.dlfcn.dladdr
+    libc.src.dlfcn.dladdr1
     libc.src.dlfcn.dlclose
     libc.src.dlfcn.dlerror
     libc.src.dlfcn.dlinfo
