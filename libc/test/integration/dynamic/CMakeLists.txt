@@ -264,3 +264,13 @@ add_libc_dynamic_test(
   DEPENDS
     libc-test-dl-lock-object
 )
+
+add_libc_dynamic_test(
+  dlinfo_test
+  SRCS
+    dlinfo_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
+  DEPENDS
+    libc-test-dl-object
+)

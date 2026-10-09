@@ -30160,6 +30160,23 @@ libc_support_library(
 )
 
 libc_function(
+    name = "dlinfo",
+    srcs = ["src/dlfcn/dlinfo.cpp"],
+    hdrs = ["src/dlfcn/dlinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_elf_passive_abi",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":_r_debug",
+        ":dlfcn_dl_internal",
+        ":hdr_stdint_proxy",
+        ":hdr_types_lmid_t",
+    ],
+)
+
+libc_function(
     name = "getdents",
     srcs = ["src/dirent/getdents.cpp"],
     hdrs = ["src/dirent/getdents.h"],
@@ -30229,6 +30246,11 @@ libc_support_library(
 libc_support_library(
     name = "hdr_types_dl_info",
     hdrs = ["hdr/types/dl_info.h"],
+)
+
+libc_support_library(
+    name = "hdr_types_lmid_t",
+    hdrs = ["hdr/types/lmid_t.h"],
 )
 
 libc_support_library(
