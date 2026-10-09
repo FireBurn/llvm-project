@@ -43,6 +43,32 @@ TEST_F(LlvmLibcConfStrTest, PathIsReported) {
   EXPECT_STREQ(buf, "/bin:/usr/bin");
 }
 
+TEST_F(LlvmLibcConfStrTest, GlibcVersionNamesAreReported) {
+  char buf[64] = "initial";
+  constexpr size_t EXPECTED = sizeof("llvm-libc");
+  EXPECT_EQ(LIBC_NAMESPACE::confstr(_CS_GNU_LIBC_VERSION, buf, sizeof(buf)),
+            EXPECTED);
+  ASSERT_ERRNO_SUCCESS();
+  EXPECT_STREQ(buf, "llvm-libc");
+  EXPECT_EQ(LIBC_NAMESPACE::confstr(_CS_GNU_LIBPTHREAD_VERSION, buf, 0),
+            EXPECTED);
+  EXPECT_EQ(LIBC_NAMESPACE::confstr(_CS_GNU_LIBPTHREAD_VERSION, buf,
+                                    sizeof(buf)),
+            EXPECTED);
+  EXPECT_STREQ(buf, "llvm-libc");
+}
+
+TEST_F(LlvmLibcConfStrTest, ConformingEnvironmentIsReported) {
+  char buf[64] = "initial";
+  constexpr size_t EXPECTED = sizeof("POSIXLY_CORRECT=1");
+  const int names[] = {_CS_V6_ENV, _CS_V7_ENV};
+  for (int name : names) {
+    EXPECT_EQ(LIBC_NAMESPACE::confstr(name, buf, sizeof(buf)), EXPECTED);
+    ASSERT_ERRNO_SUCCESS();
+    EXPECT_STREQ(buf, "POSIXLY_CORRECT=1");
+  }
+}
+
 TEST_F(LlvmLibcConfStrTest, SizeQueryLeavesTheBufferAlone) {
   char buf[64] = "initial";
   // A length of zero asks how much room is needed and must not write.
