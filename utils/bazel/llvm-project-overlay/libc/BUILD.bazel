@@ -1191,6 +1191,8 @@ alias(
         "lgamma_r",
         "log2l",
         "powl",
+        "tgamma",
+        "tgammaf",
         "y0",
         "y0f",
         "y1",
