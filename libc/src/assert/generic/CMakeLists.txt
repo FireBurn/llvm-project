@@ -10,3 +10,17 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.stdlib.abort_utils
 )
+
+add_entrypoint_object(
+  __assert_perror_fail
+  SRCS
+    __assert_perror_fail.cpp
+  HDRS
+    ../__assert_perror_fail.h
+  DEPENDS
+    libc.include.assert
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.StringUtil.error_to_string
+    libc.src.__support.integer_to_string
+    libc.src.stdlib.abort_utils
+)
