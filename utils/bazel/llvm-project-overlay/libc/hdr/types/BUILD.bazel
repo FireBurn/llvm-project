@@ -1224,6 +1224,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "hdr_types_lmid_t",
+    hdrs = ["lmid_t.h"],
+)
+
+libc_support_library(
     name = "cap_user_data_t",
     hdrs = ["cap_user_data_t.h"],
 )
