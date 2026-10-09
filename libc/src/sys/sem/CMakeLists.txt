@@ -22,3 +22,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.semop
 )
+
+add_entrypoint_object(
+  semtimedop
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.semtimedop
+)
