@@ -185,6 +185,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.libgen.basename
     libc.src.libgen.dirname
 
+    # monetary.h entrypoints
+    libc.src.monetary.strfmon
+    libc.src.monetary.strfmon_l
+
     # stdbit.h entrypoints
     libc.src.stdbit.stdc_bit_ceil_uc
     libc.src.stdbit.stdc_bit_ceil_ui
