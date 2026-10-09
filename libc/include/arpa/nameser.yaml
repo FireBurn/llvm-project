@@ -1,4 +1,5 @@
 header: arpa/nameser.h
+header_template: nameser.h.def
 standards:
   - bsd
 macros:
@@ -67,6 +68,8 @@ enums:
     value: 4
   - name: ns_o_update
     value: 5
+  - name: ns_o_max
+    value: 6
   - name: ns_r_noerror
     value: 0
   - name: ns_r_formerr
@@ -79,8 +82,32 @@ enums:
     value: 4
   - name: ns_r_refused
     value: 5
+  - name: ns_r_yxdomain
+    value: 6
+  - name: ns_r_yxrrset
+    value: 7
+  - name: ns_r_nxrrset
+    value: 8
+  - name: ns_r_notauth
+    value: 9
+  - name: ns_r_notzone
+    value: 10
+  - name: ns_r_max
+    value: 11
+  - name: ns_r_badvers
+    value: 16
+  - name: ns_r_badsig
+    value: 16
+  - name: ns_r_badkey
+    value: 17
+  - name: ns_r_badtime
+    value: 18
   - name: ns_c_in
     value: 1
+  - name: ns_c_invalid
+    value: 0
+  - name: ns_c_2
+    value: 2
   - name: ns_c_chaos
     value: 3
   - name: ns_c_hs
@@ -89,8 +116,12 @@ enums:
     value: 254
   - name: ns_c_any
     value: 255
+  - name: ns_c_max
+    value: 65536
   - name: ns_t_a
     value: 1
+  - name: ns_t_invalid
+    value: 0
   - name: ns_t_ns
     value: 2
   - name: ns_t_cname
@@ -255,6 +286,8 @@ enums:
     value: 32768
   - name: ns_t_dlv
     value: 32769
+  - name: ns_t_max
+    value: 65536
   - name: ns_t_any
     value: 255
 objects: []
