@@ -18,7 +18,7 @@ extern "C" [[gnu::weak]] ElfW(Dyn) _DYNAMIC[];
 
 TEST_MAIN() {
   ASSERT_EQ(LIBC_NAMESPACE::_r_debug.r_version, 1);
-  ASSERT_EQ(LIBC_NAMESPACE::_r_debug.r_state, static_cast<int>(RT_CONSISTENT));
+  ASSERT_EQ(LIBC_NAMESPACE::_r_debug.r_state, static_cast<int>(r_debug::RT_CONSISTENT));
   ASSERT_NE(LIBC_NAMESPACE::_r_debug.r_map,
             static_cast<struct link_map *>(nullptr));
   ASSERT_NE(LIBC_NAMESPACE::_r_debug.r_brk, static_cast<ElfW(Addr)>(0));
