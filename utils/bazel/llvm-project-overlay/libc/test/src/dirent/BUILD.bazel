@@ -82,3 +82,15 @@ libc_test(
         "//libc:types_struct_dirent",
     ],
 )
+
+libc_test(
+    name = "readdir_r_test",
+    srcs = ["readdir_r_test.cpp"],
+    deps = [
+        "//libc:closedir",
+        "//libc:opendir",
+        "//libc:readdir_r",
+        "//libc:strcmp",
+        "//libc:types_struct_dirent",
+    ],
+)

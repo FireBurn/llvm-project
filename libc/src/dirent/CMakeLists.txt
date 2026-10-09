@@ -50,6 +50,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  readdir_r
+  SRCS
+    readdir_r.cpp
+  HDRS
+    readdir_r.h
+  DEPENDS
+    libc.include.dirent
+    libc.src.__support.File.dir
+    libc.src.__support.File.platform_dir
+)
+
+add_entrypoint_object(
   fdopendir
   SRCS
     fdopendir.cpp
