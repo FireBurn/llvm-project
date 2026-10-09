@@ -178,6 +178,18 @@ functions:
     return_type: int
     arguments:
       - type: pthread_attr_t *
+  - name: pthread_getattr_default_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_attr_t *
+  - name: pthread_setattr_default_np
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const pthread_attr_t *
   - name: pthread_attr_setdetachstate
     return_type: int
     arguments:
