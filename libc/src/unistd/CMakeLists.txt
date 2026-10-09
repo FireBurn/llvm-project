@@ -48,6 +48,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  acct
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.acct
+)
+
+add_entrypoint_object(
   chroot
   ALIAS
   DEPENDS
