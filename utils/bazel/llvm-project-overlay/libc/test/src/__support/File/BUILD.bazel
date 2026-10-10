@@ -11,6 +11,14 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "file_mode_test",
+    srcs = ["file_mode_test.cpp"],
+    deps = [
+        "//libc:__support_file_file",
+    ],
+)
+
+libc_test(
     name = "file_test",
     srcs = ["file_test.cpp"],
     deps = [
