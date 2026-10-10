@@ -66,7 +66,10 @@ public:
         file_mode_ |= static_cast<Mode>(Extension::CLOSE_ON_EXEC);
         break;
       default:
-        file_mode_ = 0;
+        // C leaves anything past the mode characters it defines to the
+        // implementation, and every implementation ignores what it does not
+        // know rather than failing the open. sed asks for "rt".
+        break;
       }
     }
 
