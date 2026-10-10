@@ -91,6 +91,15 @@ add_libc_test(
 )
 
 add_libc_test(
+  stdlib_no_float_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    stdlib_no_float_macros_test.cpp
+  DEPENDS
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
