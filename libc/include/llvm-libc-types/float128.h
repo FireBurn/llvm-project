@@ -9,8 +9,6 @@
 #ifndef LLVM_LIBC_TYPES_FLOAT128_H
 #define LLVM_LIBC_TYPES_FLOAT128_H
 
-#include "../llvm-libc-macros/float-macros.h" // LDBL_MANT_DIG
-
 // Currently, C23 `_Float128` type is only defined as a built-in type in GCC 7
 // or later, and only for C.  For C++, or for clang, `__float128` is defined
 // instead, and only on x86-64 targets.
@@ -34,7 +32,7 @@ typedef _Float128 float128;
 #define LIBC_TYPES_HAS_NATIVE_FLOAT128
 typedef __float128 float128;
 #endif // !(Clang < 18.1 on x86_64)
-#elif (LDBL_MANT_DIG == 113)
+#elif (__LDBL_MANT_DIG__ == 113)
 #define LIBC_TYPES_HAS_NATIVE_FLOAT128
 typedef long double float128;
 #endif
