@@ -735,10 +735,16 @@ void LTO::addModuleToGlobalRes(ArrayRef<InputFile::Symbol> Syms,
 
     auto &GlobalRes = (*GlobalResolutions)[SymbolName];
     GlobalRes.UnnamedAddr &= Sym.isUnnamedAddr();
+    // A reference read before the definition leaves its IR name in GlobalRes,
+    // and the definition replaces it below. The check on the names has to see
+    // that they differ in that order as much as in the other.
+    bool IRNameChanged = false;
     if (Res.Prevailing) {
       assert(!GlobalRes.Prevailing &&
              "Multiple prevailing defs are not allowed");
       GlobalRes.Prevailing = true;
+      IRNameChanged =
+          !GlobalRes.IRName.empty() && GlobalRes.IRName != Sym.getIRName();
       GlobalRes.IRName = std::string(Sym.getIRName());
     } else if (!GlobalRes.Prevailing && GlobalRes.IRName.empty()) {
       // Sometimes it can be two copies of symbol in a module and prevailing
@@ -762,7 +768,7 @@ void LTO::addModuleToGlobalRes(ArrayRef<InputFile::Symbol> Syms,
     // based on mangled name, but this requires an access to the Target Triple
     // and would be relatively invasive on the codebase.
     // FIXME: use the GUID member of GlobalRes.
-    if (GlobalRes.IRName != Sym.getIRName()) {
+    if (IRNameChanged || GlobalRes.IRName != Sym.getIRName()) {
       GlobalRes.Partition = GlobalResolution::External;
       GlobalRes.VisibleOutsideSummary = true;
     }
