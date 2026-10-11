@@ -16,6 +16,23 @@ package(
 licenses(["notice"])
 
 libc_support_library(
+    name = "locale",
+    srcs = ["locale.cpp"],
+    hdrs = ["locale.h"],
+    deps = [
+        ":locale_data",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_support_library(
     name = "locale_data",
     hdrs = ["locale_data.h"],
     deps = [
