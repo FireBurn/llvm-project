@@ -21804,6 +21804,19 @@ libc_function(
 )
 
 libc_function(
+    name = "fwide",
+    srcs = ["src/wchar/fwide.cpp"],
+    hdrs = ["src/wchar/fwide.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "wcpcpy",
     srcs = ["src/wchar/wcpcpy.cpp"],
     hdrs = ["src/wchar/wcpcpy.h"],
@@ -22588,6 +22601,20 @@ libc_support_library(
         ":full_build": [":llvm_libc_types_struct_dl_phdr_info"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "stdio_freopen",
+    srcs = ["src/stdio/generic/freopen.cpp"],
+    hdrs = ["src/stdio/freopen.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_FILE",
+    ],
 )
 
 libc_support_library(
