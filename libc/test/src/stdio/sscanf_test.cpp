@@ -827,3 +827,12 @@ TEST(LlvmLibcSScanfTest, ExactWidthCharConv) {
   EXPECT_EQ(LIBC_NAMESPACE::sscanf("ab", "%1c", buffer), 1);
   EXPECT_EQ(LIBC_NAMESPACE::sscanf("", "%1c", buffer), EOF);
 }
+
+TEST(LlvmLibcSScanfTest, ScanSetWithNonAsciiBytes) {
+  char buf[16];
+  // Bytes above 0x7f are negative as char, and must still index the set.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("a\xc3\xa9z!", "%[^!]", buf), 1);
+  ASSERT_STREQ(buf, "a\xc3\xa9z");
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("\xc3\xa9\xc3\xa9x", "%[^x]", buf), 1);
+  ASSERT_STREQ(buf, "\xc3\xa9\xc3\xa9");
+}
