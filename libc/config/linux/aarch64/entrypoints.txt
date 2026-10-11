@@ -1971,6 +1971,7 @@ if(LLVM_LIBC_FULL_BUILD)
     # sys/select.h entrypoints
     libc.src.sys.select.pselect
     libc.src.sys.select.select
+    libc.src.sys.single_threaded.__libc_single_threaded
     libc.src.wchar.mbrlen
     libc.src.wchar.mbsinit
     libc.src.wchar.mbrtowc
