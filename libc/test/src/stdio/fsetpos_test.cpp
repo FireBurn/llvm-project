@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "hdr/errno_macros.h"
+#include "hdr/locale_macros.h"
 #include "hdr/stdio_macros.h"
 #include "hdr/types/FILE.h"
 #include "hdr/types/fpos_t.h"
@@ -20,6 +21,7 @@
 #include "hdr/types/wint_t.h"
 #include "src/__support/CPP/scope.h"
 #include "src/__support/libc_errno.h"
+#include "src/locale/setlocale.h"
 #include "src/stdio/fclose.h"
 #include "src/stdio/feof.h"
 #include "src/stdio/ferror.h"
@@ -253,6 +255,10 @@ TEST_F(LlvmLibcFsetposTest, UndoUngetwc) {
 }
 
 TEST_F(LlvmLibcFsetposTest, WideStreamParseState) {
+  // L'\u00a2' has no encoding in the C locale.
+  ASSERT_TRUE(LIBC_NAMESPACE::setlocale(LC_ALL, "C.UTF-8") != nullptr);
+  scope_exit restore_locale([] { LIBC_NAMESPACE::setlocale(LC_ALL, "C"); });
+
   constexpr char FILENAME[] = "fsetpos_wide_state.test";
   auto FILEPATH = libc_make_test_file_path(FILENAME);
 

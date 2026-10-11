@@ -59,12 +59,30 @@ add_libc_test(
 )
 
 add_libc_test(
+  c_locale_test
+  SUITE
+    libc-wchar-tests
+  SRCS
+    c_locale_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.locale_macros
+    libc.hdr.types.mbstate_t
+    libc.hdr.types.wchar_t
+    libc.src.locale.setlocale
+    libc.src.wchar.mbrtowc
+    libc.src.wchar.wcrtomb
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   mbrtowc_test
   SUITE
     libc-wchar-tests
   SRCS
     mbrtowc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.__support.wchar.mbstate
     libc.src.string.memset
@@ -81,6 +99,7 @@ add_libc_test(
   SRCS
     mbsrtowcs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.__support.wchar.mbstate
     libc.src.string.memset
@@ -113,6 +132,7 @@ add_libc_test(
   SRCS
     mbsnrtowcs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.__support.wchar.mbstate
     libc.src.string.memset
@@ -129,6 +149,7 @@ add_libc_test(
   SRCS
     mbsinit_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.string.memset
     libc.src.wchar.mbsinit
     libc.src.wchar.mbrtowc
@@ -153,6 +174,7 @@ add_libc_test(
   SRCS
     wcrtomb_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.wchar.wcrtomb
     libc.src.string.memset
@@ -169,6 +191,7 @@ add_libc_test(
   SRCS
     wcsrtombs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.wchar.wcsrtombs
     libc.test.UnitTest.ErrnoCheckingTest
     libc.hdr.types.wchar_t
@@ -183,6 +206,7 @@ add_libc_test(
   SRCS
     wcsnrtombs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.wchar.wcsnrtombs
     libc.test.UnitTest.ErrnoCheckingTest
     libc.hdr.types.wchar_t
@@ -578,6 +602,7 @@ add_libc_test(
   SRCS
     fputwc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -599,6 +624,7 @@ add_libc_test(
   SRCS
     fgetwc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -619,6 +645,7 @@ add_libc_test(
   SRCS
     fputws_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.src.stdio.fclose
@@ -637,6 +664,7 @@ add_libc_test(
   SRCS
     fgetws_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.types.wint_t
@@ -657,6 +685,7 @@ add_libc_test(
   SRCS
     ungetwc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.stdio_macros
     libc.hdr.wchar_macros
     libc.src.stdio.fclose
@@ -678,6 +707,7 @@ add_libc_test(
   SRCS
     getwc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -698,6 +728,7 @@ add_libc_test(
   SRCS
     getwchar_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -720,6 +751,7 @@ add_libc_test(
   SRCS
     putwc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -739,6 +771,7 @@ add_libc_test(
   SRCS
     putwchar_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.stdint_proxy
     libc.hdr.wchar_macros
@@ -759,6 +792,7 @@ add_libc_test(
   SRCS
     swprintf_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.hdr.types.wchar_t
@@ -775,6 +809,7 @@ add_libc_test(
   SRCS
     fwprintf_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.stdio.fclose
     libc.src.stdio.fopen
@@ -803,6 +838,7 @@ add_libc_test(
   SRCS
     wcsftime_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.types.struct_tm
     libc.hdr.types.wchar_t
     libc.src.wchar.wcsftime
