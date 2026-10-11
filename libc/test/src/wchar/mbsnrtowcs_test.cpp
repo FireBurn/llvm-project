@@ -15,6 +15,7 @@
 #include "src/wchar/mbsnrtowcs.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcMBSNRToWCSTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 

@@ -11,6 +11,7 @@
 #include "src/wchar/mbrtowc.h"
 #include "src/wchar/mbsinit.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 TEST(LlvmLibcMBSInitTest, EmptyState) {
   mbstate_t ps;
