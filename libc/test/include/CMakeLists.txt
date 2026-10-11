@@ -245,6 +245,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  stdint_constant_test
+  SUITE
+    libc-include-tests
+  SRCS
+    stdint_constant_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.limits_macros
+    libc.include.llvm-libc-macros.stdint_macros
+)
+
+add_libc_test(
   fpclassifyf_test
   SUITE
     libc-include-tests
