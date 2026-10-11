@@ -1493,6 +1493,14 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_single_threaded
+  ../libc/include/sys/single_threaded.yaml
+  sys/single_threaded.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header_macro(
   sys_socket
   ../libc/include/sys/socket.yaml
   sys/socket.h

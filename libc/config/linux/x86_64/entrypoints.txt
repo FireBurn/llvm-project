@@ -2194,6 +2194,9 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.sys.select.pselect
     libc.src.sys.select.select
 
+    # sys/single_threaded.h entrypoints
+    libc.src.sys.single_threaded.__libc_single_threaded
+
     # wchar.h entrypoints
     libc.src.wchar.mbrlen
     libc.src.wchar.mbsinit
