@@ -9,3 +9,64 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "string_converter_test",
+    srcs = ["string_converter_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:Utf8Locale",
+        "//libc:__support_error_or",
+        "//libc:__support_macros_properties_types",
+        "//libc:__support_wchar_mbstate",
+        "//libc:__support_wchar_string_converter",
+        "//libc:hdr_errno_macros",
+        "//libc:types_char32_t",
+        "//libc:types_char8_t",
+    ],
+)
+
+libc_test(
+    name = "utf8_to_32_test",
+    srcs = ["utf8_to_32_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:Utf8Locale",
+        "//libc:__support_error_or",
+        "//libc:__support_macros_properties_types",
+        "//libc:__support_wchar_character_converter",
+        "//libc:__support_wchar_mbstate",
+        "//libc:hdr_errno_macros",
+    ],
+)
+
+libc_test(
+    name = "utf32_to_8_test",
+    srcs = ["utf32_to_8_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:Utf8Locale",
+        "//libc:__support_common",
+        "//libc:__support_error_or",
+        "//libc:__support_macros_properties_types",
+        "//libc:__support_wchar_character_converter",
+        "//libc:__support_wchar_mbstate",
+    ],
+)
+
+libc_test(
+    name = "wcsnrtombs_test",
+    srcs = ["wcsnrtombs_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:Utf8Locale",
+        "//libc:__support_error_or",
+        "//libc:__support_macros_null_check",
+        "//libc:__support_macros_properties_os",
+        "//libc:__support_wchar_character_converter",
+        "//libc:__support_wchar_mbstate",
+        "//libc:__support_wchar_string_converter",
+        "//libc:__support_wchar_wcsnrtombs",
+        "//libc:hdr_errno_macros",
+        "//libc:types_char32_t",
+        "//libc:types_char8_t",
+        "//libc:types_size_t",
+        "//libc:types_wchar_t",
+    ],
+)

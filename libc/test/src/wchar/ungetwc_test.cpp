@@ -24,6 +24,7 @@
 #include "src/wchar/ungetwc.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcUngetwcTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 

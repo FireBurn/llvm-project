@@ -16,6 +16,7 @@
 #include "src/wchar/wcsftime.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcWcsftimeTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
