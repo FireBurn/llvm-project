@@ -11,6 +11,7 @@
 #include "src/stdlib/mbtowc.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcMBToWCTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 

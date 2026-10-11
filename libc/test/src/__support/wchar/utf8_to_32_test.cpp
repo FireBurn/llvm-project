@@ -12,6 +12,7 @@
 #include "src/__support/wchar/character_converter.h"
 #include "src/__support/wchar/mbstate.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 #if defined(LIBC_TYPES_WCHAR_T_IS_UTF32)
 using TestCharTypesUTF32 = LIBC_NAMESPACE::testing::TypeList<char32_t, wchar_t>;

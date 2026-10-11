@@ -9,6 +9,7 @@
 #include "src/stdlib/wcstombs.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcWcstombs = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
