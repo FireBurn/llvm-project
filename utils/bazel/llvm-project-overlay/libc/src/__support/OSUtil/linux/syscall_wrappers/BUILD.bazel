@@ -2943,6 +2943,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "alarm",
+    hdrs = ["alarm.h"],
+    deps = [
+        ":setitimer",
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/hdr:sys_time_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "fgetxattr",
     hdrs = ["fgetxattr.h"],
     deps = [
@@ -2985,6 +2999,20 @@ libc_support_library(
     hdrs = ["setxattr.h"],
     deps = [
         "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "setitimer",
+    hdrs = ["setitimer.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
