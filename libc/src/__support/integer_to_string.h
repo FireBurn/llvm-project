@@ -70,7 +70,7 @@
 #include "src/__support/common.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/wctype_utils.h"
+#include "src/__support/wctype_ascii_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -363,7 +363,10 @@ class IntegerToString {
       if constexpr (Fmt::BASE <= 10) {
         return result;
       } else {
-        return Fmt::IS_UPPERCASE ? internal::toupper(result) : result;
+        if constexpr (cpp::is_same_v<CharT, char>)
+          return Fmt::IS_UPPERCASE ? internal::toupper(result) : result;
+        else
+          return Fmt::IS_UPPERCASE ? internal::ascii::toupper(result) : result;
       }
     }
 
