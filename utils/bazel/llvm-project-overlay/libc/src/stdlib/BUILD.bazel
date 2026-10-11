@@ -726,6 +726,35 @@ libc_support_library(
 )
 
 libc_function(
+    name = "mbtowc",
+    srcs = ["mbtowc.cpp"],
+    hdrs = ["mbtowc.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "mblen",
+    srcs = ["mblen.cpp"],
+    hdrs = ["mblen.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "mbstowcs",
     srcs = ["mbstowcs.cpp"],
     hdrs = ["mbstowcs.h"],
@@ -736,6 +765,21 @@ libc_function(
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/wchar:mbsnrtowcs",
         "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "wctomb",
+    srcs = ["wctomb.cpp"],
+    hdrs = ["wctomb.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcrtomb",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
     ],

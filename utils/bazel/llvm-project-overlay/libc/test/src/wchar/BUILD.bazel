@@ -30,6 +30,7 @@ libc_test(
         "//libc/src/stdio:fread",
         "//libc/src/wchar:fwide",
         "//libc/src/wchar:fwprintf",
+        "//libc/test/UnitTest:Utf8Locale",
     ],
 )
 
@@ -105,6 +106,7 @@ libc_test(
         "//libc/hdr/types:wchar_t",
         "//libc/src/locale:locale_data",
         "//libc/src/wchar:wcsftime",
+        "//libc/test/UnitTest:Utf8Locale",
     ],
 )
 
@@ -289,6 +291,287 @@ libc_test(
 )
 
 libc_test(
+    name = "c_locale_test",
+    srcs = ["c_locale_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:locale_macros",
+        "//libc/src/locale:setlocale",
+        "//libc/src/wchar:mbrtowc",
+        "//libc/src/wchar:wcrtomb",
+    ],
+)
+
+libc_test(
+    name = "mbrtowc_test",
+    srcs = ["mbrtowc_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:mbrtowc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "mbsrtowcs_test",
+    srcs = ["mbsrtowcs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:mbsrtowcs",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "mbsnrtowcs_test",
+    srcs = ["mbsnrtowcs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:mbsnrtowcs",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "mbsinit_test",
+    srcs = ["mbsinit_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:mbrtowc",
+        "//libc/src/wchar:mbsinit",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wcrtomb_test",
+    srcs = ["wcrtomb_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:wcrtomb",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wcsrtombs_test",
+    srcs = ["wcsrtombs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:wcsrtombs",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wcsnrtombs_test",
+    srcs = ["wcsnrtombs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/locale:locale_data",
+        "//libc/src/string:memset",
+        "//libc/src/wchar:wcsnrtombs",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "fputwc_test",
+    srcs = ["fputwc_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fputwc",
+        "//libc/src/wchar:fwide",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "fgetwc_test",
+    srcs = ["fgetwc_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fgetwc",
+        "//libc/src/wchar:fwide",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "fputws_test",
+    srcs = ["fputws_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/wchar:fputws",
+        "//libc/src/wchar:fwide",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "fgetws_test",
+    srcs = ["fgetws_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fgetws",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:wcscmp",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "ungetwc_test",
+    srcs = ["ungetwc_test.cpp"],
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fgetwc",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:ungetwc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "getwc_test",
+    srcs = ["getwc_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:getwc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "getwchar_test",
+    srcs = ["getwchar_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:stdin",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:getwchar",
+        "//libc/src/wchar:ungetwc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "putwc_test",
+    srcs = ["putwc_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:putwc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "putwchar_test",
+    srcs = ["putwchar_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:stdout",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:putwchar",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
     name = "swprintf_test",
     srcs = ["swprintf_test.cpp"],
     deps = [
@@ -301,6 +584,7 @@ libc_test(
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/__support/printf_core:printf_config",
         "//libc/src/wchar:swprintf",
+        "//libc/test/UnitTest:Utf8Locale",
         "//libc/test/UnitTest:fp_test_helpers",
     ],
 )

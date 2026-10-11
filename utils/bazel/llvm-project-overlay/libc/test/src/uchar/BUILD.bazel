@@ -19,6 +19,7 @@ libc_test(
         "//libc/src/locale:locale_data",
         "//libc/src/uchar:c32rtomb",
         "//libc/src/uchar:mbrtoc32",
+        "//libc/test/UnitTest:Utf8Locale",
     ],
 )
 
@@ -31,5 +32,6 @@ libc_test(
         "//libc/src/locale:locale_data",
         "//libc/src/uchar:c16rtomb",
         "//libc/src/uchar:mbrtoc16",
+        "//libc/test/UnitTest:Utf8Locale",
     ],
 )

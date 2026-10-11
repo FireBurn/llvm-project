@@ -29,6 +29,7 @@ libc_test(
         "//libc/src/__support:alloc_checker",
         "//libc/src/__support:error_or",
         "//libc/src/locale:locale_data",
+        "//libc/test/UnitTest:Utf8Locale",
         "//libc/test/UnitTest:memory_matcher",
     ],
 )

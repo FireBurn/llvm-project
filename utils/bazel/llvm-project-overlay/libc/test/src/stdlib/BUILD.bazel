@@ -367,6 +367,29 @@ libc_test(
 )
 
 libc_test(
+    name = "mbtowc_test",
+    srcs = ["mbtowc_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:mbtowc",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "mblen_test",
+    srcs = ["mblen_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:mblen",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
     name = "mbstowcs_test",
     srcs = ["mbstowcs_test.cpp"],
     deps = [
@@ -375,5 +398,29 @@ libc_test(
         "//libc/src/__support/macros:null_check",
         "//libc/src/locale:locale_data",
         "//libc/src/stdlib:mbstowcs",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wctomb_test",
+    srcs = ["wctomb_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:wctomb",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wcstombs_test",
+    srcs = ["wcstombs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:wcstombs",
+        "//libc/test/UnitTest:Utf8Locale",
     ],
 )

@@ -9,3 +9,69 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "string_converter_test",
+    srcs = ["string_converter_test.cpp"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:char8_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:string_converter",
+        "//libc/src/__support:error_or",
+        "//libc/src/locale:locale_data",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "utf8_to_32_test",
+    srcs = ["utf8_to_32_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/wchar:character_converter",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:error_or",
+        "//libc/src/locale:locale_data",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "utf32_to_8_test",
+    srcs = ["utf32_to_8_test.cpp"],
+    deps = [
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/wchar:character_converter",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/locale:locale_data",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
+
+libc_test(
+    name = "wcsnrtombs_test",
+    srcs = ["wcsnrtombs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:char8_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros/properties:os",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:character_converter",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:string_converter",
+        "//libc/src/__support/wchar:wcsnrtombs",
+        "//libc/src/__support:error_or",
+        "//libc/src/locale:locale_data",
+        "//libc/test/UnitTest:Utf8Locale",
+    ],
+)
