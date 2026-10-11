@@ -6295,6 +6295,39 @@ add_fp_unittest(
 )
 
 add_fp_unittest(
+  sinl_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    sinl_test.cpp
+  DEPENDS
+    libc.src.math.sinl
+    libc.hdr.errno_macros
+)
+
+add_fp_unittest(
+  cosl_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    cosl_test.cpp
+  DEPENDS
+    libc.src.math.cosl
+    libc.hdr.errno_macros
+)
+
+add_fp_unittest(
+  tanl_test
+  SUITE
+    libc-math-smoke-tests
+  SRCS
+    tanl_test.cpp
+  DEPENDS
+    libc.src.math.tanl
+    libc.hdr.errno_macros
+)
+
+add_fp_unittest(
   sin_test
   SUITE
     libc-math-smoke-tests
