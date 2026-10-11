@@ -262,6 +262,8 @@ const char *set_locale_name(int category, cpp::string_view name) {
   return current[category].name;
 }
 
+bool ctype_is_utf8() { return current[LC_CTYPE].utf8; }
+
 const char *current_codeset() {
   return current[LC_CTYPE].utf8 ? "UTF-8" : "ANSI_X3.4-1968";
 }
