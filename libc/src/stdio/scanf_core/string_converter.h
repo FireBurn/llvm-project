@@ -62,7 +62,8 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
     // If this is %s and we've hit a space, or if this is %[] and we've found
     // something not in the scanset.
     if ((to_conv.conv_name == 's' && internal::isspace(cur_char)) ||
-        (to_conv.conv_name == '[' && !to_conv.scan_set.test(cur_char))) {
+        (to_conv.conv_name == '[' &&
+         !to_conv.scan_set.test(static_cast<unsigned char>(cur_char)))) {
       break;
     }
     if (allocating && i + terminator + 1 > capacity) {
