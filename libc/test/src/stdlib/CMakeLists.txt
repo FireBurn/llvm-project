@@ -524,6 +524,7 @@ add_libc_test(
   SRCS
     mbtowc_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.stdlib.mbtowc
     libc.hdr.types.wchar_t
@@ -537,6 +538,7 @@ add_libc_test(
   SRCS
     mblen_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.stdlib.mblen
     libc.test.UnitTest.ErrnoCheckingTest
@@ -549,6 +551,7 @@ add_libc_test(
   SRCS
     mbstowcs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.stdlib.mbstowcs
     libc.hdr.types.wchar_t
@@ -562,6 +565,7 @@ add_libc_test(
   SRCS
     wctomb_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.errno_macros
     libc.src.stdlib.wctomb
     libc.hdr.types.wchar_t
@@ -574,6 +578,7 @@ add_libc_test(
   SRCS
     wcstombs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.stdlib.wcstombs
     libc.test.UnitTest.ErrnoCheckingTest
     libc.hdr.types.wchar_t

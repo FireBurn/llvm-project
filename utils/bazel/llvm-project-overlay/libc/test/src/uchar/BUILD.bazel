@@ -14,6 +14,7 @@ libc_test(
     name = "mbrtoc32_test",
     srcs = ["mbrtoc32_test.cpp"],
     deps = [
+        "//libc/test/UnitTest:Utf8Locale",
         "//libc:c32rtomb",
         "//libc:mbrtoc32",
         "//libc:types_char32_t",
@@ -25,6 +26,7 @@ libc_test(
     name = "mbrtoc16_test",
     srcs = ["mbrtoc16_test.cpp"],
     deps = [
+        "//libc/test/UnitTest:Utf8Locale",
         "//libc:c16rtomb",
         "//libc:mbrtoc16",
         "//libc:types_char16_t",
