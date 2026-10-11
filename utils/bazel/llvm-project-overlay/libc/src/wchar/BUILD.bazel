@@ -375,6 +375,22 @@ libc_function(
 )
 
 libc_function(
+    name = "mbrtowc",
+    srcs = ["mbrtowc.cpp"],
+    hdrs = ["mbrtowc.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "vfwprintf",
     srcs = ["vfwprintf.cpp"],
     hdrs = ["vfwprintf.h"],
@@ -423,6 +439,22 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/stdio:stdout",
+    ],
+)
+
+libc_function(
+    name = "wcrtomb",
+    srcs = ["wcrtomb.cpp"],
+    hdrs = ["wcrtomb.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcrtomb",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -549,6 +581,87 @@ libc_support_library(
 )
 
 libc_function(
+    name = "mbsinit",
+    srcs = ["mbsinit.cpp"],
+    hdrs = ["mbsinit.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:character_converter",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "mbsrtowcs",
+    srcs = ["mbsrtowcs.cpp"],
+    hdrs = ["mbsrtowcs.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "mbsnrtowcs",
+    srcs = ["mbsnrtowcs.cpp"],
+    hdrs = ["mbsnrtowcs.h"],
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "wcsrtombs",
+    srcs = ["wcsrtombs.cpp"],
+    hdrs = ["wcsrtombs.h"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "wcsnrtombs",
+    srcs = ["wcsnrtombs.cpp"],
+    hdrs = ["wcsnrtombs.h"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "wcsxfrm",
     srcs = ["wcsxfrm.cpp"],
     hdrs = ["wcsxfrm.h"],
@@ -558,6 +671,155 @@ libc_function(
         "//libc/hdr/types:wchar_t",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "fputwc",
+    srcs = ["fputwc.cpp"],
+    hdrs = ["fputwc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "fgetwc",
+    srcs = ["fgetwc.cpp"],
+    hdrs = ["fgetwc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "fputws",
+    srcs = ["fputws.cpp"],
+    hdrs = ["fputws.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "fgetws",
+    srcs = ["fgetws.cpp"],
+    hdrs = ["fgetws.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ungetwc",
+    srcs = ["ungetwc.cpp"],
+    hdrs = ["ungetwc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "getwc",
+    srcs = ["getwc.cpp"],
+    hdrs = ["getwc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "getwchar",
+    srcs = ["getwchar.cpp"],
+    hdrs = ["getwchar.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/stdio:stdin",
+    ],
+)
+
+libc_function(
+    name = "putwc",
+    srcs = ["putwc.cpp"],
+    hdrs = ["putwc.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "putwchar",
+    srcs = ["putwchar.cpp"],
+    hdrs = ["putwchar.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/stdio:stdout",
     ],
 )
 

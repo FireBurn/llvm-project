@@ -736,6 +736,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_fpos_t",
+    hdrs = ["llvm-libc-types/fpos_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_iconv_t",
     hdrs = ["llvm-libc-types/iconv_t.h"],
 )

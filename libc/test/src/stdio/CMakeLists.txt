@@ -302,6 +302,7 @@ add_fp_unittest(
   SRCS
     sprintf_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.stdio.sprintf
     libc.src.__support.FPUtil.fp_bits
     libc.src.__support.printf_core.printf_config
@@ -987,6 +988,7 @@ add_libc_test(
   SRCS
     fgetpos_test.cpp
   DEPENDS
+    libc.hdr.locale_macros
     libc.hdr.stdio_macros
     libc.hdr.types.FILE
     libc.hdr.types.fpos_t
@@ -994,6 +996,7 @@ add_libc_test(
     libc.hdr.types.size_t
     libc.hdr.types.wint_t
     libc.src.__support.CPP.scope
+    libc.src.locale.setlocale
     libc.src.stdio.fclose
     libc.src.stdio.feof
     libc.src.stdio.fgetpos
@@ -1021,6 +1024,7 @@ add_libc_test(
     fsetpos_test.cpp
   DEPENDS
     libc.hdr.errno_macros
+    libc.hdr.locale_macros
     libc.hdr.stdio_macros
     libc.hdr.types.FILE
     libc.hdr.types.fpos_t
@@ -1028,6 +1032,7 @@ add_libc_test(
     libc.hdr.types.size_t
     libc.hdr.types.wint_t
     libc.src.__support.CPP.scope
+    libc.src.locale.setlocale
     libc.src.stdio.fclose
     libc.src.stdio.feof
     libc.src.stdio.ferror

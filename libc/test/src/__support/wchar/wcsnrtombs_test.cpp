@@ -14,6 +14,7 @@
 #include "src/__support/wchar/mbstate.h"
 #include "src/__support/wchar/wcsnrtombs.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 // TODO: add support for 16-bit widechars to remove this guard
 #if !defined(LIBC_TYPES_WCHAR_T_IS_UTF32)

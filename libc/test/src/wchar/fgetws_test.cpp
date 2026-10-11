@@ -23,6 +23,7 @@
 #include "src/wchar/wcscmp.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcFgetwsTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
