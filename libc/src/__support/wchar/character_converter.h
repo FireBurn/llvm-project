@@ -25,9 +25,16 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
 
+// Whether LC_CTYPE in force uses UTF-8. Defined with the locale.
+bool ctype_is_utf8();
+
 class CharacterConverter {
 private:
   mbstate *state;
+  // In a locale that is not UTF-8, which is the C locale until a program
+  // asks for another, only ASCII converts and anything else is an encoding
+  // error, as it is in glibc.
+  bool utf8;
 
   // This is for utf-8 bytes other than the first byte
   static constexpr size_t ENCODED_BITS_PER_UTF8 = 6;
@@ -44,7 +51,9 @@ private:
 
 public:
   explicit LIBC_INLINE CharacterConverter(mbstate *state_ptr)
-      : state(state_ptr) {}
+      : state(state_ptr), utf8(ctype_is_utf8()) {}
+  LIBC_INLINE CharacterConverter(mbstate *state_ptr, bool in_utf8)
+      : state(state_ptr), utf8(in_utf8) {}
 
   LIBC_INLINE void clear() {
     state->partial = 0;
@@ -93,7 +102,7 @@ LIBC_INLINE int CharacterConverter::push(char8_t utf8_byte) {
       state->total_bytes = 1;
     }
     // UTF-8 char has 2 through 4 bytes total
-    else if (num_ones >= 2 && num_ones <= 4) {
+    else if (utf8 && num_ones >= 2 && num_ones <= 4) {
       /* Since the format is 110xxxxx, 1110xxxx, and 11110xxx for 2, 3, and 4,
       we will make the base mask with 7 ones and right shift it as necessary. */
       constexpr size_t SIGNIFICANT_BITS = 7;
@@ -102,7 +111,7 @@ LIBC_INLINE int CharacterConverter::push(char8_t utf8_byte) {
       state->total_bytes = num_ones;
       utf8_byte &= (base_mask >> num_ones);
     }
-    // Invalid first byte
+    // Invalid first byte, or one outside ASCII where that is all there is
     else {
       // bytes_stored and total_bytes will always be 0 here
       state->partial = static_cast<char32_t>(0);
@@ -131,6 +140,9 @@ LIBC_INLINE int CharacterConverter::push(char32_t utf32) {
   // we can't be partially through a conversion when pushing a utf32 value
   if (!isEmpty())
     return -1;
+
+  if (!utf8 && utf32 > 0x7f)
+    return EILSEQ;
 
   // A surrogate is half of a UTF-16 pair and is not a character on its own,
   // so UTF-8 has no encoding for it.
