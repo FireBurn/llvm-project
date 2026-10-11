@@ -32,6 +32,10 @@ public:
     ++buff_cur;
     return output;
   }
+  // A string ends at its terminator.
+  LIBC_INLINE bool at_end() const {
+    return buff_cur > 0 && buffer[buff_cur - 1] == '\0';
+  }
   LIBC_INLINE void ungetc(int) {
     if (buff_cur > 0) {
       // While technically c should be written back to the buffer, in scanf we
