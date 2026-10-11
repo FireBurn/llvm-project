@@ -104,6 +104,16 @@ get_int_format(const FormatSection &to_conv, const tm *timeptr) {
     raw_num = time_reader.get_yday() + 1; // get_yday is 0 indexed
     result.pad_to_len = 3;
     break;
+  case 'k': // 24-hour format, space padded [ 0-23]
+    raw_num = time_reader.get_hour();
+    result.pad_to_len = 2;
+    result.padding_char = ' ';
+    break;
+  case 'l': // 12-hour format, space padded [ 1-12]
+    raw_num = ((time_reader.get_hour() + 11) % 12) + 1;
+    result.pad_to_len = 2;
+    result.padding_char = ' ';
+    break;
   case 'm':                              // Month of the year [01-12]
     raw_num = time_reader.get_mon() + 1; // get_mon is 0 indexed
     result.pad_to_len = 2;
