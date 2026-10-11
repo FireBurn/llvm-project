@@ -105,6 +105,9 @@ public:
       internal::ungetc(c, stream);
   }
   LIBC_INLINE bool reached_eof() const { return eof; }
+  // Only what the stream reported as the end is the end: a NUL byte is read
+  // as the character it is.
+  LIBC_INLINE bool at_end() const { return eof; }
 };
 
 LIBC_INLINE int vfscanf_internal(::FILE *__restrict stream,
