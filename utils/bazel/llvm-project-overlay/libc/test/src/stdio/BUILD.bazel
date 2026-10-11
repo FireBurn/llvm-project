@@ -309,6 +309,31 @@ libc_test(
 )
 
 libc_test(
+    name = "freopen_test",
+    srcs = ["freopen_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_scope",
+        "//libc:__support_macros_properties_os",
+        "//libc:clearerr",
+        "//libc:close",
+        "//libc:fclose",
+        "//libc:fcntl",
+        "//libc:feof",
+        "//libc:ferror",
+        "//libc:fflush",
+        "//libc:fileno",
+        "//libc:fopen",
+        "//libc:fread",
+        "//libc:fwide",
+        "//libc:fwrite",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:stdio_freopen",
+        "//libc:stdout",
+    ],
+)
+
+libc_test(
     name = "setvbuf_test",
     srcs = ["setvbuf_test.cpp"],
     deps = [
