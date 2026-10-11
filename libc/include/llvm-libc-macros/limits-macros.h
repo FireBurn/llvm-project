@@ -105,6 +105,15 @@
 #endif // __BOOL_WIDTH__
 #endif // BOOL_WIDTH
 
+#ifndef BOOL_MAX
+#define BOOL_MAX 1
+#endif // BOOL_MAX
+
+// A word is an int. glibc gives the same, as XSI asks.
+#ifndef WORD_BIT
+#define WORD_BIT INT_WIDTH
+#endif // WORD_BIT
+
 // *_MAX macros
 
 #ifndef SCHAR_MAX
