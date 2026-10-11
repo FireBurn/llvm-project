@@ -389,10 +389,10 @@ typedef __UINTMAX_TYPE__ uintmax_t;
 #ifdef __int_least16_t
 #ifdef __int16_c_suffix
 #define INT16_C(v) __int_c(v, __int16_c_suffix)
-#define UINT16_C(v) __uint_c(v, __int16_c_suffix)
+#define UINT16_C(v) __int_c(v, __int16_c_suffix)
 #else
 #define INT16_C(v) v
-#define UINT16_C(v) v##U
+#define UINT16_C(v) v
 #endif /* __int16_c_suffix */
 #endif /* __int_least16_t */
 
@@ -406,10 +406,10 @@ typedef __UINTMAX_TYPE__ uintmax_t;
 #ifdef __int_least8_t
 #ifdef __int8_c_suffix
 #define INT8_C(v) __int_c(v, __int8_c_suffix)
-#define UINT8_C(v) __uint_c(v, __int8_c_suffix)
+#define UINT8_C(v) __int_c(v, __int8_c_suffix)
 #else
 #define INT8_C(v) v
-#define UINT8_C(v) v##U
+#define UINT8_C(v) v
 #endif /* __int8_c_suffix */
 #endif /* __int_least8_t */
 
