@@ -352,3 +352,14 @@ libc_test(
         "//libc:strtold",
     ],
 )
+
+libc_test(
+    name = "mbstowcs_test",
+    srcs = ["mbstowcs_test.cpp"],
+    deps = [
+        "//libc:__support_macros_null_check",
+        "//libc:hdr_errno_macros",
+        "//libc:mbstowcs",
+        "//libc:types_wchar_t",
+    ],
+)
