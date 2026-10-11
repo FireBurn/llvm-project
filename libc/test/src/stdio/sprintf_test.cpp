@@ -4003,6 +4003,14 @@ TEST(LlvmLibcSprintfTest, WideCharStringConversion) {
   ASSERT_STREQ_LEN(written, buff, "   (nu");
 }
 
+TEST(LlvmLibcSprintfTest, InvalidWideCharacterFailsTheCall) {
+  char buff[64];
+  // A lone surrogate has no encoding.
+  int written = LIBC_NAMESPACE::sprintf(buff, "x%ls", L"\xD800");
+  EXPECT_EQ(written, -1);
+  ASSERT_ERRNO_EQ(EILSEQ);
+}
+
 #endif // !LIBC_COPT_PRINTF_DISABLE_WIDE && !LIBC_TARGET_ARCH_IS_GPU
 
 TEST(LlvmLibcSprintfTest, GroupingFlagIsAccepted) {
