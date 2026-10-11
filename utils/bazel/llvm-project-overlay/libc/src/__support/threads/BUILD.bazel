@@ -345,6 +345,7 @@ libc_support_library(
         "//libc/src/__support:elf_dynamic_blocks",
         "//libc/src/__support:error_or",
         "//libc/src/__support:fixedvector",
+        "//libc/src/sys/single_threaded:__libc_single_threaded",
     ],
 )
 
