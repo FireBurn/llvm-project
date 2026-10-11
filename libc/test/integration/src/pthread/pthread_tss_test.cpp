@@ -142,6 +142,20 @@ static void dtor_iteration_limit_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(key), 0);
 }
 
+// Deleting a key does not clear the values threads hold for it, and the next
+// key created may be given the same number. It starts out empty all the same,
+// and the destructor of the key that was deleted is not run for the old value.
+static void deleted_key_is_not_reused_value_test() {
+  pthread_key_t old_key, new_key;
+  static int data;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_create(&old_key, &dtor_failure), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setspecific(old_key, &data), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(old_key), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_create(&new_key, nullptr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_getspecific(new_key), nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_key_delete(new_key), 0);
+}
+
 // A process exiting is not a thread exiting: the destructor of a value the
 // main thread still holds is not run. The key is deliberately left in place
 // and the value left set, so that anything running it after main returns
@@ -159,6 +173,7 @@ TEST_MAIN() {
   getspecific_nullptr_in_dtor_test();
   multiple_dtor_test();
   dtor_iteration_limit_test();
+  deleted_key_is_not_reused_value_test();
   main_thread_exit_test();
   return 0;
 }
