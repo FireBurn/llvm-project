@@ -16,6 +16,7 @@
 #include "src/__support/macros/config.h"
 #include "test/UnitTest/MemoryMatcher.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using MemoryView = LIBC_NAMESPACE::testing::MemoryView;
 using LIBC_NAMESPACE::ErrorOr;
@@ -876,9 +877,9 @@ TEST(LlvmLibcFileTest, ShortWritesAreRetried) {
 TEST(LlvmLibcFileTest, PartialWideCharWriteDetected) {
   LIBC_NAMESPACE::AllocChecker ac;
   // Two of the three bytes are taken, and then nothing more ever is.
-  ShortWriteFile *f = new (ac) ShortWriteFile(
-      nullptr, 0, _IONBF, true, FileMode("w"),
-      /*max_write_bytes=*/2, /*accept_total_bytes=*/2);
+  ShortWriteFile *f =
+      new (ac) ShortWriteFile(nullptr, 0, _IONBF, true, FileMode("w"),
+                              /*max_write_bytes=*/2, /*accept_total_bytes=*/2);
   ASSERT_FALSE(f == nullptr);
 
   const wchar_t euro = L'€';
@@ -933,8 +934,7 @@ public:
   MaybeTerminalFile(char *buffer, size_t buflen, bool is_terminal)
       : LIBC_NAMESPACE::File(&tty_write, &tty_read, &tty_seek, &tty_close,
                              reinterpret_cast<uint8_t *>(buffer), buflen,
-                             _IOFBF, false,
-                             FileMode("w"),
+                             _IOFBF, false, FileMode("w"),
                              /*static_stream=*/false,
                              /*has_file_descriptor=*/false, &tty_isatty,
                              /*settle_buffer_mode=*/true),
@@ -1065,9 +1065,8 @@ TEST(LlvmLibcFileTest, ShortReadsAreNotTheEndOfTheFile) {
   constexpr size_t DATA_SIZE = 300;
   char buffer[16];
   LIBC_NAMESPACE::AllocChecker ac;
-  ShortReadFile *f = new (ac)
-      ShortReadFile(buffer, sizeof(buffer), _IOFBF,
-                    FileMode("r"), /*max_read=*/7);
+  ShortReadFile *f = new (ac) ShortReadFile(buffer, sizeof(buffer), _IOFBF,
+                                            FileMode("r"), /*max_read=*/7);
   ASSERT_FALSE(f == nullptr);
   f->fill(DATA_SIZE);
 
@@ -1091,9 +1090,8 @@ TEST(LlvmLibcFileTest, ShortReadsAreNotTheEndOfTheFile) {
 TEST(LlvmLibcFileTest, ShortReadsUnbuffered) {
   constexpr size_t DATA_SIZE = 100;
   LIBC_NAMESPACE::AllocChecker ac;
-  ShortReadFile *f = new (ac)
-      ShortReadFile(nullptr, 0, _IONBF, FileMode("r"),
-                    /*max_read=*/3);
+  ShortReadFile *f = new (ac) ShortReadFile(nullptr, 0, _IONBF, FileMode("r"),
+                                            /*max_read=*/3);
   ASSERT_FALSE(f == nullptr);
   f->fill(DATA_SIZE);
 
