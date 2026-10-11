@@ -15,6 +15,7 @@
 #include "src/__support/wchar/mbstate.h"
 #include "src/__support/wchar/wcsnrtombs.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 // TODO: add support for 16-bit widechars to remove this macro
 #ifdef LIBC_TARGET_OS_IS_WINDOWS
