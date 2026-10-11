@@ -1,0 +1,10 @@
+add_entrypoint_object(
+  __libc_single_threaded
+  SRCS
+    __libc_single_threaded.cpp
+  HDRS
+    __libc_single_threaded.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
