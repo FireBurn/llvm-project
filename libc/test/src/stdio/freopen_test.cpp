@@ -344,6 +344,33 @@ TEST_F(LlvmLibcFreopenTest, StdoutFailureTest) {
 }
 #endif
 
+TEST_F(LlvmLibcFreopenTest, DescriptorClosedBehindTheStream) {
+  const auto FILENAME = libc_make_test_file_path("freopen_closed_fd.test");
+  const char *fn = FILENAME;
+  const char MSG[] = "again";
+
+  ::FILE *file = LIBC_NAMESPACE::fopen(fn, "w");
+  ASSERT_FALSE(file == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fwrite(MSG, 1, sizeof(MSG) - 1, file),
+            sizeof(MSG) - 1);
+  ASSERT_THAT(LIBC_NAMESPACE::fflush(file), Succeeds(0));
+
+  // Closing the number leaves the stream with a descriptor that the next open
+  // takes back, which a program that closed standard input and then names a
+  // file to read does as a matter of course.
+  const int fd = LIBC_NAMESPACE::fileno(file);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
+
+  file = LIBC_NAMESPACE::freopen(fn, "r", file);
+  ASSERT_FALSE(file == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fileno(file), fd);
+
+  char buf[16] = {0};
+  ASSERT_EQ(LIBC_NAMESPACE::fread(buf, 1, sizeof(buf), file), sizeof(MSG) - 1);
+  ASSERT_STREQ(buf, MSG);
+  ASSERT_THAT(LIBC_NAMESPACE::fclose(file), Succeeds(0));
+}
+
 TEST_F(LlvmLibcFreopenTest, NullStreamFailure) {
   const auto FILENAME = libc_make_test_file_path("freopen_null_stream.test");
   const char *fn = FILENAME;
