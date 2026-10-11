@@ -22,6 +22,7 @@ libc_test(
     name = "file_test",
     srcs = ["file_test.cpp"],
     deps = [
+        "//libc/test/UnitTest:Utf8Locale",
         "//libc/test/UnitTest:memory_matcher",
         "//libc:__support_alloc_checker",
         "//libc:__support_cpp_new",

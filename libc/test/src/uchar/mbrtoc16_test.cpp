@@ -17,6 +17,7 @@
 #include "src/uchar/mbrtoc16.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 static unsigned byte(char c) { return static_cast<unsigned char>(c); }
 
