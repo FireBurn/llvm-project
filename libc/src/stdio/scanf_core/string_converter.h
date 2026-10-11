@@ -58,7 +58,7 @@ int convert_string(Reader<T> *reader, const FormatSection &to_conv) {
 
   char cur_char = reader->getc();
   size_t i = 0;
-  for (; i < max_width && cur_char != '\0'; ++i) {
+  for (; i < max_width && !reader->hit_end_of_input(); ++i) {
     // If this is %s and we've hit a space, or if this is %[] and we've found
     // something not in the scanset.
     if ((to_conv.conv_name == 's' && internal::isspace(cur_char)) ||
