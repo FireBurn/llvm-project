@@ -3701,6 +3701,11 @@ libc_math_function(
 )
 
 libc_math_function(
+    name = "cosl",
+    additional_deps = ["//libc/src/__support/FPUtil:x87_trig"],
+)
+
+libc_math_function(
     name = "erf",
     additional_deps = ["//libc/src/__support/math:erf"],
 )
@@ -3779,6 +3784,16 @@ libc_math_function(
         "//libc/src/__support/math:powl_impl",
         "//libc/src/__support:uint128",
     ],
+)
+
+libc_math_function(
+    name = "sinl",
+    additional_deps = ["//libc/src/__support/FPUtil:x87_trig"],
+)
+
+libc_math_function(
+    name = "tanl",
+    additional_deps = ["//libc/src/__support/FPUtil:x87_trig"],
 )
 
 libc_math_function(

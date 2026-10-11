@@ -504,3 +504,28 @@ libc_support_library(
         "//libc/src/__support:uint128",
     ],
 )
+
+libc_support_library(
+    name = "x87_trig",
+    hdrs = ["x86_64/x87_trig.h", "x86_64/x87_two_over_pi.h"],
+    deps = [
+        ":fenv_impl",
+        ":fp_bits",
+        ":x86_64_x87_two_over_pi",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "x86_64_x87_two_over_pi",
+    hdrs = ["x86_64/x87_two_over_pi.h"],
+    deps = [
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/macros:config",
+    ],
+)
