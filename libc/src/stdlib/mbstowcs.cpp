@@ -25,7 +25,9 @@ LLVM_LIBC_FUNCTION(size_t, mbstowcs,
   LIBC_CRASH_ON_NULLPTR(s);
   // If destination is null, ignore n
   n = pwcs == nullptr ? SIZE_MAX : n;
-  static internal::mbstate internal_mbstate;
+  // Each call starts in the initial shift state, so no state outlives it or
+  // is shared with another thread.
+  internal::mbstate internal_mbstate;
   const char *temp = s;
   auto ret = internal::mbsnrtowcs(pwcs, &temp, SIZE_MAX, n, &internal_mbstate);
 
