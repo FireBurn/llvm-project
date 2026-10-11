@@ -234,3 +234,27 @@ TEST(LlvmLibcFScanfTest, MatchingErrors) {
 
   ASSERT_EQ(scanf_test::fclose(file), 0);
 }
+
+TEST(LlvmLibcFScanfTest, NulBytesAreDataNotTheEndOfTheFile) {
+  const char *FILENAME = "fscanf_nul.test";
+  auto FILE_PATH = libc_make_test_file_path(FILENAME);
+  ::FILE *file = scanf_test::fopen(FILE_PATH, "w");
+  ASSERT_FALSE(file == nullptr);
+
+  constexpr char bytes[] = {'\0', 'A', '\0', 'B', '\x01'};
+  ASSERT_EQ(sizeof(bytes), scanf_test::fwrite(bytes, 1, sizeof(bytes), file));
+  ASSERT_EQ(0, scanf_test::fclose(file));
+
+  file = scanf_test::fopen(FILE_PATH, "r");
+  ASSERT_FALSE(file == nullptr);
+
+  for (char expected : bytes) {
+    char c = 'x';
+    ASSERT_EQ(LIBC_NAMESPACE::fscanf(file, "%c", &c), 1);
+    ASSERT_EQ(c, expected);
+  }
+  char c;
+  ASSERT_EQ(LIBC_NAMESPACE::fscanf(file, "%c", &c), EOF);
+
+  ASSERT_EQ(0, scanf_test::fclose(file));
+}
