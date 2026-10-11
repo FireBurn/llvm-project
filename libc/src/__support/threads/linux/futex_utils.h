@@ -45,7 +45,8 @@ public:
   }
   LIBC_INLINE ErrorOr<int> wait(FutexWordType expected,
                                 cpp::optional<Timeout> timeout = cpp::nullopt,
-                                bool is_shared = false) {
+                                bool is_shared = false,
+                                bool restart_on_signal = true) {
     // use bitset variants to enforce abs_time
     uint32_t op = is_shared ? FUTEX_WAIT_BITSET : FUTEX_WAIT_BITSET_PRIVATE;
     if (timeout && timeout->is_realtime()) {
@@ -89,10 +90,14 @@ public:
           /*ignored=*/nullptr,
           /*bitset=*/FUTEX_BITSET_MATCH_ANY);
 
-      // continue waiting if interrupted; otherwise return the result
-      // which should normally be 0 or -ETIMEOUT.
-      if (ret == -EINTR)
-        continue;
+      // continue waiting if interrupted, unless the caller reports being
+      // interrupted itself; otherwise return the result which should normally
+      // be 0 or -ETIMEOUT.
+      if (ret == -EINTR) {
+        if (restart_on_signal)
+          continue;
+        return cpp::unexpected(EINTR);
+      }
 
       // EAGAIN and EWOULDBLOCK will be treated as a normal finish, as the value
       // has changed.
