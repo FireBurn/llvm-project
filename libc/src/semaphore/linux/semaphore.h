@@ -44,7 +44,10 @@ class Semaphore {
   // absolute timeout.
   LIBC_INLINE int wait_until(internal::AbsTimeout timeout) {
     while (trywait() != 0) {
-      auto wait_or = value.wait(/*expected=*/0, timeout, is_shared);
+      // A signal handler that runs ends the wait with EINTR, as POSIX has it
+      // for the semaphore calls.
+      auto wait_or = value.wait(/*expected=*/0, timeout, is_shared,
+                                /*restart_on_signal=*/false);
 
       // returned error is not a benign race EAGAIN
       if (!wait_or.has_value() && wait_or.error() != EAGAIN) {
@@ -140,7 +143,8 @@ public:
       // so a racing post() before sleep is not lost.
       // Spurious wakeups just send back to trywait().
       auto wait_or =
-          value.wait(/*expected=*/0, /*timeout=*/cpp::nullopt, is_shared);
+          value.wait(/*expected=*/0, /*timeout=*/cpp::nullopt, is_shared,
+                     /*restart_on_signal=*/false);
 
       // A successful wake or EAGAIN both just send it back to trywait().
       // Any other error is unexpected.
