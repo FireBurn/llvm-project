@@ -31,6 +31,15 @@ libc_test_library(
 )
 
 libc_test_library(
+    name = "Utf8Locale",
+    hdrs = ["Utf8Locale.h"],
+    deps = [
+        "//libc:hdr_locale_macros",
+        "//libc:locale_locale",
+    ],
+)
+
+libc_test_library(
     name = "LibcUnitTest",
     srcs = [
         "BazelFilePath.cpp",
