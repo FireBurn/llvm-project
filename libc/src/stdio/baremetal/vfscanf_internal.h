@@ -28,6 +28,7 @@ namespace internal {
 
 class StreamReader : public scanf_core::Reader<StreamReader> {
   ::FILE *stream;
+  bool eof = false;
 
 public:
   LIBC_INLINE StreamReader(::FILE *stream) : stream(stream) {}
@@ -35,10 +36,13 @@ public:
   LIBC_INLINE char getc() {
     char c;
     auto result = read_internal(&c, 1, stream);
-    if (result != 1)
+    if (result != 1) {
+      eof = true;
       return '\0';
+    }
     return c;
   }
+  LIBC_INLINE bool at_end() const { return eof; }
   LIBC_INLINE void ungetc(int c) { (void)ungetc_internal(c, stream); }
 };
 
