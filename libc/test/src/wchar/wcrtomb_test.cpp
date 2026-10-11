@@ -14,6 +14,7 @@
 #include "src/wchar/wcrtomb.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcWCRToMBTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
