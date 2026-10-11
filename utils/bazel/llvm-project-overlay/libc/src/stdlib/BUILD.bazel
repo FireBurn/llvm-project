@@ -684,3 +684,35 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_function(
+    name = "mbstowcs",
+    srcs = ["mbstowcs.cpp"],
+    hdrs = ["mbstowcs.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "wcstombs",
+    srcs = ["wcstombs.cpp"],
+    hdrs = ["wcstombs.h"],
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
