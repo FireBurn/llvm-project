@@ -9,3 +9,28 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "sem_wait_test",
+    srcs = ["sem_wait_test.cpp"],
+    deps = [
+        "//libc:__support_time_clock_gettime",
+        "//libc:alarm",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_limits_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:hdr_time_macros",
+        "//libc:sem_clockwait",
+        "//libc:sem_destroy",
+        "//libc:sem_getvalue",
+        "//libc:sem_init",
+        "//libc:sem_post",
+        "//libc:sem_timedwait",
+        "//libc:sem_trywait",
+        "//libc:sem_wait",
+        "//libc:sigaction",
+        "//libc:types_sem_t",
+        "//libc:types_struct_sigaction",
+        "//libc:types_struct_timespec",
+    ],
+)
