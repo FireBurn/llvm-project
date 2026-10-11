@@ -245,7 +245,17 @@ int LinuxFile::reopen_unlocked(const char *path, const char *mode) {
 
     // Else the new file successfully opened, so we move it into the fd the old
     // file was using if the old fd exists.
-    if (old_fd >= 0) {
+    if (old_fd >= 0 && new_fd.value() == old_fd) {
+      // The old descriptor was closed behind the stream's back, so the open
+      // took its number. dup3 refuses to duplicate a descriptor onto itself.
+      if (!file_mode.is_close_on_exec()) {
+        auto flags = linux_syscalls::fcntl(old_fd, F_GETFD);
+        if (flags.has_value())
+          linux_syscalls::fcntl(
+              old_fd, F_SETFD,
+              reinterpret_cast<void *>(flags.value() & ~FD_CLOEXEC));
+      }
+    } else if (old_fd >= 0) {
       // Preserve close-on-exec atomically when replacing the old descriptor.
       int dup_flags =
           file_mode.is_close_on_exec() ? LinuxFileFlags::CLOSE_ON_EXEC : 0;
