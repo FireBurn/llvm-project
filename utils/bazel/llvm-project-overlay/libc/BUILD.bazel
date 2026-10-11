@@ -24091,6 +24091,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_fputil_x87_trig",
+    hdrs = ["src/__support/FPUtil/x86_64/x87_trig.h", "src/__support/FPUtil/x86_64/x87_two_over_pi.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_array",
+        ":__support_cpp_bit",
+        ":__support_fputil_fenv_impl",
+        ":__support_fputil_fp_bits",
+        ":__support_fputil_x86_64_x87_two_over_pi",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_macros_properties_types",
+    ],
+)
+
+libc_support_library(
     name = "__support_math_erf_common",
     hdrs = ["src/__support/math/erf_common.h"],
     deps = [
@@ -24248,6 +24264,15 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_fputil_x86_64_x87_two_over_pi",
+    hdrs = ["src/__support/FPUtil/x86_64/x87_two_over_pi.h"],
+    deps = [
+        ":__support_cpp_array",
+        ":__support_macros_config",
+    ],
+)
+
 libc_math_function(
     name = "acosh",
     additional_deps = [":__support_math_acosh"],
@@ -24261,6 +24286,11 @@ libc_math_function(
 libc_math_function(
     name = "atanh",
     additional_deps = [":__support_math_atanh"],
+)
+
+libc_math_function(
+    name = "cosl",
+    additional_deps = [":__support_fputil_x87_trig"],
 )
 
 libc_math_function(
@@ -24342,6 +24372,16 @@ libc_math_function(
         ":__support_uint128",
         ":hdr_fenv_macros",
     ],
+)
+
+libc_math_function(
+    name = "sinl",
+    additional_deps = [":__support_fputil_x87_trig"],
+)
+
+libc_math_function(
+    name = "tanl",
+    additional_deps = [":__support_fputil_x87_trig"],
 )
 
 libc_math_function(
