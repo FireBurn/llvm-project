@@ -354,6 +354,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: cosl
+    standards:
+      - stdc
+    return_type: long double
+    arguments:
+      - type: long double
   - name: cosh
     standards:
       - stdc
@@ -2730,6 +2736,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: sinl
+    standards:
+      - stdc
+    return_type: long double
+    arguments:
+      - type: long double
   - name: sincos
     standards:
       - gnu
@@ -2829,6 +2841,12 @@ functions:
     arguments:
       - type: _Float16
     guard: LIBC_TYPES_HAS_FLOAT16
+  - name: tanl
+    standards:
+      - stdc
+    return_type: long double
+    arguments:
+      - type: long double
   - name: tanh
     standards:
       - stdc
