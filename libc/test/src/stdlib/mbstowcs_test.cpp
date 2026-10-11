@@ -8,6 +8,7 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/types/wchar_t.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/null_check.h"
 #include "src/stdlib/mbstowcs.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
@@ -160,6 +161,18 @@ TEST_F(LlvmLibcMBSToWCSTest, ErrnoChecks) {
   ASSERT_EQ(static_cast<int>(n), -1);
   // Making sure the pointer is not getting updated
   ASSERT_EQ(src, original);
+}
+
+TEST_F(LlvmLibcMBSToWCSTest, AFailedCallLeavesNothingForTheNext) {
+  wchar_t dest[8];
+  // The euro sign cut short is an error, and has to be forgotten afterwards.
+  ASSERT_EQ(static_cast<int>(LIBC_NAMESPACE::mbstowcs(dest, "\xe2\x82", 8)),
+            -1);
+  ASSERT_ERRNO_EQ(EILSEQ);
+  LIBC_NAMESPACE::libc_errno = 0;
+  ASSERT_EQ(LIBC_NAMESPACE::mbstowcs(dest, "abc", 8), size_t(3));
+  ASSERT_EQ(dest[0], wchar_t(L'a'));
+  ASSERT_EQ(dest[2], wchar_t(L'c'));
 }
 
 #if defined(LIBC_ADD_NULL_CHECKS)
