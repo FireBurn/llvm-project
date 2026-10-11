@@ -91,3 +91,41 @@ libc_support_library(
         "//libc/src/__support:error_or",
     ],
 )
+
+libc_support_library(
+    name = "mbsnrtowcs",
+    hdrs = ["mbsnrtowcs.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        ":string_converter",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "wcsnrtombs",
+    hdrs = ["wcsnrtombs.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        ":string_converter",
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:char8_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)

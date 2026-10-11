@@ -365,3 +365,15 @@ libc_test(
         "//libc/src/stdlib:strtold",
     ],
 )
+
+libc_test(
+    name = "mbstowcs_test",
+    srcs = ["mbstowcs_test.cpp"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:mbstowcs",
+    ],
+)
