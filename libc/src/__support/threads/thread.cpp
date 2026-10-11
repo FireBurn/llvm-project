@@ -10,6 +10,7 @@
 #include "hdr/limits_macros.h"
 #include "hdr/types/struct___pthread_cleanup_frame.h"
 #include "src/__support/CPP/array.h"
+#include "src/__support/CPP/atomic.h"
 #include "src/__support/CPP/mutex.h" // lock_guard
 #include "src/__support/CPP/optional.h"
 #include "src/__support/fixedvector.h"
@@ -49,6 +50,11 @@ struct TSSKeyUnit {
   }
 };
 
+// Counts how many times each key has been deleted. A key is reused once it is
+// deleted, and a thread still holding a value from before has to see that the
+// value belongs to the key's earlier life rather than this one.
+cpp::array<cpp::Atomic<unsigned int>, TSS_KEY_COUNT> tss_key_generations;
+
 class TSSKeyMgr {
   Mutex mtx;
   cpp::array<TSSKeyUnit, TSS_KEY_COUNT> units;
@@ -81,6 +87,8 @@ public:
     if (key >= TSS_KEY_COUNT)
       return false;
     cpp::lock_guard lock(mtx);
+    if (units[key].active)
+      tss_key_generations[key].fetch_add(1, cpp::MemoryOrder::RELEASE);
     units[key].reset();
     return true;
   }
@@ -97,10 +105,16 @@ struct TSSValueUnit {
   bool active = false;
   void *payload = nullptr;
   TSSDtor *dtor = nullptr;
+  unsigned int generation = 0;
 
   constexpr TSSValueUnit() = default;
-  constexpr TSSValueUnit(void *p, TSSDtor *d)
-      : active(true), payload(p), dtor(d) {}
+  constexpr TSSValueUnit(void *p, TSSDtor *d, unsigned int g)
+      : active(true), payload(p), dtor(d), generation(g) {}
+
+  bool is_current(unsigned int key) const {
+    return active && generation == tss_key_generations[key].load(
+                                       cpp::MemoryOrder::ACQUIRE);
+  }
 };
 
 static LIBC_THREAD_LOCAL cpp::array<TSSValueUnit, TSS_KEY_COUNT> tss_values;
@@ -161,8 +175,11 @@ void call_atexit_callbacks() {
   for (size_t iter = 0; iter < PTHREAD_DESTRUCTOR_ITERATIONS; ++iter) {
     bool called_dtor = false;
     for (TSSValueUnit &unit : tss_values) {
-      // Both dtor and value need to be nonnull to call dtor
-      if (unit.dtor == nullptr || unit.payload == nullptr)
+      // Both dtor and value need to be nonnull to call dtor. A key deleted
+      // since the value was set has no destructor to run.
+      if (unit.dtor == nullptr || unit.payload == nullptr ||
+          !unit.is_current(
+              static_cast<unsigned int>(&unit - tss_values.begin())))
         continue;
 
       void *val = unit.payload;
@@ -186,7 +203,8 @@ bool tss_key_delete(unsigned int key) { return tss_key_mgr.remove_key(key); }
 bool set_tss_value(unsigned int key, void *val) {
   if (!tss_key_mgr.is_valid_key(key))
     return false;
-  tss_values[key] = {val, tss_key_mgr.get_dtor(key)};
+  tss_values[key] = {val, tss_key_mgr.get_dtor(key),
+                     tss_key_generations[key].load(cpp::MemoryOrder::ACQUIRE)};
   return true;
 }
 
@@ -195,7 +213,7 @@ void *get_tss_value(unsigned int key) {
     return nullptr;
 
   auto &u = tss_values[key];
-  if (!u.active)
+  if (!u.is_current(key))
     return nullptr;
   return u.payload;
 }
