@@ -19,6 +19,7 @@
 #include "src/wchar/swprintf.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcSwprintfTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 

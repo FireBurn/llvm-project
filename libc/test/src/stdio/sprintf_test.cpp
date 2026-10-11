@@ -19,6 +19,7 @@
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/RoundingModeUtils.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 #include <inttypes.h>
 
 // TODO: Add a comment here explaining the printf format string.

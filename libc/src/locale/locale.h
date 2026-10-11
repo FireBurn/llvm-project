@@ -67,6 +67,10 @@ const char *set_locale_name(int category, cpp::string_view name);
 // The name in force, which setlocale reports when asked rather than told.
 const char *current_locale_name(int category);
 
+// Whether LC_CTYPE in force uses UTF-8, rather than the ASCII the C locale
+// means. The multibyte conversions follow it.
+bool ctype_is_utf8();
+
 // The name of the character set the locale in force uses: "UTF-8", or the
 // ASCII the C locale means, under the name glibc gives it.
 const char *current_codeset();

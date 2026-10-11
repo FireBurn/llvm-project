@@ -7,6 +7,7 @@ add_libc_test(
   SRCS
     string_converter_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.__support.macros.properties.types
     libc.src.__support.wchar.string_converter
     libc.src.__support.wchar.mbstate
@@ -22,6 +23,7 @@ add_libc_test(
   SRCS
     utf8_to_32_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.__support.error_or
     libc.src.__support.macros.properties.types
     libc.src.__support.wchar.character_converter
@@ -35,6 +37,7 @@ add_libc_test(
   SRCS
     utf32_to_8_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.__support.error_or
     libc.src.__support.macros.properties.types
     libc.src.__support.wchar.character_converter
@@ -48,6 +51,7 @@ add_libc_test(
   SRCS
     wcsnrtombs_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.__support.wchar.string_converter
     libc.src.__support.wchar.character_converter
     libc.src.__support.wchar.mbstate

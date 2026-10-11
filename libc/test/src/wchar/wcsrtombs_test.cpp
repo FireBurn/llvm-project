@@ -12,6 +12,7 @@
 #include "src/wchar/wcsrtombs.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcWcsrtombs = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
