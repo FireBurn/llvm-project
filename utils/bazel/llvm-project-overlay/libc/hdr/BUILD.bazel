@@ -369,6 +369,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "locale_macros",
+    hdrs = ["locale_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_locale_macros",
+    ],
+)
+
+libc_support_library(
     name = "printf_macros",
     hdrs = ["printf_macros.h"],
     deps = select({

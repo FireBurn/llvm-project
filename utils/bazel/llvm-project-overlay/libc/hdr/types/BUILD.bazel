@@ -549,6 +549,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "locale_t",
+    hdrs = ["locale_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_locale_t"],
+        "//conditions:default": [],
+    }),
+    target_compatible_with = select({
+        "//libc:full_build": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+)
+
+libc_support_library(
     name = "cookie_io_functions_t",
     hdrs = ["cookie_io_functions_t.h"],
     deps = select({

@@ -702,6 +702,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_locale_t",
+    hdrs = ["llvm-libc-types/locale_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_Elf64_Sxword",
     hdrs = ["llvm-libc-types/Elf64_Sxword.h"],
 )
@@ -739,6 +744,14 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_locale_macros",
+    hdrs = ["llvm-libc-macros/locale-macros.h"],
+    deps = [
+        ":llvm_libc_types_locale_t",
+    ],
 )
 
 libc_support_library(
