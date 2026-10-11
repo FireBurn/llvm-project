@@ -188,7 +188,7 @@ public:
       "V must be a byte slice or byte vector");
 
   LIBC_INLINE constexpr PtrHash(uint64_t seed_, PilotsTypeV pilots_, F remap_)
-      : seed(seed_), pilots(pilots_), remap(remap_) {}
+      : seed(seed_), pilot_values(pilots_), remap(remap_) {}
 
   LIBC_INLINE constexpr PtrHash() = default;
   LIBC_INLINE constexpr PtrHash(const PtrHash &) = default;
@@ -209,7 +209,7 @@ public:
   LIBC_INLINE constexpr size_t index_no_remap(Key key) const {
     auto hx = this->hash_key(key);
     auto b = this->bucket(hx);
-    auto pilot = this->pilots[b];
+    auto pilot = this->pilot_values[b];
     return this->slot(hx, pilot);
   }
 
@@ -261,8 +261,8 @@ public:
                   : !this->remap_free_slots(taken);
     }
 
-    this->pilots = pilots;
-    return {{this->seed, this->pilots, this->remap}};
+    this->pilot_values = pilots;
+    return {{this->seed, this->pilot_values, this->remap}};
   }
 
   LIBC_INLINE constexpr bool
@@ -576,8 +576,8 @@ public:
           pilots[b] = static_cast<uint8_t>(p);
           for (auto &item :
                hashes.subspan(starts[b], starts[b + 1] - starts[b])) {
-            auto p = this->slot_in_part_hp(item, hp);
-            slots[p] = b;
+            auto slot_pos = this->slot_in_part_hp(item, hp);
+            slots[slot_pos] = b;
           }
           continue;
         }
@@ -592,8 +592,8 @@ public:
           size_t collision_score = 0;
           for (auto &item :
                hashes.subspan(starts[b], starts[b + 1] - starts[b])) {
-            auto p = this->slot_in_part_hp(item, hp);
-            const auto s = slots[p];
+            auto slot_pos = this->slot_in_part_hp(item, hp);
+            const auto s = slots[slot_pos];
             size_t new_score = 0;
             if (s == BUCKET_IDX_NONE) {
               continue;
@@ -641,10 +641,11 @@ public:
             heap.push({bucket_len(b2), b2});
             evictions++;
 
-            auto hp = this->hash_pilot(static_cast<uint64_t>(pilots[b2]));
-            for (auto &item :
+            auto evicted_hp =
+                this->hash_pilot(static_cast<uint64_t>(pilots[b2]));
+            for (auto &evicted_item :
                  hashes.subspan(starts[b2], starts[b2 + 1] - starts[b2])) {
-              auto p2 = this->slot_in_part_hp(item, hp);
+              auto p2 = this->slot_in_part_hp(evicted_item, evicted_hp);
               slots[p2] = BUCKET_IDX_NONE;
               taken[p2] = false;
             }
@@ -703,8 +704,8 @@ public:
       size_t hx = bucket[i];
       const auto slot = this->slot_in_part_hp(hx, hp);
       if (taken[slot]) {
-        for (auto hx : bucket.subspan(0, i)) {
-          taken[this->slot_in_part_hp(hx, hp)] = false;
+        for (auto earlier : bucket.subspan(0, i)) {
+          taken[this->slot_in_part_hp(earlier, hp)] = false;
         }
         return false;
       }
@@ -802,7 +803,7 @@ public:
 
 private:
   uint64_t seed;
-  PilotsTypeV pilots;
+  PilotsTypeV pilot_values;
   F remap;
 };
 
