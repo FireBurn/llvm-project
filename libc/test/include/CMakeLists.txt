@@ -196,6 +196,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  float_test
+  SUITE
+    libc-include-tests
+  SRCS
+    float_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.float_macros
+)
+
+add_libc_test(
   fpclassifyf_test
   SUITE
     libc-include-tests
