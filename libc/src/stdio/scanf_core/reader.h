@@ -25,12 +25,13 @@ template <typename Derived> class Reader {
 
 public:
   // This returns the next character from the input and advances it by one
-  // character. When it hits the end of the string or file it returns '\0' to
-  // signal to stop parsing.
+  // character. When it hits the end of the string or file it returns '\0' and
+  // the reader says so through at_end(), since a NUL byte in a file is data
+  // and not the end of it.
   LIBC_INLINE char getc() {
     ++cur_chars_read;
     char c = static_cast<Derived *>(this)->getc();
-    if (c == '\0')
+    if (static_cast<Derived *>(this)->at_end())
       input_exhausted = true;
     else if (!internal::isspace(c))
       read_non_space = true;
