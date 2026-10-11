@@ -18,6 +18,7 @@
 #include "src/uchar/mbrtoc32.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcUcharTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
