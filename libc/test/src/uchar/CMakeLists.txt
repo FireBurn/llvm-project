@@ -7,6 +7,7 @@ add_libc_test(
   SRCS
     mbrtoc32_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.hdr.types.char32_t
     libc.hdr.types.mbstate_t
     libc.src.errno.errno
