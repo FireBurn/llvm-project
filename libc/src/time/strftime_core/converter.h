@@ -63,6 +63,8 @@ int convert(printf_core::Writer<overflow_mode> *writer,
   case 'H': // 24-hour format [00-23]
   case 'I': // 12-hour format [01-12]
   case 'j': // Day of the year [001-366]
+  case 'k': // 24-hour format, space padded [ 0-23]
+  case 'l': // 12-hour format, space padded [ 1-12]
   case 'm': // Month of the year [01-12]
   case 'M': // Minute of the hour [00-59]
   case 's': // Seconds since the epoch
@@ -87,6 +89,7 @@ int convert(printf_core::Writer<overflow_mode> *writer,
   case 'B': // Full month name
   case 'h': // same as %b
   case 'p': // AM/PM designation
+  case 'P': // am/pm designation
     return convert_str(writer, to_conv, timeptr);
 
   case 'Z': // Timezone name (string conv)
