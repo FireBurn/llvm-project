@@ -179,6 +179,50 @@
 #define LDBL_HAS_SUBNORM __LDBL_HAS_DENORM__
 #endif // LDBL_HAS_SUBNORM
 
+#ifndef FLT_NORM_MAX
+#define FLT_NORM_MAX __FLT_NORM_MAX__
+#endif // FLT_NORM_MAX
+
+#ifndef DBL_NORM_MAX
+#define DBL_NORM_MAX __DBL_NORM_MAX__
+#endif // DBL_NORM_MAX
+
+#ifndef LDBL_NORM_MAX
+#define LDBL_NORM_MAX __LDBL_NORM_MAX__
+#endif // LDBL_NORM_MAX
+
+// Whether the format follows IEC 60559: 1 where it does, 0 where it does not,
+// and 2 where that is not known. The compiler says so for the whole target.
+#ifdef __STDC_IEC_60559_BFP__
+#define __LIBC_IS_IEC_60559 1
+#else
+#define __LIBC_IS_IEC_60559 2
+#endif // __STDC_IEC_60559_BFP__
+
+#ifndef FLT_IS_IEC_60559
+#define FLT_IS_IEC_60559 __LIBC_IS_IEC_60559
+#endif // FLT_IS_IEC_60559
+
+#ifndef DBL_IS_IEC_60559
+#define DBL_IS_IEC_60559 __LIBC_IS_IEC_60559
+#endif // DBL_IS_IEC_60559
+
+#ifndef LDBL_IS_IEC_60559
+#define LDBL_IS_IEC_60559 __LIBC_IS_IEC_60559
+#endif // LDBL_IS_IEC_60559
+
+#ifndef FLT_SNAN
+#define FLT_SNAN __builtin_nansf("")
+#endif // FLT_SNAN
+
+#ifndef DBL_SNAN
+#define DBL_SNAN __builtin_nans("")
+#endif // DBL_SNAN
+
+#ifndef LDBL_SNAN
+#define LDBL_SNAN __builtin_nansl("")
+#endif // LDBL_SNAN
+
 // TODO: Add FLT16 and FLT128 constants.
 
 #endif // LLVM_LIBC_MACROS_FLOAT_MACROS_H
