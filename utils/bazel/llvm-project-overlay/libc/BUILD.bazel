@@ -5215,6 +5215,7 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":hdr_sys_mman_macros",
         ":hdr_sys_resource_macros",
+        ":sys_single_threaded___libc_single_threaded",
     ],
 )
 
@@ -19835,6 +19836,17 @@ libc_function(
 )
 
 libc_function(
+    name = "__libc_single_threaded",
+    srcs = ["src/sys/single_threaded/__libc_single_threaded.cpp"],
+    hdrs = ["src/sys/single_threaded/__libc_single_threaded.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sys_single_threaded___libc_single_threaded",
+    ],
+)
+
+libc_function(
     name = "adjtimex",
     srcs = ["src/sys/timex/adjtimex.cpp"],
     hdrs = ["src/sys/timex/adjtimex.h"],
@@ -28738,5 +28750,15 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":types_cpu_set_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_single_threaded___libc_single_threaded",
+    srcs = ["src/sys/single_threaded/__libc_single_threaded.cpp"],
+    hdrs = ["src/sys/single_threaded/__libc_single_threaded.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
