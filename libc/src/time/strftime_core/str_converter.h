@@ -68,6 +68,9 @@ LIBC_INLINE int convert_str(printf_core::Writer<overflow_mode> *writer,
   case 'p': // AM/PM designation
     str = time_reader.get_am_pm();
     break;
+  case 'P': // am/pm designation
+    str = time_reader.get_am_pm()[0] == 'A' ? "am" : "pm";
+    break;
   case 'Z': // Timezone name
     str = time_reader.get_timezone_name();
     break;
