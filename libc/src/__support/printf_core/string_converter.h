@@ -91,11 +91,15 @@ write_wchar_string_as_chars(Writer<mode, char> *writer,
   internal::StringConverter<char32_t> length_counter(wstr_ptr, &mbstate,
                                                      precision);
 
-  for (auto converted = length_counter.pop<char8_t>();
-       converted.has_value() && converted.value() != '\0';
-       converted = length_counter.pop<char8_t>()) {
+  auto counted = length_counter.pop<char8_t>();
+  for (; counted.has_value() && counted.value() != '\0';
+       counted = length_counter.pop<char8_t>()) {
     ++string_len;
   }
+  // -1 only says the precision was used up. Anything else is a wide character
+  // that has no encoding, which fails the call before anything is written.
+  if (!counted.has_value() && counted.error() != -1)
+    return ILLEGAL_WIDE_CHAR;
 
   size_t padding_spaces = to_conv.min_width > static_cast<int>(string_len)
                               ? to_conv.min_width - string_len
