@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_support_library")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -76,5 +76,138 @@ libc_support_library(
         "//libc/src/__support:libc_assert",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/sys/mman:shm_common",
+    ],
+)
+
+libc_function(
+    name = "sem_init",
+    srcs = ["linux/sem_init.cpp"],
+    hdrs = ["sem_init.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_destroy",
+    srcs = ["linux/sem_destroy.cpp"],
+    hdrs = ["sem_destroy.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_getvalue",
+    srcs = ["linux/sem_getvalue.cpp"],
+    hdrs = ["sem_getvalue.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_post",
+    srcs = ["linux/sem_post.cpp"],
+    hdrs = ["sem_post.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_wait",
+    srcs = ["linux/sem_wait.cpp"],
+    hdrs = ["sem_wait.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_trywait",
+    srcs = ["linux/sem_trywait.cpp"],
+    hdrs = ["sem_trywait.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_timedwait",
+    srcs = ["linux/sem_timedwait.cpp"],
+    hdrs = ["sem_timedwait.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sem_clockwait",
+    srcs = ["linux/sem_clockwait.cpp"],
+    hdrs = ["sem_clockwait.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
