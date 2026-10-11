@@ -67,6 +67,7 @@ add_object_library(
     libc.hdr.errno_macros
     libc.hdr.sched_macros
     libc.hdr.sys_mman_macros
+    libc.src.sys.single_threaded.__libc_single_threaded
     libc.src.__support.CPP.atomic
     libc.src.__support.CPP.stringstream
     libc.src.__support.CPP.string_view
@@ -91,6 +92,7 @@ add_object_library(
     libc.src.__support.threads.robust_list
     libc.src.__support.threads.thread_common
     libc.src.__support.threads.thread_attributes
+    .setxid_signal
   COMPILE_OPTIONS
     ${libc_opt_high_flag}
 )
