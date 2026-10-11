@@ -22012,6 +22012,22 @@ libc_function(
 )
 
 libc_function(
+    name = "mbrtowc",
+    srcs = ["src/wchar/mbrtowc.cpp"],
+    hdrs = ["src/wchar/mbrtowc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
     name = "vfwprintf",
     srcs = ["src/wchar/vfwprintf.cpp"],
     hdrs = ["src/wchar/vfwprintf.h"],
@@ -22078,6 +22094,22 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":__support_macros_null_check",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "wcrtomb",
+    srcs = ["src/wchar/wcrtomb.cpp"],
+    hdrs = ["src/wchar/wcrtomb.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcrtomb",
+        ":types_mbstate_t",
         ":types_size_t",
         ":types_wchar_t",
     ],
@@ -23099,6 +23131,20 @@ libc_support_library(
     hdrs = ["hdr/types/fd_set.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_fd_set"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_fpos_t",
+    hdrs = ["include/llvm-libc-types/fpos_t.h"],
+)
+
+libc_support_library(
+    name = "types_fpos_t",
+    hdrs = ["hdr/types/fpos_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_fpos_t"],
         "//conditions:default": [],
     }),
 )
@@ -24373,6 +24419,35 @@ libc_function(
 )
 
 libc_function(
+    name = "mbtowc",
+    srcs = ["src/stdlib/mbtowc.cpp"],
+    hdrs = ["src/stdlib/mbtowc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "mblen",
+    srcs = ["src/stdlib/mblen.cpp"],
+    hdrs = ["src/stdlib/mblen.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "mbstowcs",
     srcs = ["src/stdlib/mbstowcs.cpp"],
     hdrs = ["src/stdlib/mbstowcs.h"],
@@ -24384,6 +24459,21 @@ libc_function(
         ":__support_wchar_mbsnrtowcs",
         ":__support_wchar_mbstate",
         ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "wctomb",
+    srcs = ["src/stdlib/wctomb.cpp"],
+    hdrs = ["src/stdlib/wctomb.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcrtomb",
+        ":types_mbstate_t",
         ":types_wchar_t",
     ],
 )
@@ -24687,6 +24777,87 @@ libc_function(
 )
 
 libc_function(
+    name = "mbsinit",
+    srcs = ["src/wchar/mbsinit.cpp"],
+    hdrs = ["src/wchar/mbsinit.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_wchar_character_converter",
+        ":__support_wchar_mbstate",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "mbsrtowcs",
+    srcs = ["src/wchar/mbsrtowcs.cpp"],
+    hdrs = ["src/wchar/mbsrtowcs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbsnrtowcs",
+        ":__support_wchar_mbstate",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "mbsnrtowcs",
+    srcs = ["src/wchar/mbsnrtowcs.cpp"],
+    hdrs = ["src/wchar/mbsnrtowcs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbsnrtowcs",
+        ":__support_wchar_mbstate",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "wcsrtombs",
+    srcs = ["src/wchar/wcsrtombs.cpp"],
+    hdrs = ["src/wchar/wcsrtombs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcsnrtombs",
+        ":types_char32_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "wcsnrtombs",
+    srcs = ["src/wchar/wcsnrtombs.cpp"],
+    hdrs = ["src/wchar/wcsnrtombs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":__support_wchar_wcsnrtombs",
+        ":types_char32_t",
+        ":types_mbstate_t",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
     name = "wcsxfrm",
     srcs = ["src/wchar/wcsxfrm.cpp"],
     hdrs = ["src/wchar/wcsxfrm.h"],
@@ -24696,6 +24867,155 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":wchar_wcsxfrm_impl",
+    ],
+)
+
+libc_function(
+    name = "fputwc",
+    srcs = ["src/wchar/fputwc.cpp"],
+    hdrs = ["src/wchar/fputwc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_wchar_macros",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "fgetwc",
+    srcs = ["src/wchar/fgetwc.cpp"],
+    hdrs = ["src/wchar/fgetwc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_wchar_macros",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "fputws",
+    srcs = ["src/wchar/fputws.cpp"],
+    hdrs = ["src/wchar/fputws.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":string_utils",
+        ":types_FILE",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "fgetws",
+    srcs = ["src/wchar/fgetws.cpp"],
+    hdrs = ["src/wchar/fgetws.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":types_FILE",
+        ":types_wchar_t",
+    ],
+)
+
+libc_function(
+    name = "ungetwc",
+    srcs = ["src/wchar/ungetwc.cpp"],
+    hdrs = ["src/wchar/ungetwc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_wchar_macros",
+        ":types_FILE",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "getwc",
+    srcs = ["src/wchar/getwc.cpp"],
+    hdrs = ["src/wchar/getwc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_wchar_macros",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "getwchar",
+    srcs = ["src/wchar/getwchar.cpp"],
+    hdrs = ["src/wchar/getwchar.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_wchar_macros",
+        ":stdin",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "putwc",
+    srcs = ["src/wchar/putwc.cpp"],
+    hdrs = ["src/wchar/putwc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_wchar_macros",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
+    ],
+)
+
+libc_function(
+    name = "putwchar",
+    srcs = ["src/wchar/putwchar.cpp"],
+    hdrs = ["src/wchar/putwchar.h"],
+    deps = [
+        ":__support_common",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_wchar_macros",
+        ":stdout",
+        ":types_FILE",
+        ":types_wchar_t",
+        ":types_wint_t",
     ],
 )
 
@@ -25084,6 +25404,46 @@ libc_function(
 )
 
 libc_function(
+    name = "fgetpos",
+    srcs = ["src/stdio/generic/fgetpos.cpp"],
+    hdrs = ["src/stdio/fgetpos.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_type_traits",
+        ":__support_error_or",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_wchar_mbstate",
+        ":string_memory_utils",
+        ":types_FILE",
+        ":types_fpos_t",
+        ":types_mbstate_t",
+    ],
+)
+
+libc_function(
+    name = "fsetpos",
+    srcs = ["src/stdio/generic/fsetpos.cpp"],
+    hdrs = ["src/stdio/fsetpos.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_type_traits",
+        ":__support_error_or",
+        ":__support_file_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_wchar_mbstate",
+        ":string_memory_utils",
+        ":types_FILE",
+        ":types_fpos_t",
+        ":types_mbstate_t",
+    ],
+)
+
+libc_function(
     name = "fread_unlocked",
     srcs = ["src/stdio/generic/fread_unlocked.cpp"],
     hdrs = ["src/stdio/fread_unlocked.h"],
@@ -25171,6 +25531,18 @@ libc_function(
         ":stdout",
         ":types_FILE",
         ":types_file",
+    ],
+)
+
+libc_function(
+    name = "ungetc",
+    srcs = ["src/stdio/generic/ungetc.cpp"],
+    hdrs = ["src/stdio/ungetc.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_macros_config",
+        ":types_FILE",
     ],
 )
 
