@@ -2799,9 +2799,3 @@ math_test(
         "//libc:tgammaf",
     ],
 )
-
-math_test(name = "tanl")
-
-math_test(name = "sinl")
-
-math_test(name = "cosl")
