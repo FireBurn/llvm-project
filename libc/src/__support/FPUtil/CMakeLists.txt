@@ -168,6 +168,22 @@ add_header_library(
 )
 
 add_header_library(
+  x87_trig
+  HDRS
+    x86_64/x87_trig.h
+    x86_64/x87_two_over_pi.h
+  DEPENDS
+    .fenv_impl
+    .fp_bits
+    libc.src.__support.common
+    libc.src.__support.CPP.array
+    libc.src.__support.CPP.bit
+    libc.src.__support.macros.config
+    libc.src.__support.macros.properties.architectures
+    libc.src.__support.macros.properties.types
+)
+
+add_header_library(
   nearest_integer
   HDRS
     nearest_integer.h
