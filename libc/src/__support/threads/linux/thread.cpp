@@ -43,6 +43,7 @@
 #include "src/__support/threads/linux/futex_word.h"
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/thread_attributes.h"
+#include "src/sys/single_threaded/__libc_single_threaded.h"
 
 #include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
@@ -325,6 +326,8 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
   attrib->platform_data = clear_tid;
 
   get_tcb(tls.tp)->attrib = attrib;
+
+  __libc_single_threaded = 0;
 
   auto clone_result = linux_syscalls::clone(
       start_thread, reinterpret_cast<void *>(adjusted_stack),
