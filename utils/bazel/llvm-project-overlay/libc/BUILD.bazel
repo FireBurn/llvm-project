@@ -29211,6 +29211,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_itimerval",
+    hdrs = ["include/llvm-libc-types/struct_itimerval.h"],
+)
+
+libc_support_library(
+    name = "types_struct_itimerval",
+    hdrs = ["hdr/types/struct_itimerval.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_itimerval"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_mntent",
     hdrs = ["include/llvm-libc-types/struct_mntent.h"],
 )
@@ -30729,6 +30743,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_alarm",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/alarm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setitimer",
+        ":__support_osutil_syscall",
+        ":hdr_sys_time_macros",
+        ":types_struct_itimerval",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_fgetxattr",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fgetxattr.h"],
     deps = [
@@ -30775,6 +30803,20 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setitimer",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setitimer.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_limits",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_errno_macros",
+        ":types_struct_itimerval",
     ],
 )
 
@@ -33588,6 +33630,139 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "sem_init",
+    srcs = ["src/semaphore/linux/sem_init.cpp"],
+    hdrs = ["src/semaphore/sem_init.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_limits_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_destroy",
+    srcs = ["src/semaphore/linux/sem_destroy.cpp"],
+    hdrs = ["src/semaphore/sem_destroy.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_getvalue",
+    srcs = ["src/semaphore/linux/sem_getvalue.cpp"],
+    hdrs = ["src/semaphore/sem_getvalue.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_post",
+    srcs = ["src/semaphore/linux/sem_post.cpp"],
+    hdrs = ["src/semaphore/sem_post.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_wait",
+    srcs = ["src/semaphore/linux/sem_wait.cpp"],
+    hdrs = ["src/semaphore/sem_wait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_trywait",
+    srcs = ["src/semaphore/linux/sem_trywait.cpp"],
+    hdrs = ["src/semaphore/sem_trywait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+    ],
+)
+
+libc_function(
+    name = "sem_timedwait",
+    srcs = ["src/semaphore/linux/sem_timedwait.cpp"],
+    hdrs = ["src/semaphore/sem_timedwait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_sem_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "sem_clockwait",
+    srcs = ["src/semaphore/linux/sem_clockwait.cpp"],
+    hdrs = ["src/semaphore/sem_clockwait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":hdr_errno_macros",
+        ":semaphore_linux_semaphore",
+        ":types_clockid_t",
+        ":types_sem_t",
+        ":types_struct_timespec",
+    ],
+)
+
 libc_support_library(
     name = "shadow_shadow_utils",
     srcs = ["src/shadow/shadow_utils.cpp"],
@@ -35368,6 +35543,17 @@ libc_function(
 )
 
 libc_function(
+    name = "alarm",
+    srcs = ["src/unistd/linux/alarm.cpp"],
+    hdrs = ["src/unistd/alarm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_alarm",
+    ],
+)
+
+libc_function(
     name = "fdatasync",
     srcs = ["src/unistd/linux/fdatasync.cpp"],
     hdrs = ["src/unistd/fdatasync.h"],
@@ -36539,6 +36725,22 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_sys_select_macros",
     hdrs = ["include/llvm-libc-macros/sys-select-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_time_macros",
+    hdrs = ["include/llvm-libc-macros/sys-time-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_time_macros",
+    hdrs = ["hdr/sys_time_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_sys_time_macros",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
