@@ -950,6 +950,20 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "freopen",
+    srcs = ["generic/freopen.cpp"],
+    hdrs = ["freopen.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_function(
     name = "fopencookie",
     srcs = ["fopencookie.cpp"],

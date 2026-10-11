@@ -347,3 +347,16 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "fwide",
+    srcs = ["fwide.cpp"],
+    hdrs = ["fwide.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
