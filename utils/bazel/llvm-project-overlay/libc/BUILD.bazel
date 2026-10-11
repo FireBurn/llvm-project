@@ -220,6 +220,10 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
+    libc_header_info(
+        "sys/single_threaded",
+        has_def_template = True,
+    ),
     libc_header_info("sys/soundcard"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/timeb"),
@@ -5651,6 +5655,7 @@ libc_support_library(
         ":hdr_stdint_proxy",
         ":hdr_sys_mman_macros",
         ":hdr_sys_resource_macros",
+        ":__libc_single_threaded",
     ],
 )
 
@@ -20590,6 +20595,16 @@ libc_function(
         ":types_struct_timespec",
         ":types_struct_timeval",
         ":types_struct_timezone",
+    ],
+)
+
+libc_function(
+    name = "__libc_single_threaded",
+    srcs = ["src/sys/single_threaded/__libc_single_threaded.cpp"],
+    hdrs = ["src/sys/single_threaded/__libc_single_threaded.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
