@@ -226,6 +226,19 @@ add_integration_test(
 )
 
 add_integration_test(
+  single_threaded_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    single_threaded_test.cpp
+  DEPENDS
+    libc.include.pthread
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.sys.single_threaded.__libc_single_threaded
+)
+
+add_integration_test(
   pthread_tss_test
   SUITE
     libc-pthread-integration-tests
