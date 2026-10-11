@@ -192,6 +192,16 @@ add_unittest_framework_library(
 )
 
 add_header_library(
+  Utf8Locale
+  HDRS
+    Utf8Locale.h
+  DEPENDS
+    libc.hdr.locale_macros
+    libc.src.__support.macros.config
+    libc.src.locale.locale
+)
+
+add_header_library(
   string_utils
   HDRS
     StringUtils.h
