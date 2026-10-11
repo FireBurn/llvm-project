@@ -284,6 +284,7 @@ add_fp_unittest(
   SRCS
     sprintf_test.cpp
   DEPENDS
+    libc.test.UnitTest.Utf8Locale
     libc.src.stdio.sprintf
     libc.src.__support.FPUtil.fp_bits
     libc.src.__support.printf_core.printf_config
