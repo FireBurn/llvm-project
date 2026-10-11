@@ -5144,6 +5144,7 @@ libc_support_library(
     }),
     deps = [
         ":__support_cpp_array",
+        ":__support_cpp_atomic",
         ":__support_cpp_mutex",
         ":__support_cpp_optional",
         ":__support_fixedvector",
