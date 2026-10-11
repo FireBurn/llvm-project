@@ -18,6 +18,7 @@
 #include "src/wchar/fwide.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 using LlvmLibcFgetwcTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
