@@ -68,6 +68,7 @@ add_object_library(
     libc.hdr.sched_macros
     libc.hdr.sys_mman_macros
     libc.src.errno.errno
+    libc.src.sys.single_threaded.__libc_single_threaded
     libc.src.__support.CPP.atomic
     libc.src.__support.CPP.stringstream
     libc.src.__support.CPP.string_view

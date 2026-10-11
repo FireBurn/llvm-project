@@ -1,0 +1,11 @@
+header: sys/single_threaded.h
+header_template: single_threaded.h.def
+standards:
+  - linux
+macros: []
+types: []
+enums: []
+objects:
+  - object_name: __libc_single_threaded
+    object_type: char
+functions: []
