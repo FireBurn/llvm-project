@@ -331,6 +331,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  cosl
+  SRCS
+    cosl.cpp
+  HDRS
+    ../cosl.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.FPUtil.x87_trig
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   cospif
   SRCS
     cospif.cpp
@@ -391,6 +403,18 @@ add_entrypoint_object(
     ../sinf16.h
   DEPENDS
     libc.src.__support.math.sinf16
+)
+
+add_entrypoint_object(
+  sinl
+  SRCS
+    sinl.cpp
+  HDRS
+    ../sinl.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.FPUtil.x87_trig
+    libc.src.__support.macros.config
 )
 
 add_entrypoint_object(
@@ -471,6 +495,18 @@ add_entrypoint_object(
     ../tanf16.h
   DEPENDS
     libc.src.__support.math.tanf16
+)
+
+add_entrypoint_object(
+  tanl
+  SRCS
+    tanl.cpp
+  HDRS
+    ../tanl.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.FPUtil.x87_trig
+    libc.src.__support.macros.config
 )
 
 add_entrypoint_object(
