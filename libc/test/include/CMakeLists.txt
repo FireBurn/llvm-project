@@ -118,6 +118,7 @@ add_libc_test(
     sys_param_test.cpp
   DEPENDS
     libc.include.llvm-libc-macros.sys_param_macros
+    libc.hdr.types.dev_t
 )
 
 add_libc_test(
