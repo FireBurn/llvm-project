@@ -4013,6 +4013,20 @@ TEST(LlvmLibcSprintfTest, InvalidWideCharacterFailsTheCall) {
 
 #endif // !LIBC_COPT_PRINTF_DISABLE_WIDE && !LIBC_TARGET_ARCH_IS_GPU
 
+TEST(LlvmLibcSprintfTest, FormatEndingInsideAConversionFails) {
+  char buff[64];
+  const char *formats[] = {"%", "%l", "%5", "%.", "a%-12.3ll"};
+  for (const char *format : formats) {
+    ASSERT_EQ(LIBC_NAMESPACE::sprintf(buff, format, 1), -1);
+    ASSERT_ERRNO_EQ(EINVAL);
+    libc_errno = 0;
+  }
+  // An unknown conversion letter is still written out as it came.
+  int written = LIBC_NAMESPACE::sprintf(buff, "a%yb");
+  EXPECT_EQ(written, 4);
+  ASSERT_STREQ_LEN(written, buff, "a%yb");
+}
+
 TEST(LlvmLibcSprintfTest, GroupingFlagIsAccepted) {
   char buff[64];
   // The C locale has no grouping, so the flag changes nothing there.
