@@ -194,7 +194,8 @@ ErrorOr<LinuxFile *> create_file_from_fd(int fd, const char *mode) {
   File::add_file(file);
   if (do_seek) {
     result = file->seek(0, SEEK_END);
-    if (!result.has_value()) {
+    // A pipe has no position to move, and O_APPEND is all it was asked for.
+    if (!result.has_value() && result.error() != ESPIPE) {
       File::remove_file(file);
       delete file;
       return Error(result.error());
@@ -318,7 +319,7 @@ int LinuxFile::reopen_unlocked(const char *path, const char *mode) {
 
   if (do_seek) {
     auto seek_result = linux_file_seek(this, 0, SEEK_END);
-    if (!seek_result.has_value())
+    if (!seek_result.has_value() && seek_result.error() != ESPIPE)
       return seek_result.error();
   }
   return 0;
