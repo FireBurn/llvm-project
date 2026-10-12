@@ -71,9 +71,44 @@ bool same_codeset(cpp::string_view codeset, const char *expected) {
   return expected[read] == '\0';
 }
 
+// Whether the language and territory part of a name is one a locale has:
+// "C", "POSIX", or "ll" or "lll" with an optional "_CC" after it. There is no
+// locale data to look a name up in, but a name that is no locale's, such as
+// "invalid", is still refused, which is how programs find out that a locale
+// is not there.
+bool names_a_locale(cpp::string_view name) {
+  if (name.empty())
+    return true;
+  size_t end = 0;
+  while (end < name.size() && name[end] != '.' && name[end] != '@')
+    ++end;
+  cpp::string_view base = name.substr(0, end);
+  if (base == cpp::string_view("C") || base == cpp::string_view("POSIX"))
+    return true;
+  size_t i = 0;
+  while (i < base.size() && base[i] >= 'a' && base[i] <= 'z')
+    ++i;
+  if (i < 2 || i > 3)
+    return false;
+  if (i == base.size())
+    return true;
+  if (base[i] != '_')
+    return false;
+  const size_t territory = base.size() - i - 1;
+  if (territory < 2 || territory > 3)
+    return false;
+  for (size_t j = i + 1; j < base.size(); ++j)
+    if (!((base[j] >= 'A' && base[j] <= 'Z') ||
+          (base[j] >= '0' && base[j] <= '9')))
+      return false;
+  return true;
+}
+
 } // anonymous namespace
 
 bool codeset_is_supported(cpp::string_view name) {
+  if (!names_a_locale(name))
+    return false;
   cpp::string_view codeset = codeset_of(name);
   if (codeset.empty())
     return true;
