@@ -365,6 +365,25 @@ libc_test(
 )
 
 libc_test(
+    name = "fdopen_test",
+    srcs = ["fdopen_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:fcntl",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fdopen",
+        "//libc/src/stdio:fgets",
+        "//libc/src/stdio:fputs",
+        "//libc/src/stdio:stdio_fgets",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pipe",
+    ],
+)
+
+libc_test(
     name = "ctermid_test",
     srcs = ["ctermid_test.cpp"],
     deps = [
