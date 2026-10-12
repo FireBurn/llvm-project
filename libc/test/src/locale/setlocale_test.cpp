@@ -75,6 +75,20 @@ TEST_F(LlvmLibcSetlocale, TheCharacterSetIsReadEitherWayItIsWritten) {
   ASSERT_STREQ(LIBC_NAMESPACE::nl_langinfo(CODESET), "UTF-8");
 }
 
+TEST_F(LlvmLibcSetlocale, RefusesANameNoLocaleHas) {
+  // Python coerces the C locale to C.UTF-8 when the environment names a
+  // locale that is not there, and asks setlocale to find out.
+  ASSERT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "invalid.ascii"),
+            static_cast<char *>(nullptr));
+  ASSERT_EQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "nonsense"),
+            static_cast<char *>(nullptr));
+  ASSERT_EQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "en_us"),
+            static_cast<char *>(nullptr));
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "de_DE"), "de_DE");
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "POSIX"), "POSIX");
+}
+
 TEST_F(LlvmLibcSetlocale, RefusesACharacterSetItCannotHonour) {
   ASSERT_EQ(LIBC_NAMESPACE::setlocale(LC_ALL, "ja_JP.EUC-JP"),
             static_cast<char *>(nullptr));
