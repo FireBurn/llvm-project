@@ -28,7 +28,9 @@ TEST_F(LlvmLibcPathconfTest, SmokeTest) {
 
   EXPECT_EQ(LIBC_NAMESPACE::pathconf(FILENAME, _PC_SYNC_IO), -1l);
   EXPECT_EQ(LIBC_NAMESPACE::pathconf(FILENAME, _PC_PATH_MAX),
-            static_cast<long>(_POSIX_PATH_MAX));
+            static_cast<long>(PATH_MAX));
+  EXPECT_EQ(LIBC_NAMESPACE::pathconf(FILENAME, _PC_PIPE_BUF),
+            static_cast<long>(PIPE_BUF));
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 }
 
