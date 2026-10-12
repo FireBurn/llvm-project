@@ -24419,6 +24419,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_statfs",
+    hdrs = ["include/llvm-libc-types/struct_statfs.h"],
+)
+
+libc_support_library(
+    name = "types_struct_statfs",
+    hdrs = ["hdr/types/struct_statfs.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_statfs"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "stdio_freopen",
     srcs = ["src/stdio/generic/freopen.cpp"],
     hdrs = ["src/stdio/freopen.h"],
@@ -25243,6 +25257,30 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_statfs",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/statfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_statfs",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fstatfs",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fstatfs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_statfs",
     ],
 )
 
@@ -26373,6 +26411,50 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_fdatasync",
         ":__support_threads_cancel",
         ":errno",
+    ],
+)
+
+libc_function(
+    name = "fpathconf",
+    srcs = ["src/unistd/linux/fpathconf.cpp"],
+    hdrs = ["src/unistd/fpathconf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fstatfs",
+        ":errno",
+        ":types_struct_statfs",
+        ":unistd_linux_pathconf_utils",
+    ],
+)
+
+libc_function(
+    name = "pathconf",
+    srcs = ["src/unistd/linux/pathconf.cpp"],
+    hdrs = ["src/unistd/pathconf.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_statfs",
+        ":errno",
+        ":types_struct_statfs",
+        ":unistd_linux_pathconf_utils",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_linux_pathconf_utils",
+    srcs = ["src/unistd/linux/pathconf_utils.cpp"],
+    hdrs = ["src/unistd/linux/pathconf_utils.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":hdr_limits_macros",
+        ":hdr_unistd_macros",
+        ":types_struct_statfs",
     ],
 )
 
