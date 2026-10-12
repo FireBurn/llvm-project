@@ -86,7 +86,8 @@ TEST_F(LlvmLibcSetlocale, RefusesANameNoLocaleHas) {
             static_cast<char *>(nullptr));
   ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_ALL, nullptr), "C");
   ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "de_DE"), "de_DE");
-  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "POSIX"), "POSIX");
+  // POSIX is reported as the C locale it is.
+  ASSERT_STREQ(LIBC_NAMESPACE::setlocale(LC_CTYPE, "POSIX"), "C");
 }
 
 TEST_F(LlvmLibcSetlocale, RefusesACharacterSetItCannotHonour) {
