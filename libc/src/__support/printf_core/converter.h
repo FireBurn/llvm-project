@@ -140,6 +140,8 @@ int convert(Writer<mode, CharT> *writer, const FormatSection<CharT> &to_conv) {
 #endif // LIBC_COPT_PRINTF_DISABLE_WRITE_INT
   case CharT{'p'}:
     return convert_pointer(writer, to_conv);
+  case '\0':
+    return INCOMPLETE_FORMAT;
   default:
     return writer->write(to_conv.raw_string);
   }
