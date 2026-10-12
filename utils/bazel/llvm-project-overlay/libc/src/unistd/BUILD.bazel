@@ -1174,6 +1174,50 @@ libc_function(
 )
 
 libc_function(
+    name = "fpathconf",
+    srcs = ["linux/fpathconf.cpp"],
+    hdrs = ["fpathconf.h"],
+    deps = [
+        ":linux_pathconf_utils",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fstatfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "pathconf",
+    srcs = ["linux/pathconf.cpp"],
+    hdrs = ["pathconf.h"],
+    deps = [
+        ":linux_pathconf_utils",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "linux_pathconf_utils",
+    srcs = ["linux/pathconf_utils.cpp"],
+    hdrs = ["linux/pathconf_utils.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "pause",
     srcs = ["linux/pause.cpp"],
     hdrs = ["pause.h"],

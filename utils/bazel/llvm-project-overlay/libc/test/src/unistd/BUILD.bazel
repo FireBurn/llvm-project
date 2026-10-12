@@ -336,6 +336,34 @@ libc_test(
 )
 
 libc_test(
+    name = "fpathconf_test",
+    srcs = ["fpathconf_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:fpathconf",
+    ],
+)
+
+libc_test(
+    name = "pathconf_test",
+    srcs = ["pathconf_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pathconf",
+    ],
+)
+
+libc_test(
     name = "getopt_test",
     srcs = ["getopt_test.cpp"],
     deps = [

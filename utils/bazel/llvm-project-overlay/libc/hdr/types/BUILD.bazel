@@ -706,6 +706,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_statfs",
+    hdrs = ["struct_statfs.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_statfs"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "hdr_types_dl_info",
     hdrs = ["dl_info.h"],
 )
