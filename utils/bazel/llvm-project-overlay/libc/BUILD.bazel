@@ -23263,6 +23263,19 @@ libc_function(
 )
 
 libc_function(
+    name = "fdopen",
+    srcs = ["src/stdio/linux/fdopen.cpp"],
+    hdrs = ["src/stdio/fdopen.h"],
+    deps = [
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":types_FILE",
+    ],
+)
+
+libc_function(
     name = "__fbufsize",
     srcs = ["src/stdio_ext/generic/__fbufsize.cpp"],
     hdrs = ["src/stdio_ext/__fbufsize.h"],
@@ -23758,6 +23771,21 @@ libc_function(
         ":errno",
         ":types_FILE",
         ":types_file",
+    ],
+)
+
+libc_function(
+    name = "fputs",
+    srcs = ["src/stdio/generic/fputs.cpp"],
+    hdrs = ["src/stdio/fputs.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_file_file",
+        ":__support_file_platform_file",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_FILE",
     ],
 )
 
