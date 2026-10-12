@@ -128,7 +128,9 @@ TYPED_TEST(LlvmLibcPrintfParserTest, EvalBadArg, TestCharTypes) {
   evaluate(format_arr, str, arg1);
 
   LIBC_NAMESPACE::printf_core::FormatSection<CharT> expected;
-  expected.has_conv = false;
+  // A format that ends inside a conversion keeps it, for the converter to
+  // refuse.
+  expected.has_conv = true;
   expected.raw_string = {str, 1};
 
   ASSERT_PFORMAT_EQ(expected, format_arr[0]);
