@@ -26,6 +26,7 @@
 #include <mutex>
 #include <set>
 #include <stdlib.h>
+#include <sys/resource.h>
 #include <sys/wait.h>
 #include <thread>
 #include <unistd.h>
@@ -385,6 +386,48 @@ struct TestDeallocNoZeroFillConfig {
   };                                                                           \
   SCUDO_TYPED_TEST_ALL_TYPES(FIXTURE, NAME)                                    \
   template <class TypeParam> void FIXTURE##NAME<TypeParam>::Run()
+
+#if SCUDO_LINUX && SCUDO_CAN_USE_PRIMARY64
+// When the address space for the primary's regions cannot be reserved, as
+// under RLIMIT_AS, the secondary serves every request instead of the process
+// being aborted on its first allocation.
+TEST(ScudoCombinedLimitedAddressSpaceTest, ServesFromTheSecondary) {
+  using AllocatorT = TestAllocator<scudo::DefaultConfig>;
+  // The allocator's own storage is taken before the limit is lowered.
+  const size_t Size = (sizeof(AllocatorT) + kMaxAlign - 1) / kMaxAlign *
+                      kMaxAlign;
+  void *Storage = aligned_alloc(kMaxAlign, Size);
+  ASSERT_NE(Storage, nullptr);
+
+  const pid_t Pid = fork();
+  ASSERT_NE(Pid, -1);
+  if (Pid == 0) {
+    long Pages = 0;
+    FILE *Statm = fopen("/proc/self/statm", "r");
+    if (!Statm || fscanf(Statm, "%ld", &Pages) != 1)
+      _exit(2);
+    fclose(Statm);
+    // Room for the secondary's mappings, nowhere near the primary's regions.
+    const rlim_t Limit = static_cast<rlim_t>(Pages) * sysconf(_SC_PAGESIZE) +
+                         (256UL << 20);
+    const rlimit Rl = {Limit, Limit};
+    if (setrlimit(RLIMIT_AS, &Rl) != 0)
+      _exit(3);
+    AllocatorT *A = ::new (Storage) AllocatorT;
+    void *P = A->allocate(100, Origin);
+    if (!P)
+      _exit(4);
+    memset(P, 0xa5, 100);
+    A->deallocate(P, Origin);
+    _exit(0);
+  }
+  int Status = 0;
+  ASSERT_EQ(waitpid(Pid, &Status, 0), Pid);
+  EXPECT_TRUE(WIFEXITED(Status));
+  EXPECT_EQ(WEXITSTATUS(Status), 0);
+  free(Storage);
+}
+#endif
 
 SCUDO_TYPED_TEST(ScudoCombinedTest, IsOwned) {
   auto *Allocator = this->Allocator.get();
