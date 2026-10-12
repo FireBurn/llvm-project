@@ -96,10 +96,10 @@ long pathconfig(const struct statfs &s, int name) {
     return s.f_namelen;
 
   case _PC_PATH_MAX:
-    return _POSIX_PATH_MAX;
+    return PATH_MAX;
 
   case _PC_PIPE_BUF:
-    return _POSIX_PIPE_BUF;
+    return PIPE_BUF;
 
   case _PC_CHOWN_RESTRICTED:
     return _POSIX_CHOWN_RESTRICTED;
