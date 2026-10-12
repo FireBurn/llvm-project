@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "include/llvm-libc-macros/sys-param-macros.h"
+#include "include/llvm-libc-types/dev_t.h"
 #include "test/UnitTest/Test.h"
 
 TEST(LlvmLibcSysParamTest, Rounding) {
@@ -40,4 +41,10 @@ TEST(LlvmLibcSysParamTest, BitArray) {
 
   // The index is taken to be in units of NBBY bits whatever the element type.
   EXPECT_EQ(NBBY, 8);
+}
+
+TEST(LlvmLibcSysParamTest, NoDevice) {
+  // Python reads -1 as this when it converts a device number.
+  EXPECT_TRUE(NODEV == static_cast<dev_t>(-1));
+  EXPECT_EQ(NOGROUP, 65535);
 }
