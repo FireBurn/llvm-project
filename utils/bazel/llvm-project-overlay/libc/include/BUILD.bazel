@@ -803,6 +803,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_statfs",
+    hdrs = ["llvm-libc-types/struct_statfs.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_locale_macros",
     hdrs = ["llvm-libc-macros/locale-macros.h"],
     deps = [

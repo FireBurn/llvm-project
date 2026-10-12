@@ -2199,6 +2199,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "statfs",
+    hdrs = ["statfs.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fstatfs",
+    hdrs = ["fstatfs.h"],
+    deps = [
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "waitid",
     hdrs = ["waitid.h"],
     deps = [
