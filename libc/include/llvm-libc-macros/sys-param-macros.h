@@ -77,6 +77,15 @@
 #define CANBSIZ 255
 #endif
 
+// Marker for an empty group set member, and for no device at all.
+#ifndef NOGROUP
+#define NOGROUP 65535
+#endif
+
+#ifndef NODEV
+#define NODEV ((dev_t) - 1)
+#endif
+
 #ifndef DEV_BSIZE
 #define DEV_BSIZE 512
 #endif

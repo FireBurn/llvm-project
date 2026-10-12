@@ -1,4 +1,6 @@
 header: sys/param.h
+public_includes:
+  - sys/types.h
 standards:
   - bsd
 macros:
@@ -27,6 +29,10 @@ macros:
   - macro_name: NCARGS
     macro_header: sys-param-macros.h
   - macro_name: CANBSIZ
+    macro_header: sys-param-macros.h
+  - macro_name: NOGROUP
+    macro_header: sys-param-macros.h
+  - macro_name: NODEV
     macro_header: sys-param-macros.h
   - macro_name: DEV_BSIZE
     macro_header: sys-param-macros.h
