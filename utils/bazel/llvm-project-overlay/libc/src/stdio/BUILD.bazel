@@ -997,6 +997,19 @@ libc_function(
 )
 
 libc_function(
+    name = "fdopen",
+    srcs = ["linux/fdopen.cpp"],
+    hdrs = ["fdopen.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "clearerr",
     srcs = ["generic/clearerr.cpp"],
     hdrs = ["clearerr.h"],
@@ -1064,6 +1077,21 @@ libc_function(
     hdrs = ["fread_unlocked.h"],
     deps = [
         "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "fputs",
+    srcs = ["generic/fputs.cpp"],
+    hdrs = ["fputs.h"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
