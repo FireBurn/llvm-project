@@ -165,3 +165,17 @@ libc_test(
         "//libc:__support_printf_core_printf_writer",
     ],
 )
+
+libc_test(
+    name = "parser_test",
+    srcs = ["printf_core/parser_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:printf_matcher",
+        "//libc:__support_arg_list",
+        "//libc:__support_cpp_bit",
+        "//libc:__support_cpp_string_view",
+        "//libc:__support_macros_properties_types",
+        "//libc:__support_printf_core_core_structs",
+        "//libc:__support_printf_core_printf_parser",
+    ],
+)
