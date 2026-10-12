@@ -692,6 +692,7 @@ add_libc_test(
       libc.src.stdio.fgets
       libc.src.stdio.fputs
       libc.src.unistd.close
+      libc.src.unistd.pipe
       libc.test.UnitTest.ErrnoCheckingTest
       libc.test.UnitTest.ErrnoSetterMatcher
   )
