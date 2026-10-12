@@ -164,6 +164,10 @@ bool name_states_utf8(cpp::string_view name) {
 namespace {
 
 void store_name(int category, cpp::string_view name) {
+  // POSIX is the C locale by another name, and is reported as "C", as glibc
+  // does. Python tells the C locale from others by that.
+  if (name == cpp::string_view("POSIX"))
+    name = cpp::string_view("C");
   __locale_data &entry = current[category];
   size_t length = name.size();
   if (length >= MAX_LOCALE_NAME_SIZE)
