@@ -17,6 +17,7 @@
 #include "src/stdio/fgets.h"
 #include "src/stdio/fputs.h"
 #include "src/unistd/close.h"
+#include "src/unistd/pipe.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"
 #include "test/UnitTest/Test.h"
@@ -25,7 +26,7 @@ using LlvmLibcStdioFdopenTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcStdioFdopenTest, WriteAppendRead) {
   using LIBC_NAMESPACE::testing::ErrnoSetterMatcher::Succeeds;
-  constexpr const char *TEST_FILE_NAME = "testdata/write_read_append.test";
+  constexpr const char *TEST_FILE_NAME = "write_read_append.test";
   auto TEST_FILE = libc_make_test_file_path(TEST_FILE_NAME);
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU);
   auto *fp = LIBC_NAMESPACE::fdopen(fd, "w");
@@ -54,8 +55,26 @@ TEST_F(LlvmLibcStdioFdopenTest, WriteAppendRead) {
   ASSERT_ERRNO_SUCCESS();
 }
 
+TEST_F(LlvmLibcStdioFdopenTest, AppendOnAPipe) {
+  // A pipe cannot be seeked to its end. Append mode is still allowed on one,
+  // which split's --filter does to write to the command it starts.
+  int fds[2];
+  ASSERT_EQ(LIBC_NAMESPACE::pipe(fds), 0);
+  auto *out = LIBC_NAMESPACE::fdopen(fds[1], "a");
+  ASSERT_FALSE(out == nullptr);
+  auto *in = LIBC_NAMESPACE::fdopen(fds[0], "r");
+  ASSERT_FALSE(in == nullptr);
+
+  ASSERT_GE(LIBC_NAMESPACE::fputs("piped\n", out), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(out), 0);
+  char buf[16] = {0};
+  ASSERT_TRUE(LIBC_NAMESPACE::fgets(buf, sizeof(buf), in) != nullptr);
+  ASSERT_STREQ(buf, "piped\n");
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(in), 0);
+}
+
 TEST_F(LlvmLibcStdioFdopenTest, InvalidFd) {
-  constexpr const char *TEST_FILE_NAME = "testdata/invalid_fd.test";
+  constexpr const char *TEST_FILE_NAME = "invalid_fd.test";
   auto TEST_FILE = libc_make_test_file_path(TEST_FILE_NAME);
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_TRUNC);
   LIBC_NAMESPACE::close(fd);
@@ -66,7 +85,7 @@ TEST_F(LlvmLibcStdioFdopenTest, InvalidFd) {
 }
 
 TEST_F(LlvmLibcStdioFdopenTest, InvalidMode) {
-  constexpr const char *TEST_FILE_NAME = "testdata/invalid_mode.test";
+  constexpr const char *TEST_FILE_NAME = "invalid_mode.test";
   auto TEST_FILE = libc_make_test_file_path(TEST_FILE_NAME);
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_RDONLY, S_IRWXU);
   ASSERT_ERRNO_SUCCESS();
@@ -89,8 +108,7 @@ TEST_F(LlvmLibcStdioFdopenTest, InvalidMode) {
 
 TEST_F(LlvmLibcStdioFdopenTest, CloseOnExecPreservedWithoutModifier) {
   using LIBC_NAMESPACE::testing::ErrnoSetterMatcher::Succeeds;
-  constexpr const char *TEST_FILE_NAME =
-      "testdata/close_on_exec_preserved.test";
+  constexpr const char *TEST_FILE_NAME = "close_on_exec_preserved.test";
   auto TEST_FILE = libc_make_test_file_path(TEST_FILE_NAME);
   int fd =
       LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_WRONLY | O_CLOEXEC, S_IRWXU);
@@ -109,7 +127,7 @@ TEST_F(LlvmLibcStdioFdopenTest, CloseOnExecPreservedWithoutModifier) {
 
 TEST_F(LlvmLibcStdioFdopenTest, CloseOnExecEnabledByModifier) {
   using LIBC_NAMESPACE::testing::ErrnoSetterMatcher::Succeeds;
-  constexpr const char *TEST_FILE_NAME = "testdata/close_on_exec_enabled.test";
+  constexpr const char *TEST_FILE_NAME = "close_on_exec_enabled.test";
   auto TEST_FILE = libc_make_test_file_path(TEST_FILE_NAME);
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_WRONLY, S_IRWXU);
   ASSERT_GE(fd, 0);
