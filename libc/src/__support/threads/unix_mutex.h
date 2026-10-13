@@ -45,7 +45,7 @@ class Mutex final : private RawMutex {
   // Where this mutex is on the list of the robust mutexes its owner holds.
   // The unused bytes at the end of pthread_mutex_t, and robust::FUTEX_OFFSET
   // counts back from here to the futex word.
-  robust::Node robust_node;
+  robust::Link robust_link;
 
   // CndVar needs to access Mutex as RawMutex
   friend class CndVar;
@@ -136,7 +136,7 @@ class Mutex final : private RawMutex {
   robust_lock(robust::Head &head, cpp::optional<internal::AbsTimeout> timeout,
               bool block) {
     const FutexWordType tid = static_cast<FutexWordType>(internal::gettid());
-    robust::Node *node = &robust_node;
+    robust::Node *node = &robust_link.node;
     head.pending = robust::tagged(node, priority_inherit);
     robust::order();
 
@@ -223,7 +223,7 @@ class Mutex final : private RawMutex {
   // after its owner exited cannot be locked again.
   LIBC_INLINE bool robust_unlock(robust::Head &head) {
     const FutexWordType tid = static_cast<FutexWordType>(internal::gettid());
-    robust::Node *node = &robust_node;
+    robust::Node *node = &robust_link.node;
     if ((futex.load(cpp::MemoryOrder::RELAXED) & robust::TID_MASK) != tid)
       return false;
     head.pending = robust::tagged(node, priority_inherit);
@@ -289,7 +289,7 @@ public:
         recursive(is_recursive), robust(is_robust), pshared(is_pshared),
         error_checking(is_error_checking), inconsistent(false),
         not_recoverable(false), owner(0), lock_count(0),
-        robust_node{nullptr, nullptr} {}
+        robust_link{nullptr, {nullptr}} {}
 
   // Puts the lock back to how it started, for the one thread of a process
   // which inherited it locked by a thread the fork did not carry over. Not
@@ -299,7 +299,7 @@ public:
     RawMutex::init(lock);
     lock->owner.store(0);
     lock->lock_count = 0;
-    lock->robust_node = {nullptr, nullptr};
+    lock->robust_link = {nullptr, {nullptr}};
   }
 
   LIBC_INLINE static MutexError destroy(Mutex *lock) {
