@@ -25,8 +25,10 @@ static_assert(
     "as the internal mutex type.");
 
 // The kernel finds the futex word of a robust mutex from its list node, at a
-// fixed distance.
-static_assert(__builtin_offsetof(__mutex_type, __reserved) ==
+// fixed distance. The node is the second of the two words in the reserved
+// bytes, the first being what leads to it.
+static_assert(__builtin_offsetof(__mutex_type, __reserved) +
+                      sizeof(robust::Node *) ==
                   -robust::FUTEX_OFFSET,
               "The list node of a robust mutex is not where the kernel looks "
               "for the futex word relative to it.");
