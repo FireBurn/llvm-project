@@ -102,3 +102,51 @@ TEST(LlvmLibcElfSymbolTest, PrefixesDoNotMatch) {
   EXPECT_EQ(t.lookup("print"), static_cast<const ElfW(Sym) *>(nullptr));
   EXPECT_EQ(t.lookup("fre"), static_cast<const ElfW(Sym) *>(nullptr));
 }
+
+namespace {
+
+// Two definitions of one name, the older one first and marked hidden, as a
+// library which keeps a compatibility version emits them.
+struct VersionedTable {
+  uint32_t nbuckets = 1;
+  uint32_t symoffset = 1;
+  uint32_t bloom_size = 1;
+  uint32_t bloom_shift = 6;
+  ElfW(Addr) bloom[1] = { ~ElfW(Addr)(0) };
+  uint32_t buckets[1] = {1};
+  uint32_t chain[2] = {0, 0};
+};
+
+const char VERSTRTAB[] = "\0snd_rate";
+
+const ElfW(Sym) VERSYMTAB[] = {
+    make_sym(0, 0),
+    make_sym(1, 0x1000), // snd_rate, the compatibility version
+    make_sym(1, 0x2000), // snd_rate, the default version
+};
+
+} // anonymous namespace
+
+TEST(LlvmLibcElfSymbolTest, HiddenVersionYieldsToDefault) {
+  VersionedTable t;
+  const uint32_t hash = LIBC_NAMESPACE::elf::gnu_hash("snd_rate");
+  t.chain[0] = hash & ~1u;
+  t.chain[1] = hash | 1u;
+  const uint16_t versym[] = {0, 0x8002, 0x0003};
+  GnuSymbolTable table(&t, VERSYMTAB, VERSTRTAB, versym);
+  const ElfW(Sym) *sym = table.lookup("snd_rate");
+  ASSERT_TRUE(sym != nullptr);
+  EXPECT_EQ(sym->st_value, ElfW(Addr)(0x2000));
+}
+
+TEST(LlvmLibcElfSymbolTest, HiddenVersionIsUsedWhenAlone) {
+  VersionedTable t;
+  const uint32_t hash = LIBC_NAMESPACE::elf::gnu_hash("snd_rate");
+  t.chain[0] = hash & ~1u;
+  t.chain[1] = hash | 1u;
+  const uint16_t versym[] = {0, 0x8002, 0x8003};
+  GnuSymbolTable table(&t, VERSYMTAB, VERSTRTAB, versym);
+  const ElfW(Sym) *sym = table.lookup("snd_rate");
+  ASSERT_TRUE(sym != nullptr);
+  EXPECT_EQ(sym->st_value, ElfW(Addr)(0x1000));
+}
