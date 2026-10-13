@@ -28,15 +28,16 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/wchar/mbrtowc.h"
 #include "src/__support/wchar/mbstate.h"
+#include "src/__support/wchar/wcrtomb.h"
 #include "src/stdio/vsnprintf.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
 
 namespace {
+constexpr size_t MB_LEN_MAX_BYTES = 4;
+} // anonymous namespace
 
-// The format, with each character taken down to the byte it stands for.
-// Returns nothing when a character has no such byte.
 char *narrow_format(const wchar_t *format) {
   size_t len = 0;
   while (format[len] != L'\0')
@@ -57,7 +58,31 @@ char *narrow_format(const wchar_t *format) {
   return out;
 }
 
-} // anonymous namespace
+char *encode_text(const wchar_t *text) {
+  size_t len = 0;
+  while (text[len] != L'\0')
+    ++len;
+
+  char *out = reinterpret_cast<char *>(malloc(len * MB_LEN_MAX_BYTES + 1));
+  if (out == nullptr) {
+    libc_errno = ENOMEM;
+    return nullptr;
+  }
+
+  mbstate state;
+  size_t used = 0;
+  for (size_t i = 0; i < len; ++i) {
+    auto n = wcrtomb(out + used, text[i], &state);
+    if (!n.has_value()) {
+      free(out);
+      libc_errno = EILSEQ;
+      return nullptr;
+    }
+    used += n.value();
+  }
+  out[used] = '\0';
+  return out;
+}
 
 int format_wide(const wchar_t *format, va_list vlist, wchar_t **out) {
   char *narrow = narrow_format(format);
