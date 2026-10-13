@@ -28,9 +28,10 @@ constexpr uintptr_t NEXT_HANDLE = static_cast<uintptr_t>(-1l);
 
 // The first module at or after `from` which defines `name`. Returns nothing
 // when none does.
-void *search_from(const elf::ModuleSet &set, size_t from, const char *name) {
+void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
+                  const char *version) {
   for (size_t i = from; i < set.count; ++i) {
-    const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name);
+    const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name, version);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
       continue;
     return reinterpret_cast<void *>(set.modules[i].load_bias() +
@@ -41,7 +42,8 @@ void *search_from(const elf::ModuleSet &set, size_t from, const char *name) {
 
 } // anonymous namespace
 
-void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
+void *lookup(void *handle, const char *name, ElfW(Addr) caller,
+             const char *version) {
   elf::ModuleSet *modules = elf::process_modules();
   cpp::lock_guard lock(dl::dl_mutex);
 
@@ -58,7 +60,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
   // Every module, in the order they were loaded, which is the order a lookup
   // through the program's own scope goes in.
   if (handle == DEFAULT_HANDLE) {
-    if (void *found = search_from(set, 0, name))
+    if (void *found = search_from(set, 0, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -74,7 +76,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
         break;
       }
     }
-    if (void *found = search_from(set, after, name))
+    if (void *found = search_from(set, after, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -90,14 +92,14 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
   // program, and a lookup through that is a lookup through the whole of the
   // program's scope rather than the executable on its own.
   if (index == 0) {
-    if (void *found = search_from(set, 0, name))
+    if (void *found = search_from(set, 0, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
   }
 
   const elf::Module &module = set.modules[index];
-  const ElfW(Sym) *symbol = module.symbols().lookup(name);
+  const ElfW(Sym) *symbol = module.symbols().lookup(name, version);
   // A symbol the object only references does not count as finding it.
   if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF) {
     dl::set_error("undefined symbol", name);
