@@ -242,12 +242,13 @@ extern "C" [[gnu::used]] ElfW(Addr)
   if (index >= table.size())
     lookup_failed(module->name(), "a PLT slot past the end of its table");
   const ElfW(Rela) &rela = table.begin()[index];
-  const char *name = module->strtab() +
-                     module->symtab()[elf::reloc_symbol(rela.r_info)].st_name;
+  const uint32_t symbol_index = elf::reloc_symbol(rela.r_info);
+  const char *name = module->strtab() + module->symtab()[symbol_index].st_name;
+  const char *version = module->symbol_version(symbol_index);
 
   // The definition may come from a module opened after this one.
   elf::SearchOrder order(set.modules, set.count);
-  auto found = order.resolve(name);
+  auto found = order.resolve(name, version);
   if (!found)
     lookup_failed(module->name(), name);
 
