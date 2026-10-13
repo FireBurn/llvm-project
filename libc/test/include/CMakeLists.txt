@@ -1734,6 +1734,16 @@ add_libc_test(
     libc.include.llvm-libc-macros.sys_ioctl_macros
 )
 
+add_libc_test(
+  linux_sys_wait_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    linux_sys_wait_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_wait_macros
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.
