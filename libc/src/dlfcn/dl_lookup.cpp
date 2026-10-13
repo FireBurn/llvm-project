@@ -33,9 +33,10 @@ constexpr uintptr_t NEXT_HANDLE = static_cast<uintptr_t>(-1l);
 
 // The first module at or after `from` which defines `name`. Returns nothing
 // when none does.
-void *search_from(const elf::ModuleSet &set, size_t from, const char *name) {
+void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
+                  const char *version) {
   for (size_t i = from; i < set.count; ++i) {
-    const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name);
+    const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name, version);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
       continue;
     return reinterpret_cast<void *>(set.modules[i].load_bias() +
@@ -44,9 +45,59 @@ void *search_from(const elf::ModuleSet &set, size_t from, const char *name) {
   return nullptr;
 }
 
+// Whether `have` is the name `want`.
+bool same_name(const char *have, const char *want) {
+  if (have == nullptr)
+    return false;
+  for (; *have == *want; ++have, ++want)
+    if (*have == '\0')
+      return true;
+  return false;
+}
+
+// The definition of `name` in the module at `index` or in anything it needs,
+// searched breadth first the way a lookup through a handle goes. A library
+// that only names others, as a compatibility stub does, finds its symbols in
+// what it pulls in.
+void *search_handle(const elf::ModuleSet &set, size_t index, const char *name,
+                    const char *version) {
+  constexpr size_t LIMIT = 512;
+  size_t queue[LIMIT];
+  bool queued[LIMIT] = {};
+  size_t head = 0;
+  size_t tail = 0;
+  if (index >= LIMIT || index >= set.count) {
+    const ElfW(Sym) *symbol = set.modules[index].symbols().lookup(name, version);
+    if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
+      return nullptr;
+    return reinterpret_cast<void *>(set.modules[index].load_bias() +
+                                    symbol->st_value);
+  }
+  queue[tail++] = index;
+  queued[index] = true;
+  while (head < tail) {
+    const elf::Module &module = set.modules[queue[head++]];
+    const ElfW(Sym) *symbol = module.symbols().lookup(name, version);
+    if (symbol != nullptr && symbol->st_shndx != SHN_UNDEF)
+      return reinterpret_cast<void *>(module.load_bias() + symbol->st_value);
+    module.for_each_needed([&](const char *needed) {
+      for (size_t i = 0; i < set.count && i < LIMIT; ++i) {
+        if (queued[i] || (!same_name(set.modules[i].soname(), needed) &&
+                          !same_name(set.modules[i].name(), needed)))
+          continue;
+        queued[i] = true;
+        queue[tail++] = i;
+        return;
+      }
+    });
+  }
+  return nullptr;
+}
+
 } // anonymous namespace
 
-void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
+void *lookup(void *handle, const char *name, ElfW(Addr) caller,
+             const char *version) {
   elf::ModuleSet *modules = elf::process_modules();
   cpp::lock_guard lock(dl::dl_mutex);
 
@@ -63,7 +114,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
   // Every module, in the order they were loaded, which is the order a lookup
   // through the program's own scope goes in.
   if (handle == DEFAULT_HANDLE) {
-    if (void *found = search_from(set, 0, name))
+    if (void *found = search_from(set, 0, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -79,7 +130,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
         break;
       }
     }
-    if (void *found = search_from(set, after, name))
+    if (void *found = search_from(set, after, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -95,20 +146,16 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller) {
   // program, and a lookup through that is a lookup through the whole of the
   // program's scope rather than the executable on its own.
   if (index == 0) {
-    if (void *found = search_from(set, 0, name))
+    if (void *found = search_from(set, 0, name, version))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
   }
 
-  const elf::Module &module = set.modules[index];
-  const ElfW(Sym) *symbol = module.symbols().lookup(name);
-  // A symbol the object only references does not count as finding it.
-  if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF) {
-    dl::set_error("undefined symbol", name);
-    return nullptr;
-  }
-  return reinterpret_cast<void *>(module.load_bias() + symbol->st_value);
+  if (void *found = search_handle(set, index, name, version))
+    return found;
+  dl::set_error("undefined symbol", name);
+  return nullptr;
 }
 
 } // namespace dl
