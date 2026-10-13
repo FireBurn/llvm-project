@@ -22,6 +22,14 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
 
+// The format with each character taken down to the byte it stands for, in
+// memory from malloc. Returns nullptr when a character has no such byte, or
+// when there is no memory.
+char *narrow_format(const wchar_t *format);
+
+// The text as UTF-8, in memory from malloc, or nullptr with errno set.
+char *encode_text(const wchar_t *text);
+
 // Formats as printf would and hands back the result as wide characters, in
 // memory from malloc that the caller frees. Returns how many there are, not
 // counting the terminating null, or -1 with errno set.

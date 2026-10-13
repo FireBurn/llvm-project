@@ -534,6 +534,22 @@ functions:
     arguments:
       - type: wint_t
       - type: FILE *
+  - name: swscanf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: const wchar_t *__restrict
+      - type: '...'
+  - name: vswscanf
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: const wchar_t *__restrict
+      - type: va_list
   - name: swprintf
     standards:
       - stdc
