@@ -25,6 +25,10 @@
 namespace LIBC_NAMESPACE_DECL {
 namespace elf {
 
+// Set in a DT_VERSYM entry when the definition is not its name's default
+// version.
+constexpr uint16_t VERSYM_HIDDEN = 0x8000;
+
 // The header of a DT_GNU_HASH table, followed by the Bloom filter, the bucket
 // array and the hash array.
 struct GnuHashHeader {
@@ -44,8 +48,9 @@ class GnuSymbolTable {
 public:
   LIBC_INLINE constexpr GnuSymbolTable() = default;
   LIBC_INLINE GnuSymbolTable(const void *hash_table, const ElfW(Sym) * symtab,
-                             const char *strtab)
-      : symtab_(symtab), strtab_(strtab) {
+                             const char *strtab,
+                             const uint16_t *versym = nullptr)
+      : symtab_(symtab), strtab_(strtab), versym_(versym) {
     if (hash_table == nullptr)
       return;
     header_ = static_cast<const GnuHashHeader *>(hash_table);
@@ -58,6 +63,11 @@ public:
 
   // Returns the matching symbol, or nullptr. Defined only for names this
   // module actually exports; callers walk modules in search order themselves.
+  //
+  // A module can define a name more than once, under different versions, with
+  // the older ones marked hidden. A reference which names no version gets the
+  // default one, so a hidden definition is only returned when it is the only
+  // one there is.
   LIBC_INLINE const ElfW(Sym) * lookup(const char *name) const {
     if (header_ == nullptr || header_->nbuckets == 0)
       return nullptr;
@@ -70,14 +80,19 @@ public:
     if (index < header_->symoffset)
       return nullptr;
 
+    const ElfW(Sym) *hidden = nullptr;
     for (;; ++index) {
       const uint32_t entry = chain_[index - header_->symoffset];
       // The low bit is the end-of-chain marker, so it is masked out of the
       // comparison rather than being part of the hash.
-      if ((entry | 1) == (hash | 1) && matches(index, name))
-        return &symtab_[index];
+      if ((entry | 1) == (hash | 1) && matches(index, name)) {
+        if (versym_ == nullptr || (versym_[index] & VERSYM_HIDDEN) == 0)
+          return &symtab_[index];
+        if (hidden == nullptr)
+          hidden = &symtab_[index];
+      }
       if (entry & 1)
-        return nullptr;
+        return hidden;
     }
   }
 
@@ -136,6 +151,7 @@ private:
   const uint32_t *chain_ = nullptr;
   const ElfW(Sym) *symtab_ = nullptr;
   const char *strtab_ = nullptr;
+  const uint16_t *versym_ = nullptr;
 };
 
 } // namespace elf
