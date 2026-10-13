@@ -8,7 +8,9 @@ add_integration_test(
     pthread_mutex_robust_test.cpp
   DEPENDS
     libc.hdr.errno_macros
+    libc.hdr.stdint_proxy
     libc.include.pthread
+    libc.src.__support.OSUtil.osutil
     libc.src.pthread.pthread_create
     libc.src.pthread.pthread_join
     libc.src.pthread.pthread_mutex_consistent
