@@ -22,7 +22,8 @@ namespace dl {
 
 // Finds `name` the way dlsym does. `caller` is an address in whatever called
 // dlsym, which RTLD_NEXT needs, and so has to be taken by the entry point.
-void *lookup(void *handle, const char *name, ElfW(Addr) caller);
+void *lookup(void *handle, const char *name, ElfW(Addr) caller,
+             const char *version = nullptr);
 
 } // namespace dl
 } // namespace LIBC_NAMESPACE_DECL

@@ -20,14 +20,12 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-// Nothing here defines more than one version of a symbol, so the version
-// names the one there is and is not compared.
 LLVM_LIBC_FUNCTION(void *, dlvsym,
                    (void *__restrict handle, const char *__restrict name,
-                    const char *__restrict)) {
+                    const char *__restrict version)) {
   const ElfW(Addr) caller =
       reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
-  return dl::lookup(handle, name, caller);
+  return dl::lookup(handle, name, caller, version);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
