@@ -65,12 +65,36 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wcstol_l
+  SRCS
+    wcstol_l.cpp
+  HDRS
+    wcstol_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.errno.errno
+    libc.src.__support.str_to_integer
+)
+
+add_entrypoint_object(
   wcstoll
   SRCS
     wcstoll.cpp
   HDRS
     wcstoll.h
   DEPENDS
+    libc.src.errno.errno
+    libc.src.__support.str_to_integer
+)
+
+add_entrypoint_object(
+  wcstoll_l
+  SRCS
+    wcstoll_l.cpp
+  HDRS
+    wcstoll_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
     libc.src.errno.errno
     libc.src.__support.str_to_integer
 )
@@ -87,12 +111,36 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wcstoul_l
+  SRCS
+    wcstoul_l.cpp
+  HDRS
+    wcstoul_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.errno.errno
+    libc.src.__support.str_to_integer
+)
+
+add_entrypoint_object(
   wcstoull
   SRCS
     wcstoull.cpp
   HDRS
     wcstoull.h
   DEPENDS
+    libc.src.errno.errno
+    libc.src.__support.str_to_integer
+)
+
+add_entrypoint_object(
+  wcstoull_l
+  SRCS
+    wcstoull_l.cpp
+  HDRS
+    wcstoull_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
     libc.src.errno.errno
     libc.src.__support.str_to_integer
 )
@@ -109,6 +157,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wcstof_l
+  SRCS
+    wcstof_l.cpp
+  HDRS
+    wcstof_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.__support.str_to_float
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   wcstod
   SRCS
     wcstod.cpp
@@ -120,12 +180,36 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wcstod_l
+  SRCS
+    wcstod_l.cpp
+  HDRS
+    wcstod_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.src.__support.str_to_float
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   wcstold
   SRCS
     wcstold.cpp
   HDRS
     wcstold.h
   DEPENDS
+    libc.src.__support.str_to_float
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  wcstold_l
+  SRCS
+    wcstold_l.cpp
+  HDRS
+    wcstold_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
     libc.src.__support.str_to_float
     libc.src.errno.errno
 )
