@@ -104,6 +104,7 @@ add_header_library(
     libc.hdr.func.realloc
     .reader
     .core_structs
+    libc.src.__support.wchar.mbrtowc
     libc.include.inttypes
     libc.src.__support.common
     libc.src.__support.ctype_utils
