@@ -894,6 +894,7 @@ add_object_library(
     libc.src.__support.macros.config
     libc.src.__support.wchar.mbrtowc
     libc.src.__support.wchar.mbstate
+    libc.src.__support.wchar.wcrtomb
     libc.src.stdio.vsnprintf
 )
 
@@ -926,6 +927,37 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.wchar.vswprintf
+)
+
+add_entrypoint_object(
+  vswscanf
+  SRCS
+    vswscanf.cpp
+  HDRS
+    vswscanf.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.func.free
+    libc.hdr.stdio_macros
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.stdio.vsscanf
+    .wide_format
+)
+
+add_entrypoint_object(
+  swscanf
+  SRCS
+    swscanf.cpp
+  HDRS
+    swscanf.h
+  DEPENDS
+    libc.hdr.types.wchar_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.wchar.vswscanf
 )
 
 add_entrypoint_object(
