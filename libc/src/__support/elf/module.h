@@ -112,8 +112,11 @@ public:
     auto hash = dynamic_.address(DT_GNU_HASH);
     if (!hash)
       return GnuSymbolTable();
+    const uint16_t *versym = nullptr;
+    if (auto addr = dynamic_.address(DT_VERSYM))
+      versym = reinterpret_cast<const uint16_t *>(*addr);
     return GnuSymbolTable(reinterpret_cast<const void *>(*hash), symtab(),
-                          strtab());
+                          strtab(), versym);
   }
 
   // The DT_RELA table. DT_JMPREL is kept separate because a loader may bind
