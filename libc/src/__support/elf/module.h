@@ -115,8 +115,44 @@ public:
     const uint16_t *versym = nullptr;
     if (auto addr = dynamic_.address(DT_VERSYM))
       versym = reinterpret_cast<const uint16_t *>(*addr);
+    const ElfW(Verdef) *verdef = nullptr;
+    if (auto addr = dynamic_.address(DT_VERDEF))
+      verdef = reinterpret_cast<const ElfW(Verdef) *>(*addr);
     return GnuSymbolTable(reinterpret_cast<const void *>(*hash), symtab(),
-                          strtab(), versym);
+                          strtab(), versym, verdef);
+  }
+
+  // The version this module's reference to symbol `index` asks for, as the
+  // library's own name for it, or null when it asks for none. The linker
+  // numbers each version a module needs in DT_VERNEED and records the number
+  // against every versioned reference in DT_VERSYM.
+  LIBC_INLINE const char *symbol_version(uint32_t index) const {
+    auto versym = dynamic_.address(DT_VERSYM);
+    auto need = dynamic_.address(DT_VERNEED);
+    const char *strings = strtab();
+    if (!versym || !need || strings == nullptr)
+      return nullptr;
+    const uint16_t ndx = reinterpret_cast<const uint16_t *>(*versym)[index] &
+                         static_cast<uint16_t>(~VERSYM_HIDDEN);
+    if (ndx < 2)
+      return nullptr;
+    const auto *file = reinterpret_cast<const ElfW(Verneed) *>(*need);
+    for (;;) {
+      const auto *aux = reinterpret_cast<const ElfW(Vernaux) *>(
+          reinterpret_cast<const char *>(file) + file->vn_aux);
+      for (ElfW(Half) i = 0; i < file->vn_cnt; ++i) {
+        if (aux->vna_other == ndx)
+          return strings + aux->vna_name;
+        if (aux->vna_next == 0)
+          break;
+        aux = reinterpret_cast<const ElfW(Vernaux) *>(
+            reinterpret_cast<const char *>(aux) + aux->vna_next);
+      }
+      if (file->vn_next == 0)
+        return nullptr;
+      file = reinterpret_cast<const ElfW(Verneed) *>(
+          reinterpret_cast<const char *>(file) + file->vn_next);
+    }
   }
 
   // The DT_RELA table. DT_JMPREL is kept separate because a loader may bind
