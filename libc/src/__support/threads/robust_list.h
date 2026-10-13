@@ -31,9 +31,10 @@ LIBC_INLINE_VAR constexpr uint32_t OWNER_DIED = 0x40000000u;
 LIBC_INLINE_VAR constexpr uint32_t TID_MASK = 0x3fffffffu;
 
 // Where the futex word is, counting from the list node in the same mutex:
-// the node is the sixteen bytes after the lock count, which come last in
-// pthread_mutex_t, and the word is the first.
-LIBC_INLINE_VAR constexpr long FUTEX_OFFSET = -24;
+// the two words of the link are the sixteen bytes after the lock count, which
+// come last in pthread_mutex_t, the node being the second, and the futex word
+// is the first of the mutex. This is glibc's offset.
+LIBC_INLINE_VAR constexpr long FUTEX_OFFSET = -32;
 
 LIBC_INLINE Node *tagged(Node *node, bool priority_inherit) {
   return reinterpret_cast<Node *>(reinterpret_cast<uintptr_t>(node) |
@@ -55,6 +56,7 @@ LIBC_INLINE void register_list(ThreadAttributes *attrib) {
   head.next = reinterpret_cast<Node *>(&head);
   head.futex_offset = FUTEX_OFFSET;
   head.pending = nullptr;
+  prev_of(reinterpret_cast<Node *>(&head)) = reinterpret_cast<Node *>(&head);
   linux_syscalls::set_robust_list(&head, sizeof(Head));
 }
 
@@ -62,28 +64,26 @@ LIBC_INLINE void register_list(ThreadAttributes *attrib) {
 LIBC_INLINE void enqueue(Head &head, Node *node, bool priority_inherit) {
   order();
   node->next = head.next;
-  node->prev = reinterpret_cast<Node *>(&head);
-  Node *first = untagged(head.next);
-  if (first != reinterpret_cast<Node *>(&head))
-    first->prev = node;
+  prev_of(node) = reinterpret_cast<Node *>(&head);
+  // The head's own slot when the list is empty, which is read as well.
+  prev_of(untagged(head.next)) = node;
   order();
   head.next = tagged(node, priority_inherit);
   order();
 }
 
 // Takes the node out of the list, wherever it is.
-LIBC_INLINE void dequeue(Head &head, Node *node) {
+LIBC_INLINE void dequeue([[maybe_unused]] Head &head, Node *node) {
   order();
-  Node *prev = node->prev;
+  Node *prev = prev_of(node);
   Node *next = untagged(node->next);
   // `prev` is the head when the node is first, and the head's `next` is where
   // a node's is.
   prev->next = node->next;
-  if (next != reinterpret_cast<Node *>(&head))
-    next->prev = prev;
+  prev_of(next) = prev;
   order();
   node->next = nullptr;
-  node->prev = nullptr;
+  prev_of(node) = nullptr;
 }
 
 // The child of a fork has one thread, a copy of the one which forked, with a
