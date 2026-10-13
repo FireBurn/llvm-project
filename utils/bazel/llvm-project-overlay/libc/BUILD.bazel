@@ -24921,6 +24921,7 @@ libc_support_library(
         ":hdr_elf_proxy",
         ":hdr_link_macros",
         ":hdr_stdint_proxy",
+        ":types_size_t",
     ],
 )
 
