@@ -20880,6 +20880,19 @@ libc_function(
 )
 
 libc_function(
+    name = "swscanf",
+    srcs = ["src/wchar/swscanf.cpp"],
+    hdrs = ["src/wchar/swscanf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_wchar_t",
+        ":wchar_swscanf",
+        ":wchar_vswscanf",
+    ],
+)
+
+libc_function(
     name = "vfwprintf",
     srcs = ["src/wchar/vfwprintf.cpp"],
     hdrs = ["src/wchar/vfwprintf.h"],
@@ -20910,6 +20923,24 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
         ":wchar_vswprintf",
+        ":wchar_wide_format",
+    ],
+)
+
+libc_function(
+    name = "vswscanf",
+    srcs = ["src/wchar/vswscanf.cpp"],
+    hdrs = ["src/wchar/vswscanf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_free",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
+        ":types_wchar_t",
+        ":vsscanf",
+        ":wchar_vswscanf",
         ":wchar_wide_format",
     ],
 )
@@ -22445,5 +22476,34 @@ libc_support_library(
         ":__support_str_to_integer",
         ":types_locale_t",
         ":types_wint_t",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_vswscanf",
+    srcs = ["src/wchar/vswscanf.cpp"],
+    hdrs = ["src/wchar/vswscanf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":func_free",
+        ":hdr_errno_macros",
+        ":hdr_stdio_macros",
+        ":types_wchar_t",
+        ":vsscanf",
+        ":wchar_wide_format",
+    ],
+)
+
+libc_support_library(
+    name = "wchar_swscanf",
+    srcs = ["src/wchar/swscanf.cpp"],
+    hdrs = ["src/wchar/swscanf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_wchar_t",
+        ":wchar_vswscanf",
     ],
 )
