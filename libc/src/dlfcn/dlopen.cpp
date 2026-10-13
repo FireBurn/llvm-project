@@ -125,6 +125,8 @@ bool same_file(const char *known, const char *wanted) {
 // it was opened under, the file that path comes to, or the name it says it
 // goes by.
 bool already_loaded(const elf::ModuleSet &set, const char *name) {
+  if (elf::is_glibc_interpreter(name))
+    return true;
   for (size_t i = 0; i < set.count; ++i)
     if (same_name(set.modules[i].name(), name) ||
         same_file(set.modules[i].name(), name) ||
