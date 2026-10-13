@@ -17,6 +17,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int vsscanf(const char *s, const char *format, va_list vlist);
 
+namespace internal {
+int vsscanf_impl(const char *buffer, const char *format, va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_VSSCANF_H
