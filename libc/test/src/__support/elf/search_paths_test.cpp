@@ -22,6 +22,7 @@
 
 #include <link.h>
 
+using LIBC_NAMESPACE::elf::is_glibc_interpreter;
 using LIBC_NAMESPACE::elf::library_path_from;
 using LIBC_NAMESPACE::elf::Module;
 using LIBC_NAMESPACE::elf::path_list_from_text;
@@ -199,4 +200,22 @@ TEST(LlvmLibcElfSearchPathsTest, NoPreloadIgnoreListLeavesEverythingIn) {
   ASSERT_FALSE(missing.contains("/lib/anything.so"));
   PreloadIgnoreList none(nullptr);
   ASSERT_FALSE(none.contains("/lib/anything.so"));
+}
+
+TEST(LlvmLibcElfSearchPathsTest, GlibcProgramInterpretersAreRecognised) {
+  ASSERT_TRUE(is_glibc_interpreter("ld-linux-x86-64.so.2"));
+  ASSERT_TRUE(is_glibc_interpreter("ld-linux-aarch64.so.1"));
+  ASSERT_TRUE(is_glibc_interpreter("ld-linux-riscv64-lp64d.so.1"));
+  ASSERT_TRUE(is_glibc_interpreter("ld-linux-armhf.so.3"));
+}
+
+TEST(LlvmLibcElfSearchPathsTest, OtherLibrariesAreNotGlibcInterpreters) {
+  ASSERT_FALSE(is_glibc_interpreter("libc.so.6"));
+  ASSERT_FALSE(is_glibc_interpreter("libc.so.1"));
+  ASSERT_FALSE(is_glibc_interpreter("ld-llvm-libc-x86_64.so.1"));
+  // The whole name has to match, not a part of it at either end.
+  ASSERT_FALSE(is_glibc_interpreter("ld-linux-x86-64.so"));
+  ASSERT_FALSE(is_glibc_interpreter("ld-linux-x86-64.so.22"));
+  ASSERT_FALSE(is_glibc_interpreter("xld-linux-x86-64.so.2"));
+  ASSERT_FALSE(is_glibc_interpreter(""));
 }
