@@ -8,6 +8,30 @@ macros:
     macro_header: malloc-macros.h
   - macro_name: M_PURGE_ALL
     macro_header: malloc-macros.h
+  - macro_name: M_MXFAST
+    macro_header: malloc-macros.h
+  - macro_name: M_NLBLKS
+    macro_header: malloc-macros.h
+  - macro_name: M_GRAIN
+    macro_header: malloc-macros.h
+  - macro_name: M_KEEP
+    macro_header: malloc-macros.h
+  - macro_name: M_TRIM_THRESHOLD
+    macro_header: malloc-macros.h
+  - macro_name: M_TOP_PAD
+    macro_header: malloc-macros.h
+  - macro_name: M_MMAP_THRESHOLD
+    macro_header: malloc-macros.h
+  - macro_name: M_MMAP_MAX
+    macro_header: malloc-macros.h
+  - macro_name: M_CHECK_ACTION
+    macro_header: malloc-macros.h
+  - macro_name: M_PERTURB
+    macro_header: malloc-macros.h
+  - macro_name: M_ARENA_TEST
+    macro_header: malloc-macros.h
+  - macro_name: M_ARENA_MAX
+    macro_header: malloc-macros.h
 functions:
   - name: mallinfo
     standards:
