@@ -214,8 +214,47 @@ private:
       // is the only module loaded at this point.
       auto loaded = find_and_load(name, &modules_[0], executable_origin_,
                                   library_path_, &system_paths_, page_size_);
-      if (loaded.has_value())
+      if (!loaded.has_value())
+        continue;
+      const size_t first = count_;
+      remember(loaded.value());
+      // An object whose own libraries are not there, as with one built for
+      // another C library, is dropped whole rather than failing the program.
+      if (!load_preload_dependencies(first)) {
+        for (size_t i = first; i < count_; ++i)
+          unmap_module(mappings_[i]);
+        count_ = first;
+        report("ERROR: ld.so: object '");
+        report(name);
+        report("' from LD_PRELOAD cannot be preloaded (cannot open shared "
+               "object file): ignored.\n");
+      }
+    }
+    return true;
+  }
+
+  // Loads what the modules from `first` on need, and what that needs in turn.
+  LIBC_INLINE bool load_preload_dependencies(size_t first) {
+    for (size_t i = first; i < count_; ++i) {
+      bool failed = false;
+      const Module requester = modules_[i];
+      requester.for_each_needed([&](const char *needed) {
+        if (failed || already_loaded(needed))
+          return;
+        if (count_ >= MAX_STARTUP_MODULES) {
+          failed = true;
+          return;
+        }
+        auto loaded = find_and_load(needed, &requester, nullptr, library_path_,
+                                    &system_paths_, page_size_);
+        if (!loaded.has_value()) {
+          failed = true;
+          return;
+        }
         remember(loaded.value());
+      });
+      if (failed)
+        return false;
     }
     return true;
   }
