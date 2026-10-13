@@ -459,6 +459,7 @@ libc_support_library(
     hdrs = ["elf/symbol.h"],
     deps = [
         ":elf_hash",
+        "//libc/hdr/types:size_t",
         "//libc/hdr:elf_macros",
         "//libc/hdr:elf_proxy",
         "//libc/hdr:link_macros",
