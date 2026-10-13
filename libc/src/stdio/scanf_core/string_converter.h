@@ -81,7 +81,7 @@ int convert_wide_string(Reader<T> *reader, const FormatSection &to_conv) {
     if (!complete)
       break;
 
-    const bool is_space = wc < 0x80 && internal::isspace(static_cast<int>(wc));
+    const bool is_space = wc < 0x80 && internal::isspace(static_cast<char>(wc));
     if ((to_conv.conv_name == 's' && is_space) ||
         (to_conv.conv_name == '[' &&
          !to_conv.scan_set.test(wc < 0x100 ? static_cast<unsigned char>(wc)
