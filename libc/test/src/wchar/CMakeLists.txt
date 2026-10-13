@@ -525,6 +525,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  wcsto_l_test
+  SUITE
+    libc-wchar-tests
+  SRCS
+    wcsto_l_test.cpp
+  DEPENDS
+    libc.src.wchar.wcstod_l
+    libc.src.wchar.wcstof_l
+    libc.src.wchar.wcstol_l
+    libc.src.wchar.wcstold_l
+    libc.src.wchar.wcstoll_l
+    libc.src.wchar.wcstoul_l
+    libc.src.wchar.wcstoull_l
+)
+
+add_libc_test(
   wcstof_test
   SUITE
     libc-wchar-tests
