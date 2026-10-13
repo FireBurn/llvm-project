@@ -39,6 +39,14 @@ extern "C" int main() {
   CHECK(dlvsym(handle, "no_such_symbol", "LLVM_LIBC_DL_1") == nullptr);
   dlerror();
 
+  // A version the symbol is not defined under is not made up for by the
+  // symbol's other one, and neither is a version the object does not have.
+  CHECK(dlvsym(handle, "llvm_libc_dl_value", "LLVM_LIBC_DL_1") != nullptr);
+  CHECK(dlvsym(handle, "llvm_libc_dl_value", "LLVM_LIBC_DL_2") == nullptr);
+  CHECK(dlerror() != nullptr);
+  CHECK(dlvsym(handle, "llvm_libc_dl_versioned", "LLVM_LIBC_DL_3") == nullptr);
+  CHECK(dlerror() != nullptr);
+
   CHECK(dlclose(handle) == 0);
   return failures == 0 ? 0 : 1;
 }
