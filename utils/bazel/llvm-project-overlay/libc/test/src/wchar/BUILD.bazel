@@ -205,6 +205,20 @@ libc_test(
 )
 
 libc_test(
+    name = "wcsto_l_test",
+    srcs = ["wcsto_l_test.cpp"],
+    deps = [
+        "//libc/src/wchar:wcstod_l",
+        "//libc/src/wchar:wcstof_l",
+        "//libc/src/wchar:wcstol_l",
+        "//libc/src/wchar:wcstold_l",
+        "//libc/src/wchar:wcstoll_l",
+        "//libc/src/wchar:wcstoul_l",
+        "//libc/src/wchar:wcstoull_l",
+    ],
+)
+
+libc_test(
     name = "wcsxfrm_l_test",
     srcs = ["wcsxfrm_l_test.cpp"],
     deps = [

@@ -501,6 +501,109 @@ libc_function(
 )
 
 libc_function(
+    name = "wcstod_l",
+    srcs = ["wcstod_l.cpp"],
+    hdrs = ["wcstod_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstof_l",
+    srcs = ["wcstof_l.cpp"],
+    hdrs = ["wcstof_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstol_l",
+    srcs = ["wcstol_l.cpp"],
+    hdrs = ["wcstol_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstold_l",
+    srcs = ["wcstold_l.cpp"],
+    hdrs = ["wcstold_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoll_l",
+    srcs = ["wcstoll_l.cpp"],
+    hdrs = ["wcstoll_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoul_l",
+    srcs = ["wcstoul_l.cpp"],
+    hdrs = ["wcstoul_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoull_l",
+    srcs = ["wcstoull_l.cpp"],
+    hdrs = ["wcstoull_l.h"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "wcsxfrm_l",
     srcs = ["wcsxfrm_l.cpp"],
     hdrs = ["wcsxfrm_l.h"],
