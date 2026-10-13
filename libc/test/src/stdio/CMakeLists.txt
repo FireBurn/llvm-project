@@ -470,6 +470,7 @@ add_libc_test(
     sscanf_test.cpp
   DEPENDS
     libc.hdr.func.free
+    libc.hdr.types.wchar_t
     libc.src.string.string_utils
     libc.src.stdio.sscanf
     libc.test.UnitTest.FPTestHelpers
