@@ -34,6 +34,18 @@ libc_test(
 )
 
 libc_test(
+    name = "swscanf_test",
+    srcs = ["swscanf_test.cpp"],
+    deps = [
+        "//libc/test/UnitTest:Utf8Locale",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_stdio_macros",
+        "//libc:swscanf",
+        "//libc:types_wchar_t",
+    ],
+)
+
+libc_test(
     name = "wcpcpy_test",
     srcs = ["wcpcpy_test.cpp"],
     deps = [
