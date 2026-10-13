@@ -219,8 +219,65 @@ private:
       // is the only module loaded at this point.
       auto loaded = find_and_load(name, &modules_[0], executable_origin_,
                                   library_path_, &system_paths_, page_size_);
-      if (loaded.has_value())
+      if (!loaded.has_value())
+        continue;
+      const size_t first = count_;
+      remember(loaded.value());
+      // An object whose own libraries are not there, as with one built for
+      // another C library, is dropped whole rather than failing the program.
+      if (!load_preload_dependencies(first)) {
+        for (size_t i = first; i < count_; ++i)
+          unmap_module(mappings_[i]);
+        count_ = first;
+        report("ERROR: ld.so: object '");
+        report(name);
+        report("' from LD_PRELOAD cannot be preloaded (cannot open shared "
+               "object file): ignored.\n");
+        continue;
+      }
+      // The libraries it needed were loaded after it, but they belong after
+      // every object that was asked for. Otherwise a preload that needs the
+      // C library puts it ahead of the next preload, and a wrapper there that
+      // looks up the next definition with RTLD_NEXT finds nothing.
+      move_module(first, next_preload_++);
+    }
+    return true;
+  }
+
+  // Moves the module at `from` down to `to`, shifting those between up.
+  LIBC_INLINE void move_module(size_t from, size_t to) {
+    const Module module = modules_[from];
+    const MappedModule mapping = mappings_[from];
+    for (size_t i = from; i > to; --i) {
+      modules_[i] = modules_[i - 1];
+      mappings_[i] = mappings_[i - 1];
+    }
+    modules_[to] = module;
+    mappings_[to] = mapping;
+  }
+
+  // Loads what the modules from `first` on need, and what that needs in turn.
+  LIBC_INLINE bool load_preload_dependencies(size_t first) {
+    for (size_t i = first; i < count_; ++i) {
+      bool failed = false;
+      const Module requester = modules_[i];
+      requester.for_each_needed([&](const char *needed) {
+        if (failed || already_loaded(needed))
+          return;
+        if (count_ >= MAX_STARTUP_MODULES) {
+          failed = true;
+          return;
+        }
+        auto loaded = find_and_load(needed, &requester, nullptr, library_path_,
+                                    &system_paths_, page_size_);
+        if (!loaded.has_value()) {
+          failed = true;
+          return;
+        }
         remember(loaded.value());
+      });
+      if (failed)
+        return false;
     }
     return true;
   }
@@ -387,6 +444,9 @@ private:
   char executable_path_[MAX_EXECUTABLE_PATH];
   const char *executable_origin_ = nullptr;
   const char *preload_list_;
+  // Where the next object named in LD_PRELOAD goes, just after the ones
+  // before it and the executable.
+  size_t next_preload_ = 1;
   void (*debug_state_)();
   Module modules_[MAX_STARTUP_MODULES];
   MappedModule mappings_[MAX_STARTUP_MODULES];
