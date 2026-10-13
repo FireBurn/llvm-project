@@ -72,6 +72,22 @@ if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
   target_link_options(libc-test-dl-tlsdesc-object PRIVATE -nostdlib)
 endif()
 
+# An object that needs a library which is built where nothing looks for it.
+add_library(libc-test-dl-absent SHARED dl_absent.cpp)
+target_compile_options(libc-test-dl-absent PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-absent PRIVATE -nostdlib)
+set_target_properties(libc-test-dl-absent PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/absent)
+add_library(libc-test-dl-missing-object SHARED dl_missing_object.cpp)
+target_compile_options(libc-test-dl-missing-object PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-missing-object PRIVATE -nostdlib)
+target_link_libraries(libc-test-dl-missing-object PRIVATE libc-test-dl-absent)
+# No search path to the library it needs, as with one built elsewhere.
+set_target_properties(libc-test-dl-missing-object PROPERTIES
+  SKIP_BUILD_RPATH TRUE)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -257,6 +273,16 @@ if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
       libc-test-dl-tlsdesc-object
   )
 endif()
+
+add_libc_dynamic_test(
+  preload_missing_test
+  SRCS
+    preload_missing_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_MISSING_OBJECT="$<TARGET_FILE:libc-test-dl-missing-object>"
+  DEPENDS
+    libc-test-dl-missing-object
+)
 
 add_libc_dynamic_test(
   lock_in_init_test
