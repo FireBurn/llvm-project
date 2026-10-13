@@ -150,3 +150,55 @@ TEST(LlvmLibcElfSymbolTest, HiddenVersionIsUsedWhenAlone) {
   ASSERT_TRUE(sym != nullptr);
   EXPECT_EQ(sym->st_value, ElfW(Addr)(0x1000));
 }
+
+namespace {
+
+// A library with a verdef section naming version 2 "OLD_1" and version 3
+// "NEW_2", laid out the way a linker emits one: each definition followed by
+// its single auxiliary entry.
+struct VersionDefs {
+  ElfW(Verdef) old_def;
+  ElfW(Verdaux) old_aux;
+  ElfW(Verdef) new_def;
+  ElfW(Verdaux) new_aux;
+};
+
+const char DEFSTRTAB[] = "\0snd_rate\0OLD_1\0NEW_2";
+
+VersionDefs make_defs() {
+  VersionDefs d{};
+  d.old_def.vd_version = 1;
+  d.old_def.vd_cnt = 1;
+  d.old_def.vd_ndx = 2;
+  d.old_def.vd_aux = sizeof(ElfW(Verdef));
+  d.old_def.vd_next = sizeof(ElfW(Verdef)) + sizeof(ElfW(Verdaux));
+  d.old_aux.vda_name = 10;
+  d.new_def.vd_version = 1;
+  d.new_def.vd_cnt = 1;
+  d.new_def.vd_ndx = 3;
+  d.new_def.vd_aux = sizeof(ElfW(Verdef));
+  d.new_aux.vda_name = 16;
+  return d;
+}
+
+} // anonymous namespace
+
+TEST(LlvmLibcElfSymbolTest, RequestedVersionIsHonoured) {
+  VersionedTable t;
+  const uint32_t hash = LIBC_NAMESPACE::elf::gnu_hash("snd_rate");
+  t.chain[0] = hash & ~1u;
+  t.chain[1] = hash | 1u;
+  const uint16_t versym[] = {0, 0x8002, 0x0003};
+  const VersionDefs defs = make_defs();
+  GnuSymbolTable table(&t, VERSYMTAB, DEFSTRTAB, versym, &defs.old_def);
+  const ElfW(Sym) *old_sym = table.lookup("snd_rate", "OLD_1");
+  ASSERT_TRUE(old_sym != nullptr);
+  EXPECT_EQ(old_sym->st_value, ElfW(Addr)(0x1000));
+  const ElfW(Sym) *new_sym = table.lookup("snd_rate", "NEW_2");
+  ASSERT_TRUE(new_sym != nullptr);
+  EXPECT_EQ(new_sym->st_value, ElfW(Addr)(0x2000));
+  // A version the library does not have falls back to its default.
+  const ElfW(Sym) *other = table.lookup("snd_rate", "OTHER_9");
+  ASSERT_TRUE(other != nullptr);
+  EXPECT_EQ(other->st_value, ElfW(Addr)(0x2000));
+}
