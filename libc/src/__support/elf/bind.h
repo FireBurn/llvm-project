@@ -107,10 +107,10 @@ public:
   // `first` skips the modules before it, which is what a copy relocation
   // needs: the executable reserved the space and must not satisfy its own
   // lookup with it.
-  LIBC_INLINE cpp::optional<Resolved> find(const char *name,
-                                           size_t first = 0) const {
+  LIBC_INLINE cpp::optional<Resolved> find(const char *name, size_t first = 0,
+                                           const char *version = nullptr) const {
     for (size_t i = first; i < count_; ++i) {
-      const ElfW(Sym) *symbol = modules_[i].symbols().lookup(name);
+      const ElfW(Sym) *symbol = modules_[i].symbols().lookup(name, version);
       if (symbol == nullptr)
         continue;
       // A symbol the module only references rather than defines has no
@@ -124,8 +124,9 @@ public:
   }
 
   // Returns the runtime address of `name`, or nothing if no module defines it.
-  LIBC_INLINE cpp::optional<ElfW(Addr)> resolve(const char *name) const {
-    if (auto found = find(name))
+  LIBC_INLINE cpp::optional<ElfW(Addr)>
+  resolve(const char *name, const char *version = nullptr) const {
+    if (auto found = find(name, 0, version))
       return found->address;
     return cpp::nullopt;
   }
@@ -207,6 +208,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
     const uint32_t symbol_index = reloc_symbol(rela->r_info);
     const ElfW(Sym) &symbol = symtab[symbol_index];
     const char *name = strtab + symbol.st_name;
+    const char *version = target.symbol_version(symbol_index);
 
     if (is_tls_module || is_tls_module_offset) {
       // The general dynamic model. What is stored is not an address but a
@@ -216,7 +218,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       size_t module = target_index;
       ElfW(Addr) value = 0;
       if (symbol_index != 0 && symbol.st_shndx == SHN_UNDEF) {
-        auto defined = order.find(name);
+        auto defined = order.find(name, 0, version);
         if (!defined) {
           ++result.unresolved;
           if (result.missing == nullptr)
@@ -240,7 +242,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       size_t module = target_index;
       ElfW(Addr) value = 0;
       if (symbol_index != 0 && symbol.st_shndx == SHN_UNDEF) {
-        auto defined = order.find(name);
+        auto defined = order.find(name, 0, version);
         if (!defined) {
           ++result.unresolved;
           if (result.missing == nullptr)
@@ -303,7 +305,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
         // only be resolved here rather than through the search order.
         block = offsets[target_index];
         value = symbol_index == 0 ? 0 : symbol.st_value;
-      } else if (auto defined = order.find(name)) {
+      } else if (auto defined = order.find(name, 0, version)) {
         block = offsets[defined->module];
         value = defined->value;
       } else {
@@ -325,7 +327,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       // data symbol it imports and takes a copy of it, so that its own
       // references can be plain absolute addresses. The definition has to
       // come from somewhere other than the executable itself.
-      auto defined = order.find(name, target_index + 1);
+      auto defined = order.find(name, target_index + 1, version);
       if (!defined) {
         ++result.unresolved;
         if (result.missing == nullptr)
@@ -342,7 +344,7 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       continue;
     }
 
-    auto found = order.resolve(name);
+    auto found = order.resolve(name, version);
 
     // A weak undefined symbol is allowed to stay unresolved and is written as
     // zero, which is what lets a module test for an optional dependency.
