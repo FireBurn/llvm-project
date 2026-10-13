@@ -11,112 +11,116 @@
 
 // IEEE Std 1003.1-2017 - basedefs/sys_socket.h.html
 // Macro values come from the Linux syscall interface.
+//
+// The AF_ names are defined in terms of the PF_ ones, as glibc does, because
+// systemd scans for "#define AF_x AF_y" or "PF_y" to build its table of
+// address families and finds none when AF_ names are numbers.
 
-#define AF_UNSPEC 0   // Unspecified
-#define AF_UNIX 1     // Unix domain sockets
-#define AF_LOCAL 1    // POSIX name for AF_UNIX
-#define AF_INET 2     // Internet IPv4 Protocol
-#define AF_INET6 10   // IP version 6
-#define AF_NETLINK 16 // Netlink sockets
-#define AF_BRIDGE 7   // Multiprotocol bridge
-#define AF_PACKET 17  // Packets straight off the device
-#define AF_VSOCK 40   // Sockets between a guest and its host
-#define AF_MPLS 28    // Multiprotocol label switching
-#define AF_CAN 29     // Controller area network
-#define AF_ALG 38     // Kernel crypto
-#define AF_XDP 44     // Express data path
+// 4.2BSD protocol families
+#define PF_UNSPEC 0
+#define PF_UNIX 1
+#define PF_LOCAL 1
+#define PF_INET 2
+#define PF_INET6 10
+#define PF_NETLINK 16
+#define PF_BRIDGE 7
+#define PF_PACKET 17
+#define PF_VSOCK 40
+#define PF_MPLS 28
+#define PF_CAN 29
+#define PF_ALG 38
+#define PF_XDP 44
+#define PF_AX25 3
+#define PF_IPX 4
+#define PF_APPLETALK 5
+#define PF_NETROM 6
+#define PF_ATMPVC 8
+#define PF_X25 9
+#define PF_ROSE 11
+#define PF_DECnet 12
+#define PF_NETBEUI 13
+#define PF_SECURITY 14
+#define PF_KEY 15
+#define PF_ASH 18
+#define PF_ECONET 19
+#define PF_ATMSVC 20
+#define PF_RDS 21
+#define PF_SNA 22
+#define PF_IRDA 23
+#define PF_PPPOX 24
+#define PF_WANPIPE 25
+#define PF_LLC 26
+#define PF_IB 27
+#define PF_TIPC 30
+#define PF_BLUETOOTH 31
+#define PF_IUCV 32
+#define PF_RXRPC 33
+#define PF_ISDN 34
+#define PF_PHONET 35
+#define PF_IEEE802154 36
+#define PF_CAIF 37
+#define PF_NFC 39
+#define PF_KCM 41
+#define PF_QIPCRTR 42
+#define PF_SMC 43
+#define PF_MCTP 45
+#define PF_MAX 46
+#define PF_FILE PF_LOCAL
+#define PF_ROUTE PF_NETLINK
+
+#define AF_UNSPEC PF_UNSPEC   // Unspecified
+#define AF_UNIX PF_UNIX       // Unix domain sockets
+#define AF_LOCAL PF_LOCAL     // POSIX name for AF_UNIX
+#define AF_INET PF_INET       // Internet IPv4 Protocol
+#define AF_INET6 PF_INET6     // IP version 6
+#define AF_NETLINK PF_NETLINK // Netlink sockets
+#define AF_BRIDGE PF_BRIDGE   // Multiprotocol bridge
+#define AF_PACKET PF_PACKET   // Packets straight off the device
+#define AF_VSOCK PF_VSOCK     // Sockets between a guest and its host
+#define AF_MPLS PF_MPLS       // Multiprotocol label switching
+#define AF_CAN PF_CAN         // Controller area network
+#define AF_ALG PF_ALG         // Kernel crypto
+#define AF_XDP PF_XDP         // Express data path
 
 // The rest of the families the kernel knows, at the numbers it gives them.
 // AF_FILE and AF_ROUTE are the names 4.4BSD used for two of them.
-#define AF_AX25 3
-#define AF_IPX 4
-#define AF_APPLETALK 5
-#define AF_NETROM 6
-#define AF_ATMPVC 8
-#define AF_X25 9
-#define AF_ROSE 11
-#define AF_DECnet 12
-#define AF_NETBEUI 13
-#define AF_SECURITY 14
-#define AF_KEY 15
-#define AF_ASH 18
-#define AF_ECONET 19
-#define AF_ATMSVC 20
-#define AF_RDS 21
-#define AF_SNA 22
-#define AF_IRDA 23
-#define AF_PPPOX 24
-#define AF_WANPIPE 25
-#define AF_LLC 26
-#define AF_IB 27
-#define AF_TIPC 30
-#define AF_BLUETOOTH 31
-#define AF_IUCV 32
-#define AF_RXRPC 33
-#define AF_ISDN 34
-#define AF_PHONET 35
-#define AF_IEEE802154 36
-#define AF_CAIF 37
-#define AF_NFC 39
-#define AF_KCM 41
-#define AF_QIPCRTR 42
-#define AF_SMC 43
-#define AF_MCTP 45
-#define AF_MAX 46
-#define AF_FILE AF_LOCAL
-#define AF_ROUTE AF_NETLINK
-
-// 4.2BSD protocol families
-#define PF_UNSPEC AF_UNSPEC
-#define PF_UNIX AF_UNIX
-#define PF_LOCAL AF_LOCAL
-#define PF_INET AF_INET
-#define PF_INET6 AF_INET6
-#define PF_NETLINK AF_NETLINK
-#define PF_BRIDGE AF_BRIDGE
-#define PF_PACKET AF_PACKET
-#define PF_VSOCK AF_VSOCK
-#define PF_MPLS AF_MPLS
-#define PF_CAN AF_CAN
-#define PF_ALG AF_ALG
-#define PF_XDP AF_XDP
-#define PF_AX25 AF_AX25
-#define PF_IPX AF_IPX
-#define PF_APPLETALK AF_APPLETALK
-#define PF_NETROM AF_NETROM
-#define PF_ATMPVC AF_ATMPVC
-#define PF_X25 AF_X25
-#define PF_ROSE AF_ROSE
-#define PF_DECnet AF_DECnet
-#define PF_NETBEUI AF_NETBEUI
-#define PF_SECURITY AF_SECURITY
-#define PF_KEY AF_KEY
-#define PF_ASH AF_ASH
-#define PF_ECONET AF_ECONET
-#define PF_ATMSVC AF_ATMSVC
-#define PF_RDS AF_RDS
-#define PF_SNA AF_SNA
-#define PF_IRDA AF_IRDA
-#define PF_PPPOX AF_PPPOX
-#define PF_WANPIPE AF_WANPIPE
-#define PF_LLC AF_LLC
-#define PF_IB AF_IB
-#define PF_TIPC AF_TIPC
-#define PF_BLUETOOTH AF_BLUETOOTH
-#define PF_IUCV AF_IUCV
-#define PF_RXRPC AF_RXRPC
-#define PF_ISDN AF_ISDN
-#define PF_PHONET AF_PHONET
-#define PF_IEEE802154 AF_IEEE802154
-#define PF_CAIF AF_CAIF
-#define PF_NFC AF_NFC
-#define PF_KCM AF_KCM
-#define PF_QIPCRTR AF_QIPCRTR
-#define PF_SMC AF_SMC
-#define PF_MCTP AF_MCTP
-#define PF_MAX AF_MAX
-#define PF_FILE AF_FILE
-#define PF_ROUTE AF_ROUTE
+#define AF_AX25 PF_AX25
+#define AF_IPX PF_IPX
+#define AF_APPLETALK PF_APPLETALK
+#define AF_NETROM PF_NETROM
+#define AF_ATMPVC PF_ATMPVC
+#define AF_X25 PF_X25
+#define AF_ROSE PF_ROSE
+#define AF_DECnet PF_DECnet
+#define AF_NETBEUI PF_NETBEUI
+#define AF_SECURITY PF_SECURITY
+#define AF_KEY PF_KEY
+#define AF_ASH PF_ASH
+#define AF_ECONET PF_ECONET
+#define AF_ATMSVC PF_ATMSVC
+#define AF_RDS PF_RDS
+#define AF_SNA PF_SNA
+#define AF_IRDA PF_IRDA
+#define AF_PPPOX PF_PPPOX
+#define AF_WANPIPE PF_WANPIPE
+#define AF_LLC PF_LLC
+#define AF_IB PF_IB
+#define AF_TIPC PF_TIPC
+#define AF_BLUETOOTH PF_BLUETOOTH
+#define AF_IUCV PF_IUCV
+#define AF_RXRPC PF_RXRPC
+#define AF_ISDN PF_ISDN
+#define AF_PHONET PF_PHONET
+#define AF_IEEE802154 PF_IEEE802154
+#define AF_CAIF PF_CAIF
+#define AF_NFC PF_NFC
+#define AF_KCM PF_KCM
+#define AF_QIPCRTR PF_QIPCRTR
+#define AF_SMC PF_SMC
+#define AF_MCTP PF_MCTP
+#define AF_MAX PF_MAX
+#define AF_FILE PF_FILE
+#define AF_ROUTE PF_ROUTE
 
 #define SOCK_STREAM 1
 #define SOCK_DGRAM 2
