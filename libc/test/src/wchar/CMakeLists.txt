@@ -808,6 +808,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  swscanf_test
+  SUITE
+    libc_wchar_unittests
+  SRCS
+    swscanf_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.stdio_macros
+    libc.hdr.types.wchar_t
+    libc.src.wchar.swscanf
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   fwprintf_test
   SUITE
     libc_wchar_unittests
