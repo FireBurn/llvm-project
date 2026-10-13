@@ -295,6 +295,27 @@ LIBC_INLINE const char *library_path_from(char **envp) {
   return value_of(envp, "LD_LIBRARY_PATH=");
 }
 
+// Whether a needed library is the program interpreter of glibc, which a
+// program built for glibc names as a dependency for the sake of its
+// __tls_get_addr and _dl_* entry points. This libc is the loader and has
+// those, so loading glibc's own loader beside it would put a second set of
+// them first in the search order and leave the program calling into one that
+// was never started.
+LIBC_INLINE bool is_glibc_interpreter(const char *name) {
+  constexpr const char *NAMES[] = {"ld-linux-x86-64.so.2",
+                                   "ld-linux-aarch64.so.1",
+                                   "ld-linux-riscv64-lp64d.so.1",
+                                   "ld-linux-armhf.so.3"};
+  for (const char *candidate : NAMES) {
+    const char *a = candidate;
+    const char *b = name;
+    for (; *a == *b; ++a, ++b)
+      if (*a == '\0')
+        return true;
+  }
+  return false;
+}
+
 // LD_PRELOAD, the objects to load before anything the program asked for so
 // that what they define is found first.
 LIBC_INLINE const char *preload_list_from(char **envp) {
