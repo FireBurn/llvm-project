@@ -49,8 +49,9 @@ public:
   LIBC_INLINE constexpr GnuSymbolTable() = default;
   LIBC_INLINE GnuSymbolTable(const void *hash_table, const ElfW(Sym) * symtab,
                              const char *strtab,
-                             const uint16_t *versym = nullptr)
-      : symtab_(symtab), strtab_(strtab), versym_(versym) {
+                             const uint16_t *versym = nullptr,
+                             const ElfW(Verdef) *verdef = nullptr)
+      : symtab_(symtab), strtab_(strtab), versym_(versym), verdef_(verdef) {
     if (hash_table == nullptr)
       return;
     header_ = static_cast<const GnuHashHeader *>(hash_table);
@@ -68,7 +69,15 @@ public:
   // the older ones marked hidden. A reference which names no version gets the
   // default one, so a hidden definition is only returned when it is the only
   // one there is.
-  LIBC_INLINE const ElfW(Sym) * lookup(const char *name) const {
+  //
+  // A reference which names a version, as one from a module that links
+  // against a versioned library does, passes it as `version` and gets the
+  // definition under that name. A module which defines no versions at all
+  // satisfies any version, and when the module has the name but not that
+  // version the default definition stands in, so a mismatch binds as it did
+  // before versions were looked at rather than failing the load.
+  LIBC_INLINE const ElfW(Sym) *
+      lookup(const char *name, const char *version = nullptr) const {
     if (header_ == nullptr || header_->nbuckets == 0)
       return nullptr;
 
@@ -81,18 +90,26 @@ public:
       return nullptr;
 
     const ElfW(Sym) *hidden = nullptr;
+    const ElfW(Sym) *fallback = nullptr;
     for (;; ++index) {
       const uint32_t entry = chain_[index - header_->symoffset];
       // The low bit is the end-of-chain marker, so it is masked out of the
       // comparison rather than being part of the hash.
       if ((entry | 1) == (hash | 1) && matches(index, name)) {
-        if (versym_ == nullptr || (versym_[index] & VERSYM_HIDDEN) == 0)
+        if (version != nullptr && versym_ != nullptr && verdef_ != nullptr &&
+            version_is(versym_[index] & ~VERSYM_HIDDEN, version))
           return &symtab_[index];
-        if (hidden == nullptr)
+        if (versym_ == nullptr || (versym_[index] & VERSYM_HIDDEN) == 0) {
+          if (version == nullptr || versym_ == nullptr || verdef_ == nullptr)
+            return &symtab_[index];
+          if (fallback == nullptr)
+            fallback = &symtab_[index];
+        } else if (hidden == nullptr) {
           hidden = &symtab_[index];
+        }
       }
       if (entry & 1)
-        return hidden;
+        return fallback != nullptr ? fallback : hidden;
     }
   }
 
@@ -126,6 +143,29 @@ public:
   }
 
 private:
+  // Whether version number `ndx` of this module is the one called `version`.
+  LIBC_INLINE bool version_is(uint16_t ndx, const char *version) const {
+    if (ndx < 2)
+      return false;
+    const ElfW(Verdef) *def = verdef_;
+    for (;;) {
+      if (def->vd_ndx == ndx) {
+        const auto *aux = reinterpret_cast<const ElfW(Verdaux) *>(
+            reinterpret_cast<const char *>(def) + def->vd_aux);
+        const char *candidate = strtab_ + aux->vda_name;
+        for (const char *want = version; *candidate == *want;
+             ++candidate, ++want)
+          if (*candidate == '\0')
+            return true;
+        return false;
+      }
+      if (def->vd_next == 0)
+        return false;
+      def = reinterpret_cast<const ElfW(Verdef) *>(
+          reinterpret_cast<const char *>(def) + def->vd_next);
+    }
+  }
+
   LIBC_INLINE bool bloom_may_contain(uint32_t hash) const {
     if (header_->bloom_size == 0)
       return true;
@@ -152,6 +192,7 @@ private:
   const ElfW(Sym) *symtab_ = nullptr;
   const char *strtab_ = nullptr;
   const uint16_t *versym_ = nullptr;
+  const ElfW(Verdef) *verdef_ = nullptr;
 };
 
 } // namespace elf
