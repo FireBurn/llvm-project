@@ -888,13 +888,20 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcpcpy
     libc.src.wchar.wcpncpy
     libc.src.wchar.wcstod
+    libc.src.wchar.wcstod_l
     libc.src.wchar.wcstof
+    libc.src.wchar.wcstof_l
     libc.src.wchar.wcstok
     libc.src.wchar.wcstol
+    libc.src.wchar.wcstol_l
     libc.src.wchar.wcstold
+    libc.src.wchar.wcstold_l
     libc.src.wchar.wcstoll
+    libc.src.wchar.wcstoll_l
     libc.src.wchar.wcstoul
+    libc.src.wchar.wcstoul_l
     libc.src.wchar.wcstoull
+    libc.src.wchar.wcstoull_l
 
     # wctype.h entrypoints
     libc.src.wctype.iswalpha
