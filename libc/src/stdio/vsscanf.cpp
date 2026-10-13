@@ -18,14 +18,22 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, vsscanf,
-                   (const char *buffer, const char *format, va_list vlist)) {
+namespace internal {
+
+int vsscanf_impl(const char *buffer, const char *format, va_list vlist) {
   internal::ArgList args(vlist);
   scanf_core::StringReader reader(buffer, cpp::numeric_limits<size_t>::max());
   int ret_val = scanf_core::scanf_main(&reader, format, args);
   // This is done to avoid including stdio.h in the internals. On most systems
   // EOF is -1, so this will be transformed into just "return ret_val".
   return (ret_val == -1) ? EOF : ret_val;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, vsscanf,
+                   (const char *buffer, const char *format, va_list vlist)) {
+  return internal::vsscanf_impl(buffer, format, vlist);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
