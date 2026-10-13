@@ -345,6 +345,15 @@ functions:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
       - type: int
+  - name: wcstol_l
+    standards:
+      - posix
+    return_type: long
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: int
+      - type: locale_t
   - name: wcstoll
     standards:
       - stdc
@@ -353,6 +362,15 @@ functions:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
       - type: int
+  - name: wcstoll_l
+    standards:
+      - posix
+    return_type: long long
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: int
+      - type: locale_t
   - name: wcstoul
     standards:
       - stdc
@@ -361,6 +379,15 @@ functions:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
       - type: int
+  - name: wcstoul_l
+    standards:
+      - posix
+    return_type: unsigned long
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: int
+      - type: locale_t
   - name: wcstoull
     standards:
       - stdc
@@ -369,6 +396,15 @@ functions:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
       - type: int
+  - name: wcstoull_l
+    standards:
+      - posix
+    return_type: unsigned long long
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: int
+      - type: locale_t
   - name: wcstof
     standards:
       - stdc
@@ -376,6 +412,14 @@ functions:
     arguments:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
+  - name: wcstof_l
+    standards:
+      - posix
+    return_type: float
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: locale_t
   - name: wcstod
     standards:
       - stdc
@@ -383,6 +427,14 @@ functions:
     arguments:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
+  - name: wcstod_l
+    standards:
+      - posix
+    return_type: double
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: locale_t
   - name: wcstold
     standards:
       - stdc
@@ -390,6 +442,14 @@ functions:
     arguments:
       - type: const wchar_t *__restrict
       - type: wchar_t **__restrict
+  - name: wcstold_l
+    standards:
+      - posix
+    return_type: long double
+    arguments:
+      - type: const wchar_t *__restrict
+      - type: wchar_t **__restrict
+      - type: locale_t
   - name: wcsxfrm
     standards:
       - stdc
