@@ -10,11 +10,13 @@
 
 #include "hdr/func/free.h"
 #include "hdr/stdio_macros.h" // For EOF
+#include "hdr/types/wchar_t.h"
 #include "src/__support/CPP/limits.h"
 #include "src/__support/FPUtil/FPBits.h"
 #include "src/string/string_utils.h"
 #include "test/UnitTest/FPMatcher.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 TEST(LlvmLibcSScanfTest, SimpleStringConv) {
   int ret_val;
@@ -835,4 +837,28 @@ TEST(LlvmLibcSScanfTest, ScanSetWithNonAsciiBytes) {
   ASSERT_STREQ(buf, "a\xc3\xa9z");
   EXPECT_EQ(LIBC_NAMESPACE::sscanf("\xc3\xa9\xc3\xa9x", "%[^x]", buf), 1);
   ASSERT_STREQ(buf, "\xc3\xa9\xc3\xa9");
+}
+
+TEST(LlvmLibcSScanfTest, WideStringConv) {
+  wchar_t buf[16];
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("ab\xc3\xa9 x", "%ls", buf), 1);
+  ASSERT_EQ(buf[0], L'a');
+  ASSERT_EQ(buf[1], L'b');
+  ASSERT_EQ(buf[2], static_cast<wchar_t>(0xe9));
+  ASSERT_EQ(buf[3], L'\0');
+
+  // The width counts characters, not bytes.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("\xc3\xa9\xc3\xa9\xc3\xa9", "%2ls", buf), 1);
+  ASSERT_EQ(buf[1], static_cast<wchar_t>(0xe9));
+  ASSERT_EQ(buf[2], L'\0');
+
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("abc", "%2lc", buf), 1);
+  ASSERT_EQ(buf[1], L'b');
+
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("ab\xc3\xa9!", "%l[^!]", buf), 1);
+  ASSERT_EQ(buf[2], static_cast<wchar_t>(0xe9));
+  ASSERT_EQ(buf[3], L'\0');
+
+  // An invalid sequence is a conversion failure.
+  EXPECT_EQ(LIBC_NAMESPACE::sscanf("\xff\xff", "%ls", buf), 0);
 }
