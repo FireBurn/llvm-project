@@ -5318,6 +5318,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_wchar_mbrtowc",
+    hdrs = ["src/__support/wchar/mbrtowc.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_wchar_mbstate",
+        ":types_size_t",
+        ":types_wchar_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_wchar_wcrtomb",
     hdrs = ["src/__support/wchar/wcrtomb.h"],
     deps = [
@@ -19127,10 +19140,17 @@ libc_support_library(
         ":__support_cpp_limits",
         ":__support_cpp_string_view",
         ":__support_ctype_utils",
+        ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_str_to_float",
+        ":__support_wchar_mbrtowc",
+        ":__support_wchar_mbstate",
+        ":func_free",
+        ":func_realloc",
+        ":hdr_errno_macros",
         ":scanf_core_structs",
         ":scanf_reader",
+        ":types_wchar_t",
     ],
 )
 
