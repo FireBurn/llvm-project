@@ -474,6 +474,7 @@ add_libc_test(
     libc.src.string.string_utils
     libc.src.stdio.sscanf
     libc.test.UnitTest.FPTestHelpers
+    libc.test.UnitTest.Utf8Locale
   COMPILE_OPTIONS
     ${sscanf_test_copts}
 )

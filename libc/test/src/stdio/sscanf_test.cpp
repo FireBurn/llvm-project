@@ -16,6 +16,7 @@
 #include "src/string/string_utils.h"
 #include "test/UnitTest/FPMatcher.h"
 #include "test/UnitTest/Test.h"
+#include "test/UnitTest/Utf8Locale.h"
 
 TEST(LlvmLibcSScanfTest, SimpleStringConv) {
   int ret_val;

@@ -819,6 +819,7 @@ add_libc_test(
     libc.hdr.types.wchar_t
     libc.src.wchar.swscanf
     libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.Utf8Locale
 )
 
 add_libc_test(
