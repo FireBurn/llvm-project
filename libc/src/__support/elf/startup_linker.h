@@ -172,6 +172,8 @@ private:
   }
 
   LIBC_INLINE bool already_loaded(const char *name) const {
+    if (is_glibc_interpreter(name))
+      return true;
     for (size_t i = 0; i < count_; ++i) {
       const char *soname = modules_[i].soname();
       if (soname != nullptr && equal(soname, name))
