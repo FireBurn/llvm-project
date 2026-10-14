@@ -16,3 +16,12 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_VARIABLE(char **, environ) = nullptr;
 
 } // namespace LIBC_NAMESPACE_DECL
+
+#if defined(LIBC_COPT_PUBLIC_PACKAGING) &&                                     \
+    !defined(LIBC_TARGET_USES_LEADING_UNDERSCORE)
+// glibc binaries refer to the same variable by these names.
+extern "C" {
+extern char **_environ [[gnu::alias("environ")]];
+extern char **__environ [[gnu::alias("environ")]];
+}
+#endif
