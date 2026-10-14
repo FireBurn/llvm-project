@@ -114,5 +114,11 @@ libc_test(
     srcs = ["search_paths_test.cpp"],
     deps = [
         "//libc:__support_elf_search",
+        "//libc:close",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:open",
+        "//libc:unlink",
+        "//libc:write",
     ],
 )
