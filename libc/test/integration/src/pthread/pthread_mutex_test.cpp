@@ -178,9 +178,9 @@ void recursive_mutex_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_destroy(&attr), 0);
 
   pthread_mutex_t snapshot = snapshot_mutex(&recursive_mutex);
-  ASSERT_TRUE(snapshot.__recursive);
+  ASSERT_TRUE((snapshot.__kind & 1) != 0);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&recursive_mutex), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&recursive_mutex), 0);
@@ -197,7 +197,7 @@ void recursive_mutex_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&recursive_mutex), 0);
   snapshot = snapshot_mutex(&recursive_mutex);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_trylock(&recursive_mutex), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&recursive_mutex), 0);
@@ -220,15 +220,16 @@ void initializer_acts_the_same_as_null_attr() {
   // the layout has padding bits and __builtin_clear_padding is not available.
   ASSERT_EQ(mutex_snapshot.__ftxw.__word,
             mutex_from_init_snapshot.__ftxw.__word);
-  ASSERT_EQ(mutex_snapshot.__priority_inherit,
-            mutex_from_init_snapshot.__priority_inherit);
-  ASSERT_EQ(mutex_snapshot.__recursive, mutex_from_init_snapshot.__recursive);
-  ASSERT_EQ(mutex_snapshot.__robust, mutex_from_init_snapshot.__robust);
-  ASSERT_EQ(mutex_snapshot.__pshared, mutex_from_init_snapshot.__pshared);
-  ASSERT_EQ(mutex_snapshot.__error_checking,
-            mutex_from_init_snapshot.__error_checking);
+  ASSERT_EQ(mutex_snapshot.__kind & 0x20,
+            mutex_from_init_snapshot.__kind & 0x20);
+  ASSERT_EQ(mutex_snapshot.__kind & 1, mutex_from_init_snapshot.__kind & 1);
+  ASSERT_EQ(mutex_snapshot.__kind & 0x10,
+            mutex_from_init_snapshot.__kind & 0x10);
+  ASSERT_EQ(mutex_snapshot.__kind & 0x80,
+            mutex_from_init_snapshot.__kind & 0x80);
+  ASSERT_EQ(mutex_snapshot.__kind & 2, mutex_from_init_snapshot.__kind & 2);
   ASSERT_EQ(mutex_snapshot.__owner, mutex_from_init_snapshot.__owner);
-  ASSERT_EQ(mutex_snapshot.__lock_count, mutex_from_init_snapshot.__lock_count);
+  ASSERT_EQ(mutex_snapshot.__count, mutex_from_init_snapshot.__count);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_trylock(&mutex), EBUSY);
@@ -253,9 +254,9 @@ void error_checking_mutex_test() {
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutexattr_destroy(&attr), 0);
 
   pthread_mutex_t snapshot = snapshot_mutex(&error_checking_mutex);
-  ASSERT_TRUE(snapshot.__error_checking);
+  ASSERT_TRUE((snapshot.__kind & 2) != 0);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&error_checking_mutex), 0);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_trylock(&error_checking_mutex),
@@ -265,7 +266,7 @@ void error_checking_mutex_test() {
 
   snapshot = snapshot_mutex(&error_checking_mutex);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_destroy(&error_checking_mutex), 0);
 }
 
@@ -353,7 +354,7 @@ void priority_inherit_test() {
   relay_counter(&attr);
 
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_init(&mutex, &attr), 0);
-  ASSERT_TRUE(snapshot_mutex(&mutex).__priority_inherit);
+  ASSERT_TRUE((snapshot_mutex(&mutex).__kind & 0x20) != 0);
   // The word holds the owner, which is what the kernel boosts.
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_lock(&mutex), 0);
   ASSERT_NE(snapshot_mutex(&mutex).__ftxw.__word, 0u);
