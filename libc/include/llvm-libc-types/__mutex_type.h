@@ -13,24 +13,22 @@
 #include "pid_t.h"
 #include "size_t.h"
 
+// glibc's layout, which a program built for glibc initialises statically.
+// __kind holds the type in its low two bits and the robust, priority
+// inheriting and process shared flags above them, as glibc's does.
 typedef struct {
 #ifdef __linux__
   __futex_word __ftxw;
 #else
 #error "Mutex type not defined for the target platform."
 #endif
-
-  unsigned int __priority_inherit : 1;
-  unsigned int __recursive : 1;
-  unsigned int __robust : 1;
-  unsigned int __pshared : 1;
-  unsigned int __error_checking : 1;
-
+  unsigned int __count;
   pid_t __owner;
-  size_t __lock_count;
-  // Unused. glibc's mutex is forty bytes, and structures laid out around one
-  // expect that.
-  char __reserved[16];
+  unsigned int __nusers;
+  int __kind;
+  int __spins;
+  // Where a robust mutex is on its owner's list.
+  void *__reserved[2];
 } __mutex_type;
 
 #endif // LLVM_LIBC_TYPES___MUTEX_TYPE_H
