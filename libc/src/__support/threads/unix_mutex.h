@@ -27,21 +27,32 @@
 namespace LIBC_NAMESPACE_DECL {
 
 class Mutex final : private RawMutex {
-  // Use bitfields to allow encoding more attributes.
-  LIBC_PREFERED_TYPE(bool) unsigned int priority_inherit : 1;
-  LIBC_PREFERED_TYPE(bool) unsigned int recursive : 1;
-  LIBC_PREFERED_TYPE(bool) unsigned int robust : 1;
-  LIBC_PREFERED_TYPE(bool) unsigned int pshared : 1;
-  LIBC_PREFERED_TYPE(bool) unsigned int error_checking : 1;
+  // The layout is glibc's, up to the words glibc leaves unused, because a
+  // program built for glibc starts a mutex with a static initialiser that
+  // writes its kind, a recursive one for instance, at offset 16 and nothing
+  // else. Anything laid out differently reads that as a plain mutex and the
+  // first nested lock waits on itself for ever.
+  //
+  // The futex word is first, as in RawMutex.
+  static constexpr int KIND_TYPE_MASK = 3;
+  static constexpr int KIND_RECURSIVE = 1;
+  static constexpr int KIND_ERROR_CHECKING = 2;
+  static constexpr int KIND_ROBUST = 0x10;
+  static constexpr int KIND_PRIORITY_INHERIT = 0x20;
+  static constexpr int KIND_PSHARED = 0x80;
   // Robust mutexes. The owner exited holding the mutex and the new owner has
   // not yet said the state is consistent, and the mutex was unlocked without
-  // that being said, which makes it unusable.
-  LIBC_PREFERED_TYPE(bool) unsigned int inconsistent : 1;
-  LIBC_PREFERED_TYPE(bool) unsigned int not_recoverable : 1;
+  // that being said, which makes it unusable. Kept above the bits glibc uses.
+  static constexpr int KIND_INCONSISTENT = 0x01000000;
+  static constexpr int KIND_NOT_RECOVERABLE = 0x02000000;
 
+  // How many times the owner holds a recursive mutex.
+  unsigned int lock_count;
   // TLS address may not work across forked processes. Use thread id instead.
   cpp::Atomic<pid_t> owner;
-  size_t lock_count;
+  [[maybe_unused]] unsigned int unused_users;
+  int kind;
+  [[maybe_unused]] int unused_spins;
   // Where this mutex is on the list of the robust mutexes its owner holds.
   // The unused bytes at the end of pthread_mutex_t, and robust::FUTEX_OFFSET
   // counts back from here to the futex word.
@@ -53,7 +64,7 @@ class Mutex final : private RawMutex {
   template <class LockRoutine>
   LIBC_INLINE MutexError lock_impl(LockRoutine do_lock) {
     if (is_recursive() && owner == internal::gettid()) {
-      if (LIBC_UNLIKELY(lock_count == cpp::numeric_limits<size_t>::max()))
+      if (LIBC_UNLIKELY(lock_count == cpp::numeric_limits<unsigned int>::max()))
         return MutexError::OVERFLOW;
       lock_count++;
       return MutexError::NONE;
@@ -87,7 +98,7 @@ class Mutex final : private RawMutex {
   LIBC_INLINE MutexError pi_lock(cpp::optional<internal::AbsTimeout> timeout) {
     if (pi_try_lock())
       return MutexError::NONE;
-    ErrorOr<int> result = futex.lock_pi(timeout, this->pshared);
+    ErrorOr<int> result = futex.lock_pi(timeout, pshared());
     if (result.has_value())
       return MutexError::NONE;
     if (result.error() == ETIMEDOUT)
@@ -104,7 +115,7 @@ class Mutex final : private RawMutex {
     if (futex.compare_exchange_strong(expected, 0, cpp::MemoryOrder::RELEASE,
                                       cpp::MemoryOrder::RELAXED))
       return true;
-    return futex.unlock_pi(this->pshared).has_value();
+    return futex.unlock_pi(pshared()).has_value();
   }
 #endif
 
@@ -114,7 +125,7 @@ class Mutex final : private RawMutex {
   // run; they get an ordinary mutex.
   LIBC_INLINE robust::Head *robust_head() {
 #if defined(__linux__) && defined(LIBC_FULL_BUILD)
-    if (!this->robust)
+    if (!robust_kind())
       return nullptr;
     ThreadAttributes *attrib = get_current_thread_attrib();
     return attrib == nullptr ? nullptr : &attrib->robust_list;
@@ -137,12 +148,12 @@ class Mutex final : private RawMutex {
               bool block) {
     const FutexWordType tid = static_cast<FutexWordType>(internal::gettid());
     robust::Node *node = &robust_link.node;
-    head.pending = robust::tagged(node, priority_inherit);
+    head.pending = robust::tagged(node, priority_inherit());
     robust::order();
 
     MutexError result = MutexError::NONE;
-    if (priority_inherit) {
-      if (this->not_recoverable) {
+    if (priority_inherit()) {
+      if ((kind & KIND_NOT_RECOVERABLE)) {
         result = MutexError::NOT_RECOVERABLE;
       } else if (pi_try_lock()) {
         result = MutexError::NONE;
@@ -170,7 +181,7 @@ class Mutex final : private RawMutex {
       }
     } else {
       for (;;) {
-        if (this->not_recoverable) {
+        if ((kind & KIND_NOT_RECOVERABLE)) {
           result = MutexError::NOT_RECOVERABLE;
           break;
         }
@@ -211,8 +222,8 @@ class Mutex final : private RawMutex {
 
     if (result == MutexError::NONE || result == MutexError::OWNER_DEAD) {
       if (result == MutexError::OWNER_DEAD)
-        this->inconsistent = true;
-      robust::enqueue(head, node, priority_inherit);
+        kind |= KIND_INCONSISTENT;
+      robust::enqueue(head, node, priority_inherit());
     }
     robust::order();
     head.pending = nullptr;
@@ -226,14 +237,14 @@ class Mutex final : private RawMutex {
     robust::Node *node = &robust_link.node;
     if ((futex.load(cpp::MemoryOrder::RELAXED) & robust::TID_MASK) != tid)
       return false;
-    head.pending = robust::tagged(node, priority_inherit);
+    head.pending = robust::tagged(node, priority_inherit());
     robust::order();
     robust::dequeue(head, node);
-    if (this->inconsistent) {
-      this->inconsistent = false;
-      this->not_recoverable = true;
+    if ((kind & KIND_INCONSISTENT)) {
+      kind &= ~KIND_INCONSISTENT;
+      kind |= KIND_NOT_RECOVERABLE;
     }
-    if (priority_inherit) {
+    if (priority_inherit()) {
       FutexWordType expected = tid;
       if (!futex.compare_exchange_strong(expected, 0, cpp::MemoryOrder::RELEASE,
                                          cpp::MemoryOrder::RELAXED))
@@ -253,10 +264,10 @@ class Mutex final : private RawMutex {
 #if defined(__linux__)
     if (robust::Head *head = robust_head())
       return robust_lock(*head, timeout, /*block=*/true);
-    if (this->priority_inherit)
+    if (priority_inherit())
       return pi_lock(timeout);
 #endif
-    if (this->RawMutex::lock(timeout, this->pshared))
+    if (this->RawMutex::lock(timeout, pshared()))
       return MutexError::NONE;
     return MutexError::TIMEOUT;
   }
@@ -265,7 +276,7 @@ class Mutex final : private RawMutex {
 #if defined(__linux__)
     if (robust::Head *head = robust_head())
       return robust_lock(*head, cpp::nullopt, /*block=*/false);
-    if (this->priority_inherit)
+    if (priority_inherit())
       return pi_try_lock() ? MutexError::NONE : MutexError::BUSY;
 #endif
     return this->RawMutex::try_lock() ? MutexError::NONE : MutexError::BUSY;
@@ -275,20 +286,23 @@ class Mutex final : private RawMutex {
 #if defined(__linux__)
     if (robust::Head *head = robust_head())
       return robust_unlock(*head);
-    if (this->priority_inherit)
+    if (priority_inherit())
       return pi_unlock();
 #endif
-    return this->RawMutex::unlock(this->pshared);
+    return this->RawMutex::unlock(pshared());
   }
 
 public:
   LIBC_INLINE constexpr Mutex(bool is_priority_inherit, bool is_recursive,
                               bool is_robust, bool is_pshared,
                               bool is_error_checking = false)
-      : RawMutex(), priority_inherit(is_priority_inherit),
-        recursive(is_recursive), robust(is_robust), pshared(is_pshared),
-        error_checking(is_error_checking), inconsistent(false),
-        not_recoverable(false), owner(0), lock_count(0),
+      : RawMutex(), lock_count(0), owner(0), unused_users(0),
+        kind((is_recursive ? KIND_RECURSIVE
+                           : (is_error_checking ? KIND_ERROR_CHECKING : 0)) |
+             (is_robust ? KIND_ROBUST : 0) |
+             (is_priority_inherit ? KIND_PRIORITY_INHERIT : 0) |
+             (is_pshared ? KIND_PSHARED : 0)),
+        unused_spins(0),
         robust_link{nullptr, {nullptr}} {}
 
   // Puts the lock back to how it started, for the one thread of a process
@@ -303,7 +317,11 @@ public:
   }
 
   LIBC_INLINE static MutexError destroy(Mutex *lock) {
-    LIBC_ASSERT(lock->owner == 0 && lock->lock_count == 0 &&
+    // The count shares its word with the flag bits of the public type, whose
+    // initialiser leaves the rest of it as it was, so only a recursive mutex,
+    // which is built here, has a count that means anything.
+    LIBC_ASSERT(lock->owner == 0 &&
+                (!lock->is_recursive() || lock->lock_count == 0) &&
                 "Mutex destroyed while being locked.");
     RawMutex::destroy(lock);
     return MutexError::NONE;
@@ -354,9 +372,9 @@ public:
   LIBC_INLINE MutexError consistent() {
 #if defined(__linux__)
     const FutexWordType tid = static_cast<FutexWordType>(internal::gettid());
-    if (this->robust && this->inconsistent &&
+    if (robust_kind() && (kind & KIND_INCONSISTENT) &&
         (futex.load(cpp::MemoryOrder::RELAXED) & robust::TID_MASK) == tid) {
-      this->inconsistent = false;
+      kind &= ~KIND_INCONSISTENT;
       futex.fetch_and(~static_cast<FutexWordType>(robust::OWNER_DIED),
                       cpp::MemoryOrder::RELAXED);
       return MutexError::NONE;
@@ -366,13 +384,22 @@ public:
   }
 
   LIBC_INLINE bool can_be_requeued() const {
-    return !this->pshared && !this->robust && !this->recursive &&
-           !this->priority_inherit && !this->error_checking;
+    return !pshared() && !robust_kind() && !is_recursive() &&
+           !priority_inherit() && !is_error_checking();
   }
 
-  LIBC_INLINE bool is_robust() const { return this->robust; }
-  LIBC_INLINE bool is_recursive() const { return this->recursive; }
-  LIBC_INLINE bool is_error_checking() const { return this->error_checking; }
+  LIBC_INLINE bool robust_kind() const { return (kind & KIND_ROBUST) != 0; }
+  LIBC_INLINE bool priority_inherit() const {
+    return (kind & KIND_PRIORITY_INHERIT) != 0;
+  }
+  LIBC_INLINE bool pshared() const { return (kind & KIND_PSHARED) != 0; }
+  LIBC_INLINE bool is_robust() const { return robust_kind(); }
+  LIBC_INLINE bool is_recursive() const {
+    return (kind & KIND_TYPE_MASK) == KIND_RECURSIVE;
+  }
+  LIBC_INLINE bool is_error_checking() const {
+    return (kind & KIND_TYPE_MASK) == KIND_ERROR_CHECKING;
+  }
 };
 
 } // namespace LIBC_NAMESPACE_DECL
