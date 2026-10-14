@@ -1,4 +1,5 @@
 header: pty.h
+header_template: pty.h.def
 standards:
   - bsd
 macros: []
