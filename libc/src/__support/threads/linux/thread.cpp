@@ -270,6 +270,12 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
 
   TLSDescriptor tls;
   init_tls(tls);
+#ifdef LIBC_TARGET_ARCH_IS_X86_64
+  // A function compiled with a stack protector can return on another thread
+  // than it was entered on when a fiber library moves a stack, so every thread
+  // carries the one guard of the process, as with glibc.
+  get_tcb(tls.tp)->stack_guard = get_tcb()->stack_guard;
+#endif
 
   // When the new thread is spawned by the kernel, the new thread gets the
   // stack we pass to the clone syscall. Thread initialization structures
