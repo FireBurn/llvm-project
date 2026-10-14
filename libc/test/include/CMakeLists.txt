@@ -751,6 +751,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  pty_termios_test
+  SUITE
+    libc-include-tests
+  SRCS
+    pty_termios_test.cpp
+  DEPENDS
+    libc.include.pty
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
