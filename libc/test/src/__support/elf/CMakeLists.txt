@@ -191,7 +191,13 @@ add_libc_test(
   SRCS
     search_paths_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
     libc.src.__support.elf.search
+    libc.src.fcntl.open
+    libc.src.unistd.close
+    libc.src.unistd.unlink
+    libc.src.unistd.write
 )
 
 if(LIBC_ENABLE_SHARED)
