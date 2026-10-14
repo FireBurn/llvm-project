@@ -11,7 +11,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "hdr/fcntl_macros.h"
+#include "hdr/sys_stat_macros.h"
 #include "src/__support/elf/search.h"
+#include "src/fcntl/open.h"
+#include "src/unistd/close.h"
+#include "src/unistd/unlink.h"
+#include "src/unistd/write.h"
 #include "test/UnitTest/Test.h"
 
 #include <link.h>
@@ -19,6 +25,7 @@
 using LIBC_NAMESPACE::elf::library_path_from;
 using LIBC_NAMESPACE::elf::Module;
 using LIBC_NAMESPACE::elf::path_list_from_text;
+using LIBC_NAMESPACE::elf::PreloadIgnoreList;
 using LIBC_NAMESPACE::elf::preload_list_from;
 using LIBC_NAMESPACE::elf::rpath_of;
 using LIBC_NAMESPACE::elf::runpath_of;
@@ -150,4 +157,46 @@ TEST(LlvmLibcElfSearchPathsTest, NoPathFileIsNoList) {
   ASSERT_TRUE(paths.list() == nullptr);
   SystemPaths none(nullptr);
   ASSERT_TRUE(none.list() == nullptr);
+}
+
+namespace {
+
+// Writes `text` to a file of its own and returns where it is.
+const char *write_list(const char *path, const char *text, size_t size) {
+  int fd = LIBC_NAMESPACE::open(path, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+  if (fd < 0)
+    return nullptr;
+  LIBC_NAMESPACE::write(fd, text, size);
+  LIBC_NAMESPACE::close(fd);
+  return path;
+}
+
+} // namespace
+
+TEST(LlvmLibcElfSearchPathsTest, PreloadIgnoreListMatchesTheFileNameOnly) {
+  auto path = libc_make_test_file_path("preload_ignore.test");
+  const char text[] = "# objects to leave out\n"
+                      "gameoverlayrenderer.so\n"
+                      "\n"
+                      "other.so  \r\n";
+  ASSERT_TRUE(write_list(path, text, sizeof(text) - 1) != nullptr);
+
+  PreloadIgnoreList list(path);
+  ASSERT_TRUE(list.contains("/home/user/.steam/gameoverlayrenderer.so"));
+  ASSERT_TRUE(list.contains("gameoverlayrenderer.so"));
+  // Blanks after a name and a carriage return are not part of it.
+  ASSERT_TRUE(list.contains("/lib/other.so"));
+  // The whole name has to match, and a comment names nothing.
+  ASSERT_FALSE(list.contains("/lib/gameoverlayrenderer.so.1"));
+  ASSERT_FALSE(list.contains("/lib/overlayrenderer.so"));
+  ASSERT_FALSE(list.contains("/lib/# objects to leave out"));
+  ASSERT_FALSE(list.contains("/lib/unlisted.so"));
+  LIBC_NAMESPACE::unlink(path);
+}
+
+TEST(LlvmLibcElfSearchPathsTest, NoPreloadIgnoreListLeavesEverythingIn) {
+  PreloadIgnoreList missing("/nonexistent/ld-llvm-libc-test.ignore");
+  ASSERT_FALSE(missing.contains("/lib/anything.so"));
+  PreloadIgnoreList none(nullptr);
+  ASSERT_FALSE(none.contains("/lib/anything.so"));
 }
