@@ -155,9 +155,9 @@ void recursive_mutex_test() {
             static_cast<int>(thrd_success));
 
   mtx_t snapshot = snapshot_mutex(&recursive_mutex);
-  ASSERT_TRUE(snapshot.__recursive);
+  ASSERT_TRUE((snapshot.__kind & 1) != 0);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
 
   ASSERT_EQ(LIBC_NAMESPACE::mtx_lock(&recursive_mutex),
             static_cast<int>(thrd_success));
@@ -170,7 +170,7 @@ void recursive_mutex_test() {
             static_cast<int>(thrd_success));
   snapshot = snapshot_mutex(&recursive_mutex);
   ASSERT_EQ(snapshot.__owner, 0);
-  ASSERT_EQ(snapshot.__lock_count, size_t(0));
+  ASSERT_EQ(snapshot.__count, 0u);
 
   LIBC_NAMESPACE::mtx_destroy(&recursive_mutex);
 }
