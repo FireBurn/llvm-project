@@ -45,6 +45,14 @@ macros:
     macro_header: pthread-macros.h
   - macro_name: "PTHREAD_MUTEX_INITIALIZER"
     macro_header: pthread-macros.h
+  - macro_name: "PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP"
+    standards:
+      - gnu
+    macro_header: pthread-macros.h
+  - macro_name: "PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP"
+    standards:
+      - gnu
+    macro_header: pthread-macros.h
   - macro_name: "PTHREAD_COND_INITIALIZER"
     macro_header: pthread-macros.h
   - macro_name: "PTHREAD_RWLOCK_INITIALIZER"
