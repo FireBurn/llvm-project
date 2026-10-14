@@ -300,6 +300,76 @@ LIBC_INLINE const char *library_path_from(char **envp) {
   return value_of(envp, "LD_LIBRARY_PATH=");
 }
 
+// A list of objects LD_PRELOAD is not to load, by file name, one to a line,
+// read from the file the loader is given. Some programs are made to be
+// preloaded into a glibc process and look inside glibc's threads and loader
+// as they do; loading one here can only end in the program stopping itself.
+class PreloadIgnoreList {
+public:
+  LIBC_INLINE explicit PreloadIgnoreList(
+      const char *file = "/etc/ld-llvm-libc-preload-ignore")
+      : file_(file) {}
+
+  // Whether the preload's own file name, the part after the last slash, is
+  // on the list.
+  LIBC_INLINE bool contains(const char *path) {
+    if (!read_) {
+      read_ = true;
+      load();
+    }
+    const char *base = path;
+    for (const char *p = path; *p != '\0'; ++p)
+      if (*p == '/')
+        base = p + 1;
+    size_t i = 0;
+    while (i < length_) {
+      size_t start = i;
+      while (i < length_ && text_[i] != '\n')
+        ++i;
+      size_t end = i;
+      ++i;
+      while (end > start && (text_[end - 1] == ' ' || text_[end - 1] == '\t' ||
+                             text_[end - 1] == '\r'))
+        --end;
+      if (end == start || text_[start] == '#')
+        continue;
+      size_t n = 0;
+      while (base[n] != '\0')
+        ++n;
+      if (n != end - start)
+        continue;
+      bool same = true;
+      for (size_t k = 0; k < n && same; ++k)
+        same = base[k] == text_[start + k];
+      if (same)
+        return true;
+    }
+    return false;
+  }
+
+private:
+  LIBC_INLINE void load() {
+    if (file_ == nullptr)
+      return;
+    auto fd = linux_syscalls::open(file_, O_RDONLY | O_CLOEXEC, 0);
+    if (!fd.has_value())
+      return;
+    while (length_ < sizeof(text_)) {
+      auto n = linux_syscalls::read(fd.value(), text_ + length_,
+                                    sizeof(text_) - length_);
+      if (!n.has_value() || n.value() <= 0)
+        break;
+      length_ += static_cast<size_t>(n.value());
+    }
+    linux_syscalls::close(fd.value());
+  }
+
+  const char *file_;
+  bool read_ = false;
+  size_t length_ = 0;
+  char text_[1024];
+};
+
 // LD_PRELOAD, the objects to load before anything the program asked for so
 // that what they define is found first.
 LIBC_INLINE const char *preload_list_from(char **envp) {
