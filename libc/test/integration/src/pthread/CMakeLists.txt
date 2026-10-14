@@ -259,6 +259,19 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_stack_guard_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_stack_guard_test.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.pthread
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+)
+
+add_integration_test(
   pthread_stacksize_test
   SUITE
     libc-pthread-integration-tests
