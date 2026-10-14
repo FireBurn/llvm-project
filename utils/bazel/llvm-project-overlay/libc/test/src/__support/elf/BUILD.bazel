@@ -113,6 +113,12 @@ libc_test(
     name = "search_paths_test",
     srcs = ["search_paths_test.cpp"],
     deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
         "//libc/src/__support:elf_search",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
     ],
 )

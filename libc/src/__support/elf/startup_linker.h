@@ -211,6 +211,11 @@ private:
       name[n] = '\0';
       if (n == 0)
         continue;
+      // Named in the loader's list of things not to preload, which is for
+      // objects made for another C library's threads.
+      PreloadIgnoreList ignored;
+      if (ignored.contains(name))
+        continue;
       if (count_ >= MAX_STARTUP_MODULES) {
         report("too many shared objects\n");
         return false;
