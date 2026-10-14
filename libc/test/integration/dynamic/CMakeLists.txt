@@ -285,6 +285,12 @@ add_libc_dynamic_test(
 )
 
 add_libc_dynamic_test(
+  environ_alias_test
+  SRCS
+    environ_alias_test.cpp
+)
+
+add_libc_dynamic_test(
   lock_in_init_test
   SRCS
     lock_in_init_test.cpp
