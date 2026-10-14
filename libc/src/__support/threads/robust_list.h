@@ -53,6 +53,7 @@ LIBC_INLINE void register_list(ThreadAttributes *attrib) {
   head.next = reinterpret_cast<Node *>(&head);
   head.futex_offset = FUTEX_OFFSET;
   head.pending = nullptr;
+  prev_of(reinterpret_cast<Node *>(&head)) = reinterpret_cast<Node *>(&head);
   LIBC_NAMESPACE::syscall_impl<long>(SYS_set_robust_list, &head, sizeof(Head));
 }
 
@@ -61,24 +62,22 @@ LIBC_INLINE void enqueue(Head &head, Node *node, bool priority_inherit) {
   order();
   node->next = head.next;
   prev_of(node) = reinterpret_cast<Node *>(&head);
-  Node *first = untagged(head.next);
-  if (first != reinterpret_cast<Node *>(&head))
-    prev_of(first) = node;
+  // The head's own slot when the list is empty, which is read as well.
+  prev_of(untagged(head.next)) = node;
   order();
   head.next = tagged(node, priority_inherit);
   order();
 }
 
 // Takes the node out of the list, wherever it is.
-LIBC_INLINE void dequeue(Head &head, Node *node) {
+LIBC_INLINE void dequeue([[maybe_unused]] Head &head, Node *node) {
   order();
   Node *prev = prev_of(node);
   Node *next = untagged(node->next);
   // `prev` is the head when the node is first, and the head's `next` is where
   // a node's is.
   prev->next = node->next;
-  if (next != reinterpret_cast<Node *>(&head))
-    prev_of(next) = prev;
+  prev_of(next) = prev;
   order();
   node->next = nullptr;
   prev_of(node) = nullptr;
