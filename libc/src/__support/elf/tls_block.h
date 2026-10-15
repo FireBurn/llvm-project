@@ -90,7 +90,15 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
         offsets[i] = 0;
     return TlsBlock{};
   }
-  const size_t total = layout.size();
+  // Each module's offset is a multiple of its own alignment, which only
+  // places it correctly if the thread pointer is a multiple of the strictest
+  // one. Under variant 2 the pointer sits at the top, so the blocks below it
+  // are padded until it does; the mapping itself is page aligned.
+  const size_t below_tp =
+      TLS_VARIANT_2 ? round_up(layout.size() - TLS_TCB_RESERVE,
+                               layout.alignment())
+                    : 0;
+  const size_t total = TLS_VARIANT_2 ? below_tp + TLS_TCB_RESERVE : layout.size();
 
   auto storage = linux_syscalls::mmap(nullptr, total, PROT_READ | PROT_WRITE,
                                       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -100,7 +108,7 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
   const uintptr_t base = reinterpret_cast<uintptr_t>(storage.value());
   // Variant 2 puts the thread control block at the top with the module blocks
   // below it; variant 1 puts it at the bottom with the modules above.
-  const uintptr_t tp = TLS_VARIANT_2 ? base + (total - TLS_TCB_RESERVE) : base;
+  const uintptr_t tp = TLS_VARIANT_2 ? base + below_tp : base;
 
   // The ABI requires the first word of the thread control block to point at
   // the thread pointer itself. Compiler generated thread local accesses read
