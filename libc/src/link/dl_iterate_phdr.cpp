@@ -61,8 +61,10 @@ static struct dl_phdr_info info_for(const elf::Module &module,
   to_return.dlpi_phdr = module.phdrs();
   to_return.dlpi_phnum = module.phnum();
   to_return.dlpi_addr = module.load_bias();
+  // The path it was loaded from, as glibc and musl report it. A caller such
+  // as a JVM finds its own library's directory from this.
   const char *soname = module.soname();
-  to_return.dlpi_name = soname != nullptr ? soname : module.name();
+  to_return.dlpi_name = module.name() != nullptr ? module.name() : soname;
   to_return.dlpi_adds = set.generation;
   to_return.dlpi_subs = 0;
   to_return.dlpi_tls_modid = 0;
