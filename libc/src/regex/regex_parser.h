@@ -111,6 +111,7 @@ private:
       // An empty branch, as in "a|" or "()", matches the empty string.
       return new_node(Op::Empty, error);
     }
+    at_start_ = true;
     int32_t left = parse_repeat(error);
     if (error != 0)
       return NONE;
@@ -196,6 +197,10 @@ private:
     int32_t atom = parse_atom(error);
     if (error != 0)
       return NONE;
+    // In a basic expression a '*' after the opening '^' is an ordinary
+    // character, so the anchor is not repeated.
+    if (at_start_)
+      return atom;
     for (;;) {
       if (*p_ == '*') {
         ++p_;
@@ -363,6 +368,10 @@ private:
   }
 
   LIBC_INLINE int32_t parse_atom(int &error) {
+    // Where a branch of a basic expression begins, '^' is an anchor and '*'
+    // is an ordinary character; elsewhere it is the other way round.
+    const bool start = at_start_;
+    at_start_ = false;
     if (at_operator('(')) {
       skip_operator();
       uint32_t group = ++group_used_;
@@ -380,6 +389,7 @@ private:
       set(node, inner, NONE);
       if (nodes_ != nullptr)
         nodes_[node].index = group;
+      at_start_ = false;
       return node;
     }
 
@@ -392,13 +402,16 @@ private:
     }
 
     // '^' anchors only where an expression may begin in a basic expression,
-    // but anywhere in an extended one. Treating it as an anchor everywhere is
-    // what every practical implementation does.
-    if (*p_ == '^') {
+    // and '$' only where one may end; in an extended one both anchor anywhere.
+    if (*p_ == '^' && (extended_ || start)) {
       ++p_;
+      if (!extended_)
+        at_start_ = true;
       return new_node(Op::Bol, error);
     }
-    if (*p_ == '$') {
+    if (*p_ == '$' &&
+        (extended_ || p_[1] == '\0' ||
+         (p_[1] == '\\' && (p_[2] == ')' || p_[2] == '|')))) {
       ++p_;
       return new_node(Op::Eol, error);
     }
@@ -429,7 +442,7 @@ private:
       return NONE;
     }
     // A repetition operator with nothing to repeat.
-    if (*p_ == '*') {
+    if (*p_ == '*' && !(start && !extended_)) {
       error = REG_BADRPT;
       return NONE;
     }
@@ -440,6 +453,8 @@ private:
   const char *p_;
   bool extended_;
   bool icase_;
+  // Set while the next atom begins a branch of a basic expression.
+  bool at_start_ = false;
   Node *nodes_;
   uint32_t node_capacity_;
   uint32_t node_used_ = 0;

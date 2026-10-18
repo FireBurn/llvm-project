@@ -260,9 +260,15 @@ private:
       return ok;
     }
     case Frame::Kind::Repeat:
-      // An iteration that consumed nothing would repeat forever.
-      if (pos == f.entered)
-        return f.done > re_.nodes[f.node].min ? match_cont(pos, f.cont) : false;
+      // An iteration that consumed nothing cannot repeat. It still counts
+      // towards the minimum, since the rest could match nothing too. Once
+      // earlier iterations have reached the minimum it adds nothing, and the
+      // captures stay with the last iteration that consumed something.
+      if (pos == f.entered) {
+        if (f.done > 1 && f.done - 1 >= re_.nodes[f.node].min)
+          return false;
+        return match_cont(pos, f.cont);
+      }
       return match_repeat(f.node, pos, f.cont, f.done);
     }
     return false;

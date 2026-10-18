@@ -145,6 +145,61 @@ TEST(LlvmLibcRegexTest, Subexpressions) {
   LIBC_NAMESPACE::regfree(&re);
 }
 
+// In a basic expression '*' is ordinary at the start of a branch and '^' and
+// '$' anchor only at its start and end.
+TEST(LlvmLibcRegexTest, BasicDialectLiteralOperators) {
+  EXPECT_TRUE(matches("*a", "*a", 0));
+  EXPECT_TRUE(matches("**a", "**a", 0));
+  EXPECT_TRUE(matches("^*ab", "*ab", 0));
+  EXPECT_TRUE(matches("\\(*a\\)", "*a", 0));
+  EXPECT_TRUE(matches("a^b", "a^b", 0));
+  EXPECT_FALSE(matches("a^b", "ab", 0));
+  EXPECT_TRUE(matches("a$b", "a$b", 0));
+  EXPECT_TRUE(matches("a\\(b$\\)", "ab", 0));
+  // The extended dialect anchors everywhere.
+  EXPECT_FALSE(matches("a^b", "a^b"));
+}
+
+// A repetition over something that can match nothing still counts those
+// empty iterations towards its minimum.
+TEST(LlvmLibcRegexTest, EmptyIterationsCountTowardsTheMinimum) {
+  EXPECT_TRUE(matches("^(a*)+$", ""));
+  EXPECT_TRUE(matches("^(a*)+$", "aaa"));
+  EXPECT_TRUE(matches("^(a*){2}x$", "x"));
+  EXPECT_TRUE(matches("^(a*){2}x$", "ax"));
+  EXPECT_TRUE(matches("^X(.?){8,}Y$", "X1234567Y"));
+  EXPECT_TRUE(matches("^X(.?){8}Y$", "X1234567Y"));
+  EXPECT_FALSE(matches("^X(.?){2}Y$", "X1234567Y"));
+}
+
+// The captures belong to the last iteration that consumed something, unless
+// the minimum needed an empty one after it.
+TEST(LlvmLibcRegexTest, EmptyIterationKeepsTheLastCapture) {
+  regex_t re;
+  regmatch_t m[2];
+
+  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&re, "(a*)*", REG_EXTENDED), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::regexec(&re, "aaa", 2, m, 0), 0);
+  EXPECT_EQ(m[1].rm_so, regoff_t(0));
+  EXPECT_EQ(m[1].rm_eo, regoff_t(3));
+  ASSERT_EQ(LIBC_NAMESPACE::regexec(&re, "x", 2, m, 0), 0);
+  EXPECT_EQ(m[1].rm_so, regoff_t(0));
+  EXPECT_EQ(m[1].rm_eo, regoff_t(0));
+  LIBC_NAMESPACE::regfree(&re);
+
+  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&re, "X(.?){8,}Y", REG_EXTENDED), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::regexec(&re, "X1234567Y", 2, m, 0), 0);
+  EXPECT_EQ(m[1].rm_so, regoff_t(8));
+  EXPECT_EQ(m[1].rm_eo, regoff_t(8));
+  LIBC_NAMESPACE::regfree(&re);
+
+  ASSERT_EQ(LIBC_NAMESPACE::regcomp(&re, "X(.?){3,}Y", REG_EXTENDED), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::regexec(&re, "X1234567Y", 2, m, 0), 0);
+  EXPECT_EQ(m[1].rm_so, regoff_t(7));
+  EXPECT_EQ(m[1].rm_eo, regoff_t(8));
+  LIBC_NAMESPACE::regfree(&re);
+}
+
 TEST(LlvmLibcRegexTest, MatchOffsets) {
   regex_t re;
   ASSERT_EQ(LIBC_NAMESPACE::regcomp(&re, "b+", REG_EXTENDED), 0);
