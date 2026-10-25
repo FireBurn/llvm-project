@@ -200,3 +200,18 @@ functions:
     arguments:
       - type: wint_t
       - type: locale_t
+  - name: iswctype_l
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: wint_t
+      - type: wctype_t
+      - type: locale_t
+  - name: wctype_l
+    standards:
+      - posix
+    return_type: wctype_t
+    arguments:
+      - type: const char*
+      - type: locale_t

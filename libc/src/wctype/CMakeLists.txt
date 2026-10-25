@@ -345,3 +345,28 @@ add_entrypoint_object(
     libc.hdr.types.wint_t
     libc.src.__support.wctype_utils
 )
+
+add_entrypoint_object(
+  iswctype_l
+  SRCS
+    iswctype_l.cpp
+  HDRS
+    iswctype_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wctype_t
+    libc.hdr.types.wint_t
+    libc.src.__support.wctype_impl
+)
+
+add_entrypoint_object(
+  wctype_l
+  SRCS
+    wctype_l.cpp
+  HDRS
+    wctype_l.h
+  DEPENDS
+    libc.hdr.types.locale_t
+    libc.hdr.types.wctype_t
+    libc.src.__support.wctype_impl
+)
