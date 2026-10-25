@@ -564,6 +564,10 @@ macros:
     macro_value: 2
   - macro_name: STB_LOOS
     macro_value: 10
+  - macro_name: STB_GNU_UNIQUE
+    macro_value: 10
+    standards:
+      - gnu
   - macro_name: STB_HIOS
     macro_value: 12
   - macro_name: STB_LOPROC
