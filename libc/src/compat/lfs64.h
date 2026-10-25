@@ -16,6 +16,7 @@
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
 #include "hdr/types/struct_dirent.h"
+#include "hdr/types/struct_iovec.h"
 #include "hdr/types/struct_rlimit.h"
 #include "hdr/types/struct_stat.h"
 #include "hdr/types/struct_statfs.h"
@@ -45,6 +46,8 @@ int ftruncate64(int fd, off_t length);
 int truncate64(const char *path, off_t length);
 ssize_t pread64(int fd, void *buf, size_t count, off_t offset);
 ssize_t pwrite64(int fd, const void *buf, size_t count, off_t offset);
+ssize_t preadv64(int fd, const struct iovec *iov, int iovcnt, off_t offset);
+ssize_t pwritev64(int fd, const struct iovec *iov, int iovcnt, off_t offset);
 struct dirent *readdir64(DIR *dir);
 int scandir64(const char *path, struct dirent ***namelist,
               int (*filter)(const struct dirent *),

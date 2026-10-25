@@ -1695,6 +1695,7 @@ add_header_macro(
     .llvm-libc-types.pid_t
     .llvm-libc-types.struct_iovec
     .llvm-libc-types.ssize_t
+    .llvm-libc-macros.lfs64_macros
 )
 
 add_header_macro(

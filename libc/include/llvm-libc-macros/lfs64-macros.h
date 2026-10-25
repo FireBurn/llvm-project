@@ -38,6 +38,7 @@
 // program which included that record's header is affected.
 
 struct dirent;
+struct iovec;
 struct rlimit;
 struct stat;
 struct statfs;
@@ -123,6 +124,16 @@ __END_C_DECLS
 #define LLVM_LIBC_LFS64_SYS_SENDFILE
 __BEGIN_C_DECLS
 ssize_t sendfile64(int __out_fd, int __in_fd, off_t *__offset, size_t __count);
+__END_C_DECLS
+#endif
+
+#if defined(_LLVM_LIBC_SYS_UIO_H) && !defined(LLVM_LIBC_LFS64_SYS_UIO)
+#define LLVM_LIBC_LFS64_SYS_UIO
+__BEGIN_C_DECLS
+ssize_t preadv64(int __fd, const struct iovec *__iov, int __iovcnt,
+                 off_t __offset);
+ssize_t pwritev64(int __fd, const struct iovec *__iov, int __iovcnt,
+                  off_t __offset);
 __END_C_DECLS
 #endif
 

@@ -23,6 +23,8 @@
 #undef lseek64
 #undef pread64
 #undef pwrite64
+#undef preadv64
+#undef pwritev64
 #undef truncate64
 #undef ftruncate64
 #undef lockf64
