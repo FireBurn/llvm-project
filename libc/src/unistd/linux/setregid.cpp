@@ -18,12 +18,17 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/linux/setxid.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, setregid, (gid_t rgid, gid_t egid)) {
-  // TODO: Implement setxid propagation across threads.
-  auto ret = linux_syscalls::setregid(rgid, egid);
+  auto ret = internal::setxid(
+      [](long rgid, long egid, long) {
+        return linux_syscalls::setregid(static_cast<gid_t>(rgid),
+                                        static_cast<gid_t>(egid));
+      },
+      rgid, egid);
   if (!ret) {
     libc_errno = ret.error();
     return -1;

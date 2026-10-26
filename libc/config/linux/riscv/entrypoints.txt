@@ -71,6 +71,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.grp.getgrouplist
     libc.src.grp.getgrnam
     libc.src.grp.getgrnam_r
+    libc.src.grp.initgroups
     libc.src.grp.setgrent
 
     # net/if.h entrypoints
@@ -120,6 +121,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.shadow.sgetspent_r
     libc.src.shadow.ulckpwdf
     libc.src.grp.putgrent
+    libc.src.grp.setgroups
 
     # mntent.h entrypoints
     libc.src.mntent.addmntent
@@ -705,9 +707,17 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.readlinkat
     libc.src.unistd.rmdir
     libc.src.unistd.sbrk
+    libc.src.unistd.setegid
+    libc.src.unistd.seteuid
+    libc.src.unistd.setgid
     libc.src.unistd.sethostname
     libc.src.unistd.setpgid
+    libc.src.unistd.setregid
+    libc.src.unistd.setresgid
+    libc.src.unistd.setresuid
+    libc.src.unistd.setreuid
     libc.src.unistd.setsid
+    libc.src.unistd.setuid
     libc.src.unistd.sleep
     libc.src.unistd.symlink
     libc.src.unistd.sync
@@ -2026,10 +2036,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.glob.glob
       libc.src.glob.globfree
 
-      # grp.h entrypoints
-      libc.src.grp.initgroups
-      libc.src.grp.setgroups
-
       # libintl.h entrypoints
       libc.src.libintl.bind_textdomain_codeset
       libc.src.libintl.bindtextdomain
@@ -2059,16 +2065,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
 
       # sys/ptrace.h entrypoints
       libc.src.sys.ptrace.ptrace
-
-      # unistd.h entrypoints
-      libc.src.unistd.setegid
-      libc.src.unistd.seteuid
-      libc.src.unistd.setgid
-      libc.src.unistd.setregid
-      libc.src.unistd.setresgid
-      libc.src.unistd.setresuid
-      libc.src.unistd.setreuid
-      libc.src.unistd.setuid
 
       # wchar.h entrypoints
       libc.src.wchar.swprintf
