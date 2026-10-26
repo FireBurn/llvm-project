@@ -430,6 +430,18 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_signalfd_macros
+  HDR
+    sys-signalfd-macros.h
+)
+
+add_macro_header(
+  sys_timerfd_macros
+  HDR
+    sys-timerfd-macros.h
+)
+
+add_macro_header(
   sys_sysmacros_macros
   HDR
     sys-sysmacros-macros.h
