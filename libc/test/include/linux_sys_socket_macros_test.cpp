@@ -29,3 +29,9 @@ TEST(LlvmLibcLinuxSysSocketMacrosTest,
   EXPECT_EQ(static_cast<long long>(SCM_CREDENTIALS), 2LL);
   EXPECT_EQ(static_cast<long long>(SCM_SECURITY), 3LL);
 }
+
+TEST(LlvmLibcLinuxSysSocketMacrosTest, AddScm_TimestampnsAndScm_Timestamping) {
+  EXPECT_EQ(static_cast<long long>(SCM_TIMESTAMP), 63LL);
+  EXPECT_EQ(static_cast<long long>(SCM_TIMESTAMPNS), 64LL);
+  EXPECT_EQ(static_cast<long long>(SCM_TIMESTAMPING), 65LL);
+}
