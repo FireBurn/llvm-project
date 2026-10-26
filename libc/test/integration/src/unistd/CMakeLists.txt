@@ -16,6 +16,28 @@ add_integration_test(
 )
 
 add_integration_test(
+  setxid_test
+  SUITE
+    libc-unistd-integration-tests
+  SRCS
+    setxid_test.cpp
+  DEPENDS
+    libc.include.pthread
+    libc.include.signal
+    libc.include.sys_syscall
+    libc.src.__support.CPP.atomic
+    libc.src.__support.OSUtil.osutil
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.signal.pthread_sigmask
+    libc.src.signal.sigfillset
+    libc.src.unistd.geteuid
+    libc.src.unistd.setresgid
+    libc.src.unistd.setresuid
+    libc.src.unistd.setreuid
+)
+
+add_integration_test(
   fork_test
   SUITE
     libc-unistd-integration-tests
