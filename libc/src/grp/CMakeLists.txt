@@ -160,6 +160,7 @@ add_entrypoint_object(
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -195,6 +196,7 @@ add_object_library(
     libc.src.__support.pwd.field_tokenizer
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
+    libc.src.__support.threads.linux.setxid
 )
 
 add_entrypoint_object(

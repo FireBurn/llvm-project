@@ -19,6 +19,7 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
+#include "src/__support/threads/linux/setxid.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -26,8 +27,12 @@ LLVM_LIBC_FUNCTION(int, setgroups, (size_t size, const gid_t *list)) {
   if (size > 0)
     LIBC_CRASH_ON_NULLPTR(list);
 
-  // TODO: Implement setxid propagation across threads.
-  const auto ret = linux_syscalls::setgroups(size, list);
+  const auto ret = internal::setxid(
+      [](long size, long list, long) {
+        return linux_syscalls::setgroups(static_cast<size_t>(size),
+                                         reinterpret_cast<const gid_t *>(list));
+      },
+      static_cast<long>(size), reinterpret_cast<long>(list));
   if (!ret) {
     libc_errno = ret.error();
     return -1;

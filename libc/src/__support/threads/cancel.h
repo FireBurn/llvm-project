@@ -28,7 +28,7 @@ LIBC_INLINE void *canceled() { return reinterpret_cast<void *>(-1); }
 // The signal a cancellation request is sent with. It is not for programs to
 // use: its only job is to interrupt whatever the target thread is blocked in
 // so that the thread reaches its next cancellation point. This is why
-// SIGRTMIN is one above it.
+// SIGRTMIN is above it.
 constexpr int CANCEL_SIGNAL = 32;
 
 // Acts on a request the calling thread has been given, and is defined with
