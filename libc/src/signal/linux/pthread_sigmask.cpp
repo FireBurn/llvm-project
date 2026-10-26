@@ -24,11 +24,11 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, pthread_sigmask,
                    (int how, const sigset_t *__restrict set,
                     sigset_t *__restrict oldset)) {
-  sigset_t copy;
-  auto result = linux_syscalls::rt_sigprocmask(
-      how, internal::keep_setxid_unblocked(how, set, copy), oldset);
-  if (result.has_value())
+  auto result = linux_syscalls::rt_sigprocmask(how, set, oldset);
+  if (result.has_value()) {
+    internal::keep_setxid_unblocked(how, set);
     return 0;
+  }
 
   return result.error();
 }

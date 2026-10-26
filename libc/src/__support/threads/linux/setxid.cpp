@@ -26,6 +26,7 @@
 #include "hdr/types/pid_t.h"
 #include "hdr/types/sigset_t.h"
 #include "hdr/types/struct_sigaction.h"
+#include "hdr/unistd_macros.h"
 #include "src/__support/CPP/atomic.h"
 #include "src/__support/OSUtil/linux/sigmask.h"
 #include "src/__support/OSUtil/syscall.h"
@@ -55,16 +56,16 @@ struct Waiter {
 // What the handlers read. It is only written with thread_creation_lock held,
 // and while no handler of an earlier broadcast is still running.
 struct Broadcast {
-  SetxidFn fn;
-  long args[3];
-  cpp::Atomic<Waiter *> waiters;
+  SetxidFn fn = nullptr;
+  long args[3] = {};
+  cpp::Atomic<Waiter *> waiters{nullptr};
   // How many threads are in the list, have made the call, and have left.
   Futex registered{0};
   Futex finished{0};
   Futex left{0};
   // Moves from COLLECT to RUN to RELEASE.
   Futex phase{0};
-  cpp::Atomic<int> failed;
+  cpp::Atomic<int> failed{0};
 };
 
 enum : FutexWordType { IDLE, COLLECT, RUN, RELEASE };
