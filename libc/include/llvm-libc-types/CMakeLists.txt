@@ -317,6 +317,8 @@ add_type_header(
 )
 add_header(struct_ether_header HDR struct_ether_header.h DEPENDS libc.include.llvm-libc-macros.net_ethernet_macros libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_arphdr HDR struct_arphdr.h)
+add_header(mqd_t HDR mqd_t.h)
+add_header(struct_mq_attr HDR struct_mq_attr.h)
 add_header(struct_file_handle HDR struct_file_handle.h)
 add_header(struct_statx HDR struct_statx.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
 add_header(struct_mount_attr HDR struct_mount_attr.h DEPENDS libc.include.llvm-libc-macros.stdint_macros)
