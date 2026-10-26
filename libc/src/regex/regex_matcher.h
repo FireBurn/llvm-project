@@ -120,8 +120,6 @@ private:
       if (static_cast<size_t>(pos) >= length_)
         return false;
       unsigned char c = static_cast<unsigned char>(text_[pos]);
-      if (newline_ && c == '\n' && !re_.classes[n.index].has('\n'))
-        return false;
       if (!re_.classes[n.index].has(c))
         return false;
       return match_cont(pos + 1, cont);

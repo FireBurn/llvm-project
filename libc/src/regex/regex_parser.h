@@ -32,8 +32,8 @@ public:
                      uint32_t node_capacity, CharClass *classes,
                      uint32_t class_capacity)
       : p_(pattern), extended_(cflags & REG_EXTENDED),
-        icase_(cflags & REG_ICASE), nodes_(nodes),
-        node_capacity_(node_capacity), classes_(classes),
+        icase_(cflags & REG_ICASE), newline_(cflags & REG_NEWLINE),
+        nodes_(nodes), node_capacity_(node_capacity), classes_(classes),
         class_capacity_(class_capacity) {}
 
   // Returns the root node index, or an error code in `error`.
@@ -206,6 +206,11 @@ private:
     // character, so the anchor is not repeated.
     if (at_start_)
       return atom;
+    if (anchor_ && extended_ &&
+        (*p_ == '*' || *p_ == '+' || *p_ == '?' || *p_ == '{')) {
+      error = REG_BADRPT;
+      return NONE;
+    }
     for (;;) {
       if (*p_ == '*') {
         ++p_;
@@ -288,6 +293,30 @@ private:
     return true;
   }
 
+  // Reads one character of a bracket expression: a plain character, or a
+  // collating symbol "[.c.]" or equivalence class "[=c=]" naming one. Only
+  // single characters are collating elements in the C locale.
+  LIBC_INLINE int bracket_char(int &error) {
+    if (p_[0] == '[' && (p_[1] == '.' || p_[1] == '=')) {
+      const char kind = p_[1];
+      const char *start = p_ + 2;
+      const char *end = start;
+      while (*end != '\0' && !(end[0] == kind && end[1] == ']'))
+        ++end;
+      if (*end == '\0') {
+        error = REG_EBRACK;
+        return -1;
+      }
+      if (end - start != 1) {
+        error = REG_ECOLLATE;
+        return -1;
+      }
+      p_ = end + 2;
+      return static_cast<unsigned char>(*start);
+    }
+    return static_cast<unsigned char>(*p_++);
+  }
+
   LIBC_INLINE int32_t parse_bracket(int &error) {
     if (class_used_ >= class_capacity_) {
       error = REG_ESPACE;
@@ -320,19 +349,33 @@ private:
         continue;
       }
 
-      unsigned char lo = static_cast<unsigned char>(*p_++);
+      int lo = bracket_char(error);
+      if (lo < 0)
+        return NONE;
       // A '-' before the closing bracket is a literal.
       if (*p_ == '-' && p_[1] != ']' && p_[1] != '\0') {
         ++p_;
-        unsigned char hi = static_cast<unsigned char>(*p_++);
+        // A class cannot end a range.
+        if (p_[0] == '[' && p_[1] == ':') {
+          error = REG_ERANGE;
+          return NONE;
+        }
+        int hi = bracket_char(error);
+        if (hi < 0)
+          return NONE;
         if (hi < lo) {
           error = REG_ERANGE;
           return NONE;
         }
         for (int c = lo; c <= hi; ++c)
           cc.add(static_cast<unsigned char>(c));
+        // An end point belongs to one range only, as in "a-c-e".
+        if (*p_ == '-' && p_[1] != ']') {
+          error = REG_ERANGE;
+          return NONE;
+        }
       } else {
-        cc.add(lo);
+        cc.add(static_cast<unsigned char>(lo));
       }
     }
     ++p_; // past ']'
@@ -350,8 +393,9 @@ private:
     }
     if (negated) {
       cc.negate();
-      // A newline is never matched by a negated class under REG_NEWLINE, but
-      // that is decided at match time so the class stays reusable.
+      // Under REG_NEWLINE a negated class never matches a newline.
+      if (newline_)
+        cc.remove('\n');
     }
 
     int32_t node = new_node(Op::Class, error);
@@ -377,6 +421,7 @@ private:
     // is an ordinary character; elsewhere it is the other way round.
     const bool start = at_start_;
     at_start_ = false;
+    anchor_ = false;
     if (at_operator('(')) {
       skip_operator();
       uint32_t group = ++group_used_;
@@ -412,12 +457,14 @@ private:
       ++p_;
       if (!extended_)
         at_start_ = true;
+      anchor_ = true;
       return new_node(Op::Bol, error);
     }
     if (*p_ == '$' &&
         (extended_ || p_[1] == '\0' ||
          (p_[1] == '\\' && (p_[2] == ')' || p_[2] == '|')))) {
       ++p_;
+      anchor_ = true;
       return new_node(Op::Eol, error);
     }
 
@@ -447,7 +494,8 @@ private:
       return NONE;
     }
     // A repetition operator with nothing to repeat.
-    if (*p_ == '*' && !(start && !extended_)) {
+    if ((*p_ == '*' && !(start && !extended_)) ||
+        (extended_ && (*p_ == '+' || *p_ == '?' || *p_ == '{'))) {
       error = REG_BADRPT;
       return NONE;
     }
@@ -458,6 +506,10 @@ private:
   const char *p_;
   bool extended_;
   bool icase_;
+  bool newline_;
+  // Set when the atom just parsed was an anchor, which an extended expression
+  // may not repeat.
+  bool anchor_ = false;
   // Set while the next atom begins a branch of a basic expression.
   bool at_start_ = false;
   Node *nodes_;

@@ -53,6 +53,9 @@ struct CharClass {
   LIBC_INLINE constexpr bool has(unsigned char c) const {
     return (bits[c >> 5] >> (c & 31)) & 1u;
   }
+  LIBC_INLINE constexpr void remove(unsigned char c) {
+    bits[c >> 5] &= ~(1u << (c & 31));
+  }
   LIBC_INLINE constexpr void negate() {
     for (int i = 0; i < 8; ++i)
       bits[i] = ~bits[i];
