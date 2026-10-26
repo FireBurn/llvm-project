@@ -751,6 +751,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "mqd_t",
+    hdrs = ["mqd_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_mqd_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "nl_item",
     hdrs = ["nl_item.h"],
     deps = select({
@@ -859,6 +868,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_mq_attr",
+    hdrs = ["struct_mq_attr.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_mq_attr"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_msginfo",
     hdrs = ["struct_msginfo.h"],
     deps = select({
@@ -890,6 +908,15 @@ libc_support_library(
     hdrs = ["struct_shminfo.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_struct_shminfo"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_sigevent",
+    hdrs = ["struct_sigevent.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_sigevent"],
         "//conditions:default": [],
     }),
 )
@@ -935,6 +962,15 @@ libc_support_library(
     hdrs = ["struct_winsize.h"],
     deps = select({
         "//libc:full_build": ["//libc/include:llvm_libc_types_struct_winsize"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "timer_t",
+    hdrs = ["timer_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_timer_t"],
         "//conditions:default": [],
     }),
 )
