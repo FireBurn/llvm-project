@@ -1490,6 +1490,23 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  eventfd_t
+  HDRS
+    eventfd_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.eventfd_t
+)
+
+add_proxy_header_library(
+  struct_signalfd_siginfo
+  HDRS
+    struct_signalfd_siginfo.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_signalfd_siginfo
+)
+
+
+add_proxy_header_library(
   struct_sgrp
   HDRS
     struct_sgrp.h
