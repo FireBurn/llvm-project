@@ -34,8 +34,8 @@ TEST(LlvmLibcWcstoLTest, Integers) {
 TEST(LlvmLibcWcstoLTest, Floats) {
   wchar_t *end = nullptr;
   const wchar_t *str = L"2.5e1rest";
-  ASSERT_EQ(LIBC_NAMESPACE::wcstod_l(str, &end, nullptr), 25.0);
+  ASSERT_TRUE(LIBC_NAMESPACE::wcstod_l(str, &end, nullptr) == 25.0);
   ASSERT_EQ(end, str + 5);
-  ASSERT_EQ(LIBC_NAMESPACE::wcstof_l(L"-0.5", &end, nullptr), -0.5f);
-  ASSERT_EQ(LIBC_NAMESPACE::wcstold_l(L"1.25", &end, nullptr), 1.25L);
+  ASSERT_TRUE(LIBC_NAMESPACE::wcstof_l(L"-0.5", &end, nullptr) == -0.5f);
+  ASSERT_TRUE(LIBC_NAMESPACE::wcstold_l(L"1.25", &end, nullptr) == 1.25L);
 }
