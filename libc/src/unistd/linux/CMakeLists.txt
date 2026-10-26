@@ -944,6 +944,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.gid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setresgid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -956,6 +957,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.uid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setresuid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -968,6 +970,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.gid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setgid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -1003,6 +1006,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.gid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setregid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -1015,6 +1019,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.gid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setresgid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -1027,6 +1032,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.uid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setreuid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -1039,6 +1045,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.uid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setresuid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
@@ -1081,6 +1088,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.uid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.setuid
+    libc.src.__support.threads.linux.setxid
     libc.src.errno.errno
 )
 
