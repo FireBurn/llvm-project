@@ -50,11 +50,10 @@
 #define NSIG 65
 #define _NSIG NSIG
 
-// The first real time signal is kept for the thread cancellation request,
-// which is not for programs to use: its only job is to interrupt whatever a
-// thread is blocked in so it reaches its next cancellation point. This is
-// what glibc does with the same signal.
-#define SIGRTMIN 33
+// The first two real time signals are kept for the library: the thread
+// cancellation request, and the request each thread is sent to change its
+// credentials along with the rest of the process. glibc keeps the same two.
+#define SIGRTMIN 34
 // SIGRTMAX is the largest allowed value for the runtime signal.
 #define SIGRTMAX (NSIG - 1)
 
