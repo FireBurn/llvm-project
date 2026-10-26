@@ -5,7 +5,12 @@ function(collect_object_file_deps target result)
   # Header libraries are dense in the dependency graph, so each target keeps
   # the result of its walk and every later visit is a lookup. A target reached
   # again while its own walk is still in progress adds nothing, which ends a
-  # cycle.
+  # cycle. A dependency named but never defined, as some header libraries
+  # have, has nothing to add either.
+  if(NOT TARGET ${target})
+    set(${result} "" PARENT_SCOPE)
+    return()
+  endif()
   get_target_property(aliased ${target} "ALIASED_TARGET")
   if(aliased)
     set(target ${aliased})
