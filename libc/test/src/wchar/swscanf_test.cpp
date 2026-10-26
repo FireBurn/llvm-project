@@ -28,7 +28,7 @@ TEST_F(LlvmLibcSwscanfTest, Numbers) {
   ASSERT_EQ(
       LIBC_NAMESPACE::swscanf(L"  42 -1.5e1 tail", L"%d %lf%n", &i, &d, &n), 2);
   ASSERT_EQ(i, 42);
-  ASSERT_EQ(d, -15.0);
+  ASSERT_TRUE(d == -15.0);
   ASSERT_EQ(n, 11);
 }
 
