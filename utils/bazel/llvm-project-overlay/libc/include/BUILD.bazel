@@ -48,6 +48,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("mntent"),
     libc_header_info("monetary"),
+    libc_header_info("mqueue"),
     libc_header_info("netinet/icmp6"),
     libc_header_info("netinet/if_ether"),
     libc_header_info("netinet/ip"),
@@ -909,6 +910,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_mqd_t",
+    hdrs = ["llvm-libc-types/mqd_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_nl_item",
     hdrs = ["llvm-libc-types/nl_item.h"],
 )
@@ -969,6 +975,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_mq_attr",
+    hdrs = ["llvm-libc-types/struct_mq_attr.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_msginfo",
     hdrs = ["llvm-libc-types/struct_msginfo.h"],
 )
@@ -986,6 +997,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_shminfo",
     hdrs = ["llvm-libc-types/struct_shminfo.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_sigevent",
+    hdrs = ["llvm-libc-types/struct_sigevent.h"],
 )
 
 libc_support_library(
@@ -1011,6 +1027,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_winsize",
     hdrs = ["llvm-libc-types/struct_winsize.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_timer_t",
+    hdrs = ["llvm-libc-types/timer_t.h"],
 )
 
 libc_support_library(
