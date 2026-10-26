@@ -389,6 +389,8 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/eventfd.h entrypoints
     libc.src.sys.eventfd.eventfd
+    libc.src.sys.eventfd.eventfd_read
+    libc.src.sys.eventfd.eventfd_write
 
     # sys/file.h entrypoints
     libc.src.sys.file.flock
@@ -396,6 +398,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/io.h entrypoints
     libc.src.sys.io.ioperm
     libc.src.sys.io.iopl
+
+    # sys/signalfd.h entrypoints
+    libc.src.sys.signalfd.signalfd
+
+    # sys/timerfd.h entrypoints
+    libc.src.sys.timerfd.timerfd_create
+    libc.src.sys.timerfd.timerfd_gettime
+    libc.src.sys.timerfd.timerfd_settime
 
     # sys/shm.h entrypoints
     libc.src.sys.shm.shmat

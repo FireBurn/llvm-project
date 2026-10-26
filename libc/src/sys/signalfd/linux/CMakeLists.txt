@@ -1,0 +1,11 @@
+add_entrypoint_object(
+  signalfd
+  SRCS
+    signalfd.cpp
+  HDRS
+    ../signalfd.h
+  DEPENDS
+    libc.hdr.types.sigset_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.signalfd
+    libc.src.errno.errno
+)
