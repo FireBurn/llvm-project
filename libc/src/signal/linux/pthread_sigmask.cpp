@@ -17,6 +17,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigprocmask.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/linux/setxid_signal.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -24,8 +25,10 @@ LLVM_LIBC_FUNCTION(int, pthread_sigmask,
                    (int how, const sigset_t *__restrict set,
                     sigset_t *__restrict oldset)) {
   auto result = linux_syscalls::rt_sigprocmask(how, set, oldset);
-  if (result.has_value())
+  if (result.has_value()) {
+    internal::keep_setxid_unblocked(how, set);
     return 0;
+  }
 
   return result.error();
 }
