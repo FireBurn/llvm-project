@@ -1,0 +1,45 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc mqueue.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "mqueue_test",
+    srcs = ["mqueue_test.cpp"],
+    deps = [
+        "//libc:clock_gettime",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:hdr_time_macros",
+        "//libc:memcmp",
+        "//libc:mq_close",
+        "//libc:mq_getattr",
+        "//libc:mq_notify",
+        "//libc:mq_open",
+        "//libc:mq_receive",
+        "//libc:mq_send",
+        "//libc:mq_setattr",
+        "//libc:mq_timedreceive",
+        "//libc:mq_timedsend",
+        "//libc:mq_unlink",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:sigtimedwait",
+        "//libc:sigprocmask",
+        "//libc:types_mqd_t",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_mq_attr",
+        "//libc:types_struct_sigevent",
+        "//libc:types_struct_timespec",
+    ],
+)
