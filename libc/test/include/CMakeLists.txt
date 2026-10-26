@@ -1347,6 +1347,16 @@ add_libc_test(
     libc.include.llvm-libc-types.char32_t
 )
 
+add_libc_test(
+  socklen_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    socklen_t_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.socklen_t
+)
+
 # Test `#include <...>` of each header in each available language mode.
 # This is gated on -DLLVM_LIBC_BUILD_HEADER_TESTS=ON until all the bugs
 # in headers are fixed so the tests all compile.
