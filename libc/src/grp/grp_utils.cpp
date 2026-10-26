@@ -35,6 +35,7 @@
 #include "src/__support/pwd/field_tokenizer.h"
 #include "src/__support/pwd/flat_file_db.h"
 #include "src/__support/str_to_integer.h"
+#include "src/__support/threads/linux/setxid.h"
 
 #ifndef LIBC_COPT_GROUP_FILE_PATH
 #define LIBC_COPT_GROUP_FILE_PATH "/etc/group"
@@ -412,8 +413,13 @@ ErrorOr<int> init_groups(cpp::string_view user, gid_t group, const char *path) {
   if (!res.has_value())
     return Error(res.error());
 
-  // TODO: Implement setxid propagation across threads.
-  return linux_syscalls::setgroups(gid_list.size(), gid_list.data());
+  return internal::setxid(
+      [](long size, long list, long) {
+        return linux_syscalls::setgroups(static_cast<size_t>(size),
+                                         reinterpret_cast<const gid_t *>(list));
+      },
+      static_cast<long>(gid_list.size()),
+      reinterpret_cast<long>(gid_list.data()));
 }
 
 } // namespace grp
