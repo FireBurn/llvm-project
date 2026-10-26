@@ -2740,3 +2740,88 @@ add_header_library(
     libc.hdr.types.struct_rlimit
     libc.include.sys_syscall
 )
+
+add_header_library(
+  mq_getsetattr
+  HDRS
+    mq_getsetattr.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.mqd_t
+    libc.hdr.types.struct_mq_attr
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  mq_notify
+  HDRS
+    mq_notify.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.mqd_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timer_create
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  mq_open
+  HDRS
+    mq_open.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.mode_t
+    libc.hdr.types.struct_mq_attr
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  mq_timedreceive
+  HDRS
+    mq_timedreceive.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  mq_timedsend
+  HDRS
+    mq_timedsend.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.mqd_t
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_timespec
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  mq_unlink
+  HDRS
+    mq_unlink.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
