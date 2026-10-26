@@ -42,16 +42,16 @@ TEST_F(LlvmLibcMkstempsTest, SuffixIsKept) {
   ::free(tmpl);
 }
 
-TEST_F(LlvmLibcMkstempsTest, OnlySixCharactersAreReplaced) {
-  // The 'X' before the six that get replaced is part of the name the caller
-  // chose, so it has to survive.
+TEST_F(LlvmLibcMkstempsTest, EveryTrailingXIsReplaced) {
+  // As in mkstemp, all of the X characters before the suffix are replaced.
   char *tmpl =
       LIBC_NAMESPACE::strdup(libc_make_test_file_path("tmp_XXXXXXXX.txt"));
   const size_t len = LIBC_NAMESPACE::strlen(tmpl);
   int fd = LIBC_NAMESPACE::mkstemps(tmpl, 4);
   ASSERT_GE(fd, 0);
-  EXPECT_EQ(tmpl[len - 12], 'X');
-  EXPECT_EQ(tmpl[len - 11], 'X');
+  EXPECT_NE(tmpl[len - 12], 'X');
+  EXPECT_NE(tmpl[len - 11], 'X');
+  EXPECT_EQ(tmpl[len - 4], '.');
   LIBC_NAMESPACE::close(fd);
   LIBC_NAMESPACE::unlink(tmpl);
   ::free(tmpl);
