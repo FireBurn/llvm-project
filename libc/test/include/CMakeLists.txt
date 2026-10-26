@@ -210,6 +210,17 @@ add_libc_test(
 )
 
 add_libc_test(
+  dirent_dttoif_test
+  SUITE
+    libc-include-tests
+  SRCS
+    dirent_dttoif_test.cpp
+  DEPENDS
+    libc.include.dirent
+    libc.include.sys_stat
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
