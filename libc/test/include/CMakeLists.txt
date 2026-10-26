@@ -222,6 +222,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  utmpx_file_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    utmpx_file_macros_test.cpp
+  DEPENDS
+    libc.include.utmpx
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
