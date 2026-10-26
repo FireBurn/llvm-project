@@ -41,6 +41,7 @@
 #include "src/__support/threads/cancel.h"
 #include "src/__support/threads/linux/futex_utils.h" // For FutexWordType
 #include "src/__support/threads/linux/futex_word.h"
+#include "src/__support/threads/linux/setxid.h"
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/thread_attributes.h"
 #include "src/sys/single_threaded/__libc_single_threaded.h"
@@ -60,6 +61,8 @@ namespace LIBC_NAMESPACE_DECL {
 namespace internal {
 // Defined below, beside the rest of the cancellation machinery.
 static bool cancel_pending();
+
+RawMutex thread_creation_lock;
 } // namespace internal
 
 static constexpr size_t NAME_SIZE_MAX = 16; // Includes the null terminator
@@ -349,11 +352,13 @@ int Thread::run(ThreadStyle style, ThreadRunner runner, void *arg, void *stack,
 
   __libc_single_threaded = 0;
 
+  internal::thread_creation_lock.lock();
   auto clone_result = linux_syscalls::clone(
       start_thread, reinterpret_cast<void *>(adjusted_stack),
       CLONE_SYSCALL_FLAGS, start_args, &attrib->tid,
       reinterpret_cast<void *>(tls.tp),
       reinterpret_cast<pid_t *>(&clear_tid->val));
+  internal::thread_creation_lock.unlock();
 
   if (!clone_result.has_value()) {
     cleanup_thread_resources(attrib);
