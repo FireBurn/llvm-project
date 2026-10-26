@@ -132,6 +132,8 @@ TYPED_TEST(LlvmLibcPrintfParserTest, EvalBadArg, TestCharTypes) {
   // refuse.
   expected.has_conv = true;
   expected.raw_string = {str, 1};
+  expected.conv_val_raw = 0;
+  expected.conv_name = CharT{'\0'};
 
   ASSERT_PFORMAT_EQ(expected, format_arr[0]);
 }
@@ -669,7 +671,11 @@ TYPED_TEST(LlvmLibcPrintfParserTest, IndexModeTrailingPercentCrash,
   expected0.raw_string = {str, 4};
   EXPECT_PFORMAT_EQ(expected0, format_arr[0]);
 
-  expected1.has_conv = false;
+  // The trailing '%' ends the format inside a conversion, which is kept for
+  // the converter to refuse.
+  expected1.has_conv = true;
+  expected1.conv_val_raw = 0;
+  expected1.conv_name = CharT{'\0'};
 
   expected1.raw_string = {str + 4, 1};
   EXPECT_PFORMAT_EQ(expected1, format_arr[1]);

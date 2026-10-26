@@ -320,6 +320,7 @@ public:
         // If the conversion is undefined, change this to a raw section. A
         // format that ends here has no conversion to leave raw, and fails.
         section.has_conv = str[cur_pos] == CharT{'\0'};
+        section.conv_val_raw = 0;
         break;
       }
       // If the end of the format section is on the '\0'. This means we need to
