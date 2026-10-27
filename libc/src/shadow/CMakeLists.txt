@@ -187,11 +187,15 @@ add_entrypoint_object(
   HDRS
     lckpwdf.h
   DEPENDS
+    libc.hdr.types.struct_timespec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fcntl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.nanosleep
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
     .pwdlock
     libc.hdr.fcntl_macros
     libc.hdr.stdio_macros
     libc.hdr.types.struct_flock
-    libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
 
@@ -202,7 +206,7 @@ add_entrypoint_object(
   HDRS
     ulckpwdf.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
     .pwdlock
-    libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
