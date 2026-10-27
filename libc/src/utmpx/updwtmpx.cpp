@@ -15,11 +15,11 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/types/struct_utmpx.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 // This appends to a log of records rather than to the table of who is
@@ -30,21 +30,22 @@ LLVM_LIBC_FUNCTION(void, updwtmpx,
   if (wtmpx_file == nullptr || utmpx == nullptr)
     return;
 
-  int fd = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_openat, AT_FDCWD, wtmpx_file, O_WRONLY | O_APPEND | O_CLOEXEC, 0);
-  if (fd < 0)
+  ErrorOr<int> opened = linux_syscalls::openat(
+      AT_FDCWD, wtmpx_file, O_WRONLY | O_APPEND | O_CLOEXEC, 0);
+  if (!opened)
     return;
+  int fd = *opened;
 
   const char *p = reinterpret_cast<const char *>(utmpx);
   size_t done = 0;
   while (done < sizeof(*utmpx)) {
-    long n = LIBC_NAMESPACE::syscall_impl<long>(SYS_write, fd, p + done,
-                                                sizeof(*utmpx) - done);
-    if (n <= 0)
+    ErrorOr<ssize_t> n =
+        linux_syscalls::write(fd, p + done, sizeof(*utmpx) - done);
+    if (!n || *n <= 0)
       break;
-    done += static_cast<size_t>(n);
+    done += static_cast<size_t>(*n);
   }
-  LIBC_NAMESPACE::syscall_impl<int>(SYS_close, fd);
+  linux_syscalls::close(fd);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -5,10 +5,13 @@ add_object_library(
   HDRS
     utmpx_db.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.hdr.fcntl_macros
     libc.hdr.stdio_macros
     libc.hdr.types.struct_utmpx
-    libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
 
@@ -78,8 +81,8 @@ add_entrypoint_object(
     .utmpx_db
     libc.hdr.stdio_macros
     libc.hdr.types.struct_utmpx
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.errno.errno
 )
 
@@ -100,8 +103,10 @@ add_entrypoint_object(
   HDRS
     updwtmpx.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.hdr.fcntl_macros
     libc.hdr.types.struct_utmpx
-    libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
