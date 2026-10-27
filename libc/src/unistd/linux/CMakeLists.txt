@@ -757,8 +757,7 @@ add_entrypoint_object(
   HDRS
     ../vhangup.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vhangup
     libc.src.__support.libc_errno
 )
 

@@ -13,12 +13,10 @@
 
 #include "src/unistd/vhangup.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/vhangup.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -26,9 +24,9 @@ namespace LIBC_NAMESPACE_DECL {
 // sees the end of its input. A login program does this before handing the
 // terminal to the next user.
 LLVM_LIBC_FUNCTION(int, vhangup, (void)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_vhangup);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::vhangup();
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;
