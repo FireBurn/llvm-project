@@ -5,8 +5,7 @@ add_entrypoint_object(
   HDRS
     ../swapon.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.swapon
     libc.src.errno.errno
 )
 
@@ -17,7 +16,6 @@ add_entrypoint_object(
   HDRS
     ../swapoff.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.swapoff
     libc.src.errno.errno
 )
