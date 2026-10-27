@@ -451,8 +451,7 @@ add_entrypoint_object(
     libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.hdr.types.struct_utsname
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.uname
     libc.src.__support.libc_errno
     libc.src.string.memory_utils.inline_memcpy
     libc.src.string.string_utils
@@ -467,8 +466,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setdomainname
     libc.src.__support.libc_errno
 )
 

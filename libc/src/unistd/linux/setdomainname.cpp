@@ -14,7 +14,7 @@
 #include "src/unistd/setdomainname.h"
 
 #include "hdr/errno_macros.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setdomainname.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
@@ -28,9 +28,9 @@ LLVM_LIBC_FUNCTION(int, setdomainname, (const char *name, size_t len)) {
     libc_errno = EINVAL;
     return -1;
   }
-  int ret = syscall_impl<int>(SYS_setdomainname, name, len);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::setdomainname(name, len);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

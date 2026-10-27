@@ -15,14 +15,12 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/types/struct_utsname.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/uname.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
-
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -35,9 +33,9 @@ LLVM_LIBC_FUNCTION(int, getdomainname, (char *name, size_t len)) {
   }
 
   struct utsname info;
-  int ret = syscall_impl<int>(SYS_uname, &info);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::uname(&info);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
 
