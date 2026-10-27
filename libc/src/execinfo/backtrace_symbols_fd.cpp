@@ -14,13 +14,11 @@
 #include "src/execinfo/backtrace_symbols_fd.h"
 
 #include "hdr/types/dl_info.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dladdr.h"
 #include "src/execinfo/backtrace_line.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -29,11 +27,11 @@ namespace {
 void write_all(int fd, const char *text, size_t length) {
   size_t done = 0;
   while (done < length) {
-    const long written = LIBC_NAMESPACE::syscall_impl<long>(
-        SYS_write, fd, text + done, length - done);
-    if (written <= 0)
+    const ErrorOr<ssize_t> written =
+        linux_syscalls::write(fd, text + done, length - done);
+    if (!written || *written <= 0)
       return;
-    done += static_cast<size_t>(written);
+    done += static_cast<size_t>(*written);
   }
 }
 

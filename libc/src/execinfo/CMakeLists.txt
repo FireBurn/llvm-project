@@ -43,8 +43,7 @@ add_entrypoint_object(
   DEPENDS
     .backtrace_line
     libc.hdr.types.dl_info
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.dlfcn.dladdr
 )
 
