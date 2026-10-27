@@ -5,7 +5,6 @@ add_entrypoint_object(
   HDRS
     ../klogctl.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.syslog
     libc.src.__support.libc_errno
 )
