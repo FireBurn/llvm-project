@@ -114,8 +114,7 @@ add_entrypoint_object(
     ../statx.h
   DEPENDS
     libc.hdr.types.struct_statx
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.statx
     libc.src.errno.errno
 )
 
