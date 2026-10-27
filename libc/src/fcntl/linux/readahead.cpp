@@ -16,12 +16,10 @@
 #include "hdr/types/off_t.h"
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/readahead.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -29,19 +27,12 @@ namespace LIBC_NAMESPACE_DECL {
 // waiting for it. Nothing is read into the caller's memory, so the answer
 // says the request was made rather than how much arrived.
 LLVM_LIBC_FUNCTION(ssize_t, readahead, (int fd, off_t offset, size_t count)) {
-#if __SIZEOF_LONG__ == 8
-  ssize_t ret =
-      LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_readahead, fd, offset, count);
-#else
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(
-      SYS_readahead, fd, static_cast<long>(offset),
-      static_cast<long>(offset >> 32), count);
-#endif
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<ssize_t> ret = linux_syscalls::readahead(fd, offset, count);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

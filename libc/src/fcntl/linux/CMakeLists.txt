@@ -90,8 +90,7 @@ add_entrypoint_object(
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.readahead
     libc.src.__support.libc_errno
 )
 
