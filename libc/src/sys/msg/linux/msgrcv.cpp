@@ -15,25 +15,23 @@
 
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/msgrcv.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, msgrcv,
                    (int msqid, void *msgp, size_t msgsz, long msgtyp,
                     int msgflg)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_msgrcv, msqid, msgp, msgsz,
-                                                msgtyp, msgflg);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<long> ret =
+      linux_syscalls::msgrcv(msqid, msgp, msgsz, msgtyp, msgflg);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return static_cast<ssize_t>(ret);
+  return static_cast<ssize_t>(*ret);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

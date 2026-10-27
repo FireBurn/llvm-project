@@ -6,8 +6,7 @@ add_entrypoint_object(
     ../msgget.h
   DEPENDS
     libc.hdr.types.key_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.msgget
     libc.src.errno.errno
 )
 
@@ -19,8 +18,7 @@ add_entrypoint_object(
     ../msgctl.h
   DEPENDS
     libc.hdr.types.struct_msqid_ds
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.msgctl
     libc.src.errno.errno
 )
 
@@ -32,8 +30,7 @@ add_entrypoint_object(
     ../msgsnd.h
   DEPENDS
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.msgsnd
     libc.src.errno.errno
 )
 
@@ -46,7 +43,6 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.msgrcv
     libc.src.errno.errno
 )
