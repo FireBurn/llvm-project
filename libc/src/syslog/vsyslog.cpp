@@ -15,11 +15,17 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/syslog_macros.h"
+#include "hdr/time_macros.h"
+#include "hdr/types/struct_timespec.h"
 #include "hdr/types/struct_tm.h"
 #include "hdr/types/time_t.h"
 #include "src/__support/CPP/mutex.h"
 #include "src/__support/CPP/string_view.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getpid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sendto.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
 #include "src/__support/StringUtil/error_to_string.h"
 #include "src/__support/arg_list.h"
 #include "src/__support/common.h"
@@ -28,13 +34,12 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/printf_core/printf_main.h"
 #include "src/__support/printf_core/writer.h"
+#include "src/__support/time/clock_gettime.h"
 #include "src/errno/program_invocation_short_name.h"
 #include "src/syslog/syslog_state.h"
 #include "src/time/time_utils.h"
 
 #include <sys/socket.h>
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 namespace {
@@ -100,7 +105,9 @@ constexpr const char *MONTHS[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 
 void put_timestamp(Buffer &out) {
   time_t now = 0;
-  LIBC_NAMESPACE::syscall_impl<long>(SYS_clock_gettime, 0, &now);
+  struct timespec ts;
+  if (internal::clock_gettime(CLOCK_REALTIME, &ts).has_value())
+    now = ts.tv_sec;
 
   // A struct tm broken out of the seconds. The log wants local time, but the
   // offset is not something the libc knows without reading the zone, so this
@@ -171,9 +178,8 @@ void send_record(const char *record, size_t len, size_t header_len,
   syslog_internal::State &s = syslog_internal::log_state;
 
   if (option & LOG_PERROR) {
-    LIBC_NAMESPACE::syscall_impl<long>(SYS_write, 2, record + header_len,
-                                       len - header_len);
-    LIBC_NAMESPACE::syscall_impl<long>(SYS_write, 2, "\n", 1);
+    linux_syscalls::write(2, record + header_len, len - header_len);
+    linux_syscalls::write(2, "\n", 1);
   }
 
   bool sent = false;
@@ -183,9 +189,7 @@ void send_record(const char *record, size_t len, size_t header_len,
     // A stream connection has no record boundaries of its own, so the null
     // byte is what marks the end of one.
     size_t n = s.stream ? len + 1 : len;
-    long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_sendto, s.fd, record, n,
-                                                  MSG_NOSIGNAL, nullptr, 0);
-    if (ret >= 0) {
+    if (linux_syscalls::sendto(s.fd, record, n, MSG_NOSIGNAL, nullptr, 0)) {
       sent = true;
       break;
     }
@@ -197,13 +201,12 @@ void send_record(const char *record, size_t len, size_t header_len,
   // Falling back to the console is only done when it was asked for, since it
   // writes where anyone logged in will see it.
   if (!sent && (option & LOG_CONS)) {
-    int fd = LIBC_NAMESPACE::syscall_impl<int>(
-        SYS_openat, AT_FDCWD, "/dev/console", O_WRONLY | O_NOCTTY, 0);
-    if (fd >= 0) {
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_write, fd, record + header_len,
-                                         len - header_len);
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_write, fd, "\r\n", 2);
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_close, fd);
+    ErrorOr<int> fd = linux_syscalls::openat(AT_FDCWD, "/dev/console",
+                                             O_WRONLY | O_NOCTTY, 0);
+    if (fd) {
+      linux_syscalls::write(*fd, record + header_len, len - header_len);
+      linux_syscalls::write(*fd, "\r\n", 2);
+      linux_syscalls::close(*fd);
     }
   }
 }
@@ -246,7 +249,7 @@ LLVM_LIBC_FUNCTION(void, vsyslog,
     out.put(tag);
   if (s.option & LOG_PID) {
     out.put('[');
-    out.put_int(LIBC_NAMESPACE::syscall_impl<int>(SYS_getpid));
+    out.put_int(linux_syscalls::getpid());
     out.put(']');
   }
   if (tag != nullptr || (s.option & LOG_PID)) {
