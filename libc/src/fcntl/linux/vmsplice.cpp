@@ -13,12 +13,10 @@
 
 #include "src/fcntl/vmsplice.h"
 
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/vmsplice.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 // Moves what the caller's own memory holds into a pipe, or takes what a pipe
@@ -27,13 +25,12 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(ssize_t, vmsplice,
                    (int fd, const struct iovec *iov, size_t count,
                     unsigned int flags)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(SYS_vmsplice, fd, iov,
-                                                      count, flags);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<ssize_t> ret = linux_syscalls::vmsplice(fd, iov, count, flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
