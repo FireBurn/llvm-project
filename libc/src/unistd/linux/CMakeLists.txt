@@ -832,8 +832,8 @@ add_entrypoint_object(
     ../_Fork.h
   DEPENDS
     libc.hdr.types.pid_t
-    libc.hdr.signal_macros
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fork
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
