@@ -7,8 +7,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.clock_t
     libc.hdr.types.struct_tms
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.times
     libc.src.__support.common
     libc.src.__support.libc_errno
 )

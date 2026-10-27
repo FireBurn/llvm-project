@@ -15,12 +15,10 @@
 
 #include "hdr/types/clock_t.h"
 #include "hdr/types/struct_tms.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/times.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -30,12 +28,12 @@ namespace LIBC_NAMESPACE_DECL {
 // wants to know whether this failed has to clear errno first and look at it
 // afterwards rather than compare the result.
 LLVM_LIBC_FUNCTION(clock_t, times, (struct tms * buffer)) {
-  const long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_times, buffer);
-  if (ret < 0 && ret > -4096) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<long> ret = linux_syscalls::times(buffer);
+  if (!ret) {
+    libc_errno = ret.error();
     return static_cast<clock_t>(-1);
   }
-  return static_cast<clock_t>(ret);
+  return static_cast<clock_t>(*ret);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
