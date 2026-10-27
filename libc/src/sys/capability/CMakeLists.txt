@@ -14,8 +14,7 @@ add_entrypoint_object(
     capget.h
   DEPENDS
     .cap_types
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.capget
     libc.src.errno.errno
 )
 
@@ -27,7 +26,6 @@ add_entrypoint_object(
     capset.h
   DEPENDS
     .cap_types
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.capset
     libc.src.errno.errno
 )
