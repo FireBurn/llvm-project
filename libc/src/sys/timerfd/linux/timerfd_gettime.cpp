@@ -14,33 +14,18 @@
 #include "src/sys/timerfd/timerfd_gettime.h"
 
 #include "hdr/types/struct_itimerspec.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/timerfd_gettime.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, timerfd_gettime,
                    (int fd, struct itimerspec *curr_value)) {
-#ifdef SYS_timerfd_gettime64
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_timerfd_gettime64, fd, curr_value);
-#elif defined(SYS_timerfd_gettime)
-  static_assert(
-      sizeof(timespec::tv_nsec) == sizeof(long),
-      "This legacy syscall fallback is only safe on platforms where tv_nsec "
-      "matches the register size (long). It is unsafe on 32-bit platforms "
-      "with 64-bit tv_nsec.");
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_timerfd_gettime, fd, curr_value);
-#else
-#error "timerfd_gettime syscalls not available."
-#endif
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::timerfd_gettime(fd, curr_value);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

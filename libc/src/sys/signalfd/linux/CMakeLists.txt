@@ -6,7 +6,6 @@ add_entrypoint_object(
     ../signalfd.h
   DEPENDS
     libc.hdr.types.sigset_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.signalfd
     libc.src.errno.errno
 )
