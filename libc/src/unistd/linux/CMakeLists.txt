@@ -475,6 +475,9 @@ add_entrypoint_object(
   HDRS
     ../gethostid.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.hdr.fcntl_macros
     libc.src.__support.OSUtil.osutil
 )
