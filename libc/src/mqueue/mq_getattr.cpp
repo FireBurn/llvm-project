@@ -15,21 +15,18 @@
 
 #include "hdr/types/mqd_t.h"
 #include "hdr/types/struct_mq_attr.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/mq_getsetattr.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 // The kernel has one call for both directions; reading is that call with
 // nothing to set.
 LLVM_LIBC_FUNCTION(int, mq_getattr, (mqd_t mqdes, struct mq_attr *attr)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_getsetattr, mqdes, nullptr,
-                                              attr);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::mq_getsetattr(mqdes, nullptr, attr);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

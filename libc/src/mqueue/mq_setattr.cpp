@@ -15,12 +15,10 @@
 
 #include "hdr/types/mqd_t.h"
 #include "hdr/types/struct_mq_attr.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/mq_getsetattr.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 // Only mq_flags is looked at; the rest of the structure was fixed when the
@@ -28,10 +26,9 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, mq_setattr,
                    (mqd_t mqdes, const struct mq_attr *__restrict newattr,
                     struct mq_attr *__restrict oldattr)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_mq_getsetattr, mqdes, newattr,
-                                              oldattr);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::mq_getsetattr(mqdes, newattr, oldattr);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

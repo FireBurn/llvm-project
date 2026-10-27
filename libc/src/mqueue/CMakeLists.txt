@@ -9,8 +9,7 @@ add_entrypoint_object(
     libc.hdr.types.mode_t
     libc.hdr.types.mqd_t
     libc.hdr.types.struct_mq_attr
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_open
     libc.src.errno.errno
 )
 
@@ -22,8 +21,7 @@ add_entrypoint_object(
     mq_close.h
   DEPENDS
     libc.hdr.types.mqd_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.errno.errno
 )
 
@@ -34,8 +32,7 @@ add_entrypoint_object(
   HDRS
     mq_unlink.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_unlink
     libc.src.errno.errno
 )
 
@@ -61,8 +58,7 @@ add_entrypoint_object(
     libc.hdr.types.mqd_t
     libc.hdr.types.size_t
     libc.hdr.types.struct_timespec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_timedsend
     libc.src.errno.errno
 )
 
@@ -90,8 +86,7 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_timespec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_timedreceive
     libc.src.errno.errno
 )
 
@@ -104,8 +99,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.mqd_t
     libc.hdr.types.struct_mq_attr
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_getsetattr
     libc.src.errno.errno
 )
 
@@ -118,8 +112,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.mqd_t
     libc.hdr.types.struct_mq_attr
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_getsetattr
     libc.src.errno.errno
 )
 
@@ -133,7 +126,6 @@ add_entrypoint_object(
     libc.hdr.types.mqd_t
     libc.hdr.types.struct_sigevent
     libc.src.__support.OSUtil.linux.syscall_wrappers.timer_create
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_notify
     libc.src.errno.errno
 )
