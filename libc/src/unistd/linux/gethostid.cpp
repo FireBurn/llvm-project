@@ -14,11 +14,11 @@
 #include "src/unistd/gethostid.h"
 
 #include "hdr/fcntl_macros.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -27,17 +27,16 @@ namespace LIBC_NAMESPACE_DECL {
 // answer musl gives in that case. POSIX marks this obsolescent and asks
 // nothing of the value beyond its being an identifier.
 LLVM_LIBC_FUNCTION(long, gethostid, (void)) {
-  int fd = LIBC_NAMESPACE::syscall_impl<int>(SYS_openat, AT_FDCWD,
-                                             "/etc/hostid", O_RDONLY, 0);
-  if (fd < 0)
+  ErrorOr<int> fd =
+      linux_syscalls::openat(AT_FDCWD, "/etc/hostid", O_RDONLY, 0);
+  if (!fd)
     return 0;
 
   int32_t id = 0;
-  long read_result = LIBC_NAMESPACE::syscall_impl<long>(
-      SYS_read, fd, reinterpret_cast<long>(&id), sizeof(id));
-  LIBC_NAMESPACE::syscall_impl<long>(SYS_close, fd);
+  ErrorOr<ssize_t> read_result = linux_syscalls::read(*fd, &id, sizeof(id));
+  linux_syscalls::close(*fd);
 
-  if (read_result != static_cast<long>(sizeof(id)))
+  if (!read_result || *read_result != static_cast<ssize_t>(sizeof(id)))
     return 0;
   return id;
 }

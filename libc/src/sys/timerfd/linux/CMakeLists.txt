@@ -7,8 +7,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_itimerspec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timerfd_create
     libc.src.errno.errno
 )
 
@@ -21,8 +20,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_itimerspec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timerfd_settime
     libc.src.errno.errno
 )
 
@@ -35,7 +33,6 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_itimerspec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timerfd_gettime
     libc.src.errno.errno
 )

@@ -369,8 +369,7 @@ add_entrypoint_object(
   HDRS
     ../setns.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setns
     libc.src.errno.errno
 )
 
@@ -381,7 +380,6 @@ add_entrypoint_object(
   HDRS
     ../unshare.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.unshare
     libc.src.errno.errno
 )

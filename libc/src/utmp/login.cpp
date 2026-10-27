@@ -14,7 +14,7 @@
 #include "src/utmp/login.h"
 
 #include "hdr/types/struct_utmp.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getpid.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/string/memory_utils/inline_memcpy.h"
@@ -24,8 +24,6 @@
 #include "src/utmp/setutent.h"
 #include "src/utmp/updwtmp.h"
 #include "src/utmp/utmp_fill.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -63,8 +61,7 @@ LLVM_LIBC_FUNCTION(void, login, (const struct utmp *entry)) {
   struct utmp record;
   inline_memcpy(&record, entry, sizeof(record));
   record.ut_type = USER_PROCESS;
-  record.ut_pid =
-      static_cast<pid_t>(LIBC_NAMESPACE::syscall_impl<long>(SYS_getpid));
+  record.ut_pid = linux_syscalls::getpid();
   if (record.ut_line[0] == '\0')
     terminal_name(record.ut_line, sizeof(record.ut_line));
   utmp_fill::stamp(&record);

@@ -13,14 +13,12 @@
 
 #include "src/unistd/_Fork.h"
 
-#include "hdr/signal_macros.h"            // For SIGCHLD
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/fork.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/gettid.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/identifier.h"
-
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -33,25 +31,19 @@ LLVM_LIBC_FUNCTION(pid_t, _Fork, (void)) {
   // fork does: a signal handler running in the window after the syscall
   // would otherwise read the wrong one.
   internal::force_set_tid(0);
-#ifdef SYS_fork
-  pid_t ret = syscall_impl<pid_t>(SYS_fork);
-#elif defined(SYS_clone)
-  pid_t ret = syscall_impl<pid_t>(SYS_clone, SIGCHLD, 0);
-#else
-#error "fork and clone syscalls not available."
-#endif
+  ErrorOr<pid_t> ret = linux_syscalls::fork();
 
-  if (ret == 0) {
-    internal::force_set_tid(syscall_impl<pid_t>(SYS_gettid));
+  if (ret && *ret == 0) {
+    internal::force_set_tid(linux_syscalls::gettid());
     return 0;
   }
 
   internal::force_set_tid(parent_tid);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -5,8 +5,7 @@ add_entrypoint_object(
   HDRS
     quotactl.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.quotactl
     libc.src.errno.errno
 )
 
@@ -17,7 +16,6 @@ add_entrypoint_object(
   HDRS
     quotactl_fd.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.quotactl_fd
     libc.src.errno.errno
 )

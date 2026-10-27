@@ -14,21 +14,18 @@
 #include "src/sys/msg/msgsnd.h"
 
 #include "hdr/types/size_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/msgsnd.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, msgsnd,
                    (int msqid, const void *msgp, size_t msgsz, int msgflg)) {
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_msgsnd, msqid, msgp, msgsz, msgflg);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::msgsnd(msqid, msgp, msgsz, msgflg);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

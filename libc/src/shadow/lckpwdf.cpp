@@ -16,12 +16,14 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/stdio_macros.h"
 #include "hdr/types/struct_flock.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "hdr/types/struct_timespec.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fcntl.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/nanosleep.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/shadow/pwdlock.h"
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 namespace shadow_lock {
@@ -38,11 +40,11 @@ LLVM_LIBC_FUNCTION(int, lckpwdf, (void)) {
   if (shadow_lock::held_fd >= 0)
     return -1;
 
-  int fd = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_openat, AT_FDCWD, shadow_lock::LOCK_PATH,
-      O_WRONLY | O_CREAT | O_CLOEXEC, 0600);
-  if (fd < 0)
+  ErrorOr<int> opened = linux_syscalls::openat(
+      AT_FDCWD, shadow_lock::LOCK_PATH, O_WRONLY | O_CREAT | O_CLOEXEC, 0600);
+  if (!opened)
     return -1;
+  int fd = *opened;
 
   struct flock fl;
   fl.l_type = F_WRLCK;
@@ -53,20 +55,17 @@ LLVM_LIBC_FUNCTION(int, lckpwdf, (void)) {
   // The wait is spent asking again rather than blocking in the kernel, so
   // that it can be given up on after the timeout.
   for (int waited = 0; waited <= TIMEOUT_SECONDS; ++waited) {
-    if (LIBC_NAMESPACE::syscall_impl<int>(SYS_fcntl, fd, F_SETLK, &fl) >= 0) {
+    if (linux_syscalls::fcntl(fd, F_SETLK, &fl)) {
       shadow_lock::held_fd = fd;
       return 0;
     }
     if (waited == TIMEOUT_SECONDS)
       break;
-    struct {
-      long tv_sec;
-      long tv_nsec;
-    } one_second = {1, 0};
-    LIBC_NAMESPACE::syscall_impl<int>(SYS_nanosleep, &one_second, nullptr);
+    struct timespec one_second = {1, 0};
+    linux_syscalls::nanosleep(&one_second, nullptr);
   }
 
-  LIBC_NAMESPACE::syscall_impl<int>(SYS_close, fd);
+  linux_syscalls::close(fd);
   return -1;
 }
 

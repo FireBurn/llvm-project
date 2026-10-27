@@ -14,12 +14,10 @@
 #include "src/sys/shm/shmctl.h"
 
 #include "hdr/types/struct_shmid_ds.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/shmctl.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -27,12 +25,12 @@ namespace LIBC_NAMESPACE_DECL {
 // struct shmid_ds is here, and the syscall asks for that itself, so the
 // command goes through as it is.
 LLVM_LIBC_FUNCTION(int, shmctl, (int shmid, int cmd, struct shmid_ds *buf)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_shmctl, shmid, cmd, buf);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::shmctl(shmid, cmd, buf);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

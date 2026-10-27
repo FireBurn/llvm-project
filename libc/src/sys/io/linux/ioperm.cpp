@@ -13,12 +13,10 @@
 
 #include "src/sys/io/ioperm.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/ioperm.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -27,9 +25,9 @@ namespace LIBC_NAMESPACE_DECL {
 // the rest.
 LLVM_LIBC_FUNCTION(int, ioperm,
                    (unsigned long from, unsigned long num, int turn_on)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_ioperm, from, num, turn_on);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::ioperm(from, num, turn_on);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

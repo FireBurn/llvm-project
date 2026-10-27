@@ -13,19 +13,17 @@
 
 #include "src/sys/swap/swapon.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/swapon.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, swapon, (const char *path, int flags)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_swapon, path, flags);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::swapon(path, flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

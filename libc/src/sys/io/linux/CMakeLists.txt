@@ -5,8 +5,7 @@ add_entrypoint_object(
   HDRS
     ../ioperm.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ioperm
     libc.src.errno.errno
 )
 
@@ -17,7 +16,6 @@ add_entrypoint_object(
   HDRS
     ../iopl.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.iopl
     libc.src.errno.errno
 )

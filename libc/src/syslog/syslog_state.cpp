@@ -14,12 +14,13 @@
 #include "src/syslog/syslog_state.h"
 
 #include "hdr/fcntl_macros.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/connect.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/socket.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/mutex.h"
 
 #include <sys/socket.h>
-#include <sys/syscall.h>
 #include <sys/un.h>
 
 namespace LIBC_NAMESPACE_DECL {
@@ -31,10 +32,10 @@ Mutex log_mutex(false, false, false, false);
 namespace {
 
 int open_socket(int type) {
-  int fd = LIBC_NAMESPACE::syscall_impl<int>(SYS_socket, AF_UNIX,
-                                             type | SOCK_CLOEXEC, 0);
-  if (fd < 0)
+  ErrorOr<int> opened = linux_syscalls::socket(AF_UNIX, type | SOCK_CLOEXEC, 0);
+  if (!opened)
     return -1;
+  int fd = *opened;
 
   struct sockaddr_un addr;
   addr.sun_family = AF_UNIX;
@@ -44,11 +45,11 @@ int open_socket(int type) {
     addr.sun_path[i] = p[i];
   addr.sun_path[i] = '\0';
 
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_connect, fd, reinterpret_cast<struct sockaddr *>(&addr),
-      static_cast<socklen_t>(sizeof(addr)));
-  if (ret < 0) {
-    LIBC_NAMESPACE::syscall_impl<int>(SYS_close, fd);
+  ErrorOr<int> ret =
+      linux_syscalls::connect(fd, reinterpret_cast<struct sockaddr *>(&addr),
+                              static_cast<socklen_t>(sizeof(addr)));
+  if (!ret) {
+    linux_syscalls::close(fd);
     return -1;
   }
   return fd;
@@ -81,7 +82,7 @@ bool connect_unlocked() {
 void disconnect_unlocked() {
   State &s = log_state;
   if (s.fd >= 0)
-    LIBC_NAMESPACE::syscall_impl<int>(SYS_close, s.fd);
+    linux_syscalls::close(s.fd);
   s.fd = -1;
   s.stream = false;
 }

@@ -13,23 +13,20 @@
 
 #include "src/sys/mount/fsmount.h"
 
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/fsmount.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, fsmount,
                    (int fd, unsigned int flags, unsigned int attr_flags)) {
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_fsmount, fd, flags, attr_flags);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::fsmount(fd, flags, attr_flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

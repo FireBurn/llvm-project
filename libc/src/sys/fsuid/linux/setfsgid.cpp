@@ -13,11 +13,9 @@
 
 #include "src/sys/fsuid/setfsgid.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setfsgid.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -28,7 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 // The call always reports the group it was before, and never fails: a caller
 // which wants to know whether the change took has to ask again.
 LLVM_LIBC_FUNCTION(int, setfsgid, (gid_t id)) {
-  return syscall_impl<int>(SYS_setfsgid, id);
+  return linux_syscalls::setfsgid(id);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

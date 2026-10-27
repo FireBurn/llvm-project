@@ -15,19 +15,17 @@
 
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/removexattr.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, removexattr, (const char *path, const char *name)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_removexattr, path, name);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<long> ret = linux_syscalls::removexattr(path, name);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

@@ -16,10 +16,11 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/stdio_macros.h"
 #include "hdr/types/struct_utmpx.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/lseek.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h>
-
 #ifndef LIBC_COPT_UTMPX_FILE_PATH
 #define LIBC_COPT_UTMPX_FILE_PATH "/var/run/utmp"
 #endif
@@ -36,20 +37,20 @@ bool rewind() {
     // Read and write, so that pututxline can use the same descriptor, but
     // fall back to reading alone since a program which only looks does not
     // need to be able to write.
-    fd = LIBC_NAMESPACE::syscall_impl<int>(SYS_openat, AT_FDCWD, path,
-                                           O_RDWR | O_CLOEXEC, 0);
-    if (fd < 0)
-      fd = LIBC_NAMESPACE::syscall_impl<int>(SYS_openat, AT_FDCWD, path,
-                                             O_RDONLY | O_CLOEXEC, 0);
-    if (fd < 0)
+    ErrorOr<int> opened =
+        linux_syscalls::openat(AT_FDCWD, path, O_RDWR | O_CLOEXEC, 0);
+    if (!opened)
+      opened = linux_syscalls::openat(AT_FDCWD, path, O_RDONLY | O_CLOEXEC, 0);
+    if (!opened)
       return false;
+    fd = *opened;
   }
-  return LIBC_NAMESPACE::syscall_impl<long>(SYS_lseek, fd, 0, SEEK_SET) >= 0;
+  return linux_syscalls::lseek(fd, 0, SEEK_SET).has_value();
 }
 
 void close() {
   if (fd >= 0)
-    LIBC_NAMESPACE::syscall_impl<int>(SYS_close, fd);
+    linux_syscalls::close(fd);
   fd = -1;
 }
 
@@ -62,11 +63,11 @@ bool read_next() {
   char *out = reinterpret_cast<char *>(&entry);
   size_t got = 0;
   while (got < sizeof(entry)) {
-    long n = LIBC_NAMESPACE::syscall_impl<long>(SYS_read, fd, out + got,
-                                                sizeof(entry) - got);
-    if (n <= 0)
+    ErrorOr<ssize_t> n =
+        linux_syscalls::read(fd, out + got, sizeof(entry) - got);
+    if (!n || *n <= 0)
       return false;
-    got += static_cast<size_t>(n);
+    got += static_cast<size_t>(*n);
   }
   return true;
 }

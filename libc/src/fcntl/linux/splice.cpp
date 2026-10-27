@@ -13,24 +13,22 @@
 
 #include "src/fcntl/splice.h"
 
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/splice.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, splice,
                    (int fd_in, off_t *off_in, int fd_out, off_t *off_out,
                     size_t len, unsigned int flags)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(
-      SYS_splice, fd_in, off_in, fd_out, off_out, len, flags);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<ssize_t> ret =
+      linux_syscalls::splice(fd_in, off_in, fd_out, off_out, len, flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

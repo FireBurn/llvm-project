@@ -140,8 +140,7 @@ add_entrypoint_object(
   HDRS
     ../removexattr.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.removexattr
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
@@ -155,8 +154,7 @@ add_entrypoint_object(
   HDRS
     ../lremovexattr.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lremovexattr
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
@@ -170,8 +168,7 @@ add_entrypoint_object(
   HDRS
     ../fremovexattr.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fremovexattr
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config

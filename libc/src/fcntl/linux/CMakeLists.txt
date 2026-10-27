@@ -90,8 +90,7 @@ add_entrypoint_object(
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.readahead
     libc.src.__support.libc_errno
 )
 
@@ -103,8 +102,7 @@ add_entrypoint_object(
     ../sync_file_range.h
   DEPENDS
     libc.hdr.types.off_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sync_file_range
     libc.src.__support.libc_errno
 )
 
@@ -145,8 +143,7 @@ add_entrypoint_object(
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.splice
     libc.src.errno.errno
 )
 
@@ -160,8 +157,7 @@ add_entrypoint_object(
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vmsplice
     libc.src.errno.errno
 )
 
@@ -174,8 +170,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.tee
     libc.src.errno.errno
 )
 
@@ -187,8 +182,7 @@ add_entrypoint_object(
     ../name_to_handle_at.h
   DEPENDS
     libc.hdr.types.struct_file_handle
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.name_to_handle_at
     libc.src.errno.errno
 )
 
@@ -200,8 +194,7 @@ add_entrypoint_object(
     ../open_by_handle_at.h
   DEPENDS
     libc.hdr.types.struct_file_handle
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open_by_handle_at
     libc.src.errno.errno
 )
 

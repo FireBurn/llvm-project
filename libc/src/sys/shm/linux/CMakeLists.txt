@@ -7,8 +7,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.key_t
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.shmget
     libc.src.errno.errno
 )
 
@@ -19,8 +18,7 @@ add_entrypoint_object(
   HDRS
     ../shmat.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.shmat
     libc.src.errno.errno
 )
 
@@ -31,8 +29,7 @@ add_entrypoint_object(
   HDRS
     ../shmdt.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.shmdt
     libc.src.errno.errno
 )
 
@@ -44,7 +41,6 @@ add_entrypoint_object(
     ../shmctl.h
   DEPENDS
     libc.hdr.types.struct_shmid_ds
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.shmctl
     libc.src.errno.errno
 )

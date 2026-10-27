@@ -150,10 +150,10 @@ add_entrypoint_object(
   HDRS
     logwtmp.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
     .updwtmp
     .utmp_fill
     libc.hdr.types.struct_utmp
-    libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
 )
 
@@ -170,8 +170,7 @@ add_entrypoint_object(
     .updwtmp
     .utmp_fill
     libc.hdr.types.struct_utmp
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
     libc.src.string.memory_utils.inline_memcpy
     libc.src.unistd.ttyname_r
 )

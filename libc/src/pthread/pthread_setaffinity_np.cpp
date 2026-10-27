@@ -14,12 +14,10 @@
 #include "src/pthread/pthread_setaffinity_np.h"
 
 #include "hdr/errno_macros.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setaffinity.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/thread.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -32,10 +30,12 @@ LLVM_LIBC_FUNCTION(int, pthread_setaffinity_np,
   auto *thread = reinterpret_cast<Thread *>(&th);
   if (thread->attrib == nullptr)
     return ESRCH;
-  const int ret = LIBC_NAMESPACE::syscall_impl<int>(
-      SYS_sched_setaffinity, thread->attrib->tid, cpuset_size, mask);
-  if (ret < 0)
-    return -ret;
+  const ErrorOr<int> ret = linux_syscalls::sched_setaffinity(
+      thread->attrib->tid,
+      cpp::span<const unsigned char>(
+          reinterpret_cast<const unsigned char *>(mask), cpuset_size));
+  if (!ret)
+    return ret.error();
   return 0;
 }
 

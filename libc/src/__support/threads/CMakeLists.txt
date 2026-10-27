@@ -132,7 +132,7 @@ if(TARGET libc.src.__support.threads.${LIBC_TARGET_OS}.futex_utils)
       .thread_attributes
       libc.hdr.stdint_proxy
       libc.src.__support.CPP.atomic
-      libc.src.__support.OSUtil.osutil
+      libc.src.__support.OSUtil.linux.syscall_wrappers.set_robust_list
       libc.src.__support.macros.config
   )
 

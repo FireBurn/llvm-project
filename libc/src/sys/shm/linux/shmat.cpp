@@ -13,12 +13,10 @@
 
 #include "src/sys/shm/shmat.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/shmat.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -27,13 +25,12 @@ namespace LIBC_NAMESPACE_DECL {
 // since an address is what it otherwise gives back.
 LLVM_LIBC_FUNCTION(void *, shmat,
                    (int shmid, const void *shmaddr, int shmflg)) {
-  long ret =
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_shmat, shmid, shmaddr, shmflg);
-  if (ret < 0 && ret > -4096) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<void *> ret = linux_syscalls::shmat(shmid, shmaddr, shmflg);
+  if (!ret) {
+    libc_errno = ret.error();
     return reinterpret_cast<void *>(-1);
   }
-  return reinterpret_cast<void *>(ret);
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

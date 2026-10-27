@@ -41,8 +41,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_timespec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.clock_nanosleep
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config

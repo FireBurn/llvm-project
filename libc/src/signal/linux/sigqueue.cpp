@@ -17,7 +17,8 @@
 #include "hdr/types/pid_t.h"
 #include "hdr/types/siginfo_t.h"
 #include "hdr/types/union_sigval.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigqueueinfo.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
@@ -36,14 +37,12 @@ LLVM_LIBC_FUNCTION(int, sigqueue,
   info.si_signo = sig;
   info.si_code = SI_QUEUE;
   info.si_pid = LIBC_NAMESPACE::getpid();
-  info.si_uid =
-      static_cast<unsigned int>(LIBC_NAMESPACE::syscall_impl<int>(SYS_getuid));
+  info.si_uid = static_cast<unsigned int>(linux_syscalls::getuid());
   info.si_value = value;
 
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_rt_sigqueueinfo, pid, sig, &info);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::rt_sigqueueinfo(pid, sig, &info);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

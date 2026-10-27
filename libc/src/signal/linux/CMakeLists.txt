@@ -91,8 +91,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.sigset_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigpending
     libc.src.__support.common
     libc.src.errno.errno
 )
@@ -253,8 +252,7 @@ add_entrypoint_object(
     libc.hdr.types.siginfo_t
     libc.hdr.types.sigset_t
     libc.hdr.types.struct_timespec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigtimedwait
     libc.src.errno.errno
 )
 
@@ -309,8 +307,8 @@ add_entrypoint_object(
     libc.hdr.types.pid_t
     libc.hdr.types.siginfo_t
     libc.hdr.types.union_sigval
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigqueueinfo
     libc.src.errno.errno
     libc.src.unistd.getpid
 )

@@ -16,12 +16,10 @@
 #include "hdr/types/off_t.h"
 #include "hdr/types/ssize_t.h"
 #include "hdr/types/struct_iovec.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/preadv.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 // The offset goes to the kernel as a pair of longs, low half first. On a
@@ -30,14 +28,12 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(ssize_t, preadv,
                    (int fd, const struct iovec *iov, int iovcnt,
                     off_t offset)) {
-  ssize_t ret = LIBC_NAMESPACE::syscall_impl<ssize_t>(
-      SYS_preadv, fd, iov, iovcnt, static_cast<long>(offset),
-      static_cast<long>(static_cast<unsigned long long>(offset) >> 32));
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<ssize_t> ret = linux_syscalls::preadv(fd, iov, iovcnt, offset);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

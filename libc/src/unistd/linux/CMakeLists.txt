@@ -226,11 +226,9 @@ add_entrypoint_object(
     ../vfork.h
   DEPENDS
     libc.hdr.types.pid_t
-    libc.hdr.sched_macros
-    libc.hdr.signal_macros
     libc.include.unistd
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vfork
     libc.src.errno.errno
     libc.src.__support.threads.identifier
 )
@@ -451,8 +449,7 @@ add_entrypoint_object(
     libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.hdr.types.struct_utsname
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.uname
     libc.src.__support.libc_errno
     libc.src.string.memory_utils.inline_memcpy
     libc.src.string.string_utils
@@ -467,8 +464,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setdomainname
     libc.src.__support.libc_errno
 )
 
@@ -479,6 +475,9 @@ add_entrypoint_object(
   HDRS
     ../gethostid.h
   DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.hdr.fcntl_macros
     libc.src.__support.OSUtil.osutil
 )
@@ -758,8 +757,7 @@ add_entrypoint_object(
   HDRS
     ../vhangup.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vhangup
     libc.src.__support.libc_errno
 )
 
@@ -834,8 +832,8 @@ add_entrypoint_object(
     ../_Fork.h
   DEPENDS
     libc.hdr.types.pid_t
-    libc.hdr.signal_macros
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fork
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
@@ -1412,8 +1410,7 @@ add_entrypoint_object(
     libc.hdr.types.off_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.copy_file_range
     libc.src.errno.errno
 )
 
@@ -1425,8 +1422,7 @@ add_entrypoint_object(
     ../sethostname.h
   DEPENDS
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sethostname
     libc.src.errno.errno
 )
 
@@ -1452,7 +1448,6 @@ add_entrypoint_object(
   HDRS
     ../close_range.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close_range
     libc.src.errno.errno
 )

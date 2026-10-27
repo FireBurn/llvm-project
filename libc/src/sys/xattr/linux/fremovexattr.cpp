@@ -15,19 +15,17 @@
 
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fremovexattr.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, fremovexattr, (int fd, const char *name)) {
-  long ret = LIBC_NAMESPACE::syscall_impl<long>(SYS_fremovexattr, fd, name);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<long> ret = linux_syscalls::fremovexattr(fd, name);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
   return 0;

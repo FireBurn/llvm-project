@@ -13,12 +13,10 @@
 
 #include "src/sys/timerfd/timerfd_create.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/timerfd_create.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -26,13 +24,12 @@ namespace LIBC_NAMESPACE_DECL {
 // timer is the same as waiting for anything else. A read hands back how
 // many times it has fired since the last one.
 LLVM_LIBC_FUNCTION(int, timerfd_create, (int clockid, int flags)) {
-  int ret =
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_timerfd_create, clockid, flags);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::timerfd_create(clockid, flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

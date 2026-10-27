@@ -94,7 +94,7 @@ add_entrypoint_object(
     dlopen.h
   DEPENDS
     libc.src.dlfcn.lazy_bind
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.newfstatat
     libc.src.__support.elf.search
     libc.src.unistd.environ
     libc.src.__support.CPP.mutex

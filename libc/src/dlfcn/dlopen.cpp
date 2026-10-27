@@ -11,7 +11,7 @@
 #include "hdr/func/free.h"
 #include "hdr/func/malloc.h"
 #include "src/__support/CPP/mutex.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/newfstatat.h"
 #include "src/__support/common.h"
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/load_module.h"
@@ -25,8 +25,6 @@
 
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 namespace {
@@ -117,10 +115,8 @@ bool same_file(const char *known, const char *wanted) {
     return false;
   struct stat one;
   struct stat two;
-  if (LIBC_NAMESPACE::syscall_impl<int>(SYS_newfstatat, AT_FDCWD, a, &one, 0) !=
-          0 ||
-      LIBC_NAMESPACE::syscall_impl<int>(SYS_newfstatat, AT_FDCWD, b, &two, 0) !=
-          0)
+  if (!linux_syscalls::newfstatat(AT_FDCWD, a, &one, 0) ||
+      !linux_syscalls::newfstatat(AT_FDCWD, b, &two, 0))
     return false;
   return one.st_dev == two.st_dev && one.st_ino == two.st_ino;
 }
