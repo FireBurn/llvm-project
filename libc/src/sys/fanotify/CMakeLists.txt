@@ -5,8 +5,7 @@ add_entrypoint_object(
   HDRS
     fanotify_init.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fanotify_init
     libc.src.errno.errno
 )
 
@@ -18,7 +17,6 @@ add_entrypoint_object(
     fanotify_mark.h
   DEPENDS
     libc.hdr.stdint_proxy
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fanotify_mark
     libc.src.errno.errno
 )
