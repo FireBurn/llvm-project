@@ -1425,8 +1425,7 @@ add_entrypoint_object(
     ../sethostname.h
   DEPENDS
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sethostname
     libc.src.errno.errno
 )
 
