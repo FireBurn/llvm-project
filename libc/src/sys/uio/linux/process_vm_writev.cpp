@@ -15,12 +15,10 @@
 
 #include "hdr/types/ssize_t.h"
 #include "hdr/types/struct_iovec.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/process_vm_writev.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -28,14 +26,13 @@ LLVM_LIBC_FUNCTION(ssize_t, process_vm_writev,
                    (pid_t pid, const struct iovec *local_iov,
                     unsigned long liovcnt, const struct iovec *remote_iov,
                     unsigned long riovcnt, unsigned long flags)) {
-  long ret =
-      LIBC_NAMESPACE::syscall_impl<long>(SYS_process_vm_writev, pid, local_iov,
-                                         liovcnt, remote_iov, riovcnt, flags);
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  ErrorOr<long> ret = linux_syscalls::process_vm_writev(
+      pid, local_iov, liovcnt, remote_iov, riovcnt, flags);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return static_cast<ssize_t>(ret);
+  return static_cast<ssize_t>(*ret);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

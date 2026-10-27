@@ -9,8 +9,7 @@ add_entrypoint_object(
     libc.hdr.types.pid_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.process_vm_writev
     libc.src.__support.common
     libc.src.errno.errno
 )
@@ -26,8 +25,7 @@ add_entrypoint_object(
     libc.hdr.types.pid_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.process_vm_readv
     libc.src.__support.common
     libc.src.errno.errno
 )
