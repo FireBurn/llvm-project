@@ -15,22 +15,20 @@
 
 #include "hdr/types/key_t.h"
 #include "hdr/types/size_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/shmget.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, shmget, (key_t key, size_t size, int shmflg)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_shmget, key, size, shmflg);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::shmget(key, size, shmflg);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
