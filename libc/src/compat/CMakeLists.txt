@@ -207,7 +207,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.pthread_macros
     libc.hdr.sys_auxv_macros
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.__support.threads.tcb

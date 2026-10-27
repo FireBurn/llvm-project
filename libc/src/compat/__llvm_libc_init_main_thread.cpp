@@ -16,14 +16,12 @@
 #include "hdr/pthread_macros.h"
 #include "hdr/sys_auxv_macros.h"
 #include "src/__support/OSUtil/linux/auxv.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/gettid.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -48,7 +46,7 @@ LLVM_LIBC_FUNCTION(int, __llvm_libc_init_main_thread, (void)) {
   if (get_current_thread_attrib() != nullptr)
     return 0;
 
-  long tid = syscall_impl<long>(SYS_gettid);
+  long tid = linux_syscalls::gettid();
   if (tid <= 0)
     return -1;
 
