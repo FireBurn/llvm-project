@@ -6,7 +6,6 @@ add_entrypoint_object(
     reboot.h
   DEPENDS
     libc.hdr.sys_reboot_macros
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.reboot
     libc.src.errno.errno
 )
