@@ -37,8 +37,7 @@ add_entrypoint_object(
   HDRS
     ../fsopen.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fsopen
     libc.src.errno.errno
 )
 
@@ -49,8 +48,7 @@ add_entrypoint_object(
   HDRS
     ../fsmount.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fsmount
     libc.src.errno.errno
 )
 
@@ -61,8 +59,7 @@ add_entrypoint_object(
   HDRS
     ../fsconfig.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fsconfig
     libc.src.errno.errno
 )
 
@@ -73,8 +70,7 @@ add_entrypoint_object(
   HDRS
     ../fspick.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fspick
     libc.src.errno.errno
 )
 
@@ -85,8 +81,7 @@ add_entrypoint_object(
   HDRS
     ../open_tree.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open_tree
     libc.src.errno.errno
 )
 
@@ -97,8 +92,7 @@ add_entrypoint_object(
   HDRS
     ../move_mount.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.move_mount
     libc.src.errno.errno
 )
 
@@ -111,8 +105,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.types.size_t
     libc.hdr.types.struct_mount_attr
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mount_setattr
     libc.src.errno.errno
 )
 
@@ -123,7 +116,6 @@ add_entrypoint_object(
   HDRS
     ../pivot_root.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pivot_root
     libc.src.errno.errno
 )
