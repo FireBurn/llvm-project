@@ -91,8 +91,7 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.sigset_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigpending
     libc.src.__support.common
     libc.src.errno.errno
 )
