@@ -12,16 +12,13 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/unistd/vfork.h"
-#include "hdr/sched_macros.h"             // For CLONE_VFORK
-#include "hdr/signal_macros.h"            // For SIGCHLD
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/gettid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/vfork.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/identifier.h"
 
 #include "src/__support/libc_errno.h"
-#include <sys/syscall.h> // For syscall numbers.
-
 namespace LIBC_NAMESPACE_DECL {
 
 // What callers rely on vfork for is that the parent stays suspended until the
@@ -41,21 +38,21 @@ LLVM_LIBC_FUNCTION(pid_t, vfork, (void)) {
   // handler triggered which may get the wrong tid.
   internal::force_set_tid(0);
 
-  pid_t ret = syscall_impl<pid_t>(SYS_clone, CLONE_VFORK | SIGCHLD, 0);
+  ErrorOr<pid_t> ret = linux_syscalls::vfork();
 
-  if (ret == 0) {
-    internal::force_set_tid(syscall_impl<pid_t>(SYS_gettid));
+  if (ret && *ret == 0) {
+    internal::force_set_tid(linux_syscalls::gettid());
     return 0;
   }
 
   internal::force_set_tid(parent_tid);
 
-  if (ret < 0) {
-    libc_errno = static_cast<int>(-ret);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
 
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -226,11 +226,9 @@ add_entrypoint_object(
     ../vfork.h
   DEPENDS
     libc.hdr.types.pid_t
-    libc.hdr.sched_macros
-    libc.hdr.signal_macros
     libc.include.unistd
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.vfork
     libc.src.errno.errno
     libc.src.__support.threads.identifier
 )
