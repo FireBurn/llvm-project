@@ -13,11 +13,9 @@
 
 #include "src/sys/fsuid/setfsuid.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setfsuid.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -28,7 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 // The call always reports the user it was before, and never fails: a caller
 // which wants to know whether the change took has to ask again.
 LLVM_LIBC_FUNCTION(int, setfsuid, (uid_t id)) {
-  return syscall_impl<int>(SYS_setfsuid, id);
+  return linux_syscalls::setfsuid(id);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

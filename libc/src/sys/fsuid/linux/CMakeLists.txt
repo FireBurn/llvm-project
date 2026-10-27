@@ -6,8 +6,7 @@ add_entrypoint_object(
     ../setfsuid.h
   DEPENDS
     libc.hdr.types.uid_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setfsuid
     libc.src.__support.common
     libc.src.__support.macros.config
 )
@@ -20,8 +19,7 @@ add_entrypoint_object(
     ../setfsgid.h
   DEPENDS
     libc.hdr.types.gid_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setfsgid
     libc.src.__support.common
     libc.src.__support.macros.config
 )
