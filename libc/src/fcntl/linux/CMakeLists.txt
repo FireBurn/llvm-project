@@ -103,8 +103,7 @@ add_entrypoint_object(
     ../sync_file_range.h
   DEPENDS
     libc.hdr.types.off_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sync_file_range
     libc.src.__support.libc_errno
 )
 
