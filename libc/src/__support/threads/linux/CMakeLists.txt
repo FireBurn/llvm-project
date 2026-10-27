@@ -137,10 +137,15 @@ add_object_library(
     libc.hdr.types.sigset_t
     libc.hdr.types.struct_sigaction
     libc.hdr.unistd_macros
-    libc.include.sys_syscall
     libc.src.__support.CPP.atomic
     libc.src.__support.OSUtil.linux.sigmask
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getdents64
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.gettid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.tgkill
     libc.src.__support.common
     libc.src.__support.error_or
     libc.src.__support.macros.config

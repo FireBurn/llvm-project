@@ -29,7 +29,13 @@
 #include "hdr/unistd_macros.h"
 #include "src/__support/CPP/atomic.h"
 #include "src/__support/OSUtil/linux/sigmask.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getdents64.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getpid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/gettid.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/lseek.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/tgkill.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/callonce.h"
@@ -41,7 +47,6 @@
 #include "src/sys/single_threaded/__libc_single_threaded.h"
 
 #include <linux/errno.h>
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 namespace internal {
@@ -83,7 +88,7 @@ void handler(int, siginfo_t *, void *) {
   // do, as does one sent before the thread had blocked it for the handler.
   if (request.phase.load() != COLLECT)
     return;
-  pid_t self = syscall_impl<pid_t>(SYS_gettid);
+  pid_t self = linux_syscalls::gettid();
   for (Waiter *w = request.waiters.load(); w; w = w->next)
     if (w->tid == self)
       return;
@@ -123,15 +128,17 @@ LIBC_INLINE bool listed(pid_t tid) {
 // Signals every thread in /proc/self/task, open as |fd|, that is not in the
 // list yet, and says how many it signalled.
 ErrorOr<int> signal_unlisted(int fd, pid_t pid, pid_t self) {
-  long rewound = syscall_impl<long>(SYS_lseek, fd, 0, SEEK_SET);
-  if (rewound < 0)
-    return Error(static_cast<int>(-rewound));
+  ErrorOr<off_t> rewound = linux_syscalls::lseek(fd, 0, SEEK_SET);
+  if (!rewound)
+    return Error(rewound.error());
   int signalled = 0;
   alignas(8) char buffer[2048];
   for (;;) {
-    long size = syscall_impl<long>(SYS_getdents64, fd, buffer, sizeof(buffer));
-    if (size < 0)
-      return Error(static_cast<int>(-size));
+    ErrorOr<ssize_t> entries =
+        linux_syscalls::getdents64(fd, buffer, sizeof(buffer));
+    if (!entries)
+      return Error(entries.error());
+    long size = *entries;
     if (size == 0)
       break;
     for (long offset = 0; offset < size;) {
@@ -148,7 +155,7 @@ ErrorOr<int> signal_unlisted(int fd, pid_t pid, pid_t self) {
         tid = tid * 10 + (*name - '0');
       if (tid == self || listed(tid))
         continue;
-      if (syscall_impl<int>(SYS_tgkill, pid, tid, SETXID_SIGNAL) == 0)
+      if (linux_syscalls::tgkill(pid, tid, SETXID_SIGNAL))
         ++signalled;
     }
   }
@@ -185,19 +192,20 @@ ErrorOr<int> setxid(SetxidFn fn, long arg0, long arg1, long arg2) {
   // told so while its credentials are still those of every thread.
   int fd = -1;
   if (!__libc_single_threaded) {
-    fd = syscall_impl<int>(SYS_openat, AT_FDCWD, "/proc/self/task",
-                           O_RDONLY | O_DIRECTORY | O_CLOEXEC);
-    if (fd < 0) {
+    ErrorOr<int> opened = linux_syscalls::openat(
+        AT_FDCWD, "/proc/self/task", O_RDONLY | O_DIRECTORY | O_CLOEXEC, 0);
+    if (!opened) {
       (void)signals::set_mask(old_mask);
       thread_creation_lock.unlock();
-      return Error(-fd);
+      return Error(opened.error());
     }
+    fd = *opened;
   }
 
   ErrorOr<int> result = fn(arg0, arg1, arg2);
   if (!result || fd < 0) {
     if (fd >= 0)
-      syscall_impl<int>(SYS_close, fd);
+      linux_syscalls::close(fd);
     (void)signals::set_mask(old_mask);
     thread_creation_lock.unlock();
     return result;
@@ -215,8 +223,8 @@ ErrorOr<int> setxid(SetxidFn fn, long arg0, long arg1, long arg2) {
   request.failed.store(0);
   request.phase = COLLECT;
 
-  pid_t pid = syscall_impl<pid_t>(SYS_getpid);
-  pid_t self = syscall_impl<pid_t>(SYS_gettid);
+  pid_t pid = linux_syscalls::getpid();
+  pid_t self = linux_syscalls::gettid();
   bool complete = true;
   for (;;) {
     FutexWordType before = request.registered.load();
@@ -242,7 +250,7 @@ ErrorOr<int> setxid(SetxidFn fn, long arg0, long arg1, long arg2) {
     request.left.wait(n);
   request.phase = IDLE;
 
-  syscall_impl<int>(SYS_close, fd);
+  linux_syscalls::close(fd);
   (void)signals::set_mask(old_mask);
   thread_creation_lock.unlock();
 
