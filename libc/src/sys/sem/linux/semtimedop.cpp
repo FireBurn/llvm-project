@@ -13,23 +13,20 @@
 
 #include "src/sys/sem/semtimedop.h"
 
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/semtimedop.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
-#include <sys/syscall.h>
-
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, semtimedop,
                    (int semid, struct sembuf *sops, size_t nsops,
                     const struct timespec *timeout)) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_semtimedop, semid, sops,
-                                              nsops, timeout);
-  if (ret < 0) {
-    libc_errno = -ret;
+  ErrorOr<int> ret = linux_syscalls::semtimedop(semid, sops, nsops, timeout);
+  if (!ret) {
+    libc_errno = ret.error();
     return -1;
   }
-  return ret;
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
