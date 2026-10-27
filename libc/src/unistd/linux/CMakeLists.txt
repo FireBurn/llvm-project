@@ -1451,7 +1451,6 @@ add_entrypoint_object(
   HDRS
     ../close_range.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close_range
     libc.src.errno.errno
 )
