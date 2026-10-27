@@ -6,8 +6,7 @@ add_entrypoint_object(
     init_module.h
   DEPENDS
     libc.hdr.types.size_t
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.init_module
     libc.src.errno.errno
 )
 
@@ -18,7 +17,6 @@ add_entrypoint_object(
   HDRS
     delete_module.h
   DEPENDS
-    libc.include.sys_syscall
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.delete_module
     libc.src.errno.errno
 )
