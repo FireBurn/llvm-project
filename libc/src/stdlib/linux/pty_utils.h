@@ -16,10 +16,9 @@
 
 #include "hdr/sys_ioctl_macros.h"
 #include "hdr/types/size_t.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/ioctl.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 namespace pty {
@@ -32,8 +31,8 @@ LIBC_INLINE_VAR constexpr size_t PTS_PREFIX_LEN = 9;
 // Asks the kernel which numbered terminal a master descriptor is for.
 // Returns an errno value, or zero.
 LIBC_INLINE int number(int fd, unsigned int *out) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_ioctl, fd, TIOCGPTN, out);
-  return ret < 0 ? -ret : 0;
+  ErrorOr<int> ret = linux_syscalls::ioctl(fd, TIOCGPTN, out);
+  return ret ? 0 : ret.error();
 }
 
 } // namespace pty
