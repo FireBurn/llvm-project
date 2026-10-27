@@ -16,12 +16,10 @@
 
 #include "hdr/stdint_proxy.h"
 #include "src/__support/CPP/atomic.h"
-#include "src/__support/OSUtil/syscall.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/set_robust_list.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/robust_list_types.h"
 #include "src/__support/threads/thread_attributes.h"
-
-#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 namespace robust {
@@ -59,7 +57,7 @@ LIBC_INLINE void register_list(ThreadAttributes *attrib) {
   head.futex_offset = FUTEX_OFFSET;
   head.pending = nullptr;
   prev_of(reinterpret_cast<Node *>(&head)) = reinterpret_cast<Node *>(&head);
-  LIBC_NAMESPACE::syscall_impl<long>(SYS_set_robust_list, &head, sizeof(Head));
+  linux_syscalls::set_robust_list(&head, sizeof(Head));
 }
 
 // Puts the node at the front of the list.
@@ -94,7 +92,7 @@ LIBC_INLINE void dequeue([[maybe_unused]] Head &head, Node *node) {
 LIBC_INLINE void reset_after_fork(ThreadAttributes *attrib, uint32_t parent_tid,
                                   uint32_t child_tid) {
   Head &head = attrib->robust_list;
-  LIBC_NAMESPACE::syscall_impl<long>(SYS_set_robust_list, &head, sizeof(Head));
+  linux_syscalls::set_robust_list(&head, sizeof(Head));
   for (Node *node = untagged(head.next);
        node != reinterpret_cast<Node *>(&head); node = untagged(node->next)) {
     auto *word = reinterpret_cast<cpp::Atomic<uint32_t> *>(
