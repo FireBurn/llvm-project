@@ -17,12 +17,12 @@
 #include "hdr/types/pid_t.h"
 #include "hdr/types/siginfo_t.h"
 #include "hdr/types/union_sigval.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getpid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/rt_sigqueueinfo.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/unistd/getpid.h"
 #include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
@@ -36,7 +36,7 @@ LLVM_LIBC_FUNCTION(int, sigqueue,
   __builtin_memset(&info, 0, sizeof(info));
   info.si_signo = sig;
   info.si_code = SI_QUEUE;
-  info.si_pid = LIBC_NAMESPACE::getpid();
+  info.si_pid = linux_syscalls::getpid();
   info.si_uid = static_cast<unsigned int>(linux_syscalls::getuid());
   info.si_value = value;
 
