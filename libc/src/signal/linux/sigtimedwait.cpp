@@ -24,9 +24,11 @@
 #include "src/__support/threads/cancel.h"
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, sigtimedwait,
-                   (const sigset_t *__restrict set, siginfo_t *__restrict info,
-                    const struct timespec *__restrict timeout)) {
+namespace internal {
+
+int sigtimedwait_impl(const sigset_t *__restrict set,
+                      siginfo_t *__restrict info,
+                      const struct timespec *__restrict timeout) {
   internal::cancel_point();
   // The kernel wants to be told how wide the set is, since its own is
   // narrower than the one the library hands out.
@@ -39,6 +41,14 @@ LLVM_LIBC_FUNCTION(int, sigtimedwait,
     return -1;
   }
   return *ret;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, sigtimedwait,
+                   (const sigset_t *__restrict set, siginfo_t *__restrict info,
+                    const struct timespec *__restrict timeout)) {
+  return internal::sigtimedwait_impl(set, info, timeout);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

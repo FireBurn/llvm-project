@@ -29,7 +29,7 @@ LLVM_LIBC_FUNCTION(int, sigwait,
   siginfo_t info;
   const int saved = libc_errno;
   libc_errno = 0;
-  const int signal = LIBC_NAMESPACE::sigwaitinfo(set, &info);
+  const int signal = internal::sigwaitinfo_impl(set, &info);
   if (signal < 0) {
     const int reason = libc_errno;
     libc_errno = saved;
