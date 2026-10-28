@@ -15,16 +15,17 @@
 
 #include "hdr/stdio_macros.h"
 #include "hdr/types/FILE.h"
+#include "src/__support/File/file.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/stdio/setvbuf.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 // The older spelling of asking for line buffering. It cannot report a
 // failure, so one is dropped.
 LLVM_LIBC_FUNCTION(void, setlinebuf, (::FILE * stream)) {
-  LIBC_NAMESPACE::setvbuf(stream, nullptr, _IOLBF, 0);
+  reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->set_buffer(nullptr, 0,
+                                                               _IOLBF);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
