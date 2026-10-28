@@ -15,9 +15,10 @@
 
 #include "hdr/types/mqd_t.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/mq_timedsend.h"
 #include "src/__support/common.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/mqueue/mq_timedsend.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -25,8 +26,13 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, mq_send,
                    (mqd_t mqdes, const char *msg_ptr, size_t msg_len,
                     unsigned int msg_prio)) {
-  return LIBC_NAMESPACE::mq_timedsend(mqdes, msg_ptr, msg_len, msg_prio,
-                                      nullptr);
+  ErrorOr<int> ret =
+      linux_syscalls::mq_timedsend(mqdes, msg_ptr, msg_len, msg_prio, nullptr);
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
