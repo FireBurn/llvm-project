@@ -236,8 +236,9 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.pid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.kill
+    libc.src.__support.error_or
     libc.src.errno.errno
-    libc.src.signal.kill
 )
 
 add_entrypoint_object(
@@ -307,8 +308,8 @@ add_entrypoint_object(
     libc.hdr.types.pid_t
     libc.hdr.types.siginfo_t
     libc.hdr.types.union_sigval
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigqueueinfo
     libc.src.errno.errno
-    libc.src.unistd.getpid
 )
