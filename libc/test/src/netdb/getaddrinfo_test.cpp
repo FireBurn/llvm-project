@@ -16,7 +16,7 @@
 #include "hdr/types/struct_addrinfo.h"
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
-#include "src/net/if_nametoindex.h"
+#include "src/net/if/if_nametoindex.h"
 #include "src/netdb/freeaddrinfo.h"
 #include "src/netdb/getaddrinfo.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
