@@ -33,7 +33,7 @@ LIBC_THREAD_LOCAL HostentStorage storage;
 HostentStorage &hostent_storage() { return storage; }
 
 struct hostent *fill_hostent(const char *name, int family) {
-  int &error = *LIBC_NAMESPACE::__h_errno_location();
+  int &error = *internal::h_errno_location_impl();
 
   if (name == nullptr) {
     error = HOST_NOT_FOUND;
