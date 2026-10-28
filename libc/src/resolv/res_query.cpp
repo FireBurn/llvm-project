@@ -29,7 +29,7 @@ namespace internal {
 
 int res_query_with(struct __res_state *state, const char *name, int rr_class,
                    int type, unsigned char *answer, int anslen) {
-  int *h_errno_location = LIBC_NAMESPACE::__h_errno_location();
+  int *h_errno_location = internal::h_errno_location_impl();
   if (name == nullptr || answer == nullptr || anslen <= 0) {
     *h_errno_location = NO_RECOVERY;
     return -1;
@@ -102,7 +102,7 @@ int res_query_with(struct __res_state *state, const char *name, int rr_class,
 LLVM_LIBC_FUNCTION(int, res_query,
                    (const char *name, int rr_class, int type,
                     unsigned char *answer, int anslen)) {
-  return internal::res_query_with(LIBC_NAMESPACE::__res_state(), name, rr_class,
+  return internal::res_query_with(internal::res_state_impl(), name, rr_class,
                                   type, answer, anslen);
 }
 
