@@ -18281,6 +18281,17 @@ libc_function(
 )
 
 libc_function(
+    name = "strerror",
+    srcs = ["src/string/strerror.cpp"],
+    hdrs = ["src/string/strerror.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_stringutil",
+    ],
+)
+
+libc_function(
     name = "strlen",
     srcs = ["src/string/strlen.cpp"],
     hdrs = ["src/string/strlen.h"],
@@ -23658,6 +23669,17 @@ libc_function(
         ":__support_macros_config",
         ":types_FILE",
         ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "strerror_r",
+    srcs = ["src/string/strerror_r.cpp"],
+    hdrs = ["src/string/strerror_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_stringutil",
     ],
 )
 
