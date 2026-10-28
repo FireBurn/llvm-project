@@ -16,11 +16,9 @@
 #include "hdr/limits_macros.h"
 #include "hdr/sys_resource_macros.h"
 #include "hdr/types/struct_rlimit.h"
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/prlimit64.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/sys/resource/getrlimit.h"
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -29,7 +27,7 @@ namespace LIBC_NAMESPACE_DECL {
 // be read is answered with the compiled in one.
 LLVM_LIBC_FUNCTION(int, getdtablesize, (void)) {
   struct rlimit limit;
-  if (LIBC_NAMESPACE::getrlimit(RLIMIT_NOFILE, &limit) == 0 &&
+  if (linux_syscalls::prlimit64(0, RLIMIT_NOFILE, nullptr, &limit) &&
       limit.rlim_cur != RLIM_INFINITY)
     return static_cast<int>(limit.rlim_cur);
   // POSIX's floor on how many a process may have, which is the least this
