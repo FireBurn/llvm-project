@@ -30,7 +30,7 @@ char line[gshadow::GSHADOW_LINE_SIZE];
 
 LLVM_LIBC_FUNCTION(struct sgrp *, sgetsgent, (const char *s)) {
   struct sgrp *result = nullptr;
-  int err = LIBC_NAMESPACE::sgetsgent_r(s, &entry, line, sizeof(line), &result);
+  int err = internal::sgetsgent_r_impl(s, &entry, line, sizeof(line), &result);
   if (err != 0) {
     libc_errno = err;
     return nullptr;
