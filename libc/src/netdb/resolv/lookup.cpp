@@ -35,7 +35,7 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_pton.h"
-#include "src/net/if_nametoindex.h"
+#include "src/net/if/if_nametoindex.h"
 #include "src/netdb/resolv/dns_message.h"
 #include "src/netdb/resolv/resolv_conf.h"
 #include "src/string/memory_utils/inline_memcpy.h"
