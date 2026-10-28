@@ -126,6 +126,20 @@ libc_test(
 )
 
 libc_test(
+    name = "gmtime_test",
+    srcs = ["gmtime_test.cpp"],
+    deps = [
+        ":tm_matcher",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/time:gmtime",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+    ],
+)
+
+libc_test(
     name = "strptime_test",
     srcs = ["strptime_test.cpp"],
     deps = [
