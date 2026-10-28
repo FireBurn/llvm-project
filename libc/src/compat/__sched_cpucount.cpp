@@ -26,7 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 // otherwise not here.
 LLVM_LIBC_FUNCTION(int, __sched_cpucount,
                    (size_t cpuset_size, const cpu_set_t *mask)) {
-  return __sched_getcpucount(cpuset_size, mask);
+  return internal::sched_getcpucount_impl(cpuset_size, mask);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

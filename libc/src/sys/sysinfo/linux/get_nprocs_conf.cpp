@@ -22,6 +22,8 @@ namespace LIBC_NAMESPACE_DECL {
 // What the machine is configured with rather than what this process may
 // use. Reading that apart from the affinity mask means parsing sysfs, so
 // until something needs the distinction this reports the same number.
-LLVM_LIBC_FUNCTION(int, get_nprocs_conf, (void)) { return get_nprocs(); }
+LLVM_LIBC_FUNCTION(int, get_nprocs_conf, (void)) {
+  return internal::get_nprocs_impl();
+}
 
 } // namespace LIBC_NAMESPACE_DECL
