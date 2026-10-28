@@ -750,3 +750,25 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "wctype_perfect_hash_map",
+    hdrs = ["wctype/perfect_hash_map.h"],
+    deps = [
+        ":uint128",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:expected",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string",
+        "//libc/src/__support/CPP:tuple",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/CPP:utility",
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/math:ceil",
+        "//libc/src/__support/math:log",
+    ],
+)
