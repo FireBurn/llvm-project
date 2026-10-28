@@ -24,6 +24,11 @@ namespace LIBC_NAMESPACE_DECL {
 int vswscanf(const wchar_t *__restrict buffer, const wchar_t *__restrict format,
              va_list vlist);
 
+namespace internal {
+int vswscanf_impl(const wchar_t *__restrict buffer,
+                  const wchar_t *__restrict format, va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_WCHAR_VSWSCANF_H
