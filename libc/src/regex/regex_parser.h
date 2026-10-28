@@ -241,6 +241,10 @@ private:
     const char *end = start;
     while (*end != '\0' && *end != ':')
       ++end;
+    if (end[0] == '\0' || (end[0] == ':' && end[1] == '\0')) {
+      error = REG_EBRACK;
+      return false;
+    }
     if (end[0] != ':' || end[1] != ']') {
       error = REG_ECTYPE;
       return false;
@@ -346,6 +350,11 @@ private:
       if (p_[0] == '[' && p_[1] == ':') {
         if (!parse_named_class(cc, error))
           return NONE;
+        // A class cannot start a range either.
+        if (*p_ == '-' && p_[1] != ']' && p_[1] != '\0') {
+          error = REG_ERANGE;
+          return NONE;
+        }
         continue;
       }
 
@@ -460,9 +469,8 @@ private:
       anchor_ = true;
       return new_node(Op::Bol, error);
     }
-    if (*p_ == '$' &&
-        (extended_ || p_[1] == '\0' ||
-         (p_[1] == '\\' && (p_[2] == ')' || p_[2] == '|')))) {
+    if (*p_ == '$' && (extended_ || p_[1] == '\0' ||
+                       (p_[1] == '\\' && (p_[2] == ')' || p_[2] == '|')))) {
       ++p_;
       anchor_ = true;
       return new_node(Op::Eol, error);
