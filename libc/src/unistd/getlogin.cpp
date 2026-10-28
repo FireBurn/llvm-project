@@ -30,7 +30,7 @@ char name[LOGIN_NAME_MAX];
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(char *, getlogin, (void)) {
-  int err = LIBC_NAMESPACE::getlogin_r(name, sizeof(name));
+  int err = internal::getlogin_r_impl(name, sizeof(name));
   if (err != 0) {
     libc_errno = err;
     return nullptr;
