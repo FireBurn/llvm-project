@@ -37,4 +37,5 @@ add_entrypoint_object(
     libc.hdr.types.nl_item
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.locale.locale
 )

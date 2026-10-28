@@ -315,6 +315,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl
+    libc.src.sys.ipc.ftok
 
     # sys/klog.h entrypoints
     libc.src.sys.klog.klogctl
@@ -1573,6 +1574,14 @@ if(LLVM_LIBC_FULL_BUILD)
     # sys/select.h entrypoints
     libc.src.sys.select.pselect
     libc.src.sys.select.select
+    libc.src.wchar.mbrlen
+    libc.src.wchar.mbsinit
+    libc.src.wchar.mbrtowc
+    libc.src.wchar.mbsrtowcs
+    libc.src.wchar.mbsnrtowcs
+    libc.src.wchar.wcrtomb
+    libc.src.wchar.wcsrtombs
+    libc.src.wchar.wcsnrtombs
 
     # syslog.h entrypoints
     libc.src.syslog.closelog

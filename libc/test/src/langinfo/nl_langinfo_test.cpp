@@ -25,7 +25,7 @@ using LlvmLibcLanginfo = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcLanginfo, DefaultLocaleItems) {
   constexpr const char *EXPECTED_CODESET =
-      LIBC_NAMESPACE::DEFAULT_LOCALE_IS_UTF8 ? "UTF-8" : "US-ASCII";
+      LIBC_NAMESPACE::DEFAULT_LOCALE_IS_UTF8 ? "UTF-8" : "ANSI_X3.4-1968";
   EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo(CODESET), EXPECTED_CODESET);
   EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo(RADIXCHAR), ".");
   EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo(THOUSEP), "");
@@ -95,11 +95,11 @@ TEST_F(LlvmLibcLanginfo, StaticLocaleItemsL) {
   locale_t utf8_loc = &LIBC_NAMESPACE::utf8_locale;
 
   if constexpr (LIBC_NAMESPACE::ENABLE_RUNTIME_LOCALE) {
-    EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo_l(CODESET, c_loc), "US-ASCII");
+    EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo_l(CODESET, c_loc), "ANSI_X3.4-1968");
     EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo_l(CODESET, utf8_loc), "UTF-8");
   } else {
     constexpr const char *EXPECTED_CODESET =
-        LIBC_NAMESPACE::DEFAULT_LOCALE_IS_UTF8 ? "UTF-8" : "US-ASCII";
+        LIBC_NAMESPACE::DEFAULT_LOCALE_IS_UTF8 ? "UTF-8" : "ANSI_X3.4-1968";
     EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo_l(CODESET, c_loc),
                  EXPECTED_CODESET);
     EXPECT_STREQ(LIBC_NAMESPACE::nl_langinfo_l(CODESET, utf8_loc),
