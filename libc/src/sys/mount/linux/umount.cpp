@@ -13,16 +13,23 @@
 
 #include "src/sys/mount/umount.h"
 
+#include "src/__support/OSUtil/linux/syscall_wrappers/umount2.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/sys/mount/umount2.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 // umount is umount2 with no flags, which is the whole difference between
 // them.
 LLVM_LIBC_FUNCTION(int, umount, (const char *target)) {
-  return LIBC_NAMESPACE::umount2(target, 0);
+  ErrorOr<int> ret = linux_syscalls::umount2(target, 0);
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
