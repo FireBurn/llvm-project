@@ -20,10 +20,10 @@ libc_function(
     srcs = ["isalnum.cpp"],
     hdrs = ["isalnum.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -32,10 +32,10 @@ libc_function(
     srcs = ["isalpha.cpp"],
     hdrs = ["isalpha.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -44,9 +44,9 @@ libc_function(
     srcs = ["isascii.cpp"],
     hdrs = ["isascii.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -55,9 +55,9 @@ libc_function(
     srcs = ["isblank.cpp"],
     hdrs = ["isblank.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -66,9 +66,9 @@ libc_function(
     srcs = ["iscntrl.cpp"],
     hdrs = ["iscntrl.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -77,10 +77,10 @@ libc_function(
     srcs = ["isdigit.cpp"],
     hdrs = ["isdigit.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -89,10 +89,10 @@ libc_function(
     srcs = ["isgraph.cpp"],
     hdrs = ["isgraph.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -101,10 +101,10 @@ libc_function(
     srcs = ["islower.cpp"],
     hdrs = ["islower.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -113,9 +113,9 @@ libc_function(
     srcs = ["isprint.cpp"],
     hdrs = ["isprint.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -124,10 +124,10 @@ libc_function(
     srcs = ["ispunct.cpp"],
     hdrs = ["ispunct.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -136,10 +136,10 @@ libc_function(
     srcs = ["isspace.cpp"],
     hdrs = ["isspace.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -148,10 +148,10 @@ libc_function(
     srcs = ["isupper.cpp"],
     hdrs = ["isupper.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -160,10 +160,10 @@ libc_function(
     srcs = ["isxdigit.cpp"],
     hdrs = ["isxdigit.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -172,9 +172,9 @@ libc_function(
     srcs = ["toascii.cpp"],
     hdrs = ["toascii.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -183,10 +183,10 @@ libc_function(
     srcs = ["tolower.cpp"],
     hdrs = ["tolower.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )
 
@@ -195,9 +195,9 @@ libc_function(
     srcs = ["toupper.cpp"],
     hdrs = ["toupper.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
     ],
 )

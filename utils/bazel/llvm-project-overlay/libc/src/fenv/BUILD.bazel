@@ -20,9 +20,9 @@ libc_function(
     srcs = ["fetestexcept.cpp"],
     hdrs = ["fetestexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -32,9 +32,9 @@ libc_function(
     hdrs = ["fetestexceptflag.h"],
     deps = [
         "//libc/hdr/types:fexcept_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -43,9 +43,9 @@ libc_function(
     srcs = ["feclearexcept.cpp"],
     hdrs = ["feclearexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -54,9 +54,9 @@ libc_function(
     srcs = ["feraiseexcept.cpp"],
     hdrs = ["feraiseexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -65,9 +65,9 @@ libc_function(
     srcs = ["fegetround.cpp"],
     hdrs = ["fegetround.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -76,9 +76,9 @@ libc_function(
     srcs = ["fesetround.cpp"],
     hdrs = ["fesetround.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -87,9 +87,9 @@ libc_function(
     srcs = ["fedisableexcept.cpp"],
     hdrs = ["fedisableexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -98,9 +98,9 @@ libc_function(
     srcs = ["feenableexcept.cpp"],
     hdrs = ["feenableexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -109,9 +109,9 @@ libc_function(
     srcs = ["fegetexcept.cpp"],
     hdrs = ["fegetexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -121,9 +121,9 @@ libc_function(
     hdrs = ["fegetenv.h"],
     deps = [
         "//libc/hdr/types:fenv_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -133,9 +133,9 @@ libc_function(
     hdrs = ["fesetenv.h"],
     deps = [
         "//libc/hdr/types:fenv_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -145,9 +145,9 @@ libc_function(
     hdrs = ["feupdateenv.h"],
     deps = [
         "//libc/hdr/types:fenv_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -156,9 +156,9 @@ libc_function(
     srcs = ["fesetexcept.cpp"],
     hdrs = ["fesetexcept.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -168,9 +168,9 @@ libc_function(
     hdrs = ["fegetexceptflag.h"],
     deps = [
         "//libc/hdr/types:fexcept_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -180,9 +180,9 @@ libc_function(
     hdrs = ["fesetexceptflag.h"],
     deps = [
         "//libc/hdr/types:fexcept_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -192,8 +192,8 @@ libc_function(
     hdrs = ["feholdexcept.h"],
     deps = [
         "//libc/hdr/types:fenv_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/FPUtil:fenv_impl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

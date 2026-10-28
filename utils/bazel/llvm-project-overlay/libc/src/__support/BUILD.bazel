@@ -24,12 +24,12 @@ libc_support_library(
     deps = [
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:bit",
-        "//libc/src/__support/macros:attributes",
-        "//libc/src/__support/macros:config",
-        "//libc/src/__support/macros:hardening",
         "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros/properties:compiler",
         "//libc/src/__support/macros/properties:os",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:hardening",
     ],
 )
 
@@ -147,11 +147,11 @@ libc_support_library(
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/macros/properties:compiler",
+        "//libc/src/__support/macros/properties:types",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:optimization",
-        "//libc/src/__support/macros/properties:compiler",
-        "//libc/src/__support/macros/properties:types",
     ],
 )
 
@@ -198,8 +198,8 @@ libc_support_library(
     hdrs = ["uint128.h"],
     deps = [
         ":big_int",
-        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:attributes",
     ],
 )
 
@@ -242,7 +242,6 @@ libc_support_library(
         ":big_int",
         ":common",
         ":ctype_utils",
-        ":wctype_utils",
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:algorithm",
         "//libc/src/__support/CPP:array",
@@ -261,12 +260,12 @@ libc_support_library(
     hdrs = ["libc_assert.h"],
     deps = [
         ":common",
+        "//libc/src/__support/macros/properties:os",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:hardening",
         "//libc/src/__support/macros:macro_utils",
         "//libc/src/__support/macros:optimization",
-        "//libc/src/__support/macros/properties:os",
     ] + select({
         "//libc:full_build": [
             ":integer_to_string",
@@ -326,11 +325,11 @@ libc_support_library(
         "//libc/src/__support/CPP:type_traits",
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/__support/FPUtil:rounding_mode",
+        "//libc/src/__support/macros/properties:types",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/macros:optimization",
-        "//libc/src/__support/macros/properties:types",
     ],
 )
 
@@ -338,9 +337,9 @@ libc_support_library(
     name = "complex_type",
     hdrs = ["complex_type.h"],
     deps = [
-        "//libc/src/__support/macros:config",
         "//libc/src/__support/macros/properties:complex_types",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -363,8 +362,8 @@ libc_support_library(
         "//libc/hdr/func:malloc",
         "//libc/hdr/types:size_t",
         "//libc/src/__support/CPP:new",
-        "//libc/src/__support/macros:config",
         "//libc/src/__support/macros/properties:os",
+        "//libc/src/__support/macros:config",
     ],
 )
 

@@ -277,7 +277,7 @@ TEST(LlvmLibcRegexMatcherTest, ParseEreEscapesAndErrors) {
   }
 
   const string_view badbr_patterns[] = {"a{1a}",    "a{1,x}",       "a{1,0}",
-                                        "a{5,2}",   "a{256}",       "a{1,256}",
+                                        "a{5,2}",   "a{65535}",       "a{1,65535}",
                                         "a{1,2,3}", "a{9876543210}"};
   for (string_view pat : badbr_patterns) {
     ErrorOr<ExprId> err = parse_ere(pat, REG_EXTENDED, pool);

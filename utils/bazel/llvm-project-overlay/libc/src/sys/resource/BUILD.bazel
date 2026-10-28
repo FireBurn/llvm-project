@@ -21,11 +21,11 @@ libc_function(
     hdrs = ["getrlimit.h"],
     deps = [
         "//libc/hdr/types:struct_rlimit",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -36,11 +36,11 @@ libc_function(
     hdrs = ["setrlimit.h"],
     deps = [
         "//libc/hdr/types:struct_rlimit",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )

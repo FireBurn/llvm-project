@@ -35,8 +35,8 @@ libc_support_library(
     }),
     deps = [
         "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
-        "//libc/src/__support/macros/properties:architectures",
     ],
 )

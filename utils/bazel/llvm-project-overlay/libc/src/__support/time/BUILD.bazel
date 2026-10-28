@@ -19,15 +19,15 @@ libc_support_library(
     name = "time",
     hdrs = glob(["*.h"]),
     deps = [
-        "//libc/hdr:time_macros",
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
         "//libc/hdr/types:time_t",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/CPP:expected",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support:libc_assert",
-        "//libc/src/__support/CPP:expected",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -56,11 +56,11 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_gettime",
+        "//libc/src/__support/OSUtil:vdso",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
-        "//libc/src/__support/OSUtil:vdso",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_gettime",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -75,10 +75,10 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_settime",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
     ],
 )
 

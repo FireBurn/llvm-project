@@ -166,10 +166,8 @@ public:
                              CloseFunc *cf, uint8_t *buffer, size_t buffer_size,
                              int buffer_mode, bool owned, FileMode mode)
       : platform_write(wf), platform_read(rf), platform_seek(sf),
-        platform_close(cf), buf(buffer), bufsize(buffer_size), pos(0),
-        read_limit(0), prev(nullptr), next(nullptr), mbstate(), mode(mode),
-        ungetc_buf{}, mutex(/*timed=*/false, /*recursive=*/true,
-                            /*robust=*/false, /*pshared=*/false),
+        mutex(/*timed=*/false, /*recursive=*/true,
+              /*robust=*/false, /*pshared=*/false),
         bufmode(static_cast<int8_t>(buffer_mode)), prev_op(FileOp::NONE),
         orientation(Orientation::UNORIENTED), own_buf(owned), eof(false),
         err(false) {

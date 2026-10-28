@@ -53,6 +53,10 @@ LIBC_CONFIGURE_COMMON_OPTIONS = [
 
     # Documentation in libc/src/__support/time/monotonicity.h
     "LIBC_COPT_TIMEOUT_ENSURE_MONOTONICITY",
+
+    # Documentation in libc/config/config.json
+    "LIBC_CONF_DEFAULT_LOCALE=\\\"C.UTF-8\\\"",
+    "LIBC_CONF_ENABLE_RUNTIME_LOCALE",
 ]
 
 LIBC_CONFIGURE_OVERLAY_OPTIONS = [

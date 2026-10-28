@@ -24,10 +24,6 @@ libc_support_library(
     deps = [
         "//libc/hdr:stdint_proxy",
         "//libc/include:llvm_libc_macros_stdfix_macros",
-        "//libc/src/__support:big_int",
-        "//libc/src/__support:libc_assert",
-        "//libc/src/__support:math_extras",
-        "//libc/src/__support:uint128",
         "//libc/src/__support/CPP:algorithm",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/CPP:limits",
@@ -36,5 +32,9 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/macros:optimization",
+        "//libc/src/__support:big_int",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support:uint128",
     ],
 )

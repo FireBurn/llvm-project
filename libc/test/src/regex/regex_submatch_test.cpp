@@ -36,8 +36,9 @@ TEST(LlvmLibcRegexSubmatchTest, PmatchInitialisedOnMatchAndPreservedOnNoMatch) {
   EXPECT_EQ(pm[1].rm_eo, regoff_t(88));
 
   EXPECT_EQ(LIBC_NAMESPACE::regexec(&preg, "say hello", 2, pm, 0), 0);
-  EXPECT_EQ(pm[0].rm_so, regoff_t(-1));
-  EXPECT_EQ(pm[0].rm_eo, regoff_t(-1));
+  EXPECT_EQ(pm[0].rm_so, regoff_t(4));
+  EXPECT_EQ(pm[0].rm_eo, regoff_t(9));
+  // The pattern has no group, so the second slot is reported as unset.
   EXPECT_EQ(pm[1].rm_so, regoff_t(-1));
   EXPECT_EQ(pm[1].rm_eo, regoff_t(-1));
 

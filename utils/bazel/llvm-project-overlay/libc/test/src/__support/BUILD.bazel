@@ -26,7 +26,7 @@ libc_test(
 # libc_test(
 #     name = "blockstore_test",
 #     srcs = ["blockstore_test.cpp"],
-#     deps = ["//libc:__support_blockstore"],
+#     deps = ["//libc/src/__support:blockstore"],
 # )
 
 libc_test(
@@ -54,12 +54,12 @@ libc_test(
         "str_to_long_double_test.cpp",
     ],
     deps = [
-        "//libc/src/__support:integer_literals",
-        "//libc/src/__support:str_to_float",
-        "//libc/src/__support:uint128",
         "//libc/src/__support/FPUtil:float128",
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support:integer_literals",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support:uint128",
     ],
 )
 
@@ -67,14 +67,14 @@ libc_test(
     name = "integer_to_string_test",
     srcs = ["integer_to_string_test.cpp"],
     deps = [
-        "//libc/src/__support:big_int",
-        "//libc/src/__support:integer_literals",
-        "//libc/src/__support:integer_to_string",
-        "//libc/src/__support:uint128",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:span",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support:big_int",
+        "//libc/src/__support:integer_literals",
+        "//libc/src/__support:integer_to_string",
+        "//libc/src/__support:uint128",
     ],
 )
 
@@ -82,8 +82,8 @@ libc_test(
     name = "arg_list_test",
     srcs = ["arg_list_test.cpp"],
     deps = [
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/macros/properties:os",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -93,10 +93,10 @@ libc_test(
     deps = [
         "//libc/hdr:math_macros",
         "//libc/include:llvm_libc_macros_math_macros",
-        "//libc/src/__support:big_int",
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support:big_int",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -104,8 +104,8 @@ libc_test(
     name = "fixedvector_test",
     srcs = ["fixedvector_test.cpp"],
     deps = [
-        "//libc/src/__support:fixedvector",
         "//libc/src/__support/CPP:array",
+        "//libc/src/__support:fixedvector",
     ],
 )
 
@@ -121,8 +121,8 @@ libc_test(
     name = "integer_literals_test",
     srcs = ["integer_literals_test.cpp"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -130,12 +130,12 @@ libc_test(
     name = "printf_parser_test",
     srcs = ["printf_core/parser_test.cpp"],
     deps = [
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros/properties:types",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_parser",
+        "//libc/src/__support:arg_list",
         "//libc/test/UnitTest:printf_matcher",
     ],
 )
@@ -144,10 +144,10 @@ libc_test(
     name = "printf_writer_test",
     srcs = ["printf_core/writer_test.cpp"],
     deps = [
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -156,10 +156,10 @@ libc_test(
     name = "printf_converter_test",
     srcs = ["printf_core/converter_test.cpp"],
     deps = [
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/printf_core:printf_converter",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
     ],
 )

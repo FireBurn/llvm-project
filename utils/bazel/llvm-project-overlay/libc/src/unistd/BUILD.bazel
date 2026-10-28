@@ -21,11 +21,11 @@ libc_function(
     hdrs = ["access.h"],
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:access",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:access",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -35,11 +35,11 @@ libc_function(
     srcs = ["linux/chdir.cpp"],
     hdrs = ["chdir.h"],
     deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:chdir",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:chdir",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -55,10 +55,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:gid_t",
         "//libc/hdr/types:uid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:chown",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -68,10 +68,10 @@ libc_function(
     srcs = ["linux/close.cpp"],
     hdrs = ["close.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -82,11 +82,11 @@ libc_function(
     hdrs = ["dup.h"],
     deps = [
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -98,11 +98,11 @@ libc_function(
     deps = [
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -117,11 +117,11 @@ libc_function(
     }),
     deps = [
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup3",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup3",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -131,9 +131,9 @@ libc_function(
     srcs = ["environ.cpp"],
     hdrs = ["environ.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -142,11 +142,11 @@ libc_function(
     srcs = ["linux/fchdir.cpp"],
     hdrs = ["fchdir.h"],
     deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchdir",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchdir",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -162,10 +162,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:gid_t",
         "//libc/hdr/types:uid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchown",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -175,11 +175,11 @@ libc_function(
     srcs = ["linux/fsync.cpp"],
     hdrs = ["fsync.h"],
     deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsync",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fsync",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -189,14 +189,14 @@ libc_function(
     srcs = ["linux/ftruncate.cpp"],
     hdrs = ["ftruncate.h"],
     deps = [
+        "//libc/hdr/types:off_t",
         "//libc/hdr:stdint_proxy",
         "//libc/hdr:unistd_macros",
-        "//libc/hdr/types:off_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ftruncate",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ftruncate",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -206,14 +206,14 @@ libc_function(
     srcs = ["linux/getcwd.cpp"],
     hdrs = ["getcwd.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcwd",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:checked_ptr",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcwd",
-        "//libc/src/__support/macros:config",
         "//libc/src/string:allocating_string_utils",
     ],
 )
@@ -223,11 +223,11 @@ libc_function(
     srcs = ["linux/geteuid.cpp"],
     hdrs = ["geteuid.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:uid_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:geteuid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -242,10 +242,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:struct_utsname",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:uname",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
         "//libc/src/string:utils",
     ],
@@ -256,9 +256,9 @@ libc_function(
     srcs = ["linux/getpagesize.cpp"],
     hdrs = ["getpagesize.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:linux_auxv",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -267,11 +267,11 @@ libc_function(
     srcs = ["linux/getpid.cpp"],
     hdrs = ["getpid.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -280,11 +280,11 @@ libc_function(
     srcs = ["linux/getppid.cpp"],
     hdrs = ["getppid.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getppid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -298,18 +298,18 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        "//libc/hdr/types:pid_t",
         "//libc/hdr:signal_macros",
         "//libc/hdr:unistd_macros",
-        "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:gettid",
+        "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:fork_callbacks",
         "//libc/src/__support/threads:identifier",
         "//libc/src/__support/threads:thread",
         "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -324,10 +324,10 @@ libc_function(
     }),
     deps = [
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getsid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -337,11 +337,11 @@ libc_function(
     srcs = ["linux/getuid.cpp"],
     hdrs = ["getuid.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:uid_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getuid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -351,9 +351,9 @@ libc_function(
     hdrs = ["getegid.h"],
     deps = [
         "//libc/hdr/types:gid_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getegid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -362,11 +362,11 @@ libc_function(
     srcs = ["linux/getgid.cpp"],
     hdrs = ["getgid.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:gid_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getgid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -377,11 +377,11 @@ libc_function(
     deps = [
         "//libc/hdr:sys_ioctl_macros",
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -393,11 +393,11 @@ libc_function(
     deps = [
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:link",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:link",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -407,10 +407,10 @@ libc_function(
     srcs = ["linux/linkat.cpp"],
     hdrs = ["linkat.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:linkat",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -420,11 +420,11 @@ libc_function(
     srcs = ["linux/pipe.cpp"],
     hdrs = ["pipe.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:pipe",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:sanitizer",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -434,13 +434,13 @@ libc_function(
     srcs = ["linux/lseek.cpp"],
     hdrs = ["lseek.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:off_t",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -454,15 +454,15 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:off_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:pread",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:sanitizer",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -476,14 +476,14 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:off_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:pwrite",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -493,14 +493,14 @@ libc_function(
     srcs = ["linux/read.cpp"],
     hdrs = ["read.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:sanitizer",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -510,15 +510,15 @@ libc_function(
     srcs = ["linux/readlink.cpp"],
     hdrs = ["readlink.h"],
     deps = [
-        "//libc/hdr:fcntl_macros",
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlink",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlink",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -528,15 +528,15 @@ libc_function(
     srcs = ["linux/readlinkat.cpp"],
     hdrs = ["readlinkat.h"],
     deps = [
-        "//libc/hdr:fcntl_macros",
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlinkat",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlinkat",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -547,11 +547,11 @@ libc_function(
     hdrs = ["rmdir.h"],
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rmdir",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rmdir",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -566,10 +566,10 @@ libc_function(
     }),
     deps = [
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:setsid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -580,10 +580,10 @@ libc_function(
     hdrs = ["symlink.h"],
     deps = [
         "//libc/hdr:unistd_macros",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:symlink",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -594,10 +594,10 @@ libc_function(
     hdrs = ["symlinkat.h"],
     deps = [
         "//libc/hdr:unistd_macros",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:symlinkat",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -607,11 +607,11 @@ libc_function(
     srcs = ["swab.cpp"],
     hdrs = ["swab.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:ssize_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -620,12 +620,12 @@ libc_function(
     srcs = ["linux/truncate.cpp"],
     hdrs = ["truncate.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:off_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:truncate",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -636,11 +636,11 @@ libc_function(
     hdrs = ["unlink.h"],
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:unlink",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:unlink",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -651,11 +651,11 @@ libc_function(
     hdrs = ["unlinkat.h"],
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:unlinkat",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:unlinkat",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -671,19 +671,19 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        "//libc/hdr/types:struct_rlimit",
+        "//libc/hdr/types:struct_sysinfo",
         "//libc/hdr:limits_macros",
         "//libc/hdr:sys_auxv_macros",
         "//libc/hdr:sys_resource_macros",
         "//libc/hdr:unistd_macros",
-        "//libc/hdr/types:struct_rlimit",
-        "//libc/hdr/types:struct_sysinfo",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:linux_auxv",
-        "//libc/src/__support/OSUtil:linux_sysinfo",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sysinfo",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/OSUtil:linux_sysinfo",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -693,13 +693,13 @@ libc_function(
     srcs = ["linux/write.cpp"],
     hdrs = ["write.h"],
     deps = [
-        "//libc/hdr:unistd_macros",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:ssize_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:unistd_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )

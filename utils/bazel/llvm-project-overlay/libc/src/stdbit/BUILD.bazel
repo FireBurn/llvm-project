@@ -47,9 +47,9 @@ bit_prefix_needs_math_list = [
         srcs = [bit_prefix + bit_suffix + ".cpp"],
         hdrs = [bit_prefix + bit_suffix + ".h"],
         deps = [
-            "//libc/src/__support:common",
             "//libc/src/__support/CPP:bit",
             "//libc/src/__support/macros:config",
+            "//libc/src/__support:common",
         ],
     )
     for bit_prefix in bit_prefix_list
@@ -62,9 +62,9 @@ bit_prefix_needs_math_list = [
         srcs = [bit_prefix + bit_suffix + ".cpp"],
         hdrs = [bit_prefix + bit_suffix + ".h"],
         deps = [
+            "//libc/src/__support/macros:config",
             "//libc/src/__support:common",
             "//libc/src/__support:math_extras",
-            "//libc/src/__support/macros:config",
         ],
     )
     for bit_prefix in bit_prefix_needs_math_list

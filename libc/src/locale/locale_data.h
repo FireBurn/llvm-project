@@ -95,7 +95,7 @@ struct LcMessagesData {
   const char *noexpr;
 };
 
-LIBC_INLINE_VAR constexpr LcCtypeData C_CTYPE_DATA = {"US-ASCII"};
+LIBC_INLINE_VAR constexpr LcCtypeData C_CTYPE_DATA = {"ANSI_X3.4-1968"};
 LIBC_INLINE_VAR constexpr LcCtypeData UTF8_CTYPE_DATA = {"UTF-8"};
 
 LIBC_INLINE_VAR constexpr LcNumericData C_NUMERIC_DATA = {".", ""};

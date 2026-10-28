@@ -20,10 +20,10 @@ libc_function(
     srcs = ["linux/getcpu.cpp"],
     hdrs = ["getcpu.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcpu",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -33,10 +33,10 @@ libc_function(
     srcs = ["linux/sched_getcpu.cpp"],
     hdrs = ["sched_getcpu.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcpu",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -46,10 +46,10 @@ libc_function(
     srcs = ["linux/sched_get_priority_max.cpp"],
     hdrs = ["sched_get_priority_max.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_get_priority_max",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -59,10 +59,10 @@ libc_function(
     srcs = ["linux/sched_get_priority_min.cpp"],
     hdrs = ["sched_get_priority_min.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_get_priority_min",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -74,10 +74,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:struct_sched_param",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_getparam",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -88,10 +88,10 @@ libc_function(
     hdrs = ["sched_getscheduler.h"],
     deps = [
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_getscheduler",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -103,10 +103,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:struct_timespec",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_rr_get_interval",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -119,11 +119,11 @@ libc_function(
         "//libc/hdr/types:cpu_set_t",
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:span",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setaffinity",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -135,10 +135,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:struct_sched_param",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setparam",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -150,10 +150,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:pid_t",
         "//libc/hdr/types:struct_sched_param",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_setscheduler",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -163,10 +163,10 @@ libc_function(
     srcs = ["linux/sched_yield.cpp"],
     hdrs = ["sched_yield.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_yield",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )

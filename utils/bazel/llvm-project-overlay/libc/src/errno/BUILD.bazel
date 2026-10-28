@@ -19,10 +19,10 @@ libc_support_library(
     name = "errno",
     srcs = ["libc_errno.cpp"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -31,8 +31,8 @@ libc_function(
     srcs = ["program_invocation_name.cpp"],
     hdrs = ["program_invocation_name.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -41,7 +41,7 @@ libc_function(
     srcs = ["program_invocation_short_name.cpp"],
     hdrs = ["program_invocation_short_name.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

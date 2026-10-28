@@ -40,9 +40,9 @@ libc_test(
     name = "mlock_test",
     srcs = ["linux/mlock_test.cpp"],
     deps = [
+        "//libc/hdr/types:struct_rlimit",
         "//libc/hdr:sys_mman_macros",
         "//libc/hdr:sys_resource_macros",
-        "//libc/hdr/types:struct_rlimit",
         "//libc/src/__support/CPP:scope",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:sanitizer",
@@ -115,10 +115,10 @@ libc_test(
     name = "pkey_test",
     srcs = ["linux/pkey_test.cpp"],
     deps = [
+        "//libc/hdr/types:size_t",
         "//libc/hdr:errno_macros",
         "//libc/hdr:signal_macros",
         "//libc/hdr:sys_mman_macros",
-        "//libc/hdr/types:size_t",
         "//libc/src/sys/mman:mmap",
         "//libc/src/sys/mman:munmap",
         "//libc/src/sys/mman:pkey_alloc",

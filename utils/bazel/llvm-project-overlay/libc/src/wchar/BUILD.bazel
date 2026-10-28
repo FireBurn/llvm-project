@@ -21,8 +21,8 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:attributes",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -31,10 +31,10 @@ libc_function(
     srcs = ["btowc.cpp"],
     hdrs = ["btowc.h"],
     deps = [
-        "//libc/hdr:wchar_macros",
         "//libc/hdr/types:wint_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:wchar_macros",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -45,8 +45,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -58,9 +58,9 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -71,8 +71,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -84,9 +84,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -97,9 +97,9 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -110,8 +110,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -124,9 +124,9 @@ libc_function(
         ":utils",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -137,8 +137,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -150,8 +150,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -163,8 +163,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -176,8 +176,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -189,9 +189,9 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -202,8 +202,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -214,9 +214,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -226,9 +226,9 @@ libc_function(
     hdrs = ["wcsrchr.h"],
     deps = [
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -240,9 +240,9 @@ libc_function(
         ":utils",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -253,8 +253,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -264,11 +264,11 @@ libc_function(
     srcs = ["wctob.cpp"],
     hdrs = ["wctob.h"],
     deps = [
-        "//libc/hdr:stdio_macros",
         "//libc/hdr/types:wint_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:stdio_macros",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -279,8 +279,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -291,9 +291,9 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -304,8 +304,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -317,9 +317,9 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -330,8 +330,8 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -343,7 +343,7 @@ libc_function(
     deps = [
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

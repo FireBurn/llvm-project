@@ -70,8 +70,8 @@ math_test(name = "atan2f16")
 math_test(
     name = "atan2f128",
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -146,8 +146,8 @@ math_test(
     name = "canonicalizebf16",
     hdrs = ["CanonicalizeTest.h"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:bfloat16",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -171,8 +171,8 @@ math_test(
     name = "canonicalizef128",
     hdrs = ["CanonicalizeTest.h"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -180,8 +180,8 @@ math_test(
     name = "canonicalizef80",
     hdrs = ["CanonicalizeTest.h"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:float80",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -537,8 +537,8 @@ math_test(
     name = "sqrtf128",
     hdrs = ["SqrtTest.h"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support:integer_literals",
     ],
 )
 
@@ -1970,8 +1970,8 @@ math_test(
     name = "nextafterbf16",
     hdrs = ["NextAfterTest.h"],
     deps = [
-        "//libc/src/__support:sign",
         "//libc/src/__support/FPUtil:bfloat16",
+        "//libc/src/__support:sign",
     ],
 )
 

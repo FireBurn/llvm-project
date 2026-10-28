@@ -39,10 +39,10 @@ libc_header_library(
         "str_to_integer.h",
     ],
     deps = [
+        "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/__support:common",
         "//libc/src/__support:str_to_float",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/FPUtil:fp_bits",
     ],
 )
 
@@ -65,18 +65,6 @@ cc_library(
         "//libc/hdr:stdint_proxy",
         "//libc/include:llvm_libc_macros_float16_macros",
         "//libc/include:llvm_libc_types_float128",
-        "//libc/src/__support:big_int",
-        "//libc/src/__support:common",
-        "//libc/src/__support:frac128",
-        "//libc/src/__support:frac256",
-        "//libc/src/__support:frac64",
-        "//libc/src/__support:integer_literals",
-        "//libc/src/__support:libc_errno",
-        "//libc/src/__support:math_extras",
-        "//libc/src/__support:number_pair",
-        "//libc/src/__support:sign",
-        "//libc/src/__support:str_to_float",
-        "//libc/src/__support:uint128",
         "//libc/src/__support/CPP:algorithm",
         "//libc/src/__support/CPP:array",
         "//libc/src/__support/CPP:bit",
@@ -107,19 +95,31 @@ cc_library(
         "//libc/src/__support/FPUtil:rounding_mode",
         "//libc/src/__support/FPUtil:sqrt",
         "//libc/src/__support/FPUtil:triple_double",
-        "//libc/src/__support/macros:attributes",
-        "//libc/src/__support/macros:config",
-        "//libc/src/__support/macros:hardening",
-        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros/properties:compiler",
         "//libc/src/__support/macros/properties:cpu_features",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:hardening",
+        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/math:acos",
         "//libc/src/__support/math:range_reduction",
         "//libc/src/__support/math:range_reduction_double",
         "//libc/src/__support/math:sincos_eval",
         "//libc/src/__support/math:sincosf_utils",
+        "//libc/src/__support:big_int",
+        "//libc/src/__support:common",
+        "//libc/src/__support:frac128",
+        "//libc/src/__support:frac256",
+        "//libc/src/__support:frac64",
+        "//libc/src/__support:integer_literals",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support:number_pair",
+        "//libc/src/__support:sign",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support:uint128",
     ],
 )
 
@@ -128,9 +128,9 @@ libc_support_library(
     hdrs = ["math/static_rounding/expf.h"],
     deps = [
         ":libc_common",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/math:expf_integer_eval",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -139,9 +139,9 @@ libc_support_library(
     hdrs = ["math/static_rounding/exp2f.h"],
     deps = [
         ":libc_common",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/math:exp2f_integer_eval",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -150,8 +150,8 @@ libc_support_library(
     hdrs = ["math/static_rounding/exp10f.h"],
     deps = [
         ":libc_common",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/math:exp10f_integer_eval",
+        "//libc/src/__support:common",
     ],
 )

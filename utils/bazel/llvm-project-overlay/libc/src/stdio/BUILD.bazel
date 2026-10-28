@@ -21,10 +21,10 @@ libc_support_library(
     hdrs = ["stdin.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:common",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -34,10 +34,10 @@ libc_support_library(
     hdrs = ["stdout.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:common",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -47,10 +47,10 @@ libc_support_library(
     hdrs = ["stderr.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:common",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -63,10 +63,10 @@ libc_support_library(
         ":stdin",
         ":stdout",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:error_or",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:error_or",
     ],
 )
 
@@ -76,12 +76,12 @@ libc_function(
     hdrs = ["fflush.h"],
     deps = [
         ":fflush_internal",
-        "//libc/hdr:stdio_macros",
         "//libc/hdr/types:FILE",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -92,10 +92,10 @@ libc_function(
     hdrs = ["fclose.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -105,11 +105,11 @@ libc_function(
     hdrs = ["fopen.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -119,10 +119,10 @@ libc_function(
     hdrs = ["fread.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -132,10 +132,10 @@ libc_function(
     hdrs = ["fwrite.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -168,13 +168,13 @@ libc_function(
     srcs = ["asprintf.cpp"],
     hdrs = ["asprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vasprintf_internal",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -183,8 +183,6 @@ libc_function(
     srcs = ["sprintf.cpp"],
     hdrs = ["sprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_config",
@@ -192,6 +190,8 @@ libc_function(
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:printf_main",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -201,14 +201,14 @@ libc_function(
     srcs = ["snprintf.cpp"],
     hdrs = ["snprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:printf_main",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -220,13 +220,13 @@ libc_function(
     deps = [
         ":stdout",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vfprintf_internal",
+        "//libc/src/__support:arg_list",
         "//libc/src/errno",
     ],
 )
@@ -237,13 +237,13 @@ libc_function(
     hdrs = ["fprintf.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vfprintf_internal",
+        "//libc/src/__support:arg_list",
         "//libc/src/errno",
     ],
 )
@@ -253,13 +253,13 @@ libc_function(
     srcs = ["vasprintf.cpp"],
     hdrs = ["vasprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vasprintf_internal",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -268,14 +268,14 @@ libc_function(
     srcs = ["vsprintf.cpp"],
     hdrs = ["vsprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:printf_main",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -285,14 +285,14 @@ libc_function(
     srcs = ["vsnprintf.cpp"],
     hdrs = ["vsnprintf.h"],
     deps = [
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:printf_main",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -304,13 +304,13 @@ libc_function(
     deps = [
         ":stdout",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vfprintf_internal",
+        "//libc/src/__support:arg_list",
         "//libc/src/errno",
     ],
 )
@@ -321,13 +321,13 @@ libc_function(
     hdrs = ["vfprintf.h"],
     deps = [
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:vfprintf_internal",
+        "//libc/src/__support:arg_list",
         "//libc/src/errno",
     ],
 )
@@ -355,12 +355,12 @@ libc_support_library(
     deps = [
         ":scanf_config",
         ":scanf_core_structs",
-        "//libc/src/__support:arg_list",
-        "//libc/src/__support:ctype_utils",
-        "//libc/src/__support:str_to_integer",
         "//libc/src/__support/CPP:algorithm",
         "//libc/src/__support/CPP:bitset",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
     ],
 )
 
@@ -399,13 +399,13 @@ libc_support_library(
     deps = [
         ":scanf_core_structs",
         ":scanf_reader",
-        "//libc/src/__support:char_vector",
-        "//libc/src/__support:ctype_utils",
-        "//libc/src/__support:str_to_float",
         "//libc/src/__support/CPP:bitset",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:char_vector",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_float",
     ],
 )
 
@@ -418,8 +418,8 @@ libc_support_library(
         ":scanf_core_structs",
         ":scanf_parser",
         ":scanf_reader",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -430,11 +430,11 @@ libc_support_library(
         ":scanf_main",
         ":scanf_reader",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/File:file",
+        "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
-        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -446,9 +446,9 @@ libc_function(
         ":stdin",
         ":vfscanf_internal",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -460,9 +460,9 @@ libc_function(
         ":stdin",
         ":vfscanf_internal",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -473,9 +473,9 @@ libc_function(
     deps = [
         ":vfscanf_internal",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -486,9 +486,9 @@ libc_function(
     deps = [
         ":vfscanf_internal",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -499,12 +499,12 @@ libc_function(
     deps = [
         ":scanf_main",
         ":scanf_string_reader",
-        "//libc/hdr:stdio_macros",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
+        "//libc/hdr:stdio_macros",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -515,12 +515,12 @@ libc_function(
     deps = [
         ":scanf_main",
         ":scanf_string_reader",
-        "//libc/hdr:stdio_macros",
         "//libc/hdr/types:FILE",
-        "//libc/src/__support:arg_list",
+        "//libc/hdr:stdio_macros",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/File:file",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:arg_list",
     ],
 )
 
@@ -531,10 +531,10 @@ libc_function(
     deps = [
         "//libc/hdr:errno_macros",
         "//libc/hdr:fcntl_macros",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:unlinkat",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -550,11 +550,11 @@ libc_function(
     deps = [
         "//libc/hdr:fcntl_macros",
         "//libc/include:llvm_libc_macros_fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rename",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rename",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )

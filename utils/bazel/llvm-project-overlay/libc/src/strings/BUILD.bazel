@@ -20,8 +20,8 @@ libc_function(
     srcs = ["index.cpp"],
     hdrs = ["index.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -31,9 +31,9 @@ libc_function(
     srcs = ["rindex.cpp"],
     hdrs = ["rindex.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -43,8 +43,8 @@ libc_function(
     srcs = ["bcopy.cpp"],
     hdrs = ["bcopy.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -54,8 +54,8 @@ libc_function(
     srcs = ["bcmp.cpp"],
     hdrs = ["bcmp.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -65,8 +65,8 @@ libc_function(
     srcs = ["bzero.cpp"],
     hdrs = ["bzero.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -76,10 +76,10 @@ libc_function(
     srcs = ["strcasecmp.cpp"],
     hdrs = ["strcasecmp.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -89,10 +89,10 @@ libc_function(
     srcs = ["strncasecmp.cpp"],
     hdrs = ["strncasecmp.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
         "//libc/src/string/memory_utils",
     ],
 )

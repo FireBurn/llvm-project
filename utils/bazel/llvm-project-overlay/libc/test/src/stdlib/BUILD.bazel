@@ -143,16 +143,16 @@ libc_test(
     name = "realpath_test",
     srcs = ["realpath_test.cpp"],
     deps = [
+        "//libc/hdr/types:size_t",
         "//libc/hdr:errno_macros",
         "//libc/hdr:limits_macros",
-        "//libc/hdr/types:size_t",
-        "//libc/src/__support:c_string",
-        "//libc/src/__support:fixedvector",
-        "//libc/src/__support:libc_assert",
         "//libc/src/__support/CPP:string",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/CPP:utility",
         "//libc/src/__support/OSUtil:path",
+        "//libc/src/__support:c_string",
+        "//libc/src/__support:fixedvector",
+        "//libc/src/__support:libc_assert",
         "//libc/src/fcntl:openat",
         "//libc/src/stdlib:realpath",
         "//libc/src/string:strdup",
@@ -251,10 +251,10 @@ libc_test_library(
     hdrs = ["StrtolTest.h"],
     deps = [
         "//libc/hdr:errno_macros",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:type_traits",
         "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support:ctype_utils",
         "//libc/test/UnitTest:LibcUnitTest",
     ],
 )
@@ -310,10 +310,10 @@ libc_test(
     srcs = ["strtof128_test.cpp"],
     deps = [
         "//libc/hdr:errno_macros",
-        "//libc/src/__support:uint128",
         "//libc/src/__support/FPUtil:float128",
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support:uint128",
         "//libc/src/stdlib:strtof128",
     ],
 )
@@ -332,8 +332,8 @@ libc_test(
     name = "strtold_test",
     srcs = ["strtold_test.cpp"],
     deps = [
-        "//libc/src/__support:uint128",
         "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/__support:uint128",
         "//libc/src/stdlib:strtold",
     ],
 )

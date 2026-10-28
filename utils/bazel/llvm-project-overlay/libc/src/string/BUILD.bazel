@@ -20,8 +20,8 @@ libc_support_library(
     hdrs = ["allocating_string_utils.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:checked_ptr",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:checked_ptr",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -33,16 +33,16 @@ libc_support_library(
         "string_utils.h",
     ],
     deps = [
+        "//libc/hdr/types:size_t",
         "//libc/hdr:limits_macros",
         "//libc/hdr:stdint_proxy",
-        "//libc/hdr/types:size_t",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:bitset",
         "//libc/src/__support/CPP:type_traits",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:optimization",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -53,9 +53,9 @@ libc_function(
     hdrs = ["memchr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -64,9 +64,9 @@ libc_function(
     srcs = ["memcpy.cpp"],
     hdrs = ["memcpy.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -76,9 +76,9 @@ libc_function(
     srcs = ["memccpy.cpp"],
     hdrs = ["memccpy.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -87,9 +87,9 @@ libc_function(
     srcs = ["memset.cpp"],
     hdrs = ["memset.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -99,9 +99,9 @@ libc_function(
     srcs = ["memset_explicit.cpp"],
     hdrs = ["memset_explicit.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -111,9 +111,9 @@ libc_function(
     srcs = ["memmove.cpp"],
     hdrs = ["memmove.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -123,9 +123,9 @@ libc_function(
     srcs = ["memmem.cpp"],
     hdrs = ["memmem.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -135,9 +135,9 @@ libc_function(
     srcs = ["mempcpy.cpp"],
     hdrs = ["mempcpy.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -147,10 +147,10 @@ libc_function(
     srcs = ["memcmp.cpp"],
     hdrs = ["memcmp.h"],
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:integer_operations",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:integer_operations",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -161,9 +161,9 @@ libc_function(
     hdrs = ["memrchr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -173,9 +173,9 @@ libc_function(
     hdrs = ["stpcpy.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -186,9 +186,9 @@ libc_function(
     hdrs = ["stpncpy.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -200,9 +200,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -211,9 +211,9 @@ libc_function(
     srcs = ["strsignal.cpp"],
     hdrs = ["strsignal.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/StringUtil",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -224,9 +224,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -238,8 +238,8 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -248,9 +248,9 @@ libc_function(
     srcs = ["strncpy.cpp"],
     hdrs = ["strncpy.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -260,8 +260,8 @@ libc_function(
     hdrs = ["strcmp.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -272,9 +272,9 @@ libc_function(
     hdrs = ["strncmp.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -285,8 +285,8 @@ libc_function(
     hdrs = ["strchr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -296,8 +296,8 @@ libc_function(
     hdrs = ["strrchr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -307,8 +307,8 @@ libc_function(
     hdrs = ["strchrnul.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -319,9 +319,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/hdr:signal_macros",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -332,9 +332,9 @@ libc_function(
     hdrs = ["strstr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -345,10 +345,10 @@ libc_function(
     hdrs = ["strcasestr.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -360,9 +360,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -373,8 +373,8 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -385,9 +385,9 @@ libc_function(
     deps = [
         ":utils",
         "//libc/include:llvm_libc_types_size_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -397,8 +397,8 @@ libc_function(
     hdrs = ["strnlen.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -408,8 +408,8 @@ libc_function(
     hdrs = ["strcspn.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -421,9 +421,9 @@ libc_function(
         ":allocating_string_utils",
         "//libc/hdr:stdlib_macros",
         "//libc/include:llvm_libc_types_size_t",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/macros:config",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -434,10 +434,10 @@ libc_function(
     hdrs = ["strspn.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:bitset",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -447,8 +447,8 @@ libc_function(
     hdrs = ["strpbrk.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -458,8 +458,8 @@ libc_function(
     hdrs = ["strtok.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -469,7 +469,7 @@ libc_function(
     hdrs = ["strtok_r.h"],
     deps = [
         ":utils",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

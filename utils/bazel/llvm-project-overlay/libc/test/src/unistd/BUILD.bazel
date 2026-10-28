@@ -232,7 +232,7 @@ libc_test(
 #     name = "syscall_test",
 #     srcs = ["syscall_test.cpp"],
 #     deps = [
-#         "//libc:syscall",
+#         "//libc/src/compat:syscall",
 #     ],
 # )
 
@@ -242,7 +242,7 @@ libc_test(
 #     name = "sysconf_test",
 #     srcs = ["sysconf_test.cpp"],
 #     deps = [
-#         "//libc:sysconf",
+#         "//libc/src/unistd:sysconf",
 #     ],
 # )
 
@@ -252,9 +252,9 @@ libc_test(
 #     name = "getopt_test",
 #     srcs = ["getopt_test.cpp"],
 #     deps = [
-#         "//libc:__support_cpp_array",
-#         "//libc:getopt",
-#         "//libc:fopencookie",
-#         "//libc:fflush",
+#         "//libc/src/__support/CPP:array",
+#         "//libc/src/unistd:getopt",
+#         "//libc/src/stdio:fopencookie",
+#         "//libc/src/stdio:fflush",
 #     ],
 # )

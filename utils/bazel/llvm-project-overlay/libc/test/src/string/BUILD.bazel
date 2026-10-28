@@ -224,10 +224,10 @@ libc_test_library(
     hdrs = ["memory_utils/memory_check_utils.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:libc_assert",
         "//libc/src/__support/CPP:span",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:sanitizer",
+        "//libc/src/__support:libc_assert",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -242,8 +242,8 @@ libc_test_library(
     deps = [
         "//libc/hdr:stdint_proxy",
         "//libc/hdr:sys_mman_macros",
-        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros/properties:os",
+        "//libc/src/__support/macros:attributes",
     ],
 )
 
@@ -302,8 +302,8 @@ libc_test(
     srcs = ["memset_explicit_test.cpp"],
     deps = [
         ":memory_check_utils",
-        "//libc/src/string:memset_explicit",
         "//libc/src/string/memory_utils",
+        "//libc/src/string:memset_explicit",
     ],
 )
 

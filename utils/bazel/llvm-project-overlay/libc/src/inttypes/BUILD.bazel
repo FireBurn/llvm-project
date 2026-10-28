@@ -19,10 +19,10 @@ libc_function(
     hdrs = ["strtoimax.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -33,10 +33,10 @@ libc_function(
     hdrs = ["strtoumax.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -46,9 +46,9 @@ libc_function(
     srcs = ["imaxabs.cpp"],
     hdrs = ["imaxabs.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -57,8 +57,8 @@ libc_function(
     srcs = ["imaxdiv.cpp"],
     hdrs = ["imaxdiv.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )

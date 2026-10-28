@@ -632,8 +632,8 @@ libc_math_function(
     name = "ceilf128",
     additional_deps = [
         "//libc/src/__support/CPP:bit",
-        "//libc/src/__support/math:ceilf128",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/math:ceilf128",
     ],
 )
 
@@ -700,8 +700,8 @@ libc_math_function(
 libc_math_function(
     name = "cos",
     additional_deps = [
-        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/macros/properties:cpu_features",
+        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/math:cos",
         "//libc/src/__support/math:cos_integer_eval",
     ],
@@ -781,9 +781,9 @@ libc_math_function(
 libc_math_function(
     name = "ddivf128",
     additional_deps = [
-        "//libc/src/__support/math:ddivf128",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/math:ddivf128",
     ],
 )
 
@@ -795,8 +795,8 @@ libc_math_function(
 libc_math_function(
     name = "dfmaf128",
     additional_deps = [
-        "//libc/src/__support/math:dfmaf128",
         "//libc/include:llvm_libc_types_float128",
+        "//libc/src/__support/math:dfmaf128",
     ],
 )
 
@@ -810,9 +810,9 @@ libc_math_function(
 libc_math_function(
     name = "dmulf128",
     additional_deps = [
-        "//libc/src/__support/math:dmulf128",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/math:dmulf128",
     ],
 )
 
@@ -838,9 +838,9 @@ libc_math_function(
 libc_math_function(
     name = "dsubf128",
     additional_deps = [
-        "//libc/src/__support/math:dsubf128",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/math:dsubf128",
     ],
 )
 
@@ -873,8 +873,8 @@ libc_math_function(
 libc_math_function(
     name = "expf",
     additional_deps = [
-        "//libc/src/__support/math:expf",
         "//libc/shared:math_static_rounding_expf",
+        "//libc/src/__support/math:expf",
     ],
 )
 
@@ -935,8 +935,8 @@ libc_math_function(
 libc_math_function(
     name = "exp2f",
     additional_deps = [
-        "//libc/src/__support/math:exp2f",
         "//libc/shared:math_static_rounding_exp2f",
+        "//libc/src/__support/math:exp2f",
     ],
 )
 
@@ -1335,8 +1335,8 @@ libc_math_function(
     name = "floorf128",
     additional_deps = [
         "//libc/src/__support/CPP:bit",
-        "//libc/src/__support/math:floorf128",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/math:floorf128",
     ],
 )
 
@@ -3277,8 +3277,8 @@ libc_math_function(
 libc_math_function(
     name = "sin",
     additional_deps = [
-        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/macros/properties:cpu_features",
+        "//libc/src/__support/macros:optimization",
         "//libc/src/__support/math:sin",
         "//libc/src/__support/math:sin_integer_eval",
     ],

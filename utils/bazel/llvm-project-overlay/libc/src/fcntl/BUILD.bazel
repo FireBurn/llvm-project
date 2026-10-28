@@ -24,12 +24,12 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/hdr:fcntl_macros",
         "//libc/hdr/types:mode_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:fcntl_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -43,10 +43,10 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:fcntl",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -60,12 +60,12 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/hdr:fcntl_macros",
         "//libc/hdr/types:mode_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:fcntl_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:openat",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -76,11 +76,11 @@ libc_function(
     hdrs = ["creat.h"],
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )

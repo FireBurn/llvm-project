@@ -21,13 +21,13 @@ libc_support_library(
     # Full-build only, as overlay mode must use the host libc's cleanup.
     full_build_only = True,
     deps = [
-        "//libc/src/__support:blockstore",
-        "//libc/src/__support:common",
-        "//libc/src/__support:fixedvector",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/CPP:new",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:mutex",
+        "//libc/src/__support:blockstore",
+        "//libc/src/__support:common",
+        "//libc/src/__support:fixedvector",
     ],
 )
 
@@ -38,9 +38,9 @@ libc_function(
     # Full-build only, as overlay mode must use the host libc's cleanup.
     full_build_only = True,
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:exit",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -53,9 +53,9 @@ libc_function(
     deps = [
         ":exit_handler",
         "//libc/hdr/types:atexithandler_t",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -66,10 +66,10 @@ libc_function(
     # Full-build only, as overlay mode must use the host libc's cleanup.
     full_build_only = True,
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:exit",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
         "//libc/src/stdio:fflush_internal",
     ],
 )
@@ -79,9 +79,9 @@ libc_function(
     srcs = ["abs.cpp"],
     hdrs = ["abs.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -90,9 +90,9 @@ libc_function(
     srcs = ["labs.cpp"],
     hdrs = ["labs.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -101,9 +101,9 @@ libc_function(
     srcs = ["llabs.cpp"],
     hdrs = ["llabs.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -113,9 +113,9 @@ libc_function(
     hdrs = ["div.h"],
     deps = [
         "//libc/hdr/types:div_t",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -125,9 +125,9 @@ libc_function(
     hdrs = ["ldiv.h"],
     deps = [
         "//libc/hdr/types:ldiv_t",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -137,9 +137,9 @@ libc_function(
     hdrs = ["lldiv.h"],
     deps = [
         "//libc/hdr/types:lldiv_t",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:integer_operations",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -148,10 +148,10 @@ libc_function(
     srcs = ["atoi.cpp"],
     hdrs = ["atoi.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -161,10 +161,10 @@ libc_function(
     srcs = ["atol.cpp"],
     hdrs = ["atol.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -174,10 +174,10 @@ libc_function(
     srcs = ["atoll.cpp"],
     hdrs = ["atoll.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -187,10 +187,10 @@ libc_function(
     srcs = ["atof.cpp"],
     hdrs = ["atof.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -201,8 +201,8 @@ libc_function(
     hdrs = ["bsearch.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -230,11 +230,11 @@ libc_support_library(
     }),
     deps = [
         "//libc/hdr/types:struct_sigaction",
-        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:raise",
         "//libc/src/__support/OSUtil:exit",
         "//libc/src/__support/OSUtil:linux_sigmask",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:raise",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/signal:__signal_utils",
     ],
 )
@@ -258,13 +258,13 @@ libc_support_library(
     deps = [
         "//libc/config:app_h",
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:checked_ptr",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:new",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/CPP:string_view",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
         "//libc/src/unistd:environ",
     ],
@@ -276,8 +276,8 @@ libc_function(
     hdrs = ["getenv.h"],
     deps = [
         ":environ_internal",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -292,12 +292,12 @@ libc_support_library(
     ],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/CPP:cstddef",
         "//libc/src/__support/CPP:utility",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -308,10 +308,10 @@ libc_function(
     hdrs = ["qsort.h"],
     deps = [
         ":qsort_util",
-        "//libc/hdr:stdint_proxy",
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -321,10 +321,10 @@ libc_function(
     hdrs = ["qsort_r.h"],
     deps = [
         ":qsort_util",
-        "//libc/hdr:stdint_proxy",
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -346,9 +346,9 @@ libc_function(
     deps = [
         ":rand_util",
         "//libc/hdr:stdlib_macros",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:sleep",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -357,24 +357,24 @@ libc_function(
     srcs = ["linux/realpath.cpp"],
     hdrs = ["realpath.h"],
     deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr/types:size_t",
         "//libc/hdr:errno_macros",
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:limits_macros",
         "//libc/hdr:sys_stat_macros",
-        "//libc/hdr/types:mode_t",
-        "//libc/hdr/types:size_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/CPP:string",
         "//libc/src/__support/CPP:string_view",
-        "//libc/src/__support/OSUtil:linux_stat_kernel_statx_types",
-        "//libc/src/__support/OSUtil:path",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcwd",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlink",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
+        "//libc/src/__support/OSUtil:linux_stat_kernel_statx_types",
+        "//libc/src/__support/OSUtil:path",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
         "//libc/src/string/memory_utils",
     ],
 )
@@ -385,8 +385,8 @@ libc_function(
     hdrs = ["srand.h"],
     deps = [
         ":rand_util",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -395,8 +395,6 @@ libc_support_library(
     hdrs = ["str_from_util.h"],
     deps = [
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:libc_errno",
-        "//libc/src/__support:str_to_integer",
         "//libc/src/__support/CPP:limits",
         "//libc/src/__support/CPP:type_traits",
         "//libc/src/__support/macros:config",
@@ -404,6 +402,8 @@ libc_support_library(
         "//libc/src/__support/printf_core:printf_core_structs",
         "//libc/src/__support/printf_core:printf_error_mapper",
         "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
     ],
 )
 
@@ -457,10 +457,10 @@ libc_function(
     srcs = ["strtol.cpp"],
     hdrs = ["strtol.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -470,10 +470,10 @@ libc_function(
     srcs = ["strtoll.cpp"],
     hdrs = ["strtoll.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -483,10 +483,10 @@ libc_function(
     srcs = ["strtoul.cpp"],
     hdrs = ["strtoul.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -496,10 +496,10 @@ libc_function(
     srcs = ["strtoull.cpp"],
     hdrs = ["strtoull.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -509,10 +509,10 @@ libc_function(
     srcs = ["strtof.cpp"],
     hdrs = ["strtof.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -522,13 +522,13 @@ libc_function(
     srcs = ["strtof128.cpp"],
     hdrs = ["strtof128.h"],
     deps = [
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support/macros/properties:types",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
-        "//libc/src/__support/CPP:bit",
-        "//libc/src/__support/FPUtil:float128",
-        "//libc/src/__support/macros:config",
-        "//libc/src/__support/macros/properties:types",
         "//libc/src/errno",
     ],
 )
@@ -538,10 +538,10 @@ libc_function(
     srcs = ["strtod.cpp"],
     hdrs = ["strtod.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -551,10 +551,10 @@ libc_function(
     srcs = ["strtold.cpp"],
     hdrs = ["strtold.h"],
     deps = [
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )

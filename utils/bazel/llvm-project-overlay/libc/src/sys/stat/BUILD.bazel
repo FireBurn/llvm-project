@@ -20,13 +20,13 @@ libc_function(
     srcs = ["linux/mkdir.cpp"],
     hdrs = ["mkdir.h"],
     deps = [
-        "//libc/hdr:fcntl_macros",
         "//libc/hdr/types:mode_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdir",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdir",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )
@@ -37,11 +37,11 @@ libc_function(
     hdrs = ["mkdirat.h"],
     deps = [
         "//libc/hdr/types:mode_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdirat",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/OSUtil:syscall",
-        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdirat",
-        "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
 )

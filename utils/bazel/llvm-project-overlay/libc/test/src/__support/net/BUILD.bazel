@@ -14,8 +14,8 @@ libc_test(
     name = "byte_order_test",
     srcs = ["byte_order_test.cpp"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
     ],
 )
 

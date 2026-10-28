@@ -21,9 +21,9 @@ libc_function(
     hdrs = ["htonl.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -33,9 +33,9 @@ libc_function(
     hdrs = ["htons.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -44,13 +44,13 @@ libc_function(
     srcs = ["inet_addr.cpp"],
     hdrs = ["inet_addr.h"],
     deps = [
-        "//libc/hdr:netinet_in_macros",
         "//libc/hdr/types:in_addr_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:netinet_in_macros",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -60,11 +60,11 @@ libc_function(
     hdrs = ["inet_aton.h"],
     deps = [
         "//libc/hdr/types:struct_in_addr",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -73,12 +73,12 @@ libc_function(
     srcs = ["inet_ntoa.cpp"],
     hdrs = ["inet_ntoa.h"],
     deps = [
-        "//libc/hdr:inet_address_macros",
         "//libc/hdr/types:struct_in_addr",
-        "//libc/src/__support:common",
+        "//libc/hdr:inet_address_macros",
         "//libc/src/__support/CPP:span",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -87,17 +87,17 @@ libc_function(
     srcs = ["inet_ntop.cpp"],
     hdrs = ["inet_ntop.h"],
     deps = [
-        "//libc/hdr:errno_macros",
-        "//libc/hdr:sys_socket_macros",
         "//libc/hdr/types:socklen_t",
         "//libc/hdr/types:struct_in6_addr",
         "//libc/hdr/types:struct_in_addr",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_socket_macros",
         "//libc/src/__support/CPP:span",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -106,16 +106,16 @@ libc_function(
     srcs = ["inet_pton.cpp"],
     hdrs = ["inet_pton.h"],
     deps = [
+        "//libc/hdr/types:struct_in6_addr",
+        "//libc/hdr/types:struct_in_addr",
         "//libc/hdr:errno_macros",
         "//libc/hdr:stdint_proxy",
         "//libc/hdr:sys_socket_macros",
-        "//libc/hdr/types:struct_in6_addr",
-        "//libc/hdr/types:struct_in_addr",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support/net:address",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -125,9 +125,9 @@ libc_function(
     hdrs = ["ntohl.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -137,8 +137,8 @@ libc_function(
     hdrs = ["ntohs.h"],
     deps = [
         "//libc/hdr:stdint_proxy",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
     ],
 )

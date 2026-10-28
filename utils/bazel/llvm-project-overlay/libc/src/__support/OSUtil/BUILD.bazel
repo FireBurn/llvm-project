@@ -32,13 +32,13 @@ libc_support_library(
         "@platforms//os:windows": [],
     }),
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
         "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:optimization",
         "//libc/src/__support/macros:sanitizer",
-        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
     ],
 )
 
@@ -54,7 +54,6 @@ libc_support_library(
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:sys_auxv_macros",
         "//libc/hdr:sys_mman_macros",
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:mmap",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:munmap",
@@ -62,6 +61,7 @@ libc_support_library(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:prctl",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
         "//libc/src/__support/threads:callonce",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -74,9 +74,6 @@ libc_support_library(
     }),
     deps = [
         "//libc/hdr:errno_macros",
-        "//libc/src/__support:common",
-        "//libc/src/__support:ctype_utils",
-        "//libc/src/__support:error_or",
         "//libc/src/__support/CPP:array",
         "//libc/src/__support/CPP:bit",
         "//libc/src/__support/CPP:optional",
@@ -85,6 +82,9 @@ libc_support_library(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_getaffinity",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:error_or",
     ],
 )
 
@@ -107,22 +107,22 @@ libc_support_library(
     ],
     deps = [
         ":linux_auxv",
-        "//libc/hdr:elf_proxy",
-        "//libc/hdr:link_macros",
-        "//libc/hdr:sys_auxv_macros",
         "//libc/hdr/types:clock_t",
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
         "//libc/hdr/types:struct_timeval",
         "//libc/hdr/types:time_t",
-        "//libc/src/__support:common",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:sys_auxv_macros",
         "//libc/src/__support/CPP:array",
         "//libc/src/__support/CPP:optional",
         "//libc/src/__support/CPP:string_view",
-        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/threads:callonce",
         "//libc/src/__support/threads:linux_futex_word_type",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -136,10 +136,10 @@ libc_support_library(
     }),
     deps = [
         ":syscall",
-        "//libc/src/__support:common",
         "//libc/src/__support/CPP:string_view",
-        "//libc/src/__support/macros:config",
         "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
         "//libc/src/string:utils",
     ],
 )
@@ -148,8 +148,8 @@ libc_support_library(
     name = "exit_hdrs",
     hdrs = ["exit.h"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -163,9 +163,9 @@ libc_support_library(
     }),
     deps = [
         ":exit_hdrs",
-        "//libc/src/__support:common",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:exit_group",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )
 
@@ -191,12 +191,12 @@ libc_support_library(
     }),
     deps = [
         ":linux_stat_kernel_statx_types",
-        "//libc/hdr:stdint_proxy",
         "//libc/hdr/types:struct_stat",
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
+        "//libc/hdr:stdint_proxy",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
     ],
 )
 
@@ -233,13 +233,13 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/hdr:errno_macros",
-        "//libc/hdr:signal_macros",
         "//libc/hdr/types:sigset_t",
         "//libc/hdr/types:size_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigprocmask",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
     ],
 )

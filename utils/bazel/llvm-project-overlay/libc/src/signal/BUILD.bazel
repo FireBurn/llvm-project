@@ -48,18 +48,18 @@ libc_support_library(
     }),
     deps = [
         ":__restore_rt",
-        "//libc/hdr:signal_macros",
         "//libc/hdr/types:siginfo_t",
         "//libc/hdr/types:sigset_t",
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:struct_sigaction",
-        "//libc/src/__support:common",
-        "//libc/src/__support:error_or",
+        "//libc/hdr:signal_macros",
         "//libc/src/__support/OSUtil:linux_sigmask",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/OSUtil:vdso",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:raw_rwlock",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
     ],
 )
 
@@ -69,10 +69,10 @@ libc_function(
     hdrs = ["kill.h"],
     deps = [
         "//libc/hdr/types:pid_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:kill",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -86,10 +86,10 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:raise",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -102,9 +102,9 @@ libc_function(
     deps = [
         ":__signal_utils",
         "//libc/hdr/types:struct_sigaction",
+        "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
-        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -117,13 +117,13 @@ libc_function(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        "//libc/hdr/types:stack_t",
         "//libc/hdr:errno_macros",
         "//libc/hdr:signal_macros",
-        "//libc/hdr/types:stack_t",
-        "//libc/src/__support:common",
-        "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:sigaltstack",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/errno",
     ],
 )
@@ -137,7 +137,7 @@ libc_function(
     deps = [
         ":sigaction",
         "//libc/hdr:signal_macros",
-        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

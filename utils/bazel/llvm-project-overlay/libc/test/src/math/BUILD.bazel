@@ -267,9 +267,9 @@ math_mpfr_test(
     name = "dmulf128",
     hdrs = ["MulTest.h"],
     deps = [
-        "//libc:rand",
-        "//libc:srand",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/stdlib:rand",
+        "//libc/src/stdlib:srand",
     ],
 )
 
@@ -1209,8 +1209,8 @@ math_mpfr_test(
     name = "sqrtf128",
     hdrs = ["SqrtTest.h"],
     deps = [
-        "//libc/src/__support:integer_literals",
         "//libc/src/__support/FPUtil:float128",
+        "//libc/src/__support:integer_literals",
     ],
 )
 

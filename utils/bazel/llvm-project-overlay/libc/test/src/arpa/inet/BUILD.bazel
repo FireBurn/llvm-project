@@ -34,8 +34,8 @@ libc_test(
     name = "inet_addr_test",
     srcs = ["inet_addr_test.cpp"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
         "//libc/src/arpa/inet:inet_addr",
     ],
 )
@@ -44,8 +44,8 @@ libc_test(
     name = "inet_aton_test",
     srcs = ["inet_aton_test.cpp"],
     deps = [
-        "//libc/src/__support:common",
         "//libc/src/__support/net:byte_order",
+        "//libc/src/__support:common",
         "//libc/src/arpa/inet:inet_aton",
     ],
 )
@@ -64,10 +64,10 @@ libc_test(
     name = "inet_ntop_test",
     srcs = ["inet_ntop_test.cpp"],
     deps = [
-        "//libc/hdr:errno_macros",
-        "//libc/hdr:sys_socket_macros",
         "//libc/hdr/types:struct_in6_addr",
         "//libc/hdr/types:struct_in_addr",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_socket_macros",
         "//libc/src/__support/net:byte_order",
         "//libc/src/arpa/inet:inet_ntop",
     ],
@@ -77,10 +77,10 @@ libc_test(
     name = "inet_pton_test",
     srcs = ["inet_pton_test.cpp"],
     deps = [
-        "//libc/hdr:errno_macros",
-        "//libc/hdr:sys_socket_macros",
         "//libc/hdr/types:struct_in6_addr",
         "//libc/hdr/types:struct_in_addr",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_socket_macros",
         "//libc/src/__support/net:byte_order",
         "//libc/src/arpa/inet:inet_pton",
         "//libc/src/string/memory_utils",

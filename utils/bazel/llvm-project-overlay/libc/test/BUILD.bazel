@@ -24,7 +24,7 @@ exports_files(["libc_test_rules.bzl"])
 libc_release_library(
     name = "libc_release_test",
     libc_functions = [
-        "//libc:acosf",
+        "//libc/src/math:acosf",
         "//libc/src/unistd:read",
     ],
     weak_symbols = [
