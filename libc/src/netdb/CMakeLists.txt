@@ -69,7 +69,7 @@ add_entrypoint_object(
     libc.include.sys_socket
     libc.src.arpa.inet.inet_ntop
     libc.src.arpa.inet.ntohs
-    libc.src.net.if_indextoname
+    libc.src.net.if.if_indextoname
     libc.src.string.string_utils
 )
 
