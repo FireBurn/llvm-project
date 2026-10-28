@@ -14,6 +14,7 @@
 #ifndef LLVM_LIBC_SRC_PTY_LOGIN_TTY_H
 #define LLVM_LIBC_SRC_PTY_LOGIN_TTY_H
 
+#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -21,6 +22,10 @@ namespace LIBC_NAMESPACE_DECL {
 // Makes the given terminal the one this session is attached to, and the three
 // standard streams. The descriptor is closed once it has been put in place.
 int login_tty(int fd);
+
+namespace internal {
+ErrorOr<int> login_tty_impl(int fd);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 

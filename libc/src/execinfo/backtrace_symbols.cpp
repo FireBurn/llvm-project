@@ -33,7 +33,7 @@ size_t render(void *address, char *out, size_t room) {
   char *const end = scratch + sizeof(scratch) - 1;
 
   Dl_info info = {};
-  const bool found = LIBC_NAMESPACE::dladdr(address, &info) != 0;
+  const bool found = internal::dladdr_impl(address, &info) != 0;
   if (found && info.dli_fname != nullptr)
     cursor = execinfo::put(cursor, end, info.dli_fname);
   if (found && info.dli_sname != nullptr) {

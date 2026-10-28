@@ -26,7 +26,7 @@ LLVM_LIBC_FUNCTION(int, wcswidth, (const wchar_t *ws, size_t n)) {
     return -1;
   int total = 0;
   for (size_t i = 0; i < n && ws[i] != L'\0'; ++i) {
-    int width = LIBC_NAMESPACE::wcwidth(ws[i]);
+    int width = internal::wcwidth_impl(ws[i]);
     // A single character which cannot be displayed makes the whole string
     // unmeasurable.
     if (width < 0)

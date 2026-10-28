@@ -59,7 +59,7 @@ LLVM_LIBC_FUNCTION(int, res_mkquery,
                     const unsigned char *data, int datalen,
                     const unsigned char *newrr, unsigned char *buf,
                     int buflen)) {
-  return internal::res_mkquery_with(LIBC_NAMESPACE::__res_state(), op, dname,
+  return internal::res_mkquery_with(internal::res_state_impl(), op, dname,
                                     rr_class, type, data, datalen, newrr, buf,
                                     buflen);
 }

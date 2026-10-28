@@ -22,9 +22,11 @@
 namespace LIBC_NAMESPACE_DECL {
 
 // dn_expand under the name BIND gave it later, which says what went wrong.
-LLVM_LIBC_FUNCTION(int, ns_name_uncompress,
-                   (const unsigned char *msg, const unsigned char *eom,
-                    const unsigned char *src, char *dst, size_t dstsiz)) {
+namespace internal {
+
+int ns_name_uncompress_impl(const unsigned char *msg, const unsigned char *eom,
+                            const unsigned char *src, char *dst,
+                            size_t dstsiz) {
   if (msg == nullptr || eom == nullptr || src == nullptr || dst == nullptr ||
       eom < msg || src < msg || src >= eom || dstsiz < 2) {
     libc_errno = EMSGSIZE;
@@ -42,6 +44,14 @@ LLVM_LIBC_FUNCTION(int, ns_name_uncompress,
     dst[1] = '\0';
   }
   return static_cast<int>(used);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, ns_name_uncompress,
+                   (const unsigned char *msg, const unsigned char *eom,
+                    const unsigned char *src, char *dst, size_t dstsiz)) {
+  return internal::ns_name_uncompress_impl(msg, eom, src, dst, dstsiz);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -94,7 +94,7 @@ int format_wide(const wchar_t *format, va_list vlist, wchar_t **out) {
   // How long the result comes to, before writing any of it.
   va_list measure;
   va_copy(measure, vlist);
-  int len = LIBC_NAMESPACE::vsnprintf(nullptr, 0, narrow, measure);
+  int len = internal::vsnprintf_impl(nullptr, 0, narrow, measure);
   va_end(measure);
   if (len < 0) {
     free(narrow);
@@ -107,8 +107,8 @@ int format_wide(const wchar_t *format, va_list vlist, wchar_t **out) {
     libc_errno = ENOMEM;
     return -1;
   }
-  int written = LIBC_NAMESPACE::vsnprintf(text, static_cast<size_t>(len) + 1,
-                                          narrow, vlist);
+  int written = internal::vsnprintf_impl(text, static_cast<size_t>(len) + 1,
+                                         narrow, vlist);
   free(narrow);
   if (written < 0) {
     free(text);

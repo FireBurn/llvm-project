@@ -749,7 +749,7 @@ add_entrypoint_object(
     libc.src.__support.File.file
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
-    libc.src.stdlib.getenv
+    libc.src.stdlib.environ_internal
 )
 
 add_entrypoint_object(
@@ -767,7 +767,7 @@ add_entrypoint_object(
     libc.src.__support.CPP.string_view
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
-    libc.src.stdlib.getenv
+    libc.src.stdlib.environ_internal
     libc.src.unistd.getopt
 )
 
@@ -786,7 +786,7 @@ add_entrypoint_object(
     libc.src.__support.CPP.string_view
     libc.src.stdio.fprintf
     libc.src.stdio.stderr
-    libc.src.stdlib.getenv
+    libc.src.stdlib.environ_internal
     libc.src.unistd.getopt
 )
 
@@ -882,10 +882,10 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.size_t
-    libc.src.pwd.getpwuid
-    libc.src.stdlib.getenv
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.pwd.pwd_utils
+    libc.src.stdlib.environ_internal
     libc.src.string.string_utils
-    libc.src.unistd.getuid
 )
 
 add_entrypoint_object(

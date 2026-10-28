@@ -60,7 +60,7 @@ int res_send_with(struct __res_state *state, const unsigned char *message,
 LLVM_LIBC_FUNCTION(int, res_send,
                    (const unsigned char *message, int msglen,
                     unsigned char *answer, int anslen)) {
-  return internal::res_send_with(LIBC_NAMESPACE::__res_state(), message, msglen,
+  return internal::res_send_with(internal::res_state_impl(), message, msglen,
                                  answer, anslen);
 }
 

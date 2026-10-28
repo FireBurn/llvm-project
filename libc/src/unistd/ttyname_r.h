@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int ttyname_r(int fd, char *buf, size_t buflen);
 
+namespace internal {
+int ttyname_r_impl(int fd, char *buf, size_t buflen);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_UNISTD_TTYNAME_R_H

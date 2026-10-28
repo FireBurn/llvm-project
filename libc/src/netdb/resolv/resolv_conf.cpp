@@ -15,6 +15,7 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/sys_socket_macros.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/ctype_utils.h"
@@ -23,7 +24,6 @@
 #include "src/arpa/inet/inet_pton.h"
 #include "src/net/if_nametoindex.h"
 #include "src/string/memory_utils/inline_memcpy.h"
-#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace resolv {
@@ -69,7 +69,7 @@ size_t read_file(const char *path, char *buffer, size_t capacity) {
       break;
     filled += static_cast<size_t>(taken.value());
   }
-  LIBC_NAMESPACE::close(fd.value());
+  linux_syscalls::close(fd.value());
   return filled;
 }
 
@@ -124,15 +124,15 @@ bool ResolvConf::read() {
       Nameserver &server = servers[server_count];
       server.port = DNS_PORT;
       server.scope = 0;
-      if (LIBC_NAMESPACE::inet_pton(AF_INET, text, server.bytes) == 1) {
+      if (internal::inet_pton_impl(AF_INET, text, server.bytes) == 1) {
         server.family = AF_INET;
         ++server_count;
-      } else if (LIBC_NAMESPACE::inet_pton(AF_INET6, text, server.bytes) == 1) {
+      } else if (internal::inet_pton_impl(AF_INET6, text, server.bytes) == 1) {
         server.family = AF_INET6;
         if (zone[0] != '\0') {
           auto number = internal::strtointeger<unsigned int>(zone, 10);
           server.scope = number.has_error() || number.value == 0
-                             ? LIBC_NAMESPACE::if_nametoindex(zone)
+                             ? internal::if_nametoindex_impl(zone)
                              : number.value;
         }
         ++server_count;
@@ -210,7 +210,7 @@ bool ResolvConf::read() {
 
 HostsFile::~HostsFile() {
   if (fd_ >= 0)
-    LIBC_NAMESPACE::close(fd_);
+    linux_syscalls::close(fd_);
 }
 
 bool HostsFile::open() {

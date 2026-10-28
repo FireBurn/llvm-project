@@ -21,7 +21,9 @@ namespace LIBC_NAMESPACE_DECL {
 
 // What each of the values a name lookup leaves in h_errno means. The wording
 // is the one these have always been printed with.
-LLVM_LIBC_FUNCTION(const char *, hstrerror, (int err_num)) {
+namespace internal {
+
+const char *hstrerror_impl(int err_num) {
   switch (err_num) {
   case 0:
     return "Resolver Error 0 (no error)";
@@ -36,6 +38,12 @@ LLVM_LIBC_FUNCTION(const char *, hstrerror, (int err_num)) {
   default:
     return "Unknown resolver error";
   }
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(const char *, hstrerror, (int err_num)) {
+  return internal::hstrerror_impl(err_num);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

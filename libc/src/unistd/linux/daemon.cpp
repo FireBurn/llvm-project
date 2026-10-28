@@ -15,15 +15,17 @@
 
 #include "hdr/fcntl_macros.h"
 #include "hdr/unistd_macros.h"
+#include "src/__support/OSUtil/exit.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/chdir.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/setsid.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/fcntl/open.h"
-#include "src/stdlib/_Exit.h"
-#include "src/unistd/chdir.h"
-#include "src/unistd/close.h"
-#include "src/unistd/dup2.h"
 #include "src/unistd/fork.h"
-#include "src/unistd/setsid.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -31,35 +33,35 @@ namespace LIBC_NAMESPACE_DECL {
 // that it is not the child of the shell which started it and has no
 // controlling terminal.
 LLVM_LIBC_FUNCTION(int, daemon, (int nochdir, int noclose)) {
-  switch (LIBC_NAMESPACE::fork()) {
-  case -1:
+  ErrorOr<pid_t> child = internal::fork_impl();
+  if (!child) {
+    libc_errno = child.error();
     return -1;
-  case 0:
-    break;
-  default:
-    // The parent is what the shell is waiting for, so it goes away and leaves
-    // the child running. _Exit rather than exit: the handlers and the streams
-    // belong to the program, which is carrying on in the child.
-    LIBC_NAMESPACE::_Exit(0);
   }
+  // The parent is what the shell is waiting for, so it goes away and leaves
+  // the child running. exit rather than the library's exit: the handlers and
+  // the streams belong to the program, which is carrying on in the child.
+  if (*child != 0)
+    internal::exit(0);
 
-  if (LIBC_NAMESPACE::setsid() == -1)
+  if (auto sid = linux_syscalls::setsid(); !sid) {
+    libc_errno = sid.error();
     return -1;
+  }
 
   // Nothing should be left holding a directory which cannot then be unmounted.
   if (!nochdir)
-    LIBC_NAMESPACE::chdir("/");
+    linux_syscalls::chdir("/");
 
   // The three standard descriptors would otherwise still be on the terminal
   // the caller was started from.
   if (!noclose) {
-    int fd = LIBC_NAMESPACE::open("/dev/null", O_RDWR);
-    if (fd != -1) {
-      LIBC_NAMESPACE::dup2(fd, STDIN_FILENO);
-      LIBC_NAMESPACE::dup2(fd, STDOUT_FILENO);
-      LIBC_NAMESPACE::dup2(fd, STDERR_FILENO);
-      if (fd > STDERR_FILENO)
-        LIBC_NAMESPACE::close(fd);
+    if (ErrorOr<int> fd = linux_syscalls::open("/dev/null", O_RDWR, 0)) {
+      linux_syscalls::dup2(*fd, STDIN_FILENO);
+      linux_syscalls::dup2(*fd, STDOUT_FILENO);
+      linux_syscalls::dup2(*fd, STDERR_FILENO);
+      if (*fd > STDERR_FILENO)
+        linux_syscalls::close(*fd);
     }
   }
   return 0;

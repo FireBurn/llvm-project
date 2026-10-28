@@ -133,9 +133,14 @@ add_header_library(
   HDRS
     pty_utils.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
     libc.hdr.sys_ioctl_macros
     libc.hdr.types.size_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.error_or
+    libc.src.__support.integer_to_string
     libc.src.__support.macros.attributes
 )
 
@@ -146,9 +151,7 @@ add_entrypoint_object(
   HDRS
     ../posix_openpt.h
   DEPENDS
-    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
     .pty_utils
-    libc.hdr.fcntl_macros
     libc.src.errno.errno
 )
 
@@ -170,8 +173,7 @@ add_entrypoint_object(
   HDRS
     ../unlockpt.h
   DEPENDS
-    libc.hdr.sys_ioctl_macros
-    libc.src.__support.OSUtil.linux.syscall_wrappers.ioctl
+    .pty_utils
     libc.src.errno.errno
 )
 
@@ -183,9 +185,7 @@ add_entrypoint_object(
     ../ptsname_r.h
   DEPENDS
     .pty_utils
-    libc.hdr.errno_macros
     libc.hdr.types.size_t
-    libc.src.__support.integer_to_string
 )
 
 add_entrypoint_object(
@@ -196,7 +196,6 @@ add_entrypoint_object(
     ../ptsname.h
   DEPENDS
     .pty_utils
-    .ptsname_r
     libc.src.errno.errno
 )
 

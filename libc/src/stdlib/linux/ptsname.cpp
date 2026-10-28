@@ -17,7 +17,6 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/stdlib/linux/pty_utils.h"
-#include "src/stdlib/ptsname_r.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -26,7 +25,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(char *, ptsname, (int fd)) {
   // Room for the prefix, the widest number and the terminator.
   static char name[pty::PTS_PREFIX_LEN + 11];
-  int err = LIBC_NAMESPACE::ptsname_r(fd, name, sizeof(name));
+  int err = pty::name(fd, name, sizeof(name));
   if (err != 0) {
     libc_errno = err;
     return nullptr;

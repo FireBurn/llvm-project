@@ -40,9 +40,9 @@ LLVM_LIBC_FUNCTION(int, fgetsgent_r,
 
   // Blank lines and comments are passed over.
   for (;;) {
-    if (LIBC_NAMESPACE::fgets(split.line.data(),
-                              static_cast<int>(split.line.size()),
-                              stream) == nullptr)
+    if (internal::fgets_impl(split.line.data(),
+                             static_cast<int>(split.line.size()),
+                             stream) == nullptr)
       return ENOENT; // The end of the file, which is not an error to report.
 
     size_t len = 0;

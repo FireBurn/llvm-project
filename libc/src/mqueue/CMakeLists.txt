@@ -43,9 +43,10 @@ add_entrypoint_object(
   HDRS
     mq_send.h
   DEPENDS
-    .mq_timedsend
     libc.hdr.types.mqd_t
     libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_timedsend
+    libc.src.errno.errno
 )
 
 add_entrypoint_object(
@@ -69,10 +70,11 @@ add_entrypoint_object(
   HDRS
     mq_receive.h
   DEPENDS
-    .mq_timedreceive
     libc.hdr.types.mqd_t
     libc.hdr.types.size_t
     libc.hdr.types.ssize_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mq_timedreceive
+    libc.src.errno.errno
 )
 
 add_entrypoint_object(

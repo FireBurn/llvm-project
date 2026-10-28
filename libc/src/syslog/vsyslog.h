@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 void vsyslog(int priority, const char *format, va_list ap);
 
+namespace internal {
+void vsyslog_impl(int priority, const char *format, va_list ap);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SYSLOG_VSYSLOG_H

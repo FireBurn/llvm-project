@@ -22,6 +22,11 @@ namespace LIBC_NAMESPACE_DECL {
 int ns_name_uncompress(const unsigned char *msg, const unsigned char *eom,
                        const unsigned char *src, char *dst, size_t dstsiz);
 
+namespace internal {
+int ns_name_uncompress_impl(const unsigned char *msg, const unsigned char *eom,
+                            const unsigned char *src, char *dst, size_t dstsiz);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_ARPA_NAMESER_NS_NAME_UNCOMPRESS_H

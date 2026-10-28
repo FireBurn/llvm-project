@@ -21,6 +21,11 @@ namespace LIBC_NAMESPACE_DECL {
 int ns_skiprr(const unsigned char *ptr, const unsigned char *eom, int section,
               int count);
 
+namespace internal {
+int ns_skiprr_impl(const unsigned char *ptr, const unsigned char *eom,
+                   int section, int count);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_ARPA_NAMESER_NS_SKIPRR_H

@@ -30,9 +30,17 @@ LIBC_CONSTINIT LIBC_THREAD_LOCAL char search_names[resolv::SEARCH_POOL];
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(struct __res_state *, __res_state, (void)) {
+namespace internal {
+
+struct __res_state *res_state_impl(void) {
   static LIBC_THREAD_LOCAL struct __res_state state;
   return &state;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct __res_state *, __res_state, (void)) {
+  return internal::res_state_impl();
 }
 
 namespace internal {

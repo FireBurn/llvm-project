@@ -24,6 +24,11 @@ namespace LIBC_NAMESPACE_DECL {
 int fgetspent_r(::FILE *stream, struct spwd *spbuf, char *buf, size_t buflen,
                 struct spwd **spbufp);
 
+namespace internal {
+int fgetspent_r_impl(::FILE *stream, struct spwd *spbuf, char *buf,
+                     size_t buflen, struct spwd **spbufp);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SHADOW_FGETSPENT_R_H

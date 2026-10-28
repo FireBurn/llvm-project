@@ -27,7 +27,7 @@ LLVM_LIBC_FUNCTION(int, swscanf,
                     const wchar_t *__restrict format, ...)) {
   va_list vlist;
   va_start(vlist, format);
-  int ret = LIBC_NAMESPACE::vswscanf(buffer, format, vlist);
+  int ret = internal::vswscanf_impl(buffer, format, vlist);
   va_end(vlist);
   return ret;
 }

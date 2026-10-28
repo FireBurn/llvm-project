@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 struct utmp *getutline(const struct utmp *line);
 
+namespace internal {
+struct utmp *getutline_impl(const struct utmp *line);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_UTMP_GETUTLINE_H

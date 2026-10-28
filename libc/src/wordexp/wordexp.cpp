@@ -36,15 +36,15 @@
 #include "hdr/func/realloc.h"
 #include "hdr/glob_macros.h"
 #include "hdr/types/glob_t.h"
+#include "hdr/types/struct_passwd.h"
 #include "hdr/types/wordexp_t.h"
 #include "hdr/wordexp_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/glob/glob.h"
 #include "src/glob/globfree.h"
-#include "src/pwd/getpwnam.h"
-#include "src/stdlib/getenv.h"
-#include "hdr/types/struct_passwd.h"
+#include "src/pwd/pwd_utils.h"
+#include "src/stdlib/environ_internal.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -195,22 +195,22 @@ int add_globbed(Words &words, const char *word, bool has_magic) {
   for (size_t i = 0; i < sizeof(glob_t); ++i)
     reinterpret_cast<char *>(&g)[i] = 0;
 
-  int rc = LIBC_NAMESPACE::glob(word, 0, nullptr, &g);
+  int rc = internal::glob_impl(word, 0, nullptr, &g);
   if (rc == GLOB_NOSPACE)
     return WRDE_NOSPACE;
   if (rc != 0 || g.gl_pathc == 0) {
     // No match, so the word stands as it is.
-    LIBC_NAMESPACE::globfree(&g);
+    internal::globfree_impl(&g);
     return words.add(word) ? 0 : WRDE_NOSPACE;
   }
 
   for (size_t i = 0; i < g.gl_pathc; ++i) {
     if (!words.add(g.gl_pathv[g.gl_offs + i])) {
-      LIBC_NAMESPACE::globfree(&g);
+      internal::globfree_impl(&g);
       return WRDE_NOSPACE;
     }
   }
-  LIBC_NAMESPACE::globfree(&g);
+  internal::globfree_impl(&g);
   return 0;
 }
 
@@ -294,7 +294,7 @@ LLVM_LIBC_FUNCTION(int, wordexp,
     const char *key = name.c_str();
     if (key == nullptr)
       return WRDE_NOSPACE;
-    const char *value = LIBC_NAMESPACE::getenv(key);
+    const char *value = internal::EnvironmentManager::get_instance().get(key);
     if (value == nullptr) {
       if ((flags & WRDE_UNDEF) != 0)
         return WRDE_BADVAL;
@@ -394,7 +394,8 @@ LLVM_LIBC_FUNCTION(int, wordexp,
           const char *key = name.c_str();
           if (key == nullptr)
             return WRDE_NOSPACE;
-          const char *value = LIBC_NAMESPACE::getenv(key);
+          const char *value =
+              internal::EnvironmentManager::get_instance().get(key);
           if (value == nullptr) {
             if ((flags & WRDE_UNDEF) != 0)
               return WRDE_BADVAL;
@@ -433,11 +434,11 @@ LLVM_LIBC_FUNCTION(int, wordexp,
         return WRDE_NOSPACE;
       const char *home = nullptr;
       if (*who == '\0') {
-        home = LIBC_NAMESPACE::getenv("HOME");
+        home = internal::EnvironmentManager::get_instance().get("HOME");
       } else {
-        struct passwd *pw = LIBC_NAMESPACE::getpwnam(who);
-        if (pw != nullptr)
-          home = pw->pw_dir;
+        auto pw = pwd::find_by_name(who);
+        if (pw.has_value())
+          home = pw.value()->pw_dir;
       }
       if (home != nullptr) {
         field_open = true;

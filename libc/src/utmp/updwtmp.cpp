@@ -21,9 +21,17 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace internal {
+
+void updwtmp_impl(const char *wtmp_file, const struct utmp *utmp) {
+  internal::updwtmpx_impl(wtmp_file, as_utmpx(utmp));
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(void, updwtmp,
                    (const char *wtmp_file, const struct utmp *utmp)) {
-  LIBC_NAMESPACE::updwtmpx(wtmp_file, as_utmpx(utmp));
+  internal::updwtmp_impl(wtmp_file, utmp);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

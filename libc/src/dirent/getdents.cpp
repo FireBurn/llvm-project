@@ -15,9 +15,11 @@
 
 #include "hdr/types/size_t.h"
 #include "hdr/types/ssize_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getdents64.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/dirent/getdents64.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -25,7 +27,12 @@ namespace LIBC_NAMESPACE_DECL {
 // library has, the same as getdents64, since there is no other on a
 // sixty four bit target.
 LLVM_LIBC_FUNCTION(ssize_t, getdents, (int fd, void *buf, size_t count)) {
-  return getdents64(fd, buf, count);
+  ErrorOr<ssize_t> ret = linux_syscalls::getdents64(fd, buf, count);
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

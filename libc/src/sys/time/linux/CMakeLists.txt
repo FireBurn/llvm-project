@@ -112,7 +112,8 @@ add_entrypoint_object(
     libc.hdr.types.struct_timespec
     libc.hdr.types.struct_timeval
     libc.hdr.types.struct_timezone
+    libc.src.__support.error_or
+    libc.src.__support.time.clock_settime
     libc.src.__support.time.units
     libc.src.errno.errno
-    libc.src.time.clock_settime
 )

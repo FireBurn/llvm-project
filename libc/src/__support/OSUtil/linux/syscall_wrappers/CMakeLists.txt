@@ -3066,3 +3066,16 @@ add_header_library(
     libc.hdr.types.pid_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  kill
+  HDRS
+    kill.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.include.sys_syscall
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.__support.OSUtil.osutil
+)

@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int get_nprocs(void);
 
+namespace internal {
+int get_nprocs_impl();
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_SYS_SYSINFO_GET_NPROCS_H

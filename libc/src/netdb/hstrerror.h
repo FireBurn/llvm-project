@@ -20,6 +20,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 const char *hstrerror(int err_num);
 
+namespace internal {
+const char *hstrerror_impl(int err_num);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_NETDB_HSTRERROR_H

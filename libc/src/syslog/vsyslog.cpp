@@ -213,8 +213,9 @@ void send_record(const char *record, size_t len, size_t header_len,
 
 } // namespace
 
-LLVM_LIBC_FUNCTION(void, vsyslog,
-                   (int priority, const char *format, va_list ap)) {
+namespace internal {
+
+void vsyslog_impl(int priority, const char *format, va_list ap) {
   const int level = LOG_PRI(priority);
 
   cpp::lock_guard guard(syslog_internal::log_mutex);
@@ -273,6 +274,13 @@ LLVM_LIBC_FUNCTION(void, vsyslog,
   record[len] = '\0';
 
   send_record(record, len, header_len, s.option);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void, vsyslog,
+                   (int priority, const char *format, va_list ap)) {
+  internal::vsyslog_impl(priority, format, ap);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

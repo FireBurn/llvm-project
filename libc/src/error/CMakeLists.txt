@@ -89,5 +89,5 @@ add_entrypoint_object(
     libc.src.__support.arg_list
     libc.src.__support.common
     libc.src.__support.macros.config
-    libc.src.string.strcmp
+    libc.src.string.memory_utils.inline_strcmp
 )

@@ -15,6 +15,7 @@
 #define LLVM_LIBC_SRC_FTW_FTW_WALK_H
 
 #include "hdr/errno_macros.h"
+#include "hdr/fcntl_macros.h"
 #include "hdr/ftw_macros.h"
 #include "hdr/func/free.h"
 #include "hdr/func/malloc.h"
@@ -27,17 +28,13 @@
 #include "hdr/types/struct_FTW.h"
 #include "hdr/types/struct_dirent.h"
 #include "hdr/types/struct_stat.h"
+#include "src/__support/File/dir.h"
+#include "src/__support/OSUtil/linux/stat/stat_via_statx.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/dirent/closedir.h"
-#include "src/dirent/opendir.h"
-#include "src/dirent/readdir.h"
-#include "src/dirent/seekdir.h"
-#include "src/dirent/telldir.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
-#include "src/sys/stat/lstat.h"
-#include "src/sys/stat/stat.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace ftw_internal {
@@ -202,6 +199,45 @@ LIBC_INLINE Step act_on(Walk &walk, int result, bool &skip_subtree) {
   }
 }
 
+LIBC_INLINE ::DIR *open_dir(const char *path) {
+  auto dir = Dir::open(path);
+  if (!dir) {
+    libc_errno = dir.error();
+    return nullptr;
+  }
+  return reinterpret_cast<::DIR *>(dir.value());
+}
+
+LIBC_INLINE struct ::dirent *read_dir(::DIR *dir) {
+  auto entry = reinterpret_cast<Dir *>(dir)->read();
+  if (!entry) {
+    libc_errno = entry.error();
+    return nullptr;
+  }
+  return entry.value();
+}
+
+LIBC_INLINE void close_dir(::DIR *dir) {
+  reinterpret_cast<Dir *>(dir)->close();
+}
+
+LIBC_INLINE long tell_dir(::DIR *dir) {
+  return static_cast<long>(reinterpret_cast<Dir *>(dir)->tell());
+}
+
+LIBC_INLINE void seek_dir(::DIR *dir, long position) {
+  reinterpret_cast<Dir *>(dir)->seek(static_cast<off_t>(position));
+}
+
+LIBC_INLINE int stat_path(const char *path, struct stat *info, int flags) {
+  ErrorOr<void> result = internal::stat_via_statx(AT_FDCWD, path, flags, info);
+  if (!result) {
+    libc_errno = result.error();
+    return -1;
+  }
+  return 0;
+}
+
 LIBC_INLINE bool is_dot_or_dot_dot(const char *name) {
   return name[0] == '.' &&
          (name[1] == '\0' || (name[1] == '.' && name[2] == '\0'));
@@ -216,9 +252,9 @@ LIBC_INLINE Step walk_entries(Walk &walk, PathBuffer &path, ::DIR *dir,
                               int level) {
   const bool keep_open = level + 1 < walk.descriptors;
   for (;;) {
-    struct ::dirent *entry = LIBC_NAMESPACE::readdir(dir);
+    struct ::dirent *entry = read_dir(dir);
     if (entry == nullptr) {
-      LIBC_NAMESPACE::closedir(dir);
+      close_dir(dir);
       return Step::Continue;
     }
     if (is_dot_or_dot_dot(entry->d_name))
@@ -228,14 +264,14 @@ LIBC_INLINE Step walk_entries(Walk &walk, PathBuffer &path, ::DIR *dir,
     size_t child_base = 0;
     if (!path.push(entry->d_name, child_base)) {
       libc_errno = ENAMETOOLONG;
-      LIBC_NAMESPACE::closedir(dir);
+      close_dir(dir);
       return Step::Failed;
     }
 
     long position = 0;
     if (!keep_open) {
-      position = LIBC_NAMESPACE::telldir(dir);
-      LIBC_NAMESPACE::closedir(dir);
+      position = tell_dir(dir);
+      close_dir(dir);
       dir = nullptr;
     }
 
@@ -244,19 +280,19 @@ LIBC_INLINE Step walk_entries(Walk &walk, PathBuffer &path, ::DIR *dir,
 
     if (step == Step::Failed || step == Step::Stop) {
       if (dir != nullptr)
-        LIBC_NAMESPACE::closedir(dir);
+        close_dir(dir);
       return step;
     }
 
     if (!keep_open) {
-      dir = LIBC_NAMESPACE::opendir(path.get());
+      dir = open_dir(path.get());
       if (dir == nullptr)
         return Step::Failed;
-      LIBC_NAMESPACE::seekdir(dir, position);
+      seek_dir(dir, position);
     }
 
     if (step == Step::SkipSiblings) {
-      LIBC_NAMESPACE::closedir(dir);
+      close_dir(dir);
       return Step::Continue;
     }
   }
@@ -272,11 +308,13 @@ LIBC_INLINE Step visit(Walk &walk, PathBuffer &path, int level, size_t base) {
   // Under FTW_PHYS a link is reported as a link. Otherwise it is followed,
   // and one whose target does not exist is reported as such.
   const bool physical = (walk.flags & FTW_PHYS) != 0;
-  const int stat_result = physical ? LIBC_NAMESPACE::lstat(path.get(), &info)
-                                   : LIBC_NAMESPACE::stat(path.get(), &info);
+  const int stat_result =
+      physical ? stat_path(path.get(), &info, AT_SYMLINK_NOFOLLOW)
+               : stat_path(path.get(), &info, 0);
   if (stat_result != 0) {
     struct stat link_info = {};
-    if (!physical && LIBC_NAMESPACE::lstat(path.get(), &link_info) == 0 &&
+    if (!physical &&
+        stat_path(path.get(), &link_info, AT_SYMLINK_NOFOLLOW) == 0 &&
         S_ISLNK(link_info.st_mode)) {
       // A link with no target. Only nftw has a value that says so; to ftw it
       // is just something that could not be stat'd.
@@ -318,7 +356,7 @@ LIBC_INLINE Step visit(Walk &walk, PathBuffer &path, int level, size_t base) {
 
   ::DIR *dir = nullptr;
   if (is_directory) {
-    dir = LIBC_NAMESPACE::opendir(path.get());
+    dir = open_dir(path.get());
     if (dir == nullptr) {
       // A directory that cannot be read is reported as unreadable, which is
       // what tells the caller nothing below it was seen.
@@ -336,7 +374,7 @@ LIBC_INLINE Step visit(Walk &walk, PathBuffer &path, int level, size_t base) {
         walk, walk.callback(path.get(), &info, kind, &position), skip_subtree);
     if (step != Step::Continue || skip_subtree) {
       if (dir != nullptr)
-        LIBC_NAMESPACE::closedir(dir);
+        close_dir(dir);
       return skip_subtree && step == Step::Continue ? Step::Continue : step;
     }
   }
@@ -382,12 +420,12 @@ LIBC_INLINE int walk_tree(const char *root, Callback callback, int descriptors,
   // as does a symbolic link with no target.
   struct stat root_info;
   if (((flags & FTW_PHYS) != 0
-           ? LIBC_NAMESPACE::lstat(path.get(), &root_info)
-           : LIBC_NAMESPACE::stat(path.get(), &root_info)) != 0) {
+           ? stat_path(path.get(), &root_info, AT_SYMLINK_NOFOLLOW)
+           : stat_path(path.get(), &root_info, 0)) != 0) {
     const int reason = libc_errno;
     if (reason != EACCES &&
         !((flags & FTW_PHYS) == 0 &&
-          LIBC_NAMESPACE::lstat(path.get(), &root_info) == 0)) {
+          stat_path(path.get(), &root_info, AT_SYMLINK_NOFOLLOW) == 0)) {
       libc_errno = reason;
       return -1;
     }

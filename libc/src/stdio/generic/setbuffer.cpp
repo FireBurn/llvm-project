@@ -16,16 +16,17 @@
 #include "hdr/stdio_macros.h"
 #include "hdr/types/FILE.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/File/file.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/stdio/setvbuf.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 // setbuf with a size of the caller's choosing rather than BUFSIZ. No buffer
 // means no buffering, and it cannot report a failure, so one is dropped.
 LLVM_LIBC_FUNCTION(void, setbuffer, (::FILE * stream, char *buf, size_t size)) {
-  LIBC_NAMESPACE::setvbuf(stream, buf, buf == nullptr ? _IONBF : _IOFBF, size);
+  reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->set_buffer(
+      buf, size, buf == nullptr ? _IONBF : _IOFBF);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

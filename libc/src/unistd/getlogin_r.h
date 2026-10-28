@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int getlogin_r(char *buf, size_t bufsize);
 
+namespace internal {
+int getlogin_r_impl(char *buf, size_t bufsize);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_UNISTD_GETLOGIN_R_H

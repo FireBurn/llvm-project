@@ -21,7 +21,7 @@
 #include "src/__support/macros/config.h"
 #include "src/stdio/fprintf.h"
 #include "src/stdio/stderr.h"
-#include "src/stdlib/getenv.h"
+#include "src/stdlib/environ_internal.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -49,7 +49,7 @@ struct GetoptContext {
 
   template <typename... Ts> void report_error(const char *fmt, Ts... ts) {
     if (opterr)
-      LIBC_NAMESPACE::fprintf(
+      internal::fprintf_impl(
           errstream ? errstream
                     : reinterpret_cast<FILE *>(LIBC_NAMESPACE::stderr),
           fmt, ts...);
@@ -204,7 +204,8 @@ LIBC_INLINE int getopt_scan(int argc, char *const argv[], const char *optstring,
 LIBC_INLINE bool options_may_follow_operands(const char *optstring) {
   if (optstring[0] == '+' || optstring[0] == '-')
     return false;
-  return LIBC_NAMESPACE::getenv("POSIXLY_CORRECT") == nullptr;
+  return internal::EnvironmentManager::get_instance().get("POSIXLY_CORRECT") ==
+         nullptr;
 }
 
 // Moves argv[src] down to argv[dest], pushing what was there along by one.

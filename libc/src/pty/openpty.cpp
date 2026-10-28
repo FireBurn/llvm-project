@@ -13,19 +13,19 @@
 
 #include "src/pty/openpty.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
+#include "hdr/termios_macros.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/ioctl.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/fcntl/open.h"
-#include "src/stdlib/grantpt.h"
-#include "src/stdlib/posix_openpt.h"
-#include "src/stdlib/ptsname_r.h"
-#include "src/stdlib/unlockpt.h"
+#include "src/stdlib/linux/pty_utils.h"
 #include "src/string/string_utils.h"
-#include "src/sys/ioctl/ioctl.h"
 #include "src/termios/tcsetattr.h"
-#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -37,48 +37,63 @@ constexpr unsigned long SET_WINDOW_SIZE = 0x5414; // TIOCSWINSZ
 constexpr size_t MAX_PTY_NAME = 64;
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(int, openpty,
-                   (int *primary, int *secondary, char *name,
-                    const struct termios *settings,
-                    const struct winsize *size)) {
-  if (primary == nullptr || secondary == nullptr) {
-    libc_errno = EINVAL;
-    return -1;
-  }
+namespace internal {
 
-  int first = LIBC_NAMESPACE::posix_openpt(O_RDWR | O_NOCTTY);
-  if (first < 0)
-    return -1;
+ErrorOr<int> openpty_impl(int *primary, int *secondary, char *name,
+                          const struct termios *settings,
+                          const struct winsize *size) {
+  if (primary == nullptr || secondary == nullptr)
+    return Error(EINVAL);
+
+  ErrorOr<int> first = pty::open_master(O_RDWR | O_NOCTTY);
+  if (!first)
+    return first;
 
   char path[MAX_PTY_NAME];
-  if (LIBC_NAMESPACE::grantpt(first) != 0 ||
-      LIBC_NAMESPACE::unlockpt(first) != 0 ||
-      LIBC_NAMESPACE::ptsname_r(first, path, sizeof(path)) != 0) {
-    const int saved = libc_errno;
-    LIBC_NAMESPACE::close(first);
-    libc_errno = saved;
-    return -1;
+  unsigned int number = 0;
+  int err = pty::number(*first, &number);
+  if (err == 0)
+    err = pty::unlock(*first);
+  if (err == 0)
+    err = pty::name(*first, path, sizeof(path));
+  if (err != 0) {
+    linux_syscalls::close(*first);
+    return Error(err);
   }
 
-  int second = LIBC_NAMESPACE::open(path, O_RDWR | O_NOCTTY, 0);
-  if (second < 0) {
-    const int saved = libc_errno;
-    LIBC_NAMESPACE::close(first);
-    libc_errno = saved;
-    return -1;
+  ErrorOr<int> second =
+      linux_syscalls::openat(AT_FDCWD, path, O_RDWR | O_NOCTTY, 0);
+  if (!second) {
+    linux_syscalls::close(*first);
+    return second;
   }
 
   // What the caller asked the terminal to be like, where it asked at all.
   if (settings != nullptr)
-    LIBC_NAMESPACE::tcsetattr(second, TCSAFLUSH, settings);
+    internal::tcsetattr_impl(*second, TCSAFLUSH, settings);
   if (size != nullptr)
-    LIBC_NAMESPACE::ioctl(second, SET_WINDOW_SIZE, size);
+    linux_syscalls::ioctl(*second, SET_WINDOW_SIZE, size);
 
   if (name != nullptr)
     internal::strlcpy(name, path, MAX_PTY_NAME);
 
-  *primary = first;
-  *secondary = second;
+  *primary = *first;
+  *secondary = *second;
+  return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, openpty,
+                   (int *primary, int *secondary, char *name,
+                    const struct termios *settings,
+                    const struct winsize *size)) {
+  if (auto ret =
+          internal::openpty_impl(primary, secondary, name, settings, size);
+      !ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
   return 0;
 }
 

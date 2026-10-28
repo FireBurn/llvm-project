@@ -26,7 +26,7 @@ LLVM_LIBC_FUNCTION(int, getutid_r,
                     struct utmp **result)) {
   if (buffer == nullptr || result == nullptr)
     return -1;
-  struct utmp *entry = LIBC_NAMESPACE::getutid(id);
+  struct utmp *entry = internal::getutid_impl(id);
   if (entry == nullptr) {
     *result = nullptr;
     return -1;

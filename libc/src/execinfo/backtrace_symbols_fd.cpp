@@ -54,7 +54,7 @@ LLVM_LIBC_FUNCTION(void, backtrace_symbols_fd,
     char *const end = line + sizeof(line) - 1;
 
     Dl_info info = {};
-    const bool found = LIBC_NAMESPACE::dladdr(buffer[i], &info) != 0;
+    const bool found = internal::dladdr_impl(buffer[i], &info) != 0;
     if (found && info.dli_fname != nullptr)
       out = execinfo::put(out, end, info.dli_fname);
     if (found && info.dli_sname != nullptr) {

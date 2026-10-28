@@ -10,6 +10,7 @@
 #include "hdr/signal_macros.h"            // For SIGCHLD
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/fork_callbacks.h"
 #include "src/__support/threads/identifier.h"
@@ -25,7 +26,9 @@ namespace LIBC_NAMESPACE_DECL {
 // The implementation of fork here is very minimal. We will add more
 // functionality and standard compliance in future.
 
-LLVM_LIBC_FUNCTION(pid_t, fork, (void)) {
+namespace internal {
+
+ErrorOr<pid_t> fork_impl() {
   invoke_prepare_callbacks();
   pid_t parent_tid = internal::gettid();
   // Invalidate parent's tid cache before forking. We cannot do this in child
@@ -58,13 +61,23 @@ LLVM_LIBC_FUNCTION(pid_t, fork, (void)) {
     // Error case, a child process was not created.
     internal::force_set_tid(parent_tid);
     release_atfork_lock();
-    libc_errno = static_cast<int>(-ret);
-    return -1;
+    return Error(static_cast<int>(-ret));
   }
   // recover parent's tid.
   internal::force_set_tid(parent_tid);
   invoke_parent_callbacks();
   return ret;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(pid_t, fork, (void)) {
+  ErrorOr<pid_t> ret = internal::fork_impl();
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return *ret;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

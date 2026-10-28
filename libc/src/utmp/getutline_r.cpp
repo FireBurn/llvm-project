@@ -26,7 +26,7 @@ LLVM_LIBC_FUNCTION(int, getutline_r,
                     struct utmp **result)) {
   if (buffer == nullptr || result == nullptr)
     return -1;
-  struct utmp *entry = LIBC_NAMESPACE::getutline(line);
+  struct utmp *entry = internal::getutline_impl(line);
   if (entry == nullptr) {
     *result = nullptr;
     return -1;

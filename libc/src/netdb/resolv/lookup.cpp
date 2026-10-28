@@ -20,24 +20,26 @@
 #include "hdr/types/struct_pollfd.h"
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
+#include "hdr/types/struct_timespec.h"
+#include "hdr/types/time_t.h"
 #include "include/llvm-libc-macros/linux/poll-macros.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getrandom.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/ppoll.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/recvfrom.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sendto.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/socket.h"
 #include "src/__support/ctype_utils.h"
-#include "src/__support/macros/config.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
+#include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_pton.h"
 #include "src/net/if_nametoindex.h"
 #include "src/netdb/resolv/dns_message.h"
 #include "src/netdb/resolv/resolv_conf.h"
-#include "src/poll/poll.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
-#include "src/sys/socket/recvfrom.h"
-#include "src/sys/socket/sendto.h"
-#include "src/sys/socket/socket.h"
-#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace resolv {
@@ -83,7 +85,7 @@ int from_numeric(const char *name, int family, Address *out, size_t capacity,
                  size_t &count) {
   unsigned char bytes[16];
   if (family == AF_UNSPEC || family == AF_INET) {
-    if (LIBC_NAMESPACE::inet_pton(AF_INET, name, bytes) == 1) {
+    if (internal::inet_pton_impl(AF_INET, name, bytes) == 1) {
       add(out, capacity, count, AF_INET, bytes, 4);
       return 1;
     }
@@ -107,7 +109,7 @@ int from_numeric(const char *name, int family, Address *out, size_t capacity,
       plain[length] = '\0';
       text = plain;
     }
-    if (LIBC_NAMESPACE::inet_pton(AF_INET6, text, bytes) == 1) {
+    if (internal::inet_pton_impl(AF_INET6, text, bytes) == 1) {
       add(out, capacity, count, AF_INET6, bytes, 16);
       // The interface is a number or its name, and the address is no use
       // without one it can be reached through, so an unknown name fails.
@@ -123,7 +125,7 @@ int from_numeric(const char *name, int family, Address *out, size_t capacity,
           // An unknown interface sets errno, which getaddrinfo reports by
           // its own return value instead.
           const int saved_errno = libc_errno;
-          id = LIBC_NAMESPACE::if_nametoindex(scope);
+          id = internal::if_nametoindex_impl(scope);
           libc_errno = saved_errno;
         }
         if (id == 0) {
@@ -190,10 +192,10 @@ int from_hosts(const char *name, int family, Address *out, size_t capacity,
     unsigned char bytes[16];
     const size_t before_this_line = count;
     if ((family == AF_UNSPEC || family == AF_INET) &&
-        LIBC_NAMESPACE::inet_pton(AF_INET, text, bytes) == 1)
+        internal::inet_pton_impl(AF_INET, text, bytes) == 1)
       add(out, capacity, count, AF_INET, bytes, 4);
     else if ((family == AF_UNSPEC || family == AF_INET6) &&
-             LIBC_NAMESPACE::inet_pton(AF_INET6, text, bytes) == 1)
+             internal::inet_pton_impl(AF_INET6, text, bytes) == 1)
       add(out, capacity, count, AF_INET6, bytes, 16);
     if (count != before_this_line)
       remember_canonical(canonical, official);
@@ -217,18 +219,19 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
   for (size_t attempt = 0; attempt < conf.attempts; ++attempt) {
     for (size_t i = 0; i < conf.server_count; ++i) {
       const Nameserver &server = conf.servers[i];
-      int fd =
-          LIBC_NAMESPACE::socket(server.family, SOCK_DGRAM | SOCK_CLOEXEC, 0);
-      if (fd < 0)
+      ErrorOr<int> opened =
+          linux_syscalls::socket(server.family, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+      if (!opened)
         continue;
+      const int fd = *opened;
 
-      ssize_t sent;
+      ErrorOr<ssize_t> sent = Error(0);
       if (server.family == AF_INET) {
         struct sockaddr_in to = {};
         to.sin_family = AF_INET;
         to.sin_port = server.port;
         inline_memcpy(&to.sin_addr, server.bytes, 4);
-        sent = LIBC_NAMESPACE::sendto(fd, query.message, query.length, 0,
+        sent = linux_syscalls::sendto(fd, query.message, query.length, 0,
                                       reinterpret_cast<struct sockaddr *>(&to),
                                       sizeof(to));
       } else {
@@ -237,29 +240,31 @@ Status ask(const ResolvConf &conf, Query &query, F callback) {
         to.sin6_port = server.port;
         to.sin6_scope_id = server.scope;
         inline_memcpy(&to.sin6_addr, server.bytes, 16);
-        sent = LIBC_NAMESPACE::sendto(fd, query.message, query.length, 0,
+        sent = linux_syscalls::sendto(fd, query.message, query.length, 0,
                                       reinterpret_cast<struct sockaddr *>(&to),
                                       sizeof(to));
       }
-      if (sent < 0) {
-        LIBC_NAMESPACE::close(fd);
+      if (!sent) {
+        linux_syscalls::close(fd);
         continue;
       }
 
       struct pollfd waiting = {fd, POLLIN, 0};
-      const int ready = LIBC_NAMESPACE::poll(
-          &waiting, 1, static_cast<int>(conf.timeout_seconds) * 1000);
-      if (ready <= 0) {
-        LIBC_NAMESPACE::close(fd);
+      struct timespec timeout = {static_cast<time_t>(conf.timeout_seconds), 0};
+      const ErrorOr<int> ready =
+          linux_syscalls::ppoll(&waiting, 1, &timeout, nullptr);
+      if (!ready || *ready <= 0) {
+        linux_syscalls::close(fd);
         continue;
       }
 
       unsigned char reply[MAX_MESSAGE];
-      const ssize_t taken = LIBC_NAMESPACE::recvfrom(fd, reply, sizeof(reply),
-                                                     0, nullptr, nullptr);
-      LIBC_NAMESPACE::close(fd);
-      if (taken <= 0)
+      const ErrorOr<ssize_t> received = linux_syscalls::recvfrom(
+          fd, reply, sizeof(reply), 0, nullptr, nullptr);
+      linux_syscalls::close(fd);
+      if (!received || *received <= 0)
         continue;
+      const ssize_t taken = *received;
 
       const Status status = for_each_answer(
           reply, static_cast<size_t>(taken), query.id,
@@ -375,7 +380,7 @@ bool name_from_hosts(const unsigned char *bytes, int family, char *out,
     text[address.size()] = '\0';
 
     unsigned char parsed[16];
-    if (LIBC_NAMESPACE::inet_pton(family, text, parsed) != 1)
+    if (internal::inet_pton_impl(family, text, parsed) != 1)
       continue;
     bool same = true;
     for (size_t i = 0; i < size; ++i)

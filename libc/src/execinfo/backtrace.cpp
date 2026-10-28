@@ -77,11 +77,11 @@ void find_unwinder() {
   constexpr int LAZY = 0x00001;
   static const char *const NAMES[] = {"libunwind.so.1", "libgcc_s.so.1"};
   for (const char *name : NAMES) {
-    void *handle = LIBC_NAMESPACE::dlopen(name, LAZY);
+    void *handle = internal::dlopen_impl(name, LAZY);
     if (handle == nullptr)
       continue;
-    void *walk = LIBC_NAMESPACE::dlsym(handle, "_Unwind_Backtrace");
-    void *ip = LIBC_NAMESPACE::dlsym(handle, "_Unwind_GetIP");
+    void *walk = internal::dlsym_impl(handle, "_Unwind_Backtrace");
+    void *ip = internal::dlsym_impl(handle, "_Unwind_GetIP");
     if (walk == nullptr || ip == nullptr)
       continue;
     found.walk = reinterpret_cast<decltype(found.walk)>(walk);

@@ -13,8 +13,6 @@
 
 #include "src/stdlib/posix_openpt.h"
 
-#include "hdr/fcntl_macros.h"
-#include "src/__support/OSUtil/linux/syscall_wrappers/openat.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
@@ -24,7 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 // Opens the multiplexer, which hands back a master with a terminal of its
 // own behind it.
 LLVM_LIBC_FUNCTION(int, posix_openpt, (int flags)) {
-  ErrorOr<int> fd = linux_syscalls::openat(AT_FDCWD, pty::PTMX_PATH, flags, 0);
+  ErrorOr<int> fd = pty::open_master(flags);
   if (!fd) {
     libc_errno = fd.error();
     return -1;

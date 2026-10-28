@@ -19,11 +19,10 @@
 #include "src/__support/macros/config.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/unistd/ttyname_r.h"
-#include "src/utmp/endutent.h"
 #include "src/utmp/pututline.h"
-#include "src/utmp/setutent.h"
 #include "src/utmp/updwtmp.h"
 #include "src/utmp/utmp_fill.h"
+#include "src/utmpx/utmpx_db.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -35,7 +34,7 @@ namespace {
 bool terminal_name(char *out, size_t size) {
   char path[64];
   for (int fd = 0; fd < 3; ++fd) {
-    if (LIBC_NAMESPACE::ttyname_r(fd, path, sizeof(path)) != 0)
+    if (internal::ttyname_r_impl(fd, path, sizeof(path)) != 0)
       continue;
     const char *name = path;
     const char dev[] = "/dev/";
@@ -66,10 +65,10 @@ LLVM_LIBC_FUNCTION(void, login, (const struct utmp *entry)) {
     terminal_name(record.ut_line, sizeof(record.ut_line));
   utmp_fill::stamp(&record);
 
-  LIBC_NAMESPACE::setutent();
-  LIBC_NAMESPACE::pututline(&record);
-  LIBC_NAMESPACE::endutent();
-  LIBC_NAMESPACE::updwtmp(_PATH_WTMP, &record);
+  utmpx_db::rewind();
+  internal::pututline_impl(&record);
+  utmpx_db::close();
+  internal::updwtmp_impl(_PATH_WTMP, &record);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

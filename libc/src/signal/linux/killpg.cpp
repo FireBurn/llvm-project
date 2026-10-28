@@ -15,10 +15,11 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/types/pid_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/kill.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/signal/kill.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -29,7 +30,12 @@ LLVM_LIBC_FUNCTION(int, killpg, (pid_t pgrp, int sig)) {
   }
   // A process group is addressed by negating its id, and a pgrp of zero
   // means the caller's own group, which kill already spells as zero.
-  return LIBC_NAMESPACE::kill(-pgrp, sig);
+  ErrorOr<int> ret = linux_syscalls::kill(-pgrp, sig);
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

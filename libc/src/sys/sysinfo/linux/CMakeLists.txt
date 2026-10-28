@@ -18,9 +18,10 @@ add_entrypoint_object(
     ../get_nprocs.h
   DEPENDS
     libc.hdr.types.cpu_set_t
+    libc.src.__support.CPP.span
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_getaffinity
     libc.src.__support.common
     libc.src.__support.macros.config
-    libc.src.sched.sched_getaffinity
     libc.src.sched.__sched_getcpucount
 )
 

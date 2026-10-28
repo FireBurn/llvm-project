@@ -29,7 +29,7 @@ LLVM_LIBC_FUNCTION(void, herror, (const char *s)) {
     write_to_stderr(s);
     write_to_stderr(": ");
   }
-  write_to_stderr(hstrerror(*__h_errno_location()));
+  write_to_stderr(internal::hstrerror_impl(*internal::h_errno_location_impl()));
   write_to_stderr("\n");
 }
 

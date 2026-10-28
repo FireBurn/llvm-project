@@ -18,7 +18,7 @@
 #include "src/__support/macros/config.h"
 #include "src/error/error_one_per_line.h"
 #include "src/error/report.h"
-#include "src/string/strcmp.h"
+#include "src/string/memory_utils/inline_strcmp.h"
 
 #include <stdarg.h>
 
@@ -38,7 +38,10 @@ LIBC_INLINE bool same_place(const char *file_name, unsigned int line_number) {
     return true;
   if (file_name == nullptr || last_file_name == nullptr)
     return false;
-  return strcmp(file_name, last_file_name) == 0;
+  auto comp = [](char l, char r) -> int {
+    return static_cast<unsigned char>(l) - static_cast<unsigned char>(r);
+  };
+  return inline_strcmp(file_name, last_file_name, comp) == 0;
 }
 
 } // anonymous namespace

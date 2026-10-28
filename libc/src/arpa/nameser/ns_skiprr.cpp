@@ -25,9 +25,10 @@ namespace LIBC_NAMESPACE_DECL {
 // Steps over `count` records of `section` starting at `ptr`, and returns how
 // many bytes they took. A name is not followed where it points elsewhere in
 // the message, so the start of the message is not needed.
-LLVM_LIBC_FUNCTION(int, ns_skiprr,
-                   (const unsigned char *ptr, const unsigned char *eom,
-                    int section, int count)) {
+namespace internal {
+
+int ns_skiprr_impl(const unsigned char *ptr, const unsigned char *eom,
+                   int section, int count) {
   if (ptr == nullptr || eom < ptr) {
     libc_errno = EMSGSIZE;
     return -1;
@@ -58,6 +59,14 @@ LLVM_LIBC_FUNCTION(int, ns_skiprr,
     }
   }
   return static_cast<int>(at);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, ns_skiprr,
+                   (const unsigned char *ptr, const unsigned char *eom,
+                    int section, int count)) {
+  return internal::ns_skiprr_impl(ptr, eom, section, count);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

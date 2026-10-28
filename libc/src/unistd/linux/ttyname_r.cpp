@@ -52,7 +52,9 @@ void proc_path(int fd, char (&out)[PROC_PATH_SIZE]) {
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(int, ttyname_r, (int fd, char *buf, size_t buflen)) {
+namespace internal {
+
+int ttyname_r_impl(int fd, char *buf, size_t buflen) {
   if (buf == nullptr)
     return EINVAL;
   if (buflen == 0)
@@ -78,6 +80,12 @@ LLVM_LIBC_FUNCTION(int, ttyname_r, (int fd, char *buf, size_t buflen)) {
     return ERANGE;
   buf[written] = '\0';
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, ttyname_r, (int fd, char *buf, size_t buflen)) {
+  return internal::ttyname_r_impl(fd, buf, buflen);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

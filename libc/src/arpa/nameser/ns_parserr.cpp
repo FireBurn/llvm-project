@@ -42,16 +42,16 @@ LLVM_LIBC_FUNCTION(int, ns_parserr,
   if (rrnum < handle->_rrnum)
     nameser::set_section(*handle, section);
   if (rrnum > handle->_rrnum) {
-    int used = ns_skiprr(handle->_msg_ptr, handle->_eom, section,
-                         rrnum - handle->_rrnum);
+    int used = internal::ns_skiprr_impl(handle->_msg_ptr, handle->_eom, section,
+                                        rrnum - handle->_rrnum);
     if (used < 0)
       return -1;
     handle->_msg_ptr += used;
     handle->_rrnum = rrnum;
   }
 
-  int used = ns_name_uncompress(handle->_msg, handle->_eom, handle->_msg_ptr,
-                                rr->name, sizeof(rr->name));
+  int used = internal::ns_name_uncompress_impl(
+      handle->_msg, handle->_eom, handle->_msg_ptr, rr->name, sizeof(rr->name));
   if (used < 0)
     return -1;
   const unsigned char *at = handle->_msg_ptr + used;

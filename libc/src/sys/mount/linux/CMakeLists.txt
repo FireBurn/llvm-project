@@ -27,7 +27,11 @@ add_entrypoint_object(
   HDRS
     ../umount.h
   DEPENDS
-    .umount2
+    libc.src.__support.OSUtil.linux.syscall_wrappers.umount2
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.src.errno.errno
 )
 
 add_entrypoint_object(

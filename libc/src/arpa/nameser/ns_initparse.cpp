@@ -40,7 +40,7 @@ LLVM_LIBC_FUNCTION(int, ns_initparse,
     handle->_counts[i] = static_cast<uint16_t>((at[0] << 8) | at[1]);
   for (int i = 0; i < nameser::SECTIONS; ++i) {
     handle->_sections[i] = handle->_counts[i] == 0 ? nullptr : at;
-    int used = ns_skiprr(at, eom, i, handle->_counts[i]);
+    int used = internal::ns_skiprr_impl(at, eom, i, handle->_counts[i]);
     if (used < 0)
       return -1;
     at += used;

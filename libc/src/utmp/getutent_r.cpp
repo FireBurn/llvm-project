@@ -28,7 +28,7 @@ LLVM_LIBC_FUNCTION(int, getutent_r,
                    (struct utmp * buffer, struct utmp **result)) {
   if (buffer == nullptr || result == nullptr)
     return -1;
-  struct utmp *entry = LIBC_NAMESPACE::getutent();
+  struct utmp *entry = internal::getutent_impl();
   if (entry == nullptr) {
     *result = nullptr;
     return -1;

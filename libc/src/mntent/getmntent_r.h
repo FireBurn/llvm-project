@@ -24,6 +24,12 @@ struct mntent *getmntent_r(::FILE *__restrict stream,
                            struct mntent *__restrict entry,
                            char *__restrict buffer, int bufsize);
 
+namespace internal {
+struct mntent *getmntent_r_impl(::FILE *__restrict stream,
+                                struct mntent *__restrict entry,
+                                char *__restrict buffer, int bufsize);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_MNTENT_GETMNTENT_R_H

@@ -15,8 +15,8 @@ add_entrypoint_object(
     libc.hdr.wordexp_macros
     libc.src.glob.glob
     libc.src.glob.globfree
-    libc.src.pwd.getpwnam
-    libc.src.stdlib.getenv
+    libc.src.pwd.pwd_utils
+    libc.src.stdlib.environ_internal
 )
 
 add_entrypoint_object(

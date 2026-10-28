@@ -23,9 +23,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, sgetspent_r,
-                   (const char *s, struct spwd *spbuf, char *buf, size_t buflen,
-                    struct spwd **spbufp)) {
+namespace internal {
+
+int sgetspent_r_impl(const char *s, struct spwd *spbuf, char *buf,
+                     size_t buflen, struct spwd **spbufp) {
   if (spbufp != nullptr)
     *spbufp = nullptr;
   if (s == nullptr || spbuf == nullptr || buf == nullptr || spbufp == nullptr)
@@ -49,6 +50,14 @@ LLVM_LIBC_FUNCTION(int, sgetspent_r,
 
   *spbufp = spbuf;
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, sgetspent_r,
+                   (const char *s, struct spwd *spbuf, char *buf, size_t buflen,
+                    struct spwd **spbufp)) {
+  return internal::sgetspent_r_impl(s, spbuf, buf, buflen, spbufp);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

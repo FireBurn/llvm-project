@@ -31,7 +31,7 @@ char buffer[mntent::LINE_SIZE];
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(struct mntent *, getmntent, (::FILE * stream)) {
-  return LIBC_NAMESPACE::getmntent_r(stream, &entry, buffer, mntent::LINE_SIZE);
+  return internal::getmntent_r_impl(stream, &entry, buffer, mntent::LINE_SIZE);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -24,13 +24,13 @@ namespace LIBC_NAMESPACE_DECL {
 // programs written before that was so still do, and a program that has
 // changed the file wants the new contents read.
 LLVM_LIBC_FUNCTION(int, res_init, (void)) {
-  return internal::res_setup(*LIBC_NAMESPACE::__res_state()) ? 0 : -1;
+  return internal::res_setup(*internal::res_state_impl()) ? 0 : -1;
 }
 
 // The name the GNU library gives the same call. Rust's standard library asks
 // for it after a lookup fails.
 LLVM_LIBC_FUNCTION(int, __res_init, (void)) {
-  return internal::res_setup(*LIBC_NAMESPACE::__res_state()) ? 0 : -1;
+  return internal::res_setup(*internal::res_state_impl()) ? 0 : -1;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -35,9 +35,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, vswscanf,
-                   (const wchar_t *__restrict buffer,
-                    const wchar_t *__restrict format, va_list vlist)) {
+namespace internal {
+
+int vswscanf_impl(const wchar_t *__restrict buffer,
+                  const wchar_t *__restrict format, va_list vlist) {
   if (buffer == nullptr || format == nullptr) {
     libc_errno = EINVAL;
     return EOF;
@@ -54,10 +55,18 @@ LLVM_LIBC_FUNCTION(int, vswscanf,
     return EOF;
   }
 
-  int ret = LIBC_NAMESPACE::vsscanf(text, narrow, vlist);
+  int ret = internal::vsscanf_impl(text, narrow, vlist);
   free(text);
   free(narrow);
   return ret;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, vswscanf,
+                   (const wchar_t *__restrict buffer,
+                    const wchar_t *__restrict format, va_list vlist)) {
+  return internal::vswscanf_impl(buffer, format, vlist);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

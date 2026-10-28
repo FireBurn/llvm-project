@@ -40,6 +40,11 @@ bool res_ready(struct __res_state &state);
 void conf_from_state(const struct __res_state &state, resolv::ResolvConf &out);
 
 } // namespace internal
+
+namespace internal {
+struct __res_state *res_state_impl(void);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_RESOLV_RES_STATE_H

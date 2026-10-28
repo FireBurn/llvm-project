@@ -22,6 +22,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 char *nl_langinfo_l(nl_item item, locale_t locale);
 
+namespace internal {
+char *nl_langinfo_l_impl(nl_item item, [[maybe_unused]] locale_t which);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_LANGINFO_NL_LANGINFO_L_H

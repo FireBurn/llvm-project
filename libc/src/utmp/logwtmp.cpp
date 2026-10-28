@@ -34,7 +34,7 @@ LLVM_LIBC_FUNCTION(void, logwtmp,
   utmp_fill::field(record.ut_user, sizeof(record.ut_user), name);
   utmp_fill::field(record.ut_host, sizeof(record.ut_host), host);
   utmp_fill::stamp(&record);
-  LIBC_NAMESPACE::updwtmp(_PATH_WTMP, &record);
+  internal::updwtmp_impl(_PATH_WTMP, &record);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

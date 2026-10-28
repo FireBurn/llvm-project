@@ -21,8 +21,16 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace internal {
+
+struct utmp *pututline_impl(const struct utmp *utmp) {
+  return as_utmp(internal::pututxline_impl(as_utmpx(utmp)));
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(struct utmp *, pututline, (const struct utmp *utmp)) {
-  return as_utmp(LIBC_NAMESPACE::pututxline(as_utmpx(utmp)));
+  return internal::pututline_impl(utmp);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

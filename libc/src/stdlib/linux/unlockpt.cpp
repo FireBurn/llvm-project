@@ -13,20 +13,17 @@
 
 #include "src/stdlib/unlockpt.h"
 
-#include "hdr/sys_ioctl_macros.h"
-#include "src/__support/OSUtil/linux/syscall_wrappers/ioctl.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/stdlib/linux/pty_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 // Lets the terminal behind the master be opened.
 LLVM_LIBC_FUNCTION(int, unlockpt, (int fd)) {
-  int unlock = 0;
-  ErrorOr<int> ret = linux_syscalls::ioctl(fd, TIOCSPTLCK, &unlock);
-  if (!ret) {
-    libc_errno = ret.error();
+  if (int err = pty::unlock(fd); err != 0) {
+    libc_errno = err;
     return -1;
   }
   return 0;

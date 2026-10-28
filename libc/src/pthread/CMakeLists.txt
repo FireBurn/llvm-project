@@ -790,11 +790,11 @@ add_entrypoint_object(
     libc.hdr.types.struct_sigaction
     libc.include.pthread
     libc.src.__support.CPP.atomic
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
     libc.src.__support.OSUtil.linux.syscall_wrappers.tgkill
     libc.src.__support.threads.cancel
     libc.src.__support.threads.thread
     libc.src.signal.linux.signal_utils
-    libc.src.unistd.getpid
 )
 
 add_entrypoint_object(
