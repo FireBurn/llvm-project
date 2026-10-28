@@ -383,6 +383,22 @@ libc_function(
 )
 
 libc_function(
+    name = "gmtime",
+    srcs = ["gmtime.cpp"],
+    hdrs = ["gmtime.h"],
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "gmtime_r",
     srcs = ["gmtime_r.cpp"],
     hdrs = ["gmtime_r.h"],
