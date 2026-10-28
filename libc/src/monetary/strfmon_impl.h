@@ -21,13 +21,22 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/locale/localeconv.h"
-#include "src/stdio/snprintf.h"
+#include "src/stdio/vsnprintf.h"
 
 #include <locale.h>
 #include <stdarg.h>
 
 namespace LIBC_NAMESPACE_DECL {
 namespace monetary {
+
+LIBC_INLINE int format_fixed(char *buffer, size_t size, const char *format,
+                             ...) {
+  va_list vlist;
+  va_start(vlist, format);
+  int ret = internal::vsnprintf_impl(buffer, size, format, vlist);
+  va_end(vlist);
+  return ret;
+}
 
 // The characters of the output, which stops taking them when the buffer is
 // full but goes on counting, so that the caller can tell.
@@ -108,7 +117,7 @@ LIBC_INLINE bool format_amount(const Spec &spec, double value,
 
   // The magnitude as digits, with the integer part first.
   char number[512];
-  int n = snprintf(number, sizeof(number), "%.*f", digits, magnitude);
+  int n = format_fixed(number, sizeof(number), "%.*f", digits, magnitude);
   if (n < 0 || static_cast<size_t>(n) >= sizeof(number))
     return false;
   size_t int_len = 0;
@@ -200,7 +209,7 @@ LIBC_INLINE bool format_amount(const Spec &spec, double value,
 // strfmon and strfmon_l: the formatted amounts and the text around them.
 LIBC_INLINE ssize_t strfmon(char *__restrict s, size_t maxsize,
                             const char *__restrict format, va_list args) {
-  const struct lconv &lc = *localeconv();
+  const struct lconv &lc = *internal::localeconv_impl();
   Output out(s, maxsize);
   for (const char *p = format; *p != '\0'; ++p) {
     if (*p != '%') {
