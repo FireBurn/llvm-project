@@ -13,16 +13,19 @@
 
 #include "src/unistd/get_current_dir_name.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
+#include "hdr/limits_macros.h"
 #include "hdr/types/struct_stat.h"
 #include "src/__support/CPP/optional.h"
 #include "src/__support/OSUtil/linux/stat/stat_via_statx.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getcwd.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/stdlib/getenv.h"
+#include "src/stdlib/environ_internal.h"
 #include "src/string/allocating_string_utils.h" // For strdup.
-#include "src/unistd/getcwd.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -46,7 +49,7 @@ LLVM_LIBC_FUNCTION(char *, get_current_dir_name, (void)) {
   // PWD is what the shell put there, so it keeps the symlinks the user
   // walked through rather than the path they resolve to. It is only worth
   // anything if it is absolute and still names where the program is.
-  const char *pwd = LIBC_NAMESPACE::getenv("PWD");
+  const char *pwd = internal::EnvironmentManager::get_instance().get("PWD");
   if (pwd != nullptr && pwd[0] == '/' && names_current_directory(pwd)) {
     cpp::optional<char *> copy = internal::strdup(pwd);
     if (copy)
@@ -55,7 +58,18 @@ LLVM_LIBC_FUNCTION(char *, get_current_dir_name, (void)) {
     return nullptr;
   }
 
-  return LIBC_NAMESPACE::getcwd(nullptr, 0);
+  char pathbuf[PATH_MAX];
+  ErrorOr<ssize_t> written = linux_syscalls::getcwd(pathbuf, PATH_MAX);
+  if (!written) {
+    libc_errno = written.error();
+    return nullptr;
+  }
+  cpp::optional<char *> cwd = internal::strdup(pathbuf);
+  if (!cwd) {
+    libc_errno = ENOMEM;
+    return nullptr;
+  }
+  return *cwd;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
