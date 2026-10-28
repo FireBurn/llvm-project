@@ -23,7 +23,7 @@
 #include "src/__support/endian_internal.h"
 #include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_ntop.h"
-#include "src/net/if_indextoname.h"
+#include "src/net/if/if_indextoname.h"
 #include "src/netdb/resolv/lookup.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/string_utils.h"
