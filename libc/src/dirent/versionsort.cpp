@@ -26,7 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 // "file10" comes after "file9".
 LLVM_LIBC_FUNCTION(int, versionsort,
                    (const struct dirent **a, const struct dirent **b)) {
-  return LIBC_NAMESPACE::strverscmp(&(*a)->d_name[0], &(*b)->d_name[0]);
+  return internal::strverscmp_impl(&(*a)->d_name[0], &(*b)->d_name[0]);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
