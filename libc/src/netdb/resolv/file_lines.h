@@ -17,12 +17,12 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/string_view.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/ctype_utils.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
-#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace resolv {
@@ -49,7 +49,7 @@ public:
 
   LIBC_INLINE void close_file() {
     if (fd_ >= 0)
-      LIBC_NAMESPACE::close(fd_);
+      linux_syscalls::close(fd_);
     fd_ = -1;
     filled_ = at_ = 0;
     ended_ = false;
