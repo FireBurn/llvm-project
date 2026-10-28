@@ -77,9 +77,17 @@ char *lookup(nl_item item) {
 
 // Only the C locale is supported, so the locale argument makes no
 // difference to the answer.
+namespace internal {
+
+char *nl_langinfo_l_impl(nl_item item, [[maybe_unused]] locale_t which) {
+  return lookup(item);
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(char *, nl_langinfo_l,
                    (nl_item item, [[maybe_unused]] locale_t which)) {
-  return lookup(item);
+  return internal::nl_langinfo_l_impl(item, which);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

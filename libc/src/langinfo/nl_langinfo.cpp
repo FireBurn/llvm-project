@@ -22,7 +22,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, nl_langinfo, (nl_item item)) {
-  return LIBC_NAMESPACE::nl_langinfo_l(item, locale);
+  return internal::nl_langinfo_l_impl(item, locale);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
