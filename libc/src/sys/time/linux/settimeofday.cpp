@@ -19,10 +19,11 @@
 #include "hdr/types/struct_timeval.h"
 #include "hdr/types/struct_timezone.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/time/clock_settime.h"
 #include "src/__support/time/units.h"
-#include "src/time/clock_settime.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -47,7 +48,12 @@ LLVM_LIBC_FUNCTION(int, settimeofday,
   struct timespec ts;
   ts.tv_sec = tv->tv_sec;
   ts.tv_nsec = static_cast<long>(tv->tv_usec) * 1_us_ns;
-  return LIBC_NAMESPACE::clock_settime(CLOCK_REALTIME, &ts);
+  ErrorOr<int> ret = internal::clock_settime(CLOCK_REALTIME, &ts);
+  if (!ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
