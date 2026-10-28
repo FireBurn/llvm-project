@@ -17,7 +17,7 @@
 #include "hdr/types/struct_sockaddr_in6.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/arpa/inet/htons.h"
-#include "src/net/if_nametoindex.h"
+#include "src/net/if/if_nametoindex.h"
 #include "src/netdb/getnameinfo.h"
 #include "test/UnitTest/Test.h"
 
