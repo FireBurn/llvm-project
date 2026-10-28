@@ -82,9 +82,9 @@ bool parse(char *line, HostsStorage &storage) {
   // gives no way to ask for a family, and everything written against it
   // assumes four octets. An address written the long way is taken where it
   // stands for one of those, and the line is passed over otherwise.
-  if (LIBC_NAMESPACE::inet_pton(AF_INET, text, storage.address) != 1) {
+  if (internal::inet_pton_impl(AF_INET, text, storage.address) != 1) {
     unsigned char wide[16];
-    if (LIBC_NAMESPACE::inet_pton(AF_INET6, text, wide) != 1)
+    if (internal::inet_pton_impl(AF_INET6, text, wide) != 1)
       return false;
     if (is_v4_mapped(wide)) {
       for (size_t i = 0; i < 4; ++i)
