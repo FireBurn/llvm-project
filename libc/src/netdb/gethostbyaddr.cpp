@@ -33,7 +33,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(struct hostent *, gethostbyaddr,
                    (const void *addr, socklen_t len, int type)) {
   if (addr == nullptr) {
-    *__h_errno_location() = HOST_NOT_FOUND;
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
     return nullptr;
   }
 
@@ -57,16 +57,16 @@ LLVM_LIBC_FUNCTION(struct hostent *, gethostbyaddr,
     inline_memcpy(&socket_address.v6.sin6_addr, addr, 16);
     socket_length = static_cast<socklen_t>(sizeof(socket_address.v6));
   } else {
-    *__h_errno_location() = HOST_NOT_FOUND;
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
     return nullptr;
   }
 
   // NI_NAMEREQD so that an address with no name is a failure rather than the
   // address written back as though it were one.
-  if (getnameinfo(reinterpret_cast<struct sockaddr *>(&socket_address),
-                  socket_length, storage.name, sizeof(storage.name), nullptr, 0,
-                  NI_NAMEREQD) != 0) {
-    *__h_errno_location() = HOST_NOT_FOUND;
+  if (internal::getnameinfo_impl(
+          reinterpret_cast<struct sockaddr *>(&socket_address), socket_length,
+          storage.name, sizeof(storage.name), nullptr, 0, NI_NAMEREQD) != 0) {
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
     return nullptr;
   }
 

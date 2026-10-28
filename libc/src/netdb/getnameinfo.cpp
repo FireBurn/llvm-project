@@ -20,9 +20,9 @@
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
 #include "src/__support/common.h"
+#include "src/__support/endian_internal.h"
 #include "src/__support/macros/config.h"
 #include "src/arpa/inet/inet_ntop.h"
-#include "src/arpa/inet/ntohs.h"
 #include "src/net/if_indextoname.h"
 #include "src/netdb/resolv/lookup.h"
 #include "src/string/memory_utils/inline_memcpy.h"
@@ -71,7 +71,7 @@ bool append_scope(char *host, size_t hostlen, uint32_t scope, int flags) {
   host[used++] = '%';
   char name[IF_NAMESIZE];
   if (!(flags & NI_NUMERICSCOPE) &&
-      LIBC_NAMESPACE::if_indextoname(scope, name) != nullptr) {
+      internal::if_indextoname_impl(scope, name) != nullptr) {
     size_t length = 0;
     while (name[length] != '\0')
       ++length;
@@ -88,10 +88,11 @@ bool append_scope(char *host, size_t hostlen, uint32_t scope, int flags) {
 // Asks what the host and the service at an address are called, and falls
 // back to the numeric form of either where there is no name for it. A caller
 // which will not accept the numeric form says so with NI_NAMEREQD.
-LLVM_LIBC_FUNCTION(int, getnameinfo,
-                   (const struct sockaddr *__restrict addr, socklen_t addrlen,
-                    char *__restrict host, socklen_t hostlen,
-                    char *__restrict serv, socklen_t servlen, int flags)) {
+namespace internal {
+
+int getnameinfo_impl(const struct sockaddr *__restrict addr, socklen_t addrlen,
+                     char *__restrict host, socklen_t hostlen,
+                     char *__restrict serv, socklen_t servlen, int flags) {
   if (addr == nullptr)
     return EAI_FAMILY;
   if ((host == nullptr || hostlen == 0) && (serv == nullptr || servlen == 0))
@@ -106,13 +107,13 @@ LLVM_LIBC_FUNCTION(int, getnameinfo,
       return EAI_FAMILY;
     auto *in = reinterpret_cast<const struct sockaddr_in *>(addr);
     address = &in->sin_addr;
-    port = LIBC_NAMESPACE::ntohs(in->sin_port);
+    port = LIBC_NAMESPACE::Endian::from_big_endian(in->sin_port);
   } else if (family == AF_INET6) {
     if (addrlen < static_cast<socklen_t>(sizeof(struct sockaddr_in6)))
       return EAI_FAMILY;
     auto *in6 = reinterpret_cast<const struct sockaddr_in6 *>(addr);
     address = &in6->sin6_addr;
-    port = LIBC_NAMESPACE::ntohs(in6->sin6_port);
+    port = LIBC_NAMESPACE::Endian::from_big_endian(in6->sin6_port);
   } else {
     return EAI_FAMILY;
   }
@@ -138,7 +139,7 @@ LLVM_LIBC_FUNCTION(int, getnameinfo,
       // a caller which insisted on a name is told there is none.
       if (flags & NI_NAMEREQD)
         return EAI_NONAME;
-      if (LIBC_NAMESPACE::inet_ntop(family, address, host, hostlen) == nullptr)
+      if (internal::inet_ntop_impl(family, address, host, hostlen) == nullptr)
         return EAI_OVERFLOW;
       if (family == AF_INET6) {
         auto *in6 = reinterpret_cast<const struct sockaddr_in6 *>(addr);
@@ -158,6 +159,16 @@ LLVM_LIBC_FUNCTION(int, getnameinfo,
   }
 
   return 0;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, getnameinfo,
+                   (const struct sockaddr *__restrict addr, socklen_t addrlen,
+                    char *__restrict host, socklen_t hostlen,
+                    char *__restrict serv, socklen_t servlen, int flags)) {
+  return internal::getnameinfo_impl(addr, addrlen, host, hostlen, serv, servlen,
+                                    flags);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
