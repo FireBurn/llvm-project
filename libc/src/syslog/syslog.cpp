@@ -23,7 +23,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(void, syslog, (int priority, const char *format, ...)) {
   va_list vlist;
   va_start(vlist, format);
-  LIBC_NAMESPACE::vsyslog(priority, format, vlist);
+  internal::vsyslog_impl(priority, format, vlist);
   va_end(vlist);
 }
 
