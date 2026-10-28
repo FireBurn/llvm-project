@@ -16,6 +16,7 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/termios_macros.h"
 #include "hdr/types/struct_termios.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
@@ -24,7 +25,6 @@
 #include "src/__support/macros/config.h"
 #include "src/termios/tcgetattr.h"
 #include "src/termios/tcsetattr.h"
-#include "src/unistd/close.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -76,14 +76,14 @@ LLVM_LIBC_FUNCTION(char *, getpass, (const char *prompt)) {
   // however this leaves. ECHONL is left on so that the newline the user types
   // still moves the cursor down.
   struct termios before;
-  const bool have_terminal = LIBC_NAMESPACE::tcgetattr(in, &before) == 0;
+  const bool have_terminal = internal::tcgetattr_impl(in, &before) == 0;
   if (have_terminal) {
     struct termios quiet = before;
     quiet.c_lflag &= static_cast<decltype(quiet.c_lflag)>(~ECHO);
     quiet.c_lflag |= ECHONL;
     // TCSAFLUSH so that anything typed ahead is thrown away rather than
     // echoed once the terminal is itself again.
-    if (LIBC_NAMESPACE::tcsetattr(in, TCSAFLUSH, &quiet) != 0)
+    if (internal::tcsetattr_impl(in, TCSAFLUSH, &quiet) != 0)
       libc_errno = 0;
   }
 
@@ -109,14 +109,14 @@ LLVM_LIBC_FUNCTION(char *, getpass, (const char *prompt)) {
   passphrase[length] = '\0';
 
   if (have_terminal) {
-    LIBC_NAMESPACE::tcsetattr(in, TCSAFLUSH, &before);
+    internal::tcsetattr_impl(in, TCSAFLUSH, &before);
     // The newline the user typed was swallowed with the echo, so one is
     // written to put the cursor where it would have been.
     say(out, "\n");
   }
 
   if (own_fd)
-    LIBC_NAMESPACE::close(in);
+    linux_syscalls::close(in);
 
   if (error != 0) {
     libc_errno = error;
