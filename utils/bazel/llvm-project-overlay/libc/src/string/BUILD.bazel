@@ -475,6 +475,17 @@ libc_function(
 )
 
 libc_function(
+    name = "strerror",
+    srcs = ["strerror.cpp"],
+    hdrs = ["strerror.h"],
+    deps = [
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "strverscmp",
     srcs = ["strverscmp.cpp"],
     hdrs = ["strverscmp.h"],
@@ -483,5 +494,16 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
+    ],
+)
+
+libc_function(
+    name = "strerror_r",
+    srcs = ["strerror_r.cpp"],
+    hdrs = ["strerror_r.h"],
+    deps = [
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
     ],
 )

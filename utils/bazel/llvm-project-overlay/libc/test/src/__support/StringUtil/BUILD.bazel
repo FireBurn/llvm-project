@@ -1,0 +1,33 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc __support/StringUtil.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "error_to_string_test",
+    srcs = ["error_to_string_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/StringUtil:StringUtil",
+    ],
+)
+
+libc_test(
+    name = "signal_to_string_test",
+    srcs = ["signal_to_string_test.cpp"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support:integer_to_string",
+    ],
+)
