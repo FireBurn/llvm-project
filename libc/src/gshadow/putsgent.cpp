@@ -33,7 +33,7 @@ int print_list(::FILE *stream, char *const *names) {
     return 0;
   for (size_t i = 0; names[i] != nullptr; ++i) {
     const char *fmt = i == 0 ? "%s" : ",%s";
-    if (LIBC_NAMESPACE::fprintf(stream, fmt, names[i]) < 0)
+    if (internal::fprintf_impl(stream, fmt, names[i]) < 0)
       return -1;
   }
   return 0;
@@ -47,16 +47,16 @@ LLVM_LIBC_FUNCTION(int, putsgent, (const struct sgrp *g, ::FILE *stream)) {
     return -1;
   }
 
-  if (LIBC_NAMESPACE::fprintf(stream, "%s:%s:", g->sg_namp,
-                              g->sg_passwd != nullptr ? g->sg_passwd : "") < 0)
+  if (internal::fprintf_impl(stream, "%s:%s:", g->sg_namp,
+                             g->sg_passwd != nullptr ? g->sg_passwd : "") < 0)
     return -1;
   if (print_list(stream, g->sg_adm) < 0)
     return -1;
-  if (LIBC_NAMESPACE::fprintf(stream, ":") < 0)
+  if (internal::fprintf_impl(stream, ":") < 0)
     return -1;
   if (print_list(stream, g->sg_mem) < 0)
     return -1;
-  if (LIBC_NAMESPACE::fprintf(stream, "\n") < 0)
+  if (internal::fprintf_impl(stream, "\n") < 0)
     return -1;
   return 0;
 }

@@ -24,9 +24,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, fgetspent_r,
-                   (::FILE * stream, struct spwd *spbuf, char *buf,
-                    size_t buflen, struct spwd **spbufp)) {
+namespace internal {
+
+int fgetspent_r_impl(::FILE *stream, struct spwd *spbuf, char *buf,
+                     size_t buflen, struct spwd **spbufp) {
   if (spbufp != nullptr)
     *spbufp = nullptr;
   if (stream == nullptr || spbuf == nullptr || buf == nullptr ||
@@ -38,7 +39,7 @@ LLVM_LIBC_FUNCTION(int, fgetspent_r,
   // Blank lines and comments are skipped, as they are when the database is
   // read as a whole.
   for (;;) {
-    if (LIBC_NAMESPACE::fgets(buf, static_cast<int>(buflen), stream) == nullptr)
+    if (internal::fgets_impl(buf, static_cast<int>(buflen), stream) == nullptr)
       return ENOENT;
 
     size_t len = 0;
@@ -55,6 +56,14 @@ LLVM_LIBC_FUNCTION(int, fgetspent_r,
     *spbufp = spbuf;
     return 0;
   }
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, fgetspent_r,
+                   (::FILE * stream, struct spwd *spbuf, char *buf,
+                    size_t buflen, struct spwd **spbufp)) {
+  return internal::fgetspent_r_impl(stream, spbuf, buf, buflen, spbufp);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

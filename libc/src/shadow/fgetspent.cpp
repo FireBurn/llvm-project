@@ -32,7 +32,7 @@ char line[shadow::SHADOW_LINE_SIZE];
 LLVM_LIBC_FUNCTION(struct spwd *, fgetspent, (::FILE * stream)) {
   struct spwd *result = nullptr;
   int err =
-      LIBC_NAMESPACE::fgetspent_r(stream, &entry, line, sizeof(line), &result);
+      internal::fgetspent_r_impl(stream, &entry, line, sizeof(line), &result);
   if (err != 0) {
     // Reaching the end of the file is not an error to report.
     if (err != ENOENT)

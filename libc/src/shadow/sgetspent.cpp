@@ -29,7 +29,7 @@ char line[shadow::SHADOW_LINE_SIZE];
 
 LLVM_LIBC_FUNCTION(struct spwd *, sgetspent, (const char *s)) {
   struct spwd *result = nullptr;
-  int err = LIBC_NAMESPACE::sgetspent_r(s, &entry, line, sizeof(line), &result);
+  int err = internal::sgetspent_r_impl(s, &entry, line, sizeof(line), &result);
   if (err != 0) {
     libc_errno = err;
     return nullptr;
