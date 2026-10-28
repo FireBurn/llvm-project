@@ -40,7 +40,7 @@ LLVM_LIBC_FUNCTION(struct passwd *, fgetpwent, (::FILE * stream)) {
   }
 
   for (;;) {
-    if (LIBC_NAMESPACE::fgets(line, sizeof(line), stream) == nullptr)
+    if (internal::fgets_impl(line, sizeof(line), stream) == nullptr)
       return nullptr; // The end of the file is not an error to report.
 
     size_t len = 0;
