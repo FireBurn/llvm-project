@@ -43,11 +43,11 @@ LLVM_LIBC_FUNCTION(int, putpwent, (const struct passwd *p, ::FILE *stream)) {
 
   int written;
   if (from_network_database)
-    written = LIBC_NAMESPACE::fprintf(
+    written = internal::fprintf_impl(
         stream, "%s:%s:::%s:%s:%s\n", p->pw_name, or_empty(p->pw_passwd),
         or_empty(p->pw_gecos), or_empty(p->pw_dir), or_empty(p->pw_shell));
   else
-    written = LIBC_NAMESPACE::fprintf(
+    written = internal::fprintf_impl(
         stream, "%s:%s:%u:%u:%s:%s:%s\n", p->pw_name, or_empty(p->pw_passwd),
         static_cast<unsigned>(p->pw_uid), static_cast<unsigned>(p->pw_gid),
         or_empty(p->pw_gecos), or_empty(p->pw_dir), or_empty(p->pw_shell));
