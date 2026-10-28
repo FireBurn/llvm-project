@@ -197,7 +197,6 @@ void run_init_array(const elf::Module &module) {
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int mode)) {
 namespace internal {
 
 void *dlopen_impl(const char *path, int mode) {

@@ -80,7 +80,6 @@ char *lookup(nl_item item) {
 namespace internal {
 
 char *nl_langinfo_l_impl(nl_item item, [[maybe_unused]] locale_t which) {
-                   (nl_item item, [[maybe_unused]] locale_t which)) {
   return lookup(item);
 }
 

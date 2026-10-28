@@ -882,10 +882,10 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.errno_macros
     libc.hdr.types.size_t
-    libc.src.pwd.getpwuid
-    libc.src.stdlib.getenv
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.pwd.pwd_utils
+    libc.src.stdlib.environ_internal
     libc.src.string.string_utils
-    libc.src.unistd.getuid
 )
 
 add_entrypoint_object(
@@ -934,6 +934,3 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.close_range
 )
-    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
-    libc.src.pwd.pwd_utils
-    libc.src.stdlib.environ_internal
