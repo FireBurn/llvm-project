@@ -16,6 +16,7 @@
 
 #include "hdr/types/struct_termios.h"
 #include "hdr/types/struct_winsize.h"
+#include "src/__support/error_or.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -25,6 +26,12 @@ namespace LIBC_NAMESPACE_DECL {
 // is filled in with the path of the second, and must have room for it.
 int openpty(int *primary, int *secondary, char *name,
             const struct termios *settings, const struct winsize *size);
+
+namespace internal {
+ErrorOr<int> openpty_impl(int *primary, int *secondary, char *name,
+                          const struct termios *settings,
+                          const struct winsize *size);
+} // namespace internal
 
 } // namespace LIBC_NAMESPACE_DECL
 
