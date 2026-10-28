@@ -29,9 +29,10 @@ constexpr size_t DEFAULT_BUFSIZE = 128;
 
 } // anonymous namespace
 
-LLVM_LIBC_FUNCTION(ssize_t, getdelim,
-                   (char **__restrict lineptr, size_t *__restrict n, int delim,
-                    ::FILE *__restrict raw_stream)) {
+namespace internal {
+
+ssize_t getdelim_impl(char **__restrict lineptr, size_t *__restrict n,
+                      int delim, ::FILE *__restrict raw_stream) {
   if (lineptr == nullptr || n == nullptr || raw_stream == nullptr) {
     libc_errno = EINVAL;
     return -1;
@@ -77,6 +78,14 @@ LLVM_LIBC_FUNCTION(ssize_t, getdelim,
 
   (*lineptr)[len] = '\0';
   return static_cast<ssize_t>(len);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(ssize_t, getdelim,
+                   (char **__restrict lineptr, size_t *__restrict n, int delim,
+                    ::FILE *__restrict raw_stream)) {
+  return internal::getdelim_impl(lineptr, n, delim, raw_stream);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

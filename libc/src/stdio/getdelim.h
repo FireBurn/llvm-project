@@ -24,6 +24,11 @@ namespace LIBC_NAMESPACE_DECL {
 ssize_t getdelim(char **__restrict lineptr, size_t *__restrict n, int delim,
                  ::FILE *__restrict stream);
 
+namespace internal {
+ssize_t getdelim_impl(char **__restrict lineptr, size_t *__restrict n,
+                      int delim, ::FILE *__restrict raw_stream);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_GETDELIM_H

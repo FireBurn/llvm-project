@@ -23,7 +23,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(ssize_t, getline,
                    (char **__restrict lineptr, size_t *__restrict n,
                     ::FILE *__restrict stream)) {
-  return LIBC_NAMESPACE::getdelim(lineptr, n, '\n', stream);
+  return internal::getdelim_impl(lineptr, n, '\n', stream);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
