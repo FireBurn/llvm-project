@@ -53,13 +53,15 @@ constexpr MessageMapper<ERR_ARRAY_SIZE, TOTAL_STR_LEN>
 cpp::string_view build_error_string(int err_num, cpp::span<char> buffer) {
   // if the buffer can't hold "Unknown error" + ' ' + num_str, then just
   // return "Unknown error".
-  if (buffer.size() <
-      (sizeof("Unknown error") + 1 + IntegerToString<int>::buffer_size()))
-    return const_cast<char *>("Unknown error");
+  if (buffer.size() < max_buff_size())
+    return "Unknown error";
 
-  cpp::StringStream buffer_stream(
-      {const_cast<char *>(buffer.data()), buffer.size()});
-  buffer_stream << "Unknown error" << ' ' << err_num << '\0';
+  // The buffer is cleared and the text stops short of its end, so a
+  // terminator follows the text without being part of it.
+  for (size_t i = 0; i < buffer.size(); ++i)
+    buffer[i] = '\0';
+  cpp::StringStream buffer_stream({buffer.data(), buffer.size() - 1});
+  buffer_stream << "Unknown error" << ' ' << err_num;
   return buffer_stream.str();
 }
 

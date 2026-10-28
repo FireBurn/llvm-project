@@ -51,15 +51,18 @@ cpp::string_view build_signal_string(int sig_num, cpp::span<char> buffer) {
     base_str = cpp::string_view("Unknown signal");
   }
 
-  // if the buffer can't hold "Unknown signal" + ' ' + num_str, then just
-  // return "Unknown signal".
+  // if the buffer can't hold the base string + ' ' + num_str and a terminator,
+  // then just return the base string.
   if (buffer.size() <
-      (base_str.size() + 1 + IntegerToString<int>::buffer_size()))
+      (base_str.size() + 1 + IntegerToString<int>::buffer_size() + 1))
     return base_str;
 
-  cpp::StringStream buffer_stream(
-      {const_cast<char *>(buffer.data()), buffer.size()});
-  buffer_stream << base_str << ' ' << sig_num << '\0';
+  // The buffer is cleared and the text stops short of its end, so a
+  // terminator follows the text without being part of it.
+  for (size_t i = 0; i < buffer.size(); ++i)
+    buffer[i] = '\0';
+  cpp::StringStream buffer_stream({buffer.data(), buffer.size() - 1});
+  buffer_stream << base_str << ' ' << sig_num;
   return buffer_stream.str();
 }
 
