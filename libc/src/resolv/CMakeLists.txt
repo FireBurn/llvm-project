@@ -61,9 +61,9 @@ add_entrypoint_object(
     res_close.h
   DEPENDS
     .__res_state
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.common
     libc.src.__support.macros.config
-    libc.src.unistd.close
 )
 
 add_entrypoint_object(
