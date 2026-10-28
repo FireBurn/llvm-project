@@ -16,6 +16,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 namespace internal {
+
 void *dlsym_impl(void *__restrict handle, const char *__restrict name) {
   // Which module the call is returning to, for RTLD_NEXT. Taken before
   // anything else, so nothing stands between this and the caller.

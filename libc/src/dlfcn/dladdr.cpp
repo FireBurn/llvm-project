@@ -23,6 +23,7 @@ namespace LIBC_NAMESPACE_DECL {
 // of dlfcn this reports failure with zero rather than with a message, and it
 // leaves dlerror alone, which is what every other implementation does.
 namespace internal {
+
 int dladdr_impl(const void *__restrict addr, Dl_info *__restrict info) {
   return dl::address_lookup(addr, info, nullptr, nullptr) ? 1 : 0;
 }
