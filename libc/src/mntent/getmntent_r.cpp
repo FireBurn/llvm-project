@@ -22,9 +22,11 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(struct mntent *, getmntent_r,
-                   (::FILE *__restrict stream, struct mntent *__restrict entry,
-                    char *__restrict buffer, int bufsize)) {
+namespace internal {
+
+struct mntent *getmntent_r_impl(::FILE *__restrict stream,
+                                struct mntent *__restrict entry,
+                                char *__restrict buffer, int bufsize) {
   if (stream == nullptr || entry == nullptr || buffer == nullptr ||
       bufsize <= 0) {
     libc_errno = EINVAL;
@@ -71,6 +73,14 @@ LLVM_LIBC_FUNCTION(struct mntent *, getmntent_r,
     if (mntent::parse_line(buffer, entry))
       return entry;
   }
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct mntent *, getmntent_r,
+                   (::FILE *__restrict stream, struct mntent *__restrict entry,
+                    char *__restrict buffer, int bufsize)) {
+  return internal::getmntent_r_impl(stream, entry, buffer, bufsize);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
