@@ -30,7 +30,7 @@ char name[TTY_NAME_MAX];
 } // anonymous namespace
 
 LLVM_LIBC_FUNCTION(char *, ttyname, (int fd)) {
-  int err = LIBC_NAMESPACE::ttyname_r(fd, name, sizeof(name));
+  int err = internal::ttyname_r_impl(fd, name, sizeof(name));
   if (err != 0) {
     libc_errno = err;
     return nullptr;
