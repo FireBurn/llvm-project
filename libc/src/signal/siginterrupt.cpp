@@ -16,8 +16,10 @@
 #include "hdr/signal_macros.h"
 #include "hdr/types/struct_sigaction.h"
 #include "src/__support/common.h"
+#include "src/__support/error_or.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
-#include "src/signal/sigaction.h"
+#include "src/signal/linux/signal_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -27,15 +29,21 @@ namespace LIBC_NAMESPACE_DECL {
 // to, since that is all it has ever been.
 LLVM_LIBC_FUNCTION(int, siginterrupt, (int signal, int flag)) {
   struct sigaction action;
-  if (LIBC_NAMESPACE::sigaction(signal, nullptr, &action) < 0)
+  if (ErrorOr<int> ret = checked_sigaction(signal, nullptr, &action); !ret) {
+    libc_errno = ret.error();
     return -1;
+  }
 
   if (flag != 0)
     action.sa_flags &= ~SA_RESTART;
   else
     action.sa_flags |= SA_RESTART;
 
-  return LIBC_NAMESPACE::sigaction(signal, &action, nullptr);
+  if (ErrorOr<int> ret = checked_sigaction(signal, &action, nullptr); !ret) {
+    libc_errno = ret.error();
+    return -1;
+  }
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL

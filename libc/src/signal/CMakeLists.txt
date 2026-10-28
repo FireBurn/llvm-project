@@ -50,8 +50,10 @@ add_entrypoint_object(
     libc.hdr.signal_macros
     libc.hdr.types.struct_sigaction
     libc.src.__support.common
+    libc.src.__support.error_or
     libc.src.__support.macros.config
-    libc.src.signal.sigaction
+    libc.src.errno.errno
+    libc.src.signal.linux.signal_utils
 )
 
 add_entrypoint_object(
