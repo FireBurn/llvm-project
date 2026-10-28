@@ -17,13 +17,13 @@
 #include "hdr/signal_macros.h"
 #include "hdr/types/struct_sigaction.h"
 #include "src/__support/CPP/atomic.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/getpid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/tgkill.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/cancel.h"
 #include "src/__support/threads/thread.h"
 #include "src/signal/linux/signal_utils.h"
-#include "src/unistd/getpid.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -78,7 +78,7 @@ LLVM_LIBC_FUNCTION(int, pthread_cancel, (pthread_t th)) {
   if (tid <= 0)
     return ESRCH;
   const ErrorOr<int> result = linux_syscalls::tgkill(
-      LIBC_NAMESPACE::getpid(), tid, internal::CANCEL_SIGNAL);
+      linux_syscalls::getpid(), tid, internal::CANCEL_SIGNAL);
   if (!result)
     return result.error();
   return 0;
