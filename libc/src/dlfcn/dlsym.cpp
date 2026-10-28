@@ -15,13 +15,21 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(void *, dlsym,
-                   (void *__restrict handle, const char *__restrict name)) {
+namespace internal {
+
+void *dlsym_impl(void *__restrict handle, const char *__restrict name) {
   // Which module the call is returning to, for RTLD_NEXT. Taken before
   // anything else, so nothing stands between this and the caller.
   const ElfW(Addr) caller =
       reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
   return dl::lookup(handle, name, caller);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(void *, dlsym,
+                   (void *__restrict handle, const char *__restrict name)) {
+  return internal::dlsym_impl(handle, name);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
