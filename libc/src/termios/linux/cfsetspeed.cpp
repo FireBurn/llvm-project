@@ -28,9 +28,9 @@ namespace LIBC_NAMESPACE_DECL {
 // setting the two separately would.
 LLVM_LIBC_FUNCTION(int, cfsetspeed, (struct termios * t, speed_t speed)) {
   LIBC_CRASH_ON_NULLPTR(t);
-  if (LIBC_NAMESPACE::cfsetospeed(t, speed) != 0)
+  if (internal::cfsetospeed_impl(t, speed) != 0)
     return -1;
-  return LIBC_NAMESPACE::cfsetispeed(t, speed);
+  return internal::cfsetispeed_impl(t, speed);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
