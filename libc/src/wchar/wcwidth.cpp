@@ -21,7 +21,9 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, wcwidth, (wchar_t wc)) {
+namespace internal {
+
+int wcwidth_impl(wchar_t wc) {
   uint32_t cp = static_cast<uint32_t>(wc);
   if (cp > 0x10FFFF)
     return -1;
@@ -32,6 +34,12 @@ LLVM_LIBC_FUNCTION(int, wcwidth, (wchar_t wc)) {
   if (wcwidth_internal::in_table(wcwidth_internal::WIDE, cp))
     return 2;
   return 1;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, wcwidth, (wchar_t wc)) {
+  return internal::wcwidth_impl(wc);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

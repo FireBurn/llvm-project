@@ -21,6 +21,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int wcwidth(wchar_t wc);
 
+namespace internal {
+int wcwidth_impl(wchar_t wc);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_WCHAR_WCWIDTH_H
