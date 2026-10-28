@@ -23,9 +23,10 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, vfwprintf,
-                   (::FILE *__restrict stream, const wchar_t *__restrict format,
-                    va_list vlist)) {
+namespace internal {
+
+int vfwprintf_impl(::FILE *__restrict stream, const wchar_t *__restrict format,
+                   va_list vlist) {
   wchar_t *wide = nullptr;
   int count = internal::format_wide(format, vlist, &wide);
   if (count < 0)
@@ -42,6 +43,14 @@ LLVM_LIBC_FUNCTION(int, vfwprintf,
     return -1;
   }
   return count;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, vfwprintf,
+                   (::FILE *__restrict stream, const wchar_t *__restrict format,
+                    va_list vlist)) {
+  return internal::vfwprintf_impl(stream, format, vlist);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

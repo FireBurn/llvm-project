@@ -23,6 +23,10 @@ namespace LIBC_NAMESPACE_DECL {
 
 int vwprintf(const wchar_t *__restrict format, va_list vlist);
 
+namespace internal {
+int vwprintf_impl(const wchar_t *__restrict format, va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_WCHAR_VWPRINTF_H

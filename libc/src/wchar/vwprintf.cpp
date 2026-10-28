@@ -20,9 +20,17 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace internal {
+
+int vwprintf_impl(const wchar_t *__restrict format, va_list vlist) {
+  return internal::vfwprintf_impl(LIBC_NAMESPACE::stdout, format, vlist);
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(int, vwprintf,
                    (const wchar_t *__restrict format, va_list vlist)) {
-  return LIBC_NAMESPACE::vfwprintf(LIBC_NAMESPACE::stdout, format, vlist);
+  return internal::vwprintf_impl(format, vlist);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

@@ -24,7 +24,7 @@ LLVM_LIBC_FUNCTION(int, fwprintf,
                     ...)) {
   va_list vlist;
   va_start(vlist, format);
-  int ret = LIBC_NAMESPACE::vfwprintf(stream, format, vlist);
+  int ret = internal::vfwprintf_impl(stream, format, vlist);
   va_end(vlist);
   return ret;
 }

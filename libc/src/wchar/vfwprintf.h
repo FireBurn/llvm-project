@@ -25,6 +25,11 @@ namespace LIBC_NAMESPACE_DECL {
 int vfwprintf(::FILE *__restrict stream, const wchar_t *__restrict format,
               va_list vlist);
 
+namespace internal {
+int vfwprintf_impl(::FILE *__restrict stream, const wchar_t *__restrict format,
+                   va_list vlist);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_WCHAR_VFWPRINTF_H

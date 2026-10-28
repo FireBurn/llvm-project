@@ -22,7 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, wprintf, (const wchar_t *__restrict format, ...)) {
   va_list vlist;
   va_start(vlist, format);
-  int ret = LIBC_NAMESPACE::vwprintf(format, vlist);
+  int ret = internal::vwprintf_impl(format, vlist);
   va_end(vlist);
   return ret;
 }
