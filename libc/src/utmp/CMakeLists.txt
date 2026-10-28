@@ -164,15 +164,14 @@ add_entrypoint_object(
   HDRS
     login.h
   DEPENDS
-    .endutent
     .pututline
-    .setutent
     .updwtmp
     .utmp_fill
     libc.hdr.types.struct_utmp
     libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
     libc.src.string.memory_utils.inline_memcpy
     libc.src.unistd.ttyname_r
+    libc.src.utmpx.utmpx_db
 )
 
 add_entrypoint_object(
@@ -182,11 +181,10 @@ add_entrypoint_object(
   HDRS
     logout.h
   DEPENDS
-    .endutent
     .getutline
     .pututline
-    .setutent
     .utmp_fill
     libc.hdr.types.struct_utmp
     libc.src.string.memory_utils.inline_memcpy
+    libc.src.utmpx.utmpx_db
 )

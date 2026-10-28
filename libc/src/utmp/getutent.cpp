@@ -21,10 +21,18 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(struct utmp *, getutent, (void)) {
+namespace internal {
+
+struct utmp *getutent_impl(void) {
   if (!utmpx_db::read_next())
     return nullptr;
   return as_utmp(&utmpx_db::entry);
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(struct utmp *, getutent, (void)) {
+  return internal::getutent_impl();
 }
 
 } // namespace LIBC_NAMESPACE_DECL

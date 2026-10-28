@@ -17,11 +17,10 @@
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/string/memory_utils/inline_memcpy.h"
-#include "src/utmp/endutent.h"
 #include "src/utmp/getutline.h"
 #include "src/utmp/pututline.h"
-#include "src/utmp/setutent.h"
 #include "src/utmp/utmp_fill.h"
+#include "src/utmpx/utmpx_db.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -34,10 +33,10 @@ LLVM_LIBC_FUNCTION(int, logout, (const char *line)) {
   struct utmp key = {};
   utmp_fill::field(key.ut_line, sizeof(key.ut_line), line);
 
-  LIBC_NAMESPACE::setutent();
-  struct utmp *found = LIBC_NAMESPACE::getutline(&key);
+  utmpx_db::rewind();
+  struct utmp *found = internal::getutline_impl(&key);
   if (found == nullptr) {
-    LIBC_NAMESPACE::endutent();
+    utmpx_db::close();
     return 0;
   }
 
@@ -47,8 +46,8 @@ LLVM_LIBC_FUNCTION(int, logout, (const char *line)) {
   utmp_fill::field(record.ut_user, sizeof(record.ut_user), nullptr);
   utmp_fill::field(record.ut_host, sizeof(record.ut_host), nullptr);
   utmp_fill::stamp(&record);
-  const bool written = LIBC_NAMESPACE::pututline(&record) != nullptr;
-  LIBC_NAMESPACE::endutent();
+  const bool written = internal::pututline_impl(&record) != nullptr;
+  utmpx_db::close();
   return written ? 1 : 0;
 }
 

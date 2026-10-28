@@ -21,8 +21,16 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
+namespace internal {
+
+struct utmp *getutid_impl(const struct utmp *id) {
+  return as_utmp(internal::getutxid_impl(as_utmpx(id)));
+}
+
+} // namespace internal
+
 LLVM_LIBC_FUNCTION(struct utmp *, getutid, (const struct utmp *id)) {
-  return as_utmp(LIBC_NAMESPACE::getutxid(as_utmpx(id)));
+  return internal::getutid_impl(id);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
