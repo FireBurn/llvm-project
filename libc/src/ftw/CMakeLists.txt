@@ -18,15 +18,13 @@ add_header_library(
     libc.hdr.types.struct_stat
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
-    libc.src.dirent.closedir
-    libc.src.dirent.opendir
-    libc.src.dirent.readdir
-    libc.src.dirent.seekdir
-    libc.src.dirent.telldir
     libc.src.string.memory_utils.inline_memcpy
     libc.src.string.string_utils
-    libc.src.sys.stat.lstat
-    libc.src.sys.stat.stat
+    libc.src.__support.File.dir
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.hdr.fcntl_macros
+    libc.src.__support.error_or
+    libc.src.__support.File.platform_dir
 )
 
 add_entrypoint_object(
