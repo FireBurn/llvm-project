@@ -65,6 +65,18 @@ libc_test(
 )
 
 libc_test(
+    name = "early_init_test",
+    srcs = ["early_init_test.cpp"],
+    deps = [
+        "//libc/src/compat:__llvm_libc_early_init",
+        "//libc/src/errno:program_invocation_name",
+        "//libc/src/errno:program_invocation_short_name",
+        "//libc/src/pthread:self",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_test(
     name = "init_main_thread_test",
     srcs = ["init_main_thread_test.cpp"],
     deps = [

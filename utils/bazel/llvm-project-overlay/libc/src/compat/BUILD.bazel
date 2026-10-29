@@ -62,6 +62,20 @@ libc_function(
 )
 
 libc_function(
+    name = "__llvm_libc_early_init",
+    srcs = ["__llvm_libc_early_init.cpp"],
+    hdrs = ["__llvm_libc_early_init.h"],
+    deps = [
+        ":__llvm_libc_init_main_thread",
+        ":program_name",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_function(
     name = "__llvm_libc_init_main_thread",
     srcs = ["__llvm_libc_init_main_thread.cpp"],
     hdrs = ["__llvm_libc_init_main_thread.h"],
@@ -196,4 +210,16 @@ libc_function(
 libc_support_library(
     name = "lfs64_undef",
     hdrs = ["lfs64_undef.h"],
+)
+
+libc_support_library(
+    name = "program_name",
+    hdrs = ["program_name.h"],
+    deps = [
+        ":progname",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno:program_invocation_name",
+        "//libc/src/errno:program_invocation_short_name",
+    ],
 )
