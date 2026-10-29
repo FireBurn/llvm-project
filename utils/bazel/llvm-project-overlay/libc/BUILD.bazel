@@ -25238,6 +25238,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_elf_scope",
+    hdrs = ["src/__support/elf/scope.h"],
+    deps = [
+        ":__support_elf_passive_abi",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_elf_dtv",
     hdrs = ["src/__support/elf/dtv.h"],
     deps = [
@@ -30442,6 +30453,7 @@ libc_support_library(
         ":__support_elf_dynamic_blocks",
         ":__support_elf_module",
         ":__support_elf_passive_abi",
+        ":__support_elf_scope",
         ":__support_elf_thread_pointer",
         ":__support_macros_config",
         ":__support_macros_properties_architectures",
@@ -30535,6 +30547,7 @@ libc_support_library(
         ":__support_elf_bind",
         ":__support_elf_load_module",
         ":__support_elf_passive_abi",
+        ":__support_elf_scope",
         ":__support_elf_search",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_newfstatat",
