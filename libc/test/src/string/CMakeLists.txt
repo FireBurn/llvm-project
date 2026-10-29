@@ -424,3 +424,13 @@ add_libc_test(
   DEPENDS
     libc.src.string.explicit_bzero
 )
+
+add_libc_test(
+  inline_strlen_test
+  SUITE
+    libc-string-tests
+  SRCS
+    inline_strlen_test.cpp
+  DEPENDS
+    libc.src.string.string_utils
+)
