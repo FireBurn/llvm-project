@@ -45,6 +45,9 @@ struct MappedModule {
   // when it made its block for the index to tell whether the block was made
   // for this module or for one that used to be there.
   size_t generation = 0;
+  // Opened with RTLD_LOCAL, so outside the global scope: a lookup through
+  // RTLD_DEFAULT does not see it, and only a module that needs it does.
+  bool local = false;
 };
 
 LIBC_INLINE int segment_protection(ElfW(Word) flags) {

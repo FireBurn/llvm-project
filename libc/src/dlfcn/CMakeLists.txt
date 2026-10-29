@@ -43,6 +43,7 @@ add_object_library(
     libc.src.__support.elf.bind
     libc.src.__support.elf.dynamic_blocks
     libc.src.__support.elf.passive_abi
+    libc.src.__support.elf.scope
     libc.src.__support.elf.thread_pointer
     libc.src.__support.macros.properties.architectures
     libc.src.__support.threads.mutex
@@ -105,6 +106,7 @@ add_entrypoint_object(
     libc.src.dlfcn.dl_internal
     libc.src.__support.elf.bind
     libc.src.__support.elf.load_module
+    libc.src.__support.elf.scope
     libc.src.link.link_maps
     libc.include.dlfcn
 )

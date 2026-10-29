@@ -588,6 +588,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "elf_scope",
+    hdrs = ["elf/scope.h"],
+    deps = [
+        ":elf_passive_abi",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_dtv",
     hdrs = ["elf/dtv.h"],
     deps = [
