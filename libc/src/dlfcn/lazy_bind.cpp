@@ -25,6 +25,7 @@
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/dynamic_blocks.h"
 #include "src/__support/elf/passive_abi.h"
+#include "src/__support/elf/scope.h"
 #include "src/__support/elf/thread_pointer.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/properties/architectures.h"
@@ -229,9 +230,11 @@ extern "C" [[gnu::used]] ElfW(Addr)
   elf::ModuleSet &set = elf::loaded_modules();
 
   const elf::Module *module = nullptr;
+  size_t requester = 0;
   for (size_t i = 0; i < set.count; ++i) {
     if (set.modules[i].contains(got)) {
       module = &set.modules[i];
+      requester = i;
       break;
     }
   }
@@ -248,6 +251,9 @@ extern "C" [[gnu::used]] ElfW(Addr)
 
   // The definition may come from a module opened after this one.
   elf::SearchOrder order(set.modules, set.count);
+  bool *hidden = static_cast<bool *>(__builtin_alloca(set.count));
+  elf::hide_from(set, requester, hidden);
+  order.set_hidden(hidden);
   auto found = order.resolve(name, version);
   if (!found)
     lookup_failed(module->name(), name);

@@ -40,11 +40,14 @@ void *address_of(const elf::Module &module, const ElfW(Sym) * symbol) {
                                       : address);
 }
 
-// The first module at or after `from` which defines `name`. Returns nothing
-// when none does.
+// The first module of the global scope at or after `from` which defines
+// `name`. Returns nothing when none does.
 void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
                   const char *version) {
   for (size_t i = from; i < set.count; ++i) {
+    // The global scope leaves out what was opened RTLD_LOCAL.
+    if (set.mappings[i].local)
+      continue;
     const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name, version, version != nullptr);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
       continue;

@@ -18,6 +18,7 @@
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/load_module.h"
 #include "src/__support/elf/passive_abi.h"
+#include "src/__support/elf/scope.h"
 #include "src/__support/elf/search.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
@@ -233,6 +234,7 @@ void *dlopen_impl(const char *path, int mode) {
     return nullptr;
   }
   elf::ModuleSet &set = *modules;
+  constexpr int GLOBAL = 0x100;
   // A null path asks for a handle to the main program.
   if (path == nullptr)
     return dl::handle_for(0);
@@ -241,6 +243,8 @@ void *dlopen_impl(const char *path, int mode) {
     if (same_name(set.modules[i].name(), path) ||
         same_file(set.modules[i].name(), path) ||
         same_name(set.modules[i].soname(), path)) {
+      if ((mode & GLOBAL) != 0 && set.mappings[i].local)
+        elf::make_global(set, i);
       ++set.references[i];
       return dl::handle_for(i);
     }
@@ -331,6 +335,11 @@ void *dlopen_impl(const char *path, int mode) {
     });
   }
 
+  // Without RTLD_GLOBAL what was opened, and what it brought in, stays out of
+  // the scope that lookups through RTLD_DEFAULT and later objects use.
+  for (size_t i = first; i < set.count; ++i)
+    set.mappings[i].local = (mode & GLOBAL) == 0;
+
   // Bind against everything now loaded, the new objects included, so they can
   // refer to themselves and to each other as well as to what was there.
   // Under RTLD_LAZY a call nothing loaded defines yet is bound when first
@@ -343,7 +352,10 @@ void *dlopen_impl(const char *path, int mode) {
     elf::SearchOrder order(set.modules, set.count);
     order.set_tls_offsets(set.tls_offsets);
     order.set_static_tls(set.static_count, dl::dynamic_tls_descriptor());
+    bool *hidden = static_cast<bool *>(__builtin_alloca(set.count));
+    order.set_hidden(hidden);
     for (size_t i = first; i < set.count; ++i) {
+      elf::hide_from(set, i, hidden);
       const bool defer = lazy && dl::can_bind_lazily(set.modules[i]);
       const elf::BindResult one =
           elf::bind_module(set.modules[i], i, order, defer);
