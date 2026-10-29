@@ -27,6 +27,7 @@ namespace {
 constexpr size_t PAGE = 4096;
 constexpr const char *LIBC_PATH = LIBC_TEST_SHARED_OBJECT;
 constexpr const char *LIBM_PATH = LIBM_TEST_SHARED_OBJECT;
+constexpr const char *IFUNC_PATH = LIBC_TEST_IFUNC_OBJECT;
 } // anonymous namespace
 
 TEST(LlvmLibcElfBindTest, ResolvesAcrossModules) {
@@ -146,4 +147,39 @@ TEST(LlvmLibcElfBindTest, LazyLeavesUnresolvedPltSlotsOnTheirStubs) {
     EXPECT_TRUE(m.module.contains(slot));
   }
   unmap_module(m.mapping);
+}
+
+TEST(LlvmLibcElfBindTest, ResolvesAnIndirectFunctionToItsTarget) {
+  auto loaded = load_module(IFUNC_PATH, PAGE);
+  ASSERT_TRUE(loaded.has_value());
+  LoadedModule l = loaded.value();
+  Module modules[] = {l.module};
+  SearchOrder order(modules, 1);
+
+  BindResult result = bind_module(l.module, 0, order);
+  EXPECT_EQ(result.unresolved, size_t(0));
+
+  // What resolve hands back is the function the resolver chose, not the
+  // resolver.
+  auto address = order.resolve("exported_ifunc");
+  ASSERT_TRUE(address.has_value());
+  EXPECT_EQ(reinterpret_cast<int (*)()>(*address)(), 42);
+
+  unmap_module(l.mapping);
+}
+
+TEST(LlvmLibcElfBindTest, AppliesAnIndirectFunctionRelocationInTheModule) {
+  auto loaded = load_module(IFUNC_PATH, PAGE);
+  ASSERT_TRUE(loaded.has_value());
+  LoadedModule l = loaded.value();
+  Module modules[] = {l.module};
+  SearchOrder order(modules, 1);
+
+  bind_module(l.module, 0, order);
+
+  auto caller = order.resolve("call_hidden_ifunc");
+  ASSERT_TRUE(caller.has_value());
+  EXPECT_EQ(reinterpret_cast<int (*)()>(*caller)(), 42);
+
+  unmap_module(l.mapping);
 }
