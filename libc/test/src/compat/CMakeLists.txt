@@ -27,3 +27,17 @@ add_libc_test(
     libc.src.compat.gnu_get_libc_version
     libc.src.string.strlen
 )
+
+add_libc_test(
+  early_init_test
+  SUITE
+    libc-compat-tests
+  SRCS
+    early_init_test.cpp
+  DEPENDS
+    libc.src.compat.__llvm_libc_early_init
+    libc.src.errno.program_invocation_name
+    libc.src.errno.program_invocation_short_name
+    libc.src.pthread.pthread_self
+    libc.src.unistd.environ
+)
