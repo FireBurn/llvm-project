@@ -286,6 +286,17 @@ add_header_library(
 )
 
 add_header_library(
+  scope
+  HDRS
+    scope.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_header_library(
   link_map_chain
   HDRS
     link_map_chain.h

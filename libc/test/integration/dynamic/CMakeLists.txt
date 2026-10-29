@@ -88,6 +88,11 @@ target_link_libraries(libc-test-dl-missing-object PRIVATE libc-test-dl-absent)
 set_target_properties(libc-test-dl-missing-object PROPERTIES
   SKIP_BUILD_RPATH TRUE)
 
+add_library(libc-test-dl-user SHARED dl_user.cpp)
+target_compile_options(libc-test-dl-user PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-user PRIVATE -nostdlib -Wl,-z,undefs)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -145,6 +150,18 @@ add_libc_dynamic_test(
     -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
   DEPENDS
     libc-test-dl-object
+)
+
+add_libc_dynamic_test(
+  dlopen_local_test
+  SRCS
+    dlopen_local_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_OBJECT="$<TARGET_FILE:libc-test-dl-object>"
+    -DLIBC_TEST_DL_USER="$<TARGET_FILE:libc-test-dl-user>"
+  DEPENDS
+    libc-test-dl-object
+    libc-test-dl-user
 )
 
 add_libc_dynamic_test(
