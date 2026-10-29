@@ -21617,6 +21617,21 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "syscall",
+    srcs = ["src/compat/syscall.cpp"],
+    hdrs = ["src/compat/syscall.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_syscall",
+        ":hdr_stdint_proxy",
+        ":types_size_t",
+    ],
+)
+
 libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["include/llvm-libc-types/struct_dl_phdr_info.h"],
