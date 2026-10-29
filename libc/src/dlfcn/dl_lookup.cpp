@@ -31,6 +31,15 @@ namespace {
 constexpr void *DEFAULT_HANDLE = nullptr;
 constexpr uintptr_t NEXT_HANDLE = static_cast<uintptr_t>(-1l);
 
+// Where `symbol` of `module` is, which for an indirect function is what its
+// resolver picks.
+void *address_of(const elf::Module &module, const ElfW(Sym) * symbol) {
+  const ElfW(Addr) address = module.load_bias() + symbol->st_value;
+  return reinterpret_cast<void *>(elf::symbol_is_ifunc(symbol->st_info)
+                                      ? elf::SearchOrder::call_resolver(address)
+                                      : address);
+}
+
 // The first module at or after `from` which defines `name`. Returns nothing
 // when none does.
 void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
@@ -39,8 +48,7 @@ void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
     const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name, version);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
       continue;
-    return reinterpret_cast<void *>(set.modules[i].load_bias() +
-                                    symbol->st_value);
+    return address_of(set.modules[i], symbol);
   }
   return nullptr;
 }
@@ -70,8 +78,7 @@ void *search_handle(const elf::ModuleSet &set, size_t index, const char *name,
     const ElfW(Sym) *symbol = set.modules[index].symbols().lookup(name, version);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
       return nullptr;
-    return reinterpret_cast<void *>(set.modules[index].load_bias() +
-                                    symbol->st_value);
+    return address_of(set.modules[index], symbol);
   }
   queue[tail++] = index;
   queued[index] = true;
@@ -79,7 +86,7 @@ void *search_handle(const elf::ModuleSet &set, size_t index, const char *name,
     const elf::Module &module = set.modules[queue[head++]];
     const ElfW(Sym) *symbol = module.symbols().lookup(name, version);
     if (symbol != nullptr && symbol->st_shndx != SHN_UNDEF)
-      return reinterpret_cast<void *>(module.load_bias() + symbol->st_value);
+      return address_of(module, symbol);
     module.for_each_needed([&](const char *needed) {
       for (size_t i = 0; i < set.count && i < LIMIT; ++i) {
         if (queued[i] || (!same_name(set.modules[i].soname(), needed) &&
