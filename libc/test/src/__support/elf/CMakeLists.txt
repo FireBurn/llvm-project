@@ -114,6 +114,11 @@ if(LIBC_ENABLE_SHARED)
 endif()
 
 if(LIBC_ENABLE_SHARED)
+  add_library(libc-test-ifunc-object SHARED ifunc_object.cpp)
+  target_compile_options(libc-test-ifunc-object PRIVATE
+    -fPIC -fno-exceptions -fno-rtti)
+  target_link_options(libc-test-ifunc-object PRIVATE -nostdlib)
+
   add_libc_test(
     bind_test
     SUITE
@@ -123,12 +128,13 @@ if(LIBC_ENABLE_SHARED)
     COMPILE_OPTIONS
       -DLIBC_TEST_SHARED_OBJECT="$<TARGET_FILE:libc-shared>"
       -DLIBM_TEST_SHARED_OBJECT="$<TARGET_FILE:libm-shared>"
+      -DLIBC_TEST_IFUNC_OBJECT="$<TARGET_FILE:libc-test-ifunc-object>"
     DEPENDS
       libc.src.__support.elf.bind
       libc.src.__support.elf.load_module
   )
   add_dependencies(libc.test.src.__support.elf.bind_test.__build__
-    libc-shared libm-shared)
+    libc-shared libm-shared libc-test-ifunc-object)
 endif()
 
 if(LIBC_ENABLE_SHARED)
