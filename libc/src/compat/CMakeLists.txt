@@ -214,3 +214,30 @@ add_entrypoint_object(
     libc.src.__support.threads.robust_list
     libc.src.__support.threads.thread
 )
+
+add_header_library(
+  program_name
+  HDRS
+    program_name.h
+  DEPENDS
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.compat.progname
+    libc.src.errno.program_invocation_name
+    libc.src.errno.program_invocation_short_name
+)
+
+add_entrypoint_object(
+  __llvm_libc_early_init
+  SRCS
+    __llvm_libc_early_init.cpp
+  HDRS
+    __llvm_libc_early_init.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.auxv
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.unistd.environ
+    .__llvm_libc_init_main_thread
+    .program_name
+)
