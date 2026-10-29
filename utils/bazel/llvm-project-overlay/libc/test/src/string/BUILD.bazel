@@ -363,3 +363,11 @@ libc_test(
         "//libc:strerror_l",
     ],
 )
+
+libc_test(
+    name = "inline_strlen_test",
+    srcs = ["inline_strlen_test.cpp"],
+    deps = [
+        "//libc:string_utils",
+    ],
+)
