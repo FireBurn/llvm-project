@@ -29046,6 +29046,20 @@ libc_function(
 )
 
 libc_function(
+    name = "__llvm_libc_early_init",
+    srcs = ["src/compat/__llvm_libc_early_init.cpp"],
+    hdrs = ["src/compat/__llvm_libc_early_init.h"],
+    deps = [
+        ":__llvm_libc_init_main_thread",
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_auxv",
+        ":compat_program_name",
+        ":environ",
+    ],
+)
+
+libc_function(
     name = "__llvm_libc_init_main_thread",
     srcs = ["src/compat/__llvm_libc_init_main_thread.cpp"],
     hdrs = ["src/compat/__llvm_libc_init_main_thread.h"],
@@ -30718,6 +30732,18 @@ libc_support_library(
         ":dlfcn_dl_internal",
         ":hdr_types_dl_info",
         ":types_struct_link_map",
+    ],
+)
+
+libc_support_library(
+    name = "compat_program_name",
+    hdrs = ["src/compat/program_name.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":progname",
+        ":program_invocation_name",
+        ":program_invocation_short_name",
     ],
 )
 
