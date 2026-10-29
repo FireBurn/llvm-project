@@ -80,6 +80,7 @@ libc_startup_library(
         "//libc:__support_elf_module",
         "//libc:__support_elf_passive_abi",
         "//libc:__support_threads_robust_list",
+        "//libc:compat_program_name",
     ] + selects.with_or({
         PLATFORM_CPU_X86_64: [
             "//libc/startup/linux/x86_64:irelative",
