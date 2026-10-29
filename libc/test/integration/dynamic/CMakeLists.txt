@@ -308,6 +308,23 @@ add_libc_dynamic_test(
 )
 
 add_libc_dynamic_test(
+  loader_command_child
+  SRCS
+    loader_command_child.cpp
+)
+
+add_libc_dynamic_test(
+  loader_command_test
+  SRCS
+    loader_command_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_LOADER="$<TARGET_FILE:libc-loader>"
+    -DLIBC_TEST_LOADER_CHILD="$<TARGET_FILE:loader_command_child>"
+  DEPENDS
+    loader_command_child
+)
+
+add_libc_dynamic_test(
   lock_in_init_test
   SRCS
     lock_in_init_test.cpp
