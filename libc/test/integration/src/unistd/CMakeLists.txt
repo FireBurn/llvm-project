@@ -52,7 +52,10 @@ add_integration_test(
     libc.src.signal.raise
     libc.src.stdlib.exit
     libc.src.sys.wait.waitpid
+    libc.src.unistd.close
     libc.src.unistd.fork
+    libc.src.unistd.pipe
+    libc.src.unistd.read
 )
 
 add_integration_test(

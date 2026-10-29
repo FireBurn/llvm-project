@@ -15,7 +15,10 @@
 #include "src/signal/raise.h"
 #include "src/stdlib/exit.h"
 #include "src/sys/wait/waitpid.h"
+#include "src/unistd/close.h"
 #include "src/unistd/fork.h"
+#include "src/unistd/pipe.h"
+#include "src/unistd/read.h"
 
 #include "test/IntegrationTest/test.h"
 
@@ -56,12 +59,20 @@ void signaled() {
 }
 
 void stopped_and_continued() {
+  int fds[2];
+  ASSERT_EQ(LIBC_NAMESPACE::pipe(fds), 0);
   pid_t pid = LIBC_NAMESPACE::fork();
   if (pid == 0) {
+    LIBC_NAMESPACE::close(fds[1]);
     LIBC_NAMESPACE::raise(SIGSTOP);
+    // Stay alive until the parent has seen the child continue. A child that
+    // exits straight away can be reaped as exited instead of continued.
+    char byte;
+    LIBC_NAMESPACE::read(fds[0], &byte, 1);
     LIBC_NAMESPACE::internal::exit(0);
   }
   ASSERT_TRUE(pid > 0);
+  ASSERT_EQ(LIBC_NAMESPACE::close(fds[0]), 0);
 
   int status = 0;
   ASSERT_EQ(LIBC_NAMESPACE::waitpid(pid, &status, WUNTRACED), pid);
@@ -78,6 +89,7 @@ void stopped_and_continued() {
   ASSERT_FALSE(WIFSIGNALED(status));
   ASSERT_FALSE(WIFSTOPPED(status));
 
+  ASSERT_EQ(LIBC_NAMESPACE::close(fds[1]), 0);
   ASSERT_EQ(LIBC_NAMESPACE::waitpid(pid, &status, 0), pid);
   ASSERT_TRUE(WIFEXITED(status));
   ASSERT_EQ(WEXITSTATUS(status), 0);
