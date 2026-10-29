@@ -25,9 +25,7 @@
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
-#include "src/compat/progname.h"
-#include "src/errno/program_invocation_name.h"
-#include "src/errno/program_invocation_short_name.h"
+#include "src/compat/program_name.h"
 #include "src/link/_r_debug.h"
 #include "src/stdlib/atexit.h"
 #include "src/stdlib/exit.h"
@@ -156,17 +154,8 @@ static TLSDescriptor tls;
   if (environ == nullptr)
     environ = reinterpret_cast<char **>(env_ptr);
 
-  if (app.args->argc > 0 && app.args->argv[0] != 0) {
-    program_invocation_name = reinterpret_cast<char *>(app.args->argv[0]);
-    program_invocation_short_name = program_invocation_name;
-    for (char *p = program_invocation_name; *p != '\0'; ++p) {
-      if (*p == '/')
-        program_invocation_short_name = p + 1;
-    }
-    // The names BSD gave the same two things.
-    __progname_full = program_invocation_name;
-    __progname = program_invocation_short_name;
-  }
+  if (app.args->argc > 0 && app.args->argv[0] != 0)
+    set_program_name(reinterpret_cast<char *>(app.args->argv[0]));
 
   // After the env array, is the aux-vector. The end of the aux-vector is
   // denoted by an AT_NULL entry.
@@ -175,9 +164,6 @@ static TLSDescriptor tls;
   unsigned long hwcap = 0;
   unsigned long hwcap2 = 0;
   const char *execfn = nullptr;
-  // Non-zero when the program was started through an interpreter, which then
-  // owns thread local storage for the whole process.
-  unsigned long interpreter_base = 0;
   auxv::Vector::initialize_unsafe(
       reinterpret_cast<const auxv::Entry *>(env_end_marker + 1));
   auxv::Vector auxvec;
@@ -200,9 +186,6 @@ static TLSDescriptor tls;
       break;
     case AT_EXECFN:
       execfn = reinterpret_cast<const char *>(aux_entry.val);
-      break;
-    case AT_BASE:
-      interpreter_base = aux_entry.val;
       break;
     default:
       break; // TODO: Read other useful entries from the aux vector.
@@ -268,10 +251,11 @@ static TLSDescriptor tls;
   }
 
   // Thread local storage has to be sized across every loaded module, which
-  // only the interpreter can see. When there is one it has already set the
-  // thread pointer, and setting it again here would replace a block sized for
-  // the whole process with one sized for the executable alone.
-  if (interpreter_base == 0) {
+  // only a loader can see. Where one linked the process it has already set
+  // the thread pointer, and setting it again here would replace a block sized
+  // for the whole process with one sized for the executable alone.
+  const elf::ModuleSet *linked = elf::process_modules();
+  if (linked == nullptr || !linked->linked) {
     // This descriptor has to be static since its cleanup function cannot
     // capture the context.
     init_tls(tls);
