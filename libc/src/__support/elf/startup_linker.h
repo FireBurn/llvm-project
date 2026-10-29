@@ -130,17 +130,9 @@ public:
     // initialiser which opens something else finds a module set to add to.
     publish(order);
 
-    // The environment likewise: an initialiser is entitled to read it, and to
-    // change it, and what it does has to still be there when the program's
-    // own startup code runs. That code therefore leaves `environ` alone if it
-    // finds it already set.
-    publish_environ(order, stack);
-    publish_auxv(order, stack);
-
-    // An initialiser may ask which thread it is on and keep the answer, as Qt
-    // does to tell its threads apart, so the thread is described before any
-    // of them runs and not later by the program's startup code.
-    describe_main_thread(order);
+    // Anything an initialiser may ask libc about is described before the
+    // first of them runs, not later by the program's startup code.
+    early_init(order, stack);
 
     // A debugger reads the modules' symbols before any of their code runs.
     publish_link_maps(order, stack);
@@ -368,30 +360,24 @@ private:
     write_to_stderr(message);
   }
 
-  // Points libc's `environ` at the environment the kernel left on the stack.
-  // Found by symbol lookup, the same way the module set is: the loader cannot
-  // link against the library it loads.
-  LIBC_INLINE void publish_environ(const SearchOrder &order,
-                                   const StartupStack &stack) {
-    auto address = order.resolve("environ");
-    if (!address)
-      return; // Nothing in the process has one.
-    *reinterpret_cast<char ***>(*address) = stack.envp();
-  }
-
+  // Tells libc what an initialiser may ask about before it runs: the
+  // environment, which it is entitled to read and change, the auxiliary
+  // vector, the program's name and the thread it is on. Found by symbol
+  // lookup, the same way the module set is: the loader cannot link against
+  // the library it loads.
+  //
   // The vector on the stack is the one the program was given, which need not
-  // be the one the kernel first passed.
-  LIBC_INLINE static void publish_auxv(const SearchOrder &order,
-                                       const StartupStack &stack) {
-    auto address = order.resolve("__llvm_libc_set_auxv");
-    if (address)
-      reinterpret_cast<void (*)(const void *)>(*address)(stack.auxv());
-  }
-
-  LIBC_INLINE static void describe_main_thread(const SearchOrder &order) {
-    auto address = order.resolve("__llvm_libc_init_main_thread");
-    if (address)
-      reinterpret_cast<int (*)()>(*address)();
+  // be the one the kernel first passed. The program's own startup code
+  // leaves `environ` alone if it finds it already set, so what an
+  // initialiser did to the environment stands.
+  LIBC_INLINE static void early_init(const SearchOrder &order,
+                                     const StartupStack &stack) {
+    auto address = order.resolve("__llvm_libc_early_init");
+    if (!address)
+      return; // Nothing in the process wants to know.
+    reinterpret_cast<int (*)(int, char **, char **, const void *)>(*address)(
+        static_cast<int>(stack.argc()), stack.argv(), stack.envp(),
+        stack.auxv());
   }
 
   // Copies what was loaded into libc's storage, found by symbol lookup since
