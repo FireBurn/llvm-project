@@ -35,6 +35,7 @@ namespace elf {
 #if defined(LIBC_TARGET_ARCH_IS_X86_64)
 constexpr uint32_t RELOC_ABSOLUTE = R_X86_64_64;
 constexpr uint32_t RELOC_COPY = R_X86_64_COPY;
+constexpr uint32_t RELOC_IRELATIVE = R_X86_64_IRELATIVE;
 constexpr uint32_t RELOC_GLOB_DAT = R_X86_64_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_X86_64_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_X86_64_TPOFF64;
@@ -49,6 +50,7 @@ constexpr uint32_t RELOC_TLS_DESCRIPTOR = R_X86_64_TLSDESC;
 #elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
 constexpr uint32_t RELOC_ABSOLUTE = R_AARCH64_ABS64;
 constexpr uint32_t RELOC_COPY = R_AARCH64_COPY;
+constexpr uint32_t RELOC_IRELATIVE = R_AARCH64_IRELATIVE;
 constexpr uint32_t RELOC_GLOB_DAT = R_AARCH64_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_AARCH64_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_AARCH64_TLS_TPREL;
@@ -58,6 +60,7 @@ constexpr uint32_t RELOC_TLS_DESCRIPTOR = 0xfffffffcu;
 #elif defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
 constexpr uint32_t RELOC_ABSOLUTE = R_RISCV_64;
 constexpr uint32_t RELOC_COPY = R_RISCV_COPY;
+constexpr uint32_t RELOC_IRELATIVE = R_RISCV_IRELATIVE;
 constexpr uint32_t RELOC_GLOB_DAT = R_RISCV_JUMP_SLOT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_RISCV_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_RISCV_TLS_TPREL64;
@@ -67,6 +70,7 @@ constexpr uint32_t RELOC_TLS_DESCRIPTOR = 0xfffffffcu;
 #elif defined(LIBC_TARGET_ARCH_IS_ARM)
 constexpr uint32_t RELOC_ABSOLUTE = R_ARM_ABS32;
 constexpr uint32_t RELOC_COPY = R_ARM_COPY;
+constexpr uint32_t RELOC_IRELATIVE = R_ARM_IRELATIVE;
 constexpr uint32_t RELOC_GLOB_DAT = R_ARM_GLOB_DAT;
 constexpr uint32_t RELOC_JUMP_SLOT = R_ARM_JUMP_SLOT;
 // ARM uses a different TLS model; not handled here yet.
@@ -96,7 +100,19 @@ LIBC_INLINE constexpr unsigned char symbol_binding(unsigned char info) {
 #endif
 }
 
-LIBC_INLINE constexpr uint32_t reloc_symbol(ElfW(Xword) info) {
+// An indirect function: the symbol's value is a resolver which returns the
+// address of the function to use.
+constexpr unsigned char SYMBOL_TYPE_IFUNC = 10;
+
+LIBC_INLINE constexpr bool symbol_is_ifunc(unsigned char info) {
+#ifdef __LP64__
+  return ELF64_ST_TYPE(info) == SYMBOL_TYPE_IFUNC;
+#else
+  return ELF32_ST_TYPE(info) == SYMBOL_TYPE_IFUNC;
+#endif
+}
+
+LIBC_INLINE constexpr uint32_t reloc_symbol(Xword info) {
 #ifdef __LP64__
   return static_cast<uint32_t>(ELF64_R_SYM(info));
 #else
@@ -118,6 +134,7 @@ public:
     // that module's block rather than this one's.
     size_t module;
     ElfW(Addr) value;
+    bool ifunc;
   };
 
   // `first` skips the modules before it, which is what a copy relocation
@@ -135,17 +152,23 @@ public:
       if (symbol->st_shndx == SHN_UNDEF)
         continue;
       return Resolved{modules_[i].load_bias() + symbol->st_value, i,
-                      symbol->st_value};
+                      symbol->st_value, symbol_is_ifunc(symbol->st_info)};
     }
     return cpp::nullopt;
   }
 
   // Returns the runtime address of `name`, or nothing if no module defines it.
+  // For an indirect function that is the address its resolver chose, so the
+  // resolver runs here and the module defining it has to be relocated already.
   LIBC_INLINE cpp::optional<ElfW(Addr)>
   resolve(const char *name, const char *version = nullptr) const {
     if (auto found = find(name, 0, version))
-      return found->address;
+      return found->ifunc ? call_resolver(found->address) : found->address;
     return cpp::nullopt;
+  }
+
+  LIBC_INLINE static ElfW(Addr) call_resolver(ElfW(Addr) resolver) {
+    return reinterpret_cast<ElfW(Addr) (*)()>(resolver)();
   }
 
   // Offsets of each module's thread local block from the thread pointer, as
@@ -399,6 +422,24 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
   return result;
 }
 
+// Runs the resolvers behind a module's own indirect functions, which the
+// linker leaves as IRELATIVE entries. They wait until every other relocation
+// has been applied, since a resolver may read what those filled in.
+LIBC_INLINE size_t apply_irelative(const Module &target,
+                                   const RelaTable &table) {
+  size_t applied = 0;
+  for (const ElfW(Rela) *rela = table.begin(); rela != table.end(); ++rela) {
+    if (reloc_type(rela->r_info) != RELOC_IRELATIVE)
+      continue;
+    auto *where =
+        reinterpret_cast<ElfW(Addr) *>(target.load_bias() + rela->r_offset);
+    *where = SearchOrder::call_resolver(
+        target.load_bias() + static_cast<ElfW(Addr)>(rela->r_addend));
+    ++applied;
+  }
+  return applied;
+}
+
 // Binds both a module's ordinary and PLT relocations. Only the PLT ones can
 // be deferred.
 LIBC_INLINE BindResult bind_module(const Module &target, size_t target_index,
@@ -408,6 +449,8 @@ LIBC_INLINE BindResult bind_module(const Module &target, size_t target_index,
       bind_relocations(target, target_index, target.relocations(), order);
   BindResult b = bind_relocations(target, target_index,
                                   target.plt_relocations(), order, lazy);
+  a.bound += apply_irelative(target, target.relocations());
+  b.bound += apply_irelative(target, target.plt_relocations());
   return BindResult{a.bound + b.bound, a.unresolved + b.unresolved, b.deferred,
                     a.missing != nullptr ? a.missing : b.missing};
 }
