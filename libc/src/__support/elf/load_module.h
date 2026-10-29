@@ -42,6 +42,10 @@ namespace elf {
 struct LoadedModule {
   MappedModule mapping;
   Module module;
+  // Where the file says execution starts, and its program headers as mapped.
+  ElfW(Addr) entry = 0;
+  const ElfW(Phdr) *phdrs = nullptr;
+  ElfW(Half) phnum = 0;
 };
 
 #ifdef __LP64__
@@ -65,10 +69,12 @@ LIBC_INLINE bool is_loadable_elf(const ElfW(Ehdr) & header) {
          header.e_phnum <= MAX_PHNUM;
 }
 
-// Opens `path`, maps it, and applies the relocations it can resolve on its
-// own. The caller owns the mapping and releases it with unmap_module.
-LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
-                                              size_t page_size) {
+// Opens `path` and maps it, applying nothing. The caller owns the mapping and
+// releases it with unmap_module. With `shared_object_only` a file that has to
+// be mapped at the address it was linked for is refused, since this places
+// everything wherever there is room.
+LIBC_INLINE ErrorOr<LoadedModule> map_module(const char *path, size_t page_size,
+                                             bool shared_object_only = false) {
   auto fd = linux_syscalls::open(path, O_RDONLY, 0);
   if (!fd.has_value())
     return Error(fd.error());
@@ -82,7 +88,8 @@ LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
     close_fd();
     return Error(ENOEXEC);
   }
-  if (!is_loadable_elf(header)) {
+  if (!is_loadable_elf(header) ||
+      (shared_object_only && header.e_type != ET_DYN)) {
     close_fd();
     return Error(ENOEXEC);
   }
@@ -118,6 +125,20 @@ LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
       loaded.mapping.load_bias + header.e_phoff);
   loaded.module = Module(mapped_phdrs, header.e_phnum, loaded.mapping.load_bias,
                          loaded.mapping.name);
+  loaded.entry = loaded.mapping.load_bias + header.e_entry;
+  loaded.phdrs = mapped_phdrs;
+  loaded.phnum = header.e_phnum;
+  return loaded;
+}
+
+// Opens `path`, maps it, and applies the relocations it can resolve on its
+// own. The caller owns the mapping and releases it with unmap_module.
+LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
+                                              size_t page_size) {
+  auto mapped = map_module(path, page_size);
+  if (!mapped.has_value())
+    return Error(mapped.error());
+  LoadedModule loaded = mapped.value();
 
   // Relative relocations are the ones a module can apply to itself. Anything
   // that names a symbol needs the other modules to be loaded first.
