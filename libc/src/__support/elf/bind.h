@@ -144,6 +144,8 @@ public:
   find(const char *name, size_t first = 0,
        const char *version = nullptr) const {
     for (size_t i = first; i < count_; ++i) {
+      if (hidden_ != nullptr && hidden_[i])
+        continue;
       const ElfW(Sym) *symbol = modules_[i].symbols().lookup(name, version);
       if (symbol == nullptr)
         continue;
@@ -178,6 +180,10 @@ public:
   }
   LIBC_INLINE const intptr_t *tls_offsets() const { return tls_offsets_; }
 
+  // Modules a lookup passes over, one entry for each. Used to leave out those
+  // opened RTLD_LOCAL that the requester has no claim on.
+  LIBC_INLINE void set_hidden(const bool *hidden) { hidden_ = hidden; }
+
   // How many modules, from the first, have a place in every thread's static
   // block. Those opened later have a block per thread made on demand, and a
   // descriptor for one of their thread locals needs `dynamic_descriptor`,
@@ -196,6 +202,7 @@ private:
   const Module *modules_;
   size_t count_;
   const intptr_t *tls_offsets_ = nullptr;
+  const bool *hidden_ = nullptr;
   size_t static_count_ = static_cast<size_t>(-1);
   ElfW(Addr) dynamic_descriptor_ = 0;
 };
