@@ -3412,6 +3412,12 @@ bool Expr::isConstantInitializer(ASTContext &Ctx, bool IsForRef,
 
   switch (getStmtClass()) {
   default: break;
+  case CallExprClass:
+    // The offset from the image base is resolved by the linker.
+    if (cast<CallExpr>(this)->getBuiltinCallee() ==
+        Builtin::BI__builtin_imgrel32)
+      return true;
+    break;
   case Stmt::ExprWithCleanupsClass:
     return cast<ExprWithCleanups>(this)->getSubExpr()->isConstantInitializer(
         Ctx, IsForRef, Culprit);
