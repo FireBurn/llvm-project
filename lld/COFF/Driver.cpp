@@ -2736,6 +2736,13 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
               symtab.bitcodeFileInstances.front()->obj->getTargetTriple());
           for (auto *s : lto::LTO::getRuntimeLibcallSymbols(TT))
             symtab.addLibcall(s);
+
+          // The X86 backend references _fltused from code generation when a
+          // module uses floating point on MSVC targets, which the bitcode
+          // symbol table does not show either. addLibcall adds the x86
+          // underscore, as the backend does for __fltused.
+          if (TT.isX86() && TT.isWindowsMSVCEnvironment())
+            symtab.addLibcall("_fltused");
         }
 
         // Windows specific -- if __load_config_used can be resolved, resolve
