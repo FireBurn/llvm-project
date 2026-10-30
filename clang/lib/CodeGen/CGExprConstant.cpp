@@ -1241,6 +1241,33 @@ public:
     return nullptr;
   }
 
+  llvm::Constant *VisitCallExpr(const CallExpr *E, QualType T) {
+    if (E->getBuiltinCallee() != Builtin::BI__builtin_imgrel32)
+      return nullptr;
+
+    // trunc(ptrtoint(P) - ptrtoint(__ImageBase)), which the backend lowers to
+    // an image relative relocation.
+    llvm::Constant *Ptr =
+        Emitter.tryEmitPrivateForMemory(E->getArg(0), E->getArg(0)->getType());
+    if (!Ptr)
+      return nullptr;
+
+    llvm::Module &M = CGM.getModule();
+    llvm::GlobalVariable *ImageBase = M.getNamedGlobal("__ImageBase");
+    if (!ImageBase) {
+      ImageBase =
+          new llvm::GlobalVariable(M, CGM.Int8Ty, /*isConstant=*/true,
+                                   llvm::GlobalValue::ExternalLinkage,
+                                   /*Initializer=*/nullptr, "__ImageBase");
+      CGM.setDSOLocal(ImageBase);
+    }
+
+    llvm::Constant *Diff = llvm::ConstantExpr::getSub(
+        llvm::ConstantExpr::getPtrToInt(Ptr, CGM.IntPtrTy),
+        llvm::ConstantExpr::getPtrToInt(ImageBase, CGM.IntPtrTy));
+    return llvm::ConstantExpr::getTrunc(Diff, CGM.getTypes().ConvertType(T));
+  }
+
   llvm::Constant *VisitCastExpr(const CastExpr *E, QualType destType) {
     if (const auto *ECE = dyn_cast<ExplicitCastExpr>(E))
       CGM.EmitExplicitCastExprType(ECE, Emitter.CGF);
