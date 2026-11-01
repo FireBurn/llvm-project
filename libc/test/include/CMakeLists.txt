@@ -100,6 +100,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_time_conversions_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_time_conversions_test.cpp
+  DEPENDS
+    libc.include.sys_time
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
