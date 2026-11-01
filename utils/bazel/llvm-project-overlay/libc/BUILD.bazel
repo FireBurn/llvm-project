@@ -28134,6 +28134,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_ether_addr",
+    hdrs = ["include/llvm-libc-types/struct_ether_addr.h"],
+)
+
+libc_support_library(
+    name = "types_struct_ether_addr",
+    hdrs = ["hdr/types/struct_ether_addr.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_ether_addr"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_group",
     hdrs = ["include/llvm-libc-types/struct_group.h"],
 )
@@ -30947,6 +30961,60 @@ libc_function(
         ":types_struct_addrinfo",
         ":types_struct_sockaddr_in",
         ":types_struct_sockaddr_in6",
+    ],
+)
+
+libc_support_library(
+    name = "netinet_ether_ethers",
+    srcs = ["src/netinet/ether/ethers.cpp"],
+    hdrs = ["src/netinet/ether/ethers.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_ctype_utils",
+        ":__support_macros_config",
+        ":netdb_resolv_file_lines",
+        ":string_memory_utils",
+        ":types_size_t",
+        ":types_struct_ether_addr",
+    ],
+)
+
+libc_function(
+    name = "ether_line",
+    srcs = ["src/netinet/ether/ether_line.cpp"],
+    hdrs = ["src/netinet/ether/ether_line.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netinet_ether_ethers",
+        ":types_size_t",
+        ":types_struct_ether_addr",
+    ],
+)
+
+libc_function(
+    name = "ether_ntohost",
+    srcs = ["src/netinet/ether/ether_ntohost.cpp"],
+    hdrs = ["src/netinet/ether/ether_ntohost.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netinet_ether_ethers",
+        ":types_size_t",
+        ":types_struct_ether_addr",
+    ],
+)
+
+libc_function(
+    name = "ether_hostton",
+    srcs = ["src/netinet/ether/ether_hostton.cpp"],
+    hdrs = ["src/netinet/ether/ether_hostton.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":netinet_ether_ethers",
+        ":types_size_t",
+        ":types_struct_ether_addr",
     ],
 )
 

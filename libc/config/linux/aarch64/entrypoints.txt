@@ -1487,8 +1487,11 @@ if(LLVM_LIBC_FULL_BUILD)
     # netinet/ether.h entrypoints
     libc.src.netinet.ether.ether_aton
     libc.src.netinet.ether.ether_aton_r
+    libc.src.netinet.ether.ether_hostton
+    libc.src.netinet.ether.ether_line
     libc.src.netinet.ether.ether_ntoa
     libc.src.netinet.ether.ether_ntoa_r
+    libc.src.netinet.ether.ether_ntohost
 
     # netinet/in.h entrypoints
     libc.src.netinet.in6addr_any
