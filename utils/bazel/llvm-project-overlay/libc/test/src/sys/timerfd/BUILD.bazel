@@ -1,0 +1,29 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/timerfd.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "timerfd_test",
+    srcs = ["timerfd_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_time_macros",
+        "//libc:read",
+        "//libc:sys_timerfd_timerfd_create",
+        "//libc:sys_timerfd_timerfd_gettime",
+        "//libc:sys_timerfd_timerfd_settime",
+        "//libc:timerfd_create",
+        "//libc:timerfd_gettime",
+        "//libc:timerfd_settime",
+        "//libc:types_struct_itimerspec",
+    ],
+)
