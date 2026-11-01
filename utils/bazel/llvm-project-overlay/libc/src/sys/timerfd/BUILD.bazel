@@ -1,0 +1,94 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "timerfd_create",
+    srcs = ["linux/timerfd_create.cpp"],
+    hdrs = ["timerfd_create.h"],
+    deps = [
+        ":sys_timerfd_timerfd_create",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timerfd_create",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "timerfd_gettime",
+    srcs = ["linux/timerfd_gettime.cpp"],
+    hdrs = ["timerfd_gettime.h"],
+    deps = [
+        ":sys_timerfd_timerfd_gettime",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timerfd_gettime",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "timerfd_settime",
+    srcs = ["linux/timerfd_settime.cpp"],
+    hdrs = ["timerfd_settime.h"],
+    deps = [
+        ":sys_timerfd_timerfd_settime",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timerfd_settime",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_timerfd_timerfd_create",
+    hdrs = ["timerfd_create.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_timerfd_timerfd_gettime",
+    hdrs = ["timerfd_gettime.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_timerfd_timerfd_settime",
+    hdrs = ["timerfd_settime.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support/macros:config",
+    ],
+)

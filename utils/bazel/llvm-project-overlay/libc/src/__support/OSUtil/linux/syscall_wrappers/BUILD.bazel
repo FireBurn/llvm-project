@@ -2378,6 +2378,58 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "signalfd",
+    hdrs = ["signalfd.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "timerfd_create",
+    hdrs = ["timerfd_create.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "timerfd_gettime",
+    hdrs = ["timerfd_gettime.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "timerfd_settime",
+    hdrs = ["timerfd_settime.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
