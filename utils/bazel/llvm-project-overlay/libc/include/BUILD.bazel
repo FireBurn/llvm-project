@@ -1042,6 +1042,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_ether_addr",
+    hdrs = ["llvm-libc-types/struct_ether_addr.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_group",
     hdrs = ["llvm-libc-types/struct_group.h"],
 )
