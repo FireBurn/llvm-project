@@ -13,6 +13,7 @@ macros:
   - macro_name: timeradd
     macro_header: sys-time-macros.h
 types:
+  - type_name: struct_timespec
   - type_name: struct_itimerval
   - type_name: suseconds_t
   - type_name: time_t
