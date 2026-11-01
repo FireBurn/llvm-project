@@ -9,3 +9,21 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "ether_hostton_test",
+    srcs = ["ether_hostton_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:close",
+        "//libc:ether_hostton",
+        "//libc:ether_ntohost",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:netinet_ether_ethers",
+        "//libc:open",
+        "//libc:remove",
+        "//libc:types_struct_ether_addr",
+        "//libc:write",
+    ],
+)
