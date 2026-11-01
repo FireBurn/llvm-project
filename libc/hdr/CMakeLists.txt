@@ -535,3 +535,19 @@ add_proxy_header_library(
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-macros.sys_msg_macros
 )
+
+add_proxy_header_library(
+  sys_signalfd_macros
+  HDRS
+    sys_signalfd_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.sys_signalfd_macros
+)
+
+add_proxy_header_library(
+  sys_timerfd_macros
+  HDRS
+    sys_timerfd_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.sys_timerfd_macros
+)

@@ -401,6 +401,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.io.ioperm
     libc.src.sys.io.iopl
 
+    # sys/signalfd.h entrypoints
+    libc.src.sys.signalfd.signalfd
+
+    # sys/timerfd.h entrypoints
+    libc.src.sys.timerfd.timerfd_create
+    libc.src.sys.timerfd.timerfd_gettime
+    libc.src.sys.timerfd.timerfd_settime
+
     # sys/msg.h entrypoints
     libc.src.sys.msg.msgctl
     libc.src.sys.msg.msgget

@@ -1004,6 +1004,28 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_signalfd
+  ../libc/include/sys/signalfd.yaml
+  sys/signalfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_signalfd_macros
+    .llvm-libc-types.struct_signalfd_siginfo
+    .llvm-libc-types.sigset_t
+)
+
+add_header_macro(
+  sys_timerfd
+  ../libc/include/sys/timerfd.yaml
+  sys/timerfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_timerfd_macros
+    .llvm-libc-types.struct_itimerspec
+    .llvm-libc-types.clockid_t
+)
+
+add_header_macro(
   sys_msg
   ../libc/include/sys/msg.yaml
   sys/msg.h
