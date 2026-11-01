@@ -922,6 +922,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "struct_ether_addr",
+    hdrs = ["struct_ether_addr.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_ether_addr"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_group",
     hdrs = ["struct_group.h"],
     deps = select({
