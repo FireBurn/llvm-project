@@ -63,4 +63,18 @@
        ? ((timeval_ptr_a)->tv_usec CMP(timeval_ptr_b)->tv_usec)                \
        : ((timeval_ptr_a)->tv_sec CMP(timeval_ptr_b)->tv_sec))
 
+// Convert between the two ways of writing a time, which differ in whether
+// the fraction is microseconds or nanoseconds.
+#define TIMEVAL_TO_TIMESPEC(tv, ts)                                            \
+  do {                                                                         \
+    (ts)->tv_sec = (tv)->tv_sec;                                               \
+    (ts)->tv_nsec = (tv)->tv_usec * 1000;                                      \
+  } while (0)
+
+#define TIMESPEC_TO_TIMEVAL(tv, ts)                                            \
+  do {                                                                         \
+    (tv)->tv_sec = (ts)->tv_sec;                                               \
+    (tv)->tv_usec = (ts)->tv_nsec / 1000;                                      \
+  } while (0)
+
 #endif // LLVM_LIBC_MACROS_LINUX_SYS_TIME_MACROS_H
