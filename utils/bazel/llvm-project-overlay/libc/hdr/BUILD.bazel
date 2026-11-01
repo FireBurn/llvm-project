@@ -493,3 +493,25 @@ libc_support_library(
         "//conditions:default": [],
     }),
 )
+
+libc_support_library(
+    name = "sys_signalfd_macros",
+    hdrs = ["sys_signalfd_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_sys_signalfd_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "sys_timerfd_macros",
+    hdrs = ["sys_timerfd_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_sys_timerfd_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)

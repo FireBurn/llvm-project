@@ -77,6 +77,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/prctl",
         has_def_template = True,
     ),
+    libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
     libc_header_info(
         "sys/syscall",
@@ -137,6 +138,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/time",
         other_srcs = ["sys/select-time.yaml"],
     ),
+    libc_header_info("sys/timerfd"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/types"),
     libc_header_info("sys/utsname"),
@@ -931,6 +933,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_signalfd_siginfo",
+    hdrs = ["llvm-libc-types/struct_signalfd_siginfo.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_spwd",
     hdrs = ["llvm-libc-types/struct_spwd.h"],
 )
@@ -1006,4 +1013,14 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_sys_shm_macros",
     hdrs = ["llvm-libc-macros/sys-shm-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_signalfd_macros",
+    hdrs = ["llvm-libc-macros/sys-signalfd-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_timerfd_macros",
+    hdrs = ["llvm-libc-macros/sys-timerfd-macros.h"],
 )
