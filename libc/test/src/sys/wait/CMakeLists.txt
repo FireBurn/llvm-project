@@ -14,6 +14,23 @@ add_libc_test(
 )
 
 add_libc_test(
+  wait3_test
+  SUITE
+    libc-sys-wait-tests
+  SRCS
+    wait3_test.cpp
+  DEPENDS
+    libc.include.sys_wait
+    libc.hdr.types.struct_rusage
+    libc.src.errno.errno
+    libc.src.sys.wait.wait3
+    libc.src.unistd._exit
+    libc.src.unistd.fork
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   wait4_test
   SUITE
     libc-sys-wait-tests
