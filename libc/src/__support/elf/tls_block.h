@@ -103,8 +103,12 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
       TLS_VARIANT_2
           ? round_up(layout.size() - TLS_TCB_RESERVE, layout.alignment())
           : 0;
+  // With the control block below the pointer the blocks start after it, and
+  // the pointer is aligned like they are.
+  const size_t tcb_below =
+      TLS_TCB_BELOW_TP ? round_up(TLS_TCB_SIZE, layout.alignment()) : 0;
   const size_t total =
-      TLS_VARIANT_2 ? below_tp + TLS_TCB_RESERVE : layout.size();
+      TLS_VARIANT_2 ? below_tp + TLS_TCB_RESERVE : tcb_below + layout.size();
 
   auto storage = linux_syscalls::mmap(nullptr, total, PROT_READ | PROT_WRITE,
                                       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -114,13 +118,14 @@ LIBC_INLINE ErrorOr<TlsBlock> allocate_tls_block(const Module *modules,
   const uintptr_t base = reinterpret_cast<uintptr_t>(storage.value());
   // Variant 2 puts the thread control block at the top with the module blocks
   // below it; variant 1 puts it at the bottom with the modules above.
-  const uintptr_t tp = TLS_VARIANT_2 ? base + below_tp : base;
+  const uintptr_t tp = TLS_VARIANT_2 ? base + below_tp : base + tcb_below;
 
   // The ABI requires the first word of the thread control block to point at
   // the thread pointer itself. Compiler generated thread local accesses read
   // it to find their own base, so leaving it zero makes every one of them
   // dereference an offset from address zero.
-  *reinterpret_cast<uintptr_t *>(tp) = tp;
+  if (!TLS_TCB_BELOW_TP)
+    *reinterpret_cast<uintptr_t *>(tp) = tp;
 
   // Code built with -fstack-protector reads its guard from a fixed offset
   // from the thread pointer, so every thread needs one before any such code
