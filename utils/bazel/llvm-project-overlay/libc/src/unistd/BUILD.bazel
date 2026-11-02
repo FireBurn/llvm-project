@@ -719,6 +719,19 @@ libc_function(
 )
 
 libc_function(
+    name = "_exit",
+    srcs = ["_exit.cpp"],
+    hdrs = ["_exit.h"],
+    # Full-build only, as overlay mode must use the host libc's cleanup.
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "_Fork",
     srcs = ["linux/_Fork.cpp"],
     hdrs = ["_Fork.h"],
