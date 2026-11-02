@@ -165,6 +165,7 @@
 
 #define R_AARCH64_NONE 0
 #define R_AARCH64_TLS_TPREL 1030
+#define R_AARCH64_TLSDESC 1031
 
 #define R_ARM_NONE 0
 
