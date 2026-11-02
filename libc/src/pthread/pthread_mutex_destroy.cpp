@@ -8,9 +8,11 @@
 
 #include "pthread_mutex_destroy.h"
 
+#include "hdr/errno_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/mutex.h"
+#include "src/__support/threads/mutex_common.h"
 
 #include <pthread.h>
 
@@ -18,9 +20,8 @@ namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, pthread_mutex_destroy, (pthread_mutex_t * mutex)) {
   auto *m = reinterpret_cast<Mutex *>(mutex);
-  Mutex::destroy(m);
-  // TODO: When the Mutex class supports all the possible error conditions
-  // return the appropriate error value here.
+  if (Mutex::destroy(m) == MutexError::BUSY)
+    return EBUSY;
   return 0;
 }
 
