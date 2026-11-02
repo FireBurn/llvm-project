@@ -32,15 +32,17 @@
 #include "src/dlfcn/dl_internal.h"
 #include "src/unistd/environ.h"
 
-#if defined(LIBC_TARGET_ARCH_IS_X86_64)
+#if defined(LIBC_TARGET_ARCH_IS_X86_64) || defined(LIBC_TARGET_ARCH_IS_AARCH64)
 
 // The size of the register save area the stubs below use, and whether it is
 // written with XSAVE or FXSAVE.
 extern "C" {
+#if defined(LIBC_TARGET_ARCH_IS_X86_64)
 // Read only by the stubs below, which the optimiser cannot see into.
 [[gnu::visibility("hidden"), gnu::used]] size_t __llvm_libc_dl_state_size = 512;
 [[gnu::visibility("hidden"),
   gnu::used]] unsigned char __llvm_libc_dl_use_xsave = 0;
+#endif
 [[gnu::visibility("hidden")]] ElfW(Addr)
     __llvm_libc_dl_lazy_bind(ElfW(Addr) got, size_t index);
 [[gnu::visibility("hidden")]] void __llvm_libc_dl_lazy_entry();
@@ -48,6 +50,8 @@ extern "C" {
 __llvm_libc_tlsdesc_dynamic_offset(uintptr_t argument);
 [[gnu::visibility("hidden")]] void __llvm_libc_tlsdesc_dynamic();
 }
+
+#if defined(LIBC_TARGET_ARCH_IS_X86_64)
 
 // Reached from PLT0 with GOT[1] and the relocation index pushed above the
 // caller's return address. Saves every register a call may pass arguments
@@ -187,6 +191,119 @@ __llvm_libc_tlsdesc_dynamic:
   .size __llvm_libc_tlsdesc_dynamic, . - __llvm_libc_tlsdesc_dynamic
 )");
 
+#elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
+
+// Reached from PLT0 with x16 holding the address of GOT[2] and x17 this
+// function, above the x16 and x30 PLT0 pushed. The first of those is the
+// address of the slot being bound. Saves every register a call may pass
+// arguments in, binds the slot and jumps to the target.
+asm(R"(
+  .text
+  .p2align 2
+  .globl __llvm_libc_dl_lazy_entry
+  .hidden __llvm_libc_dl_lazy_entry
+  .type __llvm_libc_dl_lazy_entry, %function
+__llvm_libc_dl_lazy_entry:
+  sub sp, sp, #208
+  stp x0, x1, [sp, #0]
+  stp x2, x3, [sp, #16]
+  stp x4, x5, [sp, #32]
+  stp x6, x7, [sp, #48]
+  str x8, [sp, #64]
+  stp q0, q1, [sp, #80]
+  stp q2, q3, [sp, #112]
+  stp q4, q5, [sp, #144]
+  stp q6, q7, [sp, #176]
+  // The GOT starts two words before GOT[2]. The slot's index is its distance
+  // from GOT[3], in words.
+  sub x0, x16, #16
+  ldr x1, [sp, #208]
+  sub x1, x1, x0
+  sub x1, x1, #24
+  lsr x1, x1, #3
+  bl __llvm_libc_dl_lazy_bind
+  mov x17, x0
+  ldp x0, x1, [sp, #0]
+  ldp x2, x3, [sp, #16]
+  ldp x4, x5, [sp, #32]
+  ldp x6, x7, [sp, #48]
+  ldr x8, [sp, #64]
+  ldp q0, q1, [sp, #80]
+  ldp q2, q3, [sp, #112]
+  ldp q4, q5, [sp, #144]
+  ldp q6, q7, [sp, #176]
+  add sp, sp, #208
+  ldp x16, x30, [sp], #16
+  br x17
+  .size __llvm_libc_dl_lazy_entry, . - __llvm_libc_dl_lazy_entry
+)");
+
+// The descriptor function for a thread local of a module opened after
+// startup. It calls into C to find or make the thread's block, so it saves
+// every register but x0 that a call may change, the vector registers C code
+// does not preserve included.
+asm(R"(
+  .text
+  .p2align 2
+  .globl __llvm_libc_tlsdesc_dynamic
+  .hidden __llvm_libc_tlsdesc_dynamic
+  .type __llvm_libc_tlsdesc_dynamic, %function
+__llvm_libc_tlsdesc_dynamic:
+  stp x29, x30, [sp, #-16]!
+  mov x29, sp
+  sub sp, sp, #528
+  stp x1, x2, [sp, #0]
+  stp x3, x4, [sp, #16]
+  stp x5, x6, [sp, #32]
+  stp x7, x8, [sp, #48]
+  stp x9, x10, [sp, #64]
+  stp x11, x12, [sp, #80]
+  stp x13, x14, [sp, #96]
+  stp x15, x16, [sp, #112]
+  stp x17, x18, [sp, #128]
+  stp q0, q1, [sp, #144]
+  stp q2, q3, [sp, #176]
+  stp q4, q5, [sp, #208]
+  stp q6, q7, [sp, #240]
+  stp q16, q17, [sp, #272]
+  stp q18, q19, [sp, #304]
+  stp q20, q21, [sp, #336]
+  stp q22, q23, [sp, #368]
+  stp q24, q25, [sp, #400]
+  stp q26, q27, [sp, #432]
+  stp q28, q29, [sp, #464]
+  stp q30, q31, [sp, #496]
+  ldr x0, [x0, #8]
+  bl __llvm_libc_tlsdesc_dynamic_offset
+  ldp x1, x2, [sp, #0]
+  ldp x3, x4, [sp, #16]
+  ldp x5, x6, [sp, #32]
+  ldp x7, x8, [sp, #48]
+  ldp x9, x10, [sp, #64]
+  ldp x11, x12, [sp, #80]
+  ldp x13, x14, [sp, #96]
+  ldp x15, x16, [sp, #112]
+  ldp x17, x18, [sp, #128]
+  ldp q0, q1, [sp, #144]
+  ldp q2, q3, [sp, #176]
+  ldp q4, q5, [sp, #208]
+  ldp q6, q7, [sp, #240]
+  ldp q16, q17, [sp, #272]
+  ldp q18, q19, [sp, #304]
+  ldp q20, q21, [sp, #336]
+  ldp q22, q23, [sp, #368]
+  ldp q24, q25, [sp, #400]
+  ldp q26, q27, [sp, #432]
+  ldp q28, q29, [sp, #464]
+  ldp q30, q31, [sp, #496]
+  mov sp, x29
+  ldp x29, x30, [sp], #16
+  ret
+  .size __llvm_libc_tlsdesc_dynamic, . - __llvm_libc_tlsdesc_dynamic
+)");
+
+#endif
+
 namespace LIBC_NAMESPACE_DECL {
 namespace {
 
@@ -282,6 +399,7 @@ bool bind_now_requested() {
   return false;
 }
 
+#if defined(LIBC_TARGET_ARCH_IS_X86_64)
 void cpuid(uint32_t leaf, uint32_t subleaf, uint32_t &a, uint32_t &b,
            uint32_t &c, uint32_t &d) {
   asm volatile("cpuid"
@@ -308,6 +426,12 @@ void measure_saved_state() {
   __llvm_libc_dl_state_size = (static_cast<size_t>(b) + 63) & ~size_t(63);
   __llvm_libc_dl_use_xsave = 1;
 }
+
+#else
+
+void measure_saved_state() {}
+
+#endif
 
 } // anonymous namespace
 
