@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Built with -mtls-dialect=gnu2, so it reaches its thread local through a
+/// Built with -mtls-dialect=gnu2 (-enable-tlsdesc on aarch64), so it reaches its thread local through a
 /// TLS descriptor and not through __tls_get_addr. See tlsdesc_test.cpp.
 ///
 //===----------------------------------------------------------------------===//
