@@ -413,3 +413,13 @@ libc_test(
         "//libc:llvm_libc_macros_sys_queue_macros",
     ],
 )
+
+libc_test(
+    name = "android_aarch64_sigcontext_test",
+    srcs = ["android_aarch64_sigcontext_test.cpp"],
+    full_build_only = True,
+    target_compatible_with = ["@platforms//cpu:aarch64"],
+    deps = [
+        "//libc:llvm_libc_types_mcontext_t",
+    ],
+)
