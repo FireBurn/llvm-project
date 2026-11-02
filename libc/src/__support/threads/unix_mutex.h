@@ -319,9 +319,12 @@ public:
     // The count shares its word with the flag bits of the public type, whose
     // initialiser leaves the rest of it as it was, so only a recursive mutex,
     // which is built here, has a count that means anything.
-    LIBC_ASSERT(lock->owner == 0 &&
-                (!lock->is_recursive() || lock->lock_count == 0) &&
-                "Mutex destroyed while being locked.");
+    // glibc says EBUSY and leaves a locked mutex as it was, except a robust
+    // one, whose owner may have exited.
+    if (!lock->is_robust() &&
+        (lock->owner != 0 || (lock->is_recursive() && lock->lock_count != 0) ||
+         lock->futex.load(cpp::MemoryOrder::RELAXED) != 0))
+      return MutexError::BUSY;
     RawMutex::destroy(lock);
     return MutexError::NONE;
   }
