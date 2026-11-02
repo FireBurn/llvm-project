@@ -29316,7 +29316,8 @@ libc_support_library(
     name = "llvm_libc_types_mcontext_t",
     hdrs = ["include/llvm-libc-types/mcontext_t.h"],
     textual_hdrs = [
-                        "include/llvm-libc-types/x86_64/mcontext_t.h",
+        "include/llvm-libc-types/aarch64/mcontext_t.h",
+                "include/llvm-libc-types/x86_64/mcontext_t.h",
         "include/llvm-libc-types/x86_64/struct_user_regs_struct.h",
     ],
 )
@@ -29325,7 +29326,8 @@ libc_support_library(
     name = "llvm_libc_types_ucontext_t",
     hdrs = ["include/llvm-libc-types/ucontext_t.h"],
     textual_hdrs = [
-                        "include/llvm-libc-types/x86_64/ucontext_t.h",
+        "include/llvm-libc-types/aarch64/ucontext_t.h",
+                "include/llvm-libc-types/x86_64/ucontext_t.h",
     ],
     deps = [
         ":llvm_libc_types_mcontext_t",
