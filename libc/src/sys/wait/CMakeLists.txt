@@ -10,6 +10,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wait3
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.wait3
+)
+
+add_entrypoint_object(
   wait4
   ALIAS
   DEPENDS
