@@ -22,7 +22,9 @@ using LIBC_NAMESPACE::elf::load_module;
 using LIBC_NAMESPACE::elf::LoadedModule;
 using LIBC_NAMESPACE::elf::Module;
 using LIBC_NAMESPACE::elf::TLS_STACK_GUARD_OFFSET;
+using LIBC_NAMESPACE::elf::TLS_TCB_BELOW_TP;
 using LIBC_NAMESPACE::elf::TLS_TCB_RESERVE;
+using LIBC_NAMESPACE::elf::TLS_TCB_SIZE;
 using LIBC_NAMESPACE::elf::TLS_VARIANT_2;
 using LIBC_NAMESPACE::elf::TlsBlock;
 using LIBC_NAMESPACE::elf::unmap_module;
@@ -68,12 +70,15 @@ TEST(LlvmLibcElfTlsBlockTest, CoversLibcOwnTlsSegment) {
   EXPECT_GE(block.size, size_t(tls->p_memsz) + TLS_TCB_RESERVE);
 
   // The thread pointer sits inside the allocation, at the top under variant 2
-  // and at the bottom under variant 1.
+  // and at the bottom under variant 1, above the control block where that
+  // lies below the pointer.
   const uintptr_t base = reinterpret_cast<uintptr_t>(block.storage);
   EXPECT_GE(block.thread_pointer, base);
   EXPECT_LE(block.thread_pointer, base + block.size);
   if (TLS_VARIANT_2)
     EXPECT_EQ(block.thread_pointer, base + block.size - TLS_TCB_RESERVE);
+  else if (TLS_TCB_BELOW_TP)
+    EXPECT_GE(block.thread_pointer, base + TLS_TCB_SIZE);
   else
     EXPECT_EQ(block.thread_pointer, base);
 
