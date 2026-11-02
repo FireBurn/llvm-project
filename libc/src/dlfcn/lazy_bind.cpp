@@ -32,7 +32,9 @@
 #include "src/dlfcn/dl_internal.h"
 #include "src/unistd/environ.h"
 
-#if defined(LIBC_TARGET_ARCH_IS_X86_64) || defined(LIBC_TARGET_ARCH_IS_AARCH64)
+#if defined(LIBC_TARGET_ARCH_IS_X86_64) ||                                     \
+    defined(LIBC_TARGET_ARCH_IS_AARCH64) ||                                    \
+    defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
 
 // The size of the register save area the stubs below use, and whether it is
 // written with XSAVE or FXSAVE.
@@ -302,6 +304,150 @@ __llvm_libc_tlsdesc_dynamic:
   .size __llvm_libc_tlsdesc_dynamic, . - __llvm_libc_tlsdesc_dynamic
 )");
 
+#elif defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
+
+// Reached from PLT0 with t0 holding GOT[1], which is the GOT's own address
+// here, and t1 eight times the relocation index. Saves every register a call
+// may pass arguments in, binds the slot and jumps to the target.
+asm(R"(
+  .text
+  .p2align 2
+  .globl __llvm_libc_dl_lazy_entry
+  .hidden __llvm_libc_dl_lazy_entry
+  .type __llvm_libc_dl_lazy_entry, @function
+__llvm_libc_dl_lazy_entry:
+  addi sp, sp, -144
+  sd ra, 0(sp)
+  sd a0, 8(sp)
+  sd a1, 16(sp)
+  sd a2, 24(sp)
+  sd a3, 32(sp)
+  sd a4, 40(sp)
+  sd a5, 48(sp)
+  sd a6, 56(sp)
+  sd a7, 64(sp)
+  fsd fa0, 72(sp)
+  fsd fa1, 80(sp)
+  fsd fa2, 88(sp)
+  fsd fa3, 96(sp)
+  fsd fa4, 104(sp)
+  fsd fa5, 112(sp)
+  fsd fa6, 120(sp)
+  fsd fa7, 128(sp)
+  mv a0, t0
+  srli a1, t1, 3
+  call __llvm_libc_dl_lazy_bind
+  mv t1, a0
+  ld ra, 0(sp)
+  ld a0, 8(sp)
+  ld a1, 16(sp)
+  ld a2, 24(sp)
+  ld a3, 32(sp)
+  ld a4, 40(sp)
+  ld a5, 48(sp)
+  ld a6, 56(sp)
+  ld a7, 64(sp)
+  fld fa0, 72(sp)
+  fld fa1, 80(sp)
+  fld fa2, 88(sp)
+  fld fa3, 96(sp)
+  fld fa4, 104(sp)
+  fld fa5, 112(sp)
+  fld fa6, 120(sp)
+  fld fa7, 128(sp)
+  addi sp, sp, 144
+  jr t1
+  .size __llvm_libc_dl_lazy_entry, . - __llvm_libc_dl_lazy_entry
+)");
+
+// The descriptor function for a thread local of a module opened after
+// startup. It is called with t0 as the link register and may change nothing
+// but a0, t0 and t1. It calls into C to find or make the thread's block, so
+// it saves every other register a call may change, the floating point
+// registers C code does not preserve included.
+asm(R"(
+  .text
+  .p2align 2
+  .globl __llvm_libc_tlsdesc_dynamic
+  .hidden __llvm_libc_tlsdesc_dynamic
+  .type __llvm_libc_tlsdesc_dynamic, @function
+__llvm_libc_tlsdesc_dynamic:
+  addi sp, sp, -272
+  sd ra, 0(sp)
+  sd t0, 8(sp)
+  sd a1, 16(sp)
+  sd a2, 24(sp)
+  sd a3, 32(sp)
+  sd a4, 40(sp)
+  sd a5, 48(sp)
+  sd a6, 56(sp)
+  sd a7, 64(sp)
+  sd t2, 72(sp)
+  sd t3, 80(sp)
+  sd t4, 88(sp)
+  sd t5, 96(sp)
+  sd t6, 104(sp)
+  fsd ft0, 112(sp)
+  fsd ft1, 120(sp)
+  fsd ft2, 128(sp)
+  fsd ft3, 136(sp)
+  fsd ft4, 144(sp)
+  fsd ft5, 152(sp)
+  fsd ft6, 160(sp)
+  fsd ft7, 168(sp)
+  fsd fa0, 176(sp)
+  fsd fa1, 184(sp)
+  fsd fa2, 192(sp)
+  fsd fa3, 200(sp)
+  fsd fa4, 208(sp)
+  fsd fa5, 216(sp)
+  fsd fa6, 224(sp)
+  fsd fa7, 232(sp)
+  fsd ft8, 240(sp)
+  fsd ft9, 248(sp)
+  fsd ft10, 256(sp)
+  fsd ft11, 264(sp)
+  ld a0, 8(a0)
+  call __llvm_libc_tlsdesc_dynamic_offset
+  ld ra, 0(sp)
+  ld t0, 8(sp)
+  ld a1, 16(sp)
+  ld a2, 24(sp)
+  ld a3, 32(sp)
+  ld a4, 40(sp)
+  ld a5, 48(sp)
+  ld a6, 56(sp)
+  ld a7, 64(sp)
+  ld t2, 72(sp)
+  ld t3, 80(sp)
+  ld t4, 88(sp)
+  ld t5, 96(sp)
+  ld t6, 104(sp)
+  fld ft0, 112(sp)
+  fld ft1, 120(sp)
+  fld ft2, 128(sp)
+  fld ft3, 136(sp)
+  fld ft4, 144(sp)
+  fld ft5, 152(sp)
+  fld ft6, 160(sp)
+  fld ft7, 168(sp)
+  fld fa0, 176(sp)
+  fld fa1, 184(sp)
+  fld fa2, 192(sp)
+  fld fa3, 200(sp)
+  fld fa4, 208(sp)
+  fld fa5, 216(sp)
+  fld fa6, 224(sp)
+  fld fa7, 232(sp)
+  fld ft8, 240(sp)
+  fld ft9, 248(sp)
+  fld ft10, 256(sp)
+  fld ft11, 264(sp)
+  addi sp, sp, 272
+  jr t0
+  .size __llvm_libc_tlsdesc_dynamic, . - __llvm_libc_tlsdesc_dynamic
+)");
+
 #endif
 
 namespace LIBC_NAMESPACE_DECL {
@@ -453,7 +599,12 @@ void enable_lazy_binding(const elf::Module &module) {
       reinterpret_cast<ElfW(Addr) *>(*module.dynamic().address(DT_PLTGOT));
   // The binder finds the module again from the GOT's address.
   got[1] = reinterpret_cast<ElfW(Addr)>(got);
+#if defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
+  // PLT0 jumps through the first word, and the slots start at the third.
+  got[0] = reinterpret_cast<ElfW(Addr)>(&__llvm_libc_dl_lazy_entry);
+#else
   got[2] = reinterpret_cast<ElfW(Addr)>(&__llvm_libc_dl_lazy_entry);
+#endif
 }
 
 } // namespace dl
