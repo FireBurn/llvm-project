@@ -17931,6 +17931,19 @@ libc_function(
 )
 
 libc_function(
+    name = "_exit",
+    srcs = ["src/unistd/_exit.cpp"],
+    hdrs = ["src/unistd/_exit.h"],
+    # Full-build only, as overlay mode must use the host libc's cleanup.
+    full_build_only = True,
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_exit",
+    ],
+)
+
+libc_function(
     name = "atexit",
     srcs = ["src/stdlib/atexit.cpp"],
     hdrs = ["src/stdlib/atexit.h"],
@@ -21679,6 +21692,22 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_umount2",
         ":errno",
         ":sys_mount_umount2",
+    ],
+)
+
+libc_function(
+    name = "wait3",
+    srcs = ["src/sys/wait/linux/wait3.cpp"],
+    hdrs = ["src/sys/wait/wait3.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_wait4",
+        ":errno",
+        ":sys_wait_wait3",
+        ":types_pid_t",
+        ":types_struct_rusage",
     ],
 )
 
@@ -28996,6 +29025,16 @@ libc_support_library(
         ":__support_time_units",
         ":hdr_time_macros",
         ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "sys_wait_wait3",
+    hdrs = ["src/sys/wait/wait3.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+        ":types_struct_rusage",
     ],
 )
 
