@@ -39,6 +39,14 @@ constexpr bool TLS_VARIANT_2 = false;
 // module's block.
 constexpr size_t TLS_TCB_SIZE = 2 * sizeof(void *);
 
+// RISC-V is variant 1 with the thread control block below the thread pointer,
+// so the first module's block starts at the pointer itself.
+#if defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
+constexpr bool TLS_TCB_BELOW_TP = true;
+#else
+constexpr bool TLS_TCB_BELOW_TP = false;
+#endif
+
 // Bytes to keep at the thread pointer itself. Variant 1 needs only the
 // control block, which its offsets already skip. Variant 2 has to leave room
 // for what x86 addresses through the thread pointer by fixed offset: the self
@@ -86,7 +94,7 @@ public:
     }
 
     if (count_ == 0)
-      offset_ = round_up(TLS_TCB_SIZE, alignment);
+      offset_ = round_up(TLS_TCB_BELOW_TP ? 0 : TLS_TCB_SIZE, alignment);
     else
       offset_ = round_up(offset_, alignment);
     const size_t here = offset_;
