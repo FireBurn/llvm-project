@@ -339,6 +339,19 @@ libc_function(
 )
 
 libc_function(
+    name = "mutex_destroy",
+    srcs = ["pthread_mutex_destroy.cpp"],
+    hdrs = ["pthread_mutex_destroy.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/threads:mutex_common",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "mutex_timedlock",
     srcs = ["pthread_mutex_timedlock.cpp"],
     hdrs = ["pthread_mutex_timedlock.h"],
