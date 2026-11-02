@@ -14,6 +14,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  wait3
+  SRCS
+    wait3.cpp
+  HDRS
+    ../wait3.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.hdr.types.struct_rusage
+    libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   wait4
   SRCS
     wait4.cpp
