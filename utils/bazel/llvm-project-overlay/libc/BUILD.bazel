@@ -19069,6 +19069,7 @@ libc_function(
         ":__support_printf_core_vfprintf_internal",
         ":errno",
         ":types_FILE",
+        ":vfprintf",
     ],
 )
 
