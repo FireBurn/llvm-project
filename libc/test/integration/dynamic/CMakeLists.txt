@@ -101,6 +101,14 @@ target_compile_options(libc-test-dl-user PRIVATE
   -fPIC -fno-exceptions -fno-rtti)
 target_link_options(libc-test-dl-user PRIVATE -nostdlib -Wl,-z,undefs)
 
+# Calls into the program through the PLT, bound when each call is first made.
+# The image's compiler links with -z now, which leaves nothing to defer.
+add_library(libc-test-dl-lazy-object SHARED dl_lazy_object.cpp)
+target_compile_options(libc-test-dl-lazy-object PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-lazy-object PRIVATE -nostdlib
+  -Wl,-z,lazy -Wl,-z,undefs)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -330,6 +338,18 @@ add_libc_dynamic_test(
     -DLIBC_TEST_LOADER_CHILD="$<TARGET_FILE:loader_command_child>"
   DEPENDS
     loader_command_child
+)
+
+add_libc_dynamic_test(
+  lazy_bind_test
+  SRCS
+    lazy_bind_test.cpp
+  COMPILE_OPTIONS
+    -DLIBC_TEST_DL_LAZY_OBJECT="$<TARGET_FILE:libc-test-dl-lazy-object>"
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+  DEPENDS
+    libc-test-dl-lazy-object
 )
 
 add_libc_dynamic_test(
