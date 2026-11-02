@@ -18308,6 +18308,8 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
+        ":hdr_errno_macros",
         ":types_nfds_t",
         ":types_struct_pollfd",
         ":types_struct_timespec",
