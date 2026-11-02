@@ -70,6 +70,7 @@
 #define R_RISCV_COPY 4
 #define R_RISCV_TLS_DTPMOD64 7
 #define R_RISCV_TLS_DTPREL64 9
+#define R_RISCV_TLSDESC 12
 
 // The no-op relocation is type zero on every architecture, and the absolute
 // data relocations below are what object file tools match against.
