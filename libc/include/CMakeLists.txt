@@ -934,7 +934,8 @@ add_header_macro(
     .llvm_libc_common_h
 )
 
-if(LIBC_TARGET_ARCHITECTURE_IS_X86_64 OR LIBC_TARGET_ARCHITECTURE_IS_ANY_RISCV)
+if(LIBC_TARGET_ARCHITECTURE STREQUAL "x86_64" OR
+   LIBC_TARGET_ARCHITECTURE STREQUAL "aarch64")
   add_header_macro(
     ucontext
     ../libc/include/ucontext.yaml
