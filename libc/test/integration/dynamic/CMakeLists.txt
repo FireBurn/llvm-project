@@ -63,12 +63,20 @@ target_link_options(libc-test-dl-order-x PRIVATE
 add_dependencies(libc-test-dl-order-x
   libc-test-dl-order-a libc-test-dl-order-b)
 
-# Reaches its thread local through a TLS descriptor, which only x86_64 has
-# support for here.
+# Reaches its thread local through a TLS descriptor, which only x86_64 and
+# aarch64 have support for here.
+set(tlsdesc_flags "")
 if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+  set(tlsdesc_flags -mtls-dialect=gnu2)
+elseif(LIBC_TARGET_ARCHITECTURE_IS_AARCH64)
+  # The driver does not take -mtls-dialect for this target, so the option
+  # that the dialect sets underneath is given directly.
+  set(tlsdesc_flags "SHELL:-Xclang -enable-tlsdesc")
+endif()
+if(tlsdesc_flags)
   add_library(libc-test-dl-tlsdesc-object SHARED dl_tlsdesc_object.cpp)
   target_compile_options(libc-test-dl-tlsdesc-object PRIVATE
-    -fPIC -fno-exceptions -fno-rtti -mtls-dialect=gnu2)
+    -fPIC -fno-exceptions -fno-rtti ${tlsdesc_flags})
   target_link_options(libc-test-dl-tlsdesc-object PRIVATE -nostdlib)
 endif()
 
@@ -268,7 +276,7 @@ add_libc_dynamic_test(
     libc-test-dl-order-x
 )
 
-if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+if(tlsdesc_flags)
   add_libc_dynamic_test(
     tlsdesc_test
     SRCS
