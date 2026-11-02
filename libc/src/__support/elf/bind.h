@@ -66,7 +66,7 @@ constexpr uint32_t RELOC_JUMP_SLOT = R_RISCV_JUMP_SLOT;
 constexpr uint32_t RELOC_TLS_OFFSET = R_RISCV_TLS_TPREL64;
 constexpr uint32_t RELOC_TLS_MODULE = R_RISCV_TLS_DTPMOD64;
 constexpr uint32_t RELOC_TLS_MODULE_OFFSET = R_RISCV_TLS_DTPREL64;
-constexpr uint32_t RELOC_TLS_DESCRIPTOR = 0xfffffffcu;
+constexpr uint32_t RELOC_TLS_DESCRIPTOR = R_RISCV_TLSDESC;
 #elif defined(LIBC_TARGET_ARCH_IS_ARM)
 constexpr uint32_t RELOC_ABSOLUTE = R_ARM_ABS32;
 constexpr uint32_t RELOC_COPY = R_ARM_COPY;
@@ -307,7 +307,9 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
       auto *descriptor =
           reinterpret_cast<ElfW(Addr) *>(target.load_bias() + rela->r_offset);
       const intptr_t *offsets = order.tls_offsets();
-#if defined(LIBC_TARGET_ARCH_IS_X86_64) || defined(LIBC_TARGET_ARCH_IS_AARCH64)
+#if defined(LIBC_TARGET_ARCH_IS_X86_64) ||                                     \
+    defined(LIBC_TARGET_ARCH_IS_AARCH64) ||                                    \
+    defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
       if (module < order.static_count() && offsets != nullptr) {
         descriptor[0] =
             reinterpret_cast<ElfW(Addr)>(&__llvm_libc_tlsdesc_static);
@@ -329,6 +331,8 @@ LIBC_INLINE BindResult bind_relocations(const Module &target,
 #endif
       (void)descriptor;
       (void)offsets;
+      (void)module;
+      (void)offset;
       ++result.unresolved;
       if (result.missing == nullptr)
         result.missing = name;
