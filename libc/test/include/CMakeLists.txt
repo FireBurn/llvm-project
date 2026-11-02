@@ -1896,3 +1896,13 @@ add_libc_test(
     libc.include.llvm-libc-macros.netinet_icmp6_macros
     libc.include.llvm-libc-types.struct_icmp6_hdr
 )
+
+add_libc_test(
+  netinet_tcp_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_tcp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.netinet_tcp_macros
+)
