@@ -353,6 +353,12 @@ add_libc_dynamic_test(
 )
 
 add_libc_dynamic_test(
+  loader_start_test
+  SRCS
+    loader_start_test.cpp
+)
+
+add_libc_dynamic_test(
   lock_in_init_test
   SRCS
     lock_in_init_test.cpp
