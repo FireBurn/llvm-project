@@ -1947,6 +1947,12 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.langinfo.nl_langinfo_l
     libc.src.unistd._Fork
 
+    # ucontext.h entrypoints
+    libc.src.ucontext.getcontext
+    libc.src.ucontext.makecontext
+    libc.src.ucontext.setcontext
+    libc.src.ucontext.swapcontext
+
     # unistd.h entrypoints
     libc.src.unistd.__llvm_libc_syscall
     libc.src.unistd._exit
