@@ -24,6 +24,14 @@ functions:
     return_type: pid_t
     arguments:
       - type: int *
+  - name: wait3
+    standards:
+      - bsd
+    return_type: pid_t
+    arguments:
+      - type: int *
+      - type: int
+      - type: struct rusage *
   - name: wait4
     standards:
       - bsd
