@@ -67,7 +67,6 @@ function(add_startup_object name)
     DEPENDS ${ADD_STARTUP_OBJECT_DEPENDS}
     COMPILE_OPTIONS
       ${ADD_STARTUP_OBJECT_COMPILE_OPTIONS}
-      -fno-lto
   )
   set_target_properties(
     ${fq_target_name}
