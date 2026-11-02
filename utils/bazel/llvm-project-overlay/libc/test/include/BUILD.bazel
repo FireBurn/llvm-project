@@ -433,3 +433,13 @@ libc_test(
         "//libc/src/__support/CPP:string",
     ],
 )
+
+libc_test(
+    name = "android_aarch64_sigcontext_test",
+    srcs = ["android_aarch64_sigcontext_test.cpp"],
+    full_build_only = True,
+    target_compatible_with = ["@platforms//cpu:aarch64"],
+    deps = [
+        "//libc:llvm_libc_types_mcontext_t",
+    ],
+)

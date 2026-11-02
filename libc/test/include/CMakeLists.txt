@@ -1,5 +1,17 @@
 add_libc_testsuite(libc-include-tests)
 
+if(LIBC_TARGET_ARCHITECTURE_IS_AARCH64)
+  add_libc_test(
+    android_aarch64_sigcontext_test
+    SUITE
+      libc-include-tests
+    SRCS
+      android_aarch64_sigcontext_test.cpp
+    DEPENDS
+      libc.include.llvm-libc-types.mcontext_t
+  )
+endif()
+
 add_libc_test(
   resolv_state_layout_test
   SUITE
@@ -740,6 +752,16 @@ add_libc_test(
     stdlib_sys_types_test.cpp
   DEPENDS
     libc.include.stdlib
+)
+
+add_libc_test(
+  signal_ucontext_aarch64_test
+  SUITE
+    libc-include-tests
+  SRCS
+    signal_ucontext_aarch64_test.cpp
+  DEPENDS
+    libc.include.signal
 )
 
 add_libc_test(
