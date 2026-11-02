@@ -32,6 +32,9 @@
 #include "src/unistd/environ.h"
 #include "startup/linux/gnu_property_section.h"
 #include "startup/linux/irelative.h"
+#ifdef LIBC_STARTUP_STATIC_PIE
+#include "startup/linux/relocate_static_pie.h"
+#endif
 #include <sys/syscall.h>
 
 extern "C" int main(int argc, char **argv, char **envp);
@@ -129,6 +132,9 @@ static Futex main_thread_clear_tid(1);
 static TLSDescriptor tls;
 
 [[noreturn]] void do_start() {
+#ifdef LIBC_STARTUP_STATIC_PIE
+  relocate_static_pie();
+#endif
   auto tid = syscall_impl<long>(SYS_gettid);
   if (tid <= 0)
     linux_syscalls::exit_group(1);
