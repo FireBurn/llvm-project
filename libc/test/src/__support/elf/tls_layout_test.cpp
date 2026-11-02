@@ -15,6 +15,7 @@
 #include "test/UnitTest/Test.h"
 
 using LIBC_NAMESPACE::elf::round_up;
+using LIBC_NAMESPACE::elf::TLS_TCB_BELOW_TP;
 using LIBC_NAMESPACE::elf::TLS_TCB_RESERVE;
 using LIBC_NAMESPACE::elf::TLS_TCB_SIZE;
 using LIBC_NAMESPACE::elf::TLS_VARIANT_2;
@@ -49,8 +50,9 @@ TEST(LlvmLibcElfTlsLayoutTest, OffsetsAreOnTheRightSide) {
     EXPECT_LT(first, intptr_t(0));
     EXPECT_LT(second, first);
   } else {
-    // Above the thread pointer, past the thread control block.
-    EXPECT_GE(first, intptr_t(TLS_TCB_SIZE));
+    // Above the thread pointer, past the thread control block unless that
+    // sits below the pointer.
+    EXPECT_GE(first, TLS_TCB_BELOW_TP ? intptr_t(0) : intptr_t(TLS_TCB_SIZE));
     EXPECT_GT(second, first);
   }
   EXPECT_EQ(layout.module_count(), size_t(2));
