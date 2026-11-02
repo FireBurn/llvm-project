@@ -363,3 +363,23 @@ add_libc_dynamic_test(
   DEPENDS
     libc-test-dl-object
 )
+
+# Started from rcrt1.o instead of an interpreter, and linked with the static
+# library, whose objects are position independent in a shared build.
+add_executable(static_pie_test static_pie_test.cpp)
+target_compile_options(static_pie_test PRIVATE
+  -fPIE -ffreestanding -fno-exceptions -fno-rtti)
+# The driver may name a dynamic linker of its own, which a static PIE has none of.
+target_link_options(static_pie_test PRIVATE -nostdlib -static-pie
+  -Wl,--no-dynamic-linker)
+target_link_libraries(static_pie_test PRIVATE
+  $<TARGET_OBJECTS:libc.startup.${LIBC_TARGET_OS}.rcrt1> libc)
+add_dependencies(static_pie_test libc.startup.${LIBC_TARGET_OS}.rcrt1 libc)
+if(LIBC_COMPILER_RT_BUILTINS)
+  target_link_libraries(static_pie_test PRIVATE ${LIBC_COMPILER_RT_BUILTINS})
+endif()
+add_custom_target(libc.test.integration.dynamic.static_pie_test
+  COMMAND static_pie_test
+  DEPENDS static_pie_test)
+add_dependencies(libc-integration-tests
+  libc.test.integration.dynamic.static_pie_test)

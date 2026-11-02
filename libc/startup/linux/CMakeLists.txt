@@ -117,6 +117,7 @@ add_object_library(
   HDRS
     do_start.h
     irelative.h
+    relocate_static_pie.h
   DEPENDS
     .app
     libc.config.app_h
@@ -152,6 +153,53 @@ add_object_library(
     -fno-stack-protector # stack protect canary is not available yet.
 )
 
+add_object_library(
+  do_start_static_pie
+  SRCS
+    do_start.cpp
+  HDRS
+    do_start.h
+    irelative.h
+    relocate_static_pie.h
+  DEPENDS
+    .app
+    libc.config.app_h
+    libc.hdr.elf_macros
+    libc.hdr.sys_auxv_macros
+    libc.hdr.elf_proxy
+    libc.hdr.link_macros
+    libc.hdr.pthread_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.sys_auxv_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.types.struct_link_map
+    libc.hdr.types.struct_r_debug
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.linux.auxv
+    libc.src.__support.OSUtil.linux.syscall_wrappers.exit_group
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.elf.module
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.threads.tcb
+    libc.src.__support.threads.robust_list
+    libc.src.__support.threads.thread
+    libc.src.__support.threads.linux.futex_utils
+    libc.src.__support.threads.linux.tls
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.startup.linux.${LIBC_TARGET_ARCHITECTURE}.irelative
+    libc.src.link._r_debug
+    libc.src.stdlib.exit
+    libc.src.stdlib.atexit
+    libc.src.unistd.environ
+    libc.src.compat.program_name
+  COMPILE_OPTIONS
+    -ffreestanding # To avoid compiler warnings about calling the main function.
+    -fno-builtin # avoid emit unexpected calls
+    -fno-stack-protector # stack protect canary is not available yet.
+    -DLIBC_STARTUP_STATIC_PIE
+)
+
 # A program linked against libc.so cannot reach the TLS routines there, which
 # are hidden, so a shared build carries its own copy of them in crt1.o. A
 # static link takes them from crt1.o in the same way and leaves libc.a's.
@@ -171,6 +219,19 @@ merge_relocatable_object(
   .gnu_property_section
 )
 
+# Static PIEs start from rcrt1.o, which relocates the program before anything
+# else. It needs position independent objects, so only a shared build has it.
+if(LIBC_ENABLE_SHARED)
+  merge_relocatable_object(
+    rcrt1
+    .${LIBC_TARGET_ARCHITECTURE}.start
+    ${crt1_tls}
+    .${LIBC_TARGET_ARCHITECTURE}.irelative
+    .do_start_static_pie
+    .gnu_property_section
+  )
+endif()
+
 add_startup_object(
   crti
   SRC
@@ -185,6 +246,9 @@ add_startup_object(
 
 add_custom_target(libc-startup)
 set(startup_components crt1 crti crtn)
+if(LIBC_ENABLE_SHARED)
+  list(APPEND startup_components rcrt1)
+endif()
 foreach(target IN LISTS startup_components)
   set(fq_target_name libc.startup.linux.${target})
   add_dependencies(libc-startup ${fq_target_name})
