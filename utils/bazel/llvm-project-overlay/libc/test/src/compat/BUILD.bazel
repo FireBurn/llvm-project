@@ -60,3 +60,15 @@ libc_test(
         "//libc:write",
     ],
 )
+
+libc_test(
+    name = "cpucount_test",
+    srcs = ["cpucount_test.cpp"],
+    deps = [
+        "//libc:__fpclassifyf",
+        "//libc:__sched_cpucount",
+        "//libc:hdr_math_macros",
+        "//libc:memset",
+        "//libc:types_cpu_set_t",
+    ],
+)
