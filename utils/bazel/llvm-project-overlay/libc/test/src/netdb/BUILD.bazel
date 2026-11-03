@@ -157,3 +157,24 @@ libc_test(
         "//libc:types_struct_sockaddr_in6",
     ],
 )
+
+libc_test(
+    name = "netgroup_test",
+    srcs = ["netgroup_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:close",
+        "//libc:endnetgrent",
+        "//libc:getnetgrent",
+        "//libc:getnetgrent_r",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:innetgr",
+        "//libc:netdb_netgroup_utils",
+        "//libc:open",
+        "//libc:remove",
+        "//libc:setnetgrent",
+        "//libc:write",
+    ],
+)

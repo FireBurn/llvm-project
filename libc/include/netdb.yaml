@@ -214,6 +214,45 @@ functions:
       - type: size_t
       - type: struct hostent **
       - type: int *
+  - name: endnetgrent
+    standards:
+      - gnu
+    return_type: void
+    arguments:
+      - type: void
+  - name: getnetgrent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char **
+      - type: char **
+      - type: char **
+  - name: getnetgrent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: char **
+      - type: char **
+      - type: char **
+      - type: char *
+      - type: size_t
+  - name: innetgr
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+      - type: const char *
+      - type: const char *
+  - name: setnetgrent
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
   - name: herror
     standards:
       - bsd
