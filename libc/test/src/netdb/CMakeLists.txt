@@ -1,6 +1,19 @@
 add_libc_testsuite(libc-netdb-tests)
 
 add_libc_test(
+  getservbyname_r_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    getservbyname_r_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_servent
+    libc.src.netdb.getservbyname_r
+    libc.src.netdb.getservbyport_r
+)
+
+add_libc_test(
   gai_strerror_test
   SUITE
     libc-netdb-tests
