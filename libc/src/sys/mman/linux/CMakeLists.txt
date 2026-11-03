@@ -195,11 +195,13 @@ add_entrypoint_object(
   HDRS
     ../msync.h
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.types.size_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.msync
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.__support.threads.cancel
     libc.src.errno.errno
 )
 

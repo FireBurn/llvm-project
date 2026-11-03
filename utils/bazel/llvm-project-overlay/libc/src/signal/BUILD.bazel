@@ -19,11 +19,11 @@ libc_support_library(
     name = "__restore_rt",
     srcs = ["linux/__restore.cpp"],
     copts = [
-        "-fomit-frame-pointer",
         "-O3",
         "-Wframe-larger-than=0",
         "-Wno-attributes",
         "-fno-sanitize=address",
+        "-fomit-frame-pointer",
     ],
     full_build_only = True,
     target_compatible_with = select({
@@ -143,6 +143,21 @@ libc_function(
 )
 
 libc_function(
+    name = "sigsuspend",
+    srcs = ["linux/sigsuspend.cpp"],
+    hdrs = ["sigsuspend.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigsuspend",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "sigtimedwait",
     srcs = ["linux/sigtimedwait.cpp"],
     hdrs = ["sigtimedwait.h"],
@@ -168,9 +183,11 @@ libc_function(
     deps = [
         "//libc/hdr/types:siginfo_t",
         "//libc/hdr/types:sigset_t",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigtimedwait",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cancel",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",

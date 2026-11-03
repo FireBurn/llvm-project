@@ -689,6 +689,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_fd_set",
+    hdrs = ["llvm-libc-types/fd_set.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_id_t",
+    hdrs = ["llvm-libc-types/id_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_idtype_t",
+    hdrs = ["llvm-libc-types/idtype_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_pthread_attr_t",
     hdrs = ["llvm-libc-types/pthread_attr_t.h"],
 )

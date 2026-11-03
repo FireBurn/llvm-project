@@ -35,3 +35,38 @@ libc_function(
         "//libc/src/errno",
     ],
 )
+
+libc_function(
+    name = "wait",
+    srcs = ["linux/wait.cpp"],
+    hdrs = ["wait.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:struct_rusage",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:wait4",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "waitid",
+    srcs = ["linux/waitid.cpp"],
+    hdrs = ["waitid.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/hdr/types:idtype_t",
+        "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:waitid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)

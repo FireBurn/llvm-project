@@ -12,6 +12,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/sys/mman/msync.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "src/__support/OSUtil/linux/syscall_wrappers/msync.h"
 #include "src/__support/common.h"
@@ -21,7 +23,10 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, msync, (void *addr, size_t len, int flags)) {
+  internal::cancel_point();
   auto result = linux_syscalls::msync(addr, len, flags);
+  if (!result && result.error() == EINTR)
+    internal::cancel_point();
   if (!result) {
     libc_errno = result.error();
     return -1;
