@@ -9,3 +9,33 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "field_tokenizer_test",
+    srcs = ["field_tokenizer_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support:pwd_field_tokenizer",
+    ],
+)
+
+libc_test(
+    name = "flat_file_db_test",
+    srcs = ["flat_file_db_test.cpp"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support:dynamic_buffer",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:pwd_field_tokenizer",
+        "//libc/src/__support:pwd_flat_file_db",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
