@@ -21,6 +21,10 @@
 #include "src/pthread/pthread_setcancelstate.h"
 #include "src/pthread/pthread_setcanceltype.h"
 #include "src/pthread/pthread_testcancel.h"
+#include "src/unistd/close.h"
+#include "src/unistd/pipe.h"
+#include "src/unistd/read.h"
+#include "src/unistd/write.h"
 #include "test/UnitTest/Test.h"
 
 #include <pthread.h>
@@ -42,14 +46,33 @@ namespace {
 LIBC_NAMESPACE::cpp::Atomic<int> cleanup_ran;
 LIBC_NAMESPACE::cpp::Atomic<int> reached_loop;
 LIBC_NAMESPACE::cpp::Atomic<int> past_the_end;
+LIBC_NAMESPACE::cpp::Atomic<int> inner_ran;
+LIBC_NAMESPACE::cpp::Atomic<int> outer_ran;
+LIBC_NAMESPACE::cpp::Atomic<int> order;
+int pipe_fds[2];
 
 void reset() {
   cleanup_ran.store(0);
   reached_loop.store(0);
   past_the_end.store(0);
+  inner_ran.store(0);
+  outer_ran.store(0);
+  order.store(0);
 }
 
 void note_cleanup(void *) { cleanup_ran.store(1); }
+void note_inner(void *) { inner_ran.store(order.fetch_add(1) + 1); }
+void note_outer(void *) { outer_ran.store(order.fetch_add(1) + 1); }
+
+// Waits on a pipe nothing writes to, which is where the request finds it.
+void *blocked_in_read(void *) {
+  TEST_CLEANUP_PUSH(note_cleanup, nullptr);
+  char c;
+  LIBC_NAMESPACE::read(pipe_fds[0], &c, 1);
+  past_the_end.store(1);
+  TEST_CLEANUP_POP(0);
+  return reinterpret_cast<void *>(1);
+}
 
 // Never blocks, so only the point it asks for gives it a chance to stop.
 void *asks_to_be_cancelled(void *) {
@@ -80,6 +103,16 @@ void *refuses_for_a_while(void *) {
   return reinterpret_cast<void *>(1);
 }
 
+void *nested_handlers(void *) {
+  TEST_CLEANUP_PUSH(note_outer, nullptr);
+  TEST_CLEANUP_PUSH(note_inner, nullptr);
+  char c;
+  LIBC_NAMESPACE::read(pipe_fds[0], &c, 1);
+  TEST_CLEANUP_POP(0);
+  TEST_CLEANUP_POP(0);
+  return reinterpret_cast<void *>(1);
+}
+
 void *pops_its_own_handler(void *) {
   TEST_CLEANUP_PUSH(note_cleanup, nullptr);
   TEST_CLEANUP_POP(1);
@@ -98,6 +131,24 @@ void *cancel_after_it_starts(pthread_t thread,
 }
 
 } // anonymous namespace
+
+TEST(LlvmLibcPthreadCancelTest, CancelsAThreadBlockedInARead) {
+  reset();
+  ASSERT_EQ(LIBC_NAMESPACE::pipe(pipe_fds), 0);
+  pthread_t thread;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&thread, nullptr, blocked_in_read,
+                                           nullptr),
+            0);
+  // Nothing is written, so the thread is in the read until it is cancelled.
+  LIBC_NAMESPACE::pthread_cancel(thread);
+  void *result = nullptr;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(thread, &result), 0);
+  EXPECT_EQ(result, PTHREAD_CANCELED);
+  EXPECT_EQ(cleanup_ran.load(), 1);
+  EXPECT_EQ(past_the_end.load(), 0);
+  LIBC_NAMESPACE::close(pipe_fds[0]);
+  LIBC_NAMESPACE::close(pipe_fds[1]);
+}
 
 TEST(LlvmLibcPthreadCancelTest, TestCancelIsACancellationPoint) {
   reset();
@@ -127,6 +178,23 @@ TEST(LlvmLibcPthreadCancelTest, ARequestWaitsWhileCancellationIsOff) {
   EXPECT_EQ(reached_loop.load(), 1);
   EXPECT_EQ(past_the_end.load(), 0);
   EXPECT_EQ(result, PTHREAD_CANCELED);
+}
+
+TEST(LlvmLibcPthreadCancelTest, HandlersRunInnermostFirst) {
+  reset();
+  ASSERT_EQ(LIBC_NAMESPACE::pipe(pipe_fds), 0);
+  pthread_t thread;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_create(&thread, nullptr, nested_handlers,
+                                           nullptr),
+            0);
+  LIBC_NAMESPACE::pthread_cancel(thread);
+  void *result = nullptr;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_join(thread, &result), 0);
+  EXPECT_EQ(result, PTHREAD_CANCELED);
+  EXPECT_EQ(inner_ran.load(), 1);
+  EXPECT_EQ(outer_ran.load(), 2);
+  LIBC_NAMESPACE::close(pipe_fds[0]);
+  LIBC_NAMESPACE::close(pipe_fds[1]);
 }
 
 TEST(LlvmLibcPthreadCancelTest, PopRunsTheHandlerWithoutCancelling) {
