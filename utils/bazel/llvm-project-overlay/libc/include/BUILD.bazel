@@ -36,6 +36,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("execinfo"),
     libc_header_info("getopt"),
+    libc_header_info("gshadow"),
     libc_header_info("iconv"),
     libc_header_info(
         "link",
@@ -849,6 +850,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_mntent",
     hdrs = ["llvm-libc-types/struct_mntent.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_sgrp",
+    hdrs = ["llvm-libc-types/struct_sgrp.h"],
 )
 
 libc_support_library(
