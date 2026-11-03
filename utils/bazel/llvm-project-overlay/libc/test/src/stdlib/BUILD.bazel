@@ -17,6 +17,16 @@ libc_test(
 )
 
 libc_test(
+    name = "arc4random_test",
+    srcs = ["arc4random_test.cpp"],
+    deps = [
+        "//libc/src/stdlib:arc4random",
+        "//libc/src/stdlib:arc4random_buf",
+        "//libc/src/stdlib:arc4random_uniform",
+    ],
+)
+
+libc_test(
     name = "getsubopt_test",
     srcs = ["getsubopt_test.cpp"],
     deps = ["//libc/src/stdlib:getsubopt"],
