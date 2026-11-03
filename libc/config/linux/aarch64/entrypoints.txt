@@ -322,6 +322,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.bsearch
     libc.src.stdlib.div
     libc.src.stdlib.getloadavg
+    libc.src.stdlib.getprogname
     libc.src.stdlib.initstate
     libc.src.stdlib.l64a
     libc.src.stdlib.labs
@@ -341,6 +342,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.rand_r
     libc.src.stdlib.random
     libc.src.stdlib.realpath
+    libc.src.stdlib.setprogname
     libc.src.stdlib.setstate
     libc.src.stdlib.srand
     libc.src.stdlib.srandom

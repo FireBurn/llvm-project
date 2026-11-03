@@ -1292,3 +1292,28 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.arc4random_uniform
 )
+
+add_entrypoint_object(
+  getprogname
+  SRCS
+    getprogname.cpp
+  HDRS
+    getprogname.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.compat.progname
+)
+
+add_entrypoint_object(
+  setprogname
+  SRCS
+    setprogname.cpp
+  HDRS
+    setprogname.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.compat.progname
+)
