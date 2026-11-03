@@ -734,3 +734,102 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.netdb.resolv.lookup
 )
+
+
+add_object_library(
+  netgroup_utils
+  SRCS
+    netgroup_utils.cpp
+  HDRS
+    netgroup_utils.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.stdint_proxy
+    libc.hdr.stdio_macros
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.__support.nss.config
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  setnetgrent
+  SRCS
+    setnetgrent.cpp
+  HDRS
+    setnetgrent.h
+  DEPENDS
+    .netgroup_utils
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+)
+
+add_entrypoint_object(
+  endnetgrent
+  SRCS
+    endnetgrent.cpp
+  HDRS
+    endnetgrent.h
+  DEPENDS
+    .netgroup_utils
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+)
+
+add_entrypoint_object(
+  getnetgrent
+  SRCS
+    getnetgrent.cpp
+  HDRS
+    getnetgrent.h
+  DEPENDS
+    .netgroup_utils
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+)
+
+add_entrypoint_object(
+  getnetgrent_r
+  SRCS
+    getnetgrent_r.cpp
+  HDRS
+    getnetgrent_r.h
+  DEPENDS
+    .netgroup_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.string.memory_utils.inline_memcpy
+)
+
+add_entrypoint_object(
+  innetgr
+  SRCS
+    innetgr.cpp
+  HDRS
+    innetgr.h
+  DEPENDS
+    .netgroup_utils
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+)
