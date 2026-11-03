@@ -13,6 +13,8 @@ macros:
 types:
   - type_name: mode_t
   - type_name: size_t
+  - type_name: ssize_t
+  - type_name: struct_iovec
   - type_name: off_t
 enums: []
 objects: []
@@ -90,6 +92,14 @@ functions:
       - type: void *
       - type: size_t
       - type: int
+  - name: mseal
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: void *
+      - type: size_t
+      - type: unsigned long
   - name: msync
     standards:
       - posix
@@ -161,6 +171,16 @@ functions:
       - type: void *
       - type: size_t
       - type: int
+  - name: process_madvise
+    standards:
+      - linux
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: const struct iovec *
+      - type: size_t
+      - type: int
+      - type: unsigned int
   - name: remap_file_pages
     standards:
       - linux

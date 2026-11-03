@@ -321,3 +321,35 @@ add_entrypoint_object(
     libc.src.errno.errno
     .shm_common
 )
+
+add_entrypoint_object(
+  mseal
+  SRCS
+    mseal.cpp
+  HDRS
+    ../mseal.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mseal
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  process_madvise
+  SRCS
+    process_madvise.cpp
+  HDRS
+    ../process_madvise.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.process_madvise
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
