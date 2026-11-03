@@ -47,3 +47,27 @@ libc_test(
         "//libc:ulckpwdf",
     ],
 )
+
+libc_test(
+    name = "shadow_nss_test",
+    srcs = ["shadow_nss_test.cpp"],
+    deps = [
+        "//libc:__support_cpp_string_view",
+        "//libc:__support_nss_config",
+        "//libc:__support_nss_module",
+        "//libc:endspent",
+        "//libc:fclose",
+        "//libc:fopen",
+        "//libc:fwrite",
+        "//libc:getspent",
+        "//libc:getspnam",
+        "//libc:getspnam_r",
+        "//libc:hdr_errno_macros",
+        "//libc:memcpy",
+        "//libc:remove",
+        "//libc:setspent",
+        "//libc:shadow_shadow_utils",
+        "//libc:types_FILE",
+        "//libc:types_struct_spwd",
+    ],
+)
