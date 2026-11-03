@@ -19203,6 +19203,20 @@ libc_function(
 )
 
 libc_function(
+    name = "reboot",
+    srcs = ["src/sys/reboot/reboot.cpp"],
+    hdrs = ["src/sys/reboot/reboot.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_reboot",
+        ":errno",
+        ":hdr_sys_reboot_macros",
+    ],
+)
+
+libc_function(
     name = "settimeofday",
     srcs = ["src/sys/time/linux/settimeofday.cpp"],
     hdrs = ["src/sys/time/settimeofday.h"],
