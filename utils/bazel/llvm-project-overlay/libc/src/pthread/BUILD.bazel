@@ -779,3 +779,18 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "gettid_np",
+    srcs = ["pthread_gettid_np.cpp"],
+    hdrs = ["pthread_gettid_np.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:pthread_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+        "//libc/src/__support:common",
+    ],
+)
