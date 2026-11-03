@@ -599,6 +599,7 @@ add_subdirectory(fixed_point)
 add_subdirectory(time)
 
 add_subdirectory(libintl)
+add_subdirectory(nss)
 add_subdirectory(wchar)
 add_subdirectory(wctype)
 
