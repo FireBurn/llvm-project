@@ -19056,6 +19056,21 @@ libc_function(
 )
 
 libc_function(
+    name = "sigsuspend",
+    srcs = ["src/signal/linux/sigsuspend.cpp"],
+    hdrs = ["src/signal/sigsuspend.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigsuspend",
+        ":__support_threads_cancel",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "sigtimedwait",
     srcs = ["src/signal/linux/sigtimedwait.cpp"],
     hdrs = ["src/signal/sigtimedwait.h"],
@@ -19084,7 +19099,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_macros_null_check",
         ":__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_siginfo_t",
         ":types_sigset_t",
     ],
@@ -21746,6 +21763,48 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_fd_set",
+    hdrs = ["include/llvm-libc-types/fd_set.h"],
+)
+
+libc_support_library(
+    name = "types_fd_set",
+    hdrs = ["hdr/types/fd_set.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_fd_set"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_id_t",
+    hdrs = ["include/llvm-libc-types/id_t.h"],
+)
+
+libc_support_library(
+    name = "types_id_t",
+    hdrs = ["hdr/types/id_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_id_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_idtype_t",
+    hdrs = ["include/llvm-libc-types/idtype_t.h"],
+)
+
+libc_support_library(
+    name = "types_idtype_t",
+    hdrs = ["hdr/types/idtype_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_idtype_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_pthread_attr_t",
     hdrs = ["include/llvm-libc-types/pthread_attr_t.h"],
 )
@@ -21993,6 +22052,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigsuspend",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigsuspend.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_newfstatat",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/newfstatat.h"],
     deps = [
@@ -22007,6 +22078,19 @@ libc_support_library(
 libc_support_library(
     name = "hdr_types_dl_info",
     hdrs = ["hdr/types/dl_info.h"],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_nanosleep",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/nanosleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_time_macros",
+        ":types_struct_timespec",
+    ],
 )
 
 libc_function(
@@ -22155,6 +22239,59 @@ libc_support_library(
         ":types_struct_timespec",
         ":types_struct_timeval",
         ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fdatasync",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fdatasync.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_waitid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/waitid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_id_t",
+        ":types_idtype_t",
+        ":types_siginfo_t",
+        ":types_struct_rusage",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pause",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pause.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pselect6",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pselect6.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_signal_macros",
+        ":types_fd_set",
+        ":types_sigset_t",
+        ":types_size_t",
+        ":types_struct_timespec",
     ],
 )
 
@@ -22329,6 +22466,134 @@ libc_support_library(
     ],
 )
 
+libc_function(
+    name = "select",
+    srcs = ["src/sys/select/linux/select.cpp"],
+    hdrs = ["src/sys/select/select.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_limits",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pselect6",
+        ":__support_threads_cancel",
+        ":hdr_errno_macros",
+        ":types_fd_set",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+    ],
+)
+
+libc_function(
+    name = "pselect",
+    srcs = ["src/sys/select/linux/pselect.cpp"],
+    hdrs = ["src/sys/select/pselect.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pselect6",
+        ":__support_threads_cancel",
+        ":hdr_errno_macros",
+        ":types_fd_set",
+        ":types_sigset_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "wait",
+    srcs = ["src/sys/wait/linux/wait.cpp"],
+    hdrs = ["src/sys/wait/wait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_assert",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_wait4",
+        ":__support_threads_cancel",
+        ":errno",
+        ":hdr_errno_macros",
+        ":types_pid_t",
+        ":types_struct_rusage",
+    ],
+)
+
+libc_function(
+    name = "waitid",
+    srcs = ["src/sys/wait/linux/waitid.cpp"],
+    hdrs = ["src/sys/wait/waitid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_waitid",
+        ":__support_threads_cancel",
+        ":errno",
+        ":types_id_t",
+        ":types_idtype_t",
+        ":types_siginfo_t",
+    ],
+)
+
+libc_function(
+    name = "tcdrain",
+    srcs = ["src/termios/linux/tcdrain.cpp"],
+    hdrs = ["src/termios/tcdrain.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_ioctl",
+        ":__support_threads_cancel",
+        ":errno",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "fdatasync",
+    srcs = ["src/unistd/linux/fdatasync.cpp"],
+    hdrs = ["src/unistd/fdatasync.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fdatasync",
+        ":__support_threads_cancel",
+        ":errno",
+    ],
+)
+
+libc_function(
+    name = "pause",
+    srcs = ["src/unistd/linux/pause.cpp"],
+    hdrs = ["src/unistd/pause.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pause",
+        ":__support_threads_cancel",
+        ":errno",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "sleep",
+    srcs = ["src/unistd/linux/sleep.cpp"],
+    hdrs = ["src/unistd/sleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_nanosleep",
+        ":__support_threads_cancel",
+        ":types_struct_timespec",
+        ":types_time_t",
+    ],
+)
+
 
 
 libc_function(
@@ -22371,5 +22636,21 @@ libc_function(
         ":__support_osutil_linux_sigmask",
         ":errno",
         ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "nanosleep",
+    srcs = ["src/time/linux/nanosleep.cpp"],
+    hdrs = ["src/time/nanosleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_nanosleep",
+        ":__support_threads_cancel",
+        ":errno",
+        ":hdr_errno_macros",
+        ":types_struct_timespec",
     ],
 )
