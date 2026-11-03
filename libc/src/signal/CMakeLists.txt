@@ -195,3 +195,44 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.pthread_sigqueue
 )
+
+add_entrypoint_object(
+  sig2str
+  SRCS
+    sig2str.cpp
+  HDRS
+    sig2str.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.signal.signal_names
+)
+
+add_entrypoint_object(
+  str2sig
+  SRCS
+    str2sig.cpp
+  HDRS
+    str2sig.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.signal.signal_names
+)
+
+add_header_library(
+  signal_names
+  HDRS
+    signal_names.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.size_t
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)

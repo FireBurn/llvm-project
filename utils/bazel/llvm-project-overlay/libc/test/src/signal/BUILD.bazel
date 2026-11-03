@@ -11,6 +11,16 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "sig2str_test",
+    srcs = ["sig2str_test.cpp"],
+    deps = [
+        "//libc:hdr_signal_macros",
+        "//libc:sig2str",
+        "//libc:str2sig",
+    ],
+)
+
+libc_test(
     name = "sigtimedwait_test",
     srcs = ["sigtimedwait_test.cpp"],
     deps = [

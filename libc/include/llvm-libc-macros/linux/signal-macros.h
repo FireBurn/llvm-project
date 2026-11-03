@@ -57,6 +57,9 @@
 // SIGRTMAX is the largest allowed value for the runtime signal.
 #define SIGRTMAX (NSIG - 1)
 
+// The size of a buffer which holds any name sig2str gives, with its null.
+#define SIG2STR_MAX 32
+
 // A sigset_t is an array of long values. Each bit of it corresponds to a
 // signal, adjusted by 1. That is, bit 0 corresponds to signal number 1, bit 1
 // to signal number 2 and so on. It holds 1024 bits, as glibc's and musl's do,

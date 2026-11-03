@@ -61,6 +61,13 @@ functions:
       - type: pthread_t
       - type: int
       - type: const union sigval
+  - name: sig2str
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: int
+      - type: char *
   - name: sigisemptyset
     standards:
       - gnu
@@ -222,6 +229,13 @@ functions:
     arguments:
       - type: pthread_t
       - type: int
+  - name: str2sig
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: int *
   - name: tgkill
     standards:
       - gnu
