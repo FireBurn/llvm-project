@@ -184,6 +184,7 @@ add_libc_test(
   SRCS
     fgetpwent_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
     libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.hdr.types.FILE
@@ -191,6 +192,7 @@ add_libc_test(
     libc.src.__support.CPP.string_view
     libc.src.fcntl.open
     libc.src.pwd.fgetpwent
+    libc.src.pwd.fgetpwent_r
     libc.src.pwd.putpwent
     libc.src.stdio.fclose
     libc.src.stdio.fopen

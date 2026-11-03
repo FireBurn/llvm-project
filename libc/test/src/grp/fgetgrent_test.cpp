@@ -19,6 +19,7 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/fcntl/open.h"
 #include "src/grp/fgetgrent.h"
+#include "src/grp/fgetgrent_r.h"
 #include "src/grp/getgrouplist.h"
 #include "src/grp/grp_utils.h"
 #include "src/grp/putgrent.h"
@@ -142,5 +143,34 @@ TEST_F(LlvmLibcFGetGrEntTest, ListsTheGroupsAUserIsIn) {
   ASSERT_EQ(alone, 1);
   EXPECT_EQ(groups[0], gid_t(42));
 
+  ASSERT_EQ(LIBC_NAMESPACE::remove(GROUP_FILE), 0);
+}
+
+TEST_F(LlvmLibcFGetGrEntTest, ReentrantFormUsesTheCallersBuffer) {
+  write_group_file();
+
+  ::FILE *f = LIBC_NAMESPACE::fopen(GROUP_FILE, "r");
+  ASSERT_TRUE(f != nullptr);
+
+  struct group gr;
+  struct group *result = nullptr;
+  char buf[256];
+  ASSERT_EQ(LIBC_NAMESPACE::fgetgrent_r(f, &gr, buf, sizeof(buf), &result), 0);
+  ASSERT_TRUE(result == &gr);
+  EXPECT_STREQ(gr.gr_name, "root");
+  ASSERT_EQ(LIBC_NAMESPACE::fgetgrent_r(f, &gr, buf, sizeof(buf), &result), 0);
+  EXPECT_STREQ(gr.gr_name, "daemon");
+  ASSERT_STREQ(gr.gr_mem[0], "andy");
+  ASSERT_TRUE(gr.gr_mem[1] == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fgetgrent_r(f, &gr, buf, sizeof(buf), &result), 0);
+  ASSERT_STREQ(gr.gr_mem[2], "jo");
+  ASSERT_EQ(LIBC_NAMESPACE::fgetgrent_r(f, &gr, buf, sizeof(buf), &result),
+            ENOENT);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+
+  f = LIBC_NAMESPACE::fopen(GROUP_FILE, "r");
+  ASSERT_TRUE(f != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fgetgrent_r(f, &gr, buf, 4, &result), ERANGE);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
   ASSERT_EQ(LIBC_NAMESPACE::remove(GROUP_FILE), 0);
 }

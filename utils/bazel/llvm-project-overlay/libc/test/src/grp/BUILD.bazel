@@ -4,11 +4,27 @@
 
 # Tests for LLVM libc grp.
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("//libc/test:libc_test_rules.bzl", "libc_test")
 
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+cc_library(
+    name = "grp_test_utils",
+    testonly = True,
+    hdrs = ["grp_test_utils.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/File:file",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+        "//libc/test/UnitTest:LibcUnitTest",
+    ],
+)
 
 libc_test(
     name = "grp_utils_test",
@@ -26,6 +42,29 @@ libc_test(
 )
 
 libc_test(
+    name = "getgrent_test",
+    srcs = ["getgrent_test.cpp"],
+    deps = [
+        ":grp_test_utils",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/grp:endgrent",
+        "//libc/src/grp:getgrent",
+        "//libc/src/grp:getgrent_r",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/grp:setgrent",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
     name = "fgetgrent_test",
     srcs = ["fgetgrent_test.cpp"],
     deps = [
@@ -38,6 +77,7 @@ libc_test(
         "//libc/src/__support/File:line_reader",
         "//libc/src/fcntl:open",
         "//libc/src/grp:fgetgrent",
+        "//libc/src/grp:fgetgrent_r",
         "//libc/src/grp:getgrouplist",
         "//libc/src/grp:grp_utils",
         "//libc/src/grp:putgrent",

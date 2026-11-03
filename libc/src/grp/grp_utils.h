@@ -46,6 +46,9 @@ ErrorOr<void> open();
 ErrorOr<void> close();
 ErrorOr<struct group *> read_next();
 
+// The same into the caller's struct and buffer. False at the end.
+ErrorOr<bool> read_next(struct group *grp, cpp::span<char> buffer);
+
 ErrorOr<bool> find_by_name(cpp::string_view name, struct group *grp,
                            cpp::span<char> buffer, const char *path = nullptr);
 
