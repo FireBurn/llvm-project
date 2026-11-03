@@ -44,6 +44,7 @@ libc_test(
         "//libc:close",
         "//libc:fclose",
         "//libc:fgetpwent",
+        "//libc:fgetpwent_r",
         "//libc:fopen",
         "//libc:hdr_errno_macros",
         "//libc:hdr_fcntl_macros",
