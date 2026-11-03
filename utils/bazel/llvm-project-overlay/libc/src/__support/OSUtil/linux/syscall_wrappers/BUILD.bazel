@@ -2009,6 +2009,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "clock_getres",
+    hdrs = ["clock_getres.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigpending",
     hdrs = ["rt_sigpending.h"],
     deps = [
