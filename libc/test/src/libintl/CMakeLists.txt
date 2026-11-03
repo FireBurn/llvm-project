@@ -28,4 +28,28 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.test.UnitTest.ErrnoCheckingTest
       libc.test.UnitTest.ErrnoSetterMatcher
   )
+
+  add_libc_test(
+    catalogs_test
+    SUITE
+      libc-libintl-tests
+    SRCS
+      catalogs_test.cpp
+    DEPENDS
+      libc.hdr.locale_macros
+      libc.src.libintl.bind_textdomain_codeset
+      libc.src.libintl.bindtextdomain
+      libc.src.libintl.dgettext
+      libc.src.libintl.dngettext
+      libc.src.libintl.textdomain
+      libc.src.locale.setlocale
+      libc.src.stdio.fclose
+      libc.src.stdio.fopen
+      libc.src.stdio.fwrite
+      libc.src.stdio.remove
+      libc.src.stdlib.setenv
+      libc.src.stdlib.unsetenv
+      libc.src.sys.stat.mkdir
+      libc.src.unistd.rmdir
+  )
 endif()
