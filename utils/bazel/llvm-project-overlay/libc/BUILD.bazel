@@ -27407,6 +27407,22 @@ libc_function(
 )
 
 libc_function(
+    name = "getservbyname_r",
+    srcs = ["src/netdb/getservbyname_r.cpp"],
+    hdrs = ["src/netdb/getservbyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_getservbyname_r",
+        ":netdb_resolv_services",
+        ":types_size_t",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
     name = "getservbyport",
     srcs = ["src/netdb/getservbyport.cpp"],
     hdrs = ["src/netdb/getservbyport.h"],
@@ -27416,6 +27432,22 @@ libc_function(
         ":netdb_getservbyport",
         ":netdb_resolv_services",
         ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "getservbyport_r",
+    srcs = ["src/netdb/getservbyport_r.cpp"],
+    hdrs = ["src/netdb/getservbyport_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_getservbyport_r",
+        ":netdb_resolv_services",
+        ":types_size_t",
         ":types_struct_servent",
     ],
 )
