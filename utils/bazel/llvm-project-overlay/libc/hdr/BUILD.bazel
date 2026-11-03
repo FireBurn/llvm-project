@@ -402,6 +402,14 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_reboot_macros",
+    hdrs = ["sys_reboot_macros.h"],
+    deps = [
+        "//libc/include:llvm_libc_macros_sys_reboot_macros",
+    ],
+)
+
+libc_support_library(
     name = "termios_macros",
     hdrs = ["termios_macros.h"],
     deps = [

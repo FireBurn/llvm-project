@@ -78,6 +78,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/prctl",
         has_def_template = True,
     ),
+    libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
     libc_header_info(
@@ -793,6 +794,19 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_shmid_ds",
     hdrs = ["llvm-libc-types/struct_shmid_ds.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_sys_reboot_macros",
+    hdrs = ["llvm-libc-macros/linux/sys-reboot-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_reboot_macros",
+    hdrs = ["llvm-libc-macros/sys-reboot-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_sys_reboot_macros",
+    ],
 )
 
 libc_support_library(
