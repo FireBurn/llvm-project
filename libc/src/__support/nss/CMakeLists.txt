@@ -45,3 +45,20 @@ add_header_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
 )
+
+add_header_library(
+  lookup
+  HDRS
+    lookup.h
+  DEPENDS
+    .config
+    .dispatch
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.CPP.span
+    libc.src.__support.CPP.string_view
+    libc.src.__support.error_or
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+    libc.src.__support.pwd.dynamic_buffer
+)
