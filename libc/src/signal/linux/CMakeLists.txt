@@ -310,3 +310,17 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigqueueinfo
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  tgkill
+  SRCS
+    tgkill.cpp
+  HDRS
+    ../tgkill.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.tgkill
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
