@@ -139,6 +139,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.pwd.getpwuid_r
     libc.src.pwd.putpwent
     libc.src.pwd.setpwent
+    libc.src.sched.getcpu
 
     # sched.h entrypoints
     libc.src.sched.sched_get_priority_max
@@ -221,11 +222,18 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.inttypes.imaxdiv
     libc.src.inttypes.strtoimax
     libc.src.inttypes.strtoumax
+    libc.src.inttypes.wcstoimax
+    libc.src.inttypes.wcstoumax
 
     # libgen.h entrypoints
     libc.src.libgen.basename
     libc.src.libgen.dirname
     libc.src.locale.localeconv
+    libc.src.locale.duplocale
+    libc.src.locale.freelocale
+    libc.src.locale.newlocale
+    libc.src.locale.setlocale
+    libc.src.locale.uselocale
     libc.src.monetary.strfmon
     libc.src.monetary.strfmon_l
 
@@ -300,6 +308,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdbit.stdc_trailing_zeros_ul
     libc.src.stdbit.stdc_trailing_zeros_ull
     libc.src.stdbit.stdc_trailing_zeros_us
+    libc.src.stdlib.a64l
 
     # stdlib.h entrypoints
     libc.src.stdlib.abs
@@ -311,6 +320,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.stdlib.div
     libc.src.stdlib.getloadavg
     libc.src.stdlib.initstate
+    libc.src.stdlib.l64a
     libc.src.stdlib.labs
     libc.src.stdlib.ldiv
     libc.src.stdlib.llabs
@@ -522,6 +532,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.resource.prlimit
     libc.src.sys.resource.setpriority
     libc.src.sys.resource.setrlimit
+    libc.src.sys.sem.semget
+    libc.src.sys.sem.semctl
+    libc.src.sys.sem.semop
     libc.src.sys.sem.semtimedop
 
     # sys/sendfile.h entrypoints
@@ -768,6 +781,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.uchar.c32rtomb
     libc.src.uchar.mbrtoc16
     libc.src.uchar.mbrtoc32
+    libc.src.wchar.btowc
 
     # wchar.h entrypoints
     libc.src.wchar.swprintf
@@ -782,6 +796,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcsftime
     libc.src.wchar.wcsncasecmp
     libc.src.wchar.wcslen
+    libc.src.wchar.wcsnlen
     libc.src.wchar.wcstod_l
     libc.src.wchar.wcstof_l
     libc.src.wchar.wcstol_l
@@ -792,8 +807,44 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.wchar.wcsxfrm_l
     libc.src.wchar.wcswidth
     libc.src.wchar.wctob
+    libc.src.wchar.wmemmove
+    libc.src.wchar.wmemset
+    libc.src.wchar.wcschr
+    libc.src.wchar.wcsncmp
+    libc.src.wchar.wcsxfrm
+    libc.src.wchar.wcscmp
+    libc.src.wchar.wcscoll
+    libc.src.wchar.wcspbrk
+    libc.src.wchar.wcsrchr
+    libc.src.wchar.wcsspn
+    libc.src.wchar.wcscspn
+    libc.src.wchar.wcsdup
+    libc.src.wchar.wmemcmp
+    libc.src.wchar.wmempcpy
+    libc.src.wchar.wmemcpy
+    libc.src.wchar.wcsncpy
+    libc.src.wchar.wcscat
+    libc.src.wchar.wcsstr
+    libc.src.wchar.wcsncat
+    libc.src.wchar.wcslcat
+    libc.src.wchar.wcscpy
+    libc.src.wchar.wcslcpy
+    libc.src.wchar.wmemchr
+    libc.src.wchar.wcpcpy
+    libc.src.wchar.wcpncpy
+    libc.src.wchar.wcstod
+    libc.src.wchar.wcstof
+    libc.src.wchar.wcstok
+    libc.src.wchar.wcstol
+    libc.src.wchar.wcstold
+    libc.src.wchar.wcstoll
+    libc.src.wchar.wcstoul
+    libc.src.wchar.wcstoull
     libc.src.wctype.iswalnum_l
     libc.src.wchar.wcwidth
+    libc.src.nl_types.catopen
+    libc.src.nl_types.catclose
+    libc.src.nl_types.catgets
 
     # wctype.h entrypoints
     libc.src.wctype.iswalpha
@@ -844,6 +895,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.futimes
     libc.src.sys.time.futimesat
     libc.src.sys.time.lutimes
+    libc.src.sys.time.utimes
     libc.src.sys.sysinfo.get_nprocs
     libc.src.sys.sysinfo.get_nprocs_conf
     libc.src.sys.time.setitimer
@@ -856,6 +908,7 @@ if (LIBC_TYPES_HAS_NATIVE_FLOAT128)
   list(APPEND TARGET_LIBC_ENTRYPOINTS
     # stdlib.h _Float128 entrypoints
     libc.src.stdlib.strfromf128
+    libc.src.stdlib.strfroml
   )
 endif()
 
@@ -941,6 +994,7 @@ set(TARGET_LIBM_ENTRYPOINTS
     libc.src.math.atan2
     libc.src.math.atan2f
     libc.src.math.atan2f128
+    libc.src.math.atan2l
     libc.src.math.atan
     libc.src.math.atanf
     libc.src.math.atanh
@@ -1385,6 +1439,20 @@ if(LIBC_TYPES_HAS_CFLOAT128)
     libc.src.complex.cimagf128
     libc.src.complex.conjf128
     libc.src.complex.cprojf128
+    libc.src.ctype.isalnum_l
+    libc.src.ctype.isalpha_l
+    libc.src.ctype.isblank_l
+    libc.src.ctype.iscntrl_l
+    libc.src.ctype.isdigit_l
+    libc.src.ctype.isgraph_l
+    libc.src.ctype.islower_l
+    libc.src.ctype.isprint_l
+    libc.src.ctype.ispunct_l
+    libc.src.ctype.isspace_l
+    libc.src.ctype.isupper_l
+    libc.src.ctype.isxdigit_l
+    libc.src.ctype.tolower_l
+    libc.src.ctype.toupper_l
   )
 endif()
 
@@ -1538,6 +1606,15 @@ if(LLVM_LIBC_FULL_BUILD)
     # errno.h entrypoints
     libc.src.errno.program_invocation_name
     libc.src.errno.program_invocation_short_name
+    libc.src.stdlib.strtod_l
+    libc.src.stdlib.strtof_l
+    libc.src.stdlib.strtol_l
+    libc.src.stdlib.strtold_l
+    libc.src.stdlib.strtoll_l
+    libc.src.stdlib.strtoul_l
+    libc.src.stdlib.strtoull_l
+    libc.src.string.strcoll_l
+    libc.src.string.strxfrm_l
 
     # arpa/inet.h entrypoints
     libc.src.arpa.inet.htonl
@@ -1642,6 +1719,9 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_join
     libc.src.pthread.pthread_key_create
     libc.src.pthread.pthread_key_delete
+    libc.src.pthread.pthread_barrier_init
+    libc.src.pthread.pthread_barrier_wait
+    libc.src.pthread.pthread_barrier_destroy
     libc.src.pthread.pthread_mutex_consistent
     libc.src.pthread.pthread_mutex_destroy
     libc.src.pthread.pthread_mutex_init
@@ -1839,7 +1919,12 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pty.openpty
     libc.src.stdlib.setenv
     libc.src.stdlib.system
+    libc.src.stdlib.wcstombs
+    libc.src.stdlib.wctomb
     libc.src.stdlib.unsetenv
+    libc.src.stdlib.mbstowcs
+    libc.src.stdlib.mbtowc
+    libc.src.stdlib.mblen
     libc.src.stdlib.quick_exit
 
     # signal.h entrypoints
@@ -1950,10 +2035,14 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.time.difftime
     libc.src.time.gmtime
     libc.src.time.gmtime_r
+    libc.src.time.localtime
+    libc.src.time.localtime_r
     libc.src.time.mktime
     libc.src.time.timegm
     libc.src.time.clock_nanosleep
     libc.src.time.nanosleep
+    libc.src.time.strftime
+    libc.src.time.strftime_l
     libc.src.time.time
     libc.src.time.timespec_get
     libc.src.time.timer_create
