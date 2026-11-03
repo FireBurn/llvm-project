@@ -1,0 +1,43 @@
+add_entrypoint_object(
+  pidfd_open
+  SRCS
+    pidfd_open.cpp
+  HDRS
+    ../pidfd_open.h
+  DEPENDS
+    libc.hdr.types.pid_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pidfd_open
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pidfd_getfd
+  SRCS
+    pidfd_getfd.cpp
+  HDRS
+    ../pidfd_getfd.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pidfd_getfd
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pidfd_send_signal
+  SRCS
+    pidfd_send_signal.cpp
+  HDRS
+    ../pidfd_send_signal.h
+  DEPENDS
+    libc.hdr.types.siginfo_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.pidfd_send_signal
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
