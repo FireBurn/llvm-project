@@ -3354,3 +3354,31 @@ add_header_library(
     libc.hdr.types.siginfo_t
     libc.include.sys_syscall
 )
+
+add_header_library(
+  mseal
+  HDRS
+    mseal.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  process_madvise
+  HDRS
+    process_madvise.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.hdr.types.struct_iovec
+    libc.include.sys_syscall
+)
