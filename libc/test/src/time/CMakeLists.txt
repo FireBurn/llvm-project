@@ -394,3 +394,16 @@ add_libc_test(
     libc.src.time.time_constants
     libc.src.time.time_utils
 )
+
+add_libc_test(
+  timespec_getres_test
+  SUITE
+    libc-time-tests
+  SRCS
+    timespec_getres_test.cpp
+  DEPENDS
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.src.time.timespec_getres
+    libc.test.UnitTest.ErrnoCheckingTest
+)
