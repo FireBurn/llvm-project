@@ -142,6 +142,8 @@ add_entrypoint_object(
   HDRS
     ../sigtimedwait.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.hdr.types.siginfo_t
     libc.hdr.types.sigset_t
     libc.hdr.types.struct_timespec
