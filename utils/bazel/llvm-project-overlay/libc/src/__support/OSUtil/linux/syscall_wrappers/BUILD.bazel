@@ -2057,6 +2057,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "mseal",
+    hdrs = ["mseal.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "pidfd_open",
     hdrs = ["pidfd_open.h"],
     deps = [
@@ -2073,6 +2085,20 @@ libc_support_library(
     hdrs = ["pidfd_send_signal.h"],
     deps = [
         "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "process_madvise",
+    hdrs = ["process_madvise.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
