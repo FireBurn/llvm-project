@@ -18480,6 +18480,18 @@ libc_function(
 )
 
 libc_function(
+    name = "explicit_bzero",
+    srcs = ["src/string/explicit_bzero.cpp"],
+    hdrs = ["src/string/explicit_bzero.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "memchr",
     srcs = ["src/string/memchr.cpp"],
     hdrs = ["src/string/memchr.h"],
