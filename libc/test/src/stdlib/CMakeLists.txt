@@ -861,3 +861,15 @@ add_libc_test(
     libc.src.stdlib.arc4random_buf
     libc.src.stdlib.arc4random_uniform
 )
+
+add_libc_test(
+  progname_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    progname_test.cpp
+  DEPENDS
+    libc.src.compat.progname
+    libc.src.stdlib.getprogname
+    libc.src.stdlib.setprogname
+)
