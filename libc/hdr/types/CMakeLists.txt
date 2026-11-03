@@ -1466,3 +1466,10 @@ add_proxy_header_library(
 )
 
 
+add_proxy_header_library(
+  struct_spwd
+  HDRS
+    struct_spwd.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_spwd
+)

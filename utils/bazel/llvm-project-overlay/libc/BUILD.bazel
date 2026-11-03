@@ -168,6 +168,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("mntent"),
     libc_header_info("monetary"),
     libc_header_info("printf"),
+    libc_header_info("shadow"),
     libc_header_info("stdio_ext"),
     libc_header_info("sys/kd"),
     libc_header_info("sys/ttydefaults"),
@@ -25077,6 +25078,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_spwd",
+    hdrs = ["include/llvm-libc-types/struct_spwd.h"],
+)
+
+libc_support_library(
+    name = "types_struct_spwd",
+    hdrs = ["hdr/types/struct_spwd.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_spwd"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_statfs",
     hdrs = ["include/llvm-libc-types/struct_statfs.h"],
 )
@@ -26843,6 +26858,247 @@ libc_function(
         ":__support_macros_null_check",
         ":func_free",
         ":types_regex_t",
+    ],
+)
+
+libc_support_library(
+    name = "shadow_shadow_utils",
+    srcs = ["src/shadow/shadow_utils.cpp"],
+    hdrs = ["src/shadow/shadow_utils.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_ctype_utils",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_dynamic_buffer",
+        ":__support_pwd_field_tokenizer",
+        ":__support_pwd_flat_file_db",
+        ":__support_str_to_integer",
+        ":hdr_errno_macros",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_support_library(
+    name = "shadow_shadow_r_utils",
+    hdrs = ["src/shadow/shadow_r_utils.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_flat_file_db",
+        ":hdr_errno_macros",
+        ":shadow_shadow_utils",
+        ":types_size_t",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_support_library(
+    name = "shadow_pwdlock",
+    hdrs = ["src/shadow/pwdlock.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "setspent",
+    srcs = ["src/shadow/setspent.cpp"],
+    hdrs = ["src/shadow/setspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":shadow_shadow_utils",
+    ],
+)
+
+libc_function(
+    name = "endspent",
+    srcs = ["src/shadow/endspent.cpp"],
+    hdrs = ["src/shadow/endspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":shadow_shadow_utils",
+    ],
+)
+
+libc_function(
+    name = "getspent",
+    srcs = ["src/shadow/getspent.cpp"],
+    hdrs = ["src/shadow/getspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":shadow_shadow_utils",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "getspnam",
+    srcs = ["src/shadow/getspnam.cpp"],
+    hdrs = ["src/shadow/getspnam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_pwd_dynamic_buffer",
+        ":errno",
+        ":shadow_shadow_r_utils",
+        ":shadow_shadow_utils",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "getspent_r",
+    srcs = ["src/shadow/getspent_r.cpp"],
+    hdrs = ["src/shadow/getspent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":shadow_shadow_utils",
+        ":types_size_t",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "getspnam_r",
+    srcs = ["src/shadow/getspnam_r.cpp"],
+    hdrs = ["src/shadow/getspnam_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":shadow_shadow_r_utils",
+        ":types_size_t",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "sgetspent_r",
+    srcs = ["src/shadow/sgetspent_r.cpp"],
+    hdrs = ["src/shadow/sgetspent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":shadow_shadow_utils",
+        ":string_utils",
+        ":types_size_t",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "sgetspent",
+    srcs = ["src/shadow/sgetspent.cpp"],
+    hdrs = ["src/shadow/sgetspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":sgetspent_r",
+        ":shadow_shadow_utils",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "fgetspent_r",
+    srcs = ["src/shadow/fgetspent_r.cpp"],
+    hdrs = ["src/shadow/fgetspent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":fgets",
+        ":hdr_errno_macros",
+        ":shadow_shadow_utils",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "fgetspent",
+    srcs = ["src/shadow/fgetspent.cpp"],
+    hdrs = ["src/shadow/fgetspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fgetspent_r",
+        ":shadow_shadow_utils",
+        ":types_FILE",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "putspent",
+    srcs = ["src/shadow/putspent.cpp"],
+    hdrs = ["src/shadow/putspent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":types_FILE",
+        ":types_struct_spwd",
+    ],
+)
+
+libc_function(
+    name = "lckpwdf",
+    srcs = ["src/shadow/lckpwdf.cpp"],
+    hdrs = ["src/shadow/lckpwdf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_fcntl",
+        ":__support_osutil_linux_syscall_wrappers_nanosleep",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":hdr_fcntl_macros",
+        ":hdr_stdio_macros",
+        ":shadow_pwdlock",
+        ":types_struct_flock",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "ulckpwdf",
+    srcs = ["src/shadow/ulckpwdf.cpp"],
+    hdrs = ["src/shadow/ulckpwdf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":shadow_pwdlock",
     ],
 )
 
