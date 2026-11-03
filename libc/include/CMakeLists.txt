@@ -241,6 +241,7 @@ add_header_macro(
   libintl.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros._LIBC_FORMAT_ARG
     .llvm-libc-types.locale_t
 )
 

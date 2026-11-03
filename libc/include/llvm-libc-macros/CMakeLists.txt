@@ -821,6 +821,12 @@ add_macro_header(
     sysexits-macros.h
 )
 
+add_macro_header(
+  _LIBC_FORMAT_ARG
+  HDR
+    _LIBC_FORMAT_ARG.h
+)
+
 if(LIBC_CONF_PRINTF_MODULAR)
   add_macro_header(
     _LIBC_MODULAR_FORMAT_PRINTF

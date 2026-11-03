@@ -25,6 +25,8 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
@@ -33,6 +35,8 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
@@ -42,6 +46,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
+      - _LIBC_FORMAT_ARG(3)
     arguments:
       - type: const char *
       - type: const char *
@@ -52,6 +59,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
+      - _LIBC_FORMAT_ARG(3)
     arguments:
       - type: const char *
       - type: const char *
@@ -63,6 +73,8 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
@@ -70,6 +82,8 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
@@ -78,6 +92,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
+      - _LIBC_FORMAT_ARG(3)
     arguments:
       - type: const char *
       - type: const char *
@@ -87,6 +104,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(2)
+      - _LIBC_FORMAT_ARG(3)
     arguments:
       - type: const char *
       - type: const char *
@@ -97,12 +117,16 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(1)
     arguments:
       - type: const char *
   - name: gettext_l
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(1)
     arguments:
       - type: const char *
       - type: locale_t
@@ -110,6 +134,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(1)
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
@@ -118,6 +145,9 @@ functions:
     standards:
       - posix
     return_type: char *
+    attributes:
+      - _LIBC_FORMAT_ARG(1)
+      - _LIBC_FORMAT_ARG(2)
     arguments:
       - type: const char *
       - type: const char *
