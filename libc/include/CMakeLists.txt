@@ -280,6 +280,16 @@ add_header_macro(
     .llvm-libc-macros.sysexits_macros
 )
 
+add_header_macro(
+  gshadow
+  ../libc/include/gshadow.yaml
+  gshadow.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_sgrp
+    .llvm-libc-types.FILE
+    .llvm-libc-types.size_t
+)
 
 add_header_macro(
   shadow
