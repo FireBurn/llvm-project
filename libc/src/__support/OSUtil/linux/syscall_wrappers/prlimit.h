@@ -32,6 +32,24 @@ LIBC_INLINE ErrorOr<int> prlimit(pid_t pid, int resource,
                               old_limit);
 }
 
+// The calls that read and change the caller's own limits are the ones a
+// sandbox lets through; prlimit64 reaches other processes and is refused.
+LIBC_INLINE ErrorOr<int> getrlimit(int resource, struct rlimit *limit) {
+#ifdef SYS_getrlimit
+  return syscall_checked<int>(SYS_getrlimit, resource, limit);
+#else
+  return prlimit(0, resource, nullptr, limit);
+#endif
+}
+
+LIBC_INLINE ErrorOr<int> setrlimit(int resource, const struct rlimit *limit) {
+#ifdef SYS_setrlimit
+  return syscall_checked<int>(SYS_setrlimit, resource, limit);
+#else
+  return prlimit(0, resource, limit, nullptr);
+#endif
+}
+
 } // namespace linux_syscalls
 } // namespace LIBC_NAMESPACE_DECL
 
