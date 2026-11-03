@@ -11,6 +11,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "hdr/errno_macros.h"
 #include "hdr/fcntl_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "hdr/types/FILE.h"
@@ -18,6 +19,7 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/fcntl/open.h"
 #include "src/pwd/fgetpwent.h"
+#include "src/pwd/fgetpwent_r.h"
 #include "src/pwd/putpwent.h"
 #include "src/stdio/fclose.h"
 #include "src/stdio/fopen.h"
@@ -111,4 +113,33 @@ TEST_F(LlvmLibcFGetPwEntTest, WritesAnEntryOut) {
   ASSERT_EQ(LIBC_NAMESPACE::fclose(in), 0);
 
   ASSERT_EQ(LIBC_NAMESPACE::remove(OUT_FILE), 0);
+}
+
+// The reentrant form keeps the entry in the caller's buffer, and says when
+// the buffer is too small.
+TEST_F(LlvmLibcFGetPwEntTest, ReentrantFormUsesTheCallersBuffer) {
+  write_passwd_file();
+
+  ::FILE *f = LIBC_NAMESPACE::fopen(PASSWD_FILE, "r");
+  ASSERT_TRUE(f != nullptr);
+
+  struct passwd pw;
+  struct passwd *result = nullptr;
+  char buf[256];
+  ASSERT_EQ(LIBC_NAMESPACE::fgetpwent_r(f, &pw, buf, sizeof(buf), &result), 0);
+  ASSERT_TRUE(result == &pw);
+  EXPECT_STREQ(pw.pw_name, "root");
+  EXPECT_TRUE(pw.pw_dir >= buf && pw.pw_dir < buf + sizeof(buf));
+  ASSERT_EQ(LIBC_NAMESPACE::fgetpwent_r(f, &pw, buf, sizeof(buf), &result), 0);
+  EXPECT_STREQ(pw.pw_name, "andy");
+  ASSERT_EQ(LIBC_NAMESPACE::fgetpwent_r(f, &pw, buf, sizeof(buf), &result),
+            ENOENT);
+  ASSERT_TRUE(result == nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+
+  f = LIBC_NAMESPACE::fopen(PASSWD_FILE, "r");
+  ASSERT_TRUE(f != nullptr);
+  ASSERT_EQ(LIBC_NAMESPACE::fgetpwent_r(f, &pw, buf, 8, &result), ERANGE);
+  ASSERT_EQ(LIBC_NAMESPACE::fclose(f), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::remove(PASSWD_FILE), 0);
 }
