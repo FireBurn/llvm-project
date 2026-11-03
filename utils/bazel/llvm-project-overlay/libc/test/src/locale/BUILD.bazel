@@ -11,6 +11,18 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "environment_value_test",
+    srcs = ["environment_value_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+        "//libc/src/stdlib:setenv",
+        "//libc/src/stdlib:unsetenv",
+    ],
+)
+
+libc_test(
     name = "locale_test",
     srcs = ["locale_test.cpp"],
     deps = [
