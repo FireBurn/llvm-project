@@ -211,3 +211,20 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.__support.time.linux.cpu_clock
 )
+
+add_entrypoint_object(
+  timespec_getres
+  SRCS
+    timespec_getres.cpp
+  HDRS
+    ../timespec_getres.h
+  DEPENDS
+    libc.hdr.time_macros
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_timespec
+    libc.src.__support.OSUtil.linux.syscall_wrappers.clock_getres
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
