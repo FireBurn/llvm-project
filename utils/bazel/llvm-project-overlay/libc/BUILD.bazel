@@ -20757,6 +20757,21 @@ libc_function(
 )
 
 libc_function(
+    name = "get_nprocs",
+    srcs = ["src/sys/sysinfo/linux/get_nprocs.cpp"],
+    hdrs = ["src/sys/sysinfo/get_nprocs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sched_getaffinity",
+        ":sched_sched_getcpucount",
+        ":sys_sysinfo_get_nprocs",
+        ":types_cpu_set_t",
+    ],
+)
+
+libc_function(
     name = "reboot",
     srcs = ["src/sys/reboot/reboot.cpp"],
     hdrs = ["src/sys/reboot/reboot.h"],
@@ -20998,6 +21013,18 @@ libc_function(
         ":sys_time_futimesat",
         ":types_struct_timespec",
         ":types_struct_timeval",
+    ],
+)
+
+libc_function(
+    name = "get_nprocs_conf",
+    srcs = ["src/sys/sysinfo/linux/get_nprocs_conf.cpp"],
+    hdrs = ["src/sys/sysinfo/get_nprocs_conf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sys_sysinfo_get_nprocs",
+        ":sys_sysinfo_get_nprocs_conf",
     ],
 )
 
@@ -28472,6 +28499,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_sysinfo_get_nprocs",
+    hdrs = ["src/sys/sysinfo/get_nprocs.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_sysinfo_get_nprocs_conf",
+    hdrs = ["src/sys/sysinfo/get_nprocs_conf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
     name = "sched_sched_getcpucount",
     srcs = ["src/sched/linux/sched_getcpucount.cpp"],
     hdrs = ["src/sched/sched_getcpucount.h"],
@@ -33023,6 +33066,24 @@ libc_function(
         ":hdr_errno_macros",
         ":hdr_sched_macros",
         ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "sched_getaffinity",
+    srcs = ["src/sched/linux/sched_getaffinity.cpp"],
+    hdrs = ["src/sched/sched_getaffinity.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sched_getaffinity",
+        ":errno",
+        ":hdr_stdint_proxy",
+        ":types_cpu_set_t",
+        ":types_pid_t",
+        ":types_size_t",
     ],
 )
 

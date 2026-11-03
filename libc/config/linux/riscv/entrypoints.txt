@@ -652,6 +652,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.futimes
     libc.src.sys.time.futimesat
     libc.src.sys.time.utimes
+    libc.src.sys.sysinfo.get_nprocs
+    libc.src.sys.sysinfo.get_nprocs_conf
 
     # sys/sysinfo.h entrypoints
     libc.src.sys.sysinfo.sysinfo
