@@ -26454,6 +26454,18 @@ libc_support_library(
 )
 
 libc_function(
+    name = "endnetgrent",
+    srcs = ["src/netdb/endnetgrent.cpp"],
+    hdrs = ["src/netdb/endnetgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":netdb_netgroup_utils",
+    ],
+)
+
+libc_function(
     name = "gethostbyaddr",
     srcs = ["src/netdb/gethostbyaddr.cpp"],
     hdrs = ["src/netdb/gethostbyaddr.h"],
@@ -28187,6 +28199,35 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetgrent",
+    srcs = ["src/netdb/getnetgrent.cpp"],
+    hdrs = ["src/netdb/getnetgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":netdb_netgroup_utils",
+    ],
+)
+
+libc_function(
+    name = "getnetgrent_r",
+    srcs = ["src/netdb/getnetgrent_r.cpp"],
+    hdrs = ["src/netdb/getnetgrent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_errno_macros",
+        ":netdb_netgroup_utils",
+        ":string_memory_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "getprotobyname",
     srcs = ["src/netdb/getprotobyname.cpp"],
     hdrs = ["src/netdb/getprotobyname.h"],
@@ -28385,6 +28426,19 @@ libc_function(
 )
 
 libc_function(
+    name = "innetgr",
+    srcs = ["src/netdb/innetgr.cpp"],
+    hdrs = ["src/netdb/innetgr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":netdb_netgroup_utils",
+    ],
+)
+
+libc_function(
     name = "sethostent",
     srcs = ["src/netdb/sethostent.cpp"],
     hdrs = ["src/netdb/sethostent.h"],
@@ -28405,6 +28459,21 @@ libc_function(
         ":hdr_stdint_proxy",
         ":netdb_resolv_networks",
         ":types_struct_netent",
+    ],
+)
+
+libc_function(
+    name = "setnetgrent",
+    srcs = ["src/netdb/setnetgrent.cpp"],
+    hdrs = ["src/netdb/setnetgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_errno_macros",
+        ":netdb_netgroup_utils",
     ],
 )
 
@@ -31109,6 +31178,29 @@ libc_support_library(
         ":hdr_fcntl_macros",
         ":hdr_stdio_macros",
         ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_netgroup_utils",
+    srcs = ["src/netdb/netgroup_utils.cpp"],
+    hdrs = ["src/netdb/netgroup_utils.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_nss_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_fcntl_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":string_memory_utils",
+        ":types_size_t",
     ],
 )
 

@@ -2334,6 +2334,11 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.src.netdb.gethostbyname2_r
     libc.src.netdb.gethostbyaddr_r
     libc.src.netdb.getservent
+    libc.src.netdb.endnetgrent
+    libc.src.netdb.getnetgrent
+    libc.src.netdb.getnetgrent_r
+    libc.src.netdb.innetgr
+    libc.src.netdb.setnetgrent
     libc.src.netdb.herror
     libc.src.netdb.hstrerror
     libc.src.netdb.sethostent
