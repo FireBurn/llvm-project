@@ -370,3 +370,33 @@ libc_function(
         "//libc/src/errno",
     ],
 )
+
+libc_function(
+    name = "mseal",
+    srcs = ["linux/mseal.cpp"],
+    hdrs = ["mseal.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mseal",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "process_madvise",
+    srcs = ["linux/process_madvise.cpp"],
+    hdrs = ["process_madvise.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:process_madvise",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
