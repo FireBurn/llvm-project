@@ -36,6 +36,26 @@ libc_function(
 )
 
 libc_function(
+    name = "gethostbyaddr_r",
+    srcs = ["gethostbyaddr_r.cpp"],
+    hdrs = ["gethostbyaddr_r.h"],
+    deps = [
+        ":__h_errno_location",
+        ":hostent_storage",
+        ":hosts_storage",
+        ":reentrant",
+        ":resolv_lookup",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "gethostbyname",
     srcs = ["gethostbyname.cpp"],
     hdrs = ["gethostbyname.h"],
@@ -56,6 +76,62 @@ libc_function(
         ":hostent_storage",
         "//libc/hdr/types:struct_hostent",
         "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname2_r",
+    srcs = ["gethostbyname2_r.cpp"],
+    hdrs = ["gethostbyname2_r.h"],
+    deps = [
+        ":__h_errno_location",
+        ":hostent_storage",
+        ":hosts_storage",
+        ":reentrant",
+        ":resolv_lookup",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname_r",
+    srcs = ["gethostbyname_r.cpp"],
+    hdrs = ["gethostbyname_r.h"],
+    deps = [
+        ":__h_errno_location",
+        ":hostent_storage",
+        ":hosts_storage",
+        ":reentrant",
+        ":resolv_lookup",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "gethostent_r",
+    srcs = ["gethostent_r.cpp"],
+    hdrs = ["gethostent_r.h"],
+    deps = [
+        ":hostent_storage",
+        ":hosts_storage",
+        ":reentrant",
+        ":resolv_lookup",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -245,6 +321,23 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetbyaddr_r",
+    srcs = ["getnetbyaddr_r.cpp"],
+    hdrs = ["getnetbyaddr_r.h"],
+    deps = [
+        ":net_storage",
+        ":reentrant",
+        ":resolv_networks",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getnetbyname",
     srcs = ["getnetbyname.cpp"],
     hdrs = ["getnetbyname.h"],
@@ -252,6 +345,23 @@ libc_function(
         ":net_storage",
         ":resolv_networks",
         "//libc/hdr/types:struct_netent",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getnetbyname_r",
+    srcs = ["getnetbyname_r.cpp"],
+    hdrs = ["getnetbyname_r.h"],
+    deps = [
+        ":net_storage",
+        ":reentrant",
+        ":resolv_networks",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:errno_macros",
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
@@ -273,6 +383,23 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetent_r",
+    srcs = ["getnetent_r.cpp"],
+    hdrs = ["getnetent_r.h"],
+    deps = [
+        ":net_storage",
+        ":reentrant",
+        ":resolv_networks",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getprotobyname",
     srcs = ["getprotobyname.cpp"],
     hdrs = ["getprotobyname.h"],
@@ -280,6 +407,22 @@ libc_function(
         ":proto_storage",
         ":resolv_protocols",
         "//libc/hdr/types:struct_protoent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getprotobyname_r",
+    srcs = ["getprotobyname_r.cpp"],
+    hdrs = ["getprotobyname_r.h"],
+    deps = [
+        ":proto_storage",
+        ":reentrant",
+        ":resolv_protocols",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -299,6 +442,22 @@ libc_function(
 )
 
 libc_function(
+    name = "getprotobynumber_r",
+    srcs = ["getprotobynumber_r.cpp"],
+    hdrs = ["getprotobynumber_r.h"],
+    deps = [
+        ":proto_storage",
+        ":reentrant",
+        ":resolv_protocols",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getprotoent",
     srcs = ["getprotoent.cpp"],
     hdrs = ["getprotoent.h"],
@@ -312,6 +471,22 @@ libc_function(
 )
 
 libc_function(
+    name = "getprotoent_r",
+    srcs = ["getprotoent_r.cpp"],
+    hdrs = ["getprotoent_r.h"],
+    deps = [
+        ":proto_storage",
+        ":reentrant",
+        ":resolv_protocols",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getservbyname",
     srcs = ["getservbyname.cpp"],
     hdrs = ["getservbyname.h"],
@@ -319,6 +494,22 @@ libc_function(
         ":resolv_services",
         ":serv_storage",
         "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getservent_r",
+    srcs = ["getservent_r.cpp"],
+    hdrs = ["getservent_r.h"],
+    deps = [
+        ":reentrant",
+        ":resolv_services",
+        ":serv_storage",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_servent",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
@@ -621,6 +812,22 @@ libc_support_library(
         ":resolv_hosts",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "reentrant",
+    hdrs = ["reentrant.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hostent",
+        "//libc/hdr/types:struct_netent",
+        "//libc/hdr/types:struct_protoent",
+        "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
     ],
 )
 

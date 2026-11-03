@@ -13,6 +13,11 @@
 
 #include "src/netdb/hostent_storage.h"
 
+#include "hdr/types/socklen_t.h"
+#include "hdr/types/struct_sockaddr_in.h"
+#include "hdr/types/struct_sockaddr_in6.h"
+#include "src/netdb/getnameinfo_utils.h"
+
 #include "hdr/netdb_macros.h"
 #include "hdr/sys_socket_macros.h"
 #include "src/__support/macros/attributes.h"
@@ -87,6 +92,58 @@ struct hostent *fill_hostent(const char *name, int family) {
   storage.entry.h_length = static_cast<int>(size);
   storage.entry.h_addr_list = storage.address_list;
   error = 0;
+  return &storage.entry;
+}
+
+struct hostent *fill_hostent_by_address(const void *addr, socklen_t len,
+                                        int type) {
+  if (addr == nullptr) {
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
+    return nullptr;
+  }
+
+  size_t address_size = 0;
+
+  union {
+    struct sockaddr_in v4;
+    struct sockaddr_in6 v6;
+  } socket_address = {};
+  socklen_t socket_length = 0;
+
+  if (type == AF_INET && len == 4) {
+    address_size = 4;
+    socket_address.v4.sin_family = AF_INET;
+    inline_memcpy(&socket_address.v4.sin_addr, addr, 4);
+    socket_length = static_cast<socklen_t>(sizeof(socket_address.v4));
+  } else if (type == AF_INET6 && len == 16) {
+    address_size = 16;
+    socket_address.v6.sin6_family = AF_INET6;
+    inline_memcpy(&socket_address.v6.sin6_addr, addr, 16);
+    socket_length = static_cast<socklen_t>(sizeof(socket_address.v6));
+  } else {
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
+    return nullptr;
+  }
+
+  // NI_NAMEREQD so that an address with no name is a failure rather than the
+  // address written back as though it were one.
+  if (internal::getnameinfo_impl(
+          reinterpret_cast<struct sockaddr *>(&socket_address), socket_length,
+          storage.name, sizeof(storage.name), nullptr, 0, NI_NAMEREQD) != 0) {
+    *internal::h_errno_location_impl() = HOST_NOT_FOUND;
+    return nullptr;
+  }
+
+  inline_memcpy(storage.addresses[0], addr, address_size);
+  storage.address_list[0] = reinterpret_cast<char *>(storage.addresses[0]);
+  storage.address_list[1] = nullptr;
+  storage.aliases[0] = nullptr;
+
+  storage.entry.h_name = storage.name;
+  storage.entry.h_aliases = storage.aliases;
+  storage.entry.h_addrtype = type;
+  storage.entry.h_length = static_cast<int>(address_size);
+  storage.entry.h_addr_list = storage.address_list;
   return &storage.entry;
 }
 
