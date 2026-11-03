@@ -117,8 +117,6 @@ bool codeset_is_supported(cpp::string_view name) {
          same_codeset(codeset, "ansix341968");
 }
 
-namespace {
-
 // What the environment says a variable is, or nullptr where it says nothing.
 // The environment is read directly rather than through getenv, so a program
 // that keeps its own environment and defines getenv itself, as a shell does,
@@ -139,8 +137,6 @@ const char *environment_value(const char *name) {
   }
   return nullptr;
 }
-
-} // anonymous namespace
 
 const char *locale_from_environment(int category) {
   // LC_ALL overrides the rest where it says anything at all.
