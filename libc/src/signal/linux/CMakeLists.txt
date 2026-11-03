@@ -108,6 +108,7 @@ add_entrypoint_object(
     .signal_utils
     libc.hdr.types.sigset_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
+    libc.src.__support.threads.linux.setxid_signal
     libc.src.errno.errno
 )
 
@@ -200,6 +201,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
     libc.src.__support.common
     libc.src.__support.macros.config
+    libc.src.__support.threads.linux.setxid_signal
 )
 
 add_entrypoint_object(
