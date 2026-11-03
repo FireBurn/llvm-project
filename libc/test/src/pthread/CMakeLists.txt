@@ -129,3 +129,15 @@ add_libc_test(
     libc.src.sched.__sched_setcpuset
     libc.src.string.memset
 )
+
+add_libc_test(
+  pthread_gettid_np_test
+  SUITE
+    libc-pthread-tests
+  SRCS
+    pthread_gettid_np_test.cpp
+  DEPENDS
+    libc.src.pthread.pthread_gettid_np
+    libc.src.pthread.pthread_self
+    libc.src.unistd.gettid
+)

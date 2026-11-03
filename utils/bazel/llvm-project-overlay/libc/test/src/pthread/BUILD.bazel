@@ -64,3 +64,13 @@ libc_test(
         "//libc:types_cpu_set_t",
     ],
 )
+
+libc_test(
+    name = "pthread_gettid_np_test",
+    srcs = ["pthread_gettid_np_test.cpp"],
+    deps = [
+        "//libc:gettid",
+        "//libc:pthread_gettid_np",
+        "//libc:pthread_self",
+    ],
+)
