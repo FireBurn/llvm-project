@@ -377,6 +377,41 @@ if(LLVM_INCLUDE_TESTS AND LLVM_LIBC_FULL_BUILD AND NOT LIBC_TARGET_OS_IS_GPU AND
   endif()
 endif()
 
+# Rule to add a program that an integration test starts with exec* or
+# posix_spawn. It is built in the directory of the calling CMakeLists.txt, next
+# to the test, and is not part of the default build.
+# Usage:
+#   add_libc_test_helper(<name> SRCS <sources>)
+# A full build has no other C library to build it against when cross compiling,
+# and the helper should run on the libc under test anyway, so it is compiled
+# with the headers and linked with the startup file and static archive of this
+# build, the way the integration tests are. An overlay build uses the C library
+# of the host.
+function(add_libc_test_helper target_name)
+  cmake_parse_arguments(HELPER "" "" "SRCS" ${ARGN})
+  add_executable(${target_name} EXCLUDE_FROM_ALL ${HELPER_SRCS})
+  set_target_properties(
+    ${target_name}
+    PROPERTIES
+      OUTPUT_NAME ${target_name}
+      RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
+  if(NOT LLVM_LIBC_FULL_BUILD)
+    return()
+  endif()
+  target_compile_options(${target_name} PRIVATE -nostdlibinc -isystem ${LIBC_INCLUDE_DIR})
+  foreach(path IN LISTS LIBC_KERNEL_HEADERS)
+    target_compile_options(${target_name} PRIVATE "-idirafter${path}")
+  endforeach()
+  target_link_options(${target_name} PRIVATE
+    -fuse-ld=lld -nostartfiles -nodefaultlibs -nostdlib++ -static)
+  target_link_libraries(${target_name} PRIVATE
+    libc.startup.${LIBC_TARGET_OS}.crt1
+    ${LIBC_LIBRARY_DIR}/libc.a
+    ${LIBC_TEST_BUILTINS_LIBRARY})
+  add_dependencies(${target_name} libc generate-libc-headers)
+endfunction()
+
 # Rule to add a test suite in the hierarchy.
 # Usage:
 #   add_libc_testsuite(
