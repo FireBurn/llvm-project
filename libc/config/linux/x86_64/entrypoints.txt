@@ -537,6 +537,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.timerfd.timerfd_settime
     libc.src.sys.fanotify.fanotify_init
     libc.src.sys.fanotify.fanotify_mark
+    libc.src.sys.reboot.reboot
     libc.src.sys.msg.msgctl
     libc.src.sys.msg.msgget
     libc.src.sys.msg.msgrcv
