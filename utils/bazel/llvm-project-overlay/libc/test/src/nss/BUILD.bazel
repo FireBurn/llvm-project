@@ -52,3 +52,13 @@ libc_test(
         "//libc:types_struct_sockaddr_in",
     ],
 )
+
+libc_test(
+    name = "nss_configure_lookup_test",
+    srcs = ["nss_configure_lookup_test.cpp"],
+    deps = [
+        "//libc:__nss_configure_lookup",
+        "//libc:__support_nss_config",
+        "//libc:hdr_errno_macros",
+    ],
+)
