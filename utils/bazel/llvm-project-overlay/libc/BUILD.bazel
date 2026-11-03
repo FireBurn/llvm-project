@@ -26462,6 +26462,26 @@ libc_function(
 )
 
 libc_function(
+    name = "gethostbyaddr_r",
+    srcs = ["src/netdb/gethostbyaddr_r.cpp"],
+    hdrs = ["src/netdb/gethostbyaddr_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_netdb_macros",
+        ":__h_errno_location",
+        ":netdb_hostent_storage",
+        ":netdb_hosts_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_lookup",
+        ":types_size_t",
+        ":types_socklen_t",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
     name = "gethostbyname",
     srcs = ["src/netdb/gethostbyname.cpp"],
     hdrs = ["src/netdb/gethostbyname.h"],
@@ -26483,6 +26503,62 @@ libc_function(
         ":__support_macros_config",
         ":hdr_sys_socket_macros",
         ":netdb_hostent_storage",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname2_r",
+    srcs = ["src/netdb/gethostbyname2_r.cpp"],
+    hdrs = ["src/netdb/gethostbyname2_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_netdb_macros",
+        ":__h_errno_location",
+        ":netdb_hostent_storage",
+        ":netdb_hosts_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_lookup",
+        ":types_size_t",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
+    name = "gethostbyname_r",
+    srcs = ["src/netdb/gethostbyname_r.cpp"],
+    hdrs = ["src/netdb/gethostbyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_netdb_macros",
+        ":hdr_sys_socket_macros",
+        ":__h_errno_location",
+        ":netdb_hostent_storage",
+        ":netdb_hosts_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_lookup",
+        ":types_size_t",
+        ":types_struct_hostent",
+    ],
+)
+
+libc_function(
+    name = "gethostent_r",
+    srcs = ["src/netdb/gethostent_r.cpp"],
+    hdrs = ["src/netdb/gethostent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_hostent_storage",
+        ":netdb_hosts_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_lookup",
+        ":types_size_t",
         ":types_struct_hostent",
     ],
 )
@@ -28002,6 +28078,23 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetbyaddr_r",
+    srcs = ["src/netdb/getnetbyaddr_r.cpp"],
+    hdrs = ["src/netdb/getnetbyaddr_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_networks",
+        ":types_size_t",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
     name = "getnetbyname",
     srcs = ["src/netdb/getnetbyname.cpp"],
     hdrs = ["src/netdb/getnetbyname.h"],
@@ -28011,6 +28104,23 @@ libc_function(
         ":hdr_stdint_proxy",
         ":netdb_net_storage",
         ":netdb_resolv_networks",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
+    name = "getnetbyname_r",
+    srcs = ["src/netdb/getnetbyname_r.cpp"],
+    hdrs = ["src/netdb/getnetbyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_networks",
+        ":types_size_t",
         ":types_struct_netent",
     ],
 )
@@ -28030,6 +28140,23 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetent_r",
+    srcs = ["src/netdb/getnetent_r.cpp"],
+    hdrs = ["src/netdb/getnetent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":hdr_stdint_proxy",
+        ":netdb_net_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_networks",
+        ":types_size_t",
+        ":types_struct_netent",
+    ],
+)
+
+libc_function(
     name = "getprotobyname",
     srcs = ["src/netdb/getprotobyname.cpp"],
     hdrs = ["src/netdb/getprotobyname.h"],
@@ -28038,6 +28165,22 @@ libc_function(
         ":__support_macros_config",
         ":netdb_proto_storage",
         ":netdb_resolv_protocols",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
+    name = "getprotobyname_r",
+    srcs = ["src/netdb/getprotobyname_r.cpp"],
+    hdrs = ["src/netdb/getprotobyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_proto_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_protocols",
+        ":types_size_t",
         ":types_struct_protoent",
     ],
 )
@@ -28056,6 +28199,22 @@ libc_function(
 )
 
 libc_function(
+    name = "getprotobynumber_r",
+    srcs = ["src/netdb/getprotobynumber_r.cpp"],
+    hdrs = ["src/netdb/getprotobynumber_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_proto_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_protocols",
+        ":types_size_t",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
     name = "getprotoent",
     srcs = ["src/netdb/getprotoent.cpp"],
     hdrs = ["src/netdb/getprotoent.h"],
@@ -28069,6 +28228,22 @@ libc_function(
 )
 
 libc_function(
+    name = "getprotoent_r",
+    srcs = ["src/netdb/getprotoent_r.cpp"],
+    hdrs = ["src/netdb/getprotoent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_proto_storage",
+        ":netdb_reentrant",
+        ":netdb_resolv_protocols",
+        ":types_size_t",
+        ":types_struct_protoent",
+    ],
+)
+
+libc_function(
     name = "getservbyname",
     srcs = ["src/netdb/getservbyname.cpp"],
     hdrs = ["src/netdb/getservbyname.h"],
@@ -28077,6 +28252,22 @@ libc_function(
         ":__support_macros_config",
         ":netdb_resolv_services",
         ":netdb_serv_storage",
+        ":types_struct_servent",
+    ],
+)
+
+libc_function(
+    name = "getservent_r",
+    srcs = ["src/netdb/getservent_r.cpp"],
+    hdrs = ["src/netdb/getservent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_reentrant",
+        ":netdb_resolv_services",
+        ":netdb_serv_storage",
+        ":types_size_t",
         ":types_struct_servent",
     ],
 )
@@ -30839,6 +31030,22 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_reentrant",
+    hdrs = ["src/netdb/reentrant.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_size_t",
+        ":types_struct_hostent",
+        ":types_struct_netent",
+        ":types_struct_protoent",
+        ":types_struct_servent",
     ],
 )
 
