@@ -1657,6 +1657,10 @@
 #define SYS_prlimit64 __NR_prlimit64
 #endif
 
+#ifdef __NR_process_madvise
+#define SYS_process_madvise __NR_process_madvise
+#endif
+
 #ifdef __NR_process_mrelease
 #define SYS_process_mrelease __NR_process_mrelease
 #endif

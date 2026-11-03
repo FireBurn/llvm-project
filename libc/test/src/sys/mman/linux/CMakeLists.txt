@@ -239,3 +239,26 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  mseal_test
+  SUITE
+    libc-sys-mman-tests
+  SRCS
+    mseal_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.types.struct_iovec
+    libc.src.__support.libc_errno
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.mprotect
+    libc.src.sys.mman.mseal
+    libc.src.sys.mman.munmap
+    libc.src.sys.mman.process_madvise
+    libc.src.sys.pidfd.pidfd_open
+    libc.src.unistd.close
+    libc.src.unistd.getpid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
