@@ -21762,6 +21762,54 @@ libc_function(
 )
 
 libc_function(
+    name = "setegid",
+    srcs = ["src/unistd/linux/setegid.cpp"],
+    hdrs = ["src/unistd/setegid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setresgid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_gid_t",
+        ":unistd_setegid",
+    ],
+)
+
+libc_function(
+    name = "seteuid",
+    srcs = ["src/unistd/linux/seteuid.cpp"],
+    hdrs = ["src/unistd/seteuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setresuid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_uid_t",
+        ":unistd_seteuid",
+    ],
+)
+
+libc_function(
+    name = "setgid",
+    srcs = ["src/unistd/linux/setgid.cpp"],
+    hdrs = ["src/unistd/setgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setgid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_gid_t",
+        ":unistd_setgid",
+    ],
+)
+
+libc_function(
     name = "sethostname",
     srcs = ["src/unistd/linux/sethostname.cpp"],
     hdrs = ["src/unistd/sethostname.h"],
@@ -21787,6 +21835,86 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_setpgid",
         ":errno",
         ":unistd_setpgrp",
+    ],
+)
+
+libc_function(
+    name = "setregid",
+    srcs = ["src/unistd/linux/setregid.cpp"],
+    hdrs = ["src/unistd/setregid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setregid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_gid_t",
+        ":unistd_setregid",
+    ],
+)
+
+libc_function(
+    name = "setresgid",
+    srcs = ["src/unistd/linux/setresgid.cpp"],
+    hdrs = ["src/unistd/setresgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setresgid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_gid_t",
+        ":unistd_setresgid",
+    ],
+)
+
+libc_function(
+    name = "setresuid",
+    srcs = ["src/unistd/linux/setresuid.cpp"],
+    hdrs = ["src/unistd/setresuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setresuid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_uid_t",
+        ":unistd_setresuid",
+    ],
+)
+
+libc_function(
+    name = "setreuid",
+    srcs = ["src/unistd/linux/setreuid.cpp"],
+    hdrs = ["src/unistd/setreuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setreuid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_uid_t",
+        ":unistd_setreuid",
+    ],
+)
+
+libc_function(
+    name = "setuid",
+    srcs = ["src/unistd/linux/setuid.cpp"],
+    hdrs = ["src/unistd/setuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setuid",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_uid_t",
+        ":unistd_setuid",
     ],
 )
 
@@ -28373,6 +28501,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "unistd_setegid",
+    hdrs = ["src/unistd/setegid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_threads_linux_setxid",
     srcs = ["src/__support/threads/linux/setxid.cpp"],
     hdrs = ["src/__support/threads/linux/setxid.h"],
@@ -28409,6 +28546,93 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "unistd_seteuid",
+    hdrs = ["src/unistd/seteuid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setgid",
+    hdrs = ["src/unistd/setgid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setregid",
+    hdrs = ["src/unistd/setregid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setresgid",
+    hdrs = ["src/unistd/setresgid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setresuid",
+    hdrs = ["src/unistd/setresuid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setreuid",
+    hdrs = ["src/unistd/setreuid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setuid",
+    hdrs = ["src/unistd/setuid.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setresgid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setresgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setresuid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setresuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_uid_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_setgid",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgid.h"],
     deps = [
@@ -28417,6 +28641,30 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_osutil_syscall",
         ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setregid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setregid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_gid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_setreuid",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setreuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_uid_t",
     ],
 )
 
@@ -31508,6 +31756,38 @@ libc_function(
         ":grp_grp_utils",
         ":hdr_errno_macros",
         ":types_gid_t",
+    ],
+)
+
+libc_function(
+    name = "initgroups",
+    srcs = ["src/grp/initgroups.cpp"],
+    hdrs = ["src/grp/initgroups.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":grp_grp_utils",
+        ":types_gid_t",
+    ],
+)
+
+libc_function(
+    name = "setgroups",
+    srcs = ["src/grp/setgroups.cpp"],
+    hdrs = ["src/grp/setgroups.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_setgroups",
+        ":__support_threads_linux_setxid",
+        ":errno",
+        ":types_gid_t",
+        ":types_size_t",
     ],
 )
 
