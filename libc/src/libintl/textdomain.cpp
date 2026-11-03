@@ -7,23 +7,27 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of textdomain (stub).
+/// Implementation of textdomain.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/libintl/textdomain.h"
 
+#include "hdr/errno_macros.h"
 #include "src/__support/common.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/libintl/catalogs.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, textdomain, (const char *domainname)) {
-  // TODO: Implement message catalogs. For now, return the default "messages"
-  // domain when querying or resetting, and domainname otherwise.
-  if (domainname == nullptr || domainname[0] == '\0')
-    return const_cast<char *>("messages");
-  return const_cast<char *>(domainname);
+  if (domainname == nullptr)
+    return const_cast<char *>(libintl::current_domain());
+  const char *domain = libintl::set_current_domain(domainname);
+  if (domain == nullptr)
+    libc_errno = ENOMEM;
+  return const_cast<char *>(domain);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

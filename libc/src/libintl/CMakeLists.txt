@@ -1,9 +1,40 @@
+add_object_library(
+  catalogs
+  SRCS
+    catalogs.cpp
+  HDRS
+    catalogs.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.locale_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.stdio_macros
+    libc.hdr.sys_mman_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.libc_errno
+    libc.src.__support.libintl.catalog
+    libc.src.__support.macros.config
+    libc.src.__support.threads.raw_mutex
+    libc.src.iconv.conversion
+    libc.src.locale.locale
+)
+
 add_entrypoint_object(
   bind_textdomain_codeset
   SRCS
     bind_textdomain_codeset.cpp
   HDRS
     bind_textdomain_codeset.h
+  DEPENDS
+    .catalogs
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
 )
 
 add_entrypoint_object(
@@ -12,6 +43,10 @@ add_entrypoint_object(
     bindtextdomain.cpp
   HDRS
     bindtextdomain.h
+  DEPENDS
+    .catalogs
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
 )
 
 add_entrypoint_object(
@@ -20,6 +55,10 @@ add_entrypoint_object(
     dcgettext.cpp
   HDRS
     dcgettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -29,6 +68,9 @@ add_entrypoint_object(
   HDRS
     dcgettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -38,6 +80,10 @@ add_entrypoint_object(
     dcngettext.cpp
   HDRS
     dcngettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -47,6 +93,9 @@ add_entrypoint_object(
   HDRS
     dcngettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -56,6 +105,10 @@ add_entrypoint_object(
     dgettext.cpp
   HDRS
     dgettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -65,6 +118,9 @@ add_entrypoint_object(
   HDRS
     dgettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -74,6 +130,10 @@ add_entrypoint_object(
     dngettext.cpp
   HDRS
     dngettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -83,6 +143,9 @@ add_entrypoint_object(
   HDRS
     dngettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -92,6 +155,10 @@ add_entrypoint_object(
     gettext.cpp
   HDRS
     gettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -101,6 +168,9 @@ add_entrypoint_object(
   HDRS
     gettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -110,6 +180,10 @@ add_entrypoint_object(
     ngettext.cpp
   HDRS
     ngettext.h
+  DEPENDS
+    .catalogs
+    libc.hdr.locale_macros
+    libc.src.locale.locale
 )
 
 add_entrypoint_object(
@@ -119,6 +193,9 @@ add_entrypoint_object(
   HDRS
     ngettext_l.h
   DEPENDS
+    .catalogs
+    libc.src.locale.locale
+    libc.hdr.locale_macros
     libc.hdr.types.locale_t
 )
 
@@ -128,4 +205,8 @@ add_entrypoint_object(
     textdomain.cpp
   HDRS
     textdomain.h
+  DEPENDS
+    .catalogs
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
 )

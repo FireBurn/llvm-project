@@ -7,24 +7,30 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of bind_textdomain_codeset (stub).
+/// Implementation of bind_textdomain_codeset.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/libintl/bind_textdomain_codeset.h"
 
+#include "hdr/errno_macros.h"
 #include "src/__support/common.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/libintl/catalogs.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, bind_textdomain_codeset,
                    (const char *domainname, const char *codeset)) {
-  // TODO: Implement message catalogs. For now, validate domainname and return
-  // the requested codeset (or nullptr when querying).
-  if (domainname == nullptr || domainname[0] == '\0' || codeset == nullptr)
+  if (domainname == nullptr || domainname[0] == '\0')
     return nullptr;
-  return const_cast<char *>(codeset);
+  if (codeset == nullptr)
+    return const_cast<char *>(libintl::domain_codeset(domainname));
+  const char *stored = libintl::set_domain_codeset(domainname, codeset);
+  if (stored == nullptr)
+    libc_errno = ENOMEM;
+  return const_cast<char *>(stored);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
