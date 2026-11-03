@@ -28578,3 +28578,57 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "sys_sysinfo_get_nprocs",
+    hdrs = ["src/sys/sysinfo/get_nprocs.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_sysinfo_get_nprocs_conf",
+    hdrs = ["src/sys/sysinfo/get_nprocs_conf.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getservbyname_r",
+    srcs = ["src/netdb/getservbyname_r.cpp"],
+    hdrs = ["src/netdb/getservbyname_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_resolv_services",
+        ":types_size_t",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "netdb_getservbyport_r",
+    srcs = ["src/netdb/getservbyport_r.cpp"],
+    hdrs = ["src/netdb/getservbyport_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_new",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":netdb_resolv_services",
+        ":types_size_t",
+        ":types_struct_servent",
+    ],
+)
+
+libc_support_library(
+    name = "sched_sched_getcpucount",
+    hdrs = ["src/sched/sched_getcpucount.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_cpu_set_t",
+    ],
+)
