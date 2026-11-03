@@ -23,6 +23,21 @@ add_integration_test(
     libc.src.unistd.write
 )
 
+add_integration_test(
+  fork_raw_test
+  SUITE
+    libc-unistd-integration-tests
+  SRCS
+    fork_raw_test.cpp
+  DEPENDS
+    libc.include.sys_wait
+    libc.include.unistd
+    libc.src.sys.wait.waitpid
+    libc.src.unistd._Fork
+    libc.src.unistd._exit
+    libc.src.unistd.getpid
+)
+
 add_subdirectory(testdata)
 
 add_integration_test(
