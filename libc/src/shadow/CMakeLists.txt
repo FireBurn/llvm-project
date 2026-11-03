@@ -10,6 +10,9 @@ add_object_library(
     libc.src.__support.CPP.span
     libc.src.__support.ctype_utils
     libc.src.__support.error_or
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
+    libc.src.__support.pwd.dynamic_buffer
     libc.src.__support.pwd.field_tokenizer
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
@@ -77,8 +80,12 @@ add_entrypoint_object(
   HDRS
     getspnam.h
   DEPENDS
+    .shadow_r_utils
     .shadow_utils
     libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.span
+    libc.src.__support.nss.lookup
+    libc.src.__support.pwd.dynamic_buffer
     libc.src.errno.errno
 )
 
@@ -104,6 +111,8 @@ add_entrypoint_object(
   DEPENDS
     .shadow_r_utils
     libc.hdr.errno_macros
+    libc.src.__support.CPP.span
+    libc.src.__support.nss.lookup
     libc.hdr.types.size_t
     libc.hdr.types.struct_spwd
 )

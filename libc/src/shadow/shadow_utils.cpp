@@ -14,6 +14,9 @@
 #include "src/shadow/shadow_utils.h"
 #include "hdr/types/struct_spwd.h"
 #include "src/__support/macros/attributes.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
+#include "src/__support/pwd/dynamic_buffer.h"
 #include "src/__support/pwd/flat_file_db.h"
 
 #ifndef LIBC_COPT_SHADOW_FILE_PATH
@@ -27,19 +30,33 @@ static LIBC_CONSTINIT pwd::FlatFileDatabase<struct spwd>
     db(LIBC_COPT_SHADOW_FILE_PATH);
 // These are process wide and are not under a lock: getspent is not
 // reentrant, and the _r calls open the file for themselves.
-static char line_buffer[shadow::SHADOW_LINE_SIZE];
+static LIBC_CONSTINIT pwd::DynamicBuffer line_buffer;
 static struct spwd shadow_entry;
+static nss::Cursor cursor;
 
 void TESTONLY_set_shadow_path(const char *path) { db.set_path(path); }
 
 const char *path() { return db.path(); }
 
-ErrorOr<void> open() { return db.setdb(); }
+ErrorOr<void> open() {
+  nss::reset(cursor, "endspent");
+  return db.setdb();
+}
 
-ErrorOr<void> close() { return db.enddb(); }
+ErrorOr<void> close() {
+  nss::reset(cursor, "endspent");
+  return db.enddb();
+}
+
+ErrorOr<bool> read_next(struct spwd *entry, cpp::span<char> buffer) {
+  return nss::next(cursor, nss::SHADOW, "setspent", "getspent_r", "endspent",
+                   entry, buffer, [&] { return db.getnext(entry, buffer); });
+}
 
 ErrorOr<struct spwd *> read_next() {
-  auto res = db.getnext(&shadow_entry, line_buffer);
+  auto res = nss::with_growing_buffer(line_buffer, [](cpp::span<char> buffer) {
+    return read_next(&shadow_entry, buffer);
+  });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
