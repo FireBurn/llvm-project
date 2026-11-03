@@ -1093,6 +1093,17 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_pidfd
+  ../libc/include/sys/pidfd.yaml
+  sys/pidfd.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_pidfd_macros
+    .llvm-libc-types.pid_t
+    .llvm-libc-types.siginfo_t
+)
+
+add_header_macro(
   sys_file
   ../libc/include/sys/file.yaml
   sys/file.h

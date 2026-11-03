@@ -221,6 +221,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("sys/klog"),
     libc_header_info("sys/msg"),
     libc_header_info("sys/mtio"),
+    libc_header_info("sys/pidfd"),
     libc_header_info("sys/procfs"),
     libc_header_info("sys/quota"),
     libc_header_info("sys/reboot"),
@@ -20949,6 +20950,82 @@ libc_function(
         ":sched_sched_getcpucount",
         ":sys_sysinfo_get_nprocs",
         ":types_cpu_set_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pidfd_getfd",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pidfd_getfd.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_function(
+    name = "pidfd_getfd",
+    srcs = ["src/sys/pidfd/linux/pidfd_getfd.cpp"],
+    hdrs = ["src/sys/pidfd/pidfd_getfd.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pidfd_getfd",
+        ":errno",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pidfd_open",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pidfd_open.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
+    name = "pidfd_open",
+    srcs = ["src/sys/pidfd/linux/pidfd_open.cpp"],
+    hdrs = ["src/sys/pidfd/pidfd_open.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pidfd_open",
+        ":errno",
+        ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_pidfd_send_signal",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/pidfd_send_signal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_siginfo_t",
+    ],
+)
+
+libc_function(
+    name = "pidfd_send_signal",
+    srcs = ["src/sys/pidfd/linux/pidfd_send_signal.cpp"],
+    hdrs = ["src/sys/pidfd/pidfd_send_signal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_pidfd_send_signal",
+        ":errno",
+        ":types_siginfo_t",
     ],
 )
 
