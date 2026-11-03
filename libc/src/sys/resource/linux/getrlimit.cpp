@@ -22,7 +22,7 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, getrlimit, (int res, struct rlimit *limits)) {
-  auto result = linux_syscalls::prlimit(0, res, nullptr, limits);
+  auto result = linux_syscalls::getrlimit(res, limits);
   if (!result) {
     libc_errno = result.error();
     return -1;
