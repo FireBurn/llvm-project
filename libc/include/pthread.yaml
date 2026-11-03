@@ -80,6 +80,7 @@ macros:
 types:
   - type_name: pthread_t
   - type_name: clockid_t
+  - type_name: pid_t
   - type_name: struct_timespec
   - type_name: pthread_once_t
   - type_name: pthread_mutex_t
@@ -187,6 +188,12 @@ functions:
     return_type: int
     arguments:
       - type: pthread_attr_t *
+  - name: pthread_gettid_np
+    standards:
+      - gnu
+    return_type: pid_t
+    arguments:
+      - type: pthread_t
   - name: pthread_setattr_default_np
     standards:
       - gnu
