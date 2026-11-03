@@ -5849,6 +5849,8 @@ libc_support_library(
         ":__support_threads_futex_utils",
         ":__support_threads_linux_futex_utils",
         ":__support_threads_linux_futex_word_type",
+        ":__support_threads_linux_setxid",
+        ":__support_threads_linux_setxid_signal",
         ":__support_threads_linux_tls",
         ":__support_threads_mutex",
         ":__support_threads_raw_mutex",
@@ -28628,6 +28630,42 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_threads_linux_setxid",
+    srcs = ["src/__support/threads/linux/setxid.cpp"],
+    hdrs = ["src/__support/threads/linux/setxid.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_cpp_atomic",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getdents64",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_osutil_linux_syscall_wrappers_tgkill",
+        ":__support_threads_callonce",
+        ":__support_threads_linux_callonce",
+        ":__support_threads_linux_futex_utils",
+        ":__support_threads_linux_setxid_signal",
+        ":__support_threads_raw_mutex",
+        ":__support_time_abs_timeout",
+        ":__support_time_clock_gettime",
+        ":hdr_fcntl_macros",
+        ":hdr_signal_macros",
+        ":hdr_unistd_macros",
+        ":stdlib_abort_utils",
+        ":__libc_single_threaded",
+        ":types_pid_t",
+        ":types_sigset_t",
+        ":types_struct_sigaction",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_setgid",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/setgid.h"],
     deps = [
@@ -28658,6 +28696,19 @@ libc_support_library(
         ":__support_common",
         ":__support_macros_config",
         ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_threads_linux_setxid_signal",
+    hdrs = ["src/__support/threads/linux/setxid_signal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":hdr_signal_macros",
+        ":types_sigset_t",
     ],
 )
 
@@ -30813,6 +30864,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_threads_linux_callonce",
+    hdrs = ["src/__support/threads/callonce.h", "src/__support/threads/linux/callonce.h"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":__support_threads_callonce",
+        ":__support_threads_linux_futex_utils",
+    ],
+)
+
+libc_support_library(
     name = "locale_locale",
     srcs = ["src/locale/locale.cpp"],
     hdrs = ["src/locale/locale.h"],
@@ -31725,6 +31787,7 @@ libc_support_library(
         ":__support_pwd_field_tokenizer",
         ":__support_pwd_flat_file_db",
         ":__support_str_to_integer",
+        ":__support_threads_linux_setxid",
         ":func_free",
         ":func_malloc",
         ":func_realloc",
@@ -34265,6 +34328,19 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "pthread_sigmask",
+    srcs = ["src/signal/linux/pthread_sigmask.cpp"],
+    hdrs = ["src/signal/pthread_sigmask.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":__support_threads_linux_setxid_signal",
+        ":types_sigset_t",
+    ],
+)
+
 libc_support_library(
     name = "spawn_file_actions",
     hdrs = ["src/spawn/file_actions.h"],
@@ -36762,6 +36838,7 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":__support_threads_linux_setxid_signal",
         ":errno",
         ":types_sigset_t",
     ],
