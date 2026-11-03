@@ -350,6 +350,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     # stdlib.h entrypoints
     libc.src.stdlib.a64l
     libc.src.stdlib.abs
+    libc.src.stdlib.arc4random
+    libc.src.stdlib.arc4random_buf
+    libc.src.stdlib.arc4random_uniform
     libc.src.stdlib.atof
     libc.src.stdlib.atoi
     libc.src.stdlib.atol

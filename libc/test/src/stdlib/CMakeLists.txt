@@ -848,3 +848,16 @@ add_libc_test(
     libc.src.stdlib.malloc
 )
 
+
+add_libc_test(
+  arc4random_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    arc4random_test.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.stdlib.arc4random
+    libc.src.stdlib.arc4random_buf
+    libc.src.stdlib.arc4random_uniform
+)
