@@ -18,6 +18,8 @@
 #include "src/__support/CPP/span.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/macros/attributes.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/__support/pwd/dynamic_buffer.h"
 #include "src/__support/pwd/flat_file_db.h"
 #include "src/string/string_utils.h"
@@ -75,21 +77,34 @@ void TESTONLY_reset_passwd_path() {
   db.set_path(LIBC_COPT_PWD_FILE_PATH);
 }
 
-ErrorOr<void> open() { return db.setdb(); }
+namespace {
+nss::Cursor cursor;
+} // namespace
 
-ErrorOr<void> close() { return db.enddb(); }
+ErrorOr<void> open() {
+  nss::reset(cursor, "endpwent");
+  return db.setdb();
+}
+
+ErrorOr<void> close() {
+  nss::reset(cursor, "endpwent");
+  return db.enddb();
+}
+
+ErrorOr<bool> read_next(struct passwd *pwd, cpp::span<char> buffer) {
+  return nss::next(cursor, nss::PASSWD, "setpwent", "getpwent_r", "endpwent",
+                   pwd, buffer, [&] { return db.getnext(pwd, buffer); });
+}
 
 ErrorOr<struct passwd *> read_next() {
-  auto res = db.getnext(&pwd_entry, line_buffer);
+  auto res = nss::with_growing_buffer(line_buffer, [](cpp::span<char> buffer) {
+    return read_next(&pwd_entry, buffer);
+  });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
     return nullptr;
   return &pwd_entry;
-}
-
-ErrorOr<bool> read_next(struct passwd *pwd, cpp::span<char> buffer) {
-  return db.getnext(pwd, buffer);
 }
 
 namespace {
@@ -121,16 +136,29 @@ ErrorOr<bool> lookup_by_uid(uid_t uid, struct passwd *pwd, BufferType &buffer,
 
 ErrorOr<bool> find_by_name(cpp::string_view name, struct passwd *pwd,
                            cpp::span<char> buffer, const char *path) {
-  return lookup_by_name(name, pwd, buffer, path ? path : passwd_file_path);
+  if (path)
+    return lookup_by_name(name, pwd, buffer, path);
+  nss::CString text(name);
+  if (!text.ok())
+    return false;
+  return nss::find(nss::PASSWD, "getpwnam_r", text.get(), pwd, buffer, [&] {
+    return lookup_by_name(name, pwd, buffer, passwd_file_path);
+  });
 }
 
 ErrorOr<bool> find_by_uid(uid_t uid, struct passwd *pwd, cpp::span<char> buffer,
                           const char *path) {
-  return lookup_by_uid(uid, pwd, buffer, path ? path : passwd_file_path);
+  if (path)
+    return lookup_by_uid(uid, pwd, buffer, path);
+  return nss::find(nss::PASSWD, "getpwuid_r", uid, pwd, buffer, [&] {
+    return lookup_by_uid(uid, pwd, buffer, passwd_file_path);
+  });
 }
 
 ErrorOr<struct passwd *> find_by_name(cpp::string_view name) {
-  auto res = lookup_by_name(name, &pwd_entry, line_buffer, passwd_file_path);
+  auto res = nss::with_growing_buffer(line_buffer, [&](cpp::span<char> buffer) {
+    return find_by_name(name, &pwd_entry, buffer, nullptr);
+  });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
@@ -139,7 +167,9 @@ ErrorOr<struct passwd *> find_by_name(cpp::string_view name) {
 }
 
 ErrorOr<struct passwd *> find_by_uid(uid_t uid) {
-  auto res = lookup_by_uid(uid, &pwd_entry, line_buffer, passwd_file_path);
+  auto res = nss::with_growing_buffer(line_buffer, [&](cpp::span<char> buffer) {
+    return find_by_uid(uid, &pwd_entry, buffer, nullptr);
+  });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())

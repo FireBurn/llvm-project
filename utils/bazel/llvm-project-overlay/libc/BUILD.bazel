@@ -26157,6 +26157,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
         ":__support_pwd_flat_file_db",
@@ -28044,6 +28045,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":__support_str_to_integer",
         ":hdr_errno_macros",
         ":hdr_stdint_proxy",
@@ -28184,6 +28186,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":__support_str_to_integer",
         ":netdb_resolv_file_lines",
         ":string_memory_utils",
@@ -28227,6 +28230,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":hdr_stdint_proxy",
         ":hdr_sys_socket_macros",
         ":netdb_resolv_file_lines",
@@ -28256,6 +28260,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":hdr_sys_socket_macros",
         ":inet_pton",
         ":netdb_resolv_file_lines",
@@ -30473,6 +30478,23 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_nss_lookup",
+    hdrs = ["src/__support/nss/lookup.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_nss_config",
+        ":__support_nss_dispatch",
+        ":__support_pwd_dynamic_buffer",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
 libc_function(
     name = "dladdr1",
     srcs = ["src/dlfcn/dladdr1.cpp"],
@@ -31964,6 +31986,21 @@ libc_function(
 )
 
 libc_function(
+    name = "getgrgid",
+    srcs = ["src/grp/getgrgid.cpp"],
+    hdrs = ["src/grp/getgrgid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":grp_grp_utils",
+        ":types_gid_t",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
     name = "getgrouplist",
     srcs = ["src/grp/getgrouplist.cpp"],
     hdrs = ["src/grp/getgrouplist.h"],
@@ -31976,6 +32013,22 @@ libc_function(
         ":grp_grp_utils",
         ":hdr_errno_macros",
         ":types_gid_t",
+    ],
+)
+
+libc_function(
+    name = "getgrnam",
+    srcs = ["src/grp/getgrnam.cpp"],
+    hdrs = ["src/grp/getgrnam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":grp_grp_utils",
+        ":types_struct_group",
     ],
 )
 
@@ -32029,6 +32082,7 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_macros_optimization",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":__support_osutil_linux_syscall_wrappers_setgroups",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
@@ -34058,6 +34112,92 @@ libc_function(
 )
 
 libc_function(
+    name = "getpwent",
+    srcs = ["src/pwd/getpwent.cpp"],
+    hdrs = ["src/pwd/getpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":pwd_pwd_utils",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
+    name = "setpwent",
+    srcs = ["src/pwd/setpwent.cpp"],
+    hdrs = ["src/pwd/setpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":pwd_pwd_utils",
+    ],
+)
+
+libc_function(
+    name = "endpwent",
+    srcs = ["src/pwd/endpwent.cpp"],
+    hdrs = ["src/pwd/endpwent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":pwd_pwd_utils",
+    ],
+)
+
+libc_function(
+    name = "getpwnam",
+    srcs = ["src/pwd/getpwnam.cpp"],
+    hdrs = ["src/pwd/getpwnam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":errno",
+        ":pwd_pwd_utils",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
+    name = "getpwnam_r",
+    srcs = ["src/pwd/getpwnam_r.cpp"],
+    hdrs = ["src/pwd/getpwnam_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":pwd_pwd_utils",
+        ":types_size_t",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
+    name = "getpwuid",
+    srcs = ["src/pwd/getpwuid.cpp"],
+    hdrs = ["src/pwd/getpwuid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":pwd_pwd_utils",
+        ":types_struct_passwd",
+        ":types_uid_t",
+    ],
+)
+
+libc_function(
     name = "regcomp",
     srcs = ["src/regex/regcomp.cpp"],
     hdrs = ["src/regex/regcomp.h", "src/regex/regex_engine.h", "src/regex/regex_parser.h"],
@@ -34573,6 +34713,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_nss_dispatch",
+        ":__support_nss_lookup",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
         ":__support_pwd_flat_file_db",
@@ -34655,6 +34796,7 @@ libc_function(
         ":__support_cpp_span",
         ":__support_libc_errno",
         ":__support_macros_config",
+        ":__support_nss_lookup",
         ":__support_pwd_dynamic_buffer",
         ":errno",
         ":shadow_shadow_r_utils",
@@ -34685,6 +34827,7 @@ libc_function(
         ":__support_common",
         ":__support_cpp_span",
         ":__support_macros_config",
+        ":__support_nss_lookup",
         ":hdr_errno_macros",
         ":shadow_shadow_r_utils",
         ":types_size_t",
