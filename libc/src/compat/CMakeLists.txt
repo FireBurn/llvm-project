@@ -73,6 +73,33 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __sched_cpucount
+  SRCS
+    __sched_cpucount.cpp
+  HDRS
+    __sched_cpucount.h
+  DEPENDS
+    libc.hdr.types.cpu_set_t
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.sched.__sched_getcpucount
+)
+
+add_entrypoint_object(
+  __fpclassifyf
+  SRCS
+    __fpclassifyf.cpp
+  HDRS
+    __fpclassifyf.h
+  DEPENDS
+    libc.hdr.math_macros
+    libc.src.__support.FPUtil.fp_bits
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   __xpg_strerror_r
   SRCS
     __xpg_strerror_r.cpp
