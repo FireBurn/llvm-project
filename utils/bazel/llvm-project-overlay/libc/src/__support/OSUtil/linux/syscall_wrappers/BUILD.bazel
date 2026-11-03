@@ -2954,6 +2954,19 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "rt_tgsigqueueinfo",
+    hdrs = ["rt_tgsigqueueinfo.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigsuspend",
     hdrs = ["rt_sigsuspend.h"],
     deps = [
