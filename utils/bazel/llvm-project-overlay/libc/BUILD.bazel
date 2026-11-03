@@ -19452,6 +19452,23 @@ libc_function(
 ################################ unistd targets ################################
 
 libc_function(
+    name = "_Fork",
+    srcs = ["src/unistd/linux/_Fork.cpp"],
+    hdrs = ["src/unistd/_Fork.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_fork",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_threads_identifier",
+        ":types_pid_t",
+        ":unistd__fork",
+    ],
+)
+################################ unistd targets ################################
+
+libc_function(
     name = "access",
     srcs = ["src/unistd/linux/access.cpp"],
     hdrs = ["src/unistd/access.h"],
@@ -28205,6 +28222,28 @@ libc_support_library(
         ":termios_kernel_termios",
         ":termios_linux_speed_utils",
         ":types_struct_termios",
+    ],
+)
+
+libc_support_library(
+    name = "unistd__fork",
+    hdrs = ["src/unistd/_Fork.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_fork",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/fork.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_signal_macros",
+        ":types_pid_t",
     ],
 )
 
