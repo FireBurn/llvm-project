@@ -183,6 +183,8 @@ add_entrypoint_object(
   HDRS
     ../msync.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.threads.cancel
     libc.include.sys_mman
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
