@@ -147,6 +147,27 @@ libc_test(
 )
 
 libc_test(
+    name = "pthread_sigqueue_test",
+    srcs = ["pthread_sigqueue_test.cpp"],
+    deps = [
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:pthread_self",
+        "//libc:pthread_sigqueue",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:signal_sigtimedwait",
+        "//libc:sigprocmask",
+        "//libc:sigtimedwait",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_timespec",
+        "//libc:types_union_sigval",
+    ],
+)
+
+libc_test(
     name = "psignal_test",
     srcs = ["psignal_test.cpp"],
     deps = [

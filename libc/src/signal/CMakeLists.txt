@@ -188,3 +188,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.tgkill
 )
+
+add_entrypoint_object(
+  pthread_sigqueue
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.pthread_sigqueue
+)
