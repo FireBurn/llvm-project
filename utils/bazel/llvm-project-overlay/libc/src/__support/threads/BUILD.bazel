@@ -292,6 +292,7 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        ":cancel",
         ":futex_utils",
         ":linux_futex_utils",
         ":linux_futex_word_type",
@@ -401,6 +402,16 @@ libc_support_library(
     deps = [
         ":mutex",
         "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "cancel",
+    hdrs = ["cancel.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
     ],
 )

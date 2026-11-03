@@ -26,8 +26,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:ssize_t",
         "//libc/hdr/types:struct_iovec",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:readv",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",
@@ -45,8 +47,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:ssize_t",
         "//libc/hdr/types:struct_iovec",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:writev",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",

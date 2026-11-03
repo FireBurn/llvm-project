@@ -689,6 +689,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_pthread_attr_t",
+    hdrs = ["llvm-libc-types/pthread_attr_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_pthread_t",
+    hdrs = ["llvm-libc-types/pthread_t.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["llvm-libc-types/struct_dl_phdr_info.h"],
 )

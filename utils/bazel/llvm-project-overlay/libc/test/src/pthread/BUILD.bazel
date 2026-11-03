@@ -9,3 +9,24 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "pthread_cancel_test",
+    srcs = ["pthread_cancel_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/pthread:__pthread_cleanup_pop",
+        "//libc/src/pthread:__pthread_cleanup_push",
+        "//libc/src/pthread:cancel",
+        "//libc/src/pthread:create",
+        "//libc/src/pthread:join",
+        "//libc/src/pthread:setcancelstate",
+        "//libc/src/pthread:setcanceltype",
+        "//libc/src/pthread:testcancel",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pipe",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:write",
+    ],
+)
