@@ -1,0 +1,257 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "catalogs",
+    srcs = ["catalogs.cpp"],
+    hdrs = ["catalogs.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:locale_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:sys_mman_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mmap",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:raw_mutex",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:libintl_catalog",
+        "//libc/src/iconv:conversion",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "bind_textdomain_codeset",
+    srcs = ["bind_textdomain_codeset.cpp"],
+    hdrs = ["bind_textdomain_codeset.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "bindtextdomain",
+    srcs = ["bindtextdomain.cpp"],
+    hdrs = ["bindtextdomain.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "dcgettext",
+    srcs = ["dcgettext.cpp"],
+    hdrs = ["dcgettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dcgettext_l",
+    srcs = ["dcgettext_l.cpp"],
+    hdrs = ["dcgettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dcngettext",
+    srcs = ["dcngettext.cpp"],
+    hdrs = ["dcngettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dcngettext_l",
+    srcs = ["dcngettext_l.cpp"],
+    hdrs = ["dcngettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dgettext",
+    srcs = ["dgettext.cpp"],
+    hdrs = ["dgettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dgettext_l",
+    srcs = ["dgettext_l.cpp"],
+    hdrs = ["dgettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dngettext",
+    srcs = ["dngettext.cpp"],
+    hdrs = ["dngettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "dngettext_l",
+    srcs = ["dngettext_l.cpp"],
+    hdrs = ["dngettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "gettext",
+    srcs = ["gettext.cpp"],
+    hdrs = ["gettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "gettext_l",
+    srcs = ["gettext_l.cpp"],
+    hdrs = ["gettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "ngettext",
+    srcs = ["ngettext.cpp"],
+    hdrs = ["ngettext.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "ngettext_l",
+    srcs = ["ngettext_l.cpp"],
+    hdrs = ["ngettext_l.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/locale:locale",
+        "//libc/src/locale:locale_data",
+    ],
+)
+
+libc_function(
+    name = "textdomain",
+    srcs = ["textdomain.cpp"],
+    hdrs = ["textdomain.h"],
+    deps = [
+        ":catalogs",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
