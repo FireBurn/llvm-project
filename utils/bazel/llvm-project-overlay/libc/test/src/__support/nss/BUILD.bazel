@@ -14,9 +14,12 @@ libc_test(
     name = "nss_test",
     srcs = ["nss_test.cpp"],
     deps = [
+        "//libc:__support_cpp_span",
         "//libc:__support_cpp_string_view",
         "//libc:__support_nss_config",
         "//libc:__support_nss_dispatch",
+        "//libc:__support_nss_lookup",
         "//libc:__support_nss_module",
+        "//libc:hdr_errno_macros",
     ],
 )

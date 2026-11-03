@@ -76,6 +76,7 @@ add_subdirectory(signal)
 add_subdirectory(regex)
 add_subdirectory(spawn)
 add_subdirectory(pwd)
+add_subdirectory(nss)
 
 if(${LIBC_TARGET_OS} STREQUAL "linux")
   add_subdirectory(pthread)

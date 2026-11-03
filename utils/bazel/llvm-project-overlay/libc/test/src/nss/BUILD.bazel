@@ -1,0 +1,54 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc nss.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "nss_databases_test",
+    srcs = ["nss_databases_test.cpp"],
+    deps = [
+        "//libc/test/src/pwd:pwd_test_utils",
+        "//libc:__support_cpp_string_view",
+        "//libc:__support_nss_config",
+        "//libc:__support_nss_module",
+        "//libc:endpwent",
+        "//libc:freeaddrinfo",
+        "//libc:getaddrinfo",
+        "//libc:getgrgid",
+        "//libc:getgrnam",
+        "//libc:getgrouplist",
+        "//libc:gethostbyaddr",
+        "//libc:gethostbyname",
+        "//libc:getnetbyname",
+        "//libc:getprotobyname",
+        "//libc:getprotobynumber",
+        "//libc:getpwent",
+        "//libc:getpwnam",
+        "//libc:getpwnam_r",
+        "//libc:getpwuid",
+        "//libc:getservbyname",
+        "//libc:getservbyport",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_netdb_macros",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:memcpy",
+        "//libc:remove",
+        "//libc:setpwent",
+        "//libc:string_utils",
+        "//libc:types_struct_addrinfo",
+        "//libc:types_struct_group",
+        "//libc:types_struct_hostent",
+        "//libc:types_struct_netent",
+        "//libc:types_struct_passwd",
+        "//libc:types_struct_protoent",
+        "//libc:types_struct_servent",
+        "//libc:types_struct_sockaddr_in",
+    ],
+)
