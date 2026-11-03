@@ -9,3 +9,49 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "libintl_test",
+    srcs = ["libintl_test.cpp"],
+    deps = [
+        "//libc:bind_textdomain_codeset",
+        "//libc:bindtextdomain",
+        "//libc:dcgettext",
+        "//libc:dcgettext_l",
+        "//libc:dcngettext",
+        "//libc:dcngettext_l",
+        "//libc:dgettext",
+        "//libc:dgettext_l",
+        "//libc:dngettext",
+        "//libc:dngettext_l",
+        "//libc:gettext",
+        "//libc:gettext_l",
+        "//libc:hdr_locale_macros",
+        "//libc:ngettext",
+        "//libc:ngettext_l",
+        "//libc:textdomain",
+        "//libc:types_locale_t",
+    ],
+)
+
+libc_test(
+    name = "catalogs_test",
+    srcs = ["catalogs_test.cpp"],
+    deps = [
+        "//libc:bind_textdomain_codeset",
+        "//libc:bindtextdomain",
+        "//libc:dgettext",
+        "//libc:dngettext",
+        "//libc:fclose",
+        "//libc:fopen",
+        "//libc:fwrite",
+        "//libc:hdr_locale_macros",
+        "//libc:mkdir",
+        "//libc:remove",
+        "//libc:rmdir",
+        "//libc:setenv",
+        "//libc:setlocale",
+        "//libc:textdomain",
+        "//libc:unsetenv",
+    ],
+)

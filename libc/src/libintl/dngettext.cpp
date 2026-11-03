@@ -7,23 +7,26 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of dngettext (stub).
+/// Implementation of dngettext.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/libintl/dngettext.h"
 
+#include "hdr/locale_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/libintl/catalogs.h"
+#include "src/locale/locale.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, dngettext,
-                   ([[maybe_unused]] const char *domainname, const char *msgid1,
+                   (const char *domainname, const char *msgid1,
                     const char *msgid2, unsigned long int n)) {
-  // TODO: Implement message catalogs. For now, return singular or plural based
-  // on n == 1.
-  return const_cast<char *>(n == 1 ? msgid1 : msgid2);
+  return const_cast<char *>(
+      libintl::lookup(domainname, msgid1, msgid2, n, LC_MESSAGES,
+                      internal::current_locale_name(LC_MESSAGES)));
 }
 
 } // namespace LIBC_NAMESPACE_DECL

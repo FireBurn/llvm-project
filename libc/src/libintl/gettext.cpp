@@ -7,20 +7,24 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of gettext (stub).
+/// Implementation of gettext.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/libintl/gettext.h"
 
+#include "hdr/locale_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/libintl/catalogs.h"
+#include "src/locale/locale.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, gettext, (const char *msgid)) {
-  // TODO: Implement message catalogs. For now, return msgid unchanged.
-  return const_cast<char *>(msgid);
+  return const_cast<char *>(
+      libintl::lookup(nullptr, msgid, nullptr, 0, LC_MESSAGES,
+                      internal::current_locale_name(LC_MESSAGES)));
 }
 
 } // namespace LIBC_NAMESPACE_DECL
