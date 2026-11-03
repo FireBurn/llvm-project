@@ -661,6 +661,17 @@ libc_function(
 )
 
 libc_function(
+    name = "getprogname",
+    srcs = ["getprogname.cpp"],
+    hdrs = ["getprogname.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/compat:progname",
+    ],
+)
+
+libc_function(
     name = "getsubopt",
     srcs = ["getsubopt.cpp"],
     hdrs = ["getsubopt.h"],
@@ -939,6 +950,18 @@ libc_function(
         "//libc/src/__support/macros:null_check",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "setprogname",
+    srcs = ["setprogname.cpp"],
+    hdrs = ["setprogname.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/compat:progname",
     ],
 )
 
