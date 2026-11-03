@@ -545,6 +545,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.mman.mmap
     libc.src.sys.mman.mremap
     libc.src.sys.mman.mprotect
+    libc.src.sys.mman.mseal
     libc.src.sys.mman.msync
     libc.src.sys.mman.munlock
     libc.src.sys.mman.munlockall
@@ -554,6 +555,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.mman.pkey_get
     libc.src.sys.mman.pkey_mprotect
     libc.src.sys.mman.pkey_set
+    libc.src.sys.mman.process_madvise
     libc.src.sys.mman.remap_file_pages
     libc.src.sys.mman.posix_madvise
     libc.src.sys.mman.shm_open
