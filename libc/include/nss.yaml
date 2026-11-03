@@ -1,0 +1,16 @@
+header: nss.h
+standards:
+  - gnu
+macros: []
+types:
+  - type_name: enum_nss_status
+enums: []
+objects: []
+functions:
+  - name: __nss_configure_lookup
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *

@@ -2262,6 +2262,9 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.libintl.ngettext
       libc.src.libintl.ngettext_l
       libc.src.libintl.textdomain
+
+      # nss.h entrypoints
+      libc.src.nss.__nss_configure_lookup
       libc.src.wordexp.wordexp
       libc.src.wordexp.wordfree
 
