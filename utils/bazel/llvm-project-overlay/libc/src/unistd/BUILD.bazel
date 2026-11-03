@@ -1070,6 +1070,54 @@ libc_function(
 )
 
 libc_function(
+    name = "setegid",
+    srcs = ["linux/setegid.cpp"],
+    hdrs = ["setegid.h"],
+    deps = [
+        ":unistd_setegid",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "seteuid",
+    srcs = ["linux/seteuid.cpp"],
+    hdrs = ["seteuid.h"],
+    deps = [
+        ":unistd_seteuid",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setgid",
+    srcs = ["linux/setgid.cpp"],
+    hdrs = ["setgid.h"],
+    deps = [
+        ":unistd_setgid",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "sethostname",
     srcs = ["linux/sethostname.cpp"],
     hdrs = ["sethostname.h"],
@@ -1092,6 +1140,86 @@ libc_function(
         ":unistd_setpgrp",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpgid",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setregid",
+    srcs = ["linux/setregid.cpp"],
+    hdrs = ["setregid.h"],
+    deps = [
+        ":unistd_setregid",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setregid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setresgid",
+    srcs = ["linux/setresgid.cpp"],
+    hdrs = ["setresgid.h"],
+    deps = [
+        ":unistd_setresgid",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setresuid",
+    srcs = ["linux/setresuid.cpp"],
+    hdrs = ["setresuid.h"],
+    deps = [
+        ":unistd_setresuid",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setreuid",
+    srcs = ["linux/setreuid.cpp"],
+    hdrs = ["setreuid.h"],
+    deps = [
+        ":unistd_setreuid",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setreuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "setuid",
+    srcs = ["linux/setuid.cpp"],
+    hdrs = ["setuid.h"],
+    deps = [
+        ":unistd_setuid",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_setxid",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
@@ -1360,6 +1488,78 @@ libc_support_library(
     hdrs = ["_Fork.h"],
     deps = [
         "//libc/hdr/types:pid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setegid",
+    hdrs = ["setegid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_seteuid",
+    hdrs = ["seteuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setgid",
+    hdrs = ["setgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setregid",
+    hdrs = ["setregid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setresgid",
+    hdrs = ["setresgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setresuid",
+    hdrs = ["setresuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setreuid",
+    hdrs = ["setreuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_setuid",
+    hdrs = ["setuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
         "//libc/src/__support/macros:config",
     ],
 )
