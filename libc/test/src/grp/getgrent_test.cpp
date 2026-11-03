@@ -19,6 +19,7 @@
 #include "src/__support/libc_errno.h"
 #include "src/grp/endgrent.h"
 #include "src/grp/getgrent.h"
+#include "src/grp/getgrent_r.h"
 #include "src/grp/grp_utils.h"
 #include "src/grp/setgrent.h"
 #include "test/UnitTest/ErrnoSetterMatcher.h"
@@ -208,5 +209,24 @@ TEST_F(LlvmLibcGrpTest, DynamicMemberAndLineGrowth) {
   EXPECT_STREQ(grp->gr_mem[MEMBER_COUNT - 1], "u599");
   EXPECT_EQ(grp->gr_mem[MEMBER_COUNT], nullptr);
 
+  LIBC_NAMESPACE::endgrent();
+}
+
+TEST_F(LlvmLibcGrpTest, GetGrentRFillsTheCallersBuffer) {
+  constexpr char CONTENT[] = "root:x:0:root\n"
+                             "bin:x:1:bin,daemon\n";
+  ScopedGroupFile test_file(libc_make_test_file_path("getgrent_r.test"),
+                            CONTENT);
+
+  struct group gr;
+  struct group *result = nullptr;
+  char buf[256];
+  ASSERT_EQ(LIBC_NAMESPACE::getgrent_r(&gr, buf, sizeof(buf), &result), 0);
+  ASSERT_EQ(result, &gr);
+  EXPECT_STREQ(gr.gr_name, "root");
+  ASSERT_EQ(LIBC_NAMESPACE::getgrent_r(&gr, buf, sizeof(buf), &result), 0);
+  EXPECT_STREQ(gr.gr_mem[1], "daemon");
+  ASSERT_EQ(LIBC_NAMESPACE::getgrent_r(&gr, buf, sizeof(buf), &result), ENOENT);
+  ASSERT_EQ(result, nullptr);
   LIBC_NAMESPACE::endgrent();
 }

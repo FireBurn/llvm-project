@@ -20,6 +20,25 @@ functions:
     return_type: struct group *
     arguments:
       - type: FILE *
+  - name: fgetgrent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: FILE *
+      - type: struct group *
+      - type: char *
+      - type: size_t
+      - type: struct group **
+  - name: getgrent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct group *
+      - type: char *
+      - type: size_t
+      - type: struct group **
   - name: getgrent
     standards:
       - posix

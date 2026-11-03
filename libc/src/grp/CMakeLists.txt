@@ -231,3 +231,39 @@ add_entrypoint_object(
     libc.src.grp.grp_utils
     libc.src.stdio.fgets
 )
+
+add_entrypoint_object(
+  fgetgrent_r
+  SRCS
+    fgetgrent_r.cpp
+  HDRS
+    fgetgrent_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.FILE
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.span
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.grp.grp_utils
+    libc.src.stdio.fgets
+)
+
+add_entrypoint_object(
+  getgrent_r
+  SRCS
+    getgrent_r.cpp
+  HDRS
+    getgrent_r.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.hdr.types.struct_group
+    libc.src.__support.CPP.span
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.grp.grp_utils
+)
