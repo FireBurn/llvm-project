@@ -155,3 +155,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.mremap
 )
+
+add_entrypoint_object(
+  mseal
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.mseal
+)
+
+add_entrypoint_object(
+  process_madvise
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.process_madvise
+)
