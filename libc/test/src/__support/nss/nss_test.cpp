@@ -12,9 +12,11 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include "hdr/errno_macros.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/nss/config.h"
 #include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/__support/nss/module.h"
 #include "test/UnitTest/Test.h"
 
@@ -196,6 +198,23 @@ TEST(LlvmLibcNssDispatchTest, FilesAndDnsAreAnsweredByLibc) {
   ASSERT_EQ(files_calls, 1);
   ASSERT_EQ(calls[0], 1);
   ASSERT_EQ(dns_calls, 1);
+  TESTONLY_set_resolver(nullptr);
+}
+
+TEST(LlvmLibcNssDispatchTest, ABufferTooSmallEndsTheWalk) {
+  reset();
+  ASSERT_TRUE(configure("passwd", "files a"));
+  answers[0] = NOTFOUND;
+  int entry_value = 0;
+  char buffer[1];
+  auto result = find<int, int>(PASSWD, "getpwnam_r", 0, &entry_value,
+                               LIBC_NAMESPACE::cpp::span<char>(buffer, 1), [] {
+                                 return LIBC_NAMESPACE::ErrorOr<bool>(
+                                     LIBC_NAMESPACE::Error(ERANGE));
+                               });
+  ASSERT_FALSE(result.has_value());
+  ASSERT_EQ(result.error(), ERANGE);
+  ASSERT_EQ(calls[0], 0);
   TESTONLY_set_resolver(nullptr);
 }
 
