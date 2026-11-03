@@ -376,6 +376,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     # sys/file.h entrypoints
     libc.src.sys.fanotify.fanotify_init
     libc.src.sys.fanotify.fanotify_mark
+    libc.src.sys.reboot.reboot
     libc.src.sys.file.flock
 
     # sys/msg.h entrypoints
