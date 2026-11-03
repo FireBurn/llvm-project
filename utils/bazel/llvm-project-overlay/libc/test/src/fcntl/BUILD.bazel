@@ -9,3 +9,22 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "splice_test",
+    srcs = ["splice_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:fcntl_splice",
+        "//libc/src/fcntl:open",
+        "//libc/src/fcntl:splice",
+        "//libc/src/string:memcmp",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pipe",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
