@@ -819,6 +819,8 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.time.futimes
     libc.src.sys.time.futimesat
     libc.src.sys.time.lutimes
+    libc.src.sys.sysinfo.get_nprocs
+    libc.src.sys.sysinfo.get_nprocs_conf
     libc.src.sys.time.setitimer
     libc.src.sys.time.getitimer
     libc.src.sys.time.gettimeofday

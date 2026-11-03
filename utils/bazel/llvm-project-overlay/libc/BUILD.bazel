@@ -19738,6 +19738,21 @@ libc_function(
 )
 
 libc_function(
+    name = "get_nprocs",
+    srcs = ["src/sys/sysinfo/linux/get_nprocs.cpp"],
+    hdrs = ["src/sys/sysinfo/get_nprocs.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_sched_getaffinity",
+        ":sched_sched_getcpucount",
+        ":sys_sysinfo_get_nprocs",
+        ":types_cpu_set_t",
+    ],
+)
+
+libc_function(
     name = "reboot",
     srcs = ["src/sys/reboot/reboot.cpp"],
     hdrs = ["src/sys/reboot/reboot.h"],
@@ -19986,6 +20001,18 @@ libc_function(
         ":sys_time_futimesat",
         ":types_struct_timespec",
         ":types_struct_timeval",
+    ],
+)
+
+libc_function(
+    name = "get_nprocs_conf",
+    srcs = ["src/sys/sysinfo/linux/get_nprocs_conf.cpp"],
+    hdrs = ["src/sys/sysinfo/get_nprocs_conf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sys_sysinfo_get_nprocs",
+        ":sys_sysinfo_get_nprocs_conf",
     ],
 )
 
