@@ -371,3 +371,59 @@ TEST_F(LlvmLibcFlatFileDbTest,
   EXPECT_STREQ(dyn_entry.val, "secret1");
   EXPECT_GE(dyn_entry.extra_storage.size(), static_cast<size_t>(2048));
 }
+
+TEST_F(LlvmLibcFlatFileDbTest, PathIsTheFileTheDatabaseReads) {
+  const char *content = "user1:secret1\n";
+  HermeticFile test_file(libc_make_test_file_path("flat_db_path.test"),
+                         content);
+
+  LIBC_NAMESPACE::pwd::ScopedFlatFileDatabase<SimpleTestEntry> db(
+      test_file.get_path());
+  EXPECT_STREQ(db.path(), test_file.get_path());
+}
+
+TEST_F(LlvmLibcFlatFileDbTest, GetlineReturnsEachLineUnparsed) {
+  const char *content = "first:line\n\nlast";
+  HermeticFile test_file(libc_make_test_file_path("flat_db_getline.test"),
+                         content);
+
+  LIBC_NAMESPACE::pwd::ScopedFlatFileDatabase<SimpleTestEntry> db(
+      test_file.get_path());
+  char buffer[64];
+
+  auto l1 = db.getline(buffer);
+  ASSERT_TRUE(l1.has_value());
+  ASSERT_TRUE(l1.value().has_value());
+  EXPECT_EQ(*l1.value(), static_cast<size_t>(10));
+  EXPECT_STREQ(buffer, "first:line");
+
+  // A blank line has length zero, which is not the end of the file.
+  auto l2 = db.getline(buffer);
+  ASSERT_TRUE(l2.has_value());
+  ASSERT_TRUE(l2.value().has_value());
+  EXPECT_EQ(*l2.value(), static_cast<size_t>(0));
+
+  // The last line need not end in a newline.
+  auto l3 = db.getline(buffer);
+  ASSERT_TRUE(l3.has_value());
+  ASSERT_TRUE(l3.value().has_value());
+  EXPECT_STREQ(buffer, "last");
+
+  auto end = db.getline(buffer);
+  ASSERT_TRUE(end.has_value());
+  EXPECT_FALSE(end.value().has_value());
+}
+
+TEST_F(LlvmLibcFlatFileDbTest, GetlineRefusesALineThatDoesNotFit) {
+  const char *content = "a line longer than the buffer\n";
+  HermeticFile test_file(libc_make_test_file_path("flat_db_getline_long.test"),
+                         content);
+
+  LIBC_NAMESPACE::pwd::ScopedFlatFileDatabase<SimpleTestEntry> db(
+      test_file.get_path());
+  char buffer[8];
+
+  auto res = db.getline(buffer);
+  ASSERT_FALSE(res.has_value());
+  EXPECT_EQ(res.error(), ERANGE);
+}
