@@ -16,6 +16,11 @@
 struct semid_ds {
   struct ipc_perm sem_perm;
   time_t sem_otime;
+#if __SIZEOF_LONG__ == 4
+  // Where a long is too narrow to hold the time, the kernel keeps the top half
+  // of each one in a word of its own after it.
+  unsigned long __sem_otime_high;
+#endif
 #if defined(__x86_64__)
   // x86_64 kernel UAPI (asm/sembuf.h) includes extra padding fields after
   // sem_otime and sem_ctime, unlike asm-generic/sembuf.h used by other 64-bit
@@ -23,6 +28,9 @@ struct semid_ds {
   unsigned long __unused1;
 #endif
   time_t sem_ctime;
+#if __SIZEOF_LONG__ == 4
+  unsigned long __sem_ctime_high;
+#endif
 #if defined(__x86_64__)
   unsigned long __unused2;
 #endif
