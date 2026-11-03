@@ -66,6 +66,36 @@ Status lookup(Database db, const char *function, Files files, Dns dns,
   return result;
 }
 
+// Asks every source in turn, for the lookups which add up what they all say,
+// such as the groups a user belongs to. A source that finds something does not
+// end the walk, and one that fails does only where its line says to.
+template <typename Files, typename Dns, typename Module>
+Status lookup_all(Database db, const char *function, Files files, Dns dns,
+                  Module module) {
+  Status result = UNAVAIL;
+  for (Source *source = const_cast<Source *>(sources(db)); source != nullptr;
+       source = source->next) {
+    Status status;
+    if (is_files(*source)) {
+      status = files();
+    } else if (is_dns(*source)) {
+      status = dns();
+    } else {
+      void *fn = service_function(*source, function);
+      status = fn != nullptr ? module(fn) : UNAVAIL;
+    }
+    if (status == SUCCESS) {
+      result = SUCCESS;
+      continue;
+    }
+    if (result != SUCCESS)
+      result = status;
+    if (status == RETURN || source->action(status) == Action::RETURN)
+      break;
+  }
+  return result;
+}
+
 // Where a walk through the entries of a database has got to.
 struct Cursor {
   Source *source = nullptr;
