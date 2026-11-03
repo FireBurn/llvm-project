@@ -28546,6 +28546,18 @@ libc_function(
 )
 
 libc_function(
+    name = "__fpclassifyf",
+    srcs = ["src/compat/__fpclassifyf.cpp"],
+    hdrs = ["src/compat/__fpclassifyf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_fputil_fp_bits",
+        ":__support_macros_config",
+        ":hdr_math_macros",
+    ],
+)
+
+libc_function(
     name = "__libc_current_sigrtmax",
     srcs = ["src/compat/__libc_current_sigrtmax.cpp"],
     hdrs = ["src/compat/__libc_current_sigrtmax.h"],
@@ -28564,6 +28576,19 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":hdr_signal_macros",
+    ],
+)
+
+libc_function(
+    name = "__sched_cpucount",
+    srcs = ["src/compat/__sched_cpucount.cpp"],
+    hdrs = ["src/compat/__sched_cpucount.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sched_sched_getcpucount",
+        ":types_cpu_set_t",
+        ":types_size_t",
     ],
 )
 
