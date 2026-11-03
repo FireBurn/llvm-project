@@ -87,6 +87,16 @@ libc_test(
 )
 
 libc_test(
+    name = "timespec_getres_test",
+    srcs = ["timespec_getres_test.cpp"],
+    deps = [
+        "//libc:hdr_time_macros",
+        "//libc:timespec_getres",
+        "//libc:types_struct_timespec",
+    ],
+)
+
+libc_test(
     name = "ctime_test",
     srcs = ["ctime_test.cpp"],
     deps = [

@@ -222,6 +222,13 @@ functions:
       - type: int
       - type: const struct itimerspec *__restrict
       - type: struct itimerspec *__restrict
+  - name: timespec_getres
+    standards:
+      - stdc
+    return_type: int
+    arguments:
+      - type: struct timespec *
+      - type: int
   - name: tzset
     standards:
       - posix
