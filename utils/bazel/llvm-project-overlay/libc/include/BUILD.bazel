@@ -47,6 +47,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("mntent"),
     libc_header_info("monetary"),
     libc_header_info("printf"),
+    libc_header_info("shadow"),
     libc_header_info(
         "stdbit",
         has_def_template = True,
@@ -848,6 +849,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_mntent",
     hdrs = ["llvm-libc-types/struct_mntent.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_spwd",
+    hdrs = ["llvm-libc-types/struct_spwd.h"],
 )
 
 libc_support_library(

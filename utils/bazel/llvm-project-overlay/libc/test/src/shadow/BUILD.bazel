@@ -1,0 +1,51 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc shadow.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "shadow_utils_test",
+    srcs = ["shadow_utils_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_spwd",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/shadow:shadow_utils",
+    ],
+)
+
+libc_test(
+    name = "shadow_test",
+    srcs = ["shadow_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:struct_spwd",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/shadow:endspent",
+        "//libc/src/shadow:fgetspent",
+        "//libc/src/shadow:fgetspent_r",
+        "//libc/src/shadow:getspent",
+        "//libc/src/shadow:getspent_r",
+        "//libc/src/shadow:getspnam",
+        "//libc/src/shadow:getspnam_r",
+        "//libc/src/shadow:lckpwdf",
+        "//libc/src/shadow:putspent",
+        "//libc/src/shadow:setspent",
+        "//libc/src/shadow:sgetspent",
+        "//libc/src/shadow:sgetspent_r",
+        "//libc/src/shadow:shadow_utils",
+        "//libc/src/shadow:ulckpwdf",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:remove",
+    ],
+)
