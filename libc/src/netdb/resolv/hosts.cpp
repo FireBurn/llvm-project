@@ -17,6 +17,8 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/arpa/inet/inet_pton.h"
 #include "src/netdb/resolv/file_lines.h"
 #include "src/string/memory_utils/inline_memcpy.h"
@@ -47,6 +49,7 @@ bool is_loopback(const unsigned char *bytes) {
 // Where the enumeration has got to. sethostent asks for the file to be held
 // open across lookups, which is what the enumeration records.
 LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration enumeration;
+LIBC_THREAD_LOCAL nss::Cursor cursor;
 
 // Copies a field into the storage's pool and hands back a pointer to it, or
 // null where there is no room left.
@@ -133,16 +136,41 @@ bool parse(char *line, HostsStorage &storage) {
 
 } // anonymous namespace
 
-void rewind_hosts(bool stay_open) { enumeration.rewind(HOSTS_PATH, stay_open); }
+void rewind_hosts(bool stay_open) {
+  nss::reset(cursor, "endhostent");
+  enumeration.rewind(HOSTS_PATH, stay_open);
+}
 
-void stop_hosts() { enumeration.stop(); }
+void stop_hosts() {
+  nss::reset(cursor, "endhostent");
+  enumeration.stop();
+}
 
 struct hostent *next_host(HostsStorage &storage) {
-  char line[512];
-  while (enumeration.next(HOSTS_PATH, line, sizeof(line)))
-    if (parse(line, storage))
-      return &storage.entry;
-  return nullptr;
+  auto status = nss::next_entry(
+      cursor, nss::HOSTS, "sethostent", "gethostent_r", "endhostent",
+      [&] {
+        char line[512];
+        while (enumeration.next(HOSTS_PATH, line, sizeof(line)))
+          if (parse(line, storage))
+            return nss::SUCCESS;
+        return nss::NOTFOUND;
+      },
+      [&](void *fn, bool is_control) {
+        if (is_control)
+          return nss::call_control(fn);
+        using Fn = int (*)(struct hostent *, char *, size_t, int *, int *);
+        int error = 0;
+        int host_error = 0;
+        storage.entry.h_name = nullptr;
+        auto result = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+            &storage.entry, storage.pool, HostsStorage::POOL_SIZE, &error,
+            &host_error));
+        if (result == nss::SUCCESS && storage.entry.h_name == nullptr)
+          return nss::NOTFOUND;
+        return result;
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
 }
 
 } // namespace resolv
