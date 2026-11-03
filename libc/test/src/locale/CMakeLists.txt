@@ -1,6 +1,19 @@
 add_libc_testsuite(libc-locale-tests)
 
 add_libc_test(
+  environment_value_test
+  SUITE
+    libc-locale-tests
+  SRCS
+    environment_value_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.string_view
+    libc.src.locale.locale
+    libc.src.stdlib.setenv
+    libc.src.stdlib.unsetenv
+)
+
+add_libc_test(
   locale_test
   SUITE
     libc-locale-tests
