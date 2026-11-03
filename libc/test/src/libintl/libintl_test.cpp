@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Unittests for libintl stub functions.
+/// Unittests for libintl functions without a catalog.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -40,8 +40,9 @@ TEST_F(LlvmLibcLibintlTest, Textdomain) {
   EXPECT_STREQ(LIBC_NAMESPACE::textdomain(""), "messages");
 
   constexpr const char *DOMAIN_NAME = "my_app";
-  EXPECT_THAT(LIBC_NAMESPACE::textdomain(DOMAIN_NAME),
-              Succeeds(const_cast<char *>(DOMAIN_NAME)));
+  EXPECT_STREQ(LIBC_NAMESPACE::textdomain(DOMAIN_NAME), DOMAIN_NAME);
+  EXPECT_STREQ(LIBC_NAMESPACE::textdomain(nullptr), DOMAIN_NAME);
+  LIBC_NAMESPACE::textdomain("");
 }
 
 TEST_F(LlvmLibcLibintlTest, Bindtextdomain) {
@@ -53,8 +54,8 @@ TEST_F(LlvmLibcLibintlTest, Bindtextdomain) {
                "/usr/share/locale");
 
   constexpr const char *DIR_NAME = "/custom/dir";
-  EXPECT_THAT(LIBC_NAMESPACE::bindtextdomain("my_app", DIR_NAME),
-              Succeeds(const_cast<char *>(DIR_NAME)));
+  EXPECT_STREQ(LIBC_NAMESPACE::bindtextdomain("my_app", DIR_NAME), DIR_NAME);
+  EXPECT_STREQ(LIBC_NAMESPACE::bindtextdomain("my_app", nullptr), DIR_NAME);
 }
 
 TEST_F(LlvmLibcLibintlTest, BindTextdomainCodeset) {
@@ -66,8 +67,10 @@ TEST_F(LlvmLibcLibintlTest, BindTextdomainCodeset) {
               Succeeds<char *>(nullptr));
 
   constexpr const char *CODESET = "UTF-8";
-  EXPECT_THAT(LIBC_NAMESPACE::bind_textdomain_codeset("my_app", CODESET),
-              Succeeds(const_cast<char *>(CODESET)));
+  EXPECT_STREQ(LIBC_NAMESPACE::bind_textdomain_codeset("my_app", CODESET),
+               CODESET);
+  EXPECT_STREQ(LIBC_NAMESPACE::bind_textdomain_codeset("my_app", nullptr),
+               CODESET);
 }
 
 TEST_F(LlvmLibcLibintlTest, Gettext) {
