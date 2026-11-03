@@ -12,6 +12,7 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 #include "hdr/types/mode_t.h"
 #include <stdarg.h>
@@ -29,7 +30,8 @@ LLVM_LIBC_FUNCTION(int, openat, (int dfd, const char *path, int flags, ...)) {
     va_end(varargs);
   }
 
-  auto result = linux_syscalls::openat(dfd, path, flags, mode_flags);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::openat(dfd, path, flags, mode_flags); });
   if (!result) {
     libc_errno = result.error();
     return -1;

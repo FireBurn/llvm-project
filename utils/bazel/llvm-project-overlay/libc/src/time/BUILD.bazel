@@ -30,3 +30,19 @@ libc_function(
         "//libc/src/__support:libc_errno",
     ],
 )
+
+libc_function(
+    name = "nanosleep",
+    srcs = ["linux/nanosleep.cpp"],
+    hdrs = ["nanosleep.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)

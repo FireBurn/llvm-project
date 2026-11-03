@@ -522,6 +522,33 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "fd_set",
+    hdrs = ["fd_set.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_fd_set"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "id_t",
+    hdrs = ["id_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_id_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "idtype_t",
+    hdrs = ["idtype_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_idtype_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "pthread_attr_t",
     hdrs = ["pthread_attr_t.h"],
     deps = select({

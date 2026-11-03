@@ -13,6 +13,7 @@
 
 #include "src/signal/sigtimedwait.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/types/siginfo_t.h"
 #include "hdr/types/sigset_t.h"
 #include "hdr/types/struct_timespec.h"
@@ -21,14 +22,18 @@
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, sigtimedwait,
                    (const sigset_t *__restrict set, siginfo_t *__restrict info,
                     const struct timespec *__restrict timeout)) {
+  internal::cancel_point();
   auto result = linux_syscalls::rt_sigtimedwait(set, info, timeout);
   if (!result.has_value()) {
+    if (result.error() == EINTR)
+      internal::cancel_point();
     libc_errno = result.error();
     return -1;
   }

@@ -711,3 +711,46 @@ libc_function(
         "//libc/src/errno",
     ],
 )
+
+libc_function(
+    name = "fdatasync",
+    srcs = ["linux/fdatasync.cpp"],
+    hdrs = ["fdatasync.h"],
+    deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fdatasync",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "pause",
+    srcs = ["linux/pause.cpp"],
+    hdrs = ["pause.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pause",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sleep",
+    srcs = ["linux/sleep.cpp"],
+    hdrs = ["sleep.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+    ],
+)

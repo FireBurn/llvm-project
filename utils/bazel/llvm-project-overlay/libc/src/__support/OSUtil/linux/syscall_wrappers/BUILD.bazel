@@ -2007,10 +2007,88 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "rt_sigsuspend",
+    hdrs = ["rt_sigsuspend.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "newfstatat",
     hdrs = ["newfstatat.h"],
     deps = [
         "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "nanosleep",
+    hdrs = ["nanosleep.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "fdatasync",
+    hdrs = ["fdatasync.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "waitid",
+    hdrs = ["waitid.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/hdr/types:idtype_t",
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:struct_rusage",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "pause",
+    hdrs = ["pause.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "pselect6",
+    hdrs = ["pselect6.h"],
+    deps = [
+        "//libc/hdr/types:fd_set",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:signal_macros",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
