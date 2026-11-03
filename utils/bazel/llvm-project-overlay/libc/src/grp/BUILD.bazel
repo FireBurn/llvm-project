@@ -56,6 +56,7 @@ libc_support_library(
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/threads:linux_setxid",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support:dynamic_buffer",
         "//libc/src/__support:error_or",
