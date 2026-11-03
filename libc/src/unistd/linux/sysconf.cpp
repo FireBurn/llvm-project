@@ -42,7 +42,7 @@ constexpr long ARG_MAX_FALLBACK = DEFAULT_STACK_LIMIT / 4 * 3; // 6MB
 
 long get_arg_max() {
   struct rlimit limits;
-  ErrorOr<int> ret = linux_syscalls::prlimit(0, RLIMIT_STACK, nullptr, &limits);
+  ErrorOr<int> ret = linux_syscalls::getrlimit(RLIMIT_STACK, &limits);
   if (!ret) {
     libc_errno = -ret.error();
     return -1;
@@ -56,8 +56,7 @@ long get_arg_max() {
 
 long get_open_max() {
   struct rlimit limits;
-  ErrorOr<int> ret =
-      linux_syscalls::prlimit(0, RLIMIT_NOFILE, nullptr, &limits);
+  ErrorOr<int> ret = linux_syscalls::getrlimit(RLIMIT_NOFILE, &limits);
   if (!ret) {
     libc_errno = -ret.error();
     return -1;
@@ -113,7 +112,7 @@ long get_phys_pages() {
 // unbounded.
 long get_rlimit(int resource) {
   struct rlimit limits;
-  ErrorOr<int> ret = linux_syscalls::prlimit(0, resource, nullptr, &limits);
+  ErrorOr<int> ret = linux_syscalls::getrlimit(resource, &limits);
   if (!ret) {
     libc_errno = -ret.error();
     return -1;
