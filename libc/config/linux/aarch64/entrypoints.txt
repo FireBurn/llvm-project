@@ -1978,6 +1978,7 @@ if(LLVM_LIBC_FULL_BUILD)
     # langinfo.h entrypoints
     libc.src.langinfo.nl_langinfo
     libc.src.langinfo.nl_langinfo_l
+    libc.src.unistd._Fork
     libc.src.time.tz_variables
     libc.src.time.tzset
 
