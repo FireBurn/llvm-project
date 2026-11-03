@@ -29736,6 +29736,22 @@ libc_support_library(
 )
 
 libc_function(
+    name = "getdents",
+    srcs = ["src/dirent/getdents.cpp"],
+    hdrs = ["src/dirent/getdents.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getdents64",
+        ":errno",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
     name = "getdents64",
     srcs = ["src/dirent/getdents64.cpp"],
     hdrs = ["src/dirent/getdents64.h"],
