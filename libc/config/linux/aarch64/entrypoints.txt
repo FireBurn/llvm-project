@@ -2074,6 +2074,17 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.netdb.getservbyname_r
       libc.src.netdb.getservbyport
       libc.src.netdb.getservbyport_r
+      libc.src.netdb.getprotobyname_r
+      libc.src.netdb.getprotobynumber_r
+      libc.src.netdb.getprotoent_r
+      libc.src.netdb.getnetbyname_r
+      libc.src.netdb.getnetbyaddr_r
+      libc.src.netdb.getnetent_r
+      libc.src.netdb.getservent_r
+      libc.src.netdb.gethostent_r
+      libc.src.netdb.gethostbyname_r
+      libc.src.netdb.gethostbyname2_r
+      libc.src.netdb.gethostbyaddr_r
       libc.src.netdb.getservent
       libc.src.netdb.herror
       libc.src.netdb.hstrerror

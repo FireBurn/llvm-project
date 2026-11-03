@@ -14,6 +14,7 @@
 #ifndef LLVM_LIBC_SRC_NETDB_HOSTENT_STORAGE_H
 #define LLVM_LIBC_SRC_NETDB_HOSTENT_STORAGE_H
 
+#include "hdr/types/socklen_t.h"
 #include "hdr/types/struct_hostent.h"
 #include "src/__support/macros/config.h"
 #include "src/netdb/resolv/lookup.h"
@@ -40,6 +41,10 @@ HostentStorage &hostent_storage();
 // Looks `name` up and fills the calling thread's storage in. Returns null and
 // sets h_errno on failure.
 struct hostent *fill_hostent(const char *name, int family);
+
+// The same for the name of an address, as gethostbyaddr gives it.
+struct hostent *fill_hostent_by_address(const void *addr, socklen_t len,
+                                        int type);
 
 } // namespace netdb
 } // namespace LIBC_NAMESPACE_DECL
