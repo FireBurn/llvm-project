@@ -350,6 +350,21 @@ libc_function(
 )
 
 libc_function(
+    name = "getservbyname_r",
+    srcs = ["getservbyname_r.cpp"],
+    hdrs = ["getservbyname_r.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_servent",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "getservbyport",
     srcs = ["getservbyport.cpp"],
     hdrs = ["getservbyport.h"],
@@ -357,6 +372,21 @@ libc_function(
         ":resolv_services",
         ":serv_storage",
         "//libc/hdr/types:struct_servent",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getservbyport_r",
+    srcs = ["getservbyport_r.cpp"],
+    hdrs = ["getservbyport_r.h"],
+    deps = [
+        ":resolv_services",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_servent",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:new",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],
