@@ -16,6 +16,11 @@ namespace LIBC_NAMESPACE_DECL {
 
 char *fgets(char *__restrict str, int count, ::FILE *__restrict raw_stream);
 
+namespace internal {
+char *fgets_impl(char *__restrict str, int count,
+                 ::FILE *__restrict raw_stream);
+} // namespace internal
+
 } // namespace LIBC_NAMESPACE_DECL
 
 #endif // LLVM_LIBC_SRC_STDIO_FGETS_H
