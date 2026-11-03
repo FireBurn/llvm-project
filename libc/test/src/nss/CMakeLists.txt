@@ -49,3 +49,15 @@ add_libc_test(
     libc.src.string.memcpy
     libc.src.string.string_utils
 )
+
+add_libc_test(
+  nss_configure_lookup_test
+  SUITE
+    libc-nss-tests
+  SRCS
+    nss_configure_lookup_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.nss.config
+    libc.src.nss.__nss_configure_lookup
+)

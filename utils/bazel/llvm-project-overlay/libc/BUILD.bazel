@@ -190,6 +190,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("netinet/ip6"),
     libc_header_info("netinet/ip_icmp"),
     libc_header_info("netpacket/packet"),
+    libc_header_info("nss"),
     libc_header_info("paths"),
     libc_header_info("printf"),
     libc_header_info(
@@ -33479,6 +33480,21 @@ libc_function(
         ":netinet_ether_ethers",
         ":types_size_t",
         ":types_struct_ether_addr",
+    ],
+)
+
+libc_function(
+    name = "__nss_configure_lookup",
+    srcs = ["src/nss/__nss_configure_lookup.cpp"],
+    hdrs = ["src/nss/__nss_configure_lookup.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_nss_config",
+        ":hdr_errno_macros",
     ],
 )
 
