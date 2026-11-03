@@ -148,3 +148,23 @@ TEST(LlvmLibcFieldTokenizerTest, CustomSeparator) {
   auto f4 = tokenizer.next_field();
   ASSERT_FALSE(f4.has_value());
 }
+
+TEST(LlvmLibcFieldTokenizerTest, RemainingTakesTheRestOfTheRecord) {
+  char line[] = "name:a:b:c";
+  LIBC_NAMESPACE::pwd::FieldTokenizer tokenizer(
+      LIBC_NAMESPACE::cpp::span<char>(line, sizeof(line)));
+
+  auto f1 = tokenizer.next_field();
+  ASSERT_TRUE(f1.has_value());
+  ASSERT_STREQ(f1->data(), "name");
+  ASSERT_FALSE(tokenizer.exhausted());
+
+  // The separators left in the last field are kept.
+  auto rest = tokenizer.remaining();
+  ASSERT_TRUE(rest.has_value());
+  ASSERT_STREQ(rest->data(), "a:b:c");
+  ASSERT_TRUE(tokenizer.exhausted());
+
+  ASSERT_FALSE(tokenizer.remaining().has_value());
+  ASSERT_FALSE(tokenizer.next_field().has_value());
+}

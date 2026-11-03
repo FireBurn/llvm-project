@@ -17,6 +17,7 @@
 #include "hdr/errno_macros.h"
 #include "hdr/stdio_macros.h"
 #include "src/__support/CPP/functional.h"
+#include "src/__support/CPP/optional.h"
 #include "src/__support/CPP/span.h"
 #include "src/__support/File/file.h"
 #include "src/__support/File/line_reader.h"
@@ -91,6 +92,36 @@ public:
 
   // Closes the database file stream.
   LIBC_INLINE ErrorOr<void> enddb() { return clear_file_stream(); }
+
+  // The file the database reads.
+  LIBC_INLINE const char *path() const { return file_path; }
+
+  // Reads the next line into buffer without parsing it, and returns its
+  // length, or nothing at the end of the file. A blank line has length zero,
+  // which is why the end is reported separately. This is for a caller which
+  // parses with something of its own.
+  LIBC_INLINE ErrorOr<cpp::optional<size_t>> getline(cpp::span<char> buffer) {
+    if (!file) {
+      auto res = setdb();
+      if (!res.has_value())
+        return Error(res.error());
+    }
+
+    // One byte is kept for the terminator.
+    if (buffer.size() < 2)
+      return Error(ERANGE);
+    auto result = read_line(file, buffer.first(buffer.size() - 1));
+    if (!result.has_value())
+      return Error(result.error());
+
+    ReadLineResult res = result.value();
+    if (res.eof)
+      return cpp::optional<size_t>();
+    if (res.truncated)
+      return Error(ERANGE);
+    buffer[res.bytes_read] = '\0';
+    return cpp::optional<size_t>(res.bytes_read);
+  }
 
   // Reads and parses the next record from the database into a fixed buffer.
   // Returns true if an entry was read, false if EOF was reached, or an Error on
