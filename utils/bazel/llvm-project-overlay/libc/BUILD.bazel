@@ -20698,6 +20698,17 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "signal_signal_names",
+    hdrs = ["src/signal/signal_names.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_signal_macros",
+        ":types_size_t",
+    ],
+)
+
 libc_function(
     name = "pthread_sigqueue",
     srcs = ["src/signal/linux/pthread_sigqueue.cpp"],
@@ -20716,6 +20727,22 @@ libc_function(
         ":types_pthread_t",
         ":types_siginfo_t",
         ":types_union_sigval",
+    ],
+)
+
+libc_function(
+    name = "sig2str",
+    srcs = ["src/signal/sig2str.cpp"],
+    hdrs = ["src/signal/sig2str.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_integer_to_string",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_signal_macros",
+        ":signal_signal_names",
+        ":string_memory_utils",
     ],
 )
 
@@ -20954,6 +20981,20 @@ libc_function(
         ":hdr_errno_macros",
         ":types_siginfo_t",
         ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "str2sig",
+    srcs = ["src/signal/str2sig.cpp"],
+    hdrs = ["src/signal/str2sig.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_signal_macros",
+        ":signal_signal_names",
     ],
 )
 
