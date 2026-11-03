@@ -107,6 +107,9 @@ ErrorOr<void> open();
 ErrorOr<void> close();
 ErrorOr<struct spwd *> read_next();
 
+// The same into a buffer of the caller's.
+ErrorOr<bool> read_next(struct spwd *entry, cpp::span<char> buffer);
+
 } // namespace shadow_db
 } // namespace LIBC_NAMESPACE_DECL
 
