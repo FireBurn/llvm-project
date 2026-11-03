@@ -236,6 +236,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  nss
+  ../libc/include/nss.yaml
+  nss.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.enum_nss_status
+)
+
+add_header_macro(
   libintl
   ../libc/include/libintl.yaml
   libintl.h
