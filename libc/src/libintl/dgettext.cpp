@@ -7,22 +7,25 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of dgettext (stub).
+/// Implementation of dgettext.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/libintl/dgettext.h"
 
+#include "hdr/locale_macros.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/libintl/catalogs.h"
+#include "src/locale/locale.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(char *, dgettext,
-                   ([[maybe_unused]] const char *domainname,
-                    const char *msgid)) {
-  // TODO: Implement message catalogs. For now, return msgid unchanged.
-  return const_cast<char *>(msgid);
+                   (const char *domainname, const char *msgid)) {
+  return const_cast<char *>(
+      libintl::lookup(domainname, msgid, nullptr, 0, LC_MESSAGES,
+                      internal::current_locale_name(LC_MESSAGES)));
 }
 
 } // namespace LIBC_NAMESPACE_DECL
