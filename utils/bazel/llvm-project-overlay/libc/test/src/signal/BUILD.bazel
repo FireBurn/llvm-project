@@ -124,6 +124,29 @@ libc_test(
 )
 
 libc_test(
+    name = "tgkill_test",
+    srcs = ["tgkill_test.cpp"],
+    deps = [
+        "//libc:getpid",
+        "//libc:gettid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:sigaddset",
+        "//libc:sigemptyset",
+        "//libc:sigismember",
+        "//libc:signal_sigpending",
+        "//libc:signal_sigtimedwait",
+        "//libc:sigpending",
+        "//libc:sigprocmask",
+        "//libc:sigtimedwait",
+        "//libc:tgkill",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_timespec",
+    ],
+)
+
+libc_test(
     name = "psignal_test",
     srcs = ["psignal_test.cpp"],
     deps = [
