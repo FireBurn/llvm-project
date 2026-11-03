@@ -92,8 +92,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.grp.getgrouplist
     libc.src.grp.getgrnam
     libc.src.grp.getgrnam_r
+    libc.src.grp.initgroups
     libc.src.grp.putgrent
     libc.src.grp.setgrent
+    libc.src.grp.setgroups
 
     # net/if.h entrypoints
     libc.src.net.if.if_indextoname
@@ -796,6 +798,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.setpgrp
     libc.src.unistd.setsid
     libc.src.unistd.setusershell
+    libc.src.unistd.setegid
+    libc.src.unistd.seteuid
+    libc.src.unistd.setgid
+    libc.src.unistd.setregid
+    libc.src.unistd.setresgid
+    libc.src.unistd.setresuid
+    libc.src.unistd.setreuid
+    libc.src.unistd.setuid
     libc.src.unistd.sleep
     libc.src.unistd.symlink
     libc.src.unistd.symlinkat
@@ -2301,8 +2311,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.glob.globfree
 
       # grp.h entrypoints
-      libc.src.grp.initgroups
-      libc.src.grp.setgroups
 
       # ifaddrs.h entrypoints
       libc.src.ifaddrs.freeifaddrs
@@ -2348,14 +2356,6 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.wchar.fwprintf
 
       # unistd.h entrypoints
-      libc.src.unistd.setegid
-      libc.src.unistd.seteuid
-      libc.src.unistd.setgid
-      libc.src.unistd.setregid
-      libc.src.unistd.setresgid
-      libc.src.unistd.setresuid
-      libc.src.unistd.setreuid
-      libc.src.unistd.setuid
     )
   endif()
 endif()
