@@ -826,6 +826,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_sem_semid_ds_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_sem_semid_ds_test.cpp
+  DEPENDS
+    libc.include.sys_sem
+)
+
+add_libc_test(
   alloca_test
   SUITE
     libc-include-tests
