@@ -86,6 +86,14 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.poll.poll
     libc.src.poll.ppoll
 
+    # gshadow.h entrypoints
+    libc.src.gshadow.endsgent
+    libc.src.gshadow.fgetsgent
+    libc.src.gshadow.getsgent
+    libc.src.gshadow.getsgnam
+    libc.src.gshadow.getsgnam_r
+    libc.src.gshadow.putsgent
+    libc.src.gshadow.setsgent
 
     # shadow.h entrypoints
     libc.src.shadow.endspent
