@@ -407,6 +407,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     libc.src.sys.fanotify.fanotify_init
     libc.src.sys.fanotify.fanotify_mark
+    libc.src.sys.reboot.reboot
 
     # sys/ioctl.h entrypoints
     libc.src.sys.ioctl.ioctl

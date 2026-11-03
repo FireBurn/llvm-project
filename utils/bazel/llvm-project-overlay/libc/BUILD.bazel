@@ -187,6 +187,7 @@ LLVM_LIBC_HEADERS = [
     ),
     libc_header_info("sys/kd"),
     libc_header_info("sys/msg"),
+    libc_header_info("sys/reboot"),
     libc_header_info("sys/signalfd"),
     libc_header_info("sys/swap"),
     libc_header_info("sys/timerfd"),
@@ -20156,6 +20157,20 @@ libc_function(
 )
 
 libc_function(
+    name = "reboot",
+    srcs = ["src/sys/reboot/reboot.cpp"],
+    hdrs = ["src/sys/reboot/reboot.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_reboot",
+        ":errno",
+        ":hdr_sys_reboot_macros",
+    ],
+)
+
+libc_function(
     name = "settimeofday",
     srcs = ["src/sys/time/linux/settimeofday.cpp"],
     hdrs = ["src/sys/time/settimeofday.h"],
@@ -25734,6 +25749,38 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":types_off_t",
         ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_linux_sys_reboot_macros",
+    hdrs = ["include/llvm-libc-macros/linux/sys-reboot-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_reboot_macros",
+    hdrs = ["include/llvm-libc-macros/sys-reboot-macros.h"],
+    deps = [
+        ":llvm_libc_macros_linux_sys_reboot_macros",
+    ],
+)
+
+libc_support_library(
+    name = "hdr_sys_reboot_macros",
+    hdrs = ["hdr/sys_reboot_macros.h"],
+    deps = [
+        ":llvm_libc_macros_sys_reboot_macros",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_reboot",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/reboot.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
     ],
 )
 
