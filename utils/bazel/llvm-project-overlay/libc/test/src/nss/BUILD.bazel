@@ -53,3 +53,13 @@ libc_test(
         "//libc/test/src/pwd:pwd_test_utils",
     ],
 )
+
+libc_test(
+    name = "nss_configure_lookup_test",
+    srcs = ["nss_configure_lookup_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:nss_config",
+        "//libc/src/nss:__nss_configure_lookup",
+    ],
+)

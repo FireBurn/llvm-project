@@ -1,0 +1,15 @@
+add_entrypoint_object(
+  __nss_configure_lookup
+  SRCS
+    __nss_configure_lookup.cpp
+  HDRS
+    __nss_configure_lookup.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.string_view
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.__support.nss.config
+)
