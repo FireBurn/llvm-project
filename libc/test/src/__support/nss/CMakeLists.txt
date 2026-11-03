@@ -5,8 +5,11 @@ add_libc_test(
   SRCS
     nss_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.CPP.span
     libc.src.__support.CPP.string_view
     libc.src.__support.nss.config
     libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.__support.nss.module
 )

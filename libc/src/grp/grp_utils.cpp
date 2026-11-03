@@ -31,6 +31,8 @@
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/optimization.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/__support/pwd/dynamic_buffer.h"
 #include "src/__support/pwd/field_tokenizer.h"
 #include "src/__support/pwd/flat_file_db.h"
@@ -291,13 +293,10 @@ public:
   }
 };
 
-ErrorOr<void> populate_gid_list(cpp::string_view user, gid_t group,
-                                GidList &gid_list, const char *path) {
-  if (!gid_list.push_back(group))
-    return Error(ENOMEM);
-
-  pwd::ScopedFlatFileDatabase<struct group> local_db(path ? path
-                                                          : group_file_path);
+// The groups the file lists the user in.
+ErrorOr<void> add_file_groups(cpp::string_view user, GidList &gid_list,
+                              const char *path) {
+  pwd::ScopedFlatFileDatabase<struct group> local_db(path);
   pwd::ScopedDynamicBuffer buffer;
   struct group entry = {};
 
@@ -329,8 +328,67 @@ ErrorOr<void> populate_gid_list(cpp::string_view user, gid_t group,
       }
     }
   }
-
   return {};
+}
+
+// What a module adds, by the function glibc's modules provide for it.
+ErrorOr<void> add_module_groups(void *fn, const char *user, gid_t group,
+                                GidList &gid_list) {
+  using Fn =
+      int (*)(const char *, gid_t, long *, long *, gid_t **, long, int *);
+  long start = 1;
+  long size = 32;
+  auto *groups = static_cast<gid_t *>(::malloc(sizeof(gid_t) * size));
+  if (groups == nullptr)
+    return Error(ENOMEM);
+  groups[0] = group;
+  int module_error = 0;
+  auto status = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+      user, group, &start, &size, &groups, -1, &module_error));
+  ErrorOr<void> result = {};
+  if (status == nss::SUCCESS) {
+    for (long i = 0; i < start; ++i)
+      if (!gid_list.contains(groups[i]) && !gid_list.push_back(groups[i])) {
+        result = Error(ENOMEM);
+        break;
+      }
+  }
+  ::free(groups);
+  return result;
+}
+
+ErrorOr<void> populate_gid_list(cpp::string_view user, gid_t group,
+                                GidList &gid_list, const char *path) {
+  if (!gid_list.push_back(group))
+    return Error(ENOMEM);
+
+  if (path)
+    return add_file_groups(user, gid_list, path);
+
+  nss::CString text(user);
+  if (!text.ok())
+    return {};
+  ErrorOr<void> failure = {};
+  nss::lookup_all(
+      nss::GROUP, "initgroups_dyn",
+      [&] {
+        auto r = add_file_groups(user, gid_list, group_file_path);
+        if (!r.has_value()) {
+          failure = r;
+          return nss::UNAVAIL;
+        }
+        return nss::SUCCESS;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        auto r = add_module_groups(fn, text.get(), group, gid_list);
+        if (!r.has_value()) {
+          failure = r;
+          return nss::UNAVAIL;
+        }
+        return nss::SUCCESS;
+      });
+  return failure;
 }
 
 } // namespace
@@ -349,12 +407,30 @@ void TESTONLY_reset_group_path() {
   db.set_path(group_file_path);
 }
 
-ErrorOr<void> open() { return db.setdb(); }
+namespace {
+nss::Cursor cursor;
+} // namespace
 
-ErrorOr<void> close() { return db.enddb(); }
+ErrorOr<void> open() {
+  nss::reset(cursor, "endgrent");
+  return db.setdb();
+}
+
+ErrorOr<void> close() {
+  nss::reset(cursor, "endgrent");
+  return db.enddb();
+}
+
+ErrorOr<bool> read_next(struct group *grp, cpp::span<char> buffer) {
+  return nss::next(cursor, nss::GROUP, "setgrent", "getgrent_r", "endgrent",
+                   grp, buffer, [&] { return db.getnext(grp, buffer); });
+}
 
 ErrorOr<struct group *> read_next() {
-  const auto res = db.getnext(&grp_entry, line_buffer);
+  const auto res =
+      nss::with_growing_buffer(line_buffer, [](cpp::span<char> buffer) {
+        return read_next(&grp_entry, buffer);
+      });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
@@ -364,17 +440,30 @@ ErrorOr<struct group *> read_next() {
 
 ErrorOr<bool> find_by_name(cpp::string_view name, struct group *grp,
                            cpp::span<char> buffer, const char *path) {
-  return lookup_by_name(name, grp, buffer, path ? path : group_file_path);
+  if (path)
+    return lookup_by_name(name, grp, buffer, path);
+  nss::CString text(name);
+  if (!text.ok())
+    return false;
+  return nss::find(nss::GROUP, "getgrnam_r", text.get(), grp, buffer, [&] {
+    return lookup_by_name(name, grp, buffer, group_file_path);
+  });
 }
 
 ErrorOr<bool> find_by_gid(gid_t gid, struct group *grp, cpp::span<char> buffer,
                           const char *path) {
-  return lookup_by_gid(gid, grp, buffer, path ? path : group_file_path);
+  if (path)
+    return lookup_by_gid(gid, grp, buffer, path);
+  return nss::find(nss::GROUP, "getgrgid_r", gid, grp, buffer, [&] {
+    return lookup_by_gid(gid, grp, buffer, group_file_path);
+  });
 }
 
 ErrorOr<struct group *> find_by_name(cpp::string_view name) {
   const auto res =
-      lookup_by_name(name, &grp_entry, line_buffer, group_file_path);
+      nss::with_growing_buffer(line_buffer, [&](cpp::span<char> buffer) {
+        return find_by_name(name, &grp_entry, buffer, nullptr);
+      });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
@@ -383,7 +472,10 @@ ErrorOr<struct group *> find_by_name(cpp::string_view name) {
 }
 
 ErrorOr<struct group *> find_by_gid(gid_t gid) {
-  const auto res = lookup_by_gid(gid, &grp_entry, line_buffer, group_file_path);
+  const auto res =
+      nss::with_growing_buffer(line_buffer, [&](cpp::span<char> buffer) {
+        return find_by_gid(gid, &grp_entry, buffer, nullptr);
+      });
   if (!res.has_value())
     return Error(res.error());
   if (!res.value())
