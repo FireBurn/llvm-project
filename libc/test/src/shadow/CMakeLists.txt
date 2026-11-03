@@ -47,3 +47,29 @@ add_libc_test(
     libc.src.stdio.remove
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  shadow_nss_test
+  SUITE
+    libc-shadow-tests
+  SRCS
+    shadow_nss_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_spwd
+    libc.src.__support.CPP.string_view
+    libc.src.__support.nss.config
+    libc.src.__support.nss.module
+    libc.src.shadow.endspent
+    libc.src.shadow.getspent
+    libc.src.shadow.getspnam
+    libc.src.shadow.getspnam_r
+    libc.src.shadow.setspent
+    libc.src.shadow.shadow_utils
+    libc.src.stdio.fclose
+    libc.src.stdio.fopen
+    libc.src.stdio.fwrite
+    libc.src.stdio.remove
+    libc.src.string.memcpy
+    libc.test.UnitTest.ErrnoCheckingTest
+)
