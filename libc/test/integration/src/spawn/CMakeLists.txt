@@ -1,16 +1,10 @@
 add_libc_testsuite(libc-spawn-integration-tests PARENT libc-integration-tests)
 
-add_executable(
+add_libc_test_helper(
   libc_posix_spawn_test_binary
-  EXCLUDE_FROM_ALL
+  SRCS
   posix_spawn_test_binary.cpp
   test_binary_properties.h
-)
-set_target_properties(
-  libc_posix_spawn_test_binary
-  PROPERTIES
-    OUTPUT_NAME libc_posix_spawn_test_binary
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 add_header_library(
