@@ -162,3 +162,21 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
 )
 
+add_libc_test(
+  getdents_test
+  SUITE
+    libc-dirent-tests
+  SRCS
+    getdents_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.types.struct_dirent
+    libc.src.dirent.getdents
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
