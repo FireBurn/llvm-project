@@ -17,6 +17,8 @@
 #include "hdr/fcntl_macros.h"
 #include "hdr/netdb_macros.h"
 #include "hdr/sys_socket_macros.h"
+#include "hdr/types/socklen_t.h"
+#include "hdr/types/struct_hostent.h"
 #include "hdr/types/struct_pollfd.h"
 #include "hdr/types/struct_sockaddr_in.h"
 #include "hdr/types/struct_sockaddr_in6.h"
@@ -34,6 +36,7 @@
 #include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/nss/dispatch.h"
 #include "src/arpa/inet/inet_pton.h"
 #include "src/net/if/if_nametoindex.h"
 #include "src/netdb/resolv/dns_message.h"
@@ -401,18 +404,8 @@ bool name_from_hosts(const unsigned char *bytes, int family, char *out,
   return false;
 }
 
-} // anonymous namespace
-
-bool lookup_address(const unsigned char *bytes, int family, char *out,
-                    size_t capacity) {
-  if (bytes == nullptr || out == nullptr || capacity == 0)
-    return false;
-  if (family != AF_INET && family != AF_INET6)
-    return false;
-
-  if (name_from_hosts(bytes, family, out, capacity))
-    return true;
-
+bool name_from_dns(const unsigned char *bytes, int family, char *out,
+                   size_t capacity) {
   ResolvConf conf;
   if (!conf.read())
     return false;
@@ -455,6 +448,140 @@ bool lookup_address(const unsigned char *bytes, int family, char *out,
   return found;
 }
 
+// The structure a module's gethostbyname4_r hands back, as glibc lays it out.
+struct ModuleAddress {
+  ModuleAddress *next;
+  char *name;
+  int family;
+  uint32_t address[4];
+  uint32_t scope;
+};
+
+constexpr size_t MODULE_BUFFER = 8192;
+
+void add_module_address(Address *out, size_t capacity, size_t &count,
+                        int wanted, int family, const unsigned char *bytes,
+                        uint32_t scope) {
+  if (wanted != AF_UNSPEC && wanted != family)
+    return;
+  const size_t size = family == AF_INET ? 4 : 16;
+  const size_t before = count;
+  add(out, capacity, count, family, bytes, size);
+  if (count != before)
+    out[before].scope = scope;
+}
+
+// Asks a module for the addresses of a name, by gethostbyname4_r where it has
+// one, and else by gethostbyname3_r for each family wanted.
+nss::Status from_module(void *fn, bool is_fallback, const char *name,
+                        int family, Address *out, size_t capacity,
+                        size_t &count, char *canonical) {
+  alignas(16) char buffer[MODULE_BUFFER];
+  int error = 0;
+  int host_error = 0;
+  int32_t ttl = 0;
+  if (!is_fallback) {
+    using Fn = int (*)(const char *, ModuleAddress **, char *, size_t, int *,
+                       int *, int32_t *);
+    ModuleAddress *list = nullptr;
+    auto status = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+        name, &list, buffer, sizeof(buffer), &error, &host_error, &ttl));
+    if (status != nss::SUCCESS)
+      return status;
+    for (ModuleAddress *a = list; a != nullptr; a = a->next) {
+      if (a->name != nullptr)
+        remember_canonical(canonical, a->name);
+      add_module_address(out, capacity, count, family, a->family,
+                         reinterpret_cast<const unsigned char *>(a->address),
+                         a->scope);
+    }
+    return count != 0 ? nss::SUCCESS : nss::NOTFOUND;
+  }
+  using Fn = int (*)(const char *, int, struct hostent *, char *, size_t, int *,
+                     int *, int32_t *, char **);
+  nss::Status result = nss::NOTFOUND;
+  const int families[2] = {AF_INET6, AF_INET};
+  for (int wanted : families) {
+    if (family != AF_UNSPEC && family != wanted)
+      continue;
+    struct hostent host;
+    char *canon = nullptr;
+    auto status = static_cast<nss::Status>(
+        reinterpret_cast<Fn>(fn)(name, wanted, &host, buffer, sizeof(buffer),
+                                 &error, &host_error, &ttl, &canon));
+    if (status != nss::SUCCESS) {
+      if (status == nss::TRYAGAIN)
+        result = nss::TRYAGAIN;
+      continue;
+    }
+    remember_canonical(canonical, canon != nullptr ? canon : host.h_name);
+    for (char **a = host.h_addr_list; a != nullptr && *a != nullptr; ++a)
+      add_module_address(out, capacity, count, family, wanted,
+                         reinterpret_cast<const unsigned char *>(*a), 0);
+    result = nss::SUCCESS;
+  }
+  return result;
+}
+
+// The first name a module gives an address, by gethostbyaddr2_r or else
+// gethostbyaddr_r.
+nss::Status name_from_module(void *fn, bool is_fallback,
+                             const unsigned char *bytes, int family, char *out,
+                             size_t capacity) {
+  alignas(16) char buffer[MODULE_BUFFER];
+  int error = 0;
+  int host_error = 0;
+  int32_t ttl = 0;
+  struct hostent host;
+  const size_t size = family == AF_INET ? 4 : 16;
+  nss::Status status;
+  if (!is_fallback) {
+    using Fn = int (*)(const void *, socklen_t, int, struct hostent *, char *,
+                       size_t, int *, int *, int32_t *);
+    status = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+        bytes, static_cast<socklen_t>(size), family, &host, buffer,
+        sizeof(buffer), &error, &host_error, &ttl));
+  } else {
+    using Fn = int (*)(const void *, socklen_t, int, struct hostent *, char *,
+                       size_t, int *, int *);
+    status = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+        bytes, static_cast<socklen_t>(size), family, &host, buffer,
+        sizeof(buffer), &error, &host_error));
+  }
+  if (status != nss::SUCCESS || host.h_name == nullptr)
+    return status == nss::SUCCESS ? nss::NOTFOUND : status;
+  const size_t length = internal::string_length(host.h_name);
+  if (length >= capacity)
+    return nss::NOTFOUND;
+  inline_memcpy(out, host.h_name, length + 1);
+  return nss::SUCCESS;
+}
+
+} // anonymous namespace
+
+bool lookup_address(const unsigned char *bytes, int family, char *out,
+                    size_t capacity) {
+  if (bytes == nullptr || out == nullptr || capacity == 0)
+    return false;
+  if (family != AF_INET && family != AF_INET6)
+    return false;
+
+  auto files = [&] {
+    return name_from_hosts(bytes, family, out, capacity) ? nss::SUCCESS
+                                                         : nss::NOTFOUND;
+  };
+  auto dns = [&] {
+    return name_from_dns(bytes, family, out, capacity) ? nss::SUCCESS
+                                                       : nss::NOTFOUND;
+  };
+  return nss::lookup_with_fallback(
+             nss::HOSTS, "gethostbyaddr2_r", "gethostbyaddr_r", files, dns,
+             [&](void *fn, bool is_fallback) {
+               return name_from_module(fn, is_fallback, bytes, family, out,
+                                       capacity);
+             }) == nss::SUCCESS;
+}
+
 int lookup_name(const char *name, int family, int flags, Address *out,
                 size_t capacity, char *canonical) {
   if (out == nullptr || capacity == 0)
@@ -478,42 +605,52 @@ int lookup_name(const char *name, int family, int flags, Address *out,
   if ((flags & AI_NUMERICHOST) != 0)
     return EAI_NONAME;
 
-  if (from_hosts(name, family, out, capacity, count, canonical) != 0) {
-    prefer_newer_addresses(out, count);
-    return static_cast<int>(count);
-  }
+  auto files = [&] {
+    return from_hosts(name, family, out, capacity, count, canonical) != 0
+               ? nss::SUCCESS
+               : nss::NOTFOUND;
+  };
+  auto dns = [&] {
+    ResolvConf conf;
+    if (!conf.read())
+      return nss::UNAVAIL;
 
-  ResolvConf conf;
-  if (!conf.read())
-    return EAI_NONAME;
-
-  Status status = Status::NoName;
-  // The version six addresses come first, which is the order a machine with
-  // both should try them in.
-  if (family == AF_UNSPEC || family == AF_INET6) {
-    const Status one = from_dns_one(conf, name, TYPE_AAAA, AF_INET6, 16, out,
-                                    capacity, count, canonical);
-    if (one == Status::Ok)
-      status = Status::Ok;
-    else if (one == Status::Failed && status != Status::Ok)
-      status = Status::Failed;
-  }
-  if (family == AF_UNSPEC || family == AF_INET) {
-    const Status one = from_dns_one(conf, name, TYPE_A, AF_INET, 4, out,
-                                    capacity, count, canonical);
-    if (one == Status::Ok)
-      status = Status::Ok;
-    else if (one == Status::Failed && status != Status::Ok)
-      status = Status::Failed;
-  }
+    const size_t before = count;
+    Status status = Status::NoName;
+    // The version six addresses come first, which is the order a machine with
+    // both should try them in.
+    if (family == AF_UNSPEC || family == AF_INET6) {
+      const Status one = from_dns_one(conf, name, TYPE_AAAA, AF_INET6, 16, out,
+                                      capacity, count, canonical);
+      if (one == Status::Ok)
+        status = Status::Ok;
+      else if (one == Status::Failed && status != Status::Ok)
+        status = Status::Failed;
+    }
+    if (family == AF_UNSPEC || family == AF_INET) {
+      const Status one = from_dns_one(conf, name, TYPE_A, AF_INET, 4, out,
+                                      capacity, count, canonical);
+      if (one == Status::Ok)
+        status = Status::Ok;
+      else if (one == Status::Failed && status != Status::Ok)
+        status = Status::Failed;
+    }
+    if (count != before)
+      return nss::SUCCESS;
+    return status == Status::Failed ? nss::TRYAGAIN : nss::NOTFOUND;
+  };
+  const nss::Status result = nss::lookup_with_fallback(
+      nss::HOSTS, "gethostbyname4_r", "gethostbyname3_r", files, dns,
+      [&](void *fn, bool is_fallback) {
+        return from_module(fn, is_fallback, name, family, out, capacity, count,
+                           canonical);
+      });
 
   if (count != 0) {
     prefer_newer_addresses(out, count);
     return static_cast<int>(count);
   }
-  if (status == Status::Failed)
-    return EAI_AGAIN;
-  return EAI_NONAME;
+  return result == nss::TRYAGAIN ? EAI_AGAIN : EAI_NONAME;
 }
 
 void prefer_newer_addresses(Address *out, size_t count) {

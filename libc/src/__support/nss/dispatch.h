@@ -66,6 +66,33 @@ Status lookup(Database db, const char *function, Files files, Dns dns,
   return result;
 }
 
+// The same for a database whose modules may provide either of two functions
+// for the one lookup, the newer preferred. |module| is told which it was
+// handed.
+template <typename Files, typename Dns, typename Module>
+Status lookup_with_fallback(Database db, const char *function,
+                            const char *fallback, Files files, Dns dns,
+                            Module module) {
+  Status result = UNAVAIL;
+  for (Source *source = const_cast<Source *>(sources(db)); source != nullptr;
+       source = source->next) {
+    if (is_files(*source)) {
+      result = files();
+    } else if (is_dns(*source)) {
+      result = dns();
+    } else if (void *fn = service_function(*source, function)) {
+      result = module(fn, false);
+    } else if (void *old = service_function(*source, fallback)) {
+      result = module(old, true);
+    } else {
+      result = UNAVAIL;
+    }
+    if (result == RETURN || source->action(result) == Action::RETURN)
+      break;
+  }
+  return result;
+}
+
 // Asks every source in turn, for the lookups which add up what they all say,
 // such as the groups a user belongs to. A source that finds something does not
 // end the walk, and one that fails does only where its line says to.

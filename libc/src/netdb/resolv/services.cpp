@@ -13,10 +13,13 @@
 
 #include "src/netdb/resolv/services.h"
 
+#include "hdr/errno_macros.h"
 #include "hdr/types/struct_servent.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/__support/str_to_integer.h"
 #include "src/netdb/resolv/file_lines.h"
 #include "src/string/memory_utils/inline_memcpy.h"
@@ -30,8 +33,10 @@ constexpr const char *SERVICES_PATH = "/etc/services";
 
 } // anonymous namespace
 
-bool port_for_service(const char *name, const char *protocol, uint16_t &port,
-                      char *found_protocol, size_t found_capacity) {
+namespace {
+
+bool port_from_file(const char *name, const char *protocol, uint16_t &port,
+                    char *found_protocol, size_t found_capacity) {
   if (name == nullptr)
     return false;
   if (found_protocol != nullptr && found_capacity != 0)
@@ -99,11 +104,10 @@ bool port_for_service(const char *name, const char *protocol, uint16_t &port,
   return found;
 }
 
-namespace {
-
 // Where the enumeration has got to. setservent asks for the file to be held
 // open across lookups, which is what the enumeration records.
 LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration service_enumeration;
+LIBC_THREAD_LOCAL nss::Cursor service_cursor;
 
 char *keep_service(cpp::string_view field, ServStorage &storage) {
   if (storage.used + field.size() + 1 > ServStorage::POOL_SIZE)
@@ -187,10 +191,8 @@ bool protocol_matches(const ServStorage &storage, const char *protocol) {
          equal(cpp::string_view(storage.entry.s_proto), protocol);
 }
 
-} // anonymous namespace
-
-struct servent *serv_by_name(const char *name, const char *protocol,
-                             ServStorage &storage) {
+struct servent *file_serv_by_name(const char *name, const char *protocol,
+                                  ServStorage &storage) {
   if (name == nullptr)
     return nullptr;
   FileLines reader;
@@ -206,8 +208,8 @@ struct servent *serv_by_name(const char *name, const char *protocol,
   return found;
 }
 
-struct servent *serv_by_port(int port, const char *protocol,
-                             ServStorage &storage) {
+struct servent *file_serv_by_port(int port, const char *protocol,
+                                  ServStorage &storage) {
   FileLines reader;
   if (!reader.open(SERVICES_PATH))
     return nullptr;
@@ -221,18 +223,140 @@ struct servent *serv_by_port(int port, const char *protocol,
   return found;
 }
 
+// What a module put in the storage, as the answer.
+nss::Status served(nss::Status status, ServStorage &storage, int error) {
+  if (status != nss::SUCCESS)
+    return status == nss::TRYAGAIN && error != ERANGE ? status : nss::NOTFOUND;
+  return storage.entry.s_name != nullptr ? nss::SUCCESS : nss::NOTFOUND;
+}
+
+} // anonymous namespace
+
+struct servent *serv_by_name(const char *name, const char *protocol,
+                             ServStorage &storage) {
+  if (name == nullptr)
+    return nullptr;
+  auto status = nss::lookup(
+      nss::SERVICES, "getservbyname_r",
+      [&] {
+        return file_serv_by_name(name, protocol, storage) != nullptr
+                   ? nss::SUCCESS
+                   : nss::NOTFOUND;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        using Fn = int (*)(const char *, const char *, struct servent *, char *,
+                           size_t, int *);
+        int error = 0;
+        storage.entry.s_name = nullptr;
+        return served(static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+                          name, protocol, &storage.entry, storage.pool,
+                          ServStorage::POOL_SIZE, &error)),
+                      storage, error);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
+}
+
+struct servent *serv_by_port(int port, const char *protocol,
+                             ServStorage &storage) {
+  auto status = nss::lookup(
+      nss::SERVICES, "getservbyport_r",
+      [&] {
+        return file_serv_by_port(port, protocol, storage) != nullptr
+                   ? nss::SUCCESS
+                   : nss::NOTFOUND;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        using Fn =
+            int (*)(int, const char *, struct servent *, char *, size_t, int *);
+        int error = 0;
+        storage.entry.s_name = nullptr;
+        return served(static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+                          port, protocol, &storage.entry, storage.pool,
+                          ServStorage::POOL_SIZE, &error)),
+                      storage, error);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
+}
+
+bool port_for_service(const char *name, const char *protocol, uint16_t &port,
+                      char *found_protocol, size_t found_capacity) {
+  if (name == nullptr)
+    return false;
+  if (found_protocol != nullptr && found_capacity != 0)
+    found_protocol[0] = '\0';
+  // Asks the sources the way serv_by_name does, but reads the file without
+  // the limits of the storage a servent keeps its strings in.
+  ServStorage storage;
+  auto status = nss::lookup(
+      nss::SERVICES, "getservbyname_r",
+      [&] {
+        return port_from_file(name, protocol, port, found_protocol,
+                              found_capacity)
+                   ? nss::SUCCESS
+                   : nss::NOTFOUND;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        using Fn = int (*)(const char *, const char *, struct servent *, char *,
+                           size_t, int *);
+        int error = 0;
+        storage.entry.s_name = nullptr;
+        auto result = served(static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+                                 name, protocol, &storage.entry, storage.pool,
+                                 ServStorage::POOL_SIZE, &error)),
+                             storage, error);
+        if (result == nss::SUCCESS) {
+          port = static_cast<uint16_t>(storage.entry.s_port);
+          const char *named = storage.entry.s_proto;
+          if (found_protocol != nullptr && named != nullptr) {
+            size_t length = 0;
+            while (named[length] != '\0')
+              ++length;
+            if (length < found_capacity) {
+              inline_memcpy(found_protocol, named, length + 1);
+            }
+          }
+        }
+        return result;
+      });
+  return status == nss::SUCCESS;
+}
+
 void rewind_services(bool stay_open) {
+  nss::end_entries(service_cursor, "endservent",
+                   [](void *fn, bool) { return nss::call_control(fn); });
   service_enumeration.rewind(SERVICES_PATH, stay_open);
 }
 
-void stop_services() { service_enumeration.stop(); }
+void stop_services() {
+  nss::end_entries(service_cursor, "endservent",
+                   [](void *fn, bool) { return nss::call_control(fn); });
+  service_enumeration.stop();
+}
 
 struct servent *next_service(ServStorage &storage) {
-  char line[512];
-  while (service_enumeration.next(SERVICES_PATH, line, sizeof(line)))
-    if (parse_service(line, storage))
-      return &storage.entry;
-  return nullptr;
+  auto status = nss::next_entry(
+      service_cursor, nss::SERVICES, "setservent", "getservent_r", "endservent",
+      [&] {
+        char line[512];
+        while (service_enumeration.next(SERVICES_PATH, line, sizeof(line)))
+          if (parse_service(line, storage))
+            return nss::SUCCESS;
+        return nss::NOTFOUND;
+      },
+      [&](void *fn, bool is_control) {
+        if (is_control)
+          return nss::call_control(fn);
+        using Fn = int (*)(struct servent *, char *, size_t, int *);
+        int error = 0;
+        storage.entry.s_name = nullptr;
+        auto result = static_cast<nss::Status>(reinterpret_cast<Fn>(fn)(
+            &storage.entry, storage.pool, ServStorage::POOL_SIZE, &error));
+        return served(result, storage, error);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
 }
 
 } // namespace resolv
