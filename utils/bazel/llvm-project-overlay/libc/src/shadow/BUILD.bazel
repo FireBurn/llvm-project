@@ -30,6 +30,7 @@ libc_support_library(
         "//libc/src/__support:dynamic_buffer",
         "//libc/src/__support:error_or",
         "//libc/src/__support:nss_dispatch",
+        "//libc/src/__support:nss_lookup",
         "//libc/src/__support:pwd_field_tokenizer",
         "//libc/src/__support:pwd_flat_file_db",
         "//libc/src/__support:str_to_integer",
@@ -118,6 +119,7 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:dynamic_buffer",
         "//libc/src/__support:libc_errno",
+        "//libc/src/__support:nss_lookup",
         "//libc/src/errno:errno",
     ],
 )
@@ -150,6 +152,7 @@ libc_function(
         "//libc/src/__support/File:line_reader",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+        "//libc/src/__support:nss_lookup",
     ],
 )
 

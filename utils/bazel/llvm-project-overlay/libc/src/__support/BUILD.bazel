@@ -886,6 +886,23 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "nss_lookup",
+    hdrs = ["nss/lookup.h"],
+    deps = [
+        ":dynamic_buffer",
+        ":error_or",
+        ":nss_config",
+        ":nss_dispatch",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "nss_config",
     srcs = ["nss/config.cpp"],
     hdrs = ["nss/config.h"],

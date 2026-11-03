@@ -4,11 +4,27 @@
 
 # Tests for LLVM libc pwd.
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("//libc/test:libc_test_rules.bzl", "libc_test")
 
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+cc_library(
+    name = "pwd_test_utils",
+    testonly = True,
+    hdrs = ["pwd_test_utils.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/File:file",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+        "//libc/test/UnitTest:LibcUnitTest",
+    ],
+)
 
 libc_test(
     name = "pwd_utils_test",

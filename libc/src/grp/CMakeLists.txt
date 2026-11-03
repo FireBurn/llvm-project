@@ -193,6 +193,8 @@ add_object_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
     libc.src.__support.macros.optimization
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.__support.pwd.field_tokenizer
     libc.src.__support.pwd.flat_file_db
     libc.src.__support.str_to_integer
