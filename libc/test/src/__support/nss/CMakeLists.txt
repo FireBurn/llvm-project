@@ -1,0 +1,12 @@
+add_libc_test(
+  nss_test
+  SUITE
+    libc-support-tests
+  SRCS
+    nss_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.string_view
+    libc.src.__support.nss.config
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.module
+)

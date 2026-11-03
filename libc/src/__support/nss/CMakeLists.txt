@@ -1,0 +1,47 @@
+add_object_library(
+  config
+  SRCS
+    config.cpp
+  HDRS
+    config.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.stdio_macros
+    libc.hdr.types.struct_stat
+    libc.src.__support.CPP.string_view
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.lseek
+    libc.src.__support.OSUtil.linux.syscall_wrappers.newfstatat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.macros.config
+    libc.src.__support.threads.raw_mutex
+)
+
+add_object_library(
+  module
+  SRCS
+    module.cpp
+  HDRS
+    module.h
+  DEPENDS
+    .config
+    libc.src.__support.macros.config
+    libc.src.__support.threads.raw_mutex
+    libc.src.dlfcn.dlopen
+    libc.src.dlfcn.dlsym
+)
+
+add_header_library(
+  dispatch
+  HDRS
+    dispatch.h
+  DEPENDS
+    .config
+    .module
+    libc.src.__support.CPP.string_view
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
