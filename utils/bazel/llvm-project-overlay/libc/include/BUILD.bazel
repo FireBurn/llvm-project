@@ -73,6 +73,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("netinet/ip6"),
     libc_header_info("netinet/ip_icmp"),
     libc_header_info("netpacket/packet"),
+    libc_header_info("nss"),
     libc_header_info("paths"),
     libc_header_info("printf"),
     libc_header_info(
