@@ -161,6 +161,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("execinfo"),
     libc_header_info("getopt"),
+    libc_header_info("gshadow"),
     libc_header_info("iconv"),
     libc_header_info("mntent"),
     libc_header_info("monetary"),
@@ -25075,6 +25076,20 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_sgrp",
+    hdrs = ["include/llvm-libc-types/struct_sgrp.h"],
+)
+
+libc_support_library(
+    name = "types_struct_sgrp",
+    hdrs = ["hdr/types/struct_sgrp.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_sgrp"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_spwd",
     hdrs = ["include/llvm-libc-types/struct_spwd.h"],
 )
@@ -26231,6 +26246,139 @@ libc_function(
         ":__support_macros_config",
         ":fnmatch_fnmatch_matcher",
         ":hdr_fnmatch_macros",
+    ],
+)
+
+libc_support_library(
+    name = "gshadow_gshadow_utils",
+    srcs = ["src/gshadow/gshadow_utils.cpp"],
+    hdrs = ["src/gshadow/gshadow_utils.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_pwd_field_tokenizer",
+        ":__support_pwd_flat_file_db",
+        ":hdr_errno_macros",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_support_library(
+    name = "gshadow_gshadow_r_utils",
+    hdrs = ["src/gshadow/gshadow_r_utils.h"],
+    deps = [
+        ":__support_cpp_span",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "setsgent",
+    srcs = ["src/gshadow/setsgent.cpp"],
+    hdrs = ["src/gshadow/setsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":gshadow_gshadow_utils",
+    ],
+)
+
+libc_function(
+    name = "endsgent",
+    srcs = ["src/gshadow/endsgent.cpp"],
+    hdrs = ["src/gshadow/endsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":gshadow_gshadow_utils",
+    ],
+)
+
+libc_function(
+    name = "getsgent",
+    srcs = ["src/gshadow/getsgent.cpp"],
+    hdrs = ["src/gshadow/getsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":gshadow_gshadow_utils",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "getsgnam",
+    srcs = ["src/gshadow/getsgnam.cpp"],
+    hdrs = ["src/gshadow/getsgnam.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":gshadow_gshadow_utils",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "getsgnam_r",
+    srcs = ["src/gshadow/getsgnam_r.cpp"],
+    hdrs = ["src/gshadow/getsgnam_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_pwd_flat_file_db",
+        ":gshadow_gshadow_r_utils",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "putsgent",
+    srcs = ["src/gshadow/putsgent.cpp"],
+    hdrs = ["src/gshadow/putsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fprintf",
+        ":hdr_errno_macros",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_sgrp",
+    ],
+)
+
+libc_function(
+    name = "fgetsgent",
+    srcs = ["src/gshadow/fgetsgent.cpp"],
+    hdrs = ["src/gshadow/fgetsgent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":fgets",
+        ":gshadow_gshadow_utils",
+        ":hdr_errno_macros",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_struct_sgrp",
     ],
 )
 
