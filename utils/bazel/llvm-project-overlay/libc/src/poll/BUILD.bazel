@@ -22,8 +22,10 @@ libc_function(
     deps = [
         "//libc/hdr/types:nfds_t",
         "//libc/hdr/types:struct_pollfd",
+        "//libc/hdr:errno_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:poll",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cancel",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",

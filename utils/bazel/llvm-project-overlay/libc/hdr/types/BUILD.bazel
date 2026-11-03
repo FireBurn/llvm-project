@@ -522,6 +522,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pthread_attr_t",
+    hdrs = ["pthread_attr_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_pthread_attr_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "pthread_t",
+    hdrs = ["pthread_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_pthread_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "struct_dl_phdr_info",
     hdrs = ["struct_dl_phdr_info.h"],
     deps = select({

@@ -243,3 +243,28 @@ libc_support_library(
         "//libc/src/__support:error_or",
     ],
 )
+
+libc_support_library(
+    name = "linux_vdso",
+    srcs = ["linux/vdso.cpp"],
+    hdrs = ["linux/vdso.h"],
+    deps = [
+        ":linux_auxv",
+        ":vdso",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr/types:time_t",
+        "//libc/hdr:elf_proxy",
+        "//libc/hdr:link_macros",
+        "//libc/hdr:sys_auxv_macros",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/threads:callonce",
+        "//libc/src/__support/threads:linux_futex_word_type",
+        "//libc/src/__support:common",
+    ],
+)
