@@ -16,6 +16,18 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "endnetgrent",
+    srcs = ["endnetgrent.cpp"],
+    hdrs = ["endnetgrent.h"],
+    deps = [
+        ":netgroup_utils",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "gethostbyaddr",
     srcs = ["gethostbyaddr.cpp"],
     hdrs = ["gethostbyaddr.h"],
@@ -400,6 +412,35 @@ libc_function(
 )
 
 libc_function(
+    name = "getnetgrent",
+    srcs = ["getnetgrent.cpp"],
+    hdrs = ["getnetgrent.h"],
+    deps = [
+        ":netgroup_utils",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "getnetgrent_r",
+    srcs = ["getnetgrent_r.cpp"],
+    hdrs = ["getnetgrent_r.h"],
+    deps = [
+        ":netgroup_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
     name = "getprotobyname",
     srcs = ["getprotobyname.cpp"],
     hdrs = ["getprotobyname.h"],
@@ -598,6 +639,19 @@ libc_function(
 )
 
 libc_function(
+    name = "innetgr",
+    srcs = ["innetgr.cpp"],
+    hdrs = ["innetgr.h"],
+    deps = [
+        ":netgroup_utils",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "sethostent",
     srcs = ["sethostent.cpp"],
     hdrs = ["sethostent.h"],
@@ -618,6 +672,21 @@ libc_function(
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "setnetgrent",
+    srcs = ["setnetgrent.cpp"],
+    hdrs = ["setnetgrent.h"],
+    deps = [
+        ":netgroup_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
     ],
 )
 
@@ -828,6 +897,29 @@ libc_support_library(
         "//libc/src/__support/macros:config",
         "//libc/src/string/memory_utils:memory_utils",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_support_library(
+    name = "netgroup_utils",
+    srcs = ["netgroup_utils.cpp"],
+    hdrs = ["netgroup_utils.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:nss_config",
+        "//libc/src/string/memory_utils:memory_utils",
     ],
 )
 
