@@ -180,52 +180,28 @@ if((${LIBC_TARGET_OS} STREQUAL "linux") AND (${LIBC_TARGET_ARCHITECTURE_IS_X86})
   )
 endif()
 
-add_executable(
+add_libc_test_helper(
   libc_exec_test_signal_exit
-  EXCLUDE_FROM_ALL
+  SRCS
   exec_test_signal_exit.cpp
 )
-set_target_properties(
-  libc_exec_test_signal_exit
-  PROPERTIES
-    OUTPUT_NAME libc_exec_test_signal_exit
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
 
-add_executable(
+add_libc_test_helper(
   libc_execv_test_normal_exit
-  EXCLUDE_FROM_ALL
+  SRCS
   execv_test_normal_exit.cpp
 )
-set_target_properties(
-  libc_execv_test_normal_exit
-  PROPERTIES
-    OUTPUT_NAME libc_execv_test_normal_exit
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
 
-add_executable(
+add_libc_test_helper(
   libc_execl_test_normal_exit
-  EXCLUDE_FROM_ALL
+  SRCS
   execl_test_normal_exit.cpp
 )
-set_target_properties(
-  libc_execl_test_normal_exit
-  PROPERTIES
-    OUTPUT_NAME libc_execl_test_normal_exit
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
 
-add_executable(
+add_libc_test_helper(
   libc_execle_test_normal_exit
-  EXCLUDE_FROM_ALL
+  SRCS
   execle_test_normal_exit.cpp
-)
-set_target_properties(
-  libc_execle_test_normal_exit
-  PROPERTIES
-    OUTPUT_NAME libc_execle_test_normal_exit
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 add_integration_test(
