@@ -324,3 +324,24 @@ add_entrypoint_object(
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  pthread_sigqueue
+  SRCS
+    pthread_sigqueue.cpp
+  HDRS
+    ../pthread_sigqueue.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.pthread_t
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.union_sigval
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_tgsigqueueinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.null_check
+    libc.src.__support.threads.thread
+)
