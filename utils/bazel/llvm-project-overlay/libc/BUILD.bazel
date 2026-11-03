@@ -5178,6 +5178,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_threads_cancel",
+    hdrs = ["src/__support/threads/cancel.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_support_library(
     name = "__support_threads_identifier",
     hdrs = ["src/__support/threads/identifier.h"],
     deps = [
@@ -5391,6 +5401,7 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_tgkill",
         ":__support_osutil_linux_syscall_wrappers_write",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":__support_threads_futex_utils",
         ":__support_threads_linux_futex_utils",
         ":__support_threads_linux_futex_word_type",
@@ -18126,8 +18137,6 @@ libc_function(
     ],
 )
 
-################################ fcntl targets #################################
-
 libc_function(
     name = "open",
     srcs = ["src/fcntl/linux/open.cpp"],
@@ -18141,7 +18150,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":hdr_fcntl_macros",
         ":types_mode_t",
     ],
@@ -18177,6 +18188,7 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_threads_cancel",
         ":errno",
         ":hdr_fcntl_macros",
         ":types_mode_t",
@@ -18255,6 +18267,7 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_threads_cancel",
         ":errno",
     ],
 )
@@ -18500,6 +18513,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_fsync",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
     ],
 )
@@ -18624,6 +18638,8 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_poll",
         ":errno",
+        ":__support_threads_cancel",
+        ":hdr_errno_macros",
         ":types_nfds_t",
         ":types_struct_pollfd",
     ],
@@ -18721,6 +18737,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
         ":signal_sigtimedwait",
@@ -18754,7 +18771,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_wait4",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":hdr_signal_macros",
         ":hdr_sys_wait_macros",
         ":types_pid_t",
@@ -18924,7 +18943,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_macros_sanitizer",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":hdr_stdint_proxy",
         ":hdr_unistd_macros",
         ":types_off_t",
@@ -18946,7 +18967,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":hdr_stdint_proxy",
         ":hdr_unistd_macros",
         ":types_off_t",
@@ -18965,6 +18988,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_macros_sanitizer",
         ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_threads_cancel",
         ":errno",
         ":hdr_unistd_macros",
         ":types_size_t",
@@ -19164,6 +19188,7 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_write",
+        ":__support_threads_cancel",
         ":errno",
         ":hdr_unistd_macros",
         ":types_size_t",
@@ -19850,7 +19875,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":hdr_sys_mman_macros",
         ":types_size_t",
     ],
@@ -20275,7 +20302,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_accept",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_socklen_t",
         ":types_struct_sockaddr",
     ],
@@ -20323,7 +20352,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_connect",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_socklen_t",
         ":types_struct_sockaddr",
     ],
@@ -20401,7 +20432,9 @@ libc_function(
         ":__support_macros_sanitizer",
         ":__support_osutil_linux_syscall_wrappers_recvfrom",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_size_t",
         ":types_socklen_t",
         ":types_ssize_t",
@@ -20420,7 +20453,9 @@ libc_function(
         ":__support_macros_sanitizer",
         ":__support_osutil_linux_syscall_wrappers_recvfrom",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_socklen_t",
         ":types_ssize_t",
         ":types_struct_sockaddr",
@@ -20454,7 +20489,9 @@ libc_function(
         ":__support_macros_sanitizer",
         ":__support_osutil_linux_syscall_wrappers_recvmsg",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_ssize_t",
         ":types_struct_msghdr",
     ],
@@ -20470,7 +20507,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_sendto",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_size_t",
         ":types_socklen_t",
         ":types_ssize_t",
@@ -20503,7 +20542,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_sendmsg",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_ssize_t",
         ":types_struct_msghdr",
     ],
@@ -20519,7 +20560,9 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_sendto",
         ":__support_osutil_syscall",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_socklen_t",
         ":types_ssize_t",
         ":types_struct_sockaddr",
@@ -20612,7 +20655,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_readv",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_ssize_t",
         ":types_struct_iovec",
     ],
@@ -20631,7 +20676,9 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_writev",
+        ":__support_threads_cancel",
         ":errno",
+        ":hdr_errno_macros",
         ":types_ssize_t",
         ":types_struct_iovec",
     ],
@@ -21352,6 +21399,34 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_pthread_attr_t",
+    hdrs = ["include/llvm-libc-types/pthread_attr_t.h"],
+)
+
+libc_support_library(
+    name = "types_pthread_attr_t",
+    hdrs = ["hdr/types/pthread_attr_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_pthread_attr_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_types_pthread_t",
+    hdrs = ["include/llvm-libc-types/pthread_t.h"],
+)
+
+libc_support_library(
+    name = "types_pthread_t",
+    hdrs = ["hdr/types/pthread_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_pthread_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_dl_phdr_info",
     hdrs = ["include/llvm-libc-types/struct_dl_phdr_info.h"],
 )
@@ -21708,6 +21783,202 @@ libc_function(
         ":__support_osutil_linux_stat_stat_via_statx",
         ":hdr_fcntl_macros",
         ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_vdso",
+    srcs = ["src/__support/OSUtil/linux/vdso.cpp"],
+    hdrs = ["src/__support/OSUtil/linux/vdso.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_array",
+        ":__support_cpp_optional",
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_linux_auxv",
+        ":__support_osutil_vdso",
+        ":__support_threads_callonce",
+        ":__support_threads_linux_futex_word_type",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_sys_auxv_macros",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+        ":types_struct_timeval",
+        ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_threads_thread_common",
+    hdrs = ["src/__support/threads/thread.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_atomic",
+        ":__support_cpp_optional",
+        ":__support_cpp_string_view",
+        ":__support_cpp_stringstream",
+        ":__support_error_or",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_threads_tcb",
+        ":__support_threads_thread_attributes",
+        ":hdr_stdint_proxy",
+        ":types_struct_sched_param",
+    ],
+)
+
+libc_support_library(
+    name = "pthread_pthread_attr",
+    hdrs = ["src/pthread/pthread_attr.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_pthread_macros",
+        ":hdr_sched_macros",
+        ":types_pthread_attr_t",
+    ],
+)
+
+libc_function(
+    name = "pthread_create",
+    srcs = ["src/pthread/pthread_create.cpp"],
+    hdrs = ["src/pthread/pthread_create.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":hdr_pthread_macros",
+        ":pthread_pthread_attr",
+        ":types_pthread_attr_t",
+        ":types_pthread_t",
+    ],
+)
+
+libc_function(
+    name = "pthread_join",
+    srcs = ["src/pthread/pthread_join.cpp"],
+    hdrs = ["src/pthread/pthread_join.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_cancel",
+    srcs = ["src/pthread/pthread_cancel.cpp"],
+    hdrs = ["src/pthread/pthread_cancel.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_cpp_atomic",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_tgkill",
+        ":__support_threads_cancel",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":hdr_signal_macros",
+        ":signal_linux_signal_utils",
+        ":types_struct_sigaction",
+    ],
+)
+
+libc_function(
+    name = "pthread_setcancelstate",
+    srcs = ["src/pthread/pthread_setcancelstate.cpp"],
+    hdrs = ["src/pthread/pthread_setcancelstate.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_cancel",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "pthread_setcanceltype",
+    srcs = ["src/pthread/pthread_setcanceltype.cpp"],
+    hdrs = ["src/pthread/pthread_setcanceltype.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_cancel",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "pthread_testcancel",
+    srcs = ["src/pthread/pthread_testcancel.cpp"],
+    hdrs = ["src/pthread/pthread_testcancel.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_cancel",
+    ],
+)
+
+libc_function(
+    name = "__pthread_cleanup_pop",
+    srcs = ["src/pthread/__pthread_cleanup_pop.cpp"],
+    hdrs = ["src/pthread/__pthread_cleanup_pop.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_assert",
+        ":__support_macros_config",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":types_struct___pthread_cleanup_frame",
+    ],
+)
+
+libc_function(
+    name = "__pthread_cleanup_push",
+    srcs = ["src/pthread/__pthread_cleanup_push.cpp"],
+    hdrs = ["src/pthread/__pthread_cleanup_push.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":types_struct___pthread_cleanup_frame",
+    ],
+)
+
+libc_support_library(
+    name = "signal_linux_signal_utils",
+    hdrs = ["src/signal/linux/signal_utils.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":__support_osutil_linux_vdso",
+        ":__support_osutil_syscall",
+        ":__support_osutil_vdso",
+        ":__support_threads_raw_rwlock",
+        ":hdr_signal_macros",
+        ":types_siginfo_t",
+        ":types_sigset_t",
+        ":types_size_t",
+        ":types_struct_sigaction",
     ],
 )
 
