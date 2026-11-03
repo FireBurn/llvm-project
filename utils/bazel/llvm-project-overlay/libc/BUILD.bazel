@@ -19067,6 +19067,23 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "splice",
+    srcs = ["src/fcntl/linux/splice.cpp"],
+    hdrs = ["src/fcntl/splice.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_splice",
+        ":errno",
+        ":fcntl_splice",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
 ################################ time targets ##################################
 
 libc_function(
@@ -25675,6 +25692,30 @@ libc_support_library(
         ":__support_osutil_syscall",
         ":hdr_stdint_proxy",
         ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "fcntl_splice",
+    hdrs = ["src/fcntl/splice.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_off_t",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_splice",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/splice.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_off_t",
+        ":types_ssize_t",
     ],
 )
 
