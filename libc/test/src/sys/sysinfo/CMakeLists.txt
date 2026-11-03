@@ -14,3 +14,15 @@ add_libc_test(
     libc.src.sys.sysinfo.sysinfo
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  get_nprocs_test
+  SUITE
+    libc-sys-sysinfo-tests
+  SRCS
+    get_nprocs_test.cpp
+  DEPENDS
+    libc.src.sys.sysinfo.get_nprocs
+    libc.src.sys.sysinfo.get_nprocs_conf
+)
+
