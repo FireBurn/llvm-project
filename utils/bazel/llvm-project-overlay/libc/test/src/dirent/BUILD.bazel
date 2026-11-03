@@ -94,3 +94,17 @@ libc_test(
         "//libc/src/string:strcmp",
     ],
 )
+
+libc_test(
+    name = "getdents_test",
+    srcs = ["getdents_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/dirent:getdents",
+        "//libc/src/fcntl:open",
+        "//libc/src/string:strcmp",
+        "//libc/src/unistd:close",
+    ],
+)
