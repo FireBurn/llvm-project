@@ -14,7 +14,15 @@ add_libc_test(
     nss_databases_test.cpp
   DEPENDS
     libc.hdr.errno_macros
+    libc.hdr.netdb_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_addrinfo
     libc.hdr.types.struct_group
+    libc.hdr.types.struct_hostent
+    libc.hdr.types.struct_netent
+    libc.hdr.types.struct_protoent
+    libc.hdr.types.struct_servent
+    libc.hdr.types.struct_sockaddr_in
     libc.hdr.types.struct_passwd
     libc.src.__support.CPP.string_view
     libc.src.__support.nss.config
@@ -22,6 +30,15 @@ add_libc_test(
     libc.src.grp.getgrgid
     libc.src.grp.getgrnam
     libc.src.grp.getgrouplist
+    libc.src.netdb.freeaddrinfo
+    libc.src.netdb.getaddrinfo
+    libc.src.netdb.gethostbyaddr
+    libc.src.netdb.gethostbyname
+    libc.src.netdb.getnetbyname
+    libc.src.netdb.getprotobyname
+    libc.src.netdb.getprotobynumber
+    libc.src.netdb.getservbyname
+    libc.src.netdb.getservbyport
     libc.src.pwd.endpwent
     libc.src.pwd.getpwent
     libc.src.pwd.getpwnam
