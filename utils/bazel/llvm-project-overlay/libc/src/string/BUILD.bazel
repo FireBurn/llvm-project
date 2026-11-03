@@ -475,6 +475,18 @@ libc_function(
 )
 
 libc_function(
+    name = "explicit_bzero",
+    srcs = ["explicit_bzero.cpp"],
+    hdrs = ["explicit_bzero.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_function(
     name = "strerror",
     srcs = ["strerror.cpp"],
     hdrs = ["strerror.h"],
