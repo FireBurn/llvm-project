@@ -413,3 +413,13 @@ add_libc_test(
     libc.src.string.strcmp
 )
 
+
+add_libc_test(
+  explicit_bzero_test
+  SUITE
+    libc-string-tests
+  SRCS
+    explicit_bzero_test.cpp
+  DEPENDS
+    libc.src.string.explicit_bzero
+)
