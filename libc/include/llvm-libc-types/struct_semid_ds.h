@@ -14,11 +14,19 @@
 
 struct semid_ds {
   struct ipc_perm sem_perm;
-#ifdef __linux__
+#if defined(__linux__) && defined(__x86_64__)
+  // x86_64 keeps a word of padding after each time.
   time_t sem_otime;
   unsigned long __unused1;
   time_t sem_ctime;
   unsigned long __unused2;
+#elif defined(__linux__) && __SIZEOF_LONG__ == 4
+  // Where a long is too narrow to hold the time, the kernel keeps the top
+  // half of each one in a word of its own after it.
+  time_t sem_otime;
+  unsigned long __sem_otime_high;
+  time_t sem_ctime;
+  unsigned long __sem_ctime_high;
 #else
   time_t sem_otime;
   time_t sem_ctime;
