@@ -2033,6 +2033,41 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pidfd_getfd",
+    hdrs = ["pidfd_getfd.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "pidfd_open",
+    hdrs = ["pidfd_open.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "pidfd_send_signal",
+    hdrs = ["pidfd_send_signal.h"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "rt_sigtimedwait",
     hdrs = ["rt_sigtimedwait.h"],
     deps = [

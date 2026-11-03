@@ -1,0 +1,57 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "pidfd_getfd",
+    srcs = ["linux/pidfd_getfd.cpp"],
+    hdrs = ["pidfd_getfd.h"],
+    deps = [
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pidfd_getfd",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "pidfd_open",
+    srcs = ["linux/pidfd_open.cpp"],
+    hdrs = ["pidfd_open.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pidfd_open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "pidfd_send_signal",
+    srcs = ["linux/pidfd_send_signal.cpp"],
+    hdrs = ["pidfd_send_signal.h"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pidfd_send_signal",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
