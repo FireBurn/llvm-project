@@ -52,6 +52,9 @@ bool codeset_is_supported(cpp::string_view name);
 // A single name, or a composite such as "LC_CTYPE=a;LC_NUMERIC=b".
 bool locale_name_is_supported(cpp::string_view name);
 
+// What the environment says a variable is, or nullptr where it says nothing.
+const char *environment_value(const char *name);
+
 // What the environment says the given category should be: LC_ALL where it is
 // set to anything, then the variable for the category itself, then LANG. A
 // null return means none of them said.
