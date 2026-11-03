@@ -13,18 +13,22 @@
 
 #include "src/unistd/pwrite.h"
 
+#include "hdr/errno_macros.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/pwrite.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, pwrite,
                    (int fd, const void *buf, size_t count, off_t offset)) {
-
+  internal::cancel_point();
   auto result = linux_syscalls::pwrite(fd, buf, count, offset);
   if (!result) {
+    if (result.error() == EINTR)
+      internal::cancel_point();
     libc_errno = result.error();
     return -1;
   }

@@ -12,11 +12,13 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(ssize_t, write, (int fd, const void *buf, size_t count)) {
-  auto result = linux_syscalls::write(fd, buf, count);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::write(fd, buf, count); });
   if (!result.has_value()) {
     libc_errno = result.error();
     return -1;

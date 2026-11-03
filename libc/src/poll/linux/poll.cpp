@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/poll/poll.h"
+#include "hdr/errno_macros.h"
+#include "src/__support/threads/cancel.h"
 
 #include "hdr/types/nfds_t.h"
 #include "hdr/types/struct_pollfd.h"
@@ -18,7 +20,8 @@
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, poll, (pollfd * fds, nfds_t nfds, int timeout)) {
-  auto result = linux_syscalls::poll(fds, nfds, timeout);
+  auto result = internal::cancellable(
+      [&] { return linux_syscalls::poll(fds, nfds, timeout); });
   if (!result) {
     libc_errno = result.error();
     return -1;
