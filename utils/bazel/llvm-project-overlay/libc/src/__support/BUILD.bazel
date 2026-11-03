@@ -898,6 +898,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "libintl_catalog",
+    hdrs = ["libintl/catalog.h"],
+    deps = [
+        ":common",
+        ":libintl_plural",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "wctype_perfect_hash_map",
     hdrs = ["wctype/perfect_hash_map.h"],
     deps = [
