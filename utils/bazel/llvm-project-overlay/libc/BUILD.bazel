@@ -26399,6 +26399,7 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
         ":__support_pwd_flat_file_db",
@@ -26671,6 +26672,7 @@ libc_support_library(
         ":__support_error_or",
         ":__support_libc_errno",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":__support_osutil_linux_syscall_wrappers_close",
         ":__support_osutil_linux_syscall_wrappers_getrandom",
         ":__support_osutil_linux_syscall_wrappers_ppoll",
@@ -28266,6 +28268,7 @@ libc_support_library(
         ":__support_cpp_string_view",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":__support_str_to_integer",
         ":hdr_errno_macros",
         ":hdr_stdint_proxy",
@@ -28405,6 +28408,7 @@ libc_support_library(
         ":__support_cpp_string_view",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":__support_str_to_integer",
         ":netdb_resolv_file_lines",
         ":string_memory_utils",
@@ -28447,6 +28451,7 @@ libc_support_library(
         ":__support_ctype_utils",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":hdr_stdint_proxy",
         ":hdr_sys_socket_macros",
         ":netdb_resolv_file_lines",
@@ -28475,6 +28480,7 @@ libc_support_library(
         ":__support_cpp_string_view",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":hdr_sys_socket_macros",
         ":inet_pton",
         ":netdb_resolv_file_lines",
@@ -30673,6 +30679,31 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_nss_module",
+    srcs = ["src/__support/nss/module.cpp"],
+    hdrs = ["src/__support/nss/module.h"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_nss_config",
+        ":__support_threads_raw_mutex",
+        ":dlfcn_dlopen",
+        ":dlfcn_dlsym",
+    ],
+)
+
+libc_support_library(
+    name = "__support_nss_dispatch",
+    hdrs = ["src/__support/nss/dispatch.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_nss_config",
+        ":__support_nss_module",
+    ],
+)
+
 libc_function(
     name = "dladdr1",
     srcs = ["src/dlfcn/dladdr1.cpp"],
@@ -30805,6 +30836,27 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "__support_nss_config",
+    srcs = ["src/__support/nss/config.cpp"],
+    hdrs = ["src/__support/nss/config.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_newfstatat",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_read",
+        ":__support_threads_raw_mutex",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_fcntl_macros",
+        ":hdr_stdio_macros",
         ":types_struct_stat",
     ],
 )
@@ -32196,6 +32248,7 @@ libc_support_library(
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":__support_macros_optimization",
+        ":__support_nss_dispatch",
         ":__support_osutil_linux_syscall_wrappers_setgroups",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
@@ -34739,6 +34792,7 @@ libc_support_library(
         ":__support_error_or",
         ":__support_macros_attributes",
         ":__support_macros_config",
+        ":__support_nss_dispatch",
         ":__support_pwd_dynamic_buffer",
         ":__support_pwd_field_tokenizer",
         ":__support_pwd_flat_file_db",
