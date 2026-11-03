@@ -59,7 +59,7 @@ LLVM_LIBC_FUNCTION(int, pthread_getattr_np,
     if (int error = Thread::stack_limit(&soft))
       return error;
 
-    size_t room = limit.rlim_cur;
+    size_t room = soft;
     // Without a limit there is no low address to state, so a size is chosen
     // that describes the stack rather than the whole of memory.
     if (room == RLIM_INFINITY)
