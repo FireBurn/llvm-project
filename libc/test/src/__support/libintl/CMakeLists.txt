@@ -1,0 +1,10 @@
+add_libc_test(
+  plural_test
+  SUITE
+    libc-support-tests
+  SRCS
+    plural_test.cpp
+  DEPENDS
+    libc.src.__support.CPP.string_view
+    libc.src.__support.libintl.plural
+)

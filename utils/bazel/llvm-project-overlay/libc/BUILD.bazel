@@ -31512,6 +31512,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_libintl_plural",
+    hdrs = ["src/__support/libintl/plural.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
     name = "__support_threads_linux_barrier",
     srcs = ["src/__support/threads/linux/barrier.cpp"],
     hdrs = ["src/__support/threads/linux/barrier.h"],
