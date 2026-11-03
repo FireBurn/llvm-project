@@ -15,8 +15,10 @@
 
 #include "hdr/errno_macros.h"
 #include "hdr/types/struct_spwd.h"
+#include "src/__support/CPP/span.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/nss/lookup.h"
 #include "src/shadow/shadow_r_utils.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -39,9 +41,29 @@ LLVM_LIBC_FUNCTION(int, getspnam_r,
                     size_t buflen, struct spwd **spbufp)) {
   if (name == nullptr)
     return EINVAL;
-  return shadow_r::find(spbuf, buf, buflen, spbufp, [name](struct spwd *e) {
-    return same(e->sp_namp, name);
-  });
+  if (spbufp != nullptr)
+    *spbufp = nullptr;
+  if (spbuf == nullptr || buf == nullptr || spbufp == nullptr)
+    return EINVAL;
+  if (buflen < 2)
+    return ERANGE;
+  auto found = nss::find(nss::SHADOW, "getspnam_r", name, spbuf,
+                         cpp::span<char>(buf, buflen), [&]() -> ErrorOr<bool> {
+                           struct spwd *match = nullptr;
+                           int error =
+                               shadow_r::find(spbuf, buf, buflen, &match,
+                                              [name](struct spwd *e) {
+                                                return same(e->sp_namp, name);
+                                              });
+                           if (error != 0)
+                             return Error(error);
+                           return match != nullptr;
+                         });
+  if (!found.has_value())
+    return found.error();
+  if (found.value())
+    *spbufp = spbuf;
+  return 0;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
