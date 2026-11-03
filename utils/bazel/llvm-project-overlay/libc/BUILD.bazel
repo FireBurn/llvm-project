@@ -5241,6 +5241,7 @@ libc_support_library(
         ":__support_threads_futex_utils",
         ":__support_threads_linux_futex_utils",
         ":__support_threads_linux_futex_word_type",
+        ":__support_threads_linux_setxid",
         ":__support_threads_linux_tls",
         ":__support_threads_mutex",
         ":__support_threads_robust_list",
@@ -19864,6 +19865,7 @@ libc_function(
         ":__support_libc_errno",
         ":__support_macros_config",
         ":__support_time_clock_settime",
+        ":__support_time_units",
         ":errno",
         ":hdr_errno_macros",
         ":hdr_time_macros",
@@ -28802,5 +28804,74 @@ libc_support_library(
     deps = [
         ":__support_common",
         ":__support_macros_config",
+    ],
+)
+libc_support_library(
+    name = "__support_threads_linux_setxid",
+    srcs = ["src/__support/threads/linux/setxid.cpp"],
+    hdrs = ["src/__support/threads/linux/setxid.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_cpp_atomic",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getdents64",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_gettid",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_openat",
+        ":__support_osutil_linux_syscall_wrappers_tgkill",
+        ":__support_threads_callonce",
+        ":__support_threads_linux_futex_utils",
+        ":__support_threads_linux_setxid_signal",
+        ":__support_threads_raw_mutex",
+        ":__support_time_abs_timeout",
+        ":__support_time_clock_gettime",
+        ":hdr_fcntl_macros",
+        ":hdr_signal_macros",
+        ":hdr_unistd_macros",
+        ":stdlib_abort_utils",
+        ":sys_single_threaded___libc_single_threaded",
+        ":types_pid_t",
+        ":types_sigset_t",
+        ":types_struct_sigaction",
+    ],
+)
+
+libc_support_library(
+    name = "__support_time_units",
+    hdrs = ["src/__support/time/units.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_time_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_threads_linux_setxid_signal",
+    hdrs = ["src/__support/threads/linux/setxid_signal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":hdr_signal_macros",
+        ":types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_time_abs_timeout",
+    hdrs = ["src/__support/time/abs_timeout.h"],
+    deps = [
+        ":__support_cpp_expected",
+        ":__support_macros_config",
+        ":__support_time_units",
+        ":hdr_time_macros",
+        ":types_struct_timespec",
     ],
 )
