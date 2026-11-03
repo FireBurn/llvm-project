@@ -95,6 +95,123 @@ functions:
     arguments:
       - type: const char *
       - type: int
+  - name: getprotobyname_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct protoent *
+      - type: char *
+      - type: size_t
+      - type: struct protoent **
+  - name: getprotobynumber_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: int
+      - type: struct protoent *
+      - type: char *
+      - type: size_t
+      - type: struct protoent **
+  - name: getprotoent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct protoent *
+      - type: char *
+      - type: size_t
+      - type: struct protoent **
+  - name: getnetbyname_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct netent *
+      - type: char *
+      - type: size_t
+      - type: struct netent **
+      - type: int *
+  - name: getnetbyaddr_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: uint32_t
+      - type: int
+      - type: struct netent *
+      - type: char *
+      - type: size_t
+      - type: struct netent **
+      - type: int *
+  - name: getnetent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct netent *
+      - type: char *
+      - type: size_t
+      - type: struct netent **
+      - type: int *
+  - name: getservent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct servent *
+      - type: char *
+      - type: size_t
+      - type: struct servent **
+  - name: gethostent_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: struct hostent *
+      - type: char *
+      - type: size_t
+      - type: struct hostent **
+      - type: int *
+  - name: gethostbyname_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: struct hostent *
+      - type: char *
+      - type: size_t
+      - type: struct hostent **
+      - type: int *
+  - name: gethostbyname2_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: int
+      - type: struct hostent *
+      - type: char *
+      - type: size_t
+      - type: struct hostent **
+      - type: int *
+  - name: gethostbyaddr_r
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: const void *
+      - type: socklen_t
+      - type: int
+      - type: struct hostent *
+      - type: char *
+      - type: size_t
+      - type: struct hostent **
+      - type: int *
   - name: herror
     standards:
       - bsd
