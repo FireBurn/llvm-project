@@ -51,3 +51,15 @@ libc_test(
         "//libc/src/unistd:write",
     ],
 )
+
+libc_test(
+    name = "cpucount_test",
+    srcs = ["cpucount_test.cpp"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr:math_macros",
+        "//libc/src/compat:__fpclassifyf",
+        "//libc/src/compat:__sched_cpucount",
+        "//libc/src/string:memset",
+    ],
+)

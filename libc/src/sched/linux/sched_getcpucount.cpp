@@ -18,13 +18,21 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(int, __sched_getcpucount,
-                   (size_t cpuset_size, const cpu_set_t *mask)) {
+namespace internal {
+
+int sched_getcpucount_impl(size_t cpuset_size, const cpu_set_t *mask) {
   int result = 0;
   for (size_t i = 0; i < cpuset_size / sizeof(long); ++i) {
     result += cpp::popcount(mask->__mask[i]);
   }
   return result;
+}
+
+} // namespace internal
+
+LLVM_LIBC_FUNCTION(int, __sched_getcpucount,
+                   (size_t cpuset_size, const cpu_set_t *mask)) {
+  return internal::sched_getcpucount_impl(cpuset_size, mask);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
