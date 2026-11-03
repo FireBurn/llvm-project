@@ -11,6 +11,12 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "explicit_bzero_test",
+    srcs = ["explicit_bzero_test.cpp"],
+    deps = ["//libc:explicit_bzero"],
+)
+
+libc_test(
     name = "strlen_test",
     srcs = ["strlen_test.cpp"],
     deps = [
