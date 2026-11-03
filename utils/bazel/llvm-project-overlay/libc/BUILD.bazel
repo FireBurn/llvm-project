@@ -17941,6 +17941,55 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "stdlib_linux_arc4random_utils",
+    hdrs = ["src/stdlib/linux/arc4random_utils.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "arc4random",
+    srcs = ["src/stdlib/linux/arc4random.cpp"],
+    hdrs = ["src/stdlib/arc4random.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":stdlib_linux_arc4random_utils",
+    ],
+)
+
+libc_function(
+    name = "arc4random_buf",
+    srcs = ["src/stdlib/linux/arc4random_buf.cpp"],
+    hdrs = ["src/stdlib/arc4random_buf.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":stdlib_linux_arc4random_utils",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "arc4random_uniform",
+    srcs = ["src/stdlib/linux/arc4random_uniform.cpp"],
+    hdrs = ["src/stdlib/arc4random_uniform.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":stdlib_linux_arc4random_utils",
+    ],
+)
+
 libc_function(
     name = "atexit",
     srcs = ["src/stdlib/atexit.cpp"],
