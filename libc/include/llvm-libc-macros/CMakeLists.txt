@@ -365,6 +365,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_pidfd_macros
+  HDR
+    sys-pidfd-macros.h
+)
+
+add_macro_header(
   sys_file_macros
   HDR
     sys-file-macros.h

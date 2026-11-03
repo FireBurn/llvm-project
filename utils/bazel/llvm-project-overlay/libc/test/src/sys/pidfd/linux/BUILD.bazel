@@ -1,0 +1,28 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/pidfd/linux.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "pidfd_test",
+    srcs = ["pidfd_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:pidfd_getfd",
+        "//libc:pidfd_open",
+        "//libc:pidfd_send_signal",
+        "//libc:pipe",
+        "//libc:read",
+        "//libc:write",
+    ],
+)

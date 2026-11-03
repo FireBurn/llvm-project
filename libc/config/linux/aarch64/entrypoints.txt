@@ -470,6 +470,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.eventfd.eventfd_write
 
     # sys/signalfd.h entrypoints
+    libc.src.sys.pidfd.pidfd_getfd
+    libc.src.sys.pidfd.pidfd_open
+    libc.src.sys.pidfd.pidfd_send_signal
     libc.src.sys.signalfd.signalfd
 
     # sys/timerfd.h entrypoints

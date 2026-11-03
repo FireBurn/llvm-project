@@ -85,6 +85,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.sys_mman
     libc.include.sys_mount
     libc.include.sys_msg
+    libc.include.sys_pidfd
     libc.include.sys_signalfd
     libc.include.sys_timerfd
     libc.include.sys_fanotify

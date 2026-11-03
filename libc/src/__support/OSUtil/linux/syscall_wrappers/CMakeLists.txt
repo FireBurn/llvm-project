@@ -2831,19 +2831,6 @@ add_header_library(
 )
 
 add_header_library(
-  shmctl
-  HDRS
-    shmctl.h
-  DEPENDS
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.common
-    libc.src.__support.error_or
-    libc.src.__support.macros.config
-    libc.hdr.types.struct_shmid_ds
-    libc.include.sys_syscall
-)
-
-add_header_library(
   signalfd
   HDRS
     signalfd.h
@@ -3085,21 +3072,6 @@ add_header_library(
     libc.hdr.types.off_t
     libc.hdr.types.ssize_t
     libc.hdr.types.struct_iovec
-    libc.include.sys_syscall
-)
-
-add_header_library(
-  copy_file_range
-  HDRS
-    copy_file_range.h
-  DEPENDS
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.common
-    libc.src.__support.error_or
-    libc.src.__support.macros.config
-    libc.hdr.types.off_t
-    libc.hdr.types.size_t
-    libc.hdr.types.ssize_t
     libc.include.sys_syscall
 )
 
@@ -3441,31 +3413,6 @@ add_header_library(
 )
 
 add_header_library(
-  getgid
-  HDRS
-    getgid.h
-  DEPENDS
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.common
-    libc.src.__support.macros.config
-    libc.hdr.types.gid_t
-    libc.include.sys_syscall
-)
-
-add_header_library(
-  setsid
-  HDRS
-    setsid.h
-  DEPENDS
-    libc.src.__support.OSUtil.osutil
-    libc.src.__support.common
-    libc.src.__support.error_or
-    libc.src.__support.macros.config
-    libc.hdr.types.pid_t
-    libc.include.sys_syscall
-)
-
-add_header_library(
   rt_tgsigqueueinfo
   HDRS
     rt_tgsigqueueinfo.h
@@ -3475,6 +3422,44 @@ add_header_library(
     libc.src.__support.error_or
     libc.src.__support.macros.config
     libc.hdr.types.pid_t
+    libc.hdr.types.siginfo_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  pidfd_open
+  HDRS
+    pidfd_open.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.hdr.types.pid_t
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  pidfd_getfd
+  HDRS
+    pidfd_getfd.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
+    libc.include.sys_syscall
+)
+
+add_header_library(
+  pidfd_send_signal
+  HDRS
+    pidfd_send_signal.h
+  DEPENDS
+    libc.src.__support.OSUtil.osutil
+    libc.src.__support.common
+    libc.src.__support.error_or
+    libc.src.__support.macros.config
     libc.hdr.types.siginfo_t
     libc.include.sys_syscall
 )
