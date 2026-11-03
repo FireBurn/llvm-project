@@ -34,7 +34,10 @@ add_libc_test(
     libc.src.netdb.getaddrinfo
     libc.src.netdb.gethostbyaddr
     libc.src.netdb.gethostbyname
+    libc.src.netdb.gethostbyname_r
     libc.src.netdb.getnetbyname
+    libc.src.netdb.getnetbyname_r
+    libc.src.netdb.getprotobyname_r
     libc.src.netdb.getprotobyname
     libc.src.netdb.getprotobynumber
     libc.src.netdb.getservbyname
