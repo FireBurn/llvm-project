@@ -33,8 +33,11 @@
 #include "src/netdb/getaddrinfo.h"
 #include "src/netdb/gethostbyaddr.h"
 #include "src/netdb/gethostbyname.h"
+#include "src/netdb/gethostbyname_r.h"
 #include "src/netdb/getnetbyname.h"
+#include "src/netdb/getnetbyname_r.h"
 #include "src/netdb/getprotobyname.h"
+#include "src/netdb/getprotobyname_r.h"
 #include "src/netdb/getprotobynumber.h"
 #include "src/netdb/getservbyname.h"
 #include "src/netdb/getservbyport.h"
@@ -476,4 +479,37 @@ TEST_F(LlvmLibcNssDatabasesTest, ServicesProtocolsAndNetworks) {
   struct netent *n = LIBC_NAMESPACE::getnetbyname("ghostnet");
   ASSERT_TRUE(n != nullptr);
   ASSERT_EQ(n->n_net, 0x0a0000u);
+}
+
+TEST_F(LlvmLibcNssDatabasesTest, ReentrantFormsFillTheCallersBuffer) {
+  char buf[512];
+  int herr = -1;
+  struct hostent host;
+  struct hostent *hp = nullptr;
+  ASSERT_EQ(LIBC_NAMESPACE::gethostbyname_r("fake.test", &host, buf,
+                                            sizeof(buf), &hp, &herr),
+            0);
+  ASSERT_TRUE(hp == &host);
+  ASSERT_STREQ(host.h_name, "fake.test");
+  ASSERT_TRUE(reinterpret_cast<char *>(host.h_addr_list[0]) >= buf &&
+              reinterpret_cast<char *>(host.h_addr_list[0]) <
+                  buf + sizeof(buf));
+  ASSERT_EQ(
+      LIBC_NAMESPACE::gethostbyname_r("fake.test", &host, buf, 8, &hp, &herr),
+      ERANGE);
+
+  struct protoent proto;
+  struct protoent *pp = nullptr;
+  ASSERT_EQ(LIBC_NAMESPACE::getprotobyname_r("ghostproto", &proto, buf,
+                                             sizeof(buf), &pp),
+            0);
+  ASSERT_EQ(proto.p_proto, 200);
+  ASSERT_STREQ(proto.p_name, "ghostproto");
+
+  struct netent net;
+  struct netent *np = nullptr;
+  ASSERT_EQ(LIBC_NAMESPACE::getnetbyname_r("ghostnet", &net, buf, sizeof(buf),
+                                           &np, &herr),
+            0);
+  ASSERT_EQ(net.n_net, 0x0a0000u);
 }
