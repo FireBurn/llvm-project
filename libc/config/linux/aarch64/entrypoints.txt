@@ -127,6 +127,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.tls.__tls_get_addr
 
     # string.h entrypoints
+    libc.src.string.explicit_bzero
     libc.src.string.memccpy
     libc.src.string.memchr
     libc.src.string.memcmp
