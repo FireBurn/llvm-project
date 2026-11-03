@@ -2090,6 +2090,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.pthread_sigmask
     libc.src.signal.pthread_sigqueue
     libc.src.signal.raise
+    libc.src.signal.sig2str
     libc.src.signal.sigaction
     libc.src.signal.sigaddset
     libc.src.signal.sigaltstack
@@ -2107,6 +2108,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.sigtimedwait
     libc.src.signal.sigwait
     libc.src.signal.sigwaitinfo
+    libc.src.signal.str2sig
     libc.src.signal.tgkill
 
     # spawn.h entrypoints
