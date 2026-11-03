@@ -1,0 +1,22 @@
+add_libc_testsuite(libc-sys-pidfd-tests)
+
+add_libc_test(
+  pidfd_test
+  SUITE
+    libc-sys-pidfd-tests
+  SRCS
+    pidfd_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.src.sys.pidfd.pidfd_getfd
+    libc.src.sys.pidfd.pidfd_open
+    libc.src.sys.pidfd.pidfd_send_signal
+    libc.src.unistd.close
+    libc.src.unistd.getpid
+    libc.src.unistd.pipe
+    libc.src.unistd.read
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
