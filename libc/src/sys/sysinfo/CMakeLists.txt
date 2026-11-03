@@ -8,3 +8,17 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sysinfo
 )
+
+add_entrypoint_object(
+  get_nprocs
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.get_nprocs
+)
+
+add_entrypoint_object(
+  get_nprocs_conf
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.get_nprocs_conf
+)

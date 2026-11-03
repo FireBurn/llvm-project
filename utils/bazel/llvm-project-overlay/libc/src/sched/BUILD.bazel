@@ -250,6 +250,24 @@ libc_function(
 )
 
 libc_function(
+    name = "getaffinity",
+    srcs = ["linux/sched_getaffinity.cpp"],
+    hdrs = ["sched_getaffinity.h"],
+    deps = [
+        "//libc/hdr/types:cpu_set_t",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_getaffinity",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "__sched_setcpuset",
     srcs = ["linux/sched_setcpuset.cpp"],
     hdrs = ["sched_setcpuset.h"],
