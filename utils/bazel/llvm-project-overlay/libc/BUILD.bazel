@@ -27475,6 +27475,24 @@ libc_function(
 )
 
 libc_function(
+    name = "fgetpwent_r",
+    srcs = ["src/pwd/fgetpwent_r.cpp"],
+    hdrs = ["src/pwd/fgetpwent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":hdr_errno_macros",
+        ":pwd_pwd_utils",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_passwd",
+    ],
+)
+
+libc_function(
     name = "putpwent",
     srcs = ["src/pwd/putpwent.cpp"],
     hdrs = ["src/pwd/putpwent.h"],
@@ -32161,6 +32179,33 @@ libc_function(
 )
 
 libc_function(
+    name = "endgrent",
+    srcs = ["src/grp/endgrent.cpp"],
+    hdrs = ["src/grp/endgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":grp_grp_utils",
+    ],
+)
+
+libc_function(
+    name = "getgrent",
+    srcs = ["src/grp/getgrent.cpp"],
+    hdrs = ["src/grp/getgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":grp_grp_utils",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
     name = "getgrgid",
     srcs = ["src/grp/getgrgid.cpp"],
     hdrs = ["src/grp/getgrgid.h"],
@@ -32219,6 +32264,19 @@ libc_function(
         ":errno",
         ":grp_grp_utils",
         ":types_gid_t",
+    ],
+)
+
+libc_function(
+    name = "setgrent",
+    srcs = ["src/grp/setgrent.cpp"],
+    hdrs = ["src/grp/setgrent.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":grp_grp_utils",
     ],
 )
 
@@ -32307,6 +32365,41 @@ libc_function(
         ":hdr_errno_macros",
         ":stdio_fgets",
         ":types_FILE",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
+    name = "fgetgrent_r",
+    srcs = ["src/grp/fgetgrent_r.cpp"],
+    hdrs = ["src/grp/fgetgrent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":fgets",
+        ":grp_grp_utils",
+        ":hdr_errno_macros",
+        ":stdio_fgets",
+        ":types_FILE",
+        ":types_size_t",
+        ":types_struct_group",
+    ],
+)
+
+libc_function(
+    name = "getgrent_r",
+    srcs = ["src/grp/getgrent_r.cpp"],
+    hdrs = ["src/grp/getgrent_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_span",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":grp_grp_utils",
+        ":hdr_errno_macros",
+        ":types_size_t",
         ":types_struct_group",
     ],
 )
