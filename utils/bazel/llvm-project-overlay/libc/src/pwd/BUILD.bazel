@@ -63,6 +63,25 @@ libc_function(
 )
 
 libc_function(
+    name = "fgetpwent_r",
+    srcs = ["fgetpwent_r.cpp"],
+    hdrs = ["fgetpwent_r.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:line_reader",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/stdio:stdio_fgets",
+    ],
+)
+
+libc_function(
     name = "putpwent",
     srcs = ["putpwent.cpp"],
     hdrs = ["putpwent.h"],
