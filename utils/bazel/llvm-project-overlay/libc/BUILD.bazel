@@ -32631,6 +32631,234 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "libintl_catalogs",
+    srcs = ["src/libintl/catalogs.cpp"],
+    hdrs = ["src/libintl/catalogs.h"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_libc_errno",
+        ":__support_libintl_catalog",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_lseek",
+        ":__support_osutil_linux_syscall_wrappers_mmap",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_threads_raw_mutex",
+        ":func_free",
+        ":func_malloc",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_locale_macros",
+        ":hdr_stdint_proxy",
+        ":hdr_stdio_macros",
+        ":hdr_sys_mman_macros",
+        ":iconv_conversion",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "bind_textdomain_codeset",
+    srcs = ["src/libintl/bind_textdomain_codeset.cpp"],
+    hdrs = ["src/libintl/bind_textdomain_codeset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":libintl_catalogs",
+    ],
+)
+
+libc_function(
+    name = "bindtextdomain",
+    srcs = ["src/libintl/bindtextdomain.cpp"],
+    hdrs = ["src/libintl/bindtextdomain.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":libintl_catalogs",
+    ],
+)
+
+libc_function(
+    name = "dcgettext",
+    srcs = ["src/libintl/dcgettext.cpp"],
+    hdrs = ["src/libintl/dcgettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "dcgettext_l",
+    srcs = ["src/libintl/dcgettext_l.cpp"],
+    hdrs = ["src/libintl/dcgettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "dcngettext",
+    srcs = ["src/libintl/dcngettext.cpp"],
+    hdrs = ["src/libintl/dcngettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "dcngettext_l",
+    srcs = ["src/libintl/dcngettext_l.cpp"],
+    hdrs = ["src/libintl/dcngettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "dgettext",
+    srcs = ["src/libintl/dgettext.cpp"],
+    hdrs = ["src/libintl/dgettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "dgettext_l",
+    srcs = ["src/libintl/dgettext_l.cpp"],
+    hdrs = ["src/libintl/dgettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "dngettext",
+    srcs = ["src/libintl/dngettext.cpp"],
+    hdrs = ["src/libintl/dngettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "dngettext_l",
+    srcs = ["src/libintl/dngettext_l.cpp"],
+    hdrs = ["src/libintl/dngettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "gettext",
+    srcs = ["src/libintl/gettext.cpp"],
+    hdrs = ["src/libintl/gettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "gettext_l",
+    srcs = ["src/libintl/gettext_l.cpp"],
+    hdrs = ["src/libintl/gettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "ngettext",
+    srcs = ["src/libintl/ngettext.cpp"],
+    hdrs = ["src/libintl/ngettext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+    ],
+)
+
+libc_function(
+    name = "ngettext_l",
+    srcs = ["src/libintl/ngettext_l.cpp"],
+    hdrs = ["src/libintl/ngettext_l.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_locale_macros",
+        ":libintl_catalogs",
+        ":locale_locale",
+        ":types_locale_t",
+    ],
+)
+
+libc_function(
+    name = "textdomain",
+    srcs = ["src/libintl/textdomain.cpp"],
+    hdrs = ["src/libintl/textdomain.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":libintl_catalogs",
+    ],
+)
+
 libc_function(
     name = "localeconv",
     srcs = ["src/locale/localeconv.cpp"],
