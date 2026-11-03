@@ -156,6 +156,12 @@ functions:
     arguments:
       - type: double[]
       - type: int
+  - name: getprogname
+    standards:
+      - bsd
+    return_type: const char *
+    arguments:
+      - type: void
   - name: getsubopt
     standards:
       - posix
@@ -200,6 +206,12 @@ functions:
     return_type: long
     arguments:
       - type: unsigned short *
+  - name: setprogname
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: const char *
   - name: srand48
     standards:
       - posix
