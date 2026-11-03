@@ -211,12 +211,10 @@ size_t Thread::default_stacksize() {
 
   // The limit set on the process is what glibc gives a thread that asks for
   // no particular size, so it is what is given here.
-  size = FALLBACK_STACKSIZE;
-  rlimit limit;
-  auto result = linux_syscalls::prlimit(0, RLIMIT_STACK, nullptr, &limit);
-  if (result.has_value() && limit.rlim_cur != RLIM_INFINITY &&
-      limit.rlim_cur != 0)
-    size = static_cast<size_t>(limit.rlim_cur);
+  size_t size = FALLBACK_STACKSIZE;
+  unsigned long soft = 0;
+  if (stack_limit(&soft) == 0 && soft != RLIM_INFINITY && soft != 0)
+    size = static_cast<size_t>(soft);
   if (size < MINIMUM_STACKSIZE)
     size = MINIMUM_STACKSIZE;
 
