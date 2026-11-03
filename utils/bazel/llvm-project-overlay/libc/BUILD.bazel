@@ -20904,6 +20904,19 @@ libc_function(
 )
 
 libc_function(
+    name = "tgkill",
+    srcs = ["src/signal/linux/tgkill.cpp"],
+    hdrs = ["src/signal/tgkill.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_tgkill",
+        ":types_pid_t",
+    ],
+)
+
+libc_function(
     name = "get_nprocs",
     srcs = ["src/sys/sysinfo/linux/get_nprocs.cpp"],
     hdrs = ["src/sys/sysinfo/get_nprocs.h"],
@@ -37199,6 +37212,17 @@ libc_function(
         ":hdr_errno_macros",
         ":hdr_unistd_macros",
         ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "gettid",
+    srcs = ["src/unistd/gettid.cpp"],
+    hdrs = ["src/unistd/gettid.h"],
+    deps = [
+        ":__support_common",
+        ":__support_threads_identifier",
+        ":types_pid_t",
     ],
 )
 
