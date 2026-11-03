@@ -27,8 +27,15 @@ LIBC_INLINE void sleep_briefly() {
   __builtin_arm_isb(0xf);
 #elif defined(LIBC_TARGET_ARCH_IS_AARCH64)
   asm volatile("isb\n" ::: "memory");
+#elif defined(LIBC_TARGET_ARCH_IS_ANY_RISCV)
+  // The pause hint (Zihintpause), a nop where it is not implemented. The
+  // volatile asm also stops the compiler from dropping a loop that only
+  // calls this function.
+  asm volatile(".4byte 0x0100000f" ::: "memory");
 #else
-  // Simply do nothing if sleeping isn't supported on this platform.
+  // No pause instruction here. Keep a barrier so that a spin loop around
+  // this function still counts as having a side effect.
+  asm volatile("" ::: "memory");
 #endif
 }
 
