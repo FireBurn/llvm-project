@@ -173,3 +173,27 @@ add_libc_test(
     libc.src.netdb.getservent
     libc.src.netdb.setservent
 )
+
+add_libc_test(
+  netgroup_test
+  SUITE
+    libc-netdb-tests
+  SRCS
+    netgroup_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.CPP.string_view
+    libc.src.fcntl.open
+    libc.src.netdb.endnetgrent
+    libc.src.netdb.getnetgrent
+    libc.src.netdb.getnetgrent_r
+    libc.src.netdb.innetgr
+    libc.src.netdb.netgroup_utils
+    libc.src.netdb.setnetgrent
+    libc.src.stdio.remove
+    libc.src.unistd.close
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+)
