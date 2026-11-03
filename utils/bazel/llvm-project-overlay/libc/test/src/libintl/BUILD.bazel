@@ -9,3 +9,49 @@ load("//libc/test:libc_test_rules.bzl", "libc_test")
 package(default_visibility = ["//visibility:public"])
 
 licenses(["notice"])
+
+libc_test(
+    name = "libintl_test",
+    srcs = ["libintl_test.cpp"],
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr:locale_macros",
+        "//libc/src/libintl:bind_textdomain_codeset",
+        "//libc/src/libintl:bindtextdomain",
+        "//libc/src/libintl:dcgettext",
+        "//libc/src/libintl:dcgettext_l",
+        "//libc/src/libintl:dcngettext",
+        "//libc/src/libintl:dcngettext_l",
+        "//libc/src/libintl:dgettext",
+        "//libc/src/libintl:dgettext_l",
+        "//libc/src/libintl:dngettext",
+        "//libc/src/libintl:dngettext_l",
+        "//libc/src/libintl:gettext",
+        "//libc/src/libintl:gettext_l",
+        "//libc/src/libintl:ngettext",
+        "//libc/src/libintl:ngettext_l",
+        "//libc/src/libintl:textdomain",
+    ],
+)
+
+libc_test(
+    name = "catalogs_test",
+    srcs = ["catalogs_test.cpp"],
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/src/libintl:bind_textdomain_codeset",
+        "//libc/src/libintl:bindtextdomain",
+        "//libc/src/libintl:dgettext",
+        "//libc/src/libintl:dngettext",
+        "//libc/src/libintl:textdomain",
+        "//libc/src/locale:setlocale",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:remove",
+        "//libc/src/stdlib:setenv",
+        "//libc/src/stdlib:unsetenv",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:rmdir",
+    ],
+)
