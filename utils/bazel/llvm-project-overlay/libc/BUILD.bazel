@@ -19814,6 +19814,35 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_clock_getres",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/clock_getres.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "timespec_getres",
+    srcs = ["src/time/linux/timespec_getres.cpp"],
+    hdrs = ["src/time/timespec_getres.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_clock_getres",
+        ":errno",
+        ":hdr_time_macros",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+    ],
+)
+
 libc_function(
     name = "tz_variables",
     srcs = ["src/time/tz_variables.cpp"],
