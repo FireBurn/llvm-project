@@ -53,6 +53,14 @@ types:
 enums: []
 objects: []
 functions:
+  - name: pthread_sigqueue
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: int
+      - type: const union sigval
   - name: sigisemptyset
     standards:
       - gnu

@@ -20410,6 +20410,27 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_sigqueue",
+    srcs = ["src/signal/linux/pthread_sigqueue.cpp"],
+    hdrs = ["src/signal/pthread_sigqueue.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_getpid",
+        ":__support_osutil_linux_syscall_wrappers_getuid",
+        ":__support_osutil_linux_syscall_wrappers_rt_tgsigqueueinfo",
+        ":__support_threads_thread",
+        ":__support_threads_thread_headers",
+        ":hdr_errno_macros",
+        ":hdr_signal_macros",
+        ":types_pthread_t",
+        ":types_siginfo_t",
+        ":types_union_sigval",
+    ],
+)
+
+libc_function(
     name = "sigaction",
     srcs = ["src/signal/linux/sigaction.cpp"],
     hdrs = ["src/signal/sigaction.h"],
@@ -30968,6 +30989,19 @@ libc_support_library(
         ":progname",
         ":program_invocation_name",
         ":program_invocation_short_name",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_tgsigqueueinfo",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_tgsigqueueinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_pid_t",
+        ":types_siginfo_t",
     ],
 )
 
