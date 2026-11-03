@@ -20993,6 +20993,32 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_mseal",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/mseal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "mseal",
+    srcs = ["src/sys/mman/linux/mseal.cpp"],
+    hdrs = ["src/sys/mman/mseal.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_mseal",
+        ":errno",
+        ":types_size_t",
+    ],
+)
+
 libc_function(
     name = "pidfd_getfd",
     srcs = ["src/sys/pidfd/linux/pidfd_getfd.cpp"],
@@ -21055,6 +21081,36 @@ libc_function(
         ":__support_osutil_linux_syscall_wrappers_pidfd_send_signal",
         ":errno",
         ":types_siginfo_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_process_madvise",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/process_madvise.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
+    ],
+)
+
+libc_function(
+    name = "process_madvise",
+    srcs = ["src/sys/mman/linux/process_madvise.cpp"],
+    hdrs = ["src/sys/mman/process_madvise.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_process_madvise",
+        ":errno",
+        ":types_size_t",
+        ":types_ssize_t",
+        ":types_struct_iovec",
     ],
 )
 

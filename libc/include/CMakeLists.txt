@@ -1194,6 +1194,7 @@ add_header_macro(
     .llvm-libc-types.off_t
     .llvm-libc-types.size_t
     .llvm-libc-types.ssize_t
+    .llvm-libc-types.struct_iovec
     .llvm-libc-macros.lfs64_macros
 )
 
