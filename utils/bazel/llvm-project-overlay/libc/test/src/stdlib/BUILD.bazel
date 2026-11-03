@@ -187,6 +187,16 @@ libc_test(
 )
 
 libc_test(
+    name = "progname_test",
+    srcs = ["progname_test.cpp"],
+    deps = [
+        "//libc:getprogname",
+        "//libc:progname",
+        "//libc:setprogname",
+    ],
+)
+
+libc_test(
     name = "pty_test",
     srcs = ["pty_test.cpp"],
     deps = [
