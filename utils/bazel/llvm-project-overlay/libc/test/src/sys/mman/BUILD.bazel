@@ -168,3 +168,21 @@ libc_test(
         "//libc:shm_unlink",
     ],
 )
+
+libc_test(
+    name = "mseal_test",
+    srcs = ["linux/mseal_test.cpp"],
+    deps = [
+        "//libc:close",
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_sys_mman_macros",
+        "//libc:mmap",
+        "//libc:mprotect",
+        "//libc:mseal",
+        "//libc:munmap",
+        "//libc:pidfd_open",
+        "//libc:process_madvise",
+        "//libc:types_struct_iovec",
+    ],
+)
