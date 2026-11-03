@@ -14,6 +14,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  cpucount_test
+  SUITE
+    libc-compat-tests
+  SRCS
+    cpucount_test.cpp
+  DEPENDS
+    libc.hdr.math_macros
+    libc.hdr.types.cpu_set_t
+    libc.src.compat.__fpclassifyf
+    libc.src.compat.__sched_cpucount
+    libc.src.string.memset
+)
+
+add_libc_test(
   syscall_test
   SUITE
     libc-compat-tests
