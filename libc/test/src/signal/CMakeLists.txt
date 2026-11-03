@@ -336,3 +336,28 @@ add_libc_test(
     libc.src.unistd.pipe
     libc.src.unistd.read
 )
+
+add_libc_test(
+  tgkill_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    tgkill_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_timespec
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigismember
+    libc.src.signal.sigpending
+    libc.src.signal.sigprocmask
+    libc.src.signal.sigtimedwait
+    libc.src.signal.tgkill
+    libc.src.unistd.getpid
+    libc.src.unistd.gettid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)

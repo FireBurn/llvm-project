@@ -214,3 +214,11 @@ functions:
     arguments:
       - type: pthread_t
       - type: int
+  - name: tgkill
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: pid_t
+      - type: pid_t
+      - type: int
