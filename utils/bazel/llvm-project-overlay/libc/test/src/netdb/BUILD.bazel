@@ -11,6 +11,17 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "getservbyname_r_test",
+    srcs = ["getservbyname_r_test.cpp"],
+    deps = [
+        "//libc:getservbyname_r",
+        "//libc:getservbyport_r",
+        "//libc:hdr_errno_macros",
+        "//libc:types_struct_servent",
+    ],
+)
+
+libc_test(
     name = "getprotoent_test",
     srcs = ["getprotoent_test.cpp"],
     deps = [
