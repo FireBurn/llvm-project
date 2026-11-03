@@ -39,6 +39,7 @@ add_libc_test(
     libc.src.__support.libc_errno
     libc.src.grp.endgrent
     libc.src.grp.getgrent
+    libc.src.grp.getgrent_r
     libc.src.grp.grp_utils
     libc.src.grp.setgrent
     libc.src.stdio.remove
@@ -255,6 +256,7 @@ add_libc_test(
     libc.src.__support.CPP.string_view
     libc.src.fcntl.open
     libc.src.grp.fgetgrent
+    libc.src.grp.fgetgrent_r
     libc.src.grp.getgrouplist
     libc.src.grp.grp_utils
     libc.src.grp.putgrent
