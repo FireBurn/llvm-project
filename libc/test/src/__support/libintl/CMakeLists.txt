@@ -8,3 +8,13 @@ add_libc_test(
     libc.src.__support.CPP.string_view
     libc.src.__support.libintl.plural
 )
+
+add_libc_test(
+  catalog_test
+  SUITE
+    libc-support-tests
+  SRCS
+    catalog_test.cpp
+  DEPENDS
+    libc.src.__support.libintl.catalog
+)
