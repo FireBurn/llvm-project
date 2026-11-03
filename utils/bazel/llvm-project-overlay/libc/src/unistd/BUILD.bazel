@@ -718,6 +718,22 @@ libc_function(
 )
 
 libc_function(
+    name = "_Fork",
+    srcs = ["linux/_Fork.cpp"],
+    hdrs = ["_Fork.h"],
+    deps = [
+        ":_fork",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fork",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:gettid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "acct",
     srcs = ["linux/acct.cpp"],
     hdrs = ["acct.h"],
@@ -1334,6 +1350,15 @@ libc_support_library(
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:pwd_flat_file_db",
+    ],
+)
+
+libc_support_library(
+    name = "_fork",
+    hdrs = ["_Fork.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/macros:config",
     ],
 )
 
