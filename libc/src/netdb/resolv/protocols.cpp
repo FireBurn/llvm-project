@@ -16,6 +16,8 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/nss/dispatch.h"
+#include "src/__support/nss/lookup.h"
 #include "src/__support/str_to_integer.h"
 #include "src/netdb/resolv/file_lines.h"
 #include "src/string/memory_utils/inline_memcpy.h"
@@ -30,6 +32,7 @@ constexpr const char *PROTOCOLS_PATH = "/etc/protocols";
 // Where the enumeration has got to. setprotoent asks for the file to be held
 // open across lookups, which is what the enumeration records.
 LIBC_CONSTINIT LIBC_THREAD_LOCAL Enumeration enumeration;
+LIBC_THREAD_LOCAL nss::Cursor cursor;
 
 // Copies a field into the storage's pool and hands back a pointer to it, or
 // null where there is no room left.
@@ -102,9 +105,14 @@ bool names_match(const ProtoStorage &storage, const char *name) {
   return false;
 }
 
-} // anonymous namespace
+// What a module put in the storage, as the answer.
+nss::Status offered(nss::Status status, const ProtoStorage &storage) {
+  if (status != nss::SUCCESS)
+    return status;
+  return storage.entry.p_name != nullptr ? nss::SUCCESS : nss::NOTFOUND;
+}
 
-struct protoent *by_name(const char *name, ProtoStorage &storage) {
+struct protoent *file_by_name(const char *name, ProtoStorage &storage) {
   if (name == nullptr)
     return nullptr;
   FileLines reader;
@@ -119,7 +127,7 @@ struct protoent *by_name(const char *name, ProtoStorage &storage) {
   return found;
 }
 
-struct protoent *by_number(int number, ProtoStorage &storage) {
+struct protoent *file_by_number(int number, ProtoStorage &storage) {
   FileLines reader;
   if (!reader.open(PROTOCOLS_PATH))
     return nullptr;
@@ -132,18 +140,82 @@ struct protoent *by_number(int number, ProtoStorage &storage) {
   return found;
 }
 
+} // anonymous namespace
+
+struct protoent *by_name(const char *name, ProtoStorage &storage) {
+  if (name == nullptr)
+    return nullptr;
+  auto status = nss::lookup(
+      nss::PROTOCOLS, "getprotobyname_r",
+      [&] {
+        return file_by_name(name, storage) != nullptr ? nss::SUCCESS
+                                                      : nss::NOTFOUND;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        storage.entry.p_name = nullptr;
+        int error = 0;
+        return offered(
+            nss::call_get<struct protoent, const char *>(
+                fn, name, &storage.entry,
+                cpp::span<char>(storage.pool, ProtoStorage::POOL_SIZE), error),
+            storage);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
+}
+
+struct protoent *by_number(int number, ProtoStorage &storage) {
+  auto status = nss::lookup(
+      nss::PROTOCOLS, "getprotobynumber_r",
+      [&] {
+        return file_by_number(number, storage) != nullptr ? nss::SUCCESS
+                                                          : nss::NOTFOUND;
+      },
+      [] { return nss::UNAVAIL; },
+      [&](void *fn) {
+        storage.entry.p_name = nullptr;
+        int error = 0;
+        return offered(
+            nss::call_get<struct protoent, int>(
+                fn, number, &storage.entry,
+                cpp::span<char>(storage.pool, ProtoStorage::POOL_SIZE), error),
+            storage);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
+}
+
 void rewind_entries(bool stay_open) {
+  nss::reset(cursor, "endprotoent");
   enumeration.rewind(PROTOCOLS_PATH, stay_open);
 }
 
-void stop_entries() { enumeration.stop(); }
+void stop_entries() {
+  nss::reset(cursor, "endprotoent");
+  enumeration.stop();
+}
 
 struct protoent *next_entry(ProtoStorage &storage) {
-  char line[512];
-  while (enumeration.next(PROTOCOLS_PATH, line, sizeof(line)))
-    if (parse(line, storage))
-      return &storage.entry;
-  return nullptr;
+  auto status = nss::next_entry(
+      cursor, nss::PROTOCOLS, "setprotoent", "getprotoent_r", "endprotoent",
+      [&] {
+        char line[512];
+        while (enumeration.next(PROTOCOLS_PATH, line, sizeof(line)))
+          if (parse(line, storage))
+            return nss::SUCCESS;
+        return nss::NOTFOUND;
+      },
+      [&](void *fn, bool is_control) {
+        if (is_control)
+          return nss::call_control(fn);
+        storage.entry.p_name = nullptr;
+        int error = 0;
+        return offered(
+            nss::call_next<struct protoent>(
+                fn, &storage.entry,
+                cpp::span<char>(storage.pool, ProtoStorage::POOL_SIZE), error),
+            storage);
+      });
+  return status == nss::SUCCESS ? &storage.entry : nullptr;
 }
 
 } // namespace resolv

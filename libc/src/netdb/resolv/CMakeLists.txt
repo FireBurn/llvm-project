@@ -41,6 +41,8 @@ add_object_library(
     libc.hdr.types.size_t
     libc.src.__support.CPP.string_view
     libc.src.__support.macros.config
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.__support.str_to_integer
     libc.src.string.memory_utils.inline_memcpy
 )
@@ -61,6 +63,8 @@ add_object_library(
     libc.src.__support.ctype_utils
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.string.memory_utils.inline_memcpy
 )
 
@@ -103,6 +107,8 @@ add_object_library(
     libc.src.__support.CPP.string_view
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.arpa.inet.inet_pton
     libc.src.string.memory_utils.inline_memcpy
 )
@@ -120,6 +126,8 @@ add_object_library(
     libc.src.__support.CPP.string_view
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
+    libc.src.__support.nss.dispatch
+    libc.src.__support.nss.lookup
     libc.src.__support.str_to_integer
     libc.src.string.memory_utils.inline_memcpy
 )
@@ -163,6 +171,8 @@ add_object_library(
     libc.hdr.stdint_proxy
     libc.hdr.sys_socket_macros
     libc.hdr.types.size_t
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_hostent
     libc.hdr.types.struct_pollfd
     libc.hdr.types.struct_sockaddr_in
     libc.hdr.types.struct_sockaddr_in6
@@ -171,6 +181,7 @@ add_object_library(
     libc.src.__support.ctype_utils
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.__support.nss.dispatch
     libc.src.arpa.inet.inet_pton
     libc.src.net.if.if_nametoindex
     libc.src.string.memory_utils.inline_memcpy
