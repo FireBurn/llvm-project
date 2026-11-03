@@ -62,6 +62,25 @@ functions:
     return_type: int
     arguments:
       - type: int
+  - name: arc4random
+    standards:
+      - bsd
+    return_type: uint32_t
+    arguments:
+      - type: void
+  - name: arc4random_buf
+    standards:
+      - bsd
+    return_type: void
+    arguments:
+      - type: void *
+      - type: size_t
+  - name: arc4random_uniform
+    standards:
+      - bsd
+    return_type: uint32_t
+    arguments:
+      - type: uint32_t
   - name: at_quick_exit
     standards:
       - stdc

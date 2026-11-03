@@ -1272,3 +1272,23 @@ add_entrypoint_object(
     .${LIBC_TARGET_OS}.ptsname
 )
 
+add_entrypoint_object(
+  arc4random
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.arc4random
+)
+
+add_entrypoint_object(
+  arc4random_buf
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.arc4random_buf
+)
+
+add_entrypoint_object(
+  arc4random_uniform
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.arc4random_uniform
+)

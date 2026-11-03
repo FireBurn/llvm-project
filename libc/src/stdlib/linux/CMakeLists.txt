@@ -335,3 +335,54 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.__support.macros.null_check
 )
+
+add_entrypoint_object(
+  arc4random
+  SRCS
+    arc4random.cpp
+  HDRS
+    ../arc4random.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.linux.arc4random_utils
+)
+
+add_entrypoint_object(
+  arc4random_buf
+  SRCS
+    arc4random_buf.cpp
+  HDRS
+    ../arc4random_buf.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.linux.arc4random_utils
+)
+
+add_entrypoint_object(
+  arc4random_uniform
+  SRCS
+    arc4random_uniform.cpp
+  HDRS
+    ../arc4random_uniform.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.linux.arc4random_utils
+)
+
+add_header_library(
+  arc4random_utils
+  HDRS
+    arc4random_utils.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
