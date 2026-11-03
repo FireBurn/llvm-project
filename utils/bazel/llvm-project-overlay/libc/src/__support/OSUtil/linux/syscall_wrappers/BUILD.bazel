@@ -2882,10 +2882,58 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "setresgid",
+    hdrs = ["setresgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "setresuid",
+    hdrs = ["setresuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "setgid",
     hdrs = ["setgid.h"],
     deps = [
         "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "setregid",
+    hdrs = ["setregid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "setreuid",
+    hdrs = ["setreuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
