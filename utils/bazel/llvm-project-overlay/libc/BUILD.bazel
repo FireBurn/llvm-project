@@ -18965,6 +18965,17 @@ libc_function(
 libc_support_library(
     name = "__restore_rt",
     srcs = ["src/signal/linux/__restore.cpp"],
+    # The function runs on the signal frame, so it cannot have a frame of its
+    # own; an unoptimised build gives it one and the return from a handler
+    # resumes at a garbage address.
+    copts = [
+        "-O3",
+        "-fomit-frame-pointer",
+        "-Wframe-larger-than=0",
+        "-Wno-attributes",
+        "-fno-sanitize=address",
+    ],
+    full_build_only = True,
     target_compatible_with = select({
         "@platforms//os:linux": [],
         "//conditions:default": ["@platforms//:incompatible"],
