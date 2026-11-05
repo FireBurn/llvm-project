@@ -109,6 +109,7 @@ libc_support_library(
         ":linux_auxv",
         "//libc/hdr/types:clock_t",
         "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:cpu_set_t",
         "//libc/hdr/types:struct_timespec",
         "//libc/hdr/types:struct_timeval",
         "//libc/hdr/types:time_t",
