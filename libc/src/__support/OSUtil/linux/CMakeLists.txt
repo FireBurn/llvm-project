@@ -122,6 +122,7 @@ add_header_library(
   HDRS
     vdso_sym.h
   DEPENDS
+    libc.hdr.types.cpu_set_t
     libc.src.__support.common
 )
 

@@ -9,6 +9,7 @@
 #include "hdr/types/clockid_t.h"
 #include "hdr/types/struct_timespec.h"
 #include "hdr/types/struct_timeval.h"
+#include "hdr/types/cpu_set_t.h"
 #include "hdr/types/time_t.h"
 #include "src/__support/common.h"
 #include <stddef.h> // For size_t.
@@ -19,7 +20,6 @@ struct __kernel_timespec;
 struct timezone;
 struct riscv_hwprobe;
 struct getcpu_cache;
-struct cpu_set_t;
 // NOLINTEND(llvmlibc-implementation-in-namespace)
 
 namespace LIBC_NAMESPACE_DECL {
