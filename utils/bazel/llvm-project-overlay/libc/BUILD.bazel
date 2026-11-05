@@ -5079,6 +5079,7 @@ libc_support_library(
         ":hdr_sys_auxv_macros",
         ":types_clock_t",
         ":types_clockid_t",
+        ":types_cpu_set_t",
         ":types_struct_timespec",
         ":types_struct_timeval",
         ":types_time_t",
