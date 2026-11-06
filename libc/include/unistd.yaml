@@ -936,6 +936,29 @@ functions:
     arguments:
       - type: long
       - type: '...'
+  - name: fcntl
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: int
+      - type: int
+      - type: '...'
+  - name: ioctl
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: int
+      - type: unsigned long
+      - type: '...'
+  - name: setgroups
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: size_t
+      - type: const gid_t *
   - name: sysconf
     standards:
       - posix
