@@ -1,0 +1,55 @@
+header: android/api-level.h
+standards:
+  - bsd
+macros:
+  - macro_name: __ANDROID_API_FUTURE__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_G__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_I__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_J__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_J_MR1__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_J_MR2__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_K__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_L__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_L_MR1__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_M__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_N__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_N_MR1__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_O__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_O_MR1__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_P__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_Q__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_R__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_S__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_T__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_U__
+    macro_header: android-api-level-macros.h
+  - macro_name: __ANDROID_API_V__
+    macro_header: android-api-level-macros.h
+types: []
+enums: []
+objects: []
+functions:
+  - name: android_get_application_target_sdk_version
+    return_type: int
+    arguments: []
