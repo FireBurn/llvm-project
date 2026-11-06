@@ -20,6 +20,21 @@ libc_test(
 )
 
 libc_test(
+    name = "android_get_device_api_level_test",
+    srcs = ["android_get_device_api_level_test.cpp"],
+    deps = [
+        "//libc:__system_property_add",
+        "//libc:__system_property_area_init",
+        "//libc:__system_property_find",
+        "//libc:__system_property_set_filename",
+        "//libc:__system_property_update",
+        "//libc:android_get_device_api_level",
+        "//libc:strlen",
+        "//libc:unlink",
+    ],
+)
+
+libc_test(
     name = "fdsan_test",
     srcs = ["fdsan_test.cpp"],
     deps = [
