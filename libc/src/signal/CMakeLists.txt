@@ -227,6 +227,43 @@ add_entrypoint_object(
 )
 
 add_header_library(
+  signal_text
+  HDRS
+    signal_text.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.StringUtil.platform_signals
+    libc.src.__support.macros.config
+    libc.src.signal.signal_names
+)
+
+add_entrypoint_object(
+  sys_siglist
+  SRCS
+    sys_siglist.cpp
+  HDRS
+    sys_siglist.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.signal_text
+)
+
+add_entrypoint_object(
+  sys_signame
+  SRCS
+    sys_signame.cpp
+  HDRS
+    sys_signame.h
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.signal_text
+)
+
+add_header_library(
   signal_names
   HDRS
     signal_names.h
