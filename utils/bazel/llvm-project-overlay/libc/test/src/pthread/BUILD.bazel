@@ -23,6 +23,35 @@ libc_test(
 )
 
 libc_test(
+    name = "pthread_monotonic_np_test",
+    srcs = ["pthread_monotonic_np_test.cpp"],
+    deps = [
+        "//libc:clock_gettime",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_time_macros",
+        "//libc:pthread_cond_destroy",
+        "//libc:pthread_cond_init",
+        "//libc:pthread_cond_timedwait_monotonic_np",
+        "//libc:pthread_mutex_clocklock",
+        "//libc:pthread_mutex_destroy",
+        "//libc:pthread_mutex_init",
+        "//libc:pthread_mutex_lock",
+        "//libc:pthread_mutex_timedlock_monotonic_np",
+        "//libc:pthread_mutex_unlock",
+        "//libc:pthread_rwlock_destroy",
+        "//libc:pthread_rwlock_init",
+        "//libc:pthread_rwlock_timedrdlock_monotonic_np",
+        "//libc:pthread_rwlock_timedwrlock_monotonic_np",
+        "//libc:pthread_rwlock_unlock",
+        "//libc:sem_destroy",
+        "//libc:sem_init",
+        "//libc:sem_post",
+        "//libc:sem_timedwait_monotonic_np",
+        "//libc:types_struct_timespec",
+    ],
+)
+
+libc_test(
     name = "pthread_mutexattr_test",
     srcs = ["pthread_mutexattr_test.cpp"],
     deps = [

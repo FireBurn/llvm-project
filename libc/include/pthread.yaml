@@ -284,6 +284,12 @@ functions:
       - type: pthread_mutex_t *__restrict
       - type: clockid_t
       - type: const struct timespec *__restrict
+  - name: pthread_cond_timedwait_monotonic_np
+    return_type: int
+    arguments:
+      - type: pthread_cond_t *__restrict
+      - type: pthread_mutex_t *__restrict
+      - type: const struct timespec *__restrict
   - name: pthread_cond_destroy
     return_type: int
     arguments:
@@ -411,6 +417,17 @@ functions:
     arguments:
       - type: pthread_mutex_t *__restrict
       - type: const pthread_mutexattr_t *__restrict
+  - name: pthread_mutex_clocklock
+    return_type: int
+    arguments:
+      - type: pthread_mutex_t *__restrict
+      - type: clockid_t
+      - type: const struct timespec *__restrict
+  - name: pthread_mutex_timedlock_monotonic_np
+    return_type: int
+    arguments:
+      - type: pthread_mutex_t *__restrict
+      - type: const struct timespec *__restrict
   - name: pthread_getcpuclockid
     standards:
       - posix
@@ -554,7 +571,17 @@ functions:
     arguments:
       - type: pthread_rwlock_t *__restrict
       - type: const struct timespec *__restrict
+  - name: pthread_rwlock_timedrdlock_monotonic_np
+    return_type: int
+    arguments:
+      - type: pthread_rwlock_t *__restrict
+      - type: const struct timespec *__restrict
   - name: pthread_rwlock_timedwrlock
+    return_type: int
+    arguments:
+      - type: pthread_rwlock_t *__restrict
+      - type: const struct timespec *__restrict
+  - name: pthread_rwlock_timedwrlock_monotonic_np
     return_type: int
     arguments:
       - type: pthread_rwlock_t *__restrict
