@@ -37,6 +37,18 @@ static size_t pagesize() {
   return static_cast<size_t>(LIBC_NAMESPACE::sysconf(_SC_PAGESIZE));
 }
 
+// The guard size a thread gets when none is asked for. It is a multiple of the
+// largest page size the architecture has, not of the one in use, so it is not
+// always the page size.
+static size_t default_guardsize() {
+  pthread_attr_t attr;
+  size_t guardsize = 0;
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_attr_init(&attr), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_attr_getguardsize(&attr, &guardsize), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_attr_destroy(&attr), 0);
+  return guardsize;
+}
+
 static void check_readable(const void *start, size_t size) {
   size_t page_size = pagesize();
   auto *bytes = static_cast<const volatile char *>(start);
@@ -119,7 +131,7 @@ static void *child_default_func(void *arg) {
 
   check_readable(values->stackaddr, values->stacksize);
 
-  ASSERT_EQ(values->guardsize, pagesize());
+  ASSERT_EQ(values->guardsize, default_guardsize());
 
   wait_barrier(ready_barrier);
   wait_barrier(done_barrier);
@@ -202,7 +214,7 @@ static void *child_detached_func(void *) {
   values.populate_from(LIBC_NAMESPACE::pthread_self());
 
   ASSERT_EQ(values.detachstate, static_cast<int>(PTHREAD_CREATE_DETACHED));
-  ASSERT_EQ(values.guardsize, pagesize());
+  ASSERT_EQ(values.guardsize, default_guardsize());
 
   wait_barrier(done_barrier);
   return nullptr;
