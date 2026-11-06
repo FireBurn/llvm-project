@@ -39,3 +39,17 @@ add_libc_test(
     libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.ErrnoSetterMatcher
 )
+
+add_libc_test(
+  set_abort_message_test
+  SUITE
+    libc-android-tests
+  SRCS
+    set_abort_message_test.cpp
+  DEPENDS
+    libc.include.android_set_abort_message
+    libc.src.__support.abort_message
+    libc.src.android.android_set_abort_message
+    libc.src.string.strcmp
+    libc.src.string.strlen
+)
