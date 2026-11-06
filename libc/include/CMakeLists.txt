@@ -1621,6 +1621,7 @@ add_header_macro(
   sys/types.h
   DEPENDS
     .llvm_libc_common_h
+    .sys_cdefs
     .llvm-libc-types.__off_t
     .llvm-libc-types.__off64_t
     .llvm-libc-types.__uint64_t
