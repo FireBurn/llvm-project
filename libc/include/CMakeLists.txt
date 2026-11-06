@@ -2036,6 +2036,17 @@ add_header_macro(
     .llvm_libc_common_h
 )
 
+file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/android)
+
+add_header_macro(
+  android_api_level
+  ../libc/include/android/api-level.yaml
+  android/api-level.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.android_api_level_macros
+)
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/arpa)
 
 add_header_macro(
