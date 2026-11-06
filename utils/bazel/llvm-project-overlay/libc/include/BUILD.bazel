@@ -49,6 +49,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("error"),
     libc_header_info("execinfo"),
+    libc_header_info("fts"),
     libc_header_info("ftw"),
     libc_header_info("getopt"),
     libc_header_info("gnu/libc-version"),
@@ -1372,6 +1373,11 @@ libc_support_library(
     deps = [
         ":llvm_libc_types_locale_t",
     ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_fts_macros",
+    hdrs = ["llvm-libc-macros/fts-macros.h"],
 )
 
 libc_support_library(
