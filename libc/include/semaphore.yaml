@@ -18,6 +18,11 @@ functions:
       - type: sem_t *__restrict
       - type: clockid_t
       - type: const struct timespec *__restrict
+  - name: sem_timedwait_monotonic_np
+    return_type: int
+    arguments:
+      - type: sem_t *__restrict
+      - type: const struct timespec *__restrict
   - name: sem_close
     standards:
       - posix

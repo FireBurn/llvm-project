@@ -404,6 +404,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_cond_timedwait_monotonic_np
+  SRCS
+    pthread_cond_timedwait_monotonic_np.cpp
+  HDRS
+    pthread_cond_timedwait_monotonic_np.h
+  DEPENDS
+    .pthread_cond_utils
+    libc.hdr.errno_macros
+    libc.include.llvm-libc-types.pthread_cond_t
+    libc.include.llvm-libc-types.pthread_mutex_t
+    libc.include.llvm-libc-types.struct_timespec
+)
+
+add_entrypoint_object(
   pthread_cond_destroy
   SRCS
     pthread_cond_destroy.cpp
@@ -721,6 +735,34 @@ add_entrypoint_object(
     pthread_mutex_timedlock.cpp
   HDRS
     pthread_mutex_timedlock.h
+  DEPENDS
+    .pthread_mutex_timed_lock_utils
+    libc.hdr.errno_macros
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_mutex_clocklock
+  SRCS
+    pthread_mutex_clocklock.cpp
+  HDRS
+    pthread_mutex_clocklock.h
+  DEPENDS
+    .pthread_mutex_timed_lock_utils
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.clockid_t
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_mutex_timedlock_monotonic_np
+  SRCS
+    pthread_mutex_timedlock_monotonic_np.cpp
+  HDRS
+    pthread_mutex_timedlock_monotonic_np.h
   DEPENDS
     .pthread_mutex_timed_lock_utils
     libc.hdr.errno_macros
@@ -1207,11 +1249,34 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_rwlock_timedrdlock_monotonic_np
+  SRCS
+    pthread_rwlock_timedrdlock_monotonic_np.cpp
+  HDRS
+    pthread_rwlock_timedrdlock_monotonic_np.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.__support.threads.unix_rwlock
+)
+
+add_entrypoint_object(
   pthread_rwlock_timedwrlock
   SRCS
     pthread_rwlock_timedwrlock.cpp
   HDRS
     pthread_rwlock_timedwrlock.h
+  DEPENDS
+    libc.include.pthread
+    libc.src.__support.threads.unix_rwlock
+)
+
+add_entrypoint_object(
+  pthread_rwlock_timedwrlock_monotonic_np
+  SRCS
+    pthread_rwlock_timedwrlock_monotonic_np.cpp
+  HDRS
+    pthread_rwlock_timedwrlock_monotonic_np.h
   DEPENDS
     libc.include.pthread
     libc.src.__support.threads.unix_rwlock
