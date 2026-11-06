@@ -1,0 +1,95 @@
+header: sys/system_properties.h
+standards:
+  - bsd
+macros:
+  - macro_name: PROP_VALUE_MAX
+    macro_header: system-properties-macros.h
+  - macro_name: PROP_NAME_MAX
+    macro_header: system-properties-macros.h
+  - macro_name: PROP_SERVICE_NAME
+    macro_header: system-properties-macros.h
+types:
+  - type_name: prop_info
+  - type_name: __prop_foreach_callback_t
+  - type_name: __prop_read_callback_t
+  - type_name: struct_timespec
+  - type_name: uint32_t
+enums: []
+objects: []
+functions:
+  - name: __system_properties_init
+    return_type: int
+    arguments: []
+  - name: __system_property_area_init
+    return_type: int
+    arguments: []
+  - name: __system_property_set_filename
+    return_type: int
+    arguments:
+      - type: const char *
+  - name: __system_property_find
+    return_type: const prop_info *
+    arguments:
+      - type: const char *
+  - name: __system_property_read
+    return_type: int
+    arguments:
+      - type: const prop_info *
+      - type: char *
+      - type: char *
+  - name: __system_property_read_callback
+    return_type: void
+    arguments:
+      - type: const prop_info *
+      - type: __prop_read_callback_t
+      - type: void *
+  - name: __system_property_get
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: char *
+  - name: __system_property_foreach
+    return_type: int
+    arguments:
+      - type: __prop_foreach_callback_t
+      - type: void *
+  - name: __system_property_find_nth
+    return_type: const prop_info *
+    arguments:
+      - type: unsigned
+  - name: __system_property_serial
+    return_type: uint32_t
+    arguments:
+      - type: const prop_info *
+  - name: __system_property_area_serial
+    return_type: uint32_t
+    arguments: []
+  - name: __system_property_wait
+    return_type: bool
+    arguments:
+      - type: const prop_info *
+      - type: uint32_t
+      - type: uint32_t *
+      - type: const struct timespec *
+  - name: __system_property_wait_any
+    return_type: uint32_t
+    arguments:
+      - type: uint32_t
+  - name: __system_property_add
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: unsigned int
+      - type: const char *
+      - type: unsigned int
+  - name: __system_property_update
+    return_type: int
+    arguments:
+      - type: prop_info *
+      - type: const char *
+      - type: unsigned int
+  - name: __system_property_set
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
