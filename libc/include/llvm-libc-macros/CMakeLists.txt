@@ -451,6 +451,14 @@ add_macro_header(
 )
 
 add_macro_header(
+  sys_limits_macros
+  HDR
+    sys-limits-macros.h
+  DEPENDS
+    .limits_macros
+)
+
+add_macro_header(
   sys_param_macros
   HDR
     sys-param-macros.h
