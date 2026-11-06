@@ -408,6 +408,41 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_versioning_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_versioning_test.cpp
+  DEPENDS
+    libc.include.android_api_level
+    libc.include.llvm-libc-macros.fcntl_macros
+    libc.include.llvm-libc-types.off64_t
+)
+
+add_libc_test(
+  android_headers_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_headers_test.cpp
+  DEPENDS
+    libc.include.stdio
+)
+
+add_libc_test(
+  android_posix_includes_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_posix_includes_test.cpp
+  DEPENDS
+    libc.include.stdlib
+    libc.include.sys_wait
+    libc.include.sys_xattr
+    libc.include.termios
+)
+
+add_libc_test(
   sys_cdefs_test
   SUITE
     libc-include-tests
