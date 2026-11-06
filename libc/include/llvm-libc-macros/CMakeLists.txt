@@ -117,6 +117,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  fts_macros
+  HDR
+    fts-macros.h
+)
+
+add_macro_header(
   ftw_macros
   HDR
     ftw-macros.h
