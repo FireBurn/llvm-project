@@ -1,0 +1,253 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "property_area",
+    hdrs = ["property_area.h"],
+    deps = [
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils:memory_utils",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_support_library(
+    name = "property_store",
+    hdrs = ["property_store.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":property_area",
+        "//libc/hdr/types:struct_sockaddr_un",
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_mman_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:connect",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ftruncate",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getuid",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mmap",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:read",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setsockopt",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:socket",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_futex_utils",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "__system_properties_init",
+    srcs = ["__system_properties_init.cpp"],
+    hdrs = ["__system_properties_init.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_area_init",
+    srcs = ["__system_property_area_init.cpp"],
+    hdrs = ["__system_property_area_init.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_set_filename",
+    srcs = ["__system_property_set_filename.cpp"],
+    hdrs = ["__system_property_set_filename.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_find",
+    srcs = ["__system_property_find.cpp"],
+    hdrs = ["__system_property_find.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_read",
+    srcs = ["__system_property_read.cpp"],
+    hdrs = ["__system_property_read.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_read_callback",
+    srcs = ["__system_property_read_callback.cpp"],
+    hdrs = ["__system_property_read_callback.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:__prop_read_callback_t",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_get",
+    srcs = ["__system_property_get.cpp"],
+    hdrs = ["__system_property_get.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_foreach",
+    srcs = ["__system_property_foreach.cpp"],
+    hdrs = ["__system_property_foreach.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:__prop_foreach_callback_t",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_find_nth",
+    srcs = ["__system_property_find_nth.cpp"],
+    hdrs = ["__system_property_find_nth.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_serial",
+    srcs = ["__system_property_serial.cpp"],
+    hdrs = ["__system_property_serial.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_area_serial",
+    srcs = ["__system_property_area_serial.cpp"],
+    hdrs = ["__system_property_area_serial.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_wait",
+    srcs = ["__system_property_wait.cpp"],
+    hdrs = ["__system_property_wait.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_wait_any",
+    srcs = ["__system_property_wait_any.cpp"],
+    hdrs = ["__system_property_wait_any.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_add",
+    srcs = ["__system_property_add.cpp"],
+    hdrs = ["__system_property_add.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_update",
+    srcs = ["__system_property_update.cpp"],
+    hdrs = ["__system_property_update.h"],
+    deps = [
+        ":property_store",
+        "//libc/hdr/types:prop_info",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_property_set",
+    srcs = ["__system_property_set.cpp"],
+    hdrs = ["__system_property_set.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
