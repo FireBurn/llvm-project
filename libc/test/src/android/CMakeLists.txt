@@ -11,3 +11,31 @@ add_libc_test(
     libc.include.android_api_level
     libc.src.android.android_get_application_target_sdk_version
 )
+
+add_libc_test(
+  fdsan_test
+  SUITE
+    libc-android-tests
+  SRCS
+    fdsan_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.types.enum_android_fdsan_error_level
+    libc.hdr.types.enum_android_fdsan_owner_type
+    libc.include.android_fdsan
+    libc.src.android.android_fdsan_close_with_tag
+    libc.src.android.android_fdsan_create_owner_tag
+    libc.src.android.android_fdsan_exchange_owner_tag
+    libc.src.android.android_fdsan_get_error_level
+    libc.src.android.android_fdsan_get_owner_tag
+    libc.src.android.android_fdsan_get_tag_type
+    libc.src.android.android_fdsan_get_tag_value
+    libc.src.android.android_fdsan_set_error_level
+    libc.src.android.android_fdsan_set_error_level_from_property
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.unistd.close
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
