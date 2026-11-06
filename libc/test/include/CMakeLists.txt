@@ -416,6 +416,7 @@ add_libc_test(
     android_headers_test.cpp
   DEPENDS
     libc.include.stdio
+    libc.include.unistd
 )
 
 add_libc_test(
