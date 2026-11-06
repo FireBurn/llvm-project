@@ -5,7 +5,9 @@ add_header_library(
   DEPENDS
     libc.src.__support.OSUtil.linux.sigmask
     libc.src.__support.OSUtil.linux.syscall_wrappers.raise
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.__support.OSUtil.osutil
+    libc.src.__support.abort_message
     libc.src.signal.linux.__restore
     libc.src.signal.linux.signal_utils
 )
