@@ -420,6 +420,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "abort_message",
+    hdrs = ["abort_message.h"],
+    deps = [
+        ":common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "elf_elf_types",
     hdrs = ["elf/elf_types.h"],
     deps = [

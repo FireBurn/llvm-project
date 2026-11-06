@@ -16,6 +16,17 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "set_abort_message",
+    srcs = ["android_set_abort_message.cpp"],
+    hdrs = ["android_set_abort_message.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:abort_message",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "get_application_target_sdk_version",
     srcs = ["android_get_application_target_sdk_version.cpp"],
     hdrs = ["android_get_application_target_sdk_version.h"],
