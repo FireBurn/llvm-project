@@ -1274,6 +1274,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "prop_info",
+    hdrs = ["prop_info.h"],
+)
+
+libc_support_library(
+    name = "__prop_foreach_callback_t",
+    hdrs = ["__prop_foreach_callback_t.h"],
+)
+
+libc_support_library(
+    name = "__prop_read_callback_t",
+    hdrs = ["__prop_read_callback_t.h"],
+)
+
+libc_support_library(
     name = "cap_user_data_t",
     hdrs = ["cap_user_data_t.h"],
 )

@@ -189,6 +189,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("sys/socket"),
     libc_header_info("sys/stat"),
     libc_header_info("sys/statvfs"),
+    libc_header_info("sys/system_properties"),
     libc_header_info(
         "sys/time",
         other_srcs = ["sys/select-time.yaml"],
@@ -1373,6 +1374,11 @@ libc_support_library(
     deps = [
         ":llvm_libc_types_locale_t",
     ],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_system_properties_macros",
+    hdrs = ["llvm-libc-macros/system-properties-macros.h"],
 )
 
 libc_support_library(

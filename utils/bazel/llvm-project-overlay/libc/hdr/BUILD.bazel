@@ -432,6 +432,17 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "system_properties_macros",
+    hdrs = ["system_properties_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_system_properties_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "fts_macros",
     hdrs = ["fts_macros.h"],
     deps = select({
