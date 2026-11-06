@@ -22,6 +22,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.error
     libc.include.execinfo
     libc.include.fcntl
+    libc.include.fts
     libc.include.ftw
     libc.include.getopt
     libc.include.features

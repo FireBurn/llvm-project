@@ -1,0 +1,36 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc fts.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "fts_test",
+    srcs = ["fts_test.cpp"],
+    deps = [
+        "//libc/hdr/types:FTS",
+        "//libc/hdr/types:FTSENT",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:fts_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/fts:children",
+        "//libc/src/fts:close",
+        "//libc/src/fts:open",
+        "//libc/src/fts:read",
+        "//libc/src/fts:set",
+        "//libc/src/string:strcmp",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:rmdir",
+        "//libc/src/unistd:symlink",
+        "//libc/src/unistd:unlink",
+    ],
+)

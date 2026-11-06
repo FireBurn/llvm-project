@@ -522,6 +522,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "FTSENT",
+    hdrs = ["FTSENT.h"],
+)
+
+libc_support_library(
+    name = "__fts_compare_func_t",
+    hdrs = ["__fts_compare_func_t.h"],
+)
+
+libc_support_library(
+    name = "FTS",
+    hdrs = ["FTS.h"],
+)
+
+libc_support_library(
     name = "hdr_types_enum_android_fdsan_error_level",
     hdrs = ["enum_android_fdsan_error_level.h"],
     deps = ["//libc/include:llvm_libc_types_enum_android_fdsan_error_level"],
