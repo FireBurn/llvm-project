@@ -159,6 +159,7 @@ py_binary(
 
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
+    libc_header_info("android/api-level"),
     libc_header_info("ar"),
     libc_header_info(
         "arpa/nameser",
@@ -471,6 +472,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_assert_macros",
     hdrs = ["include/llvm-libc-macros/assert-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_android_api_level_macros",
+    hdrs = ["include/llvm-libc-macros/android-api-level-macros.h"],
 )
 
 libc_support_library(
@@ -1279,6 +1285,12 @@ libc_support_library(
 libc_support_library(
     name = "hdr_stdint_proxy",
     hdrs = ["hdr/stdint_proxy.h"],
+)
+
+libc_support_library(
+    name = "hdr_android_api_level_macros",
+    hdrs = ["hdr/android_api_level_macros.h"],
+    deps = [":llvm_libc_macros_android_api_level_macros"],
 )
 
 libc_support_library(
@@ -36534,6 +36546,17 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":__support_osutil_linux_auxv",
+    ],
+)
+
+libc_function(
+    name = "android_get_application_target_sdk_version",
+    srcs = ["src/android/android_get_application_target_sdk_version.cpp"],
+    hdrs = ["src/android/android_get_application_target_sdk_version.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_android_api_level_macros",
     ],
 )
 
