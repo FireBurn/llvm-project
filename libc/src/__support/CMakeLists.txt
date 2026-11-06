@@ -2,6 +2,15 @@ add_subdirectory(CPP)
 add_subdirectory(macros)
 
 add_header_library(
+  abort_message
+  HDRS
+    abort_message.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_header_library(
   libc_errno
   HDRS
     libc_errno.h

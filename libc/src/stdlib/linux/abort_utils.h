@@ -13,6 +13,8 @@
 #include "src/__support/OSUtil/exit.h"
 #include "src/__support/OSUtil/linux/sigmask.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/raise.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
+#include "src/__support/abort_message.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/signal/linux/signal_utils.h"
@@ -21,6 +23,15 @@ namespace LIBC_NAMESPACE_DECL {
 
 namespace abort_utils {
 [[noreturn]] LIBC_INLINE void abort() {
+  // Say why first, as the process may not get a chance later.
+  if (const char *msg = abort_message::get()) {
+    size_t len = 0;
+    while (msg[len] != '\0')
+      ++len;
+    (void)linux_syscalls::write(2, msg, len);
+    (void)linux_syscalls::write(2, "\n", 1);
+  }
+
   // Try to raise SIGABRT.
   // If this fails, or if a handler returns, keep going with the hard-abort
   // sequence below.
