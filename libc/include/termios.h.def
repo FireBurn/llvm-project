@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// POSIX header termios.h
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef _LLVM_LIBC_TERMIOS_H
+#define _LLVM_LIBC_TERMIOS_H
+
+#include "__llvm-libc-common.h"
+
+%%public_api()
+
+#ifdef __ANDROID__
+// bionic's brings in the terminal ioctl requests such as TIOCSCTTY.
+#include <sys/ioctl.h>
+#endif // __ANDROID__
+
+#endif // _LLVM_LIBC_TERMIOS_H

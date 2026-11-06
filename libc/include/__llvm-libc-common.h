@@ -145,4 +145,10 @@
 
 #endif // __cplusplus
 
+// Android code finds the API level macros and the types and constants bionic
+// carries between its headers in whichever header it includes first.
+#ifdef __ANDROID__
+#include <sys/cdefs.h>
+#endif
+
 #endif // _LLVM_LIBC_COMMON_H
