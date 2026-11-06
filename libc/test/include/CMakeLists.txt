@@ -398,6 +398,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  pthread_once_t_test
+  SUITE
+    libc-include-tests
+  SRCS
+    pthread_once_t_test.cpp
+  DEPENDS
+    libc.include.pthread
+)
+
+add_libc_test(
   sys_types_cdefs_test
   SUITE
     libc-include-tests
