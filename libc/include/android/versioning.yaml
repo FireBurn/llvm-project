@@ -1,0 +1,10 @@
+header: android/versioning.h
+standards:
+  - bsd
+public_includes:
+  - sys/cdefs.h
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
