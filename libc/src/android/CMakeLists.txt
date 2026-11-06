@@ -10,6 +10,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  android_get_device_api_level
+  SRCS
+    android_get_device_api_level.cpp
+  HDRS
+    android_get_device_api_level.h
+  DEPENDS
+    libc.hdr.system_properties_macros
+    libc.include.android_api_level
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.sys.system_properties.property_store
+)
+
+add_entrypoint_object(
   android_set_abort_message
   SRCS
     android_set_abort_message.cpp
