@@ -998,6 +998,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_limits_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_limits_test.cpp
+  DEPENDS
+    libc.include.sys_limits
+)
+
+add_libc_test(
   sys_param_test
   SUITE
     libc-include-tests
