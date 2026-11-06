@@ -1,4 +1,5 @@
 header: sys/xattr.h
+header_template: xattr.h.def
 standards:
   - linux
 macros:

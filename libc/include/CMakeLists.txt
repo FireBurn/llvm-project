@@ -1239,6 +1239,8 @@ add_header(
     sys/cdefs.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros.fcntl_macros
+    .llvm-libc-types.off64_t
 )
 
 add_header(
@@ -2049,6 +2051,15 @@ add_header_macro(
     .llvm_libc_common_h
     .llvm-libc-types.enum_android_fdsan_error_level
     .llvm-libc-types.enum_android_fdsan_owner_type
+)
+
+add_header_macro(
+  android_versioning
+  ../libc/include/android/versioning.yaml
+  android/versioning.h
+  DEPENDS
+    .llvm_libc_common_h
+    .sys_cdefs
 )
 
 add_header_macro(
