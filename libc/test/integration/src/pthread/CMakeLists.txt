@@ -42,6 +42,27 @@ add_integration_test(
 )
 
 add_integration_test(
+  pthread_rwlock_monotonic_np_test
+  SUITE
+    libc-pthread-integration-tests
+  SRCS
+    pthread_rwlock_monotonic_np_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+    libc.src.pthread.pthread_rwlock_init
+    libc.src.pthread.pthread_rwlock_timedrdlock_monotonic_np
+    libc.src.pthread.pthread_rwlock_timedwrlock_monotonic_np
+    libc.src.pthread.pthread_rwlock_unlock
+    libc.src.pthread.pthread_rwlock_wrlock
+    libc.src.time.clock_gettime
+)
+
+add_integration_test(
   pthread_getcpuclockid_test
   SUITE
     libc-pthread-integration-tests
