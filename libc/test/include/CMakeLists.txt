@@ -473,6 +473,19 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_unused_macro_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_unused_macro_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_hsearch_data
+    libc.include.llvm-libc-types.struct_icmphdr
+    libc.include.llvm-libc-types.struct_stat
+    libc.include.sys_cdefs
+)
+
+add_libc_test(
   sys_cdefs_test
   SUITE
     libc-include-tests
