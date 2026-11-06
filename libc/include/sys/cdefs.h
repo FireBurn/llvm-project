@@ -149,4 +149,83 @@
 #define __glibc_c99_flexarr_available 1
 #endif
 
+#ifdef __ANDROID__
+// Android headers mark each declaration with the API level that introduced it.
+// Everything here exists at every level, so the marks have no effect.
+#ifndef __BIONIC_AVAILABILITY
+#define __BIONIC_AVAILABILITY(__what, ...)
+#endif
+#ifndef __BIONIC_AVAILABILITY_GUARD
+#define __BIONIC_AVAILABILITY_GUARD(api_level) 1
+#endif
+#ifndef __INTRODUCED_IN
+#define __INTRODUCED_IN(api_level)
+#endif
+#ifndef __DEPRECATED_IN
+#define __DEPRECATED_IN(api_level, msg)
+#endif
+#ifndef __REMOVED_IN
+#define __REMOVED_IN(api_level, msg)
+#endif
+#ifndef __INTRODUCED_IN_32
+#define __INTRODUCED_IN_32(api_level)
+#endif
+#ifndef __INTRODUCED_IN_64
+#define __INTRODUCED_IN_64(api_level)
+#endif
+
+// Android code expects the API level macros from any header, and the kernel's
+// fixed width types, off64_t and the fcntl constants that bionic's
+// <sys/types.h>, <sys/socket.h> and <unistd.h> bring with them.
+#include <android/api-level.h>
+#include <linux/posix_types.h>
+// bionic's <time.h> brings in struct __kernel_timespec, which liburing and
+// other users of the kernel's time interfaces expect.
+#include <linux/time_types.h>
+#include <linux/types.h>
+#include "../llvm-libc-macros/fcntl-macros.h"
+// bionic's <sys/time.h> brings in the CLOCK_* ids through <linux/time.h>.
+#include "../llvm-libc-macros/time-macros.h"
+#include "../llvm-libc-types/off64_t.h"
+
+// bionic's <sys/cdefs.h> defines this for the code written against it.
+#ifndef __unused
+#define __unused __attribute__((__unused__))
+#endif
+
+// The attribute names bionic's <sys/cdefs.h> provides that glibc's does not.
+#ifndef __noreturn
+#define __noreturn __attribute__((__noreturn__))
+#endif
+#ifndef __dead
+#define __dead __attribute__((__noreturn__))
+#endif
+#ifndef __packed
+#define __packed __attribute__((__packed__))
+#endif
+#ifndef __returns_twice
+#define __returns_twice __attribute__((__returns_twice__))
+#endif
+#ifndef __used
+#define __used __attribute__((__used__))
+#endif
+#ifndef __mallocfunc
+#define __mallocfunc __attribute__((__malloc__))
+#endif
+#ifndef __nodiscard
+#define __nodiscard __attribute__((__warn_unused_result__))
+#endif
+
+// The format attributes bionic's <sys/cdefs.h> provides.
+#ifndef __printflike
+#define __printflike(x, y) __attribute__((__format__(__printf__, x, y)))
+#endif
+#ifndef __scanflike
+#define __scanflike(x, y) __attribute__((__format__(__scanf__, x, y)))
+#endif
+#ifndef __strftimelike
+#define __strftimelike(x) __attribute__((__format__(__strftime__, x, 0)))
+#endif
+#endif // __ANDROID__
+
 #endif // _SYS_CDEFS_H
