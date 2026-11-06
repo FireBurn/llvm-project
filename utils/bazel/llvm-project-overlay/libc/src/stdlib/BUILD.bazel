@@ -234,9 +234,11 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:struct_sigaction",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:raise",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
         "//libc/src/__support/OSUtil:exit",
         "//libc/src/__support/OSUtil:linux_sigmask",
         "//libc/src/__support/macros:config",
+        "//libc/src/__support:abort_message",
         "//libc/src/__support:common",
         "//libc/src/signal:__signal_utils",
     ],

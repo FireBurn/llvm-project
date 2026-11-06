@@ -28,6 +28,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("android/api-level"),
     libc_header_info("android/fdsan"),
+    libc_header_info("android/set_abort_message"),
     libc_header_info("android/versioning"),
     libc_header_info("ar"),
     libc_header_info(
