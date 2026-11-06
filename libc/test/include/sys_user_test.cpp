@@ -14,11 +14,14 @@
 #include "include/sys/user.h"
 #include "test/UnitTest/Test.h"
 
+#if defined(__x86_64__)
 TEST(LlvmLibcSysUserTest, TypesAreComplete) {
-  EXPECT_GT(sizeof(struct user), size_t(0));
-  EXPECT_GT(sizeof(struct user_fpregs_struct), size_t(0));
-#if defined(__x86_64__) && defined(__linux__)
   EXPECT_EQ(sizeof(struct user), size_t(912));
   EXPECT_EQ(sizeof(struct user_fpregs_struct), size_t(512));
-#endif
 }
+#elif defined(__aarch64__)
+TEST(LlvmLibcSysUserTest, TypesAreComplete) {
+  EXPECT_EQ(sizeof(struct user_regs_struct), size_t(272));
+  EXPECT_EQ(sizeof(struct user_fpsimd_struct), size_t(528));
+}
+#endif
