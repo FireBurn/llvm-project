@@ -17,9 +17,7 @@
 #include "hdr/types/struct_timespec.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/macros/null_check.h"
-#include "src/__support/threads/mutex.h"
-#include "src/__support/time/abs_timeout.h"
+#include "src/pthread/pthread_mutex_timed_lock_utils.h"
 
 #include <pthread.h>
 
@@ -28,42 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, pthread_mutex_timedlock,
                    (pthread_mutex_t *__restrict mutex,
                     const struct timespec *__restrict abstime)) {
-  LIBC_CRASH_ON_NULLPTR(abstime);
-  auto *m = reinterpret_cast<Mutex *>(mutex);
-
-  // According to POSIX.1, CLOCK_REALTIME is used for timedlock.
-  auto timeout =
-      internal::AbsTimeout::from_timespec(*abstime, /*is_realtime=*/true);
-
-  if (!timeout.has_value()) {
-    switch (timeout.error()) {
-    case internal::AbsTimeout::Error::BeforeEpoch:
-      if (m->try_lock() == MutexError::NONE)
-        return 0;
-      return ETIMEDOUT;
-    case internal::AbsTimeout::Error::Invalid:
-      return EINVAL;
-    }
-    __builtin_unreachable();
-  }
-
-  auto err = m->timed_lock(timeout.value());
-  switch (err) {
-  case MutexError::NONE:
-    return 0;
-  case MutexError::TIMEOUT:
-    return ETIMEDOUT;
-  case MutexError::DEADLOCK:
-    return EDEADLK;
-  case MutexError::OVERFLOW:
-    return EAGAIN;
-  case MutexError::OWNER_DEAD:
-    return EOWNERDEAD;
-  case MutexError::NOT_RECOVERABLE:
-    return ENOTRECOVERABLE;
-  default:
-    return EINVAL;
-  }
+  return pthread_mutex_utils::timed_lock(mutex, abstime, /*is_realtime=*/true);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
