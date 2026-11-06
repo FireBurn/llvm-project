@@ -1,0 +1,101 @@
+header: fts.h
+public_includes:
+  - sys/types.h
+  - sys/stat.h
+standards:
+  - bsd
+macros:
+  - macro_name: FTS_ROOTPARENTLEVEL
+    macro_header: fts-macros.h
+  - macro_name: FTS_ROOTLEVEL
+    macro_header: fts-macros.h
+  - macro_name: FTS_MAXLEVEL
+    macro_header: fts-macros.h
+  - macro_name: FTS_D
+    macro_header: fts-macros.h
+  - macro_name: FTS_DC
+    macro_header: fts-macros.h
+  - macro_name: FTS_DEFAULT
+    macro_header: fts-macros.h
+  - macro_name: FTS_DNR
+    macro_header: fts-macros.h
+  - macro_name: FTS_DOT
+    macro_header: fts-macros.h
+  - macro_name: FTS_DP
+    macro_header: fts-macros.h
+  - macro_name: FTS_ERR
+    macro_header: fts-macros.h
+  - macro_name: FTS_F
+    macro_header: fts-macros.h
+  - macro_name: FTS_INIT
+    macro_header: fts-macros.h
+  - macro_name: FTS_NS
+    macro_header: fts-macros.h
+  - macro_name: FTS_NSOK
+    macro_header: fts-macros.h
+  - macro_name: FTS_SL
+    macro_header: fts-macros.h
+  - macro_name: FTS_SLNONE
+    macro_header: fts-macros.h
+  - macro_name: FTS_DONTCHDIR
+    macro_header: fts-macros.h
+  - macro_name: FTS_SYMFOLLOW
+    macro_header: fts-macros.h
+  - macro_name: FTS_AGAIN
+    macro_header: fts-macros.h
+  - macro_name: FTS_FOLLOW
+    macro_header: fts-macros.h
+  - macro_name: FTS_NOINSTR
+    macro_header: fts-macros.h
+  - macro_name: FTS_SKIP
+    macro_header: fts-macros.h
+  - macro_name: FTS_COMFOLLOW
+    macro_header: fts-macros.h
+  - macro_name: FTS_LOGICAL
+    macro_header: fts-macros.h
+  - macro_name: FTS_NOCHDIR
+    macro_header: fts-macros.h
+  - macro_name: FTS_NOSTAT
+    macro_header: fts-macros.h
+  - macro_name: FTS_PHYSICAL
+    macro_header: fts-macros.h
+  - macro_name: FTS_SEEDOT
+    macro_header: fts-macros.h
+  - macro_name: FTS_XDEV
+    macro_header: fts-macros.h
+  - macro_name: FTS_OPTIONMASK
+    macro_header: fts-macros.h
+  - macro_name: FTS_NAMEONLY
+    macro_header: fts-macros.h
+types:
+  - type_name: FTS
+  - type_name: FTSENT
+  - type_name: __fts_compare_func_t
+enums: []
+objects: []
+functions:
+  - name: fts_children
+    return_type: FTSENT *
+    arguments:
+      - type: FTS *
+      - type: int
+  - name: fts_close
+    return_type: int
+    arguments:
+      - type: FTS *
+  - name: fts_open
+    return_type: FTS *
+    arguments:
+      - type: char *const *
+      - type: int
+      - type: __fts_compare_func_t
+  - name: fts_read
+    return_type: FTSENT *
+    arguments:
+      - type: FTS *
+  - name: fts_set
+    return_type: int
+    arguments:
+      - type: FTS *
+      - type: FTSENT *
+      - type: int

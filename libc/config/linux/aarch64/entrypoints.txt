@@ -84,6 +84,13 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.ftw.ftw
     libc.src.ftw.nftw
 
+    # fts.h entrypoints
+    libc.src.fts.fts_children
+    libc.src.fts.fts_close
+    libc.src.fts.fts_open
+    libc.src.fts.fts_read
+    libc.src.fts.fts_set
+
     # grp.h entrypoints
     libc.src.grp.endgrent
     libc.src.grp.fgetgrent
