@@ -8,3 +8,119 @@ add_entrypoint_object(
     libc.hdr.android_api_level_macros
     libc.include.android_api_level
 )
+
+add_object_library(
+  fdsan_error_level
+  SRCS
+    fdsan_error_level.cpp
+  HDRS
+    fdsan_error_level.h
+  DEPENDS
+    libc.hdr.types.enum_android_fdsan_error_level
+    libc.src.__support.CPP.atomic
+)
+
+add_entrypoint_object(
+  android_fdsan_create_owner_tag
+  SRCS
+    android_fdsan_create_owner_tag.cpp
+  HDRS
+    android_fdsan_create_owner_tag.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.enum_android_fdsan_owner_type
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_exchange_owner_tag
+  SRCS
+    android_fdsan_exchange_owner_tag.cpp
+  HDRS
+    android_fdsan_exchange_owner_tag.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_close_with_tag
+  SRCS
+    android_fdsan_close_with_tag.cpp
+  HDRS
+    android_fdsan_close_with_tag.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.android_fdsan
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  android_fdsan_get_owner_tag
+  SRCS
+    android_fdsan_get_owner_tag.cpp
+  HDRS
+    android_fdsan_get_owner_tag.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_get_tag_type
+  SRCS
+    android_fdsan_get_tag_type.cpp
+  HDRS
+    android_fdsan_get_tag_type.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_get_tag_value
+  SRCS
+    android_fdsan_get_tag_value.cpp
+  HDRS
+    android_fdsan_get_tag_value.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_get_error_level
+  SRCS
+    android_fdsan_get_error_level.cpp
+  HDRS
+    android_fdsan_get_error_level.h
+  DEPENDS
+    .fdsan_error_level
+    libc.hdr.types.enum_android_fdsan_error_level
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_set_error_level
+  SRCS
+    android_fdsan_set_error_level.cpp
+  HDRS
+    android_fdsan_set_error_level.h
+  DEPENDS
+    .fdsan_error_level
+    libc.hdr.types.enum_android_fdsan_error_level
+    libc.include.android_fdsan
+)
+
+add_entrypoint_object(
+  android_fdsan_set_error_level_from_property
+  SRCS
+    android_fdsan_set_error_level_from_property.cpp
+  HDRS
+    android_fdsan_set_error_level_from_property.h
+  DEPENDS
+    .fdsan_error_level
+    libc.hdr.types.enum_android_fdsan_error_level
+    libc.include.android_fdsan
+)
