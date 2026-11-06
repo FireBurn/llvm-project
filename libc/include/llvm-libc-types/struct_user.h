@@ -16,6 +16,8 @@
 
 #if defined(__x86_64__)
 #include "x86_64/struct_user.h"
+#elif defined(__aarch64__)
+#include "aarch64/struct_user.h"
 #else
 #error "struct user not available for your target architecture."
 #endif
