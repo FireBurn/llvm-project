@@ -21,6 +21,16 @@ libc_test(
 )
 
 libc_test(
+    name = "sys_siglist_test",
+    srcs = ["sys_siglist_test.cpp"],
+    deps = [
+        "//libc:hdr_signal_macros",
+        "//libc:sys_siglist",
+        "//libc:sys_signame",
+    ],
+)
+
+libc_test(
     name = "sigtimedwait_test",
     srcs = ["sigtimedwait_test.cpp"],
     deps = [
