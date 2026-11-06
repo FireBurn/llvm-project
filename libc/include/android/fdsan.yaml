@@ -1,0 +1,49 @@
+header: android/fdsan.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: enum_android_fdsan_owner_type
+  - type_name: enum_android_fdsan_error_level
+enums: []
+objects: []
+functions:
+  - name: android_fdsan_create_owner_tag
+    return_type: uint64_t
+    arguments:
+      - type: enum android_fdsan_owner_type
+      - type: uint64_t
+  - name: android_fdsan_exchange_owner_tag
+    return_type: void
+    arguments:
+      - type: int
+      - type: uint64_t
+      - type: uint64_t
+  - name: android_fdsan_close_with_tag
+    return_type: int
+    arguments:
+      - type: int
+      - type: uint64_t
+  - name: android_fdsan_get_owner_tag
+    return_type: uint64_t
+    arguments:
+      - type: int
+  - name: android_fdsan_get_tag_type
+    return_type: const char *
+    arguments:
+      - type: uint64_t
+  - name: android_fdsan_get_tag_value
+    return_type: uint64_t
+    arguments:
+      - type: uint64_t
+  - name: android_fdsan_get_error_level
+    return_type: enum android_fdsan_error_level
+    arguments: []
+  - name: android_fdsan_set_error_level
+    return_type: enum android_fdsan_error_level
+    arguments:
+      - type: enum android_fdsan_error_level
+  - name: android_fdsan_set_error_level_from_property
+    return_type: enum android_fdsan_error_level
+    arguments:
+      - type: enum android_fdsan_error_level
