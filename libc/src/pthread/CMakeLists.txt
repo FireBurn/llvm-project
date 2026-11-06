@@ -613,6 +613,47 @@ add_entrypoint_object(
     libc.src.__support.threads.linux.barrier
 )
 
+
+add_entrypoint_object(
+  pthread_barrierattr_init
+  SRCS
+    pthread_barrierattr_init.cpp
+  HDRS
+    pthread_barrierattr_init.h
+  DEPENDS
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_barrierattr_destroy
+  SRCS
+    pthread_barrierattr_destroy.cpp
+  HDRS
+    pthread_barrierattr_destroy.h
+  DEPENDS
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_barrierattr_getpshared
+  SRCS
+    pthread_barrierattr_getpshared.cpp
+  HDRS
+    pthread_barrierattr_getpshared.h
+  DEPENDS
+    libc.include.pthread
+)
+
+add_entrypoint_object(
+  pthread_barrierattr_setpshared
+  SRCS
+    pthread_barrierattr_setpshared.cpp
+  HDRS
+    pthread_barrierattr_setpshared.h
+  DEPENDS
+    libc.include.pthread
+    libc.hdr.errno_macros
+)
 add_entrypoint_object(
   pthread_barrier_wait
   SRCS

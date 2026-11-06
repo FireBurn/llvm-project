@@ -11,6 +11,18 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "pthread_barrierattr_test",
+    srcs = ["pthread_barrierattr_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:pthread_barrierattr_destroy",
+        "//libc:pthread_barrierattr_getpshared",
+        "//libc:pthread_barrierattr_init",
+        "//libc:pthread_barrierattr_setpshared",
+    ],
+)
+
+libc_test(
     name = "pthread_mutexattr_test",
     srcs = ["pthread_mutexattr_test.cpp"],
     deps = [

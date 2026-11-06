@@ -54,6 +54,21 @@ add_libc_test(
 )
 
 add_libc_test(
+  pthread_barrierattr_test
+  SUITE
+    libc-pthread-tests
+  SRCS
+    pthread_barrierattr_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.include.pthread
+    libc.src.pthread.pthread_barrierattr_destroy
+    libc.src.pthread.pthread_barrierattr_getpshared
+    libc.src.pthread.pthread_barrierattr_init
+    libc.src.pthread.pthread_barrierattr_setpshared
+)
+
+add_libc_test(
   pthread_condattr_test
   SUITE
     libc-pthread-tests
