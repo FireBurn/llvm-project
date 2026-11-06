@@ -1,4 +1,5 @@
 header: sys/select.h
+header_template: select.h.def
 standards:
   - posix
 merge_yaml_files:
