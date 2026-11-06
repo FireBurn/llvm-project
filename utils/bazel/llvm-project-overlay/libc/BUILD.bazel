@@ -161,6 +161,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("android/api-level"),
     libc_header_info("android/fdsan"),
+    libc_header_info("android/set_abort_message"),
     libc_header_info("android/versioning"),
     libc_header_info("ar"),
     libc_header_info(
@@ -18097,6 +18098,15 @@ libc_function(
 )
 
 libc_support_library(
+    name = "__support_abort_message",
+    hdrs = ["src/__support/abort_message.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
     name = "stdlib_abort_utils",
     hdrs = ["src/stdlib/abort_utils.h"],
     deps = [
@@ -18120,11 +18130,13 @@ libc_support_library(
     }),
     deps = [
         ":__signal_utils",
+        ":__support_abort_message",
         ":__support_common",
         ":__support_macros_config",
         ":__support_osutil_exit",
         ":__support_osutil_linux_sigmask",
         ":__support_osutil_linux_syscall_wrappers_raise",
+        ":__support_osutil_linux_syscall_wrappers_write",
         ":types_struct_sigaction",
     ],
 )
@@ -36659,6 +36671,17 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":__support_osutil_linux_auxv",
+    ],
+)
+
+libc_function(
+    name = "android_set_abort_message",
+    srcs = ["src/android/android_set_abort_message.cpp"],
+    hdrs = ["src/android/android_set_abort_message.h"],
+    deps = [
+        ":__support_abort_message",
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
