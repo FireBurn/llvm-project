@@ -385,7 +385,7 @@ STATIC_HEADERS = glob(
         "include/llvm-libc-macros/_LIBC_MODULAR_FORMAT_PRINTF.h",
         "include/llvm-libc-macros/_LIBC_MODULAR_FORMAT_PRINTF-disable.h",
     ],
-) + ["include/__llvm-libc-common.h"]
+) + ["include/__llvm-libc-common.h", "include/sys/cdefs.h"]
 
 [
     copy_file(

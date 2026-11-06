@@ -368,6 +368,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_types_cdefs_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_types_cdefs_test.cpp
+  DEPENDS
+    libc.include.sys_types
+)
+
+add_libc_test(
   sys_types_bsd_integer_test
   SUITE
     libc-include-tests
