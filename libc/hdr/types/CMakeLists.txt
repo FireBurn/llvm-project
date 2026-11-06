@@ -516,6 +516,22 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  enum_android_fdsan_error_level
+  HDRS
+    enum_android_fdsan_error_level.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.enum_android_fdsan_error_level
+)
+
+add_proxy_header_library(
+  enum_android_fdsan_owner_type
+  HDRS
+    enum_android_fdsan_owner_type.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.enum_android_fdsan_owner_type
+)
+
+add_proxy_header_library(
   off_t
   HDRS
     off_t.h

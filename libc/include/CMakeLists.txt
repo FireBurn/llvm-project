@@ -2046,6 +2046,16 @@ add_header_macro(
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/android)
 
 add_header_macro(
+  android_fdsan
+  ../libc/include/android/fdsan.yaml
+  android/fdsan.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.enum_android_fdsan_error_level
+    .llvm-libc-types.enum_android_fdsan_owner_type
+)
+
+add_header_macro(
   android_api_level
   ../libc/include/android/api-level.yaml
   android/api-level.h

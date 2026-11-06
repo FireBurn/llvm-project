@@ -18,3 +18,25 @@ libc_test(
         "//libc:hdr_android_api_level_macros",
     ],
 )
+
+libc_test(
+    name = "fdsan_test",
+    srcs = ["fdsan_test.cpp"],
+    deps = [
+        "//libc:android_fdsan_close_with_tag",
+        "//libc:android_fdsan_create_owner_tag",
+        "//libc:android_fdsan_exchange_owner_tag",
+        "//libc:android_fdsan_get_error_level",
+        "//libc:android_fdsan_get_owner_tag",
+        "//libc:android_fdsan_get_tag_type",
+        "//libc:android_fdsan_get_tag_value",
+        "//libc:android_fdsan_set_error_level",
+        "//libc:android_fdsan_set_error_level_from_property",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_types_enum_android_fdsan_error_level",
+        "//libc:hdr_types_enum_android_fdsan_owner_type",
+        "//libc:open",
+        "//libc:strcmp",
+    ],
+)
