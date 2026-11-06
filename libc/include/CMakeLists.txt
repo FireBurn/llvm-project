@@ -2067,6 +2067,14 @@ add_header_macro(
 )
 
 add_header_macro(
+  android_set_abort_message
+  ../libc/include/android/set_abort_message.yaml
+  android/set_abort_message.h
+  DEPENDS
+    .llvm_libc_common_h
+)
+
+add_header_macro(
   android_api_level
   ../libc/include/android/api-level.yaml
   android/api-level.h
