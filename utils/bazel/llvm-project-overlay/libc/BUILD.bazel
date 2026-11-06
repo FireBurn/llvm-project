@@ -160,6 +160,7 @@ py_binary(
 LLVM_LIBC_HEADERS = [
     libc_header_info("alloca"),
     libc_header_info("android/api-level"),
+    libc_header_info("android/fdsan"),
     libc_header_info("ar"),
     libc_header_info(
         "arpa/nameser",
@@ -709,6 +710,16 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_union_sigval",
     hdrs = ["include/llvm-libc-types/union_sigval.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_enum_android_fdsan_error_level",
+    hdrs = ["include/llvm-libc-types/enum_android_fdsan_error_level.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_enum_android_fdsan_owner_type",
+    hdrs = ["include/llvm-libc-types/enum_android_fdsan_owner_type.h"],
 )
 
 libc_support_library(
@@ -1285,6 +1296,18 @@ libc_support_library(
 libc_support_library(
     name = "hdr_stdint_proxy",
     hdrs = ["hdr/stdint_proxy.h"],
+)
+
+libc_support_library(
+    name = "hdr_types_enum_android_fdsan_error_level",
+    hdrs = ["hdr/types/enum_android_fdsan_error_level.h"],
+    deps = [":llvm_libc_types_enum_android_fdsan_error_level"],
+)
+
+libc_support_library(
+    name = "hdr_types_enum_android_fdsan_owner_type",
+    hdrs = ["hdr/types/enum_android_fdsan_owner_type.h"],
+    deps = [":llvm_libc_types_enum_android_fdsan_owner_type"],
 )
 
 libc_support_library(
@@ -36557,6 +36580,123 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":hdr_android_api_level_macros",
+    ],
+)
+
+libc_support_library(
+    name = "android_fdsan_error_level",
+    srcs = ["src/android/fdsan_error_level.cpp"],
+    hdrs = ["src/android/fdsan_error_level.h"],
+    deps = [
+        ":__support_cpp_atomic",
+        ":__support_macros_config",
+        ":hdr_types_enum_android_fdsan_error_level",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_create_owner_tag",
+    srcs = ["src/android/android_fdsan_create_owner_tag.cpp"],
+    hdrs = ["src/android/android_fdsan_create_owner_tag.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+        ":hdr_types_enum_android_fdsan_owner_type",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_exchange_owner_tag",
+    srcs = ["src/android/android_fdsan_exchange_owner_tag.cpp"],
+    hdrs = ["src/android/android_fdsan_exchange_owner_tag.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_close_with_tag",
+    srcs = ["src/android/android_fdsan_close_with_tag.cpp"],
+    hdrs = ["src/android/android_fdsan_close_with_tag.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_threads_cancel",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_get_owner_tag",
+    srcs = ["src/android/android_fdsan_get_owner_tag.cpp"],
+    hdrs = ["src/android/android_fdsan_get_owner_tag.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_get_tag_type",
+    srcs = ["src/android/android_fdsan_get_tag_type.cpp"],
+    hdrs = ["src/android/android_fdsan_get_tag_type.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_get_tag_value",
+    srcs = ["src/android/android_fdsan_get_tag_value.cpp"],
+    hdrs = ["src/android/android_fdsan_get_tag_value.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_get_error_level",
+    srcs = ["src/android/android_fdsan_get_error_level.cpp"],
+    hdrs = ["src/android/android_fdsan_get_error_level.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":android_fdsan_error_level",
+        ":hdr_types_enum_android_fdsan_error_level",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_set_error_level",
+    srcs = ["src/android/android_fdsan_set_error_level.cpp"],
+    hdrs = ["src/android/android_fdsan_set_error_level.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":android_fdsan_error_level",
+        ":hdr_types_enum_android_fdsan_error_level",
+    ],
+)
+
+libc_function(
+    name = "android_fdsan_set_error_level_from_property",
+    srcs = ["src/android/android_fdsan_set_error_level_from_property.cpp"],
+    hdrs = ["src/android/android_fdsan_set_error_level_from_property.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":android_fdsan_error_level",
+        ":hdr_types_enum_android_fdsan_error_level",
     ],
 )
 
