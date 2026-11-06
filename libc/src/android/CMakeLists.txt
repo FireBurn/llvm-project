@@ -9,6 +9,17 @@ add_entrypoint_object(
     libc.include.android_api_level
 )
 
+add_entrypoint_object(
+  android_set_abort_message
+  SRCS
+    android_set_abort_message.cpp
+  HDRS
+    android_set_abort_message.h
+  DEPENDS
+    libc.include.android_set_abort_message
+    libc.src.__support.abort_message
+)
+
 add_object_library(
   fdsan_error_level
   SRCS
