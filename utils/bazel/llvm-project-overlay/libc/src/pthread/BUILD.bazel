@@ -85,6 +85,47 @@ libc_function(
 )
 
 libc_function(
+    name = "barrierattr_init",
+    srcs = ["pthread_barrierattr_init.cpp"],
+    hdrs = ["pthread_barrierattr_init.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "barrierattr_destroy",
+    srcs = ["pthread_barrierattr_destroy.cpp"],
+    hdrs = ["pthread_barrierattr_destroy.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "barrierattr_getpshared",
+    srcs = ["pthread_barrierattr_getpshared.cpp"],
+    hdrs = ["pthread_barrierattr_getpshared.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "barrierattr_setpshared",
+    srcs = ["pthread_barrierattr_setpshared.cpp"],
+    hdrs = ["pthread_barrierattr_setpshared.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "condattr_getclock",
     srcs = ["pthread_condattr_getclock.cpp"],
     hdrs = ["pthread_condattr_getclock.h"],
