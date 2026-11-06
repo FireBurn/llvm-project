@@ -479,6 +479,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  android_api_level_macros
+  HDRS
+    android_api_level_macros.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-macros.android_api_level_macros
+)
+
+add_proxy_header_library(
   sys_auxv_macros
   HDRS
     sys_auxv_macros.h
