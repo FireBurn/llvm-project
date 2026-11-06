@@ -1,0 +1,90 @@
+add_header_library(
+  fts_walk
+  HDRS
+    fts_walk.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.fts_macros
+    libc.hdr.func.free
+    libc.hdr.func.malloc
+    libc.hdr.limits_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.DIR
+    libc.hdr.types.FTS
+    libc.hdr.types.FTSENT
+    libc.hdr.types.struct_dirent
+    libc.hdr.types.struct_stat
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.ftw.ftw_walk
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+)
+
+add_entrypoint_object(
+  fts_open
+  SRCS
+    fts_open.cpp
+  HDRS
+    fts_open.h
+  DEPENDS
+    libc.hdr.types.FTS
+    libc.hdr.types.__fts_compare_func_t
+    libc.src.__support.common
+    libc.src.fts.fts_walk
+)
+
+add_entrypoint_object(
+  fts_read
+  SRCS
+    fts_read.cpp
+  HDRS
+    fts_read.h
+  DEPENDS
+    libc.hdr.types.FTS
+    libc.hdr.types.FTSENT
+    libc.src.__support.common
+    libc.src.fts.fts_walk
+)
+
+add_entrypoint_object(
+  fts_children
+  SRCS
+    fts_children.cpp
+  HDRS
+    fts_children.h
+  DEPENDS
+    libc.hdr.types.FTS
+    libc.hdr.types.FTSENT
+    libc.src.__support.common
+    libc.src.fts.fts_walk
+)
+
+add_entrypoint_object(
+  fts_close
+  SRCS
+    fts_close.cpp
+  HDRS
+    fts_close.h
+  DEPENDS
+    libc.hdr.types.FTS
+    libc.src.__support.common
+    libc.src.fts.fts_walk
+)
+
+add_entrypoint_object(
+  fts_set
+  SRCS
+    fts_set.cpp
+  HDRS
+    fts_set.h
+  DEPENDS
+    libc.hdr.types.FTS
+    libc.hdr.types.FTSENT
+    libc.hdr.errno_macros
+    libc.hdr.fts_macros
+    libc.src.__support.libc_errno
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
