@@ -12,6 +12,24 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.android_fdsan_set_error_level_from_property
     libc.src.android.android_set_abort_message
 
+    # sys/system_properties.h entrypoints
+    libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.__system_property_area_init
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_read
+    libc.src.sys.system_properties.__system_property_read_callback
+    libc.src.sys.system_properties.__system_property_get
+    libc.src.sys.system_properties.__system_property_foreach
+    libc.src.sys.system_properties.__system_property_find_nth
+    libc.src.sys.system_properties.__system_property_serial
+    libc.src.sys.system_properties.__system_property_area_serial
+    libc.src.sys.system_properties.__system_property_wait
+    libc.src.sys.system_properties.__system_property_wait_any
+    libc.src.sys.system_properties.__system_property_add
+    libc.src.sys.system_properties.__system_property_update
+    libc.src.sys.system_properties.__system_property_set
+
     # ctype.h entrypoints
     libc.src.ctype.isalnum
     libc.src.ctype.isalpha
