@@ -1,0 +1,232 @@
+add_header_library(
+  property_area
+  HDRS
+    property_area.h
+  DEPENDS
+    libc.src.__support.CPP.atomic
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.string_utils
+)
+
+add_header_library(
+  property_store
+  HDRS
+    property_store.h
+  DEPENDS
+    .property_area
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.limits_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.sys_socket_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_sockaddr_un
+    libc.hdr.types.struct_stat
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.struct_timeval
+    libc.src.__support.CPP.optional
+    libc.src.__support.OSUtil.linux.stat.stat_via_statx
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.connect
+    libc.src.__support.OSUtil.linux.syscall_wrappers.ftruncate
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.read
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setsockopt
+    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+    libc.src.__support.threads.linux.futex_utils
+    libc.src.__support.time.clock_gettime
+)
+
+add_entrypoint_object(
+  __system_properties_init
+  SRCS
+    __system_properties_init.cpp
+  HDRS
+    __system_properties_init.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_area_init
+  SRCS
+    __system_property_area_init.cpp
+  HDRS
+    __system_property_area_init.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_set_filename
+  SRCS
+    __system_property_set_filename.cpp
+  HDRS
+    __system_property_set_filename.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_find
+  SRCS
+    __system_property_find.cpp
+  HDRS
+    __system_property_find.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_read
+  SRCS
+    __system_property_read.cpp
+  HDRS
+    __system_property_read.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_read_callback
+  SRCS
+    __system_property_read_callback.cpp
+  HDRS
+    __system_property_read_callback.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.hdr.types.__prop_read_callback_t
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_get
+  SRCS
+    __system_property_get.cpp
+  HDRS
+    __system_property_get.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_foreach
+  SRCS
+    __system_property_foreach.cpp
+  HDRS
+    __system_property_foreach.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.__prop_foreach_callback_t
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_find_nth
+  SRCS
+    __system_property_find_nth.cpp
+  HDRS
+    __system_property_find_nth.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_serial
+  SRCS
+    __system_property_serial.cpp
+  HDRS
+    __system_property_serial.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_area_serial
+  SRCS
+    __system_property_area_serial.cpp
+  HDRS
+    __system_property_area_serial.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_wait
+  SRCS
+    __system_property_wait.cpp
+  HDRS
+    __system_property_wait.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.hdr.types.struct_timespec
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_wait_any
+  SRCS
+    __system_property_wait_any.cpp
+  HDRS
+    __system_property_wait_any.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_add
+  SRCS
+    __system_property_add.cpp
+  HDRS
+    __system_property_add.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_update
+  SRCS
+    __system_property_update.cpp
+  HDRS
+    __system_property_update.h
+  DEPENDS
+    .property_store
+    libc.hdr.types.prop_info
+    libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_property_set
+  SRCS
+    __system_property_set.cpp
+  HDRS
+    __system_property_set.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+)
