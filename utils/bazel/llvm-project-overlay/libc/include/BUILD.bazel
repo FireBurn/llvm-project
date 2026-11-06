@@ -198,6 +198,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("sys/timex"),
     libc_header_info("sys/ttydefaults"),
     libc_header_info("sys/types"),
+    libc_header_info("sys/user"),
     libc_header_info("sys/utsname"),
     libc_header_info("sys/vt"),
     libc_header_info("sys/wait"),
@@ -818,6 +819,37 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_tcflag_t",
     hdrs = ["llvm-libc-types/tcflag_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_user",
+    hdrs = ["llvm-libc-types/struct_user.h"],
+    textual_hdrs = [
+        "llvm-libc-types/aarch64/struct_user.h",
+        "llvm-libc-types/x86_64/struct_user.h",
+    ],
+    deps = [
+        ":llvm_libc_types_struct_user_fpregs_struct",
+        ":llvm_libc_types_struct_user_regs_struct",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_user_fpregs_struct",
+    hdrs = ["llvm-libc-types/struct_user_fpregs_struct.h"],
+    textual_hdrs = [
+        "llvm-libc-types/aarch64/struct_user_fpregs_struct.h",
+        "llvm-libc-types/x86_64/struct_user_fpregs_struct.h",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_user_regs_struct",
+    hdrs = ["llvm-libc-types/struct_user_regs_struct.h"],
+    textual_hdrs = [
+        "llvm-libc-types/aarch64/struct_user_regs_struct.h",
+        "llvm-libc-types/x86_64/struct_user_regs_struct.h",
+    ],
 )
 
 libc_support_library(
