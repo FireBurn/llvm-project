@@ -82,3 +82,10 @@ add_entrypoint_object(
   DEPENDS
     .${LIBC_TARGET_OS}.sem_clockwait
 )
+
+add_entrypoint_object(
+  sem_timedwait_monotonic_np
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sem_timedwait_monotonic_np
+)

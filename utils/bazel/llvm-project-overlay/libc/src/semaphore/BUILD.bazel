@@ -211,3 +211,21 @@ libc_function(
         "//libc/src/errno:errno",
     ],
 )
+
+libc_function(
+    name = "sem_timedwait_monotonic_np",
+    srcs = ["linux/sem_timedwait_monotonic_np.cpp"],
+    hdrs = ["sem_timedwait_monotonic_np.h"],
+    deps = [
+        ":linux_semaphore",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)

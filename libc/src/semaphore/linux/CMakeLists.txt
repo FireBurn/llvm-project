@@ -208,3 +208,19 @@ add_entrypoint_object(
     libc.src.__support.macros.null_check
     libc.src.errno.errno
 )
+
+add_entrypoint_object(
+  sem_timedwait_monotonic_np
+  SRCS
+    sem_timedwait_monotonic_np.cpp
+  HDRS
+    ../sem_timedwait_monotonic_np.h
+  DEPENDS
+    .semaphore
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.sem_t
+    libc.hdr.types.struct_timespec
+    libc.src.__support.macros.null_check
+    libc.src.errno.errno
+)
