@@ -1,5 +1,6 @@
 add_subdirectory(__support)
 
+add_subdirectory(android)
 add_subdirectory(arpa)
 add_subdirectory(complex)
 add_subdirectory(ctype)
