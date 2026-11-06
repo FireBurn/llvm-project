@@ -17,15 +17,15 @@ licenses(["notice"])
 
 libc_support_library(
     name = "StringUtil",
-    srcs = glob(["tables/**/*.h"]) + [
+    srcs = [
         "error_to_string.cpp",
-        "message_mapper.h",
         "platform_errors.h",
-        "platform_signals.h",
         "signal_to_string.cpp",
     ],
-    hdrs = [
+    hdrs = glob(["tables/**/*.h"]) + [
         "error_to_string.h",
+        "message_mapper.h",
+        "platform_signals.h",
         "signal_to_string.h",
     ],
     target_compatible_with = select({
