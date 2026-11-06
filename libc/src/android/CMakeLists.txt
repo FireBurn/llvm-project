@@ -1,0 +1,10 @@
+add_entrypoint_object(
+  android_get_application_target_sdk_version
+  SRCS
+    android_get_application_target_sdk_version.cpp
+  HDRS
+    android_get_application_target_sdk_version.h
+  DEPENDS
+    libc.hdr.android_api_level_macros
+    libc.include.android_api_level
+)
