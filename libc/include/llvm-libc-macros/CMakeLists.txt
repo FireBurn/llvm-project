@@ -890,3 +890,9 @@ add_macro_header(
   HDR
     sys-msg-macros.h
 )
+
+add_macro_header(
+  android_api_level_macros
+  HDR
+    android-api-level-macros.h
+)
