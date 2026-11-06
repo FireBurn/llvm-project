@@ -1,0 +1,12 @@
+header: android/set_abort_message.h
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions:
+  - name: android_set_abort_message
+    return_type: void
+    arguments:
+      - type: const char *

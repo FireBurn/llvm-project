@@ -40,3 +40,14 @@ libc_test(
         "//libc/src/string:strcmp",
     ],
 )
+
+libc_test(
+    name = "set_abort_message_test",
+    srcs = ["set_abort_message_test.cpp"],
+    deps = [
+        "//libc/src/__support:abort_message",
+        "//libc/src/android:set_abort_message",
+        "//libc/src/string:strcmp",
+        "//libc/src/string:strlen",
+    ],
+)
