@@ -19,6 +19,7 @@
 
 #include <netinet/in.h>
 #include <stdio.h>
+#include <unistd.h>
 
 TEST(LlvmLibcAndroidHeadersTest, StdioBringsTheBionicIncludes) {
   off64_t offset = 0;
@@ -37,6 +38,15 @@ TEST(LlvmLibcAndroidHeadersTest, Ipv6InterfaceRequestIsDeclared) {
   EXPECT_EQ(sizeof(address), size_t(16));
   EXPECT_EQ(sizeof(request.ifr6_prefixlen), size_t(4));
   EXPECT_EQ(sizeof(request.ifr6_addr), size_t(16));
+}
+
+// bionic's <unistd.h> declares both, and code written for it does not include
+// <fcntl.h> or <sys/ioctl.h>.
+TEST(LlvmLibcAndroidHeadersTest, UnistdDeclaresFcntlAndIoctl) {
+  int (*fcntl_function)(int, int, ...) = fcntl;
+  int (*ioctl_function)(int, unsigned long, ...) = ioctl;
+  EXPECT_TRUE(fcntl_function != nullptr);
+  EXPECT_TRUE(ioctl_function != nullptr);
 }
 
 static int formatted(int, const char *, ...) __printflike(2, 3);
