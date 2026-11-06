@@ -134,6 +134,30 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  FTS
+  HDRS
+    FTS.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.FTS
+)
+
+add_proxy_header_library(
+  FTSENT
+  HDRS
+    FTSENT.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.FTSENT
+)
+
+add_proxy_header_library(
+  __fts_compare_func_t
+  HDRS
+    __fts_compare_func_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.__fts_compare_func_t
+)
+
+add_proxy_header_library(
   struct_FTW
   HDRS
     struct_FTW.h

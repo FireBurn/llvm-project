@@ -87,6 +87,18 @@ add_header_macro(
 )
 
 add_header_macro(
+  fts
+  ../libc/include/fts.yaml
+  fts.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.fts_macros
+    .llvm-libc-types.FTS
+    .llvm-libc-types.FTSENT
+    .llvm-libc-types.__fts_compare_func_t
+)
+
+add_header_macro(
   ftw
   ../libc/include/ftw.yaml
   ftw.h
