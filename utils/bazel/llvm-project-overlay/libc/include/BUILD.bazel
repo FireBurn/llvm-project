@@ -28,6 +28,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     ),
     libc_header_info("android/api-level"),
     libc_header_info("android/fdsan"),
+    libc_header_info("android/versioning"),
     libc_header_info("ar"),
     libc_header_info(
         "arpa/nameser",
@@ -152,6 +153,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("locale"),
     libc_header_info(
         "netinet/in",
+        has_def_template = True,
         other_srcs = ["htons-family.yaml"],
     ),
     libc_header_info("nl_types"),
@@ -179,6 +181,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("sys/resource"),
     libc_header_info(
         "sys/select",
+        has_def_template = True,
         other_srcs = ["sys/select-time.yaml"],
     ),
     libc_header_info("sys/socket"),
@@ -199,7 +202,10 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("sys/wait"),
     libc_header_info("sysexits"),
     libc_header_info("syslog"),
-    libc_header_info("termios"),
+    libc_header_info(
+        "termios",
+        has_def_template = True,
+    ),
     libc_header_info("threads"),
     libc_header_info("time"),
     libc_header_info("uchar"),
@@ -220,6 +226,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("wctype"),
     libc_header_info(
         "stdlib",
+        has_def_template = True,
         other_srcs = [
             "stdlib-alloca.yaml",
             "stdlib-malloc.yaml",
