@@ -27,6 +27,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         other_srcs = ["stdlib-alloca.yaml"],
     ),
     libc_header_info("android/api-level"),
+    libc_header_info("android/fdsan"),
     libc_header_info("ar"),
     libc_header_info(
         "arpa/nameser",
@@ -789,6 +790,16 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_endian_macros",
     hdrs = ["llvm-libc-macros/endian-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_enum_android_fdsan_error_level",
+    hdrs = ["llvm-libc-types/enum_android_fdsan_error_level.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_enum_android_fdsan_owner_type",
+    hdrs = ["llvm-libc-types/enum_android_fdsan_owner_type.h"],
 )
 
 libc_support_library(

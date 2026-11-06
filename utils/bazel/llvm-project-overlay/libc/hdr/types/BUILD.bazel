@@ -522,6 +522,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "hdr_types_enum_android_fdsan_error_level",
+    hdrs = ["enum_android_fdsan_error_level.h"],
+    deps = ["//libc/include:llvm_libc_types_enum_android_fdsan_error_level"],
+)
+
+libc_support_library(
+    name = "hdr_types_enum_android_fdsan_owner_type",
+    hdrs = ["enum_android_fdsan_owner_type.h"],
+    deps = ["//libc/include:llvm_libc_types_enum_android_fdsan_owner_type"],
+)
+
+libc_support_library(
     name = "cc_t",
     hdrs = ["cc_t.h"],
     deps = select({
