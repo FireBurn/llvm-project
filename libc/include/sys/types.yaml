@@ -3,6 +3,10 @@ standards:
   - posix
 public_includes:
   - endian.h
+  # glibc's <sys/types.h> brings in <sys/cdefs.h> through <features.h>, and
+  # headers written for glibc and bionic open their declarations with
+  # __BEGIN_DECLS having included nothing else that defines it.
+  - sys/cdefs.h
   # glibc's <sys/types.h> carries fd_set and the macros that go with it, and
   # a good deal of code counts on finding them there rather than including
   # <sys/select.h> for itself.
