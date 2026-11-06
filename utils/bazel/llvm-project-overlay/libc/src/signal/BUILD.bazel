@@ -206,6 +206,41 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "signal_text",
+    hdrs = ["signal_text.h"],
+    deps = [
+        ":signal_names",
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "sys_siglist",
+    srcs = ["sys_siglist.cpp"],
+    hdrs = ["sys_siglist.h"],
+    deps = [
+        ":signal_text",
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "sys_signame",
+    srcs = ["sys_signame.cpp"],
+    hdrs = ["sys_signame.h"],
+    deps = [
+        ":signal_text",
+        "//libc/hdr:signal_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_function(
     name = "siginterrupt",
     srcs = ["siginterrupt.cpp"],

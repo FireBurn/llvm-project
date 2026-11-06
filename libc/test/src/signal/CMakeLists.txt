@@ -421,3 +421,15 @@ add_libc_test(
     libc.src.signal.sig2str
     libc.src.signal.str2sig
 )
+
+add_libc_test(
+  sys_siglist_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    sys_siglist_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.signal.sys_siglist
+    libc.src.signal.sys_signame
+)

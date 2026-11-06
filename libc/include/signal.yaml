@@ -50,7 +50,15 @@ types:
     standards:
       - posix
 enums: []
-objects: []
+objects:
+  - object_name: sys_siglist
+    object_type: const char *const [NSIG]
+    standards:
+      - bsd
+  - object_name: sys_signame
+    object_type: const char *const [NSIG]
+    standards:
+      - bsd
 functions:
   - name: pthread_sigqueue
     standards:
