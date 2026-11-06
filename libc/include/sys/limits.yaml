@@ -1,0 +1,14 @@
+header: sys/limits.h
+public_includes:
+  - limits.h
+standards:
+  - bsd
+macros:
+  - macro_name: UID_MAX
+    macro_header: sys-limits-macros.h
+  - macro_name: GID_MAX
+    macro_header: sys-limits-macros.h
+types: []
+enums: []
+objects: []
+functions: []
