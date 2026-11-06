@@ -26,6 +26,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "alloca",
         other_srcs = ["stdlib-alloca.yaml"],
     ),
+    libc_header_info("android/api-level"),
     libc_header_info("ar"),
     libc_header_info(
         "arpa/nameser",
@@ -778,6 +779,11 @@ libc_support_library(
         "@platforms//os:linux": ["llvm-libc-macros/linux/error-number-macros.h"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_android_api_level_macros",
+    hdrs = ["llvm-libc-macros/android-api-level-macros.h"],
 )
 
 libc_support_library(

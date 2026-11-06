@@ -370,6 +370,12 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "android_api_level_macros",
+    hdrs = ["android_api_level_macros.h"],
+    deps = ["//libc/include:llvm_libc_macros_android_api_level_macros"],
+)
+
+libc_support_library(
     name = "stdio_ext_macros",
     hdrs = ["stdio_ext_macros.h"],
     deps = [
