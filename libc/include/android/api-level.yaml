@@ -53,3 +53,6 @@ functions:
   - name: android_get_application_target_sdk_version
     return_type: int
     arguments: []
+  - name: android_get_device_api_level
+    return_type: int
+    arguments: []
