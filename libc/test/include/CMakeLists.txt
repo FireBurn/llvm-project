@@ -667,7 +667,7 @@ add_libc_test(
     libc.include.values
 )
 # Its structures are written for x86_64 alone.
-if(LIBC_TARGET_ARCHITECTURE_IS_X86_64)
+if(LIBC_TARGET_ARCHITECTURE_IS_X86_64 OR LIBC_TARGET_ARCHITECTURE_IS_AARCH64)
   add_libc_test(
     sys_user_test
     SUITE
