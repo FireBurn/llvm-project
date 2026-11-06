@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Implementation header for __system_property_set_filename.
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIBC_SRC_SYS_SYSTEM_PROPERTIES_SYSTEM_PROPERTY_SET_FILENAME_H
+#define LLVM_LIBC_SRC_SYS_SYSTEM_PROPERTIES_SYSTEM_PROPERTY_SET_FILENAME_H
+
+#include "src/__support/macros/config.h"
+
+
+namespace LIBC_NAMESPACE_DECL {
+
+int __system_property_set_filename(const char *filename);
+
+} // namespace LIBC_NAMESPACE_DECL
+
+#endif // LLVM_LIBC_SRC_SYS_SYSTEM_PROPERTIES_SYSTEM_PROPERTY_SET_FILENAME_H

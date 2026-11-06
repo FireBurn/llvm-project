@@ -1,0 +1,65 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc system properties.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "system_properties_test",
+    srcs = ["system_properties_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:system_properties_macros",
+        "//libc/hdr:time_macros",
+        "//libc/src/string:strcmp",
+        "//libc/src/string:strlen",
+        "//libc/src/sys/system_properties:__system_properties_init",
+        "//libc/src/sys/system_properties:__system_property_add",
+        "//libc/src/sys/system_properties:__system_property_area_init",
+        "//libc/src/sys/system_properties:__system_property_area_serial",
+        "//libc/src/sys/system_properties:__system_property_find",
+        "//libc/src/sys/system_properties:__system_property_find_nth",
+        "//libc/src/sys/system_properties:__system_property_foreach",
+        "//libc/src/sys/system_properties:__system_property_get",
+        "//libc/src/sys/system_properties:__system_property_read",
+        "//libc/src/sys/system_properties:__system_property_read_callback",
+        "//libc/src/sys/system_properties:__system_property_serial",
+        "//libc/src/sys/system_properties:__system_property_set_filename",
+        "//libc/src/sys/system_properties:__system_property_update",
+        "//libc/src/sys/system_properties:__system_property_wait",
+        "//libc/src/sys/system_properties:__system_property_wait_any",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
+    name = "system_properties_client_test",
+    srcs = ["system_properties_client_test.cpp"],
+    deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_mman_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:system_properties_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/string:strcmp",
+        "//libc/src/sys/mman:mmap",
+        "//libc/src/sys/mman:munmap",
+        "//libc/src/sys/system_properties:__system_property_find",
+        "//libc/src/sys/system_properties:__system_property_get",
+        "//libc/src/sys/system_properties:__system_property_set_filename",
+        "//libc/src/sys/system_properties:__system_property_update",
+        "//libc/src/sys/system_properties:property_area",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:ftruncate",
+        "//libc/src/unistd:unlink",
+    ],
+)
