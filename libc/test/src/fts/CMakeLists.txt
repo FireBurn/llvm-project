@@ -1,0 +1,30 @@
+add_libc_testsuite(libc-fts-tests)
+
+add_libc_test(
+  fts_test
+  SUITE
+    libc-fts-tests
+  SRCS
+    fts_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.fts_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.types.FTS
+    libc.hdr.types.FTSENT
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.fts.fts_children
+    libc.src.fts.fts_close
+    libc.src.fts.fts_open
+    libc.src.fts.fts_read
+    libc.src.fts.fts_set
+    libc.src.string.strcmp
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.src.unistd.symlink
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
