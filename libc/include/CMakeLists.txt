@@ -1209,6 +1209,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_limits
+  ../libc/include/sys/limits.yaml
+  sys/limits.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_limits_macros
+)
+
+add_header_macro(
   sys_param
   ../libc/include/sys/param.yaml
   sys/param.h
