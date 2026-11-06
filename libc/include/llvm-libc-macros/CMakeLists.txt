@@ -117,6 +117,12 @@ add_macro_header(
 )
 
 add_macro_header(
+  system_properties_macros
+  HDR
+    system-properties-macros.h
+)
+
+add_macro_header(
   fts_macros
   HDR
     fts-macros.h

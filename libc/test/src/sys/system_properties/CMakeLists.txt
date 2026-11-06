@@ -1,0 +1,89 @@
+add_libc_testsuite(libc-sys-system-properties-tests)
+
+add_libc_test(
+  system_properties_test
+  SUITE
+    libc-sys-system-properties-tests
+  SRCS
+    system_properties_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.system_properties_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.src.__support.libc_errno
+    libc.src.string.strcmp
+    libc.src.string.strlen
+    libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.__system_property_add
+    libc.src.sys.system_properties.__system_property_area_init
+    libc.src.sys.system_properties.__system_property_area_serial
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_find_nth
+    libc.src.sys.system_properties.__system_property_foreach
+    libc.src.sys.system_properties.__system_property_get
+    libc.src.sys.system_properties.__system_property_read
+    libc.src.sys.system_properties.__system_property_read_callback
+    libc.src.sys.system_properties.__system_property_serial
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_property_update
+    libc.src.sys.system_properties.__system_property_wait
+    libc.src.sys.system_properties.__system_property_wait_any
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
+  system_properties_client_test
+  SUITE
+    libc-sys-system-properties-tests
+  SRCS
+    system_properties_client_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.sys_stat_macros
+    libc.hdr.system_properties_macros
+    libc.hdr.types.mode_t
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.munmap
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_get
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_property_update
+    libc.src.sys.system_properties.property_area
+    libc.src.unistd.close
+    libc.src.unistd.ftruncate
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
+  system_properties_untrusted_test
+  SUITE
+    libc-sys-system-properties-tests
+  SRCS
+    system_properties_untrusted_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.sys_stat_macros
+    libc.src.__support.libc_errno
+    libc.src.fcntl.open
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.munmap
+    libc.src.sys.stat.chmod
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.property_area
+    libc.src.unistd.close
+    libc.src.unistd.ftruncate
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
