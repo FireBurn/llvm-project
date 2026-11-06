@@ -1760,6 +1760,19 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_system_properties
+  ../libc/include/sys/system_properties.yaml
+  sys/system_properties.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.system_properties_macros
+    .llvm-libc-types.__prop_foreach_callback_t
+    .llvm-libc-types.__prop_read_callback_t
+    .llvm-libc-types.prop_info
+    .llvm-libc-types.struct_timespec
+)
+
+add_header_macro(
   sys_user
   ../libc/include/sys/user.yaml
   sys/user.h

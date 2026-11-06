@@ -134,6 +134,30 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  prop_info
+  HDRS
+    prop_info.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.prop_info
+)
+
+add_proxy_header_library(
+  __prop_foreach_callback_t
+  HDRS
+    __prop_foreach_callback_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.__prop_foreach_callback_t
+)
+
+add_proxy_header_library(
+  __prop_read_callback_t
+  HDRS
+    __prop_read_callback_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.__prop_read_callback_t
+)
+
+add_proxy_header_library(
   FTS
   HDRS
     FTS.h

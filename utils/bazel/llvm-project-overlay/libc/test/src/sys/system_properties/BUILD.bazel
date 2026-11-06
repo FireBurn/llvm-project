@@ -1,0 +1,65 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc system properties.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "system_properties_test",
+    srcs = ["system_properties_test.cpp"],
+    deps = [
+        "//libc:__system_properties_init",
+        "//libc:__system_property_add",
+        "//libc:__system_property_area_init",
+        "//libc:__system_property_area_serial",
+        "//libc:__system_property_find",
+        "//libc:__system_property_find_nth",
+        "//libc:__system_property_foreach",
+        "//libc:__system_property_get",
+        "//libc:__system_property_read",
+        "//libc:__system_property_read_callback",
+        "//libc:__system_property_serial",
+        "//libc:__system_property_set_filename",
+        "//libc:__system_property_update",
+        "//libc:__system_property_wait",
+        "//libc:__system_property_wait_any",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_system_properties_macros",
+        "//libc:hdr_time_macros",
+        "//libc:strcmp",
+        "//libc:strlen",
+        "//libc:types_struct_timespec",
+        "//libc:unlink",
+    ],
+)
+
+libc_test(
+    name = "system_properties_client_test",
+    srcs = ["system_properties_client_test.cpp"],
+    deps = [
+        "//libc:__system_property_find",
+        "//libc:__system_property_get",
+        "//libc:__system_property_set_filename",
+        "//libc:__system_property_update",
+        "//libc:close",
+        "//libc:ftruncate",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_sys_mman_macros",
+        "//libc:hdr_sys_stat_macros",
+        "//libc:hdr_system_properties_macros",
+        "//libc:mmap",
+        "//libc:munmap",
+        "//libc:open",
+        "//libc:strcmp",
+        "//libc:sys_system_properties_property_area",
+        "//libc:types_mode_t",
+        "//libc:unlink",
+    ],
+)
