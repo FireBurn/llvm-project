@@ -1,4 +1,5 @@
 header: stdlib.h
+header_template: stdlib.h.def
 public_includes:
   # glibc's <stdlib.h> makes alloca visible and a good deal of code
   # counts on it.

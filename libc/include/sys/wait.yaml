@@ -4,6 +4,9 @@ public_includes:
   # reports how a signal ended it, and callers name and send those signals
   # without including anything further.
   - signal.h
+  # POSIX lets <sys/wait.h> make <sys/resource.h> visible; waiting reports
+  # the resources a child used.
+  - sys/resource.h
 standards:
   - posix
 macros:

@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// POSIX header netinet/in.h
+///
+//===----------------------------------------------------------------------===//
+
+#ifndef _LLVM_LIBC_NETINET_IN_H
+#define _LLVM_LIBC_NETINET_IN_H
+
+#include "../__llvm-libc-common.h"
+
+#ifdef __ANDROID__
+// The kernel's headers leave out the types this header defines once they see
+// this name, as they do for bionic.
+#define _NETINET_IN_H
+#endif // __ANDROID__
+
+%%public_api()
+
+#ifdef __ANDROID__
+// bionic's brings in struct in6_ifreq, which Android code expects from here.
+#include <linux/ipv6.h>
+#endif // __ANDROID__
+
+#endif // _LLVM_LIBC_NETINET_IN_H
