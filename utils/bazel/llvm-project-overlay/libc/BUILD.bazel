@@ -5441,15 +5441,15 @@ libc_support_library(
 
 libc_support_library(
     name = "__support_stringutil",
-    srcs = glob(["src/__support/StringUtil/tables/**/*.h"]) + [
+    srcs = [
         "src/__support/StringUtil/error_to_string.cpp",
-        "src/__support/StringUtil/message_mapper.h",
         "src/__support/StringUtil/platform_errors.h",
-        "src/__support/StringUtil/platform_signals.h",
         "src/__support/StringUtil/signal_to_string.cpp",
     ],
-    hdrs = [
+    hdrs = glob(["src/__support/StringUtil/tables/**/*.h"]) + [
         "src/__support/StringUtil/error_to_string.h",
+        "src/__support/StringUtil/message_mapper.h",
+        "src/__support/StringUtil/platform_signals.h",
         "src/__support/StringUtil/signal_to_string.h",
     ],
     target_compatible_with = select({
@@ -20747,6 +20747,41 @@ libc_function(
         ":hdr_signal_macros",
         ":signal_signal_names",
         ":string_memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "signal_signal_text",
+    hdrs = ["src/signal/signal_text.h"],
+    deps = [
+        ":__support_macros_config",
+        ":__support_stringutil",
+        ":hdr_signal_macros",
+        ":signal_signal_names",
+    ],
+)
+
+libc_function(
+    name = "sys_siglist",
+    srcs = ["src/signal/sys_siglist.cpp"],
+    hdrs = ["src/signal/sys_siglist.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_signal_macros",
+        ":signal_signal_text",
+    ],
+)
+
+libc_function(
+    name = "sys_signame",
+    srcs = ["src/signal/sys_signame.cpp"],
+    hdrs = ["src/signal/sys_signame.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_signal_macros",
+        ":signal_signal_text",
     ],
 )
 
