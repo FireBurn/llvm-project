@@ -34602,6 +34602,19 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "pthread_pthread_mutex_timed_lock_utils",
+    hdrs = ["src/pthread/pthread_mutex_timed_lock_utils.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":__support_time_abs_timeout",
+        ":hdr_errno_macros",
+        ":types_struct_timespec",
+    ],
+)
+
 libc_function(
     name = "pthread_mutex_timedlock",
     srcs = ["src/pthread/pthread_mutex_timedlock.cpp"],
@@ -34609,8 +34622,7 @@ libc_function(
     deps = [
         ":__support_common",
         ":__support_macros_config",
-        ":__support_threads_mutex",
-        ":__support_time_abs_timeout",
+        ":pthread_pthread_mutex_timed_lock_utils",
         ":hdr_errno_macros",
         ":types_struct_timespec",
     ],
