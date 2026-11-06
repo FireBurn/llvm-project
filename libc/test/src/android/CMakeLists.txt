@@ -13,6 +13,24 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_get_device_api_level_test
+  SUITE
+    libc-android-tests
+  SRCS
+    android_get_device_api_level_test.cpp
+  DEPENDS
+    libc.src.android.android_get_device_api_level
+    libc.src.string.strlen
+    libc.src.sys.system_properties.__system_property_add
+    libc.src.sys.system_properties.__system_property_area_init
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_property_update
+    libc.src.unistd.unlink
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   fdsan_test
   SUITE
     libc-android-tests

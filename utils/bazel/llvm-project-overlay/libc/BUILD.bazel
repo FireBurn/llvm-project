@@ -37304,6 +37304,18 @@ libc_function(
 )
 
 libc_function(
+    name = "android_get_device_api_level",
+    srcs = ["src/android/android_get_device_api_level.cpp"],
+    hdrs = ["src/android/android_get_device_api_level.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_system_properties_macros",
+        ":sys_system_properties_property_store",
+    ],
+)
+
+libc_function(
     name = "android_get_application_target_sdk_version",
     srcs = ["src/android/android_get_application_target_sdk_version.cpp"],
     hdrs = ["src/android/android_get_application_target_sdk_version.h"],
