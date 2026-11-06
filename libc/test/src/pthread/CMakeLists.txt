@@ -69,6 +69,39 @@ add_libc_test(
 )
 
 add_libc_test(
+  pthread_monotonic_np_test
+  SUITE
+    libc-pthread-tests
+  SRCS
+    pthread_monotonic_np_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
+    libc.hdr.types.struct_timespec
+    libc.include.pthread
+    libc.src.pthread.pthread_cond_destroy
+    libc.src.pthread.pthread_cond_init
+    libc.src.pthread.pthread_cond_timedwait_monotonic_np
+    libc.src.pthread.pthread_mutex_clocklock
+    libc.src.pthread.pthread_mutex_destroy
+    libc.src.pthread.pthread_mutex_init
+    libc.src.pthread.pthread_mutex_lock
+    libc.src.pthread.pthread_mutex_timedlock_monotonic_np
+    libc.src.pthread.pthread_mutex_unlock
+    libc.src.pthread.pthread_rwlock_destroy
+    libc.src.pthread.pthread_rwlock_init
+    libc.src.pthread.pthread_rwlock_timedrdlock_monotonic_np
+    libc.src.pthread.pthread_rwlock_timedwrlock_monotonic_np
+    libc.src.pthread.pthread_rwlock_unlock
+    libc.src.semaphore.sem_destroy
+    libc.src.semaphore.sem_init
+    libc.src.semaphore.sem_post
+    libc.src.semaphore.sem_timedwait_monotonic_np
+    libc.src.time.clock_gettime
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   pthread_condattr_test
   SUITE
     libc-pthread-tests
