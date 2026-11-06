@@ -1875,6 +1875,10 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.pthread.pthread_barrier_init
     libc.src.pthread.pthread_barrier_wait
     libc.src.pthread.pthread_barrier_destroy
+    libc.src.pthread.pthread_barrierattr_init
+    libc.src.pthread.pthread_barrierattr_destroy
+    libc.src.pthread.pthread_barrierattr_getpshared
+    libc.src.pthread.pthread_barrierattr_setpshared
     libc.src.pthread.pthread_mutex_consistent
     libc.src.pthread.pthread_mutex_destroy
     libc.src.pthread.pthread_mutex_init
