@@ -116,6 +116,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  sigset64_t
+  HDRS
+    sigset64_t.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.sigset64_t
+)
+
+add_proxy_header_library(
   siginfo_t
   HDRS
     siginfo_t.h
@@ -533,6 +541,14 @@ add_proxy_header_library(
     struct_sigaction.h
   FULL_BUILD_DEPENDS
     libc.include.llvm-libc-types.struct_sigaction
+)
+
+add_proxy_header_library(
+  struct_sigaction64
+  HDRS
+    struct_sigaction64.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.struct_sigaction64
 )
 
 add_proxy_header_library(
