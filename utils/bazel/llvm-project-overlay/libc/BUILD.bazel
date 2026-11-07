@@ -33330,6 +33330,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_system_properties_property_info",
+    hdrs = ["src/sys/system_properties/property_info.h"],
+    deps = [
+        ":__support_macros_config",
+        ":string_utils",
+    ],
+)
+
+libc_support_library(
     name = "sys_system_properties_property_store",
     hdrs = ["src/sys/system_properties/property_store.h"],
     target_compatible_with = select({
@@ -33343,6 +33352,7 @@ libc_support_library(
         ":__support_osutil_linux_stat_stat_via_statx",
         ":__support_osutil_linux_syscall_wrappers_close",
         ":__support_osutil_linux_syscall_wrappers_connect",
+        ":__support_osutil_linux_syscall_wrappers_fsetxattr",
         ":__support_osutil_linux_syscall_wrappers_ftruncate",
         ":__support_osutil_linux_syscall_wrappers_getuid",
         ":__support_osutil_linux_syscall_wrappers_mmap",
@@ -33361,6 +33371,7 @@ libc_support_library(
         ":hdr_sys_stat_macros",
         ":hdr_time_macros",
         ":sys_system_properties_property_area",
+        ":sys_system_properties_property_info",
         ":types_struct_sockaddr_un",
         ":types_struct_stat",
         ":types_struct_timespec",
