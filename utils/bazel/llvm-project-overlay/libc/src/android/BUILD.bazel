@@ -16,6 +16,17 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "__libc_crash_detail_page",
+    srcs = ["libc_crash_detail_page.cpp"],
+    hdrs = ["libc_crash_detail_page.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:crash_detail",
+    ],
+)
+
+libc_function(
     name = "crash_detail_register",
     srcs = ["android_crash_detail_register.cpp"],
     hdrs = ["android_crash_detail_register.h"],

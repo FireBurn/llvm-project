@@ -16,11 +16,28 @@
 #include "src/android/android_crash_detail_replace_data.h"
 #include "src/android/android_crash_detail_replace_name.h"
 #include "src/android/android_crash_detail_unregister.h"
+#include "src/android/libc_crash_detail_page.h"
 #include "test/UnitTest/Test.h"
 
 namespace {
 namespace cd = LIBC_NAMESPACE::crash_detail;
 } // namespace
+
+TEST(LlvmLibcCrashDetailTest, PageHoldsWhatWasRegistered) {
+  const char name[] = "paged";
+  const char data[] = "value";
+  cd::Detail *detail = LIBC_NAMESPACE::android_crash_detail_register(
+      name, sizeof(name) - 1, data, sizeof(data) - 1);
+  ASSERT_TRUE(detail != nullptr);
+  const cd::Page *page =
+      static_cast<const cd::Page *>(LIBC_NAMESPACE::__libc_crash_detail_page());
+  ASSERT_TRUE(page != nullptr);
+  bool found = false;
+  for (size_t i = 0; i < page->used; ++i)
+    found = found || &page->details[i] == detail;
+  EXPECT_TRUE(found);
+  LIBC_NAMESPACE::android_crash_detail_unregister(detail);
+}
 
 TEST(LlvmLibcCrashDetailTest, RegisterKeepsThePointers) {
   const char name[] = "key";
