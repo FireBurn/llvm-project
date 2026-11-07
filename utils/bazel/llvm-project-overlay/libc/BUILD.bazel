@@ -22445,6 +22445,24 @@ libc_function(
 )
 
 libc_function(
+    name = "__read_chk",
+    srcs = ["src/unistd/linux/read_chk.cpp"],
+    hdrs = ["src/unistd/read_chk.h"],
+    deps = [
+        ":__support_abort_message",
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_integer_to_string",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
+        ":read",
+        ":stdlib_abort_utils",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
     name = "read",
     srcs = ["src/unistd/linux/read.cpp"],
     hdrs = ["src/unistd/read.h"],
