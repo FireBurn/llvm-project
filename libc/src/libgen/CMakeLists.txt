@@ -1,9 +1,9 @@
 add_entrypoint_object(
-  basename
+  __xpg_basename
   SRCS
-    basename.cpp
+    xpg_basename.cpp
   HDRS
-    basename.h
+    xpg_basename.h
   DEPENDS
     libc.src.__support.CPP.string_view
     libc.src.__support.common
