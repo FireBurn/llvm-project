@@ -571,6 +571,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_auxv_hwcap_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_auxv_hwcap_test.cpp
+  DEPENDS
+    libc.include.sys_auxv
+)
+
+add_libc_test(
   netinet_in6_test
   SUITE
     libc-include-tests
