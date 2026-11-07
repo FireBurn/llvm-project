@@ -11,7 +11,13 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.android_fdsan_get_tag_value
     libc.src.android.android_fdsan_set_error_level
     libc.src.android.android_fdsan_set_error_level_from_property
+    libc.src.android.android_create_namespace
+    libc.src.android.android_dlopen_ext
+    libc.src.android.android_get_exported_namespace
+    libc.src.android.android_init_anonymous_namespace
+    libc.src.android.android_link_namespaces
     libc.src.android.android_set_abort_message
+    libc.src.android.android_update_LD_LIBRARY_PATH
 
     # sys/system_properties.h entrypoints
     libc.src.sys.system_properties.__system_properties_init

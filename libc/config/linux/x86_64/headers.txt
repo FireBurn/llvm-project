@@ -1,5 +1,6 @@
 set(TARGET_PUBLIC_HEADERS
     libc.include.android_api_level
+    libc.include.android_dlext
     libc.include.android_fdsan
     libc.include.android_set_abort_message
     libc.include.android_versioning
