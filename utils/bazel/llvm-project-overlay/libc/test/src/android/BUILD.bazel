@@ -66,3 +66,15 @@ libc_test(
         "//libc:strlen",
     ],
 )
+
+libc_test(
+    name = "crash_detail_test",
+    srcs = ["crash_detail_test.cpp"],
+    deps = [
+        "//libc:__support_crash_detail",
+        "//libc:android_crash_detail_register",
+        "//libc:android_crash_detail_replace_data",
+        "//libc:android_crash_detail_replace_name",
+        "//libc:android_crash_detail_unregister",
+    ],
+)

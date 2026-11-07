@@ -59,6 +59,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  crash_detail_test
+  SUITE
+    libc-android-tests
+  SRCS
+    crash_detail_test.cpp
+  DEPENDS
+    libc.src.__support.crash_detail
+    libc.src.android.android_crash_detail_register
+    libc.src.android.android_crash_detail_replace_data
+    libc.src.android.android_crash_detail_replace_name
+    libc.src.android.android_crash_detail_unregister
+)
+
+add_libc_test(
   set_abort_message_test
   SUITE
     libc-android-tests
