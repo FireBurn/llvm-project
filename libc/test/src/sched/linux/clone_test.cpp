@@ -98,6 +98,34 @@ TEST_F(LlvmLibcSchedCloneTest, NullFuncOrStack) {
               Fails(EINVAL));
 }
 
+TEST_F(LlvmLibcSchedCloneTest, ContinuesFromTheCallWithoutAFunction) {
+  pid_t parent_tid = LIBC_NAMESPACE::gettid();
+  pid_t pid = LIBC_NAMESPACE::clone(nullptr, nullptr, SIGCHLD, nullptr);
+  if (pid == 0) {
+    // The child has its own id, and an exit status of its own.
+    pid_t cached = LIBC_NAMESPACE::gettid();
+    pid_t sys = LIBC_NAMESPACE::syscall_impl<pid_t>(SYS_gettid);
+    LIBC_NAMESPACE::syscall_impl<long>(
+        SYS_exit_group, cached == sys && cached != parent_tid ? 77 : 78);
+  }
+  ASSERT_ERRNO_SUCCESS();
+  ASSERT_GT(pid, 0);
+
+  int status = 0;
+  pid_t cpid = LIBC_NAMESPACE::waitpid(pid, &status, 0);
+  ASSERT_ERRNO_SUCCESS();
+  ASSERT_EQ(cpid, pid);
+  ASSERT_TRUE(WIFEXITED(status));
+  ASSERT_EQ(WEXITSTATUS(status), 77);
+  ASSERT_EQ(LIBC_NAMESPACE::gettid(), parent_tid);
+}
+
+TEST_F(LlvmLibcSchedCloneTest, NoFunctionCannotShareTheStack) {
+  EXPECT_THAT(
+      LIBC_NAMESPACE::clone(nullptr, nullptr, CLONE_VM | SIGCHLD, nullptr),
+      Fails(EINVAL));
+}
+
 TEST_F(LlvmLibcSchedCloneTest, ChildTidSeparateVm) {
   TidArgs args;
   args.parent_tid = LIBC_NAMESPACE::gettid();
