@@ -80,3 +80,7 @@ TEST(LlvmLibcLinuxSignalMacrosTest, DefineTheKernelSiCodeNames) {
 TEST(LlvmLibcLinuxSignalMacrosTest, DefineSi_Dethread) {
   EXPECT_EQ(SI_DETHREAD, -7);
 }
+
+TEST(LlvmLibcLinuxSignalMacrosTest, DefineSa_ExposeTagbits) {
+  EXPECT_EQ(SA_EXPOSE_TAGBITS, 0x800);
+}
