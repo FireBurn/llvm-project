@@ -611,6 +611,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  netinet_in6_test
+  SUITE
+    libc-include-tests
+  SRCS
+    netinet_in6_test.cpp
+  DEPENDS
+    libc.include.netinet_in6
+)
+
+add_libc_test(
   netinet_in_ports_test
   SUITE
     libc-include-tests

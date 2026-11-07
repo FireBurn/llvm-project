@@ -2019,6 +2019,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  netinet_in6
+  ../libc/include/netinet/in6.yaml
+  netinet/in6.h
+  DEPENDS
+    .llvm_libc_common_h
+    .netinet_in
+)
+
+add_header_macro(
   resolv
   ../libc/include/resolv.yaml
   resolv.h
