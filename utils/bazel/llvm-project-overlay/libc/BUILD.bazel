@@ -876,6 +876,12 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_sigset64_t",
+    hdrs = ["include/llvm-libc-types/sigset64_t.h"],
+    deps = [":llvm_libc_types_sigset_t"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_siginfo_t",
     hdrs = ["include/llvm-libc-types/siginfo_t.h"],
     deps = [
@@ -892,6 +898,15 @@ libc_support_library(
     deps = [
         ":llvm_libc_types_siginfo_t",
         ":llvm_libc_types_sigset_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_sigaction64",
+    hdrs = ["include/llvm-libc-types/struct_sigaction64.h"],
+    deps = [
+        ":llvm_libc_types_siginfo_t",
+        ":llvm_libc_types_sigset64_t",
     ],
 )
 
@@ -1632,6 +1647,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "types_sigset64_t",
+    hdrs = ["hdr/types/sigset64_t.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_sigset64_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "types_siginfo_t",
     hdrs = ["hdr/types/siginfo_t.h"],
     deps = select({
@@ -1645,6 +1669,15 @@ libc_support_library(
     hdrs = ["hdr/types/struct_sigaction.h"],
     deps = select({
         ":full_build": [":llvm_libc_types_struct_sigaction"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "types_struct_sigaction64",
+    hdrs = ["hdr/types/struct_sigaction64.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_sigaction64"],
         "//conditions:default": [],
     }),
 )
@@ -21195,6 +21228,167 @@ libc_function(
 )
 
 libc_function(
+    name = "pthread_sigmask64",
+    srcs = ["src/signal/pthread_sigmask64.cpp"],
+    hdrs = ["src/signal/pthread_sigmask64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":pthread_sigmask",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigaction64",
+    srcs = ["src/signal/sigaction64.cpp"],
+    hdrs = ["src/signal/sigaction64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigaction",
+        ":types_sigset64_t",
+        ":types_struct_sigaction",
+        ":types_struct_sigaction64",
+    ],
+)
+
+libc_function(
+    name = "sigaddset64",
+    srcs = ["src/signal/sigaddset64.cpp"],
+    hdrs = ["src/signal/sigaddset64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigaddset",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigdelset64",
+    srcs = ["src/signal/sigdelset64.cpp"],
+    hdrs = ["src/signal/sigdelset64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigdelset",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigemptyset64",
+    srcs = ["src/signal/sigemptyset64.cpp"],
+    hdrs = ["src/signal/sigemptyset64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigemptyset",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigfillset64",
+    srcs = ["src/signal/sigfillset64.cpp"],
+    hdrs = ["src/signal/sigfillset64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigfillset",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigismember64",
+    srcs = ["src/signal/sigismember64.cpp"],
+    hdrs = ["src/signal/sigismember64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigismember",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigpending64",
+    srcs = ["src/signal/sigpending64.cpp"],
+    hdrs = ["src/signal/sigpending64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigpending",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigprocmask64",
+    srcs = ["src/signal/sigprocmask64.cpp"],
+    hdrs = ["src/signal/sigprocmask64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigprocmask",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigsuspend64",
+    srcs = ["src/signal/sigsuspend64.cpp"],
+    hdrs = ["src/signal/sigsuspend64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigsuspend",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigtimedwait64",
+    srcs = ["src/signal/sigtimedwait64.cpp"],
+    hdrs = ["src/signal/sigtimedwait64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigtimedwait",
+        ":types_siginfo_t",
+        ":types_sigset64_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "sigwait64",
+    srcs = ["src/signal/sigwait64.cpp"],
+    hdrs = ["src/signal/sigwait64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigwait",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
+    name = "sigwaitinfo64",
+    srcs = ["src/signal/sigwaitinfo64.cpp"],
+    hdrs = ["src/signal/sigwaitinfo64.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":sigwaitinfo",
+        ":types_siginfo_t",
+        ":types_sigset64_t",
+    ],
+)
+
+libc_function(
     name = "str2sig",
     srcs = ["src/signal/str2sig.cpp"],
     hdrs = ["src/signal/str2sig.h"],
@@ -39400,6 +39594,34 @@ libc_function(
     name = "sigemptyset",
     srcs = ["src/signal/linux/sigemptyset.cpp"],
     hdrs = ["src/signal/sigemptyset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigdelset",
+    srcs = ["src/signal/linux/sigdelset.cpp"],
+    hdrs = ["src/signal/sigdelset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigfillset",
+    srcs = ["src/signal/linux/sigfillset.cpp"],
+    hdrs = ["src/signal/sigfillset.h"],
     deps = [
         ":__support_common",
         ":__support_libc_errno",
