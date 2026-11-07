@@ -4,7 +4,7 @@
 
 # Tests for LLVM libc system properties.
 
-load("//libc/test:libc_test_rules.bzl", "libc_test")
+load("//libc/test:libc_test_rules.bzl", "libc_test", "libc_test_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -63,3 +63,73 @@ libc_test(
         "//libc:unlink",
     ],
 )
+
+libc_test_library(
+    name = "property_info_blob",
+    hdrs = ["property_info_blob.h"],
+)
+
+libc_test(
+    name = "system_properties_directory_test",
+    srcs = ["system_properties_directory_test.cpp"],
+    deps = [
+        ":property_info_blob",
+        "//libc:__system_property_add",
+        "//libc:__system_property_area_init",
+        "//libc:__system_property_area_serial",
+        "//libc:__system_property_find",
+        "//libc:__system_property_find_nth",
+        "//libc:__system_property_foreach",
+        "//libc:__system_property_get",
+        "//libc:__system_property_set_filename",
+        "//libc:__system_property_update",
+        "//libc:close",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_limits_macros",
+        "//libc:hdr_sys_mman_macros",
+        "//libc:hdr_system_properties_macros",
+        "//libc:mkdir",
+        "//libc:mmap",
+        "//libc:munmap",
+        "//libc:open",
+        "//libc:rmdir",
+        "//libc:strcmp",
+        "//libc:strlen",
+        "//libc:sys_system_properties_property_area",
+        "//libc:sys_system_properties_property_info",
+        "//libc:types_mode_t",
+        "//libc:unlink",
+        "//libc:write",
+    ],
+)
+
+libc_test(
+    name = "system_properties_directory_client_test",
+    srcs = ["system_properties_directory_client_test.cpp"],
+    deps = [
+        ":property_info_blob",
+        "//libc:__system_properties_init",
+        "//libc:__system_property_find",
+        "//libc:__system_property_foreach",
+        "//libc:__system_property_get",
+        "//libc:__system_property_set_filename",
+        "//libc:close",
+        "//libc:ftruncate",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_fcntl_macros",
+        "//libc:hdr_limits_macros",
+        "//libc:hdr_sys_mman_macros",
+        "//libc:hdr_system_properties_macros",
+        "//libc:mkdir",
+        "//libc:mmap",
+        "//libc:munmap",
+        "//libc:open",
+        "//libc:rmdir",
+        "//libc:strcmp",
+        "//libc:strlen",
+        "//libc:sys_system_properties_property_area",
+        "//libc:unlink",
+        "//libc:write",
+    ],
+)
+
