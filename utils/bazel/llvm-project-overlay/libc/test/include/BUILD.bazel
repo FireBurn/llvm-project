@@ -396,6 +396,14 @@ libc_test(
 )
 
 libc_test(
+    name = "linux_signal_macros_test",
+    srcs = ["linux_signal_macros_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_macros_signal_macros",
+    ],
+)
+
+libc_test(
     name = "linux_sys_stat_macros_test",
     srcs = ["linux_sys_stat_macros_test.cpp"],
     deps = [
