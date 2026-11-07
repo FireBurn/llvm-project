@@ -19188,6 +19188,17 @@ libc_function(
 )
 
 libc_function(
+    name = "basename",
+    srcs = ["src/string/basename.cpp"],
+    hdrs = ["src/string/basename.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":string_utils",
+    ],
+)
+
+libc_function(
     name = "strchrnul",
     srcs = ["src/string/strchrnul.cpp"],
     hdrs = ["src/string/strchrnul.h"],

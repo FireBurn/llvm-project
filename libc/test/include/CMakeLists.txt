@@ -116,6 +116,38 @@ add_libc_test(
 )
 
 add_libc_test(
+  string_basename_test
+  SUITE
+    libc-include-tests
+  SRCS
+    string_basename_test.cpp
+  DEPENDS
+    libc.include.string
+)
+
+add_libc_test(
+  libgen_basename_test
+  SUITE
+    libc-include-tests
+  SRCS
+    libgen_basename_test.cpp
+  DEPENDS
+    libc.include.libgen
+    libc.include.string
+)
+
+add_libc_test(
+  libgen_first_basename_test
+  SUITE
+    libc-include-tests
+  SRCS
+    libgen_first_basename_test.cpp
+  DEPENDS
+    libc.include.libgen
+    libc.include.string
+)
+
+add_libc_test(
   math_relational_test
   SUITE
     libc-include-tests
