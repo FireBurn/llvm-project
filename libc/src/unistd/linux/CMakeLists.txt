@@ -974,6 +974,25 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __read_chk
+  SRCS
+    read_chk.cpp
+  HDRS
+    ../read_chk.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.CPP.string_view
+    libc.src.__support.abort_message
+    libc.src.__support.common
+    libc.src.__support.integer_to_string
+    libc.src.__support.macros.config
+    libc.src.__support.macros.optimization
+    libc.src.stdlib.abort_utils
+    libc.src.unistd.read
+)
+
+add_entrypoint_object(
   read
   SRCS
     read.cpp
