@@ -1,0 +1,19 @@
+//===-- Android netinet/in6.h header --------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef _LLVM_LIBC_NETINET_IN6_H
+#define _LLVM_LIBC_NETINET_IN6_H
+
+#include "../__llvm-libc-common.h"
+
+// Everything in this header is in <netinet/in.h>.
+#include "in.h"
+
+%%public_api()
+
+#endif // _LLVM_LIBC_NETINET_IN6_H
