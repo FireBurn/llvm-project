@@ -46,4 +46,12 @@
 #define AT_MINSIGSTKSZ 51
 #endif
 
+// glibc's header brings in the names of the hardware capability bits, which
+// the kernel's header defines on the machines that have any.
+#if defined(__has_include)
+#if __has_include(<asm/hwcap.h>)
+#include <asm/hwcap.h>
+#endif
+#endif
+
 #endif // LLVM_LIBC_MACROS_SYS_AUXV_MACROS_H
