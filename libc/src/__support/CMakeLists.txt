@@ -11,6 +11,17 @@ add_header_library(
 )
 
 add_header_library(
+  crash_detail
+  HDRS
+    crash_detail.h
+  DEPENDS
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.threads.raw_mutex
+)
+
+add_header_library(
   libc_errno
   HDRS
     libc_errno.h
