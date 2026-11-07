@@ -234,6 +234,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.string.strdup
     libc.src.string.strerror
     libc.src.string.strerror_l
+    libc.src.string.strerrorname_np
     libc.src.string.strerror_r
     libc.src.string.strlcat
     libc.src.string.strlcpy
