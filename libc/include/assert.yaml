@@ -23,3 +23,20 @@ functions:
       - type: const char *
       - type: unsigned
       - type: const char *
+  - name: __assert2
+    standards:
+      - llvm_libc_ext
+    return_type: _Noreturn void
+    arguments:
+      - type: const char *
+      - type: int
+      - type: const char *
+      - type: const char *
+  - name: __assert
+    standards:
+      - llvm_libc_ext
+    return_type: _Noreturn void
+    arguments:
+      - type: const char *
+      - type: int
+      - type: const char *
