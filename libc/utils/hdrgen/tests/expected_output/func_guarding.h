@@ -27,6 +27,10 @@ int func_guarded_b(int) __NOEXCEPT;
 int func_guarded_c(int) __NOEXCEPT;
 #endif // LIBC_TYPES_HAS_NATIVE_FLOAT128
 
+#ifndef LIBC_TYPES_HAS_FLOAT16
+int func_not_defined(int) __NOEXCEPT;
+#endif // !LIBC_TYPES_HAS_FLOAT16
+
 int func_plain(int) __NOEXCEPT;
 
 __END_C_DECLS
