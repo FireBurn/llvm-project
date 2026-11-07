@@ -1,13 +1,13 @@
 add_libc_testsuite(libc-libgen-tests)
 
 add_libc_test(
-  basename_test
+  xpg_basename_test
   SUITE
     libc-libgen-tests
   SRCS
-    basename_test.cpp
+    xpg_basename_test.cpp
   DEPENDS
-    libc.src.libgen.basename
+    libc.src.libgen.__xpg_basename
 )
 
 add_libc_test(
@@ -22,13 +22,13 @@ add_libc_test(
 
 if(LIBC_TEST_SUBPROCESS_TESTS)
   add_libc_test(
-    basename_death_test
+    xpg_basename_death_test
     SUITE
       libc-libgen-tests
     SRCS
-      basename_death_test.cpp
+      xpg_basename_death_test.cpp
     DEPENDS
-      libc.src.libgen.basename
+      libc.src.libgen.__xpg_basename
   )
 
   add_libc_test(
