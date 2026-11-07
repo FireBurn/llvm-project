@@ -633,6 +633,8 @@ macros:
     macro_value: '0x70000000'
   - macro_name: PT_HIPROC
     macro_value: '0x7fffffff'
+  - macro_name: PT_ARM_EXIDX
+    macro_value: '0x70000001'
   - macro_name: PT_GNU_EH_FRAME
     macro_value: '0x6474e550'
     standards:
@@ -985,6 +987,31 @@ macros:
     macro_value: 5
     standards:
       - gnu
+  # Notes of the register sets a debugger reads from a thread.
+  - macro_name: NT_ARM_VFP
+    macro_value: '0x400'
+  - macro_name: NT_ARM_TLS
+    macro_value: '0x401'
+  - macro_name: NT_ARM_HW_BREAK
+    macro_value: '0x402'
+  - macro_name: NT_ARM_HW_WATCH
+    macro_value: '0x403'
+  - macro_name: NT_ARM_SYSTEM_CALL
+    macro_value: '0x404'
+  - macro_name: NT_ARM_SVE
+    macro_value: '0x405'
+  - macro_name: NT_ARM_PAC_MASK
+    macro_value: '0x406'
+  - macro_name: NT_ARM_PACA_KEYS
+    macro_value: '0x407'
+  - macro_name: NT_ARM_PACG_KEYS
+    macro_value: '0x408'
+  - macro_name: NT_ARM_TAGGED_ADDR_CTRL
+    macro_value: '0x409'
+  - macro_name: NT_ARM_PAC_ENABLED_KEYS
+    macro_value: '0x40a'
+  - macro_name: NT_RISCV_VECTOR
+    macro_value: '0x901'
   # Symbol Versioning
   - macro_name: VER_DEF_NONE
     macro_value: 0
