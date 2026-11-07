@@ -877,6 +877,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.posix_close
     libc.src.unistd.pread
     libc.src.unistd.pwrite
+    libc.src.unistd.__read_chk
     libc.src.unistd.read
     libc.src.unistd.readlink
     libc.src.unistd.readlinkat
