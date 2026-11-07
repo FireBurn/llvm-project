@@ -87,3 +87,77 @@ add_libc_test(
     libc.src.unistd.unlink
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  system_properties_directory_test
+  SUITE
+    libc-sys-system-properties-tests
+  SRCS
+    system_properties_directory_test.cpp
+  HDRS
+    property_info_blob.h
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.limits_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.system_properties_macros
+    libc.hdr.types.mode_t
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.string.strlen
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.munmap
+    libc.src.sys.stat.mkdir
+    libc.src.sys.system_properties.__system_property_add
+    libc.src.sys.system_properties.__system_property_area_init
+    libc.src.sys.system_properties.__system_property_area_serial
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_find_nth
+    libc.src.sys.system_properties.__system_property_foreach
+    libc.src.sys.system_properties.__system_property_get
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.__system_property_update
+    libc.src.sys.system_properties.property_area
+    libc.src.sys.system_properties.property_info
+    libc.src.unistd.close
+    libc.src.unistd.rmdir
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  system_properties_directory_client_test
+  SUITE
+    libc-sys-system-properties-tests
+  SRCS
+    system_properties_directory_client_test.cpp
+  HDRS
+    property_info_blob.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.fcntl_macros
+    libc.hdr.limits_macros
+    libc.hdr.sys_mman_macros
+    libc.hdr.system_properties_macros
+    libc.src.fcntl.open
+    libc.src.string.strcmp
+    libc.src.string.strlen
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.munmap
+    libc.src.sys.stat.mkdir
+    libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.__system_property_find
+    libc.src.sys.system_properties.__system_property_foreach
+    libc.src.sys.system_properties.__system_property_get
+    libc.src.sys.system_properties.__system_property_set_filename
+    libc.src.sys.system_properties.property_area
+    libc.src.unistd.close
+    libc.src.unistd.ftruncate
+    libc.src.unistd.rmdir
+    libc.src.unistd.unlink
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
