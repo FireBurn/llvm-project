@@ -163,6 +163,7 @@ LLVM_LIBC_HEADERS = [
         other_srcs = ["include/stdlib-alloca.yaml"],
     ),
     libc_header_info("android/api-level"),
+    libc_header_info("android/crash_detail"),
     libc_header_info("android/dlext"),
     libc_header_info("android/fdsan"),
     libc_header_info("android/set_abort_message"),
@@ -759,6 +760,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_android_namespace_t",
     hdrs = ["include/llvm-libc-types/struct_android_namespace_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_crash_detail_t",
+    hdrs = ["include/llvm-libc-types/crash_detail_t.h"],
 )
 
 libc_support_library(
@@ -18456,6 +18462,21 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "__support_crash_detail",
+    hdrs = ["src/__support/crash_detail.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_mmap",
+        ":__support_threads_raw_mutex",
     ],
 )
 
@@ -37605,6 +37626,50 @@ libc_support_library(
     deps = [
         ":__support_macros_config",
         ":__support_osutil_linux_auxv",
+    ],
+)
+
+libc_function(
+    name = "android_crash_detail_register",
+    srcs = ["src/android/android_crash_detail_register.cpp"],
+    hdrs = ["src/android/android_crash_detail_register.h"],
+    deps = [
+        ":__support_common",
+        ":__support_crash_detail",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "android_crash_detail_unregister",
+    srcs = ["src/android/android_crash_detail_unregister.cpp"],
+    hdrs = ["src/android/android_crash_detail_unregister.h"],
+    deps = [
+        ":__support_common",
+        ":__support_crash_detail",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "android_crash_detail_replace_data",
+    srcs = ["src/android/android_crash_detail_replace_data.cpp"],
+    hdrs = ["src/android/android_crash_detail_replace_data.h"],
+    deps = [
+        ":__support_common",
+        ":__support_crash_detail",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "android_crash_detail_replace_name",
+    srcs = ["src/android/android_crash_detail_replace_name.cpp"],
+    hdrs = ["src/android/android_crash_detail_replace_name.h"],
+    deps = [
+        ":__support_common",
+        ":__support_crash_detail",
+        ":__support_macros_config",
     ],
 )
 
