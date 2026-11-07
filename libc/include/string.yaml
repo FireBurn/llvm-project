@@ -146,6 +146,13 @@ functions:
     arguments:
       - type: const char *
       - type: int
+  - name: basename
+    standards:
+      - gnu
+    guard: "!basename"
+    return_type: char *
+    arguments:
+      - type: const char *
   - name: strchrnul
     standards:
       - gnu
