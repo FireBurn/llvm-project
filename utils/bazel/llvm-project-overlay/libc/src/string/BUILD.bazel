@@ -510,6 +510,17 @@ libc_function(
 )
 
 libc_function(
+    name = "strerrorname_np",
+    srcs = ["strerrorname_np.cpp"],
+    hdrs = ["strerrorname_np.h"],
+    deps = [
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "basename",
     srcs = ["basename.cpp"],
     hdrs = ["basename.h"],
