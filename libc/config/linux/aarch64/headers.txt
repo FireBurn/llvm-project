@@ -168,6 +168,7 @@ if(LLVM_LIBC_FULL_BUILD AND LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
     libc.include.netdb
     libc.include.netinet_igmp
     libc.include.netinet_in_systm
+    libc.include.netinet_in6
     libc.include.netinet_ip_icmp
     libc.include.netpacket_packet
     libc.include.pty
