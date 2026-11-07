@@ -10,11 +10,21 @@ add_header_library(
 )
 
 add_header_library(
+  property_info
+  HDRS
+    property_info.h
+  DEPENDS
+    libc.src.__support.macros.config
+    libc.src.string.string_utils
+)
+
+add_header_library(
   property_store
   HDRS
     property_store.h
   DEPENDS
     .property_area
+    .property_info
     libc.hdr.errno_macros
     libc.hdr.fcntl_macros
     libc.hdr.limits_macros
@@ -30,6 +40,7 @@ add_header_library(
     libc.src.__support.OSUtil.linux.stat.stat_via_statx
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
     libc.src.__support.OSUtil.linux.syscall_wrappers.connect
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fsetxattr
     libc.src.__support.OSUtil.linux.syscall_wrappers.ftruncate
     libc.src.__support.OSUtil.linux.syscall_wrappers.getuid
     libc.src.__support.OSUtil.linux.syscall_wrappers.mmap

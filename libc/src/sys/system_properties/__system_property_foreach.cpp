@@ -21,13 +21,13 @@ namespace LIBC_NAMESPACE_DECL {
 using namespace system_properties;
 
 LLVM_LIBC_FUNCTION(int, __system_property_foreach, (__prop_foreach_callback_t callback, void *cookie)) {
-  Area *a = area();
-  if (a == nullptr)
-    return -1;
-  a->foreach ([&](const PropInfo *info) {
-    callback(reinterpret_cast<const prop_info *>(info), cookie);
-  });
-  return 0;
+  return for_each_area([&](Area *a) {
+    a->foreach ([&](const PropInfo *info) {
+      callback(reinterpret_cast<const prop_info *>(info), cookie);
+    });
+  })
+             ? 0
+             : -1;
 }
 
 } // namespace LIBC_NAMESPACE_DECL
