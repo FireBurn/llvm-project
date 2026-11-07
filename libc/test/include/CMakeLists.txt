@@ -493,6 +493,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_iovec_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_iovec_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_iovec
+)
+
+add_libc_test(
   android_posix_includes_test
   SUITE
     libc-include-tests
