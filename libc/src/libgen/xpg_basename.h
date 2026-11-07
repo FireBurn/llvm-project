@@ -7,12 +7,12 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Header for basename.
+/// Header for __xpg_basename.
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_LIBC_SRC_LIBGEN_BASENAME_H
-#define LLVM_LIBC_SRC_LIBGEN_BASENAME_H
+#ifndef LLVM_LIBC_SRC_LIBGEN_XPG_BASENAME_H
+#define LLVM_LIBC_SRC_LIBGEN_XPG_BASENAME_H
 
 #include "src/__support/macros/config.h"
 
@@ -23,8 +23,8 @@ namespace LIBC_NAMESPACE_DECL {
 /// \param path Pointer to the null-terminated pathname string.
 /// \return Pointer to the last component of path, or "." if path is null or
 /// empty, or "/" if path is all slashes.
-char *basename(char *path);
+char *__xpg_basename(char *path);
 
 } // namespace LIBC_NAMESPACE_DECL
 
-#endif // LLVM_LIBC_SRC_LIBGEN_BASENAME_H
+#endif // LLVM_LIBC_SRC_LIBGEN_XPG_BASENAME_H
