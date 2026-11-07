@@ -580,6 +580,14 @@ add_proxy_header_library(
 )
 
 add_proxy_header_library(
+  android_dlextinfo
+  HDRS
+    android_dlextinfo.h
+  FULL_BUILD_DEPENDS
+    libc.include.llvm-libc-types.android_dlextinfo
+)
+
+add_proxy_header_library(
   off_t
   HDRS
     off_t.h
