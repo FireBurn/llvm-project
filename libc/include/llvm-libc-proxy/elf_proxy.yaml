@@ -633,6 +633,8 @@ macros:
     macro_value: '0x70000000'
   - macro_name: PT_HIPROC
     macro_value: '0x7fffffff'
+  - macro_name: PT_ARM_EXIDX
+    macro_value: '0x70000001'
   - macro_name: PT_GNU_EH_FRAME
     macro_value: '0x6474e550'
     standards:
@@ -985,6 +987,11 @@ macros:
     macro_value: 5
     standards:
       - gnu
+  # Notes of the register sets a debugger reads from a thread.
+  - macro_name: NT_ARM_SVE
+    macro_value: '0x405'
+  - macro_name: NT_RISCV_VECTOR
+    macro_value: '0x901'
   # Symbol Versioning
   - macro_name: VER_DEF_NONE
     macro_value: 0
