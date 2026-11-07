@@ -37639,6 +37639,17 @@ libc_support_library(
 )
 
 libc_function(
+    name = "__libc_crash_detail_page",
+    srcs = ["src/android/libc_crash_detail_page.cpp"],
+    hdrs = ["src/android/libc_crash_detail_page.h"],
+    deps = [
+        ":__support_common",
+        ":__support_crash_detail",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "android_crash_detail_register",
     srcs = ["src/android/android_crash_detail_register.cpp"],
     hdrs = ["src/android/android_crash_detail_register.h"],
