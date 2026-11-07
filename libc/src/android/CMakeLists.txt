@@ -35,6 +35,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __libc_crash_detail_page
+  SRCS
+    libc_crash_detail_page.cpp
+  HDRS
+    libc_crash_detail_page.h
+  DEPENDS
+    libc.include.android_crash_detail
+    libc.src.__support.common
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   android_crash_detail_register
   SRCS
     android_crash_detail_register.cpp
