@@ -365,6 +365,15 @@ libc_test(
 )
 
 libc_test(
+    name = "strerrorname_np_test",
+    srcs = ["strerrorname_np_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:strerrorname_np",
+    ],
+)
+
+libc_test(
     name = "inline_strlen_test",
     srcs = ["inline_strlen_test.cpp"],
     deps = [
