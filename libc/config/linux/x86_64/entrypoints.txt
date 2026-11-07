@@ -16,6 +16,10 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.android_get_exported_namespace
     libc.src.android.android_init_anonymous_namespace
     libc.src.android.android_link_namespaces
+    libc.src.android.android_crash_detail_register
+    libc.src.android.android_crash_detail_replace_data
+    libc.src.android.android_crash_detail_replace_name
+    libc.src.android.android_crash_detail_unregister
     libc.src.android.android_set_abort_message
     libc.src.android.android_update_LD_LIBRARY_PATH
 
