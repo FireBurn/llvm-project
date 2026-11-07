@@ -1109,6 +1109,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  elf_gnu_constants_test
+  SUITE
+    libc-include-tests
+  SRCS
+    elf_gnu_constants_test.cpp
+  DEPENDS
+    libc.hdr.elf_proxy
+)
+
+add_libc_test(
   complex_test
   SUITE
     libc-include-tests
