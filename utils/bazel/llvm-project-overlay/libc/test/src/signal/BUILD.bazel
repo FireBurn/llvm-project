@@ -187,3 +187,32 @@ libc_test(
         "//libc:read",
     ],
 )
+
+libc_test(
+    name = "sigset64_test",
+    srcs = ["sigset64_test.cpp"],
+    deps = [
+        "//libc:getpid",
+        "//libc:hdr_errno_macros",
+        "//libc:hdr_signal_macros",
+        "//libc:kill",
+        "//libc:pthread_sigmask64",
+        "//libc:sigaction64",
+        "//libc:sigaddset64",
+        "//libc:sigdelset64",
+        "//libc:sigemptyset64",
+        "//libc:sigfillset64",
+        "//libc:sigismember64",
+        "//libc:sigpending64",
+        "//libc:sigprocmask64",
+        "//libc:sigtimedwait64",
+        "//libc:sigwait64",
+        "//libc:sigwaitinfo64",
+        "//libc:types_siginfo_t",
+        "//libc:types_sigset64_t",
+        "//libc:types_sigset_t",
+        "//libc:types_struct_sigaction",
+        "//libc:types_struct_sigaction64",
+        "//libc:types_struct_timespec",
+    ],
+)
