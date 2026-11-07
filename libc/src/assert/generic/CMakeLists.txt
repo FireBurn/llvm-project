@@ -24,3 +24,25 @@ add_entrypoint_object(
     libc.src.__support.integer_to_string
     libc.src.stdlib.abort_utils
 )
+
+add_entrypoint_object(
+  __assert2
+  SRCS
+    __assert2.cpp
+  HDRS
+    ../__assert2.h
+  DEPENDS
+    libc.include.assert
+    libc.src.assert.__assert_fail
+)
+
+add_entrypoint_object(
+  __assert
+  SRCS
+    __assert.cpp
+  HDRS
+    ../__assert.h
+  DEPENDS
+    libc.include.assert
+    libc.src.assert.__assert_fail
+)
