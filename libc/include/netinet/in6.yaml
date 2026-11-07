@@ -1,0 +1,9 @@
+header: netinet/in6.h
+header_template: in6.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []
