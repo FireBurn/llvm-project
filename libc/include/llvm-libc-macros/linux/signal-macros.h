@@ -62,6 +62,27 @@
 // counts from rather than from SIGRTMIN. The uapi headers define the same.
 #define __SIGRTMIN 32
 #define __SIGRTMAX 64
+
+// The names the uapi headers give the si_code values: the tests for a code
+// from the kernel or from a process, the highest value for each signal, and
+// the codes particular to one architecture.
+#define SI_FROMUSER(siptr) ((siptr)->si_code <= 0)
+#define SI_FROMKERNEL(siptr) ((siptr)->si_code > 0)
+#define __ILL_BREAK 10
+#define __ILL_BNDMOD 11
+#define NSIGILL 11
+#define __FPE_DECOVF 9
+#define __FPE_DECDIV 10
+#define __FPE_DECERR 11
+#define __FPE_INVASC 12
+#define __FPE_INVDEC 13
+#define NSIGFPE 15
+#define NSIGSEGV 10
+#define NSIGBUS 5
+#define NSIGTRAP 6
+#define NSIGCHLD 6
+#define NSIGPOLL 6
+#define NSIGSYS 2
 #endif // __ANDROID__
 
 // The size of a buffer which holds any name sig2str gives, with its null.
