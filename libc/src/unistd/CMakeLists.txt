@@ -478,6 +478,13 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __read_chk
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.__read_chk
+)
+
+add_entrypoint_object(
   read
   ALIAS
   DEPENDS
