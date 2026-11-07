@@ -1,12 +1,14 @@
 header: libgen.h
 standards:
   - posix
-macros: []
+macros:
+  - macro_name: basename
+    macro_value: __xpg_basename
 types: []
 enums: []
 objects: []
 functions:
-  - name: basename
+  - name: __xpg_basename
     standards:
       - posix
     return_type: char *
