@@ -2113,6 +2113,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  android_crash_detail
+  ../libc/include/android/crash_detail.yaml
+  android/crash_detail.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.crash_detail_t
+    .llvm-libc-types.size_t
+)
+
+add_header_macro(
   android_api_level
   ../libc/include/android/api-level.yaml
   android/api-level.h
