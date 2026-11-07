@@ -16,18 +16,30 @@
 #include "hdr/sched_macros.h"
 #include "hdr/types/pid_t.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/clone.h"
+#include "src/__support/OSUtil/syscall.h"
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/macros/properties/architectures.h"
 #include "src/__support/threads/identifier.h"
 #include <stdarg.h>
+#include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, clone,
                    (int (*func)(void *), void *stack, int flags, void *arg,
                     ...)) {
-  if (func == nullptr || stack == nullptr) {
+  // With neither a function nor a stack the child carries on from the call, as
+  // it does after fork. bionic does the same, and debuggerd's crash handler
+  // relies on it.
+  const bool continues_here = func == nullptr && stack == nullptr;
+  if (!continues_here && (func == nullptr || stack == nullptr)) {
+    libc_errno = EINVAL;
+    return -1;
+  }
+  // The child would run on the stack of the parent while sharing it.
+  if (continues_here && (flags & CLONE_VM)) {
     libc_errno = EINVAL;
     return -1;
   }
@@ -48,9 +60,11 @@ LLVM_LIBC_FUNCTION(int, clone,
     va_end(args);
   }
 
-  uintptr_t stack_as_integer = reinterpret_cast<uintptr_t>(stack);
-  stack_as_integer &= ~(linux_syscalls::CLONE_STACK_ALIGNMENT - 1);
-  stack = reinterpret_cast<void *>(stack_as_integer);
+  if (!continues_here) {
+    uintptr_t stack_as_integer = reinterpret_cast<uintptr_t>(stack);
+    stack_as_integer &= ~(linux_syscalls::CLONE_STACK_ALIGNMENT - 1);
+    stack = reinterpret_cast<void *>(stack_as_integer);
+  }
 
   // In some situations, we need to invalidate parent's tid cache. We cannot do
   // this in the child because a signal handler may observe the wrong tid before
@@ -70,6 +84,25 @@ LLVM_LIBC_FUNCTION(int, clone,
   if (should_clear_tid) {
     tid_of_parent = internal::gettid();
     internal::force_set_tid(0);
+  }
+
+  if (continues_here) {
+    // The kernel orders the last two arguments by architecture.
+#if defined(LIBC_TARGET_ARCH_IS_X86_64)
+    long result = syscall_impl<long>(SYS_clone, flags, nullptr, parent_tid,
+                                     child_tid, tls);
+#else
+    long result = syscall_impl<long>(SYS_clone, flags, nullptr, parent_tid, tls,
+                                     child_tid);
+#endif
+    // The child leaves the cached id cleared for the next gettid to fill.
+    if (result != 0 && should_clear_tid)
+      internal::force_set_tid(tid_of_parent);
+    if (result < 0) {
+      libc_errno = static_cast<int>(-result);
+      return -1;
+    }
+    return static_cast<int>(result);
   }
 
   auto ret = linux_syscalls::clone(func, stack, flags, arg, parent_tid, tls,
