@@ -31,3 +31,19 @@ add_libc_test(
     libc.src.stdlib.abort
 )
 
+add_libc_test(
+  assert2_test
+  SUITE
+    libc-assert-tests
+  SRCS
+    assert2_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.assert.__assert
+    libc.src.assert.__assert2
+    libc.src.unistd.close
+    libc.src.signal.raise
+    libc.src.stdlib._Exit
+    libc.src.stdlib.abort
+)
+
