@@ -107,7 +107,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.inttypes.strtoumax
 
     # libgen.h entrypoints
-    libc.src.libgen.basename
+    libc.src.libgen.__xpg_basename
     libc.src.libgen.dirname
 
     # stdbit.h entrypoints
