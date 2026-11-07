@@ -916,3 +916,9 @@ add_macro_header(
   HDR
     android-api-level-macros.h
 )
+
+add_macro_header(
+  android_dlext_macros
+  HDR
+    android-dlext-macros.h
+)
