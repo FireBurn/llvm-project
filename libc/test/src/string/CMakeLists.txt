@@ -110,6 +110,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  basename_test
+  SUITE
+    libc-string-tests
+  SRCS
+    basename_test.cpp
+  DEPENDS
+    libc.src.string.basename
+)
+
+add_libc_test(
   strcmp_test
   SUITE
     libc-string-tests
