@@ -123,6 +123,8 @@ add_header(fd_set HDR fd_set.h DEPENDS libc.include.llvm-libc-macros.sys_select_
 add_header(fenv_t HDR fenv_t.h)
 add_header(enum_android_fdsan_error_level HDR enum_android_fdsan_error_level.h)
 add_header(enum_android_fdsan_owner_type HDR enum_android_fdsan_owner_type.h)
+add_header(struct_android_namespace_t HDR struct_android_namespace_t.h)
+add_header(android_dlextinfo HDR android_dlextinfo.h DEPENDS .off64_t .size_t .struct_android_namespace_t)
 add_header(enum_nss_status HDR enum_nss_status.h)
 add_header(fexcept_t HDR fexcept_t.h)
 add_header(float_t HDR float_t.h)

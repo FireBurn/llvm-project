@@ -71,3 +71,22 @@ add_libc_test(
     libc.src.string.strcmp
     libc.src.string.strlen
 )
+
+add_libc_test(
+  android_dlext_test
+  SUITE
+    libc-android-tests
+  SRCS
+    android_dlext_test.cpp
+  DEPENDS
+    libc.hdr.types.android_dlextinfo
+    libc.include.android_dlext
+    libc.src.android.android_create_namespace
+    libc.src.android.android_dlopen_ext
+    libc.src.android.android_get_exported_namespace
+    libc.src.android.android_init_anonymous_namespace
+    libc.src.android.android_link_namespaces
+    libc.src.android.android_update_LD_LIBRARY_PATH
+    libc.src.dlfcn.dlerror
+    libc.src.stdlib.getenv
+)

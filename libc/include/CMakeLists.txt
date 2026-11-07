@@ -2117,6 +2117,18 @@ add_header_macro(
     .llvm-libc-macros.android_api_level_macros
 )
 
+add_header_macro(
+  android_dlext
+  ../libc/include/android/dlext.yaml
+  android/dlext.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-macros.android_dlext_macros
+    .llvm-libc-macros.stdint_macros
+    .llvm-libc-types.android_dlextinfo
+    .llvm-libc-types.struct_android_namespace_t
+)
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/arpa)
 
 add_header_macro(

@@ -149,3 +149,87 @@ add_entrypoint_object(
     libc.hdr.types.enum_android_fdsan_error_level
     libc.include.android_fdsan
 )
+
+add_entrypoint_object(
+  android_create_namespace
+  SRCS
+    android_create_namespace.cpp
+  HDRS
+    android_create_namespace.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.hdr.types.android_dlextinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+
+)
+
+add_entrypoint_object(
+  android_dlopen_ext
+  SRCS
+    android_dlopen_ext.cpp
+  HDRS
+    android_dlopen_ext.h
+  DEPENDS
+    libc.hdr.types.android_dlextinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dlopen
+
+)
+
+add_entrypoint_object(
+  android_get_exported_namespace
+  SRCS
+    android_get_exported_namespace.cpp
+  HDRS
+    android_get_exported_namespace.h
+  DEPENDS
+    libc.hdr.types.android_dlextinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+
+)
+
+add_entrypoint_object(
+  android_init_anonymous_namespace
+  SRCS
+    android_init_anonymous_namespace.cpp
+  HDRS
+    android_init_anonymous_namespace.h
+  DEPENDS
+    libc.hdr.types.android_dlextinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+
+)
+
+add_entrypoint_object(
+  android_link_namespaces
+  SRCS
+    android_link_namespaces.cpp
+  HDRS
+    android_link_namespaces.h
+  DEPENDS
+    libc.hdr.types.android_dlextinfo
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+
+)
+
+add_entrypoint_object(
+  android_update_LD_LIBRARY_PATH
+  SRCS
+    android_update_LD_LIBRARY_PATH.cpp
+  HDRS
+    android_update_LD_LIBRARY_PATH.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.setenv
+
+)
