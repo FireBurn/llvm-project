@@ -32742,6 +32742,44 @@ libc_function(
 )
 
 libc_function(
+    name = "__assert_fail",
+    srcs = ["src/assert/generic/__assert_fail.cpp"],
+    hdrs = [
+        "src/assert/__assert_fail.h",
+        "src/assert/assert.h",
+    ],
+    deps = [
+        ":__support_common",
+        ":__support_libc_assert",
+        ":__support_macros_config",
+        ":__support_osutil_io",
+        ":stdlib_abort_utils",
+    ],
+)
+
+libc_function(
+    name = "__assert2",
+    srcs = ["src/assert/generic/__assert2.cpp"],
+    hdrs = ["src/assert/__assert2.h"],
+    deps = [
+        ":__assert_fail",
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "__assert",
+    srcs = ["src/assert/generic/__assert.cpp"],
+    hdrs = ["src/assert/__assert.h"],
+    deps = [
+        ":__assert_fail",
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "opendir",
     srcs = ["src/dirent/opendir.cpp"],
     hdrs = ["src/dirent/opendir.h"],
