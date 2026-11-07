@@ -1149,6 +1149,167 @@ macros:
     macro_header: sys-auxv-macros.h
   - macro_name: AT_MINSIGSTKSZ
     macro_header: sys-auxv-macros.h
+  # GNU and Solaris extensions that glibc's <elf.h> defines
+  - macro_name: SHN_BEFORE
+    macro_value: '0xff00'
+  - macro_name: SHN_AFTER
+    macro_value: '0xff01'
+  - macro_name: SHT_RELR
+    macro_value: '19'
+  - macro_name: SHT_GNU_ATTRIBUTES
+    macro_value: '0x6ffffff5'
+  - macro_name: SHT_GNU_HASH
+    macro_value: '0x6ffffff6'
+  - macro_name: SHT_GNU_LIBLIST
+    macro_value: '0x6ffffff7'
+  - macro_name: SHT_CHECKSUM
+    macro_value: '0x6ffffff8'
+  - macro_name: SHT_LOSUNW
+    macro_value: '0x6ffffffa'
+  - macro_name: SHT_SUNW_move
+    macro_value: '0x6ffffffa'
+  - macro_name: SHT_SUNW_COMDAT
+    macro_value: '0x6ffffffb'
+  - macro_name: SHT_SUNW_syminfo
+    macro_value: '0x6ffffffc'
+  - macro_name: SHT_GNU_verdef
+    macro_value: '0x6ffffffd'
+  - macro_name: SHT_GNU_verneed
+    macro_value: '0x6ffffffe'
+  - macro_name: SHT_GNU_versym
+    macro_value: '0x6fffffff'
+  - macro_name: SHT_HISUNW
+    macro_value: '0x6fffffff'
+  - macro_name: SHF_GNU_RETAIN
+    macro_value: '(1 << 21)'
+  - macro_name: SHF_ORDERED
+    macro_value: '(1 << 30)'
+  - macro_name: SHF_EXCLUDE
+    macro_value: '(1U << 31)'
+  - macro_name: GRP_COMDAT
+    macro_value: '0x1'
+  - macro_name: SYMINFO_BT_SELF
+    macro_value: '0xffff'
+  - macro_name: SYMINFO_BT_PARENT
+    macro_value: '0xfffe'
+  - macro_name: SYMINFO_BT_LOWRESERVE
+    macro_value: '0xff00'
+  - macro_name: SYMINFO_FLG_DIRECT
+    macro_value: '0x0001'
+  - macro_name: SYMINFO_FLG_PASSTHRU
+    macro_value: '0x0002'
+  - macro_name: SYMINFO_FLG_COPY
+    macro_value: '0x0004'
+  - macro_name: SYMINFO_FLG_LAZYLOAD
+    macro_value: '0x0008'
+  - macro_name: SYMINFO_NONE
+    macro_value: '0'
+  - macro_name: SYMINFO_CURRENT
+    macro_value: '1'
+  - macro_name: SYMINFO_NUM
+    macro_value: '2'
+  - macro_name: PT_GNU_SFRAME
+    macro_value: '0x6474e554'
+  - macro_name: PT_LOSUNW
+    macro_value: '0x6ffffffa'
+  - macro_name: PT_SUNWBSS
+    macro_value: '0x6ffffffa'
+  - macro_name: PT_SUNWSTACK
+    macro_value: '0x6ffffffb'
+  - macro_name: PT_HISUNW
+    macro_value: '0x6fffffff'
+  - macro_name: NT_GWINDOWS
+    macro_value: '7'
+  - macro_name: NT_ASRS
+    macro_value: '8'
+  - macro_name: NT_PSTATUS
+    macro_value: '10'
+  - macro_name: NT_PSINFO
+    macro_value: '13'
+  - macro_name: NT_PRCRED
+    macro_value: '14'
+  - macro_name: NT_UTSNAME
+    macro_value: '15'
+  - macro_name: NT_LWPSTATUS
+    macro_value: '16'
+  - macro_name: NT_LWPSINFO
+    macro_value: '17'
+  - macro_name: NT_PRXFPREG
+    macro_value: '0x46e62b7f'
+  - macro_name: NT_386_TLS
+    macro_value: '0x200'
+  - macro_name: NT_386_IOPERM
+    macro_value: '0x201'
+  - macro_name: NT_X86_XSTATE
+    macro_value: '0x202'
+  - macro_name: NT_X86_SHSTK
+    macro_value: '0x204'
+  - macro_name: NT_X86_XSAVE_LAYOUT
+    macro_value: '0x205'
+  - macro_name: NT_VMCOREDD
+    macro_value: '0x700'
+  - macro_name: NT_LOONGARCH_CPUCFG
+    macro_value: '0xa00'
+  - macro_name: NT_LOONGARCH_CSR
+    macro_value: '0xa01'
+  - macro_name: NT_LOONGARCH_LSX
+    macro_value: '0xa02'
+  - macro_name: NT_LOONGARCH_LASX
+    macro_value: '0xa03'
+  - macro_name: NT_LOONGARCH_LBT
+    macro_value: '0xa04'
+  - macro_name: NT_LOONGARCH_HW_BREAK
+    macro_value: '0xa05'
+  - macro_name: NT_LOONGARCH_HW_WATCH
+    macro_value: '0xa06'
+  - macro_name: NT_VERSION
+    macro_value: '1'
+  - macro_name: DTF_1_PARINIT
+    macro_value: '0x00000001'
+  - macro_name: DTF_1_CONFEXP
+    macro_value: '0x00000002'
+  - macro_name: DF_P1_LAZYLOAD
+    macro_value: '0x00000001'
+  - macro_name: DF_P1_GROUPPERM
+    macro_value: '0x00000002'
+  - macro_name: VER_NEED_NONE
+    macro_value: '0'
+  - macro_name: VER_NEED_CURRENT
+    macro_value: '1'
+  - macro_name: ELF_NOTE_PAGESIZE_HINT
+    macro_value: '1'
+  - macro_name: ELF_NOTE_OS_LINUX
+    macro_value: '0'
+  - macro_name: ELF_NOTE_OS_GNU
+    macro_value: '1'
+  - macro_name: ELF_NOTE_OS_SOLARIS2
+    macro_value: '2'
+  - macro_name: ELF_NOTE_OS_FREEBSD
+    macro_value: '3'
+  - macro_name: NT_FDO_PACKAGING_METADATA
+    macro_value: '0xcafe1a7e'
+  - macro_name: NT_FDO_DLOPEN_METADATA
+    macro_value: '0x407c0c0a'
+  - macro_name: LL_NONE
+    macro_value: '0'
+  - macro_name: LL_EXACT_MATCH
+    macro_value: '(1 << 0)'
+  - macro_name: LL_IGNORE_INT_VER
+    macro_value: '(1 << 1)'
+  - macro_name: LL_REQUIRE_MINOR
+    macro_value: '(1 << 2)'
+  - macro_name: LL_EXPORTS
+    macro_value: '(1 << 3)'
+  - macro_name: LL_DELAY_LOAD
+    macro_value: '(1 << 4)'
+  - macro_name: LL_DELTA
+    macro_value: '(1 << 5)'
+  - macro_name: SHT_CSKY_ATTRIBUTES
+    macro_value: '(SHT_LOPROC + 1)'
+  - macro_name: DT_NIOS2_GP
+    macro_value: '0x70000002'
+  - macro_name: SHT_ARC_ATTRIBUTES
+    macro_value: '(SHT_LOPROC + 1)'
 types:
   - type_name: Elf32_Addr
   - type_name: Elf32_Chdr
