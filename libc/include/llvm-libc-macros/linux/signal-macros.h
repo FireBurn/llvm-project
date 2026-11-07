@@ -212,6 +212,7 @@
 #define SI_MESGQ (-3)   // Arrival of a message on an empty message queue
 #define SI_SIGIO (-5)   // Queued SIGIO, on older versions of Linux
 #define SI_TKILL (-6)   // Sent by tkill or tgkill
+#define SI_DETHREAD (-7) // Sent by execve killing the other threads
 #define SI_ASYNCNL (-60) // Async name lookup completion
 #define SI_KERNEL 128    // Sent by the kernel
 
