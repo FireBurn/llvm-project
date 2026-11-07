@@ -796,6 +796,15 @@ functions:
       - type: const void *
       - type: size_t
       - type: off_t
+  - name: __read_chk
+    standards:
+      - llvm_libc_ext
+    return_type: ssize_t
+    arguments:
+      - type: int
+      - type: void *
+      - type: size_t
+      - type: size_t
   - name: read
     standards:
       - posix
