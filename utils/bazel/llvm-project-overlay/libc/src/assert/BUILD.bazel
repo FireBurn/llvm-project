@@ -28,3 +28,41 @@ libc_function(
         "//libc/src/stdlib:abort_utils",
     ],
 )
+
+libc_function(
+    name = "__assert_fail",
+    srcs = ["generic/__assert_fail.cpp"],
+    hdrs = [
+        "__assert_fail.h",
+        "assert.h",
+    ],
+    deps = [
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/stdlib:abort_utils",
+    ],
+)
+
+libc_function(
+    name = "__assert2",
+    srcs = ["generic/__assert2.cpp"],
+    hdrs = ["__assert2.h"],
+    deps = [
+        ":__assert_fail",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__assert",
+    srcs = ["generic/__assert.cpp"],
+    hdrs = ["__assert.h"],
+    deps = [
+        ":__assert_fail",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)

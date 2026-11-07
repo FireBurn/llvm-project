@@ -23,3 +23,18 @@ libc_test(
         "//libc/src/unistd:close",
     ],
 )
+
+libc_test(
+    name = "assert2_test",
+    srcs = ["assert2_test.cpp"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/assert:__assert",
+        "//libc/src/assert:__assert2",
+        "//libc/src/signal:raise",
+        "//libc/src/stdlib:_Exit",
+        "//libc/src/stdlib:abort",
+        "//libc/src/unistd:close",
+    ],
+)
+
