@@ -576,6 +576,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sigset64_t",
+    hdrs = ["sigset64_t.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_sigset64_t"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "struct_sigaction64",
+    hdrs = ["struct_sigaction64.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_sigaction64"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "union_sigval",
     hdrs = ["union_sigval.h"],
     deps = select({
