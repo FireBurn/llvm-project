@@ -305,7 +305,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.inttypes.wcstoumax
 
     # libgen.h entrypoints
-    libc.src.libgen.basename
+    libc.src.libgen.__xpg_basename
     libc.src.libgen.dirname
     libc.src.monetary.strfmon
     libc.src.monetary.strfmon_l
