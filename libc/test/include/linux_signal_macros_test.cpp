@@ -59,3 +59,20 @@ TEST(LlvmLibcLinuxSignalMacrosTest, DefineTheKernelRealTimeRange) {
   EXPECT_EQ(__SIGRTMIN, 32);
   EXPECT_EQ(__SIGRTMAX, 64);
 }
+
+TEST(LlvmLibcLinuxSignalMacrosTest, DefineTheKernelSiCodeNames) {
+  struct {
+    int si_code;
+  } from_process = {-1}, from_kernel = {1};
+  EXPECT_TRUE(SI_FROMUSER(&from_process));
+  EXPECT_FALSE(SI_FROMKERNEL(&from_process));
+  EXPECT_TRUE(SI_FROMKERNEL(&from_kernel));
+  EXPECT_EQ(__ILL_BREAK, 10);
+  EXPECT_EQ(__ILL_BNDMOD, NSIGILL);
+  EXPECT_EQ(__FPE_DECOVF, 9);
+  EXPECT_EQ(__FPE_INVDEC, 13);
+  EXPECT_EQ(NSIGFPE, FPE_CONDTRAP);
+  EXPECT_EQ(NSIGSEGV, SEGV_CPERR);
+  EXPECT_EQ(NSIGBUS, BUS_MCEERR_AO);
+  EXPECT_EQ(NSIGSYS, SYS_USER_DISPATCH);
+}
