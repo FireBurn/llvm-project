@@ -57,6 +57,13 @@
 // SIGRTMAX is the largest allowed value for the runtime signal.
 #define SIGRTMAX (NSIG - 1)
 
+#ifdef __ANDROID__
+// The kernel's range of real time signals, which the platform's own code
+// counts from rather than from SIGRTMIN. The uapi headers define the same.
+#define __SIGRTMIN 32
+#define __SIGRTMAX 64
+#endif // __ANDROID__
+
 // The size of a buffer which holds any name sig2str gives, with its null.
 #define SIG2STR_MAX 32
 

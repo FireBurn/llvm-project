@@ -13,6 +13,10 @@
 
 #include "test/UnitTest/Test.h"
 
+// The kernel range is defined for the Android platform.
+#ifndef __ANDROID__
+#define __ANDROID__ 1
+#endif
 #include "include/llvm-libc-macros/linux/signal-macros.h"
 
 TEST(LlvmLibcLinuxSignalMacrosTest, AddTheRemainingSi_CodeValues) {
@@ -49,4 +53,9 @@ TEST(LlvmLibcLinuxSignalMacrosTest, DefineSa_Nomask) {
 
 TEST(LlvmLibcLinuxSignalMacrosTest, DefineSigcld) {
   EXPECT_EQ(static_cast<long long>(SIGCLD), 17LL);
+}
+
+TEST(LlvmLibcLinuxSignalMacrosTest, DefineTheKernelRealTimeRange) {
+  EXPECT_EQ(__SIGRTMIN, 32);
+  EXPECT_EQ(__SIGRTMAX, 64);
 }
