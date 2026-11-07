@@ -13,11 +13,14 @@ add_entrypoint_object(
     libc.hdr.sched_macros
     libc.hdr.types.pid_t
     libc.src.__support.OSUtil.linux.syscall_wrappers.clone
+    libc.src.__support.OSUtil.osutil
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.__support.macros.properties.architectures
     libc.src.__support.threads.identifier
     libc.src.errno.errno
+    libc.include.sys_syscall
 )
 
 add_entrypoint_object(
