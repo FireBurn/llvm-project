@@ -72,6 +72,7 @@ libc_test(
     srcs = ["crash_detail_test.cpp"],
     deps = [
         "//libc/src/__support:crash_detail",
+        "//libc/src/android:__libc_crash_detail_page",
         "//libc/src/android:crash_detail_register",
         "//libc/src/android:crash_detail_replace_data",
         "//libc/src/android:crash_detail_replace_name",
