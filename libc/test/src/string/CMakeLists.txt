@@ -426,6 +426,17 @@ add_libc_test(
 
 
 add_libc_test(
+  strerrorname_np_test
+  SUITE
+    libc-string-tests
+  SRCS
+    strerrorname_np_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.string.strerrorname_np
+)
+
+add_libc_test(
   explicit_bzero_test
   SUITE
     libc-string-tests
