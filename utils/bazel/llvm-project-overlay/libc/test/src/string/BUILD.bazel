@@ -371,3 +371,9 @@ libc_test(
         "//libc:string_utils",
     ],
 )
+
+libc_test(
+    name = "basename_test",
+    srcs = ["basename_test.cpp"],
+    deps = ["//libc:basename"],
+)

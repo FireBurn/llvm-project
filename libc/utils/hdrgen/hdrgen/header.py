@@ -376,4 +376,9 @@ class HeaderFile:
                 content.append(f"#endif // {current_guard}")
                 content.append("")
             if new_guard is not None:
-                content.append(f"#ifdef {new_guard}")
+                # A guard written "!NAME" is emitted for when NAME is not
+                # defined.
+                if new_guard.startswith("!"):
+                    content.append(f"#ifndef {new_guard[1:]}")
+                else:
+                    content.append(f"#ifdef {new_guard}")
