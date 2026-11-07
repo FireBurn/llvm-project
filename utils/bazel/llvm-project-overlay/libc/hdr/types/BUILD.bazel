@@ -549,6 +549,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "android_dlextinfo",
+    hdrs = ["android_dlextinfo.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_types_android_dlextinfo"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "cc_t",
     hdrs = ["cc_t.h"],
     deps = select({
