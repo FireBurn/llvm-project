@@ -27,6 +27,28 @@ libc_function(
 )
 
 libc_function(
+    name = "get_exported_namespace",
+    srcs = ["android_get_exported_namespace.cpp"],
+    hdrs = ["android_get_exported_namespace.h"],
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "update_LD_LIBRARY_PATH",
+    srcs = ["android_update_LD_LIBRARY_PATH.cpp"],
+    hdrs = ["android_update_LD_LIBRARY_PATH.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdlib:setenv",
+    ],
+)
+
+libc_function(
     name = "get_device_api_level",
     srcs = ["android_get_device_api_level.cpp"],
     hdrs = ["android_get_device_api_level.h"],

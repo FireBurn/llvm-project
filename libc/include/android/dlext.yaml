@@ -1,0 +1,67 @@
+header: android/dlext.h
+standards:
+  - bsd
+public_includes:
+  - stdbool.h
+macros:
+  - macro_name: ANDROID_DLEXT_RESERVED_ADDRESS
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_RESERVED_ADDRESS_HINT
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_WRITE_RELRO
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_USE_RELRO
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_USE_LIBRARY_FD
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_USE_LIBRARY_FD_OFFSET
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_FORCE_LOAD
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_USE_NAMESPACE
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_RESERVED_ADDRESS_RECURSIVE
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_DLEXT_VALID_FLAG_BITS
+    macro_header: android-dlext-macros.h
+types:
+  - type_name: android_dlextinfo
+  - type_name: struct_android_namespace_t
+  - type_name: uint64_t
+enums: []
+objects: []
+functions:
+  - name: android_dlopen_ext
+    return_type: void *
+    arguments:
+      - type: const char *
+      - type: int
+      - type: const android_dlextinfo *
+  - name: android_create_namespace
+    return_type: struct android_namespace_t *
+    arguments:
+      - type: const char *
+      - type: const char *
+      - type: const char *
+      - type: uint64_t
+      - type: const char *
+      - type: struct android_namespace_t *
+  - name: android_link_namespaces
+    return_type: bool
+    arguments:
+      - type: struct android_namespace_t *
+      - type: struct android_namespace_t *
+      - type: const char *
+  - name: android_get_exported_namespace
+    return_type: struct android_namespace_t *
+    arguments:
+      - type: const char *
+  - name: android_init_anonymous_namespace
+    return_type: bool
+    arguments:
+      - type: const char *
+      - type: const char *
+  - name: android_update_LD_LIBRARY_PATH
+    return_type: void
+    arguments:
+      - type: const char *
