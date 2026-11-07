@@ -66,6 +66,7 @@ add_libc_test(
     crash_detail_test.cpp
   DEPENDS
     libc.src.__support.crash_detail
+    libc.src.android.__libc_crash_detail_page
     libc.src.android.android_crash_detail_register
     libc.src.android.android_crash_detail_replace_data
     libc.src.android.android_crash_detail_replace_name
