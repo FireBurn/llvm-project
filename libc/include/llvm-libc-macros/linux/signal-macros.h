@@ -63,6 +63,10 @@
 #define __SIGRTMIN 32
 #define __SIGRTMAX 64
 
+// The sigaction flag that leaves the tag bits of a fault address in si_addr,
+// which the crash handler sets. The uapi headers define it.
+#define SA_EXPOSE_TAGBITS 0x00000800
+
 // The names the uapi headers give the si_code values: the tests for a code
 // from the kernel or from a process, the highest value for each signal, and
 // the codes particular to one architecture.
