@@ -76,3 +76,7 @@ TEST(LlvmLibcLinuxSignalMacrosTest, DefineTheKernelSiCodeNames) {
   EXPECT_EQ(NSIGBUS, BUS_MCEERR_AO);
   EXPECT_EQ(NSIGSYS, SYS_USER_DISPATCH);
 }
+
+TEST(LlvmLibcLinuxSignalMacrosTest, DefineSi_Dethread) {
+  EXPECT_EQ(SI_DETHREAD, -7);
+}
