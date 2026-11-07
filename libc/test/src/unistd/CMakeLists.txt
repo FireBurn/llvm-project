@@ -371,6 +371,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  read_chk_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    read_chk_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.src.unistd.__read_chk
+    libc.src.unistd.close
+    libc.src.unistd.pipe
+    libc.src.unistd.write
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   lchown_test
   SUITE
     libc-unistd-tests

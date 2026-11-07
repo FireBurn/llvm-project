@@ -202,6 +202,18 @@ libc_test(
 )
 
 libc_test(
+    name = "read_chk_test",
+    srcs = ["read_chk_test.cpp"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/unistd:__read_chk",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pipe",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "link_test",
     srcs = ["link_test.cpp"],
     deps = [
