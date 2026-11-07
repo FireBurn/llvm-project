@@ -433,3 +433,36 @@ add_libc_test(
     libc.src.signal.sys_siglist
     libc.src.signal.sys_signame
 )
+
+add_libc_test(
+  sigset64_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    sigset64_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset64_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_sigaction
+    libc.hdr.types.struct_sigaction64
+    libc.hdr.types.struct_timespec
+    libc.src.signal.kill
+    libc.src.signal.pthread_sigmask64
+    libc.src.signal.sigaction64
+    libc.src.signal.sigaddset64
+    libc.src.signal.sigdelset64
+    libc.src.signal.sigemptyset64
+    libc.src.signal.sigfillset64
+    libc.src.signal.sigismember64
+    libc.src.signal.sigpending64
+    libc.src.signal.sigprocmask64
+    libc.src.signal.sigtimedwait64
+    libc.src.signal.sigwait64
+    libc.src.signal.sigwaitinfo64
+    libc.src.unistd.getpid
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
