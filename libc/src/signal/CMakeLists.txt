@@ -273,3 +273,177 @@ add_header_library(
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
 )
+
+add_entrypoint_object(
+  pthread_sigmask64
+  SRCS
+    pthread_sigmask64.cpp
+  HDRS
+    pthread_sigmask64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.pthread_sigmask
+)
+
+add_entrypoint_object(
+  sigaction64
+  SRCS
+    sigaction64.cpp
+  HDRS
+    sigaction64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.hdr.types.struct_sigaction
+    libc.hdr.types.struct_sigaction64
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigaction
+)
+
+add_entrypoint_object(
+  sigaddset64
+  SRCS
+    sigaddset64.cpp
+  HDRS
+    sigaddset64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigaddset
+)
+
+add_entrypoint_object(
+  sigdelset64
+  SRCS
+    sigdelset64.cpp
+  HDRS
+    sigdelset64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigdelset
+)
+
+add_entrypoint_object(
+  sigemptyset64
+  SRCS
+    sigemptyset64.cpp
+  HDRS
+    sigemptyset64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigemptyset
+)
+
+add_entrypoint_object(
+  sigfillset64
+  SRCS
+    sigfillset64.cpp
+  HDRS
+    sigfillset64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigfillset
+)
+
+add_entrypoint_object(
+  sigismember64
+  SRCS
+    sigismember64.cpp
+  HDRS
+    sigismember64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigismember
+)
+
+add_entrypoint_object(
+  sigpending64
+  SRCS
+    sigpending64.cpp
+  HDRS
+    sigpending64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigpending
+)
+
+add_entrypoint_object(
+  sigprocmask64
+  SRCS
+    sigprocmask64.cpp
+  HDRS
+    sigprocmask64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigprocmask
+)
+
+add_entrypoint_object(
+  sigsuspend64
+  SRCS
+    sigsuspend64.cpp
+  HDRS
+    sigsuspend64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigsuspend
+)
+
+add_entrypoint_object(
+  sigtimedwait64
+  SRCS
+    sigtimedwait64.cpp
+  HDRS
+    sigtimedwait64.h
+  DEPENDS
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset64_t
+    libc.hdr.types.struct_timespec
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigtimedwait
+)
+
+add_entrypoint_object(
+  sigwait64
+  SRCS
+    sigwait64.cpp
+  HDRS
+    sigwait64.h
+  DEPENDS
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigwait
+)
+
+add_entrypoint_object(
+  sigwaitinfo64
+  SRCS
+    sigwaitinfo64.cpp
+  HDRS
+    sigwaitinfo64.h
+  DEPENDS
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset64_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.signal.sigwaitinfo
+)

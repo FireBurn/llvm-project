@@ -842,6 +842,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_sigset64_t",
+    hdrs = ["llvm-libc-types/sigset64_t.h"],
+    deps = [":llvm_libc_types_sigset_t"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_sigaction64",
+    hdrs = ["llvm-libc-types/struct_sigaction64.h"],
+    deps = [
+        ":llvm_libc_types_siginfo_t",
+        ":llvm_libc_types_sigset64_t",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_cc_t",
     hdrs = ["llvm-libc-types/cc_t.h"],
 )
