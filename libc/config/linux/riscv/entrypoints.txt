@@ -2142,6 +2142,19 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.signal.sys_signame
     libc.src.signal.sigwait
     libc.src.signal.sigwaitinfo
+    libc.src.signal.pthread_sigmask64
+    libc.src.signal.sigaction64
+    libc.src.signal.sigaddset64
+    libc.src.signal.sigdelset64
+    libc.src.signal.sigemptyset64
+    libc.src.signal.sigfillset64
+    libc.src.signal.sigismember64
+    libc.src.signal.sigpending64
+    libc.src.signal.sigprocmask64
+    libc.src.signal.sigsuspend64
+    libc.src.signal.sigtimedwait64
+    libc.src.signal.sigwait64
+    libc.src.signal.sigwaitinfo64
     libc.src.signal.str2sig
     libc.src.signal.tgkill
 
