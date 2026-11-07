@@ -1051,6 +1051,24 @@ libc_function(
 )
 
 libc_function(
+    name = "__read_chk",
+    srcs = ["linux/read_chk.cpp"],
+    hdrs = ["read_chk.h"],
+    deps = [
+        ":read",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support:abort_message",
+        "//libc/src/__support:common",
+        "//libc/src/__support:integer_to_string",
+        "//libc/src/stdlib:abort_utils",
+    ],
+)
+
+libc_function(
     name = "sbrk",
     srcs = ["linux/sbrk.cpp"],
     hdrs = ["sbrk.h"],
