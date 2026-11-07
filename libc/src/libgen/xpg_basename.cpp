@@ -7,18 +7,18 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Implementation of basename.
+/// Implementation of __xpg_basename.
 ///
 //===----------------------------------------------------------------------===//
 
-#include "src/libgen/basename.h"
+#include "src/libgen/xpg_basename.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(char *, basename, (char *path)) {
+LLVM_LIBC_FUNCTION(char *, __xpg_basename, (char *path)) {
   if (path == nullptr || path[0] == '\0')
     return const_cast<char *>(".");
 

@@ -19524,6 +19524,17 @@ libc_function(
 )
 
 libc_function(
+    name = "__xpg_basename",
+    srcs = ["src/libgen/xpg_basename.cpp"],
+    hdrs = ["src/libgen/xpg_basename.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_string_view",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "strsep",
     srcs = ["src/string/strsep.cpp"],
     hdrs = ["src/string/strsep.h"],
