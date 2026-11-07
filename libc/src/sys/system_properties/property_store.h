@@ -20,15 +20,16 @@
 #include "hdr/sys_mman_macros.h"
 #include "hdr/sys_socket_macros.h"
 #include "hdr/sys_stat_macros.h"
+#include "hdr/time_macros.h"
 #include "hdr/types/struct_sockaddr_un.h"
 #include "hdr/types/struct_stat.h"
-#include "hdr/time_macros.h"
 #include "hdr/types/struct_timespec.h"
 #include "hdr/types/struct_timeval.h"
 #include "src/__support/CPP/optional.h"
 #include "src/__support/OSUtil/linux/stat/stat_via_statx.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/connect.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fsetxattr.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/ftruncate.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/getuid.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/mmap.h"
@@ -42,6 +43,7 @@
 #include "src/__support/threads/linux/futex_utils.h"
 #include "src/__support/time/clock_gettime.h"
 #include "src/sys/system_properties/property_area.h"
+#include "src/sys/system_properties/property_info.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace system_properties {
@@ -52,10 +54,23 @@ constexpr const char SERVICE_SOCKET[] = "/dev/socket/property_service";
 constexpr uint32_t MSG_SETPROP2 = 0x00020001;
 constexpr int SERVICE_TIMEOUT_MS = 250;
 
+// Where the areas are when there is a directory of them: the file that tells
+// which context a property is in, the area that holds the serial everything
+// waits on, and then one area for each context, named after it.
+constexpr char INFO_FILE[] = "property_info";
+constexpr char SERIAL_FILE[] = "properties_serial";
+constexpr char SERIAL_CONTEXT[] = "u:object_r:properties_serial:s0";
+constexpr char SELINUX_XATTR[] = "security.selinux";
+constexpr size_t MAX_CONTEXTS = 512;
+
 struct State {
+  // The only area, or the one with the serial when there is a directory.
   Area *area = nullptr;
   bool writable = false;
   bool custom_filename = false;
+  bool directory = false;
+  PropertyInfo info;
+  Area *contexts[MAX_CONTEXTS] = {};
   char filename[PATH_MAX] = {};
 };
 
@@ -83,84 +98,253 @@ LIBC_INLINE bool is_read_only(const char *name) {
   return name[0] == 'r' && name[1] == 'o' && name[2] == '.';
 }
 
-// Creates the area, which only the process that serves the properties does.
-// It is made once: a file that is already there is somebody else's.
-LIBC_INLINE int create_area() {
-  State &s = state();
+LIBC_INLINE bool join(char *out, const char *directory, const char *leaf) {
+  const size_t directory_length = internal::string_length(directory);
+  const size_t leaf_length = internal::string_length(leaf);
+  if (directory_length + 1 + leaf_length >= PATH_MAX)
+    return false;
+  inline_memcpy(out, directory, directory_length);
+  out[directory_length] = '/';
+  inline_memcpy(out + directory_length + 1, leaf, leaf_length + 1);
+  return true;
+}
+
+LIBC_INLINE bool is_directory(const char *path) {
+  struct stat info = {};
+  auto status = internal::stat_via_statx(AT_FDCWD, path, 0, &info);
+  return status && S_ISDIR(info.st_mode);
+}
+
+// Creates a file for an area and maps it to write, which only the process that
+// serves the properties does. It is made once: a file that is already there is
+// somebody else's. The label is what lets the programs that may read it do so;
+// where there is no SELinux to give one, the file is left as it is.
+LIBC_INLINE Area *create_file(const char *path, const char *label) {
   auto fd = linux_syscalls::open(
-      filename(), O_RDWR | O_CREAT | O_NOFOLLOW | O_CLOEXEC | O_EXCL, 0444);
+      path, O_RDWR | O_CREAT | O_NOFOLLOW | O_CLOEXEC | O_EXCL, 0444);
   if (!fd) {
     libc_errno = fd.error();
-    return -1;
+    return nullptr;
   }
+  if (label != nullptr)
+    (void)linux_syscalls::fsetxattr(fd.value(), SELINUX_XATTR, label,
+                                    internal::string_length(label) + 1, 0);
   auto sized = linux_syscalls::ftruncate(fd.value(), AREA_SIZE);
   if (!sized) {
     libc_errno = sized.error();
     (void)linux_syscalls::close(fd.value());
-    return -1;
+    return nullptr;
   }
   auto mapped = linux_syscalls::mmap(nullptr, AREA_SIZE, PROT_READ | PROT_WRITE,
                                      MAP_SHARED, fd.value(), 0);
   (void)linux_syscalls::close(fd.value());
   if (!mapped) {
     libc_errno = mapped.error();
-    return -1;
+    return nullptr;
   }
-  s.area = static_cast<Area *>(mapped.value());
-  s.area->init();
-  s.writable = true;
-  return 0;
+  Area *area = static_cast<Area *>(mapped.value());
+  area->init();
+  return area;
 }
 
-// Maps the area to read. Anything another user could have written to is not
-// trusted, as a program decides what to do by what it says.
-LIBC_INLINE int map_area() {
-  State &s = state();
-  auto fd = linux_syscalls::open(filename(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC,
-                                 0);
+// Maps a file to read. Anything another user could have written to is not
+// trusted, as a program decides what to do by what it says. Gives the size of
+// what was mapped, which is all of the file unless it is an area.
+LIBC_INLINE void *map_trusted(const char *path, size_t minimum, bool whole,
+                              size_t *mapped_size) {
+  auto fd = linux_syscalls::open(path, O_RDONLY | O_NOFOLLOW | O_CLOEXEC, 0);
   if (!fd) {
     libc_errno = fd.error();
-    return -1;
+    return nullptr;
   }
   struct stat info = {};
   auto status = internal::stat_via_statx(fd.value(), "", AT_EMPTY_PATH, &info);
   if (!status) {
     libc_errno = status.error();
     (void)linux_syscalls::close(fd.value());
-    return -1;
+    return nullptr;
   }
   const bool trusted =
       (info.st_uid == 0 || info.st_uid == linux_syscalls::getuid()) &&
       (info.st_mode & (S_IWGRP | S_IWOTH)) == 0 &&
-      static_cast<size_t>(info.st_size) >= AREA_SIZE;
+      static_cast<size_t>(info.st_size) >= minimum;
   if (!trusted) {
     libc_errno = EPERM;
     (void)linux_syscalls::close(fd.value());
-    return -1;
+    return nullptr;
   }
-  auto mapped = linux_syscalls::mmap(nullptr, AREA_SIZE, PROT_READ, MAP_SHARED,
+  const size_t length = whole ? static_cast<size_t>(info.st_size) : minimum;
+  auto mapped = linux_syscalls::mmap(nullptr, length, PROT_READ, MAP_SHARED,
                                      fd.value(), 0);
   (void)linux_syscalls::close(fd.value());
   if (!mapped) {
     libc_errno = mapped.error();
-    return -1;
+    return nullptr;
   }
-  Area *area = static_cast<Area *>(mapped.value());
-  if (!area->valid()) {
+  if (mapped_size != nullptr)
+    *mapped_size = length;
+  return mapped.value();
+}
+
+LIBC_INLINE Area *map_area_file(const char *path) {
+  Area *area =
+      static_cast<Area *>(map_trusted(path, AREA_SIZE, false, nullptr));
+  if (area != nullptr && !area->valid()) {
     libc_errno = EINVAL;
+    return nullptr;
+  }
+  return area;
+}
+
+// Reads the file that says where each property goes.
+LIBC_INLINE bool map_info(const char *directory) {
+  State &s = state();
+  char path[PATH_MAX];
+  size_t size = 0;
+  if (!join(path, directory, INFO_FILE))
+    return false;
+  void *data = map_trusted(path, sizeof(uint32_t), true, &size);
+  if (data == nullptr)
+    return false;
+  s.info = PropertyInfo(data, size);
+  if (!s.info.valid()) {
+    libc_errno = EINVAL;
+    return false;
+  }
+  return true;
+}
+
+// Creates the areas of a directory, for every context the info file names.
+LIBC_INLINE int create_directory() {
+  State &s = state();
+  char path[PATH_MAX];
+  if (!map_info(filename()))
+    return -1;
+  if (!join(path, filename(), SERIAL_FILE)) {
+    libc_errno = ENAMETOOLONG;
     return -1;
   }
+  s.area = create_file(path, SERIAL_CONTEXT);
+  if (s.area == nullptr)
+    return -1;
+  const uint32_t count = s.info.num_contexts();
+  for (uint32_t i = 0; i < count && i < MAX_CONTEXTS; ++i) {
+    const char *context = s.info.context(i);
+    if (context == nullptr || !join(path, filename(), context)) {
+      libc_errno = EINVAL;
+      return -1;
+    }
+    s.contexts[i] = create_file(path, context);
+    if (s.contexts[i] == nullptr)
+      return -1;
+  }
+  s.directory = true;
+  s.writable = true;
+  return 0;
+}
+
+// Creates the area, or the directory of them.
+LIBC_INLINE int create_area() {
+  State &s = state();
+  if (is_directory(filename()))
+    return create_directory();
+  s.area = create_file(filename(), nullptr);
+  if (s.area == nullptr)
+    return -1;
+  s.writable = true;
+  return 0;
+}
+
+LIBC_INLINE int map_directory() {
+  State &s = state();
+  char path[PATH_MAX];
+  if (!map_info(filename()))
+    return -1;
+  if (!join(path, filename(), SERIAL_FILE)) {
+    libc_errno = ENAMETOOLONG;
+    return -1;
+  }
+  s.area = map_area_file(path);
+  if (s.area == nullptr)
+    return -1;
+  s.directory = true;
+  s.writable = false;
+  return 0;
+}
+
+// Maps the area, or the directory of them, to read.
+LIBC_INLINE int map_area() {
+  State &s = state();
+  if (is_directory(filename()))
+    return map_directory();
+  Area *area = map_area_file(filename());
+  if (area == nullptr)
+    return -1;
   s.area = area;
   s.writable = false;
   return 0;
 }
 
-// The area is mapped the first time something needs it.
+// The area is mapped the first time something needs it. With a directory of
+// them this is the one that holds the serial of all of them.
 LIBC_INLINE Area *area() {
   State &s = state();
   if (s.area == nullptr && map_area() != 0)
     return nullptr;
   return s.area;
+}
+
+// The area that a property is kept in, with the area of its context mapped the
+// first time one is looked for.
+LIBC_INLINE Area *area_for(const char *name) {
+  State &s = state();
+  if (area() == nullptr)
+    return nullptr;
+  if (!s.directory)
+    return s.area;
+  const uint32_t index = s.info.context_of(name);
+  if (index == NO_INDEX || index >= MAX_CONTEXTS) {
+    libc_errno = ENOENT;
+    return nullptr;
+  }
+  if (s.contexts[index] == nullptr) {
+    char path[PATH_MAX];
+    const char *context = s.info.context(index);
+    if (context == nullptr || !join(path, filename(), context)) {
+      libc_errno = ENOENT;
+      return nullptr;
+    }
+    s.contexts[index] = map_area_file(path);
+  }
+  return s.contexts[index];
+}
+
+// Calls the function with every area there is. An area that cannot be mapped,
+// as the programs that read this may not be allowed to, is left out.
+template <typename Function> LIBC_INLINE bool for_each_area(Function function) {
+  State &s = state();
+  if (area() == nullptr)
+    return false;
+  if (!s.directory) {
+    function(s.area);
+    return true;
+  }
+  const uint32_t count = s.info.num_contexts();
+  for (uint32_t i = 0; i < count && i < MAX_CONTEXTS; ++i) {
+    if (s.contexts[i] == nullptr) {
+      char path[PATH_MAX];
+      const char *context = s.info.context(i);
+      if (context == nullptr || !join(path, filename(), context))
+        continue;
+      // Leaving one out is not a failure of the walk.
+      const int saved_errno = libc_errno;
+      s.contexts[i] = map_area_file(path);
+      libc_errno = saved_errno;
+    }
+    if (s.contexts[i] != nullptr)
+      function(s.contexts[i]);
+  }
+  return true;
 }
 
 LIBC_INLINE void wake(Word &word) {
@@ -175,8 +359,9 @@ LIBC_INLINE uint32_t read_value(const PropInfo *info, char *value) {
   uint32_t serial = word.load(cpp::MemoryOrder::ACQUIRE);
   for (;;) {
     const uint32_t length = serial_value_length(serial);
-    const char *source =
-        serial_dirty(serial) ? area()->dirty_backup_area() : info->value;
+    const char *source = serial_dirty(serial)
+                             ? area_for(info->name())->dirty_backup_area()
+                             : info->value;
     inline_memcpy(value, source, length + 1);
     cpp::atomic_thread_fence(cpp::MemoryOrder::ACQUIRE);
     const uint32_t again = word.load(cpp::MemoryOrder::RELAXED);
@@ -201,11 +386,14 @@ LIBC_INLINE int add(const char *name, uint32_t name_length, const char *value,
     libc_errno = EPERM;
     return -1;
   }
-  if (s.area->find(name) != nullptr) {
+  Area *target = area_for(name);
+  if (target == nullptr)
+    return -1;
+  if (target->find(name) != nullptr) {
     libc_errno = EEXIST;
     return -1;
   }
-  if (!s.area->add(name, name_length, value, value_length)) {
+  if (!target->add(name, name_length, value, value_length)) {
     libc_errno = ENOSPC;
     return -1;
   }
@@ -229,7 +417,10 @@ LIBC_INLINE int update(PropInfo *info, const char *value, uint32_t length) {
   uint32_t serial = info->serial.load(cpp::MemoryOrder::RELAXED);
   // Readers that arrive while the value is being written take the old one
   // from here.
-  inline_memcpy(s.area->dirty_backup_area(), info->value,
+  Area *holder = area_for(info->name());
+  if (holder == nullptr)
+    return -1;
+  inline_memcpy(holder->dirty_backup_area(), info->value,
                 serial_value_length(serial) + 1);
   cpp::atomic_thread_fence(cpp::MemoryOrder::RELEASE);
   serial |= 1;
