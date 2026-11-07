@@ -23,3 +23,18 @@ libc_test(
         "//libc:raise",
     ],
 )
+
+libc_test(
+    name = "assert2_test",
+    srcs = ["assert2_test.cpp"],
+    deps = [
+        "//libc:_Exit",
+        "//libc:__assert",
+        "//libc:__assert2",
+        "//libc:abort",
+        "//libc:close",
+        "//libc:hdr_signal_macros",
+        "//libc:raise",
+    ],
+)
+
