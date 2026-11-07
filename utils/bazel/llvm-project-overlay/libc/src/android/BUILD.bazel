@@ -16,6 +16,50 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "crash_detail_register",
+    srcs = ["android_crash_detail_register.cpp"],
+    hdrs = ["android_crash_detail_register.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:crash_detail",
+    ],
+)
+
+libc_function(
+    name = "crash_detail_unregister",
+    srcs = ["android_crash_detail_unregister.cpp"],
+    hdrs = ["android_crash_detail_unregister.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:crash_detail",
+    ],
+)
+
+libc_function(
+    name = "crash_detail_replace_data",
+    srcs = ["android_crash_detail_replace_data.cpp"],
+    hdrs = ["android_crash_detail_replace_data.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:crash_detail",
+    ],
+)
+
+libc_function(
+    name = "crash_detail_replace_name",
+    srcs = ["android_crash_detail_replace_name.cpp"],
+    hdrs = ["android_crash_detail_replace_name.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:crash_detail",
+    ],
+)
+
+libc_function(
     name = "set_abort_message",
     srcs = ["android_set_abort_message.cpp"],
     hdrs = ["android_set_abort_message.h"],
