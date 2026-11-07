@@ -31042,6 +31042,12 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_iovec",
+    hdrs = ["include/llvm-libc-types/struct_iovec.h"],
+    deps = [":llvm_libc_types_size_t"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_tcphdr",
     hdrs = ["include/llvm-libc-types/struct_tcphdr.h"],
     deps = [
