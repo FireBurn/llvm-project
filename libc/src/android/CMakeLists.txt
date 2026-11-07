@@ -34,6 +34,58 @@ add_entrypoint_object(
     libc.src.__support.abort_message
 )
 
+add_entrypoint_object(
+  android_crash_detail_register
+  SRCS
+    android_crash_detail_register.cpp
+  HDRS
+    android_crash_detail_register.h
+  DEPENDS
+    libc.include.android_crash_detail
+    libc.src.__support.common
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  android_crash_detail_unregister
+  SRCS
+    android_crash_detail_unregister.cpp
+  HDRS
+    android_crash_detail_unregister.h
+  DEPENDS
+    libc.include.android_crash_detail
+    libc.src.__support.common
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  android_crash_detail_replace_data
+  SRCS
+    android_crash_detail_replace_data.cpp
+  HDRS
+    android_crash_detail_replace_data.h
+  DEPENDS
+    libc.include.android_crash_detail
+    libc.src.__support.common
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  android_crash_detail_replace_name
+  SRCS
+    android_crash_detail_replace_name.cpp
+  HDRS
+    android_crash_detail_replace_name.h
+  DEPENDS
+    libc.include.android_crash_detail
+    libc.src.__support.common
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.config
+)
+
 add_object_library(
   fdsan_error_level
   SRCS

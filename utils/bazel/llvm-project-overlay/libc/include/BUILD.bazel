@@ -27,6 +27,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         other_srcs = ["stdlib-alloca.yaml"],
     ),
     libc_header_info("android/api-level"),
+    libc_header_info("android/crash_detail"),
     libc_header_info("android/dlext"),
     libc_header_info("android/fdsan"),
     libc_header_info("android/set_abort_message"),
@@ -827,6 +828,11 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_types_struct_android_namespace_t",
     hdrs = ["llvm-libc-types/struct_android_namespace_t.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_crash_detail_t",
+    hdrs = ["llvm-libc-types/crash_detail_t.h"],
 )
 
 libc_support_library(
