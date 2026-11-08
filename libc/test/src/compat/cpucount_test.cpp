@@ -22,8 +22,8 @@ TEST(LlvmLibcCompatTest, CountsTheCpusInASet) {
   cpu_set_t set;
   LIBC_NAMESPACE::memset(&set, 0, sizeof(set));
   ASSERT_EQ(LIBC_NAMESPACE::__sched_cpucount(sizeof(set), &set), 0);
-  set.__mask[0] = 0x9;
-  set.__mask[1] = 0x1;
+  set.__bits[0] = 0x9;
+  set.__bits[1] = 0x1;
   ASSERT_EQ(LIBC_NAMESPACE::__sched_cpucount(sizeof(set), &set), 3);
 }
 
