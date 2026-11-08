@@ -147,6 +147,7 @@ add_object_library(
     libc.src.stdlib.atexit
     libc.src.unistd.environ
     libc.src.compat.program_name
+    libc.src.android.debuggerd_hook
   COMPILE_OPTIONS
     -ffreestanding # To avoid compiler warnings about calling the main function.
     -fno-builtin # avoid emit unexpected calls
@@ -193,6 +194,7 @@ add_object_library(
     libc.src.stdlib.atexit
     libc.src.unistd.environ
     libc.src.compat.program_name
+    libc.src.android.debuggerd_hook
   COMPILE_OPTIONS
     -ffreestanding # To avoid compiler warnings about calling the main function.
     -fno-builtin # avoid emit unexpected calls
