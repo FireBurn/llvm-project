@@ -120,6 +120,19 @@ add_libc_test(
 )
 
 add_libc_test(
+  errno_accessor_test
+  SUITE
+    libc-android-tests
+  SRCS
+    errno_accessor_test.cpp
+  DEPENDS
+    libc.src.__support.libc_errno
+    libc.src.android.__errno
+    libc.src.pthread.pthread_create
+    libc.src.pthread.pthread_join
+)
+
+add_libc_test(
   malloc_backtrace_test
   SUITE
     libc-android-tests
