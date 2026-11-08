@@ -44,6 +44,14 @@ libc_test(
 )
 
 libc_test(
+    name = "malloc_backtrace_test",
+    srcs = ["malloc_backtrace_test.cpp"],
+    deps = [
+        "//libc:malloc_backtrace",
+    ],
+)
+
+libc_test(
     name = "fdsan_test",
     srcs = ["fdsan_test.cpp"],
     deps = [

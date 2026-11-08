@@ -340,6 +340,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  malloc_backtrace
+  SRCS
+    malloc_backtrace.cpp
+  HDRS
+    malloc_backtrace.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.hdr.types.ssize_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   android_update_LD_LIBRARY_PATH
   SRCS
     android_update_LD_LIBRARY_PATH.cpp

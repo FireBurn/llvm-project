@@ -37860,6 +37860,18 @@ libc_function(
 )
 
 libc_function(
+    name = "malloc_backtrace",
+    srcs = ["src/android/malloc_backtrace.cpp"],
+    hdrs = ["src/android/malloc_backtrace.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":types_size_t",
+        ":types_ssize_t",
+    ],
+)
+
+libc_function(
     name = "android_update_LD_LIBRARY_PATH",
     srcs = ["src/android/android_update_LD_LIBRARY_PATH.cpp"],
     hdrs = ["src/android/android_update_LD_LIBRARY_PATH.h"],
