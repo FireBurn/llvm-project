@@ -31300,12 +31300,15 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_macros_properties_architectures",
         ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_newfstatat",
         ":__support_osutil_linux_syscall_wrappers_open",
         ":__support_osutil_linux_syscall_wrappers_read",
         ":hdr_elf_macros",
         ":hdr_fcntl_macros",
         ":hdr_link_macros",
+        ":hdr_sys_stat_macros",
         ":types_size_t",
+        ":types_struct_stat",
     ],
 )
 
