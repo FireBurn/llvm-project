@@ -16,6 +16,12 @@
 
 #include "fcntl-macros.h"
 
+// bionic's <sys/eventfd.h> includes <fcntl.h>, and Android programs call open
+// on the strength of it, as AOSP's libnetdutils does.
+#ifdef __ANDROID__
+#include <fcntl.h>
+#endif
+
 #define EFD_SEMAPHORE (1 << 0)
 #define EFD_CLOEXEC O_CLOEXEC
 #define EFD_NONBLOCK O_NONBLOCK
