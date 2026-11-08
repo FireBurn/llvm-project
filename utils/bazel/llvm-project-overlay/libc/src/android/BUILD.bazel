@@ -115,6 +115,18 @@ libc_function(
 )
 
 libc_function(
+    name = "mallopt",
+    srcs = ["android_mallopt.cpp"],
+    hdrs = ["android_mallopt.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "update_LD_LIBRARY_PATH",
     srcs = ["android_update_LD_LIBRARY_PATH.cpp"],
     hdrs = ["android_update_LD_LIBRARY_PATH.h"],
