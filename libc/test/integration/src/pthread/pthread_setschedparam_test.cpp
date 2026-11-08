@@ -7,7 +7,8 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Integration tests for pthread_setschedparam and pthread_getschedparam.
+/// Integration tests for pthread_setschedparam, pthread_getschedparam and
+/// pthread_setschedprio.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -24,6 +25,7 @@
 #include "src/pthread/pthread_mutex_unlock.h"
 #include "src/pthread/pthread_self.h"
 #include "src/pthread/pthread_setschedparam.h"
+#include "src/pthread/pthread_setschedprio.h"
 #include "test/IntegrationTest/test.h"
 
 #include <pthread.h>
@@ -101,6 +103,16 @@ TEST_MAIN() {
   param.sched_priority = 1;
   ASSERT_EQ(LIBC_NAMESPACE::pthread_setschedparam(th, SCHED_OTHER, &param),
             EINVAL);
+
+  // pthread_setschedprio changes the priority and leaves the policy alone.
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setschedprio(th, 0), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_getschedparam(th, &new_policy, &new_param),
+            0);
+  ASSERT_EQ(new_policy, SCHED_OTHER);
+  ASSERT_EQ(new_param.sched_priority, 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setschedprio(th, 1), EINVAL);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setschedprio(main_thread, 0), 0);
+  ASSERT_EQ(LIBC_NAMESPACE::pthread_setschedprio(main_thread, 1000), EINVAL);
 
   // Release mutex so child thread can complete execution
   ASSERT_EQ(LIBC_NAMESPACE::pthread_mutex_unlock(&mutex), 0);
