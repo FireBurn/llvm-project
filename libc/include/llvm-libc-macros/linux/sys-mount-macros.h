@@ -26,6 +26,14 @@
 #endif
 #endif
 
+// bionic's <sys/mount.h> brings in <linux/fs.h>, and Android programs take
+// the FS_* flags and FICLONE from it.
+#if defined(__ANDROID__) && defined(__has_include)
+#if __has_include(<linux/fs.h>)
+#include <linux/fs.h>
+#endif
+#endif
+
 #define MS_RDONLY (1 << 0)
 #define MS_NOSUID (1 << 1)
 #define MS_NODEV (1 << 2)
