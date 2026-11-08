@@ -503,6 +503,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_sys_cdefs_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sys_cdefs_test.cpp
+  DEPENDS
+    libc.include.sys_cdefs
+)
+
+add_libc_test(
   android_sys_eventfd_test
   SUITE
     libc-include-tests
