@@ -87,6 +87,7 @@ add_object_library(
     libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.src.__support.OSUtil.linux.syscall_wrappers.sched_getparam
     libc.src.__support.OSUtil.linux.syscall_wrappers.sched_getscheduler
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setparam
     libc.src.__support.OSUtil.linux.syscall_wrappers.sched_setscheduler
     libc.src.__support.OSUtil.linux.syscall_wrappers.tgkill
     libc.src.__support.OSUtil.linux.syscall_wrappers.write

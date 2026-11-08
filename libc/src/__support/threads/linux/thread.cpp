@@ -29,6 +29,7 @@
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getparam.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_getscheduler.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/sched_setparam.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/sched_setscheduler.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/tgkill.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/write.h"
@@ -601,6 +602,15 @@ int Thread::get_name(cpp::StringStream &name) const {
 int Thread::setschedparam(SchedParameters params) {
   auto result = linux_syscalls::sched_setscheduler(attrib->tid, params.policy,
                                                    &params.param);
+  if (!result.has_value())
+    return result.error();
+  return 0;
+}
+
+int Thread::setschedprio(int prio) {
+  struct sched_param param = {};
+  param.sched_priority = prio;
+  auto result = linux_syscalls::sched_setparam(attrib->tid, &param);
   if (!result.has_value())
     return result.error();
   return 0;
