@@ -22,6 +22,7 @@
 #include "src/__support/OSUtil/exit.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/clone3.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/execle.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/fork.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/wait4.h"
 #include "src/__support/common.h"
 #include "src/__support/error_or.h"
@@ -49,6 +50,10 @@ LIBC_INLINE ErrorOr<pid_t> shell_fork(const char *command,
   struct clone_args cl_args{};
   cl_args.exit_signal = SIGCHLD;
   ErrorOr<pid_t> fork_res = linux_syscalls::clone3(&cl_args, sizeof(cl_args));
+  // clone3 is missing before Linux 5.3 and some seccomp policies answer ENOSYS
+  // for it, so fall back to a plain fork as glibc does.
+  if (!fork_res.has_value() && fork_res.error() == ENOSYS)
+    fork_res = linux_syscalls::fork();
   if (!fork_res.has_value())
     return Error(fork_res.error());
 
