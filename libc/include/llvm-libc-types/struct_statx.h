@@ -16,6 +16,19 @@
 
 #include "../llvm-libc-macros/stdint-macros.h"
 
+// bionic's <sys/stat.h> is <linux/stat.h>'s struct statx, and Android programs
+// include both, so the kernel's definition stands in for ours there.
+#if defined(__ANDROID__) && defined(__has_include)
+#if __has_include(<linux/stat.h>)
+#include <linux/stat.h>
+#endif
+#endif
+#if defined(__ANDROID__) &&                                                    \
+    (defined(_UAPI_LINUX_STAT_H) || defined(_LINUX_STAT_H))
+#define __LLVM_LIBC_KERNEL_STAT_H 1
+#endif
+
+#ifndef __LLVM_LIBC_KERNEL_STAT_H
 // A time as statx reports it, which unlike struct timespec is the same
 // width everywhere.
 struct statx_timestamp {
@@ -72,5 +85,7 @@ struct statx {
 
   uint64_t __spare3[8];
 };
+
+#endif // __LLVM_LIBC_KERNEL_STAT_H
 
 #endif // LLVM_LIBC_TYPES_STRUCT_STATX_H
