@@ -31063,6 +31063,12 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_tcp_info",
+    hdrs = ["include/llvm-libc-types/struct_tcp_info.h"],
+    deps = [":llvm_libc_macros_stdint_macros"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_tcphdr",
     hdrs = ["include/llvm-libc-types/struct_tcphdr.h"],
     deps = [
