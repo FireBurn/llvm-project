@@ -36104,6 +36104,26 @@ libc_function(
 )
 
 libc_function(
+    name = "b64_ntop",
+    srcs = ["src/resolv/b64_ntop.cpp"],
+    hdrs = ["src/resolv/b64_ntop.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "b64_pton",
+    srcs = ["src/resolv/b64_pton.cpp"],
+    hdrs = ["src/resolv/b64_pton.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "dn_comp",
     srcs = ["src/resolv/dn_comp.cpp"],
     hdrs = ["src/resolv/dn_comp.h"],
