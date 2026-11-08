@@ -109,6 +109,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
         "sys/dir",
         has_def_template = True,
     ),
+    libc_header_info("sys/endian"),
     libc_header_info(
         "sys/errno",
         has_def_template = True,
@@ -813,6 +814,12 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_endian_macros",
     hdrs = ["llvm-libc-macros/endian-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_endian_macros",
+    hdrs = ["llvm-libc-macros/sys-endian-macros.h"],
+    deps = [":llvm_libc_macros_endian_macros"],
 )
 
 libc_support_library(
