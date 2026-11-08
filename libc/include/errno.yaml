@@ -13,4 +13,8 @@ objects:
     object_type: char *
   - object_name: program_invocation_short_name
     object_type: char *
-functions: []
+functions:
+  - name: __errno
+    return_type: int *
+    arguments: []
+    guard: __ANDROID__

@@ -44,6 +44,16 @@ libc_test(
 )
 
 libc_test(
+    name = "errno_accessor_test",
+    srcs = ["errno_accessor_test.cpp"],
+    deps = [
+        "//libc:__errno",
+        "//libc:pthread_create",
+        "//libc:pthread_join",
+    ],
+)
+
+libc_test(
     name = "malloc_backtrace_test",
     srcs = ["malloc_backtrace_test.cpp"],
     deps = [
