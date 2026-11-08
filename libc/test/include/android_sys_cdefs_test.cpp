@@ -26,3 +26,27 @@ extern "C" long seek_like(int, long, int) { return 7; }
 TEST(LlvmLibcAndroidSysCdefsTest, RenameIfFileOffset64LeavesTheNameAlone) {
   EXPECT_EQ(seek_like(0, 0, 0), 7L);
 }
+
+extern "C" int aliased_target() { return 11; }
+extern "C" int aliased_name();
+__strong_alias(aliased_name, aliased_target)
+
+TEST(LlvmLibcAndroidSysCdefsTest, StrongAliasNamesTheSameFunction) {
+  EXPECT_EQ(aliased_name(), 11);
+}
+
+TEST(LlvmLibcAndroidSysCdefsTest, CastKeepsTheKindOfConversion) {
+  const int value = 65;
+  EXPECT_EQ(__BIONIC_CAST(static_cast, char, value), 'A');
+  const void *pointer = &value;
+  EXPECT_EQ(__BIONIC_CAST(reinterpret_cast, const int *, pointer), &value);
+}
+
+TEST(LlvmLibcAndroidSysCdefsTest, PredictionMacrosKeepTheValue) {
+  int zero = 0;
+  int five = 5;
+  EXPECT_EQ(__predict_true(five), 1L);
+  EXPECT_EQ(__predict_true(zero), 0L);
+  EXPECT_EQ(__predict_false(five), 1L);
+  EXPECT_EQ(__predict_false(zero), 0L);
+}
