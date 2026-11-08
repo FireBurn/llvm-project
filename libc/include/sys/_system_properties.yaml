@@ -1,0 +1,9 @@
+header: sys/_system_properties.h
+header_template: _system_properties.h.def
+standards:
+  - bsd
+macros: []
+types: []
+enums: []
+objects: []
+functions: []

@@ -1784,6 +1784,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys__system_properties
+  ../libc/include/sys/_system_properties.yaml
+  sys/_system_properties.h
+  DEPENDS
+    .llvm_libc_common_h
+    .sys_system_properties
+)
+
+add_header_macro(
   sys_user
   ../libc/include/sys/user.yaml
   sys/user.h
