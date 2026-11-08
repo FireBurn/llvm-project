@@ -523,6 +523,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_netinet_tcp_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_netinet_tcp_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.netinet_tcp_macros
+    libc.include.llvm-libc-types.struct_tcp_info
+    libc.include.llvm-libc-types.struct_tcphdr
+)
+
+add_libc_test(
   android_posix_includes_test
   SUITE
     libc-include-tests
