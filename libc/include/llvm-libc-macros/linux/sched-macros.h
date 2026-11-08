@@ -22,6 +22,7 @@
 #define SCHED_ISO 4 // Not yet implemented, reserved.
 #define SCHED_IDLE 5
 #define SCHED_DEADLINE 6
+#define SCHED_EXT 7
 
 // Asked for alongside a policy, to say that a child should not inherit
 // the elevated one. The kernel reads it from the same word.
