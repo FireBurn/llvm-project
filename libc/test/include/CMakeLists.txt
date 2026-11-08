@@ -1198,11 +1198,13 @@ add_libc_test(
   DEPENDS
     libc.include.llvm-libc-macros.elf_macros
     libc.include.llvm-libc-types.Elf32_Move
+    libc.include.llvm-libc-types.Elf32_Relr
     libc.include.llvm-libc-types.Elf32_Section
     libc.include.llvm-libc-types.Elf32_Sword
     libc.include.llvm-libc-types.Elf32_Word
     libc.include.llvm-libc-types.Elf64_Lib
     libc.include.llvm-libc-types.Elf64_Move
+    libc.include.llvm-libc-types.Elf64_Relr
     libc.include.llvm-libc-types.Elf64_Section
     libc.include.llvm-libc-types.Elf64_Sword
     libc.include.llvm-libc-types.Elf64_Sxword
