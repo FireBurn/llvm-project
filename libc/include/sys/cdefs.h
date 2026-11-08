@@ -236,6 +236,30 @@
 #ifndef __strftimelike
 #define __strftimelike(x) __attribute__((__format__(__strftime__, x, 0)))
 #endif
+
+// The helpers bionic's <sys/cdefs.h> provides for its own and for platform
+// code, which uses them without declaring anything else.
+#ifndef __strong_alias
+// Gives a symbol defined in the same object file a second, global name.
+#define __strong_alias(alias, sym) \
+  __asm__(".global " #alias "\n" #alias " = " #sym);
+#endif
+#ifndef __BIONIC_CAST
+#ifdef __cplusplus
+#define __BIONIC_CAST(_k, _t, _v) (_k<_t>(_v))
+#else
+#define __BIONIC_CAST(_k, _t, _v) ((_t)(_v))
+#endif
+#endif
+#ifndef __BIONIC_COMPLICATED_NULLNESS
+#define __BIONIC_COMPLICATED_NULLNESS _Null_unspecified
+#endif
+#ifndef __predict_true
+#define __predict_true(exp) __builtin_expect((exp) != 0, 1)
+#endif
+#ifndef __predict_false
+#define __predict_false(exp) __builtin_expect((exp) != 0, 0)
+#endif
 #endif // __ANDROID__
 
 #endif // _SYS_CDEFS_H
