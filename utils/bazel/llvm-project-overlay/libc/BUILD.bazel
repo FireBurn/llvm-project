@@ -37860,6 +37860,17 @@ libc_function(
 )
 
 libc_function(
+    name = "__errno",
+    srcs = ["src/android/__errno.cpp"],
+    hdrs = ["src/android/__errno.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "malloc_backtrace",
     srcs = ["src/android/malloc_backtrace.cpp"],
     hdrs = ["src/android/malloc_backtrace.h"],
