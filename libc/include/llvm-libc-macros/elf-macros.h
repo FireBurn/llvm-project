@@ -24,6 +24,13 @@
 
 // Relocations
 
+#ifdef __ANDROID__
+// bionic's test for the magic number at the start of an ELF header.
+#define IS_ELF(ehdr)                                                           \
+  ((ehdr).e_ident[EI_MAG0] == ELFMAG0 && (ehdr).e_ident[EI_MAG1] == ELFMAG1 && \
+   (ehdr).e_ident[EI_MAG2] == ELFMAG2 && (ehdr).e_ident[EI_MAG3] == ELFMAG3)
+#endif
+
 #define ELF32_R_SYM(i) ((i) >> 8)
 #define ELF32_R_TYPE(i) ((unsigned char)(i))
 #define ELF32_R_INFO(s, t) (((s) << 8) + (unsigned char)(t))
