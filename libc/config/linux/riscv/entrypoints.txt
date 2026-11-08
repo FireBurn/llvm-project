@@ -24,6 +24,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.android_crash_detail_unregister
     libc.src.android.android_set_abort_message
     libc.src.android.android_mallopt
+    libc.src.android.android_reset_stack_guards
     libc.src.android.android_update_LD_LIBRARY_PATH
 
     # sys/system_properties.h entrypoints
