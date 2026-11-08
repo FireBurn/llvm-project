@@ -35,6 +35,15 @@ libc_test(
 )
 
 libc_test(
+    name = "android_mallopt_test",
+    srcs = ["android_mallopt_test.cpp"],
+    deps = [
+        "//libc:android_mallopt",
+        "//libc:hdr_errno_macros",
+    ],
+)
+
+libc_test(
     name = "fdsan_test",
     srcs = ["fdsan_test.cpp"],
     deps = [
