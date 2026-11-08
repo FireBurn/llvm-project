@@ -16,6 +16,14 @@
 // systemd scans for "#define AF_x AF_y" or "PF_y" to build its table of
 // address families and finds none when AF_ names are numbers.
 
+// bionic's <sys/socket.h> brings in <linux/sockios.h>, and Android programs
+// take the SIOC* ioctl numbers from it.
+#if defined(__ANDROID__) && defined(__has_include)
+#if __has_include(<linux/sockios.h>)
+#include <linux/sockios.h>
+#endif
+#endif
+
 // 4.2BSD protocol families
 #define PF_UNSPEC 0
 #define PF_UNIX 1
