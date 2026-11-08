@@ -81,6 +81,7 @@ add_header_library(
     libc.src.__support.OSUtil.osutil
     libc.src.__support.OSUtil.linux.syscall_wrappers.clone3
     libc.src.__support.OSUtil.linux.syscall_wrappers.execle
+    libc.src.__support.OSUtil.linux.syscall_wrappers.fork
     libc.src.__support.OSUtil.linux.syscall_wrappers.wait4
     libc.src.unistd.environ
 )
