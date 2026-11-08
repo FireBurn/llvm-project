@@ -39884,7 +39884,10 @@ libc_support_library(
 
 libc_support_library(
     name = "llvm_libc_macros_sys_mount_macros",
-    hdrs = ["include/llvm-libc-macros/sys-mount-macros.h"],
+    hdrs = [
+        "include/llvm-libc-macros/linux/sys-mount-macros.h",
+        "include/llvm-libc-macros/sys-mount-macros.h",
+    ],
 )
 
 libc_support_library(
