@@ -234,16 +234,23 @@ if(LIBC_ENABLE_SHARED)
   )
 endif()
 
+# These are linked into every program. Built with LTO they would be bitcode,
+# which lld merges into the LTO unit of the program, and a program that splits
+# its unit differently then fails to link.
 add_startup_object(
   crti
   SRC
     crti.cpp
+  COMPILE_OPTIONS
+    -fno-lto
 )
 
 add_startup_object(
   crtn
   SRC
     crtn.cpp
+  COMPILE_OPTIONS
+    -fno-lto
 )
 
 add_custom_target(libc-startup)
