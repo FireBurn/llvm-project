@@ -120,6 +120,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  malloc_backtrace_test
+  SUITE
+    libc-android-tests
+  SRCS
+    malloc_backtrace_test.cpp
+  DEPENDS
+    libc.src.android.malloc_backtrace
+)
+
+add_libc_test(
   android_reset_stack_guards_test
   SUITE
     libc-android-tests
