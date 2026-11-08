@@ -472,6 +472,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_sys_socket_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sys_socket_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_socket_macros
+)
+
+add_libc_test(
   android_posix_includes_test
   SUITE
     libc-include-tests
