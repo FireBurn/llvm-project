@@ -73,6 +73,7 @@ libc_support_library(
         "//libc/src/__support/threads:linux_futex_utils",
         "//libc/src/__support/time:clock_gettime",
         "//libc/src/__support:libc_errno",
+        "//libc/src/stdlib:getenv",
     ],
 )
 
@@ -84,6 +85,18 @@ libc_function(
         ":property_store",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
+    name = "__system_properties_zygote_reload",
+    srcs = ["__system_properties_zygote_reload.cpp"],
+    hdrs = ["__system_properties_zygote_reload.h"],
+    deps = [
+        ":property_store",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdlib:setenv",
     ],
 )
 

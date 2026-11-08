@@ -27,6 +27,7 @@ set(TARGET_LIBC_ENTRYPOINTS
 
     # sys/system_properties.h entrypoints
     libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.__system_properties_zygote_reload
     libc.src.sys.system_properties.__system_property_area_init
     libc.src.sys.system_properties.__system_property_set_filename
     libc.src.sys.system_properties.__system_property_find
