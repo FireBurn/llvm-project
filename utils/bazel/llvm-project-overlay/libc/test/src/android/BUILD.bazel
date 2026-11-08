@@ -88,3 +88,14 @@ libc_test(
         "//libc/src/android:crash_detail_unregister",
     ],
 )
+
+libc_test(
+    name = "android_reset_stack_guards_test",
+    srcs = ["android_reset_stack_guards_test.cpp"],
+    deps = [
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/threads:tcb",
+        "//libc/src/android:reset_stack_guards",
+        "//libc/src/stdlib:exit",
+    ],
+)
