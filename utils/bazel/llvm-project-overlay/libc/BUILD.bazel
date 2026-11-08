@@ -355,6 +355,10 @@ LLVM_LIBC_HEADERS = [
         other_srcs = ["include/sys/select-time.yaml"],
     ),
     libc_header_info("sys/types"),
+    libc_header_info(
+        "sys/_system_properties",
+        has_def_template = True,
+    ),
     libc_header_info("sys/system_properties"),
     libc_header_info("sys/user"),
     libc_header_info("sys/utsname"),
