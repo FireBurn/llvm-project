@@ -48,6 +48,9 @@ functions:
   - name: __system_properties_init
     return_type: int
     arguments: []
+  - name: __system_properties_zygote_reload
+    return_type: int
+    arguments: []
   - name: __system_property_area_init
     return_type: int
     arguments: []

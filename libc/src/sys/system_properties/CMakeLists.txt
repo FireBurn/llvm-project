@@ -53,6 +53,7 @@ add_header_library(
     libc.src.__support.macros.config
     libc.src.__support.threads.linux.futex_utils
     libc.src.__support.time.clock_gettime
+    libc.src.stdlib.getenv
 )
 
 add_entrypoint_object(
@@ -64,6 +65,18 @@ add_entrypoint_object(
   DEPENDS
     .property_store
     libc.src.__support.common
+)
+
+add_entrypoint_object(
+  __system_properties_zygote_reload
+  SRCS
+    __system_properties_zygote_reload.cpp
+  HDRS
+    __system_properties_zygote_reload.h
+  DEPENDS
+    .property_store
+    libc.src.__support.common
+    libc.src.stdlib.setenv
 )
 
 add_entrypoint_object(
