@@ -47,3 +47,9 @@ TEST(LlvmLibcLinuxSysStatMacrosTest, FillInTheMissingFcntlStatxAndMountMacros) {
   EXPECT_EQ(static_cast<long long>(STATX_ATTR_DAX), 0x200000LL);
   EXPECT_EQ(static_cast<long long>(STATX_ATTR_WRITE_ATOMIC), 0x400000LL);
 }
+
+TEST(LlvmLibcLinuxSysStatMacrosTest, PermissionMasks) {
+  EXPECT_EQ(ACCESSPERMS, 0777);
+  EXPECT_EQ(ALLPERMS, 07777);
+  EXPECT_EQ(DEFFILEMODE, 0666);
+}
