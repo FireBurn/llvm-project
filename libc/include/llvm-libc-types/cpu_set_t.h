@@ -12,6 +12,10 @@
 #define __CPU_SETSIZE 1024
 #define __NCPUBITS (8 * sizeof(unsigned long))
 typedef unsigned long __cpu_set_mask_t;
+// bionic's names for the word a set is made of and its width, which Android
+// programs use to size a set.
+#define __CPU_BITTYPE unsigned long int
+#define __CPU_BITS (8 * sizeof(__CPU_BITTYPE))
 
 typedef struct {
   __cpu_set_mask_t __mask[__CPU_SETSIZE / __NCPUBITS];
