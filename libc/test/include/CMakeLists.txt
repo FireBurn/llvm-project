@@ -553,6 +553,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_elf_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_elf_test.cpp
+  DEPENDS
+    libc.include.elf
+)
+
+add_libc_test(
   android_ucontext_test
   SUITE
     libc-include-tests
