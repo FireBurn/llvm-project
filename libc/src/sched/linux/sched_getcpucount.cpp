@@ -23,7 +23,7 @@ namespace internal {
 int sched_getcpucount_impl(size_t cpuset_size, const cpu_set_t *mask) {
   int result = 0;
   for (size_t i = 0; i < cpuset_size / sizeof(long); ++i) {
-    result += cpp::popcount(mask->__mask[i]);
+    result += cpp::popcount(mask->__bits[i]);
   }
   return result;
 }
