@@ -14,6 +14,7 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.osutil
     libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close_range
     libc.src.__support.OSUtil.linux.syscall_wrappers.dup2
     libc.src.__support.OSUtil.linux.syscall_wrappers.execve
     libc.src.__support.OSUtil.linux.syscall_wrappers.exit_group
@@ -39,6 +40,7 @@ add_entrypoint_object(
     libc.src.unistd.linux.exec_utils
     libc.hdr.signal_macros
     libc.hdr.spawn_macros
+    libc.hdr.unistd_macros
     libc.hdr.types.sigset_t
     libc.src.signal.sigismember
 )
