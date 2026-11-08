@@ -73,6 +73,7 @@ libc_startup_library(
         "//libc/src/__support/threads:thread_headers",
         "//libc/src/__support:elf_module",
         "//libc/src/__support:elf_passive_abi",
+        "//libc/src/android:debuggerd_hook",
         "//libc/src/compat:progname",
         "//libc/src/compat:program_name",
         "//libc/src/errno:program_invocation_name",
