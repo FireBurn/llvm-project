@@ -136,6 +136,33 @@ bool already_loaded(const elf::ModuleSet &set, const char *name) {
   return false;
 }
 
+// The index of the module that is the file `name` would be loaded from, found
+// by device and inode so that a link to a library that is already open, or a
+// second name for it, is the library and not another copy of it. Null where
+// the name leads to no file or the file is not open.
+bool loaded_by_identity(const elf::ModuleSet &set, const char *name,
+                        const elf::Module *requester, const char *origin,
+                        const char *library_path,
+                        elf::SystemPaths *system_paths, size_t &found) {
+  dev_t device = 0;
+  ino_t inode = 0;
+  if (!elf::locate_file(name, requester, origin, library_path, system_paths,
+                        device, inode))
+    return false;
+  for (size_t i = 0; i < set.count; ++i) {
+    const char *known = set.modules[i].name();
+    struct stat existing;
+    if (known == nullptr || known[0] != '/' ||
+        !linux_syscalls::newfstatat(AT_FDCWD, known, &existing, 0))
+      continue;
+    if (existing.st_dev == device && existing.st_ino == inode) {
+      found = i;
+      return true;
+    }
+  }
+  return false;
+}
+
 // Makes room for one more module, moving the set onto the heap once the fixed
 // block the startup linker filled in is full. The arrays are reached through
 // pointers precisely so that they can be replaced here; nothing that holds
@@ -250,19 +277,6 @@ void *dlopen_impl(const char *path, int mode) {
     }
   }
 
-  // RTLD_NOLOAD asks only for an object that is in the process already.
-  constexpr int NOLOAD = 0x4;
-  if ((mode & NOLOAD) != 0)
-    return nullptr;
-
-  WriteGuard write;
-  if (!make_room(set)) {
-    dl::set_error("cannot make room for another shared object");
-    return nullptr;
-  }
-
-  link::announce_link_maps(r_debug::RT_ADD);
-
   const char *library_path =
       elf::library_path_from(reinterpret_cast<char **>(environ));
   elf::SystemPaths system_paths;
@@ -284,6 +298,31 @@ void *dlopen_impl(const char *path, int mode) {
   if (caller_module != nullptr && caller_index == 0)
     caller_origin = elf::executable_origin(
         caller_module->name(), executable_path, sizeof(executable_path));
+
+  // The same file under a name the set does not know it by, such as a link
+  // to a library that is already open. glibc finds those by device and inode
+  // too, and an object opened twice would have two copies of its state.
+  size_t same = 0;
+  if (loaded_by_identity(set, path, caller_module, caller_origin, library_path,
+                         &system_paths, same)) {
+    if ((mode & GLOBAL) != 0 && set.mappings[same].local)
+      elf::make_global(set, same);
+    ++set.references[same];
+    return dl::handle_for(same);
+  }
+
+  // RTLD_NOLOAD asks only for an object that is in the process already.
+  constexpr int NOLOAD = 0x4;
+  if ((mode & NOLOAD) != 0)
+    return nullptr;
+
+  WriteGuard write;
+  if (!make_room(set)) {
+    dl::set_error("cannot make room for another shared object");
+    return nullptr;
+  }
+
+  link::announce_link_maps(r_debug::RT_ADD);
 
   auto loaded = elf::find_and_load(path, caller_module, caller_origin,
                                    library_path, &system_paths, set.page_size);
@@ -311,7 +350,10 @@ void *dlopen_impl(const char *path, int mode) {
   for (size_t i = first; i < set.count && !failed; ++i) {
     const elf::Module requester = set.modules[i];
     requester.for_each_needed([&](const char *name) {
-      if (failed || already_loaded(set, name))
+      size_t same = 0;
+      if (failed || already_loaded(set, name) ||
+          loaded_by_identity(set, name, &requester, nullptr, library_path,
+                             &system_paths, same))
         return;
       if (!make_room(set)) {
         failed = true;
