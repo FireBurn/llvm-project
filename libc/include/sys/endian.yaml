@@ -1,0 +1,62 @@
+header: sys/endian.h
+standards:
+  - bsd
+public_includes:
+  - arpa/inet.h
+macros:
+  - macro_name: BYTE_ORDER
+    macro_header: sys-endian-macros.h
+  - macro_name: LITTLE_ENDIAN
+    macro_header: sys-endian-macros.h
+  - macro_name: BIG_ENDIAN
+    macro_header: sys-endian-macros.h
+  - macro_name: be16toh
+    macro_header: sys-endian-macros.h
+  - macro_name: be32toh
+    macro_header: sys-endian-macros.h
+  - macro_name: be64toh
+    macro_header: sys-endian-macros.h
+  - macro_name: htobe16
+    macro_header: sys-endian-macros.h
+  - macro_name: htobe32
+    macro_header: sys-endian-macros.h
+  - macro_name: htobe64
+    macro_header: sys-endian-macros.h
+  - macro_name: htole16
+    macro_header: sys-endian-macros.h
+  - macro_name: htole32
+    macro_header: sys-endian-macros.h
+  - macro_name: htole64
+    macro_header: sys-endian-macros.h
+  - macro_name: le16toh
+    macro_header: sys-endian-macros.h
+  - macro_name: le32toh
+    macro_header: sys-endian-macros.h
+  - macro_name: le64toh
+    macro_header: sys-endian-macros.h
+  - macro_name: betoh16
+    macro_header: sys-endian-macros.h
+  - macro_name: betoh32
+    macro_header: sys-endian-macros.h
+  - macro_name: betoh64
+    macro_header: sys-endian-macros.h
+  - macro_name: letoh16
+    macro_header: sys-endian-macros.h
+  - macro_name: letoh32
+    macro_header: sys-endian-macros.h
+  - macro_name: letoh64
+    macro_header: sys-endian-macros.h
+  - macro_name: htonq
+    macro_header: sys-endian-macros.h
+  - macro_name: ntohq
+    macro_header: sys-endian-macros.h
+  - macro_name: swap16
+    macro_header: sys-endian-macros.h
+  - macro_name: swap32
+    macro_header: sys-endian-macros.h
+  - macro_name: swap64
+    macro_header: sys-endian-macros.h
+types: []
+enums: []
+objects: []
+functions: []
