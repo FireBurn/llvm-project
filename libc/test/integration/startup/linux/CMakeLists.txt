@@ -28,6 +28,23 @@ add_integration_test(
 )
 
 add_integration_test(
+  crt_objects_elf_test
+  SUITE libc-startup-tests
+  SRCS
+    crt_objects_elf_test.cpp
+  DEPENDS
+    libc.hdr.fcntl_macros
+    libc.src.fcntl.open
+    libc.src.unistd.close
+    libc.src.unistd.read
+    libc.startup.linux.crti
+    libc.startup.linux.crtn
+  ARGS
+    $<TARGET_OBJECTS:libc.startup.linux.crti>
+    $<TARGET_OBJECTS:libc.startup.linux.crtn>
+)
+
+add_integration_test(
   startup_args_test
   SUITE libc-startup-tests
   SRCS
