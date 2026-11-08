@@ -24,5 +24,8 @@
 #define POSIX_SPAWN_SETSCHEDULER 0x20
 #define POSIX_SPAWN_USEVFORK 0x40
 #define POSIX_SPAWN_SETSID 0x80
+// Bionic's: mark every descriptor but the standard three close-on-exec before
+// the file actions run.
+#define POSIX_SPAWN_CLOEXEC_DEFAULT 0x100
 
 #endif // LLVM_LIBC_MACROS_SPAWN_MACROS_H
