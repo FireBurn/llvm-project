@@ -185,6 +185,10 @@ struct Thread {
   // Return 0 on success, or an error number on failure.
   int setschedparam(SchedParameters params);
 
+  // Set the scheduling priority of the thread, leaving its policy as it is.
+  // Return 0 on success, or an error number on failure.
+  int setschedprio(int prio);
+
   // Get the scheduling policy and parameters of the thread.
   // Return SchedParameters on success, or an error number on failure.
   ErrorOr<SchedParameters> getschedparam() const;

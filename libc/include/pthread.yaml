@@ -655,6 +655,13 @@ functions:
       - type: pthread_t
       - type: int
       - type: const struct sched_param *
+  - name: pthread_setschedprio
+    standards:
+      - posix
+    return_type: int
+    arguments:
+      - type: pthread_t
+      - type: int
   - name: pthread_setcancelstate
     standards:
       - posix
