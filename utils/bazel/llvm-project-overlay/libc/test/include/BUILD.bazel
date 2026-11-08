@@ -66,6 +66,14 @@ libc_test(
 )
 
 libc_test(
+    name = "cpu_set_bits_test",
+    srcs = ["cpu_set_bits_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_types_cpu_set_t",
+    ],
+)
+
+libc_test(
     name = "assert_test",
     srcs = ["assert_test.cpp"],
     deps = [
