@@ -1061,6 +1061,8 @@ macros:
     macro_header: elf-macros.h
   - macro_name: ELF64_ST_VISIBILITY
     macro_header: elf-macros.h
+  - macro_name: IS_ELF
+    macro_header: elf-macros.h
   - macro_name: ELF32_R_SYM
     macro_header: elf-macros.h
   - macro_name: ELF32_R_TYPE
