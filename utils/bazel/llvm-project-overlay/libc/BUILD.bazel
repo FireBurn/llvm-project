@@ -33240,6 +33240,7 @@ libc_support_library(
         ":hdr_sys_socket_macros",
         ":hdr_sys_stat_macros",
         ":hdr_time_macros",
+        ":getenv",
         ":sys_system_properties_property_area",
         ":sys_system_properties_property_info",
         ":types_struct_sockaddr_un",
@@ -33256,6 +33257,18 @@ libc_function(
     deps = [
         ":__support_common",
         ":__support_macros_config",
+        ":sys_system_properties_property_store",
+    ],
+)
+
+libc_function(
+    name = "__system_properties_zygote_reload",
+    srcs = ["src/sys/system_properties/__system_properties_zygote_reload.cpp"],
+    hdrs = ["src/sys/system_properties/__system_properties_zygote_reload.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":setenv",
         ":sys_system_properties_property_store",
     ],
 )
