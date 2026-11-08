@@ -737,6 +737,21 @@ if(LLVM_LIBC_FULL_BUILD AND LIBC_TEST_SUBPROCESS_TESTS)
       libc.src.stdlib.system
       libc.test.UnitTest.ErrnoCheckingTest
   )
+
+  add_libc_test(
+    system_seccomp_test
+    SUITE
+      libc-stdlib-tests
+    SRCS
+      system_seccomp_test.cpp
+    DEPENDS
+      libc.hdr.sys_wait_macros
+      libc.src.__support.OSUtil.osutil
+      libc.src.stdlib._Exit
+      libc.src.stdlib.system
+      libc.src.sys.wait.waitpid
+      libc.src.unistd.fork
+  )
 endif()
 
 # Only baremetal and GPU has an in-tree 'malloc' implementation.
