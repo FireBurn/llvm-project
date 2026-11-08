@@ -4785,6 +4785,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_close_range",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/close_range.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_read",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/read.h"],
     target_compatible_with = select({
@@ -37143,6 +37158,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_chdir",
         ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_close_range",
         ":__support_osutil_linux_syscall_wrappers_dup2",
         ":__support_osutil_linux_syscall_wrappers_execve",
         ":__support_osutil_linux_syscall_wrappers_exit_group",
@@ -37167,6 +37183,7 @@ libc_function(
         ":hdr_fcntl_macros",
         ":hdr_signal_macros",
         ":hdr_spawn_macros",
+        ":hdr_unistd_macros",
         ":sigismember",
         ":spawn_file_actions",
         ":types_mode_t",
