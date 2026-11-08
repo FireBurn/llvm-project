@@ -2292,3 +2292,13 @@ add_libc_test(
   DEPENDS
     libc.include.llvm-libc-macros.sched_macros
 )
+
+add_libc_test(
+  sys_private_system_properties_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_private_system_properties_test.cpp
+  DEPENDS
+    libc.include.sys__system_properties
+)
