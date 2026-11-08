@@ -21,6 +21,19 @@ add_libc_test(
 )
 
 add_libc_test(
+  b64_test
+  SUITE
+    libc-resolv-tests
+  SRCS
+    b64_test.cpp
+  DEPENDS
+    libc.src.resolv.b64_ntop
+    libc.src.resolv.b64_pton
+    libc.src.string.memory_utils.inline_memcmp
+    libc.src.string.strlen
+)
+
+add_libc_test(
   dn_expand_test
   SUITE
     libc-resolv-tests
