@@ -29,6 +29,17 @@ libc_test(
 )
 
 libc_test(
+    name = "android_netinet_tcp_test",
+    srcs = ["android_netinet_tcp_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc:llvm_libc_macros_netinet_tcp_macros",
+        "//libc:llvm_libc_types_struct_tcp_info",
+        "//libc:llvm_libc_types_struct_tcphdr",
+    ],
+)
+
+libc_test(
     name = "android_sys_socket_test",
     srcs = ["android_sys_socket_test.cpp"],
     full_build_only = True,
