@@ -2399,6 +2399,8 @@ if(LLVM_LIBC_ENABLE_EXPERIMENTAL_ENTRYPOINTS)
       libc.src.netdb.gethostbyname2
     libc.src.netdb.getnameinfo
       libc.src.resolv.__res_state
+      libc.src.resolv.b64_ntop
+      libc.src.resolv.b64_pton
       libc.src.resolv.dn_comp
       libc.src.resolv.dn_expand
       libc.src.resolv.res_close
