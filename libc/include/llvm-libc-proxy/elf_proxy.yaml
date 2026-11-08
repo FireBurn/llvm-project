@@ -1326,6 +1326,7 @@ types:
   - type_name: Elf32_Phdr
   - type_name: Elf32_Rel
   - type_name: Elf32_Rela
+  - type_name: Elf32_Relr
   - type_name: Elf32_Shdr
   - type_name: Elf32_Sword
   - type_name: Elf32_Sym
@@ -1352,6 +1353,7 @@ types:
   - type_name: Elf64_Phdr
   - type_name: Elf64_Rel
   - type_name: Elf64_Rela
+  - type_name: Elf64_Relr
   - type_name: Elf64_Shdr
   - type_name: Elf64_Sword
   - type_name: Elf64_Sxword
