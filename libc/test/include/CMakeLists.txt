@@ -523,6 +523,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  cpu_set_bits_test
+  SUITE
+    libc-include-tests
+  SRCS
+    cpu_set_bits_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.cpu_set_t
+)
+
+add_libc_test(
   android_sys_eventfd_test
   SUITE
     libc-include-tests
