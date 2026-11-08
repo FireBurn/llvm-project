@@ -1529,6 +1529,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_macros_sys_eventfd_macros",
+    hdrs = [
+        "llvm-libc-macros/linux/sys-eventfd-macros.h",
+        "llvm-libc-macros/sys-eventfd-macros.h",
+    ],
+    deps = [":llvm_libc_macros_fcntl_macros"],
+)
+
+libc_support_library(
     name = "llvm_libc_macros_sys_mount_macros",
     hdrs = [
         "llvm-libc-macros/linux/sys-mount-macros.h",
