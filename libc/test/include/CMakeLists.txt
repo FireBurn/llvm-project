@@ -473,6 +473,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_sys_mount_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sys_mount_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_mount_macros
+)
+
+add_libc_test(
   android_posix_includes_test
   SUITE
     libc-include-tests
