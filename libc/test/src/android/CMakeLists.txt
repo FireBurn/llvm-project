@@ -105,3 +105,16 @@ add_libc_test(
     libc.src.dlfcn.dlerror
     libc.src.stdlib.getenv
 )
+
+add_libc_test(
+  android_mallopt_test
+  SUITE
+    libc-android-tests
+  SRCS
+    android_mallopt_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.libc_errno
+    libc.src.android.android_mallopt
+    libc.test.UnitTest.ErrnoCheckingTest
+)
