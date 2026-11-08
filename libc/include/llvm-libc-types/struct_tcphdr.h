@@ -18,10 +18,23 @@
 #include "../llvm-libc-macros/stdint-macros.h"
 #include "tcp_seq.h"
 
+// bionic's <netinet/tcp.h> is the kernel's <linux/tcp.h>, and Android programs
+// include both, so the kernel's definition stands in for ours there.
+#if defined(__ANDROID__) && defined(__has_include)
+#if __has_include(<linux/tcp.h>)
+#include <linux/tcp.h>
+#endif
+#endif
+#if defined(__ANDROID__) &&                                                    \
+    (defined(_UAPI_LINUX_TCP_H) || defined(_LINUX_TCP_H))
+#define __LLVM_LIBC_KERNEL_TCP_H 1
+#endif
+
 // The TCP header as it sits on the wire, laid out by RFC 793. The same
 // fields go by two sets of names: the ones BSD gave them and the ones Linux
 // gave them. Code exists that uses each, so both are here, over the same
 // storage.
+#ifndef __LLVM_LIBC_KERNEL_TCP_H
 struct tcphdr {
   union {
     struct {
@@ -73,5 +86,6 @@ struct tcphdr {
     };
   };
 };
+#endif
 
 #endif // LLVM_LIBC_TYPES_STRUCT_TCPHDR_H
