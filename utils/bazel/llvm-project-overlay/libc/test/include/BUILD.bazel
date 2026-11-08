@@ -421,6 +421,14 @@ libc_test(
 )
 
 libc_test(
+    name = "sys_endian_macros_test",
+    srcs = ["sys_endian_macros_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_macros_sys_endian_macros",
+    ],
+)
+
+libc_test(
     name = "sys_queue_test",
     srcs = ["sys/queue_test.cpp"],
     full_build_only = True,
