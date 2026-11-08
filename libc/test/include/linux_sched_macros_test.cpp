@@ -22,3 +22,7 @@ TEST(LlvmLibcLinuxSchedMacrosTest, AddClone_NewtimeRlimit_NlimitsAndLine_Ma) {
 TEST(LlvmLibcLinuxSchedMacrosTest, AddSched_Reset_On_Fork) {
   EXPECT_EQ(static_cast<long long>(SCHED_RESET_ON_FORK), 0x40000000LL);
 }
+
+TEST(LlvmLibcLinuxSchedMacrosTest, SchedExtIsTheKernelsSeventhPolicy) {
+  EXPECT_EQ(static_cast<int>(SCHED_EXT), 7);
+}
