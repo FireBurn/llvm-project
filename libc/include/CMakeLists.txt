@@ -2039,6 +2039,7 @@ add_header_macro(
     .arpa_nameser
     .llvm-libc-macros.resolv_macros
     .llvm-libc-types.res_state
+    .llvm-libc-types.size_t
     .llvm-libc-types.struct___res_state
 )
 
