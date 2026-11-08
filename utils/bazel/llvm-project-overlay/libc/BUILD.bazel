@@ -6047,6 +6047,7 @@ libc_support_library(
         ":__support_osutil_linux_syscall_wrappers_read",
         ":__support_osutil_linux_syscall_wrappers_sched_getparam",
         ":__support_osutil_linux_syscall_wrappers_sched_getscheduler",
+        ":__support_osutil_linux_syscall_wrappers_sched_setparam",
         ":__support_osutil_linux_syscall_wrappers_sched_setscheduler",
         ":__support_osutil_linux_syscall_wrappers_tgkill",
         ":__support_osutil_linux_syscall_wrappers_write",
