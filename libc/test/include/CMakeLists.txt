@@ -483,6 +483,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  malloc_scudo_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    malloc_scudo_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.malloc_macros
+)
+
+add_libc_test(
   android_sys_eventfd_test
   SUITE
     libc-include-tests
