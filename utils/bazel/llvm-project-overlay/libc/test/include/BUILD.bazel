@@ -29,6 +29,15 @@ libc_test(
 )
 
 libc_test(
+    name = "android_sys_socket_test",
+    srcs = ["android_sys_socket_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc:llvm_libc_macros_sys_socket_macros",
+    ],
+)
+
+libc_test(
     name = "assert_test",
     srcs = ["assert_test.cpp"],
     deps = [
