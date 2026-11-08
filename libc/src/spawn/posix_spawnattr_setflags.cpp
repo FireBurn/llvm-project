@@ -30,7 +30,8 @@ LLVM_LIBC_FUNCTION(int, posix_spawnattr_setflags,
   constexpr short KNOWN = POSIX_SPAWN_RESETIDS | POSIX_SPAWN_SETPGROUP |
                           POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK |
                           POSIX_SPAWN_SETSCHEDPARAM | POSIX_SPAWN_SETSCHEDULER |
-                          POSIX_SPAWN_SETSID | POSIX_SPAWN_USEVFORK;
+                          POSIX_SPAWN_SETSID | POSIX_SPAWN_USEVFORK |
+                          POSIX_SPAWN_CLOEXEC_DEFAULT;
   if ((flags & ~KNOWN) != 0)
     return EINVAL;
   attr->__flags = flags;
