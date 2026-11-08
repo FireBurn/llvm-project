@@ -25,6 +25,7 @@
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
 #include "src/__support/threads/thread.h"
+#include "src/android/debuggerd_hook.h"
 #include "src/compat/program_name.h"
 #include "src/link/_r_debug.h"
 #include "src/stdlib/atexit.h"
@@ -291,6 +292,8 @@ static TLSDescriptor tls;
   // array callbacks as they can potentially register their own atexit
   // callbacks.
   atexit(&call_fini_array_callbacks);
+
+  debuggerd_hook::install();
 
   call_init_array_callbacks(static_cast<int>(app.args->argc),
                             reinterpret_cast<char **>(app.args->argv),
