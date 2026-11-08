@@ -15,6 +15,28 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  b64_ntop
+  SRCS
+    b64_ntop.cpp
+  HDRS
+    b64_ntop.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  b64_pton
+  SRCS
+    b64_pton.cpp
+  HDRS
+    b64_pton.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   dn_comp
   SRCS
     dn_comp.cpp
