@@ -2302,3 +2302,13 @@ add_libc_test(
   DEPENDS
     libc.include.sys__system_properties
 )
+
+add_libc_test(
+  android_sys_types_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sys_types_test.cpp
+  DEPENDS
+    libc.include.sys_types
+)

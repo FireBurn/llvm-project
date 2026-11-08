@@ -1690,6 +1690,7 @@ add_header_macro(
     .llvm-libc-types.u_short
     .llvm-libc-types.uid_t
     .llvm-libc-types.uint
+    .llvm-libc-types.uint_t
     .llvm-libc-types.ulong
     .llvm-libc-types.useconds_t
     .llvm-libc-types.ushort
