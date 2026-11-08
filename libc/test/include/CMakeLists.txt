@@ -543,6 +543,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_endian_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_endian_test.cpp
+  DEPENDS
+    libc.include.endian
+)
+
+add_libc_test(
   android_sys_eventfd_test
   SUITE
     libc-include-tests
