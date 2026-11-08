@@ -37828,6 +37828,21 @@ libc_function(
 )
 
 libc_function(
+    name = "android_reset_stack_guards",
+    srcs = ["src/android/android_reset_stack_guards.cpp"],
+    hdrs = ["src/android/android_reset_stack_guards.h"],
+    deps = [
+        ":__stack_chk_fail",
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_linux_syscall_wrappers_getrandom",
+        ":__support_threads_tcb",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_function(
     name = "android_mallopt",
     srcs = ["src/android/android_mallopt.cpp"],
     hdrs = ["src/android/android_mallopt.h"],
