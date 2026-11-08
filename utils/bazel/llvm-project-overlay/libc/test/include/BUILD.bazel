@@ -507,3 +507,11 @@ libc_test(
         "//libc:llvm_libc_macros_sys_queue_macros",
     ],
 )
+
+libc_test(
+    name = "android_sched_macros_test",
+    srcs = ["android_sched_macros_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_macros_sched_macros",
+    ],
+)
