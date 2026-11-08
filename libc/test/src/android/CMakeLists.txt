@@ -118,3 +118,18 @@ add_libc_test(
     libc.src.android.android_mallopt
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  android_reset_stack_guards_test
+  SUITE
+    libc-android-tests
+  SRCS
+    android_reset_stack_guards_test.cpp
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.macros.properties.architectures
+    libc.src.__support.threads.tcb
+    libc.src.android.android_reset_stack_guards
+    libc.src.compiler.__stack_chk_fail
+    libc.src.stdlib.exit
+)
