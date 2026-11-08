@@ -142,6 +142,17 @@ libc_function(
 )
 
 libc_function(
+    name = "__errno",
+    srcs = ["__errno.cpp"],
+    hdrs = ["__errno.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
     name = "malloc_backtrace",
     srcs = ["malloc_backtrace.cpp"],
     hdrs = ["malloc_backtrace.h"],
