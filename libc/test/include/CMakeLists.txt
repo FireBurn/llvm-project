@@ -523,6 +523,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_ucontext_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_ucontext_test.cpp
+  DEPENDS
+    libc.include.signal
+)
+
+add_libc_test(
   android_statx_test
   SUITE
     libc-include-tests
