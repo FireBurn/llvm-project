@@ -17,13 +17,21 @@
 // The MS_* mount flags are defined by the kernel UAPI header.
 #include <linux/mount.h>
 
+// bionic's <sys/mount.h> brings in <linux/fs.h>, and Android programs take
+// the FS_* flags and FICLONE from it.
+#if defined(__ANDROID__) && defined(__has_include)
+#if __has_include(<linux/fs.h>)
+#include <linux/fs.h>
+#endif
+#endif
+
 // Flags for umount2. The kernel does not export these in a UAPI header.
 #define MNT_FORCE 0x1
 #define MNT_DETACH 0x2
 #define MNT_EXPIRE 0x4
 #define UMOUNT_NOFOLLOW 0x8
 
-// glibc spells this one as an unsigned value, the kernel as a signed one.
+// The kernel's spelling overflows an int. glibc's is unsigned.
 #undef MS_NOUSER
 #define MS_NOUSER (1U << 31)
 
