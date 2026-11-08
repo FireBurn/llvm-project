@@ -28,7 +28,7 @@ LLVM_LIBC_FUNCTION(void, __sched_orcpuset,
   LIBC_CRASH_ON_NULLPTR(srcset2);
   size_t limit = cpuset_size / sizeof(__cpu_set_mask_t);
   for (size_t i = 0; i < limit; ++i)
-    destset->__mask[i] = srcset1->__mask[i] | srcset2->__mask[i];
+    destset->__bits[i] = srcset1->__bits[i] | srcset2->__bits[i];
 }
 
 } // namespace LIBC_NAMESPACE_DECL
