@@ -8,6 +8,28 @@ macros:
     macro_header: malloc-macros.h
   - macro_name: M_PURGE_ALL
     macro_header: malloc-macros.h
+  - macro_name: M_DECAY_TIME
+    macro_header: malloc-macros.h
+  - macro_name: M_MEMTAG_TUNING
+    macro_header: malloc-macros.h
+  - macro_name: M_THREAD_DISABLE_MEM_INIT
+    macro_header: malloc-macros.h
+  - macro_name: M_PURGE_FAST
+    macro_header: malloc-macros.h
+  - macro_name: M_CACHE_COUNT_MAX
+    macro_header: malloc-macros.h
+  - macro_name: M_CACHE_SIZE_MAX
+    macro_header: malloc-macros.h
+  - macro_name: M_TSDS_COUNT_MAX
+    macro_header: malloc-macros.h
+  - macro_name: M_LOG_STATS
+    macro_header: malloc-macros.h
+  - macro_name: M_CACHE_RESIDENT_BYTES_MAX
+    macro_header: malloc-macros.h
+  - macro_name: M_MEMTAG_TUNING_BUFFER_OVERFLOW
+    macro_header: malloc-macros.h
+  - macro_name: M_MEMTAG_TUNING_UAF
+    macro_header: malloc-macros.h
   - macro_name: M_MXFAST
     macro_header: malloc-macros.h
   - macro_name: M_NLBLKS
