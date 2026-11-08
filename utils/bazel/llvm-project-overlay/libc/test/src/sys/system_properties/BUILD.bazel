@@ -15,6 +15,7 @@ libc_test(
     srcs = ["system_properties_test.cpp"],
     deps = [
         "//libc:__system_properties_init",
+        "//libc:__system_properties_zygote_reload",
         "//libc:__system_property_add",
         "//libc:__system_property_area_init",
         "//libc:__system_property_area_serial",
@@ -31,6 +32,7 @@ libc_test(
         "//libc:__system_property_wait_any",
         "//libc:hdr_errno_macros",
         "//libc:hdr_system_properties_macros",
+        "//libc:getenv",
         "//libc:hdr_time_macros",
         "//libc:strcmp",
         "//libc:strlen",

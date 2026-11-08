@@ -16,9 +16,11 @@
 #include "hdr/time_macros.h"
 #include "hdr/types/struct_timespec.h"
 #include "src/__support/libc_errno.h"
+#include "src/stdlib/getenv.h"
 #include "src/string/strcmp.h"
 #include "src/string/strlen.h"
 #include "src/sys/system_properties/__system_properties_init.h"
+#include "src/sys/system_properties/__system_properties_zygote_reload.h"
 #include "src/sys/system_properties/__system_property_add.h"
 #include "src/sys/system_properties/__system_property_area_init.h"
 #include "src/sys/system_properties/__system_property_area_serial.h"
@@ -185,6 +187,21 @@ TEST_F(LlvmLibcSystemPropertiesTest, AreaOfProperties) {
                                                        &brief));
   EXPECT_NE(LIBC_NAMESPACE::__system_property_wait_any(area_serial),
             area_serial);
+
+  // The zygote turns the overrides on, after which a property reads as its
+  // ro.appcompat_override. twin where there is one, and the apps it starts
+  // inherit the setting.
+  ASSERT_EQ(added("ro.appcompat_override.ro.build.id", "OVERRIDDEN"), 0);
+  EXPECT_EQ(LIBC_NAMESPACE::__system_property_get("ro.build.id", value), 4);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(value, "TQ3A"), 0);
+  EXPECT_TRUE(LIBC_NAMESPACE::getenv("BIONIC_APPCOMPAT_OVERRIDE") == nullptr);
+  EXPECT_EQ(LIBC_NAMESPACE::__system_properties_zygote_reload(), 0);
+  EXPECT_TRUE(LIBC_NAMESPACE::getenv("BIONIC_APPCOMPAT_OVERRIDE") != nullptr);
+  EXPECT_EQ(LIBC_NAMESPACE::__system_property_get("ro.build.id", value), 10);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(value, "OVERRIDDEN"), 0);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::__system_property_get("ro.build.version.sdk", value), 2);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(value, "34"), 0);
 
   EXPECT_EQ(LIBC_NAMESPACE::__system_properties_init(), 0);
   LIBC_NAMESPACE::unlink(path);
