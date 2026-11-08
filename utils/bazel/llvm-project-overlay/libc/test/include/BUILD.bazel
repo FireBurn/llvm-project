@@ -529,6 +529,14 @@ libc_test(
 )
 
 libc_test(
+    name = "android_sched_macros_test",
+    srcs = ["android_sched_macros_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_macros_sched_macros",
+    ],
+)
+
+libc_test(
     name = "android_aarch64_sigcontext_test",
     srcs = ["android_aarch64_sigcontext_test.cpp"],
     full_build_only = True,
