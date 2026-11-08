@@ -37445,6 +37445,28 @@ libc_support_library(
 )
 
 libc_function(
+    name = "__libc_abort_message",
+    srcs = ["src/android/libc_abort_message.cpp"],
+    hdrs = ["src/android/libc_abort_message.h"],
+    deps = [
+        ":__support_abort_message",
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "android_debuggerd_hook",
+    hdrs = ["src/android/debuggerd_hook.h"],
+    deps = [
+        ":__support_abort_message",
+        ":__support_crash_detail",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
     name = "__libc_crash_detail_page",
     srcs = ["src/android/libc_crash_detail_page.cpp"],
     hdrs = ["src/android/libc_crash_detail_page.h"],
