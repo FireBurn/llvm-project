@@ -58,6 +58,14 @@ libc_test(
 )
 
 libc_test(
+    name = "malloc_scudo_macros_test",
+    srcs = ["malloc_scudo_macros_test.cpp"],
+    deps = [
+        "//libc:llvm_libc_macros_malloc_macros",
+    ],
+)
+
+libc_test(
     name = "assert_test",
     srcs = ["assert_test.cpp"],
     deps = [
