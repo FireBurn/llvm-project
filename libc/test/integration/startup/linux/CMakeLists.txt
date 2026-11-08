@@ -17,6 +17,17 @@ add_integration_test(
 )
 
 add_integration_test(
+  debuggerd_hook_test
+  SUITE libc-startup-tests
+  SRCS
+    debuggerd_hook_test.cpp
+  DEPENDS
+    libc.src.android.android_crash_detail_register
+    libc.src.android.android_set_abort_message
+    libc.src.android.debuggerd_hook
+)
+
+add_integration_test(
   startup_args_test
   SUITE libc-startup-tests
   SRCS
