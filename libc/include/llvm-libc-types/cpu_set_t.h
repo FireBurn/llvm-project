@@ -18,7 +18,7 @@ typedef unsigned long __cpu_set_mask_t;
 #define __CPU_BITS (8 * sizeof(__CPU_BITTYPE))
 
 typedef struct {
-  __cpu_set_mask_t __mask[__CPU_SETSIZE / __NCPUBITS];
+  __cpu_set_mask_t __bits[__CPU_SETSIZE / __NCPUBITS];
 } cpu_set_t;
 
 #endif // LLVM_LIBC_TYPES_CPU_SET_T_H
