@@ -472,6 +472,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_sys_eventfd_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sys_eventfd_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sys_eventfd_macros
+)
+
+add_libc_test(
   android_sys_socket_test
   SUITE
     libc-include-tests
