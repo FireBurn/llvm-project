@@ -40,6 +40,15 @@ libc_test(
 )
 
 libc_test(
+    name = "android_sys_eventfd_test",
+    srcs = ["android_sys_eventfd_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc:llvm_libc_macros_sys_eventfd_macros",
+    ],
+)
+
+libc_test(
     name = "android_sys_socket_test",
     srcs = ["android_sys_socket_test.cpp"],
     full_build_only = True,
