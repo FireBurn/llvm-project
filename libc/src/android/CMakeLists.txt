@@ -340,6 +340,18 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __errno
+  SRCS
+    __errno.cpp
+  HDRS
+    __errno.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   malloc_backtrace
   SRCS
     malloc_backtrace.cpp
