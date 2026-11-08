@@ -152,3 +152,10 @@ TEST(LlvmLibcNetinetInMacrosTest, GiveNetinetInHTheRestOfGlibcSMacros) {
   EXPECT_EQ(static_cast<long long>(IPV6_RTHDR_STRICT), 1LL);
   EXPECT_EQ(static_cast<long long>(IPV6_RTHDR_TYPE_0), 0LL);
 }
+
+TEST(LlvmLibcNetinetInMacrosTest, InLoopbackMatchesTheLoopbackNetwork) {
+  EXPECT_TRUE(IN_LOOPBACK(0x7f000001));
+  EXPECT_TRUE(IN_LOOPBACK(0x7fffffff));
+  EXPECT_FALSE(IN_LOOPBACK(0x80000001));
+  EXPECT_FALSE(IN_LOOPBACK(0x0a000001));
+}
