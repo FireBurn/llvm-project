@@ -14,6 +14,22 @@
 #define M_PURGE (-101)
 #define M_PURGE_ALL (-104)
 
+// The rest of the parameters Scudo's mallopt takes, at its numbers. Bionic has
+// the same ones, and Android programs name them.
+#define M_DECAY_TIME (-100)
+#define M_MEMTAG_TUNING (-102)
+#define M_THREAD_DISABLE_MEM_INIT (-103)
+#define M_PURGE_FAST (-105)
+#define M_CACHE_COUNT_MAX (-200)
+#define M_CACHE_SIZE_MAX (-201)
+#define M_TSDS_COUNT_MAX (-202)
+#define M_LOG_STATS (-205)
+#define M_CACHE_RESIDENT_BYTES_MAX (-206)
+
+// The values M_MEMTAG_TUNING takes.
+#define M_MEMTAG_TUNING_BUFFER_OVERFLOW 0
+#define M_MEMTAG_TUNING_UAF 1
+
 // The mallopt parameters of glibc's malloc.h, at its numbers. Scudo takes
 // none of them and mallopt reports that it did not set the option.
 #define M_MXFAST 1
