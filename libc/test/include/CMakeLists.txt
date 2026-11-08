@@ -2232,3 +2232,13 @@ add_libc_test(
   DEPENDS
     libc.include.llvm-libc-macros.netinet_tcp_macros
 )
+
+add_libc_test(
+  android_sched_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_sched_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sched_macros
+)
