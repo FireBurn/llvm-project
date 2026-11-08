@@ -35,6 +35,30 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  __libc_abort_message
+  SRCS
+    libc_abort_message.cpp
+  HDRS
+    libc_abort_message.h
+  DEPENDS
+    libc.include.android_set_abort_message
+    libc.src.__support.abort_message
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_header_library(
+  debuggerd_hook
+  HDRS
+    debuggerd_hook.h
+  DEPENDS
+    libc.src.__support.abort_message
+    libc.src.__support.crash_detail
+    libc.src.__support.macros.attributes
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   __libc_crash_detail_page
   SRCS
     libc_crash_detail_page.cpp
