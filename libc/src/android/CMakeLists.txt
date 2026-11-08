@@ -311,6 +311,22 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  android_reset_stack_guards
+  SRCS
+    android_reset_stack_guards.cpp
+  HDRS
+    android_reset_stack_guards.h
+  DEPENDS
+    libc.hdr.stdint_proxy
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getrandom
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.macros.properties.architectures
+    libc.src.__support.threads.tcb
+    libc.src.compiler.__stack_chk_fail
+)
+
+add_entrypoint_object(
   android_mallopt
   SRCS
     android_mallopt.cpp
