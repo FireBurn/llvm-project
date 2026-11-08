@@ -14,6 +14,7 @@ macros:
   - macro_name: _res
     macro_header: resolv-macros.h
 types:
+  - type_name: size_t
   - type_name: struct___res_state
   - type_name: res_state
 enums: []
@@ -29,6 +30,23 @@ functions:
       - type: const unsigned char *
       - type: char *
       - type: int
+  - name: b64_ntop
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const unsigned char *
+      - type: size_t
+      - type: char *
+      - type: size_t
+  - name: b64_pton
+    standards:
+      - bsd
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: unsigned char *
+      - type: size_t
   - name: dn_comp
     standards:
       - bsd
