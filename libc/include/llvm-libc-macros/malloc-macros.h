@@ -26,6 +26,22 @@
 #define M_LOG_STATS (-205)
 #define M_CACHE_RESIDENT_BYTES_MAX (-206)
 
+// Options bionic's mallopt takes besides Scudo's. Android programs pass them
+// to ask for zero initialisation and for heap tagging.
+#define M_BIONIC_ZERO_INIT (-203)
+#define M_BIONIC_SET_HEAP_TAGGING_LEVEL (-204)
+
+enum HeapTaggingLevel {
+  M_HEAP_TAGGING_LEVEL_NONE = 0,
+#define M_HEAP_TAGGING_LEVEL_NONE M_HEAP_TAGGING_LEVEL_NONE
+  M_HEAP_TAGGING_LEVEL_TBI = 1,
+#define M_HEAP_TAGGING_LEVEL_TBI M_HEAP_TAGGING_LEVEL_TBI
+  M_HEAP_TAGGING_LEVEL_ASYNC = 2,
+#define M_HEAP_TAGGING_LEVEL_ASYNC M_HEAP_TAGGING_LEVEL_ASYNC
+  M_HEAP_TAGGING_LEVEL_SYNC = 3,
+#define M_HEAP_TAGGING_LEVEL_SYNC M_HEAP_TAGGING_LEVEL_SYNC
+};
+
 // The values M_MEMTAG_TUNING takes.
 #define M_MEMTAG_TUNING_BUFFER_OVERFLOW 0
 #define M_MEMTAG_TUNING_UAF 1
