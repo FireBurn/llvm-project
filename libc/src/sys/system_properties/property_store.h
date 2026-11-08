@@ -42,6 +42,7 @@
 #include "src/__support/macros/config.h"
 #include "src/__support/threads/linux/futex_utils.h"
 #include "src/__support/time/clock_gettime.h"
+#include "src/stdlib/getenv.h"
 #include "src/sys/system_properties/property_area.h"
 #include "src/sys/system_properties/property_info.h"
 
@@ -62,6 +63,8 @@ constexpr char SERIAL_FILE[] = "properties_serial";
 constexpr char SERIAL_CONTEXT[] = "u:object_r:properties_serial:s0";
 constexpr char SELINUX_XATTR[] = "security.selinux";
 constexpr size_t MAX_CONTEXTS = 512;
+constexpr char APPCOMPAT_PREFIX[] = "ro.appcompat_override.";
+constexpr char APPCOMPAT_ENV[] = "BIONIC_APPCOMPAT_OVERRIDE";
 
 struct State {
   // The only area, or the one with the serial when there is a directory.
@@ -69,6 +72,10 @@ struct State {
   bool writable = false;
   bool custom_filename = false;
   bool directory = false;
+  // Whether a property reads from its ro.appcompat_override. twin first, which
+  // the zygote turns on for the apps it starts.
+  bool appcompat_override = false;
+  bool appcompat_override_checked = false;
   PropertyInfo info;
   Area *contexts[MAX_CONTEXTS] = {};
   char filename[PATH_MAX] = {};
@@ -294,6 +301,17 @@ LIBC_INLINE Area *area() {
   return s.area;
 }
 
+// The name with the override prefix in front of it, if that fits.
+LIBC_INLINE bool join_name(char *out, size_t size, const char *name) {
+  const size_t prefix = sizeof(APPCOMPAT_PREFIX) - 1;
+  const size_t length = internal::string_length(name);
+  if (prefix + length + 1 > size)
+    return false;
+  inline_memcpy(out, APPCOMPAT_PREFIX, prefix);
+  inline_memcpy(out + prefix, name, length + 1);
+  return true;
+}
+
 // The area that a property is kept in, with the area of its context mapped the
 // first time one is looked for.
 LIBC_INLINE Area *area_for(const char *name) {
@@ -317,6 +335,27 @@ LIBC_INLINE Area *area_for(const char *name) {
     s.contexts[index] = map_area_file(path);
   }
   return s.contexts[index];
+}
+
+// The property of the name, or the override of it when the overrides are on
+// and there is one.
+LIBC_INLINE const PropInfo *find_property(const char *name) {
+  State &s = state();
+  if (!s.appcompat_override_checked) {
+    s.appcompat_override_checked = true;
+    s.appcompat_override = LIBC_NAMESPACE::getenv(APPCOMPAT_ENV) != nullptr;
+  }
+  if (s.appcompat_override) {
+    char overridden[PATH_MAX];
+    if (join_name(overridden, sizeof(overridden), name)) {
+      Area *a = area_for(overridden);
+      const PropInfo *found = a == nullptr ? nullptr : a->find(overridden);
+      if (found != nullptr)
+        return found;
+    }
+  }
+  Area *a = area_for(name);
+  return a == nullptr ? nullptr : a->find(name);
 }
 
 // Calls the function with every area there is. An area that cannot be mapped,
