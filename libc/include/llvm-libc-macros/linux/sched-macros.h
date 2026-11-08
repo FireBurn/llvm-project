@@ -14,6 +14,10 @@
 
 // Posix required
 #define SCHED_OTHER 0
+#ifdef __ANDROID__
+// bionic's name for it.
+#define SCHED_NORMAL SCHED_OTHER
+#endif
 #define SCHED_FIFO 1
 #define SCHED_RR 2
 
