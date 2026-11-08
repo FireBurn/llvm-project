@@ -1428,6 +1428,17 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pthread_setschedprio
+  SRCS
+    pthread_setschedprio.cpp
+  HDRS
+    pthread_setschedprio.h
+  DEPENDS
+    libc.hdr.types.pthread_t
+    libc.src.__support.threads.thread
+)
+
+add_entrypoint_object(
   pthread_getschedparam
   SRCS
     pthread_getschedparam.cpp
