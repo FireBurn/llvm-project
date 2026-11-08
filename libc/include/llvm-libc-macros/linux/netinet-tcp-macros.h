@@ -59,11 +59,14 @@
 #define TCP_REPAIR_OFF 0
 #define TCP_REPAIR_OFF_NO_WP -1
 
-// Values for TCP_REPAIR_QUEUE.
+// Values for TCP_REPAIR_QUEUE. The kernel's <linux/tcp.h>, which Android
+// programs include as well, has these as an enum, which macros would break.
+#ifndef __ANDROID__
 #define TCP_NO_QUEUE 0
 #define TCP_RECV_QUEUE 1
 #define TCP_SEND_QUEUE 2
 #define TCP_QUEUES_NR 3 // Number of queues, not a valid value.
+#endif
 
 // TCP connection states, as reported in tcp_info::tcpi_state.
 #define TCP_ESTABLISHED 1
