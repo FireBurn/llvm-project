@@ -112,6 +112,10 @@
 // The network the loopback address belongs to.
 #define IN_LOOPBACKNET 127
 
+// Not glibc's, but the kernel's <linux/in.h> has it, spelt as here so that
+// reading both is not a redefinition, and Android's netd uses it.
+#define IN_LOOPBACK(a) ((((long int)(a)) & 0xff000000) == 0x7f000000)
+
 #define INADDR_ANY __LLVM_LIBC_CAST(static_cast, in_addr_t, 0x00000000)
 #define INADDR_BROADCAST __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
 #define INADDR_NONE __LLVM_LIBC_CAST(static_cast, in_addr_t, 0xffffffff)
