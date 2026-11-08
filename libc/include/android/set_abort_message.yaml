@@ -6,6 +6,9 @@ types: []
 enums: []
 objects: []
 functions:
+  - name: __libc_abort_message
+    return_type: void *
+    arguments: []
   - name: android_set_abort_message
     return_type: void
     arguments:
