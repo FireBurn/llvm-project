@@ -19,7 +19,10 @@
 #include "hdr/link_macros.h"
 #include "hdr/types/size_t.h"
 #include "src/__support/CPP/optional.h"
+#include "hdr/sys_stat_macros.h"
+#include "hdr/types/struct_stat.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/newfstatat.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/open.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/read.h"
 #include "src/__support/elf/load_module.h"
@@ -194,14 +197,14 @@ LIBC_INLINE const char *runpath_of(const Module &module) {
   return nullptr;
 }
 
-// Tries `name` under each colon separated directory in `list`. `origin` is
-// what $ORIGIN stands for in that list, and is null where the list may not
-// use it.
-LIBC_INLINE cpp::optional<LoadedModule>
-load_from_path_list(const char *list, const char *name, size_t page_size,
-                    const char *origin = nullptr) {
+// Calls `visit` with `name` under each colon separated directory in `list`,
+// until it returns true. `origin` is what $ORIGIN in that list stands for, and
+// is null where the list may not use it.
+template <typename Visit>
+LIBC_INLINE bool visit_path_list(const char *list, const char *name,
+                                 const char *origin, Visit &&visit) {
   if (list == nullptr)
-    return cpp::nullopt;
+    return false;
   for (const char *segment = list; segment != nullptr;) {
     const char *end = segment;
     while (*end != '\0' && *end != ':')
@@ -211,73 +214,99 @@ load_from_path_list(const char *list, const char *name, size_t page_size,
     if (length > 0 &&
         expand_run_path(segment, length, origin, dir, sizeof(dir))) {
       char path[MAX_SEARCH_PATH];
-      if (join_path(dir, name, path, sizeof(path))) {
-        auto loaded = load_module(path, page_size);
-        if (loaded.has_value())
-          return loaded.value();
-      }
+      if (join_path(dir, name, path, sizeof(path)) && visit(path))
+        return true;
     }
     segment = (*end == '\0') ? nullptr : end + 1;
   }
-  return cpp::nullopt;
+  return false;
 }
 
-// Loads the object `name` stands for, in the order a loader is expected to
-// look: a name with a directory in it is taken as it is, and a bare one is
-// looked for under the asking object's DT_RPATH, then under `library_path`,
-// then under its DT_RUNPATH, then under what the system's path file lists,
-// then under the default directories. The two run paths sit on either side of
+// Calls `visit` with each path the object `name` stands for could be at, in
+// the order a loader is expected to look, until it returns true: a name with a
+// directory in it is taken as it is, and a bare one is looked for under the
+// asking object's DT_RPATH, then under `library_path`, then under its
+// DT_RUNPATH, then under what the system's path file lists, then under the
+// default directories. The two run paths sit on either side of
 // LD_LIBRARY_PATH, which is what tells them apart.
 //
 // `requester` is the module whose run path applies, or null where none does.
 // `origin` is what $ORIGIN in that run path stands for, or null for the
 // directory of the requester's own name. `system_paths` is null where no path
 // file is to be read.
+template <typename Visit>
+LIBC_INLINE bool visit_candidates(const char *name, const Module *requester,
+                                  const char *origin, const char *library_path,
+                                  SystemPaths *system_paths, Visit &&visit) {
+  if (name == nullptr)
+    return false;
+
+  for (const char *p = name; *p != '\0'; ++p)
+    if (*p == '/')
+      return visit(name);
+
+  if (requester != nullptr && origin == nullptr)
+    origin = requester->name();
+  if (requester != nullptr &&
+      visit_path_list(rpath_of(*requester), name, origin, visit))
+    return true;
+  if (visit_path_list(library_path, name, nullptr, visit))
+    return true;
+  if (requester != nullptr &&
+      visit_path_list(runpath_of(*requester), name, origin, visit))
+    return true;
+  if (system_paths != nullptr &&
+      visit_path_list(system_paths->list(), name, nullptr, visit))
+    return true;
+  for (const char *dir : DEFAULT_SEARCH_PATHS) {
+    char path[MAX_SEARCH_PATH];
+    if (join_path(dir, name, path, sizeof(path)) && visit(path))
+      return true;
+  }
+  return false;
+}
+
+// Loads the object `name` stands for, from the first place it can be loaded
+// from. See visit_candidates for where that looks.
 LIBC_INLINE cpp::optional<LoadedModule>
 find_and_load(const char *name, const Module *requester, const char *origin,
               const char *library_path, SystemPaths *system_paths,
               size_t page_size) {
-  if (name == nullptr)
+  LoadedModule found;
+  const bool ok = visit_candidates(
+      name, requester, origin, library_path, system_paths,
+      [&](const char *path) {
+        auto loaded = load_module(path, page_size);
+        if (!loaded.has_value())
+          return false;
+        found = loaded.value();
+        return true;
+      });
+  if (!ok)
     return cpp::nullopt;
+  return found;
+}
 
-  for (const char *p = name; *p != '\0'; ++p)
-    if (*p == '/') {
-      auto loaded = load_module(name, page_size);
-      if (loaded.has_value())
-        return loaded.value();
-      return cpp::nullopt;
-    }
-
-  if (requester != nullptr && origin == nullptr)
-    origin = requester->name();
-  if (requester != nullptr) {
-    auto loaded =
-        load_from_path_list(rpath_of(*requester), name, page_size, origin);
-    if (loaded.has_value())
-      return loaded;
-  }
-  if (auto loaded = load_from_path_list(library_path, name, page_size))
-    return loaded;
-  if (requester != nullptr) {
-    auto loaded =
-        load_from_path_list(runpath_of(*requester), name, page_size, origin);
-    if (loaded.has_value())
-      return loaded;
-  }
-  if (system_paths != nullptr) {
-    auto loaded = load_from_path_list(system_paths->list(), name, page_size);
-    if (loaded.has_value())
-      return loaded;
-  }
-  for (const char *dir : DEFAULT_SEARCH_PATHS) {
-    char path[MAX_SEARCH_PATH];
-    if (!join_path(dir, name, path, sizeof(path)))
-      continue;
-    auto loaded = load_module(path, page_size);
-    if (loaded.has_value())
-      return loaded.value();
-  }
-  return cpp::nullopt;
+// The file `name` would be loaded from, as a device and an inode, without
+// loading it: the first candidate that is there. Two names that come to the
+// same device and inode are one object, whatever they are called, which is
+// how a symbolic link to a library already in the process, or a second name
+// for it, is told from a different library.
+LIBC_INLINE bool locate_file(const char *name, const Module *requester,
+                             const char *origin, const char *library_path,
+                             SystemPaths *system_paths, dev_t &device,
+                             ino_t &inode) {
+  return visit_candidates(
+      name, requester, origin, library_path, system_paths,
+      [&](const char *path) {
+        struct stat found;
+        if (!linux_syscalls::newfstatat(AT_FDCWD, path, &found, 0) ||
+            (found.st_mode & S_IFMT) != S_IFREG)
+          return false;
+        device = found.st_dev;
+        inode = found.st_ino;
+        return true;
+      });
 }
 
 // LD_LIBRARY_PATH, without the value being copied anywhere: the environment
