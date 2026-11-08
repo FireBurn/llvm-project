@@ -183,9 +183,12 @@ add_header_library(
     libc.hdr.elf_macros
     libc.hdr.fcntl_macros
     libc.hdr.link_macros
+    libc.hdr.sys_stat_macros
     libc.hdr.types.size_t
+    libc.hdr.types.struct_stat
     libc.src.__support.CPP.optional
     libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.newfstatat
     libc.src.__support.OSUtil.linux.syscall_wrappers.open
     libc.src.__support.OSUtil.linux.syscall_wrappers.read
     libc.src.__support.elf.load_module
