@@ -21,8 +21,7 @@ namespace LIBC_NAMESPACE_DECL {
 using namespace system_properties;
 
 LLVM_LIBC_FUNCTION(int, __system_property_get, (const char *name, char *value)) {
-  Area *a = area_for(name);
-  const PropInfo *property = a == nullptr ? nullptr : a->find(name);
+  const PropInfo *property = find_property(name);
   if (property == nullptr) {
     value[0] = '\0';
     return 0;
