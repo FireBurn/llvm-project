@@ -17,6 +17,9 @@
 #define LLVM_LIBC_TYPES_RISCV_UCONTEXT_T_H
 
 #include "../sigset_t.h"
+#ifdef __ANDROID__
+#include "../sigset64_t.h"
+#endif
 #include "../stack_t.h"
 #include "mcontext_t.h"
 
@@ -27,7 +30,15 @@ typedef struct ucontext_t {
   unsigned long uc_flags;
   struct ucontext_t *uc_link;
   stack_t uc_stack;
+#ifdef __ANDROID__
+  // bionic names the same mask a second way.
+  union {
+    sigset_t uc_sigmask;
+    sigset64_t uc_sigmask64;
+  };
+#else
   sigset_t uc_sigmask;
+#endif
   mcontext_t uc_mcontext;
 } ucontext_t;
 
