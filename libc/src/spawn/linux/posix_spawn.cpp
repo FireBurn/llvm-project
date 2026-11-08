@@ -9,6 +9,7 @@
 #include "src/spawn/posix_spawn.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/chdir.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/close.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/close_range.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/dup2.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/execve.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/exit_group.h"
@@ -43,6 +44,7 @@
 #include "hdr/spawn_macros.h"
 #include "hdr/types/mode_t.h"
 #include "hdr/types/sigset_t.h"
+#include "hdr/unistd_macros.h"
 #include "src/signal/linux/signal_utils.h"
 #include "src/signal/sigismember.h"
 #include <spawn.h>
@@ -90,6 +92,15 @@ void apply_attributes(const posix_spawnattr_t *attr) {
   if (attr == nullptr || attr->__flags == 0)
     return;
   const short flags = attr->__flags;
+
+  // Before anything that opens or duplicates a descriptor, so that only the
+  // descriptors the file actions arrange stay open across the exec.
+  if (flags & POSIX_SPAWN_CLOEXEC_DEFAULT) {
+    ErrorOr<int> result =
+        linux_syscalls::close_range(3, ~0U, CLOSE_RANGE_CLOEXEC);
+    if (!result)
+      exit(result.error());
+  }
 
   if (flags & POSIX_SPAWN_SETSID) {
     ErrorOr<pid_t> result = linux_syscalls::setsid();
