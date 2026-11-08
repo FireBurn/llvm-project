@@ -589,6 +589,7 @@ add_integration_test(
     libc.src.pthread.pthread_mutex_unlock
     libc.src.pthread.pthread_self
     libc.src.pthread.pthread_setschedparam
+    libc.src.pthread.pthread_setschedprio
 )
 
 add_integration_test(
