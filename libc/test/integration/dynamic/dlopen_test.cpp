@@ -18,6 +18,8 @@
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
 using AddFn = int (*)(int, int);
 using ReadFn = int (*)();
@@ -89,6 +91,65 @@ static void noload_needs_an_object_that_is_loaded() {
   CHECK(dlclose(handle) == 0);
 }
 
+// A link to an object that is open, or a second name for it, is that object:
+// a copy would have its own state, and RTLD_NOLOAD would not find it.
+static void another_name_for_an_open_object_is_the_same_object() {
+  char dir[64];
+  snprintf(dir, sizeof(dir), "/tmp/llvm_libc_dl_alias_%d",
+           static_cast<int>(getpid()));
+  CHECK(mkdir(dir, 0700) == 0);
+  char soft[96];
+  char hard[96];
+  snprintf(soft, sizeof(soft), "%s/llvm_libc_dl_soft.so", dir);
+  snprintf(hard, sizeof(hard), "%s/llvm_libc_dl_hard.so", dir);
+  CHECK(symlink(LIBC_TEST_DL_OBJECT, soft) == 0);
+  const bool linked = link(LIBC_TEST_DL_OBJECT, hard) == 0;
+
+  void *handle = dlopen(LIBC_TEST_DL_OBJECT, RTLD_NOW);
+  CHECK(handle != nullptr);
+  int opened = 1;
+
+  // A path that ends in a different name.
+  // RTLD_NOLOAD that finds the object counts as an open, as it does for the
+  // name the object was opened under.
+  CHECK(dlopen(soft, RTLD_NOW | RTLD_NOLOAD) == handle);
+  CHECK(dlopen(soft, RTLD_NOW) == handle);
+  opened += 2;
+  if (linked) {
+    CHECK(dlopen(hard, RTLD_NOW) == handle);
+    ++opened;
+  }
+
+  // A bare name found through the search path.
+  const char *saved = getenv("LD_LIBRARY_PATH");
+  CHECK(setenv("LD_LIBRARY_PATH", dir, 1) == 0);
+  CHECK(dlopen("llvm_libc_dl_soft.so", RTLD_NOW | RTLD_NOLOAD) == handle);
+  CHECK(dlopen("llvm_libc_dl_soft.so", RTLD_NOW) == handle);
+  opened += 2;
+  if (saved)
+    setenv("LD_LIBRARY_PATH", saved, 1);
+  else
+    unsetenv("LD_LIBRARY_PATH");
+
+  // One object, so one copy of its data.
+  int *value = static_cast<int *>(dlsym(handle, "llvm_libc_dl_value"));
+  void *again = dlopen(soft, RTLD_NOW);
+  ++opened;
+  int *through_link = static_cast<int *>(dlsym(again, "llvm_libc_dl_value"));
+  CHECK(value != nullptr && value == through_link);
+
+  // Each open has to be closed, and only the last one unloads it.
+  for (int i = 0; i < opened; ++i)
+    CHECK(dlclose(handle) == 0);
+  CHECK(dlopen(soft, RTLD_NOW | RTLD_NOLOAD) == nullptr);
+  dlerror();
+
+  unlink(soft);
+  if (linked)
+    unlink(hard);
+  rmdir(dir);
+}
+
 static void the_main_program_has_a_handle() {
   void *self = dlopen(nullptr, RTLD_NOW);
   CHECK(self != nullptr);
@@ -154,6 +215,7 @@ extern "C" int main() {
   a_missing_file_is_an_error();
   opening_twice_gives_the_same_handle();
   noload_needs_an_object_that_is_loaded();
+  another_name_for_an_open_object_is_the_same_object();
   the_main_program_has_a_handle();
   more_objects_than_the_initial_block_can_be_open();
   return failures == 0 ? 0 : 1;
