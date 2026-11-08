@@ -23,6 +23,7 @@ add_integration_test(
     libc_posix_spawn_test_binary
     libc.test.integration.src.spawn.test_binary_properties
     libc.hdr.errno_macros
+    libc.hdr.spawn_macros
     libc.hdr.stdint_proxy
     libc.include.fcntl
     libc.include.signal
@@ -36,6 +37,9 @@ add_integration_test(
     libc.src.spawn.posix_spawn_file_actions_addopen
     libc.src.spawn.posix_spawn_file_actions_destroy
     libc.src.spawn.posix_spawn_file_actions_init
+    libc.src.spawn.posix_spawnattr_destroy
+    libc.src.spawn.posix_spawnattr_init
+    libc.src.spawn.posix_spawnattr_setflags
     libc.src.sys.wait.waitpid
     libc.src.unistd.close
     libc.src.unistd.dup3
