@@ -16,6 +16,12 @@
 
 #include "stdint-macros.h"
 
+// bionic's <endian.h> includes <sys/endian.h>, and Android programs take htonl
+// and the swap functions from it.
+#ifdef __ANDROID__
+#include <sys/endian.h>
+#endif
+
 #define LITTLE_ENDIAN __ORDER_LITTLE_ENDIAN__
 #define BIG_ENDIAN __ORDER_BIG_ENDIAN__
 #define BYTE_ORDER __BYTE_ORDER__
