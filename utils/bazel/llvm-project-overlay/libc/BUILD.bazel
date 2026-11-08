@@ -335,6 +335,7 @@ LLVM_LIBC_HEADERS = [
     ),
     libc_header_info("strings"),
     libc_header_info("sys/auxv"),
+    libc_header_info("sys/endian"),
     libc_header_info("sys/epoll"),
     libc_header_info("sys/ioctl"),
     libc_header_info("sys/ipc"),
@@ -616,6 +617,12 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_endian_macros",
     hdrs = ["include/llvm-libc-macros/endian-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_endian_macros",
+    hdrs = ["include/llvm-libc-macros/sys-endian-macros.h"],
+    deps = [":llvm_libc_macros_endian_macros"],
 )
 
 libc_support_library(
