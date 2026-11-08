@@ -311,6 +311,19 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  android_mallopt
+  SRCS
+    android_mallopt.cpp
+  HDRS
+    android_mallopt.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   android_update_LD_LIBRARY_PATH
   SRCS
     android_update_LD_LIBRARY_PATH.cpp
