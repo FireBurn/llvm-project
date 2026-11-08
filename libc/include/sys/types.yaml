@@ -58,6 +58,7 @@ types:
   - type_name: u_short
   - type_name: uid_t
   - type_name: uint
+  - type_name: uint_t
   - type_name: ulong
   - type_name: useconds_t
   - type_name: ushort
