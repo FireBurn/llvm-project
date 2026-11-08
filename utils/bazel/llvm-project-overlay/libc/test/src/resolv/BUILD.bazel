@@ -25,6 +25,17 @@ libc_test(
 )
 
 libc_test(
+    name = "b64_test",
+    srcs = ["b64_test.cpp"],
+    deps = [
+        "//libc:b64_ntop",
+        "//libc:b64_pton",
+        "//libc:string_memory_utils",
+        "//libc:strlen",
+    ],
+)
+
+libc_test(
     name = "dn_expand_test",
     srcs = ["dn_expand_test.cpp"],
     deps = [
