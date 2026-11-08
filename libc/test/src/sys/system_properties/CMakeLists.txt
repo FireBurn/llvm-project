@@ -12,9 +12,11 @@ add_libc_test(
     libc.hdr.time_macros
     libc.hdr.types.struct_timespec
     libc.src.__support.libc_errno
+    libc.src.stdlib.getenv
     libc.src.string.strcmp
     libc.src.string.strlen
     libc.src.sys.system_properties.__system_properties_init
+    libc.src.sys.system_properties.__system_properties_zygote_reload
     libc.src.sys.system_properties.__system_property_add
     libc.src.sys.system_properties.__system_property_area_init
     libc.src.sys.system_properties.__system_property_area_serial
