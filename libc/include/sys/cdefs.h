@@ -174,6 +174,16 @@
 #define __INTRODUCED_IN_64(api_level)
 #endif
 
+// bionic's names for giving a declaration another symbol, which the NDK
+// headers use for the calls that take an off_t. Every off_t is 64 bits wide
+// here, so the second one never renames.
+#ifndef __RENAME
+#define __RENAME(x) __asm__(#x)
+#endif
+#ifndef __RENAME_IF_FILE_OFFSET64
+#define __RENAME_IF_FILE_OFFSET64(func)
+#endif
+
 // Android code expects the API level macros from any header, and the kernel's
 // fixed width types, off64_t and the fcntl constants that bionic's
 // <sys/types.h>, <sys/socket.h> and <unistd.h> bring with them.
