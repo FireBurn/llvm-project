@@ -13,11 +13,13 @@
 
 #include "include/llvm-libc-macros/elf-macros.h"
 #include "include/llvm-libc-types/Elf32_Move.h"
+#include "include/llvm-libc-types/Elf32_Relr.h"
 #include "include/llvm-libc-types/Elf32_Section.h"
 #include "include/llvm-libc-types/Elf32_Sword.h"
 #include "include/llvm-libc-types/Elf32_Word.h"
 #include "include/llvm-libc-types/Elf64_Lib.h"
 #include "include/llvm-libc-types/Elf64_Move.h"
+#include "include/llvm-libc-types/Elf64_Relr.h"
 #include "include/llvm-libc-types/Elf64_Section.h"
 #include "include/llvm-libc-types/Elf64_Sword.h"
 #include "include/llvm-libc-types/Elf64_Sxword.h"
@@ -59,4 +61,10 @@ TEST(LlvmLibcElfTest, TheRecordsAreTheSizesTheyAreOnTheWire) {
   EXPECT_EQ(sizeof(Elf64_Lib), size_t(20));
   EXPECT_EQ(sizeof(Elf64_Move), size_t(32));
   EXPECT_EQ(sizeof(Elf32_Move), size_t(24));
+}
+
+TEST(LlvmLibcElfTest, RelativeRelocationEntriesAreAWordWide) {
+  // gelf.h names these for the packed relative relocations in SHT_RELR.
+  EXPECT_EQ(sizeof(Elf32_Relr), sizeof(Elf32_Word));
+  EXPECT_EQ(sizeof(Elf64_Relr), sizeof(Elf64_Xword));
 }
