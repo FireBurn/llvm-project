@@ -2168,6 +2168,16 @@ add_header_macro(
 )
 
 add_header_macro(
+  sys_endian
+  ../libc/include/sys/endian.yaml
+  sys/endian.h
+  DEPENDS
+    .arpa_inet
+    .llvm_libc_common_h
+    .llvm-libc-macros.sys_endian_macros
+)
+
+add_header_macro(
   termios
   ../libc/include/termios.yaml
   termios.h
