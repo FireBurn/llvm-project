@@ -305,6 +305,30 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  sigandset
+  SRCS
+    sigandset.cpp
+  HDRS
+    ../sigandset.h
+  DEPENDS
+    .signal_utils
+    libc.hdr.types.sigset_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  sigorset
+  SRCS
+    sigorset.cpp
+  HDRS
+    ../sigorset.h
+  DEPENDS
+    .signal_utils
+    libc.hdr.types.sigset_t
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   sigqueue
   SRCS
     sigqueue.cpp
