@@ -30,6 +30,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("android/crash_detail"),
     libc_header_info("android/dlext"),
     libc_header_info("android/fdsan"),
+    libc_header_info("android/resolv_netid"),
     libc_header_info("android/set_abort_message"),
     libc_header_info("android/versioning"),
     libc_header_info("ar"),
