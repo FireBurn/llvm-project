@@ -5427,6 +5427,35 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_realpath",
+    hdrs = ["src/__support/OSUtil/linux/realpath.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_cpp_optional",
+        ":__support_cpp_string",
+        ":__support_cpp_string_view",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_kernel_statx_types",
+        ":__support_osutil_linux_syscall_wrappers_getcwd",
+        ":__support_osutil_linux_syscall_wrappers_readlink",
+        ":__support_osutil_linux_syscall_wrappers_statx",
+        ":__support_osutil_path",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_limits_macros",
+        ":hdr_sys_stat_macros",
+        ":string_memory_utils",
+        ":types_mode_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_sigmask",
     hdrs = ["src/__support/OSUtil/linux/sigmask.h"],
     full_build_only = True,
@@ -18639,24 +18668,10 @@ libc_function(
     hdrs = ["src/stdlib/realpath.h"],
     deps = [
         ":__support_common",
-        ":__support_cpp_optional",
-        ":__support_cpp_string",
-        ":__support_cpp_string_view",
         ":__support_error_or",
         ":__support_libc_errno",
         ":__support_macros_config",
-        ":__support_osutil_linux_stat_kernel_statx_types",
-        ":__support_osutil_linux_syscall_wrappers_getcwd",
-        ":__support_osutil_linux_syscall_wrappers_readlink",
-        ":__support_osutil_linux_syscall_wrappers_statx",
-        ":__support_osutil_path",
-        ":hdr_errno_macros",
-        ":hdr_fcntl_macros",
-        ":hdr_limits_macros",
-        ":hdr_sys_stat_macros",
-        ":string_memory_utils",
-        ":types_mode_t",
-        ":types_size_t",
+        ":__support_osutil_linux_realpath",
     ],
 )
 
