@@ -17,8 +17,10 @@
 #include "src/__support/CPP/mutex.h"
 #include "src/__support/elf/bind.h"
 #include "src/__support/elf/passive_abi.h"
+#include "src/__support/elf/scope.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
+#include "src/dlfcn/dl_namespace.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace dl {
@@ -43,10 +45,13 @@ void *address_of(const elf::Module &module, const ElfW(Sym) * symbol) {
 // The first module of the global scope at or after `from` which defines
 // `name`. Returns nothing when none does.
 void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
-                  const char *version) {
+                  const char *version, const Namespace *home) {
   for (size_t i = from; i < set.count; ++i) {
-    // The global scope leaves out what was opened RTLD_LOCAL.
-    if (set.mappings[i].local)
+    // The global scope leaves out what was opened RTLD_LOCAL, and what is in a
+    // namespace that the caller's does not share.
+    if (set.mappings[i].local ||
+        !namespace_sees_loaded(
+            home, canonical(static_cast<Namespace *>(set.mappings[i].ns))))
       continue;
     const ElfW(Sym) *symbol = set.modules[i].symbols().lookup(name, version, version != nullptr);
     if (symbol == nullptr || symbol->st_shndx == SHN_UNDEF)
@@ -54,16 +59,6 @@ void *search_from(const elf::ModuleSet &set, size_t from, const char *name,
     return address_of(set.modules[i], symbol);
   }
   return nullptr;
-}
-
-// Whether `have` is the name `want`.
-bool same_name(const char *have, const char *want) {
-  if (have == nullptr)
-    return false;
-  for (; *have == *want; ++have, ++want)
-    if (*have == '\0')
-      return true;
-  return false;
 }
 
 // The definition of `name` in the module at `index` or in anything it needs,
@@ -87,19 +82,17 @@ void *search_handle(const elf::ModuleSet &set, size_t index, const char *name,
   queue[tail++] = index;
   queued[index] = true;
   while (head < tail) {
-    const elf::Module &module = set.modules[queue[head++]];
+    const size_t owner = queue[head++];
+    const elf::Module &module = set.modules[owner];
     const ElfW(Sym) *symbol = module.symbols().lookup(name, version, version != nullptr);
     if (symbol != nullptr && symbol->st_shndx != SHN_UNDEF)
       return address_of(module, symbol);
     module.for_each_needed([&](const char *needed) {
-      for (size_t i = 0; i < set.count && i < LIMIT; ++i) {
-        if (queued[i] || (!same_name(set.modules[i].soname(), needed) &&
-                          !same_name(set.modules[i].name(), needed)))
-          continue;
-        queued[i] = true;
-        queue[tail++] = i;
+      const size_t i = elf::scope_internal::find_needed(set, owner, needed);
+      if (i >= set.count || i >= LIMIT || queued[i])
         return;
-      }
+      queued[i] = true;
+      queue[tail++] = i;
     });
   }
   return nullptr;
@@ -122,10 +115,13 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller,
     return nullptr;
   }
 
+  // What the caller can see is what is in its own namespace.
+  const Namespace *home = namespace_of_address(caller, true);
+
   // Every module, in the order they were loaded, which is the order a lookup
   // through the program's own scope goes in.
   if (handle == DEFAULT_HANDLE) {
-    if (void *found = search_from(set, 0, name, version))
+    if (void *found = search_from(set, 0, name, version, home))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -141,7 +137,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller,
         break;
       }
     }
-    if (void *found = search_from(set, after, name, version))
+    if (void *found = search_from(set, after, name, version, home))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
@@ -157,7 +153,7 @@ void *lookup(void *handle, const char *name, ElfW(Addr) caller,
   // program, and a lookup through that is a lookup through the whole of the
   // program's scope rather than the executable on its own.
   if (index == 0) {
-    if (void *found = search_from(set, 0, name, version))
+    if (void *found = search_from(set, 0, name, version, home))
       return found;
     dl::set_error("undefined symbol", name);
     return nullptr;
