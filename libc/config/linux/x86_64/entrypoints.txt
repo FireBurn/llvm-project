@@ -777,6 +777,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.sys.xattr.setxattr
 
     # sys/prctl.h entrypoints
+    libc.src.sys.prctl.arch_prctl
     libc.src.sys.prctl.prctl
 
     # sys/personality.h entrypoints
