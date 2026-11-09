@@ -4,6 +4,7 @@
 
 load("//libc:libc_build_rules.bzl", "libc_function")
 
+load("//libc:platforms.bzl", "PLATFORM_CPU_X86_64")
 package(
     default_visibility = ["//visibility:public"],
     features = [
@@ -29,5 +30,22 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "arch_prctl",
+    srcs = ["linux/arch_prctl.cpp"],
+    hdrs = ["arch_prctl.h"],
+    target_compatible_with = select({
+        PLATFORM_CPU_X86_64: [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
     ],
 )
