@@ -79,6 +79,32 @@ libc_test(
 )
 
 libc_test(
+    name = "sigandset_test",
+    srcs = ["sigandset_test.cpp"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:signal_macros",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigandset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigismember",
+    ],
+)
+
+libc_test(
+    name = "sigorset_test",
+    srcs = ["sigorset_test.cpp"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:signal_macros",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigismember",
+        "//libc/src/signal:sigorset",
+    ],
+)
+
+libc_test(
     name = "sigaddset_test",
     srcs = ["sigaddset_test.cpp"],
     deps = [

@@ -176,6 +176,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  sigorset
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigorset
+)
+
+add_entrypoint_object(
+  sigandset
+  ALIAS
+  DEPENDS
+    .${LIBC_TARGET_OS}.sigandset
+)
+
+add_entrypoint_object(
   sigqueue
   ALIAS
   DEPENDS
