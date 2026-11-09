@@ -29,6 +29,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.__errno
     libc.src.android.android_reset_stack_guards
     libc.src.android.android_update_LD_LIBRARY_PATH
+    libc.src.android.android_get_LD_LIBRARY_PATH
 
     # sys/system_properties.h entrypoints
     libc.src.sys.system_properties.__system_properties_init
