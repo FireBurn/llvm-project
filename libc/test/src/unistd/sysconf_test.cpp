@@ -184,6 +184,12 @@ TEST(LlvmLibcSysconfTest, VersionsTest) {
 
 // The limits which do not change report what <limits.h> states.
 TEST(LlvmLibcSysconfTest, FixedLimitsTest) {
+  // Obsolete or unsupported: -1 with errno left alone.
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_PASS_MAX), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_PRIORITIZED_IO), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XOPEN_XCU_VERSION), -1L);
+  ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_XBS5_LP64_OFF64),
+            LIBC_NAMESPACE::sysconf(_SC_V7_LP64_OFF64));
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_THREAD_DESTRUCTOR_ITERATIONS),
             (long)PTHREAD_DESTRUCTOR_ITERATIONS);
   ASSERT_EQ(LIBC_NAMESPACE::sysconf(_SC_SEM_VALUE_MAX), (long)SEM_VALUE_MAX);
@@ -219,6 +225,7 @@ TEST_F(LlvmLibcSysconfTest, OptionsWhoseInterfacesArePresent) {
   EXPECT_GT(long(_POSIX_ADVISORY_INFO), 0L);
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_BARRIERS), long(_POSIX_BARRIERS));
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_C_BIND), long(_POSIX2_C_BIND));
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_C_VERSION), long(_POSIX2_C_VERSION));
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_C_DEV), long(_POSIX2_C_DEV));
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_2_CHAR_TERM), long(_POSIX2_CHAR_TERM));
 }
@@ -251,6 +258,7 @@ TEST(LlvmLibcSysconfTest, UnsupportedOptionsAreMinusOne) {
 
 TEST(LlvmLibcSysconfTest, ProgrammingEnvironments) {
   EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_ILP32_OFF32), -1L);
+  EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_XBS5_ILP32_OFF32), -1L);
   if (sizeof(long) == 8 && sizeof(void *) == 8) {
     EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_LP64_OFF64), 1L);
     EXPECT_EQ(LIBC_NAMESPACE::sysconf(_SC_V7_LPBIG_OFFBIG), 1L);
