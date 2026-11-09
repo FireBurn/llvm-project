@@ -1,4 +1,16 @@
 add_entrypoint_object(
+  arch_prctl
+  SRCS
+    arch_prctl.cpp
+  HDRS
+    ../arch_prctl.h
+  DEPENDS
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   prctl
   SRCS
     prctl.cpp
