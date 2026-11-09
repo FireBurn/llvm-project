@@ -227,6 +227,38 @@ add_libc_test(
 )
 
 add_libc_test(
+  sigandset_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    sigandset_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigismember
+    libc.src.signal.sigandset
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
+  sigorset_test
+  SUITE
+    libc-signal-tests
+  SRCS
+    sigorset_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.sigset_t
+    libc.src.signal.sigaddset
+    libc.src.signal.sigemptyset
+    libc.src.signal.sigismember
+    libc.src.signal.sigorset
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_test(
   sigaddset_test
   SUITE
     libc-signal-tests
