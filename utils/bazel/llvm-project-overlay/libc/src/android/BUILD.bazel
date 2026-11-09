@@ -176,6 +176,38 @@ libc_function(
 )
 
 libc_function(
+    name = "getaddrinfofornet",
+    srcs = ["android_getaddrinfofornet.cpp"],
+    hdrs = ["android_getaddrinfofornet.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/hdr/types:struct_sockaddr_storage",
+        "//libc/hdr/types:struct_sockaddr_un",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/netdb:freeaddrinfo",
+        "//libc/src/netdb:getaddrinfo",
+        "//libc/src/stdio:snprintf",
+        "//libc/src/string:strcspn",
+        "//libc/src/string:strlen",
+        "//libc/src/sys/socket:connect",
+        "//libc/src/sys/socket:recv",
+        "//libc/src/sys/socket:send",
+        "//libc/src/sys/socket:setsockopt",
+        "//libc/src/sys/socket:socket",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_function(
     name = "get_device_api_level",
     srcs = ["android_get_device_api_level.cpp"],
     hdrs = ["android_get_device_api_level.h"],

@@ -1,0 +1,18 @@
+header: android/resolv_netid.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: struct_addrinfo
+enums: []
+objects: []
+functions:
+  - name: android_getaddrinfofornet
+    return_type: int
+    arguments:
+      - type: const char *
+      - type: const char *
+      - type: const struct addrinfo *
+      - type: unsigned
+      - type: unsigned
+      - type: struct addrinfo **
