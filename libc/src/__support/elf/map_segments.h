@@ -48,6 +48,9 @@ struct MappedModule {
   // Opened with RTLD_LOCAL, so outside the global scope: a lookup through
   // RTLD_DEFAULT does not see it, and only a module that needs it does.
   bool local = false;
+  // The linker namespace the module was loaded into. Null for the default
+  // one, which is where everything the startup linker loaded is.
+  void *ns = nullptr;
 };
 
 LIBC_INLINE int segment_protection(ElfW(Word) flags) {
