@@ -123,3 +123,15 @@ add_integration_test(
     libc.include.link
     libc.src.link._r_debug
 )
+
+if(LIBC_TARGET_ARCHITECTURE_IS_AARCH64)
+  add_integration_test(
+    startup_mte_test
+    SUITE libc-startup-tests
+    SRCS
+      mte_test.cpp
+    DEPENDS
+      libc.hdr.sys_auxv_macros
+      libc.src.sys.auxv.getauxval
+  )
+endif()
