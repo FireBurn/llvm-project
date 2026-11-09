@@ -5,6 +5,13 @@ types: []
 enums: []
 objects: []
 functions:
+  - name: arch_prctl
+    standards:
+      - linux
+    return_type: int
+    arguments:
+      - type: int
+      - type: unsigned long
   - name: prctl
     standards:
       - linux
