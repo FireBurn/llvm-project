@@ -14,6 +14,10 @@
 
 #include <stdint.h>
 
+// <linux/fcntl.h> defines the same struct flock. A program that includes it
+// first, as Mesa and others do, would see a redefinition, so libc defers to it
+// then.
+#ifndef _ASM_GENERIC_FCNTL_H
 struct flock {
   int16_t l_type;
   int16_t l_whence;
@@ -21,5 +25,6 @@ struct flock {
   off_t l_len;
   pid_t l_pid;
 };
+#endif // _ASM_GENERIC_FCNTL_H
 
 #endif // LLVM_LIBC_TYPES_STRUCT_FLOCK_H
