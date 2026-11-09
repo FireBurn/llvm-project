@@ -1063,6 +1063,84 @@ macros:
     macro_header: elf-macros.h
   - macro_name: IS_ELF
     macro_header: elf-macros.h
+  - macro_name: EF_ARM_RELEXEC
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_HASENTRY
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_INTERWORK
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_APCS_26
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_APCS_FLOAT
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_PIC
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_ALIGN8
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_NEW_ABI
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_OLD_ABI
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_SOFT_FLOAT
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_VFP_FLOAT
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_MAVERICK_FLOAT
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_ABI_FLOAT_SOFT
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_ABI_FLOAT_HARD
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_SYMSARESORTED
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_DYNSYMSUSESEGIDX
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_MAPSYMSFIRST
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_LE8
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_BE8
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_GCCMASK
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABIMASK
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_UNKNOWN
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VER1
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VER2
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VER3
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VER4
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VER5
+    macro_header: elf-macros.h
+  - macro_name: EF_ARM_EABI_VERSION
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_RVC
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_FLOAT_ABI
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_FLOAT_ABI_SOFT
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_FLOAT_ABI_SINGLE
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_FLOAT_ABI_DOUBLE
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_FLOAT_ABI_QUAD
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_RVE
+    macro_header: elf-macros.h
+  - macro_name: EF_RISCV_TSO
+    macro_header: elf-macros.h
+  - macro_name: ELF_ST_BIND
+    macro_header: elf-macros.h
+  - macro_name: ELF_ST_TYPE
+    macro_header: elf-macros.h
+  - macro_name: ELF_ST_INFO
+    macro_header: elf-macros.h
   - macro_name: ELF32_R_SYM
     macro_header: elf-macros.h
   - macro_name: ELF32_R_TYPE
