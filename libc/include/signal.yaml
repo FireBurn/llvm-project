@@ -84,6 +84,22 @@ functions:
     return_type: int
     arguments:
       - type: const sigset_t *
+  - name: sigandset
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: sigset_t *
+      - type: const sigset_t *
+      - type: const sigset_t *
+  - name: sigorset
+    standards:
+      - gnu
+    return_type: int
+    arguments:
+      - type: sigset_t *
+      - type: const sigset_t *
+      - type: const sigset_t *
   - name: sigqueue
     standards:
       - posix
