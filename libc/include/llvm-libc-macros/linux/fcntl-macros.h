@@ -14,6 +14,7 @@
 // File creation and file status flags.
 #define O_APPEND 000002000
 #define O_ASYNC 000020000
+#define FASYNC O_ASYNC
 #define O_CLOEXEC 002000000
 #define O_CREAT 000000100
 #define O_DSYNC 000010000
