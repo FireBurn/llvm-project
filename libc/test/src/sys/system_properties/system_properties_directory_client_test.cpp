@@ -105,7 +105,8 @@ void walk(const prop_info *, void *) { ++walked; }
 
 // One test, as what is mapped is process wide.
 TEST_F(LlvmLibcSystemPropertyDirectoryClientTest, ReadsEachContext) {
-  const char *directory = libc_make_test_file_path("properties_client");
+  const char *directory =
+      libc_make_test_file_path("properties_directory_client");
   ASSERT_THAT(LIBC_NAMESPACE::mkdir(directory, 0755), Succeeds(0));
   ASSERT_TRUE(write_info(directory));
   ASSERT_TRUE(write_area(directory, "properties_serial", nullptr, nullptr));
