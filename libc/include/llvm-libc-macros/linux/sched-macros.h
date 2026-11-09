@@ -61,6 +61,10 @@
 #define CLONE_VFORK 0x00004000
 #define CLONE_VM 0x00000100
 
+// The low byte of the flags given to clone is the signal sent to the parent
+// when the child exits.
+#define CSIGNAL 0x000000ff
+
 #define CPU_SETSIZE __CPU_SETSIZE
 #define NCPUBITS __NCPUBITS
 #define CPU_AND_S(setsize, destset, srcset1, srcset2)                          \

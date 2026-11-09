@@ -15,6 +15,11 @@
 
 #include "include/llvm-libc-macros/linux/fcntl-macros.h"
 
+TEST(LlvmLibcLinuxFcntlMacrosTest, FasyncIsAnotherNameForOAsync) {
+  EXPECT_EQ(FASYNC, O_ASYNC);
+  EXPECT_EQ(static_cast<long long>(FASYNC), 020000LL);
+}
+
 TEST(LlvmLibcLinuxFcntlMacrosTest, FillInTheMissingFcntlStatxAndMountMacros) {
   EXPECT_EQ(static_cast<long long>(F_LINUX_SPECIFIC_BASE), 1024LL);
   EXPECT_EQ(static_cast<long long>(F_SETPIPE_SZ), 1031LL);
