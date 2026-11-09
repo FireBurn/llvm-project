@@ -83,3 +83,16 @@ functions:
     arguments:
       - type: char *
       - type: size_t
+  - name: android_dlwarning
+    return_type: void
+    arguments:
+      - type: void *
+      - type: void (*)(void *, const char *)
+  - name: android_set_application_target_sdk_version
+    return_type: void
+    arguments:
+      - type: int
+  - name: android_set_16kb_appcompat_mode
+    return_type: void
+    arguments:
+      - type: bool
