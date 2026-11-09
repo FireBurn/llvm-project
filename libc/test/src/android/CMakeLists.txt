@@ -13,6 +13,21 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_getaddrinfofornet_test
+  SUITE
+    libc-android-tests
+  SRCS
+    android_getaddrinfofornet_test.cpp
+  DEPENDS
+    libc.hdr.sys_socket_macros
+    libc.hdr.types.struct_addrinfo
+    libc.hdr.types.struct_sockaddr_in
+    libc.src.android.android_getaddrinfofornet
+    libc.src.netdb.freeaddrinfo
+    libc.test.UnitTest.ErrnoCheckingTest
+)
+
+add_libc_test(
   android_get_device_api_level_test
   SUITE
     libc-android-tests
