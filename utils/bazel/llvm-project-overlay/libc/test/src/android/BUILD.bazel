@@ -20,6 +20,25 @@ libc_test(
 )
 
 libc_test(
+    name = "android_dlext_test",
+    srcs = ["android_dlext_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/include:llvm_libc_macros_android_dlext_macros",
+        "//libc/src/android:create_namespace",
+        "//libc/src/android:dlopen_ext",
+        "//libc/src/android:get_LD_LIBRARY_PATH",
+        "//libc/src/android:get_exported_namespace",
+        "//libc/src/android:init_anonymous_namespace",
+        "//libc/src/android:link_namespaces",
+        "//libc/src/android:update_LD_LIBRARY_PATH",
+        "//libc/src/dlfcn:dlerror",
+        "//libc/src/stdlib:getenv",
+    ],
+)
+
+libc_test(
     name = "android_getaddrinfofornet_test",
     srcs = ["android_getaddrinfofornet_test.cpp"],
     deps = [
