@@ -1,3 +1,15 @@
+add_object_library(
+  target_sdk_version
+  SRCS
+    target_sdk_version.cpp
+  HDRS
+    target_sdk_version.h
+  DEPENDS
+    libc.hdr.android_api_level_macros
+    libc.src.__support.CPP.atomic
+    libc.src.__support.macros.config
+)
+
 add_entrypoint_object(
   android_get_application_target_sdk_version
   SRCS
@@ -5,8 +17,42 @@ add_entrypoint_object(
   HDRS
     android_get_application_target_sdk_version.h
   DEPENDS
-    libc.hdr.android_api_level_macros
+    .target_sdk_version
     libc.include.android_api_level
+)
+
+add_entrypoint_object(
+  android_set_application_target_sdk_version
+  SRCS
+    android_set_application_target_sdk_version.cpp
+  HDRS
+    android_set_application_target_sdk_version.h
+  DEPENDS
+    .target_sdk_version
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  android_set_16kb_appcompat_mode
+  SRCS
+    android_set_16kb_appcompat_mode.cpp
+  HDRS
+    android_set_16kb_appcompat_mode.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  android_dlwarning
+  SRCS
+    android_dlwarning.cpp
+  HDRS
+    android_dlwarning.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.macros.config
 )
 
 add_entrypoint_object(
