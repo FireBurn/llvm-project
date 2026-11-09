@@ -146,6 +146,14 @@
 #define _SC_IPV6 235
 #define _SC_RAW_SOCKETS 236
 #define _SC_ASYNCHRONOUS_IO 12
+#define _SC_PRIORITIZED_IO 13
+#define _SC_PASS_MAX 88
+#define _SC_XOPEN_XCU_VERSION 90
+#define _SC_2_C_VERSION 96
+#define _SC_XBS5_ILP32_OFF32 125
+#define _SC_XBS5_ILP32_OFFBIG 126
+#define _SC_XBS5_LP64_OFF64 127
+#define _SC_XBS5_LPBIG_OFFBIG 128
 #define _SC_2_C_BIND 47
 #define _SC_2_C_DEV 48
 #define _SC_2_FORT_DEV 49
@@ -261,6 +269,7 @@
 #define _POSIX_RAW_SOCKETS 202405L
 #define _POSIX_BARRIERS 202405L
 #define _POSIX2_C_BIND 202405L
+#define _POSIX2_C_VERSION 202405L
 #define _POSIX2_C_DEV 202405L
 #define _POSIX2_CHAR_TERM 202405L
 // There is no asynchronous I/O, sporadic server, tracing or typed memory.
