@@ -2163,6 +2163,7 @@ add_header_macro(
     .llvm-libc-macros.android_dlext_macros
     .llvm-libc-macros.stdint_macros
     .llvm-libc-types.android_dlextinfo
+    .llvm-libc-types.size_t
     .llvm-libc-types.struct_android_namespace_t
 )
 

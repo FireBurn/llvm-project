@@ -24,10 +24,23 @@ macros:
     macro_header: android-dlext-macros.h
   - macro_name: ANDROID_DLEXT_VALID_FLAG_BITS
     macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_REGULAR
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_ISOLATED
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_SHARED
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_SHARED_ISOLATED
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_EXEMPT_LIST_ENABLED
+    macro_header: android-dlext-macros.h
+  - macro_name: ANDROID_NAMESPACE_TYPE_ALSO_USED_AS_ANONYMOUS
+    macro_header: android-dlext-macros.h
 types:
   - type_name: android_dlextinfo
   - type_name: struct_android_namespace_t
   - type_name: uint64_t
+  - type_name: size_t
 enums: []
 objects: []
 functions:
@@ -65,3 +78,8 @@ functions:
     return_type: void
     arguments:
       - type: const char *
+  - name: android_get_LD_LIBRARY_PATH
+    return_type: void
+    arguments:
+      - type: char *
+      - type: size_t
