@@ -21,6 +21,7 @@
 #include "src/__support/elf/module.h"
 #include "src/__support/elf/passive_abi.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/macros/properties/architectures.h"
 #include "src/__support/threads/linux/futex_utils.h"
 #include "src/__support/threads/robust_list.h"
 #include "src/__support/threads/tcb.h"
@@ -36,6 +37,7 @@
 #ifdef LIBC_STARTUP_STATIC_PIE
 #include "startup/linux/relocate_static_pie.h"
 #endif
+#include <linux/prctl.h>
 #include <sys/syscall.h>
 
 extern "C" int main(int argc, char **argv, char **envp);
@@ -238,6 +240,19 @@ static TLSDescriptor tls;
     _r_debug.r_state = r_debug::RT_CONSISTENT;
     _r_debug.r_ldbase = base;
   }
+
+#ifdef LIBC_TARGET_ARCH_IS_AARCH64
+  // Without this the kernel's default tag mask lets IRG produce only tag 0,
+  // which defeats the allocator's tag scheme and makes it reject its own
+  // chunk headers. Tag checking stays off, so no fault is raised until a
+  // process asks for it.
+  constexpr unsigned long LIBC_HWCAP2_MTE = 1UL << 18;
+  if (hwcap2 & LIBC_HWCAP2_MTE)
+    LIBC_NAMESPACE::syscall_impl<long>(
+        SYS_prctl, PR_SET_TAGGED_ADDR_CTRL,
+        PR_TAGGED_ADDR_ENABLE | PR_MTE_TCF_NONE | (0xfffeUL << PR_MTE_TAG_SHIFT),
+        0, 0, 0);
+#endif
 
   // Process IRELATIVE relocations (ifunc resolvers).
   // Skips when no ifuncs are present in the binary.
