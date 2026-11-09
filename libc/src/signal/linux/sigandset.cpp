@@ -1,0 +1,36 @@
+//===----------------------------------------------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Linux implementation of sigandset
+///
+//===----------------------------------------------------------------------===//
+
+#include "src/signal/sigandset.h"
+
+#include "src/__support/common.h"
+#include "src/__support/libc_errno.h"
+#include "src/__support/macros/config.h"
+#include "src/signal/linux/signal_utils.h"
+
+namespace LIBC_NAMESPACE_DECL {
+
+LLVM_LIBC_FUNCTION(int, sigandset,
+                   (sigset_t * dest, const sigset_t *left,
+                    const sigset_t *right)) {
+  if (!dest || !left || !right) {
+    libc_errno = EINVAL;
+    return -1;
+  }
+  for (size_t i = 0; i < sizeof(dest->__signals) / sizeof(dest->__signals[0]);
+       ++i)
+    dest->__signals[i] = left->__signals[i] & right->__signals[i];
+  return 0;
+}
+
+} // namespace LIBC_NAMESPACE_DECL
