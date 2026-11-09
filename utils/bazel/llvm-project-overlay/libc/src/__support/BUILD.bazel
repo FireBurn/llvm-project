@@ -619,6 +619,7 @@ libc_support_library(
         "//libc/hdr/types:size_t",
         "//libc/src/__support/macros:attributes",
         "//libc/src/__support/macros:config",
+        "//libc/src/dlfcn:dl_namespace",
     ],
 )
 
