@@ -64,6 +64,7 @@ libc_startup_library(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:exit_group",
         "//libc/src/__support/OSUtil:linux_auxv",
         "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros/properties:architectures",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:linux_futex_utils",
         "//libc/src/__support/threads:linux_tls",
