@@ -288,6 +288,8 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
     return _POSIX_BARRIERS;
   case _SC_2_C_BIND:
     return _POSIX2_C_BIND;
+  case _SC_2_C_VERSION:
+    return _POSIX2_C_VERSION;
   case _SC_2_C_DEV:
     return _POSIX2_C_DEV;
   case _SC_2_CHAR_TERM:
@@ -332,19 +334,26 @@ LLVM_LIBC_FUNCTION(long, sysconf, (int name)) {
   // The programming environments. Every target here has 64 bit file offsets,
   // and the pointer and long sizes decide the rest.
   case _SC_V7_ILP32_OFF32:
+  case _SC_XBS5_ILP32_OFF32:
     return -1;
   case _SC_V7_ILP32_OFFBIG:
+  case _SC_XBS5_ILP32_OFFBIG:
     return sizeof(int) == 4 && sizeof(long) == 4 && sizeof(void *) == 4 ? 1
                                                                         : -1;
   case _SC_V7_LP64_OFF64:
+  case _SC_XBS5_LP64_OFF64:
     return sizeof(int) == 4 && sizeof(long) == 8 && sizeof(void *) == 8 ? 1
                                                                         : -1;
   case _SC_V7_LPBIG_OFFBIG:
+  case _SC_XBS5_LPBIG_OFFBIG:
     return sizeof(int) >= 4 && sizeof(long) >= 8 && sizeof(void *) >= 8 ? 1
                                                                         : -1;
 
   // Limits with no fixed value. -1 says there is none, and errno stays as it
   // was.
+  case _SC_PASS_MAX:
+  case _SC_PRIORITIZED_IO:
+  case _SC_XOPEN_XCU_VERSION:
   case _SC_SS_REPL_MAX:
   case _SC_TRACE_EVENT_NAME_MAX:
   case _SC_TRACE_NAME_MAX:
