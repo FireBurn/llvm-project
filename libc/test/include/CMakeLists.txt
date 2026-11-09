@@ -898,6 +898,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  fcntl_kernel_header_test
+  SUITE
+    libc-include-tests
+  SRCS
+    fcntl_kernel_header_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_f_owner_ex
+    libc.include.llvm-libc-types.struct_flock
+    libc.include.llvm-libc-types.struct_flock64
+)
+
+add_libc_test(
   fcntl_access_modes_test
   SUITE
     libc-include-tests
