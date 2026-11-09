@@ -15,10 +15,12 @@
 #include "include/llvm-libc-macros/android-dlext-macros.h"
 #include "src/android/android_create_namespace.h"
 #include "src/android/android_dlopen_ext.h"
+#include "src/android/android_dlwarning.h"
 #include "src/android/android_get_LD_LIBRARY_PATH.h"
 #include "src/android/android_get_exported_namespace.h"
 #include "src/android/android_init_anonymous_namespace.h"
 #include "src/android/android_link_namespaces.h"
+#include "src/android/android_set_16kb_appcompat_mode.h"
 #include "src/android/android_update_LD_LIBRARY_PATH.h"
 #include "src/dlfcn/dlerror.h"
 #include "src/stdlib/getenv.h"
@@ -144,4 +146,18 @@ TEST(LlvmLibcAndroidDlextTest, TheLibraryPathCanBeRead) {
   char small[3];
   LIBC_NAMESPACE::android_get_LD_LIBRARY_PATH(small, sizeof(small));
   EXPECT_STREQ(small, "/a");
+}
+
+static bool warned;
+
+TEST(LlvmLibcAndroidDlextTest, ThereAreNoWarningsToReport) {
+  warned = false;
+  LIBC_NAMESPACE::android_dlwarning(
+      nullptr, [](void *, const char *) { warned = true; });
+  EXPECT_FALSE(warned);
+}
+
+TEST(LlvmLibcAndroidDlextTest, TheAppCompatModeIsAccepted) {
+  LIBC_NAMESPACE::android_set_16kb_appcompat_mode(true);
+  LIBC_NAMESPACE::android_set_16kb_appcompat_mode(false);
 }

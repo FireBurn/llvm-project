@@ -15,6 +15,7 @@ libc_test(
     srcs = ["android_get_application_target_sdk_version_test.cpp"],
     deps = [
         "//libc:android_get_application_target_sdk_version",
+        "//libc:android_set_application_target_sdk_version",
         "//libc:hdr_android_api_level_macros",
     ],
 )
@@ -26,10 +27,12 @@ libc_test(
     deps = [
         "//libc:android_create_namespace",
         "//libc:android_dlopen_ext",
+        "//libc:android_dlwarning",
         "//libc:android_get_LD_LIBRARY_PATH",
         "//libc:android_get_exported_namespace",
         "//libc:android_init_anonymous_namespace",
         "//libc:android_link_namespaces",
+        "//libc:android_set_16kb_appcompat_mode",
         "//libc:android_update_LD_LIBRARY_PATH",
         "//libc:dlfcn_dlerror",
         "//libc:getenv",
