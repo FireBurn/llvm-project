@@ -12,18 +12,33 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/android/android_create_namespace.h"
+#include "src/__support/CPP/mutex.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
+#include "src/dlfcn/dl_namespace.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-// Every object is looked up the one way, so there is no namespace to make.
 LLVM_LIBC_FUNCTION(struct android_namespace_t *, android_create_namespace,
-                   (const char *, const char *, const char *, uint64_t,
-                    const char *, struct android_namespace_t *)) {
-  dl::set_error("linker namespaces are not supported");
-  return nullptr;
+                   (const char *name, const char *ld_library_path,
+                    const char *default_library_path, uint64_t type,
+                    const char *permitted_when_isolated_path,
+                    struct android_namespace_t *parent)) {
+  // Without a parent, the namespace of whatever called is the one.
+  const ElfW(Addr) caller =
+      reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
+  cpp::lock_guard lock(dl::dl_mutex);
+  dl::Namespace *parent_namespace = reinterpret_cast<dl::Namespace *>(parent);
+  if (parent_namespace == nullptr)
+    parent_namespace = dl::namespace_of_address(caller, false);
+  else if (!dl::valid_namespace(parent_namespace)) {
+    dl::set_error("the parent is not a namespace");
+    return nullptr;
+  }
+  return reinterpret_cast<struct android_namespace_t *>(
+      dl::create_namespace(name, ld_library_path, default_library_path, type,
+                           permitted_when_isolated_path, parent_namespace));
 }
 
 } // namespace LIBC_NAMESPACE_DECL

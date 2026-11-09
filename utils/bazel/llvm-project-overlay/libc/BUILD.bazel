@@ -31685,6 +31685,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dlfcn_dl_namespace",
+    srcs = ["src/dlfcn/dl_namespace.cpp"],
+    hdrs = ["src/dlfcn/dl_namespace.h"],
+    deps = [
+        ":__support_elf_passive_abi",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_osutil_linux_realpath",
+        ":dlfcn_dl_internal",
+        ":func_malloc",
+        ":hdr_limits_macros",
+        ":hdr_stdint_proxy",
+        ":llvm_libc_macros_android_dlext_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "dlfcn_lazy_bind",
     srcs = ["src/dlfcn/lazy_bind.cpp"],
     hdrs = ["src/dlfcn/lazy_bind.h"],
@@ -37907,13 +37925,87 @@ libc_function(
 )
 
 libc_function(
+    name = "android_create_namespace",
+    srcs = ["src/android/android_create_namespace.cpp"],
+    hdrs = ["src/android/android_create_namespace.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":dlfcn_dl_namespace",
+        ":hdr_stdint_proxy",
+        ":types_android_dlextinfo",
+    ],
+)
+
+libc_function(
+    name = "android_link_namespaces",
+    srcs = ["src/android/android_link_namespaces.cpp"],
+    hdrs = ["src/android/android_link_namespaces.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":dlfcn_dl_namespace",
+        ":hdr_stdint_proxy",
+        ":types_android_dlextinfo",
+    ],
+)
+
+libc_function(
+    name = "android_init_anonymous_namespace",
+    srcs = ["src/android/android_init_anonymous_namespace.cpp"],
+    hdrs = ["src/android/android_init_anonymous_namespace.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":dlfcn_dl_namespace",
+        ":hdr_stdint_proxy",
+        ":types_android_dlextinfo",
+    ],
+)
+
+libc_function(
     name = "android_get_exported_namespace",
     srcs = ["src/android/android_get_exported_namespace.cpp"],
     hdrs = ["src/android/android_get_exported_namespace.h"],
     deps = [
         ":__support_common",
+        ":__support_cpp_mutex",
         ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":dlfcn_dl_namespace",
+        ":hdr_stdint_proxy",
         ":types_android_dlextinfo",
+    ],
+)
+
+libc_function(
+    name = "android_dlopen_ext",
+    srcs = ["src/android/android_dlopen_ext.cpp"],
+    hdrs = ["src/android/android_dlopen_ext.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":dlfcn_dl_internal",
+        ":dlfcn_dlopen",
+        ":types_android_dlextinfo",
+    ],
+)
+
+libc_function(
+    name = "android_get_LD_LIBRARY_PATH",
+    srcs = ["src/android/android_get_LD_LIBRARY_PATH.cpp"],
+    hdrs = ["src/android/android_get_LD_LIBRARY_PATH.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":stdlib_environ_internal",
+        ":types_size_t",
     ],
 )
 
