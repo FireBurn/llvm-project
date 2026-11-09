@@ -40,6 +40,13 @@ target_compile_options(libc-test-dl-exit-object PRIVATE
 target_link_options(libc-test-dl-exit-object PRIVATE -nostdlib
   -Wl,--unresolved-symbols=ignore-all)
 
+# Reads the tag mask from its initialiser.
+add_library(libc-test-dl-mte SHARED dl_mte_object.cpp)
+target_compile_options(libc-test-dl-mte PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-mte PRIVATE -nostdlib
+  -Wl,--unresolved-symbols=ignore-all)
+
 # B needs A. The programs below load A before B, which a walk of the load
 # order backwards would initialise the wrong way round.
 add_library(libc-test-dl-order-a SHARED dl_order_a.cpp)
@@ -269,6 +276,18 @@ add_libc_dynamic_test(
   DEPENDS
     libc-test-dl-order-a
     libc-test-dl-order-b
+)
+
+add_libc_dynamic_test(
+  init_mte_test
+  SRCS
+    init_mte_test.cpp
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+    $<TARGET_FILE:libc-test-dl-mte>
+    -Wl,-rpath,$<TARGET_FILE_DIR:libc-test-dl-mte>
+  DEPENDS
+    libc-test-dl-mte
 )
 
 add_libc_dynamic_test(

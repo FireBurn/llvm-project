@@ -20,6 +20,8 @@
 #include "src/__support/elf/startup_linker.h"
 #include "src/__support/elf/startup_stack.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/macros/properties/architectures.h"
+#include <linux/prctl.h>
 #include <sys/syscall.h>
 
 namespace LIBC_NAMESPACE_DECL {
@@ -111,6 +113,20 @@ uintptr_t loader_link(void *stack_pointer) {
   elf::StartupStack stack = elf::StartupStack::from(stack_pointer);
   const size_t page_size =
       static_cast<size_t>(stack.auxval(AT_PAGESZ).value_or(FALLBACK_PAGE_SIZE));
+
+#ifdef LIBC_TARGET_ARCH_IS_AARCH64
+  // The libraries this loads run their initialisers, and so reach the
+  // allocator, before the program's own startup code runs. With the kernel's
+  // default tag mask the allocator's tags and its pointers disagree on a CPU
+  // that has MTE, and its first free reports a corrupted chunk header. Allow
+  // tags 1-15 here, ahead of all of them, with tag checks left off.
+  constexpr unsigned long LIBC_HWCAP2_MTE = 1UL << 18;
+  if (stack.auxval(AT_HWCAP2).value_or(0) & LIBC_HWCAP2_MTE)
+    syscall_impl<long>(SYS_prctl, PR_SET_TAGGED_ADDR_CTRL,
+                       PR_TAGGED_ADDR_ENABLE | PR_MTE_TCF_NONE |
+                           (0xfffeUL << PR_MTE_TAG_SHIFT),
+                       0, 0, 0);
+#endif
 
   // Only a loader which is the program has no interpreter base.
   if (stack.auxval(AT_BASE).value_or(0) == 0)
