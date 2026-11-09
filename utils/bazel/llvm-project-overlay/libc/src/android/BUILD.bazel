@@ -169,9 +169,13 @@ libc_function(
     hdrs = ["android_dlopen_ext.h"],
     deps = [
         "//libc/hdr/types:android_dlextinfo",
+        "//libc/hdr:stdint_proxy",
+        "//libc/include:llvm_libc_macros_android_dlext_macros",
+        "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
         "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dl_namespace",
         "//libc/src/dlfcn:dlopen",
     ],
 )

@@ -297,6 +297,7 @@ add_header_library(
     libc.src.__support.elf.passive_abi
     libc.src.__support.macros.attributes
     libc.src.__support.macros.config
+    libc.src.dlfcn.dl_namespace
 )
 
 add_header_library(
