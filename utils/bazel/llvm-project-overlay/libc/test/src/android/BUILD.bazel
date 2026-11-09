@@ -20,6 +20,18 @@ libc_test(
 )
 
 libc_test(
+    name = "android_getaddrinfofornet_test",
+    srcs = ["android_getaddrinfofornet_test.cpp"],
+    deps = [
+        "//libc:android_getaddrinfofornet",
+        "//libc:freeaddrinfo",
+        "//libc:hdr_sys_socket_macros",
+        "//libc:types_struct_addrinfo",
+        "//libc:types_struct_sockaddr_in",
+    ],
+)
+
+libc_test(
     name = "android_get_device_api_level_test",
     srcs = ["android_get_device_api_level_test.cpp"],
     deps = [

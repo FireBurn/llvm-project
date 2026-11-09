@@ -2123,6 +2123,15 @@ add_header_macro(
 )
 
 add_header_macro(
+  android_resolv_netid
+  ../libc/include/android/resolv_netid.yaml
+  android/resolv_netid.h
+  DEPENDS
+    .llvm_libc_common_h
+    .llvm-libc-types.struct_addrinfo
+)
+
+add_header_macro(
   android_set_abort_message
   ../libc/include/android/set_abort_message.yaml
   android/set_abort_message.h

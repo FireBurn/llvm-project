@@ -166,6 +166,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("android/crash_detail"),
     libc_header_info("android/dlext"),
     libc_header_info("android/fdsan"),
+    libc_header_info("android/resolv_netid"),
     libc_header_info("android/set_abort_message"),
     libc_header_info("android/versioning"),
     libc_header_info("ar"),
@@ -37893,6 +37894,18 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":setenv",
+    ],
+)
+
+libc_function(
+    name = "android_getaddrinfofornet",
+    srcs = ["src/android/android_getaddrinfofornet.cpp"],
+    hdrs = ["src/android/android_getaddrinfofornet.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":getaddrinfo",
+        ":types_struct_addrinfo",
     ],
 )
 
