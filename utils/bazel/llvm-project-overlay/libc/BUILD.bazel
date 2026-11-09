@@ -21092,6 +21092,34 @@ libc_function(
 )
 
 libc_function(
+    name = "sigandset",
+    srcs = ["src/signal/linux/sigandset.cpp"],
+    hdrs = ["src/signal/sigandset.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigorset",
+    srcs = ["src/signal/linux/sigorset.cpp"],
+    hdrs = ["src/signal/sigorset.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "signal",
     srcs = ["src/signal/linux/signal.cpp"],
     hdrs = ["src/signal/signal.h"],
