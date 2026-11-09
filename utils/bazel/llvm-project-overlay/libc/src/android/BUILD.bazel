@@ -104,13 +104,87 @@ libc_function(
 )
 
 libc_function(
+    name = "create_namespace",
+    srcs = ["android_create_namespace.cpp"],
+    hdrs = ["android_create_namespace.h"],
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dl_namespace",
+    ],
+)
+
+libc_function(
+    name = "link_namespaces",
+    srcs = ["android_link_namespaces.cpp"],
+    hdrs = ["android_link_namespaces.h"],
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dl_namespace",
+    ],
+)
+
+libc_function(
+    name = "init_anonymous_namespace",
+    srcs = ["android_init_anonymous_namespace.cpp"],
+    hdrs = ["android_init_anonymous_namespace.h"],
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dl_namespace",
+    ],
+)
+
+libc_function(
     name = "get_exported_namespace",
     srcs = ["android_get_exported_namespace.cpp"],
     hdrs = ["android_get_exported_namespace.h"],
     deps = [
         "//libc/hdr/types:android_dlextinfo",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+        "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dl_namespace",
+    ],
+)
+
+libc_function(
+    name = "dlopen_ext",
+    srcs = ["android_dlopen_ext.cpp"],
+    hdrs = ["android_dlopen_ext.h"],
+    deps = [
+        "//libc/hdr/types:android_dlextinfo",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/dlfcn:dl_internal",
+        "//libc/src/dlfcn:dlopen",
+    ],
+)
+
+libc_function(
+    name = "get_LD_LIBRARY_PATH",
+    srcs = ["android_get_LD_LIBRARY_PATH.cpp"],
+    hdrs = ["android_get_LD_LIBRARY_PATH.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/stdlib:environ_internal",
     ],
 )
 
