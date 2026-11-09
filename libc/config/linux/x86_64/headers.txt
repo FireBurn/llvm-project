@@ -3,6 +3,7 @@ set(TARGET_PUBLIC_HEADERS
     libc.include.android_dlext
     libc.include.android_fdsan
     libc.include.android_crash_detail
+    libc.include.android_resolv_netid
     libc.include.android_set_abort_message
     libc.include.android_versioning
     libc.include.ar
