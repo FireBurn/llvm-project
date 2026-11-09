@@ -266,4 +266,49 @@
 #define ELF_NOTE_OS_SOLARIS2 2
 #define ELF_NOTE_OS_FREEBSD 3
 
+// Processor specific flags in e_flags, from the ARM and RISC-V ELF psABIs.
+#define EF_ARM_RELEXEC 0x01
+#define EF_ARM_HASENTRY 0x02
+#define EF_ARM_INTERWORK 0x04
+#define EF_ARM_APCS_26 0x08
+#define EF_ARM_APCS_FLOAT 0x10
+#define EF_ARM_PIC 0x20
+#define EF_ARM_ALIGN8 0x40
+#define EF_ARM_NEW_ABI 0x80
+#define EF_ARM_OLD_ABI 0x100
+#define EF_ARM_SOFT_FLOAT 0x200
+#define EF_ARM_VFP_FLOAT 0x400
+#define EF_ARM_MAVERICK_FLOAT 0x800
+#define EF_ARM_ABI_FLOAT_SOFT 0x200
+#define EF_ARM_ABI_FLOAT_HARD 0x400
+#define EF_ARM_SYMSARESORTED 0x04
+#define EF_ARM_DYNSYMSUSESEGIDX 0x08
+#define EF_ARM_MAPSYMSFIRST 0x10
+#define EF_ARM_LE8 0x00400000
+#define EF_ARM_BE8 0x00800000
+#define EF_ARM_GCCMASK 0x00400fff
+#define EF_ARM_EABIMASK 0xff000000
+#define EF_ARM_EABI_UNKNOWN 0x00000000
+#define EF_ARM_EABI_VER1 0x01000000
+#define EF_ARM_EABI_VER2 0x02000000
+#define EF_ARM_EABI_VER3 0x03000000
+#define EF_ARM_EABI_VER4 0x04000000
+#define EF_ARM_EABI_VER5 0x05000000
+#define EF_ARM_EABI_VERSION(flags) ((flags) & EF_ARM_EABIMASK)
+#define EF_RISCV_RVC 0x0001
+#define EF_RISCV_FLOAT_ABI 0x0006
+#define EF_RISCV_FLOAT_ABI_SOFT 0x0000
+#define EF_RISCV_FLOAT_ABI_SINGLE 0x0002
+#define EF_RISCV_FLOAT_ABI_DOUBLE 0x0004
+#define EF_RISCV_FLOAT_ABI_QUAD 0x0006
+#define EF_RISCV_RVE 0x0008
+#define EF_RISCV_TSO 0x0010
+
+#ifdef __ANDROID__
+// bionic's names for the parts of st_info and the way to build it.
+#define ELF_ST_BIND(i) ((i) >> 4)
+#define ELF_ST_TYPE(i) ((i) & 0xf)
+#define ELF_ST_INFO(b, t) (((b) << 4) + ((t) & 0xf))
+#endif
+
 #endif // LLVM_LIBC_MACROS_ELF_MACROS_H
