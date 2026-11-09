@@ -1253,6 +1253,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  elf_arch_flags_test
+  SUITE
+    libc-include-tests
+  SRCS
+    elf_arch_flags_test.cpp
+  DEPENDS
+    libc.hdr.elf_proxy
+)
+
+add_libc_test(
   elf_gnu_constants_test
   SUITE
     libc-include-tests
