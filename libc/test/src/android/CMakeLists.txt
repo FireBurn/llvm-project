@@ -113,6 +113,7 @@ add_libc_test(
     libc.include.android_dlext
     libc.src.android.android_create_namespace
     libc.src.android.android_dlopen_ext
+    libc.src.android.android_get_LD_LIBRARY_PATH
     libc.src.android.android_get_exported_namespace
     libc.src.android.android_init_anonymous_namespace
     libc.src.android.android_link_namespaces
