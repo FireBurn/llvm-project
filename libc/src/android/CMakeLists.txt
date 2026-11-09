@@ -262,10 +262,11 @@ add_entrypoint_object(
   DEPENDS
     libc.hdr.stdint_proxy
     libc.hdr.types.android_dlextinfo
+    libc.src.__support.CPP.mutex
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.dlfcn.dl_internal
-
+    libc.src.dlfcn.dl_namespace
 )
 
 add_entrypoint_object(
@@ -290,10 +291,13 @@ add_entrypoint_object(
   HDRS
     android_get_exported_namespace.h
   DEPENDS
+    libc.hdr.stdint_proxy
     libc.hdr.types.android_dlextinfo
+    libc.src.__support.CPP.mutex
     libc.src.__support.common
     libc.src.__support.macros.config
-
+    libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dl_namespace
 )
 
 add_entrypoint_object(
@@ -303,11 +307,13 @@ add_entrypoint_object(
   HDRS
     android_init_anonymous_namespace.h
   DEPENDS
+    libc.hdr.stdint_proxy
     libc.hdr.types.android_dlextinfo
+    libc.src.__support.CPP.mutex
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.dlfcn.dl_internal
-
+    libc.src.dlfcn.dl_namespace
 )
 
 add_entrypoint_object(
@@ -317,11 +323,13 @@ add_entrypoint_object(
   HDRS
     android_link_namespaces.h
   DEPENDS
+    libc.hdr.stdint_proxy
     libc.hdr.types.android_dlextinfo
+    libc.src.__support.CPP.mutex
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.dlfcn.dl_internal
-
+    libc.src.dlfcn.dl_namespace
 )
 
 add_entrypoint_object(
@@ -389,4 +397,17 @@ add_entrypoint_object(
     libc.src.__support.macros.config
     libc.src.stdlib.setenv
 
+)
+
+add_entrypoint_object(
+  android_get_LD_LIBRARY_PATH
+  SRCS
+    android_get_LD_LIBRARY_PATH.cpp
+  HDRS
+    android_get_LD_LIBRARY_PATH.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.stdlib.environ_internal
 )
