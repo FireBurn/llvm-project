@@ -30,6 +30,9 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.android.android_reset_stack_guards
     libc.src.android.android_update_LD_LIBRARY_PATH
     libc.src.android.android_get_LD_LIBRARY_PATH
+    libc.src.android.android_dlwarning
+    libc.src.android.android_set_application_target_sdk_version
+    libc.src.android.android_set_16kb_appcompat_mode
 
     # sys/system_properties.h entrypoints
     libc.src.sys.system_properties.__system_properties_init

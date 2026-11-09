@@ -10,6 +10,7 @@ add_libc_test(
     libc.hdr.android_api_level_macros
     libc.include.android_api_level
     libc.src.android.android_get_application_target_sdk_version
+    libc.src.android.android_set_application_target_sdk_version
 )
 
 add_libc_test(
@@ -113,10 +114,12 @@ add_libc_test(
     libc.include.android_dlext
     libc.src.android.android_create_namespace
     libc.src.android.android_dlopen_ext
+    libc.src.android.android_dlwarning
     libc.src.android.android_get_LD_LIBRARY_PATH
     libc.src.android.android_get_exported_namespace
     libc.src.android.android_init_anonymous_namespace
     libc.src.android.android_link_namespaces
+    libc.src.android.android_set_16kb_appcompat_mode
     libc.src.android.android_update_LD_LIBRARY_PATH
     libc.src.dlfcn.dlerror
     libc.src.stdlib.getenv

@@ -38104,6 +38104,17 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "android_target_sdk_version",
+    srcs = ["src/android/target_sdk_version.cpp"],
+    hdrs = ["src/android/target_sdk_version.h"],
+    deps = [
+        ":__support_cpp_atomic",
+        ":__support_macros_config",
+        ":hdr_android_api_level_macros",
+    ],
+)
+
 libc_function(
     name = "android_get_application_target_sdk_version",
     srcs = ["src/android/android_get_application_target_sdk_version.cpp"],
@@ -38111,7 +38122,39 @@ libc_function(
     deps = [
         ":__support_common",
         ":__support_macros_config",
+        ":android_target_sdk_version",
         ":hdr_android_api_level_macros",
+    ],
+)
+
+libc_function(
+    name = "android_set_application_target_sdk_version",
+    srcs = ["src/android/android_set_application_target_sdk_version.cpp"],
+    hdrs = ["src/android/android_set_application_target_sdk_version.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":android_target_sdk_version",
+    ],
+)
+
+libc_function(
+    name = "android_set_16kb_appcompat_mode",
+    srcs = ["src/android/android_set_16kb_appcompat_mode.cpp"],
+    hdrs = ["src/android/android_set_16kb_appcompat_mode.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_function(
+    name = "android_dlwarning",
+    srcs = ["src/android/android_dlwarning.cpp"],
+    hdrs = ["src/android/android_dlwarning.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
     ],
 )
 
