@@ -39,8 +39,10 @@ add_object_library(
     libc.src.__support.CPP.mutex
     libc.src.__support.elf.bind
     libc.src.__support.elf.passive_abi
+    libc.src.__support.elf.scope
     libc.src.__support.macros.config
     libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dl_namespace
 )
 
 add_object_library(
@@ -66,6 +68,7 @@ add_object_library(
     libc.src.__support.macros.properties.architectures
     libc.src.__support.threads.mutex
     libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dl_namespace
     libc.src.unistd.environ
 )
 
@@ -119,9 +122,11 @@ add_entrypoint_object(
     libc.src.__support.elf.search
     libc.src.unistd.environ
     libc.src.__support.CPP.mutex
+    libc.src.__support.CPP.optional
     libc.src.__support.elf.passive_abi
     libc.src.__support.threads.mutex
     libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dl_namespace
     libc.src.__support.elf.bind
     libc.src.__support.elf.load_module
     libc.src.__support.elf.scope
