@@ -11,6 +11,24 @@ add_object_library(
 )
 
 add_object_library(
+  dl_namespace
+  SRCS
+    dl_namespace.cpp
+  HDRS
+    dl_namespace.h
+  DEPENDS
+    libc.hdr.func.malloc
+    libc.hdr.limits_macros
+    libc.hdr.stdint_proxy
+    libc.hdr.types.size_t
+    libc.include.llvm-libc-macros.android_dlext_macros
+    libc.src.__support.OSUtil.linux.realpath
+    libc.src.__support.elf.passive_abi
+    libc.src.__support.macros.config
+    libc.src.dlfcn.dl_internal
+)
+
+add_object_library(
   dl_lookup
   SRCS
     dl_lookup.cpp
