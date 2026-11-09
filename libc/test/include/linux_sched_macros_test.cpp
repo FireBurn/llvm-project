@@ -26,3 +26,7 @@ TEST(LlvmLibcLinuxSchedMacrosTest, AddSched_Reset_On_Fork) {
 TEST(LlvmLibcLinuxSchedMacrosTest, SchedExtIsTheKernelsSeventhPolicy) {
   EXPECT_EQ(static_cast<int>(SCHED_EXT), 7);
 }
+
+TEST(LlvmLibcLinuxSchedMacrosTest, CsignalMasksTheExitSignalOutOfTheCloneFlags) {
+  EXPECT_EQ(static_cast<int>(CSIGNAL), 0xff);
+}
