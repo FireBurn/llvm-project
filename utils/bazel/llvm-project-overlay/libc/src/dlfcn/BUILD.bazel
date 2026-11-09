@@ -52,6 +52,7 @@ libc_support_library(
     hdrs = ["lazy_bind.h"],
     deps = [
         ":dl_internal",
+        ":dl_namespace",
         "//libc/hdr/types:size_t",
         "//libc/hdr:elf_macros",
         "//libc/hdr:elf_proxy",
@@ -82,12 +83,14 @@ libc_support_library(
     hdrs = ["dlopen.h"],
     deps = [
         ":dl_internal",
+        ":dl_namespace",
         ":lazy_bind",
         "//libc/hdr/func:free",
         "//libc/hdr/func:malloc",
         "//libc/hdr/types:struct_stat",
         "//libc/hdr:fcntl_macros",
         "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:optional",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:newfstatat",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
@@ -135,12 +138,14 @@ libc_support_library(
     hdrs = ["dl_lookup.h"],
     deps = [
         ":dl_internal",
+        ":dl_namespace",
         "//libc/hdr/types:size_t",
         "//libc/hdr:stdint_proxy",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:elf_bind",
         "//libc/src/__support:elf_passive_abi",
+        "//libc/src/__support:elf_scope",
     ],
 )
 

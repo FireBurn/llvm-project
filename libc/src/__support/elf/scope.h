@@ -21,6 +21,7 @@
 #include "src/__support/elf/passive_abi.h"
 #include "src/__support/macros/attributes.h"
 #include "src/__support/macros/config.h"
+#include "src/dlfcn/dl_namespace.h"
 
 namespace LIBC_NAMESPACE_DECL {
 namespace elf {
@@ -34,6 +35,29 @@ LIBC_INLINE bool named(const char *have, const char *want) {
     if (*have == '\0')
       return true;
   return false;
+}
+
+// The module that `from` means by the library `needed`: one in its own
+// namespace, or one it shares, if there is such a module, and otherwise one in
+// a namespace it was linked to for that name. Returns set.count where there is
+// none, as for a library that was never loaded.
+LIBC_INLINE size_t find_needed(const ModuleSet &set, size_t from,
+                               const char *needed) {
+  const dl::Namespace *home =
+      dl::canonical(static_cast<dl::Namespace *>(set.mappings[from].ns));
+  for (int pass = 0; pass < 2; ++pass) {
+    for (size_t i = 0; i < set.count; ++i) {
+      if (!named(set.modules[i].soname(), needed) &&
+          !named(set.modules[i].name(), needed))
+        continue;
+      const dl::Namespace *owner =
+          dl::canonical(static_cast<dl::Namespace *>(set.mappings[i].ns));
+      if (pass == 0 ? dl::namespace_sees_loaded(home, owner)
+                    : dl::namespace_provides(home, owner, needed))
+        return i;
+    }
+  }
+  return set.count;
 }
 
 // Calls `visit` with the index of `root` and of every module it needs,
@@ -52,14 +76,11 @@ LIBC_INLINE void for_each_dependency(const ModuleSet &set, size_t root,
     const size_t at = queue[head++];
     visit(at);
     set.modules[at].for_each_needed([&](const char *needed) {
-      for (size_t i = 0; i < set.count; ++i) {
-        if (seen[i] || (!named(set.modules[i].soname(), needed) &&
-                        !named(set.modules[i].name(), needed)))
-          continue;
-        seen[i] = true;
-        queue[tail++] = i;
+      const size_t i = find_needed(set, at, needed);
+      if (i == set.count || seen[i])
         return;
-      }
+      seen[i] = true;
+      queue[tail++] = i;
     });
   }
 }
@@ -74,13 +95,30 @@ LIBC_INLINE bool any_local(const ModuleSet &set) {
   return false;
 }
 
+// Whether some module is in a namespace that `requester` is not in.
+LIBC_INLINE bool any_other_namespace(const ModuleSet &set, size_t requester) {
+  const dl::Namespace *home =
+      dl::canonical(static_cast<dl::Namespace *>(set.mappings[requester].ns));
+  for (size_t i = 0; i < set.count; ++i)
+    if (dl::canonical(static_cast<dl::Namespace *>(set.mappings[i].ns)) != home)
+      return true;
+  return false;
+}
+
 // Marks in `hidden` (set.count entries) the modules that `requester` cannot
-// see: the local ones it does not need.
+// see: the local ones it does not need, and the ones in other namespaces that
+// it does not need.
 LIBC_INLINE void hide_from(const ModuleSet &set, size_t requester,
                            bool *hidden) {
+  const dl::Namespace *home =
+      dl::canonical(static_cast<dl::Namespace *>(set.mappings[requester].ns));
   for (size_t i = 0; i < set.count; ++i)
-    hidden[i] = set.mappings[i].local;
-  if (!any_local(set))
+    hidden[i] =
+        set.mappings[i].local ||
+        !dl::namespace_sees_loaded(
+            home,
+            dl::canonical(static_cast<dl::Namespace *>(set.mappings[i].ns)));
+  if (!any_local(set) && !any_other_namespace(set, requester))
     return;
   bool *seen = static_cast<bool *>(__builtin_alloca(set.count));
   size_t *queue =

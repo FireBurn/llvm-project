@@ -276,10 +276,14 @@ add_entrypoint_object(
   HDRS
     android_dlopen_ext.h
   DEPENDS
+    libc.hdr.stdint_proxy
     libc.hdr.types.android_dlextinfo
+    libc.include.llvm-libc-macros.android_dlext_macros
+    libc.src.__support.CPP.mutex
     libc.src.__support.common
     libc.src.__support.macros.config
     libc.src.dlfcn.dl_internal
+    libc.src.dlfcn.dl_namespace
     libc.src.dlfcn.dlopen
 
 )

@@ -13,6 +13,7 @@
 #include "hdr/func/malloc.h"
 #include "hdr/types/struct_stat.h"
 #include "src/__support/CPP/mutex.h"
+#include "src/__support/CPP/optional.h"
 #include "src/__support/OSUtil/linux/syscall_wrappers/newfstatat.h"
 #include "src/__support/common.h"
 #include "src/__support/elf/bind.h"
@@ -22,11 +23,21 @@
 #include "src/__support/elf/search.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
+#include "src/dlfcn/dl_namespace.h"
 #include "src/dlfcn/lazy_bind.h"
 #include "src/link/link_maps.h"
 #include "src/unistd/environ.h"
 
 namespace LIBC_NAMESPACE_DECL {
+
+using dl::canonical;
+using dl::default_namespace;
+using dl::link_allows;
+using dl::Namespace;
+using dl::namespace_of_address;
+using dl::namespace_sees_loaded;
+using dl::NamespaceLink;
+using dl::path_accessible;
 
 namespace {
 
@@ -122,37 +133,119 @@ bool same_file(const char *known, const char *wanted) {
   return one.st_dev == two.st_dev && one.st_ino == two.st_ino;
 }
 
-// Whether the set already holds something of this name, by either the path
-// it was opened under, the file that path comes to, or the name it says it
-// goes by.
-bool already_loaded(const elf::ModuleSet &set, const char *name) {
-  if (elf::is_glibc_interpreter(name))
+Namespace *owner_of(const elf::ModuleSet &set, size_t index) {
+  return canonical(static_cast<Namespace *>(set.mappings[index].ns));
+}
+
+// Calls `visit` with each path the object `name` stands for could be at in
+// `ns`, until it returns true. In the default namespace that is where a
+// loader looks without namespaces: the asking object's run path, the
+// environment's path, the system's path file and the default directories. In
+// any other it is the namespace's own directories and the asking object's run
+// path. A path is not offered where an isolated namespace may not load it.
+template <typename Visit>
+bool visit_candidates_in(const Namespace &ns, const char *name,
+                         const elf::Module *requester, const char *origin,
+                         const char *library_path,
+                         elf::SystemPaths *system_paths, Visit &&visit) {
+  if (name == nullptr)
+    return false;
+  const bool is_default = &ns == default_namespace();
+  auto allowed = [&](const char *path) {
+    return path_accessible(ns, path) && visit(path);
+  };
+  for (const char *p = name; *p != '\0'; ++p)
+    if (*p == '/')
+      return allowed(name);
+
+  if (requester != nullptr && origin == nullptr)
+    origin = requester->name();
+  if (requester != nullptr &&
+      elf::visit_path_list(elf::rpath_of(*requester), name, origin, allowed))
     return true;
-  for (size_t i = 0; i < set.count; ++i)
-    if (same_name(set.modules[i].name(), name) ||
-        same_file(set.modules[i].name(), name) ||
-        same_name(set.modules[i].soname(), name))
-      return true;
+  if (elf::visit_path_list(ns.ld_library_path, name, nullptr, allowed))
+    return true;
+  if (is_default && elf::visit_path_list(library_path, name, nullptr, allowed))
+    return true;
+  if (requester != nullptr &&
+      elf::visit_path_list(elf::runpath_of(*requester), name, origin, allowed))
+    return true;
+  if (is_default && system_paths != nullptr &&
+      elf::visit_path_list(system_paths->list(), name, nullptr, allowed))
+    return true;
+  if (elf::visit_path_list(ns.default_library_path, name, nullptr, allowed))
+    return true;
+  if (is_default)
+    for (const char *dir : elf::DEFAULT_SEARCH_PATHS) {
+      char path[elf::MAX_SEARCH_PATH];
+      if (elf::join_path(dir, name, path, sizeof(path)) && allowed(path))
+        return true;
+    }
   return false;
 }
 
-// The index of the module that is the file `name` would be loaded from, found
-// by device and inode so that a link to a library that is already open, or a
-// second name for it, is the library and not another copy of it. Null where
-// the name leads to no file or the file is not open.
-bool loaded_by_identity(const elf::ModuleSet &set, const char *name,
-                        const elf::Module *requester, const char *origin,
-                        const char *library_path,
-                        elf::SystemPaths *system_paths, size_t &found) {
+// Loads the object from the first place in the namespace it is found.
+cpp::optional<elf::LoadedModule>
+find_and_load_in(const Namespace &ns, const char *name,
+                 const elf::Module *requester, const char *origin,
+                 const char *library_path, elf::SystemPaths *system_paths,
+                 size_t page_size) {
+  elf::LoadedModule found;
+  const bool ok = visit_candidates_in(ns, name, requester, origin, library_path,
+                                      system_paths, [&](const char *path) {
+                                        auto loaded =
+                                            elf::load_module(path, page_size);
+                                        if (!loaded.has_value())
+                                          return false;
+                                        found = loaded.value();
+                                        return true;
+                                      });
+  if (!ok)
+    return cpp::nullopt;
+  return found;
+}
+
+// The index of a module which `ns` counts as loaded and which is `name`: by
+// the path it was opened under, the file that path comes to, or the name it
+// says it goes by. Failing that, a module which is the file `name` would be
+// loaded from, found by device and inode so that a link to a library that is
+// already open, or a second name for it, is the library and not another copy
+// of it. An object reached by two paths has to be one object, as it holds the
+// program's state of whatever it defines.
+bool find_loaded(const elf::ModuleSet &set, const Namespace &ns,
+                 const char *name, const elf::Module *requester,
+                 const char *origin, const char *library_path,
+                 elf::SystemPaths *system_paths, size_t &found) {
+  for (size_t i = 0; i < set.count; ++i) {
+    if (!namespace_sees_loaded(&ns, owner_of(set, i)))
+      continue;
+    if (same_name(set.modules[i].name(), name) ||
+        same_file(set.modules[i].name(), name) ||
+        same_name(set.modules[i].soname(), name)) {
+      found = i;
+      return true;
+    }
+  }
+
   dev_t device = 0;
   ino_t inode = 0;
-  if (!elf::locate_file(name, requester, origin, library_path, system_paths,
-                        device, inode))
+  if (!visit_candidates_in(ns, name, requester, origin, library_path,
+                           system_paths, [&](const char *path) {
+                             struct stat file;
+                             if (!linux_syscalls::newfstatat(AT_FDCWD, path,
+                                                             &file, 0) ||
+                                 (file.st_mode & S_IFMT) != S_IFREG)
+                               return false;
+                             device = file.st_dev;
+                             inode = file.st_ino;
+                             return true;
+                           }))
     return false;
   for (size_t i = 0; i < set.count; ++i) {
     const char *known = set.modules[i].name();
     struct stat existing;
-    if (known == nullptr || known[0] != '/' ||
+    if (!namespace_sees_loaded(&ns, owner_of(set, i)) || known == nullptr ||
+        known[0] != '/' ||
         !linux_syscalls::newfstatat(AT_FDCWD, known, &existing, 0))
       continue;
     if (existing.st_dev == device && existing.st_ino == inode) {
@@ -237,17 +330,76 @@ void run_init_array(const elf::Module &module) {
       functions[i]();
 }
 
+enum class Resolved { Missing, Existing, Loaded, NoMemory };
+
+// Puts a module that was just mapped at the end of the set, in `ns`.
+void append_module(elf::ModuleSet &set, const elf::LoadedModule &loaded,
+                   Namespace *ns) {
+  const size_t at = set.count;
+  set.modules[at] = loaded.module;
+  set.mappings[at] = loaded.mapping;
+  set.mappings[at].ns = ns;
+  // Nothing loaded now has a place in the block each thread already has, so
+  // there is no offset from a thread pointer to record. Each thread takes a
+  // block of its own for it, the first time it asks.
+  set.tls_offsets[at] = 0;
+  set.references[at] = 1;
+  elf::set_module_count(set, at + 1);
+}
+
+// Finds the library `name` for something in `ns`, loading it if it is not
+// there. It is looked for in the namespace first, loaded or not, and only
+// then in the namespaces that this one is linked to for that name.
+Resolved resolve(elf::ModuleSet &set, Namespace *ns, const char *name,
+                 const elf::Module *requester, const char *origin,
+                 const char *library_path, elf::SystemPaths *system_paths,
+                 size_t &index) {
+  if (find_loaded(set, *ns, name, requester, origin, library_path, system_paths,
+                  index))
+    return Resolved::Existing;
+  if (!make_room(set))
+    return Resolved::NoMemory;
+  auto loaded = find_and_load_in(*ns, name, requester, origin, library_path,
+                                 system_paths, set.page_size);
+  if (loaded.has_value()) {
+    index = set.count;
+    append_module(set, loaded.value(), ns);
+    return Resolved::Loaded;
+  }
+
+  bool slash = false;
+  for (const char *p = name; *p != '\0'; ++p)
+    slash = slash || *p == '/';
+  if (slash)
+    return Resolved::Missing;
+  for (const Namespace *from = ns; from != nullptr; from = from->shared_from) {
+    for (const NamespaceLink *link = from->links; link != nullptr;
+         link = link->next) {
+      if (!link_allows(*link, name))
+        continue;
+      Namespace *target = link->target;
+      if (find_loaded(set, *target, name, nullptr, nullptr, library_path,
+                      system_paths, index))
+        return Resolved::Existing;
+      if (!make_room(set))
+        return Resolved::NoMemory;
+      auto other = find_and_load_in(*target, name, nullptr, nullptr,
+                                    library_path, system_paths, set.page_size);
+      if (other.has_value()) {
+        index = set.count;
+        append_module(set, other.value(), target);
+        return Resolved::Loaded;
+      }
+    }
+  }
+  return Resolved::Missing;
+}
+
 } // anonymous namespace
 
 namespace internal {
 
-void *dlopen_impl(const char *path, int mode) {
-  // The run path that applies is the one belonging to whatever called, which
-  // is found from where the call is returning to. Taken before anything else,
-  // so nothing stands between this and the caller.
-  const ElfW(Addr) caller =
-      reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0));
-
+void *dlopen_in(const char *path, int mode, ElfW(Addr) caller, Namespace *ns) {
   // A statically linked program has no module set at all: the record is
   // weak and nothing defines it, so the pointer is null rather than a set
   // that says it is not linked.
@@ -266,21 +418,6 @@ void *dlopen_impl(const char *path, int mode) {
   if (path == nullptr)
     return dl::handle_for(0);
 
-  for (size_t i = 0; i < set.count; ++i) {
-    if (same_name(set.modules[i].name(), path) ||
-        same_file(set.modules[i].name(), path) ||
-        same_name(set.modules[i].soname(), path)) {
-      if ((mode & GLOBAL) != 0 && set.mappings[i].local)
-        elf::make_global(set, i);
-      ++set.references[i];
-      return dl::handle_for(i);
-    }
-  }
-
-  const char *library_path =
-      elf::library_path_from(reinterpret_cast<char **>(environ));
-  elf::SystemPaths system_paths;
-
   const elf::Module *caller_module = nullptr;
   size_t caller_index = 0;
   for (size_t i = 0; i < set.count; ++i) {
@@ -291,6 +428,20 @@ void *dlopen_impl(const char *path, int mode) {
     }
   }
 
+  // Unless it was asked for, the namespace is the caller's, or the anonymous
+  // one where the caller is not a module this loaded.
+  if (ns == nullptr)
+    ns = namespace_of_address(caller, true);
+  ns = canonical(ns);
+  // The run path that applies is the one belonging to whatever called, which
+  // only means something in the namespace that is its own.
+  if (caller_module != nullptr && owner_of(set, caller_index) != ns)
+    caller_module = nullptr;
+
+  const char *library_path =
+      elf::library_path_from(reinterpret_cast<char **>(environ));
+  elf::SystemPaths system_paths;
+
   // The executable, which is always the first module, takes its run path
   // against the file it really is, as it did when the process started.
   char executable_path[elf::MAX_EXECUTABLE_PATH];
@@ -299,16 +450,13 @@ void *dlopen_impl(const char *path, int mode) {
     caller_origin = elf::executable_origin(
         caller_module->name(), executable_path, sizeof(executable_path));
 
-  // The same file under a name the set does not know it by, such as a link
-  // to a library that is already open. glibc finds those by device and inode
-  // too, and an object opened twice would have two copies of its state.
-  size_t same = 0;
-  if (loaded_by_identity(set, path, caller_module, caller_origin, library_path,
-                         &system_paths, same)) {
-    if ((mode & GLOBAL) != 0 && set.mappings[same].local)
-      elf::make_global(set, same);
-    ++set.references[same];
-    return dl::handle_for(same);
+  size_t existing = 0;
+  if (find_loaded(set, *ns, path, caller_module, caller_origin, library_path,
+                  &system_paths, existing)) {
+    if ((mode & GLOBAL) != 0 && set.mappings[existing].local)
+      elf::make_global(set, existing);
+    ++set.references[existing];
+    return dl::handle_for(existing);
   }
 
   // RTLD_NOLOAD asks only for an object that is in the process already.
@@ -324,56 +472,45 @@ void *dlopen_impl(const char *path, int mode) {
 
   link::announce_link_maps(r_debug::RT_ADD);
 
-  auto loaded = elf::find_and_load(path, caller_module, caller_origin,
-                                   library_path, &system_paths, set.page_size);
-  if (!loaded.has_value()) {
+  const size_t first = set.count;
+  size_t handle_index = 0;
+  const Resolved top = resolve(set, ns, path, caller_module, caller_origin,
+                               library_path, &system_paths, handle_index);
+  if (top == Resolved::Existing) {
+    // Found in a namespace this one is linked to, which is where it stays.
+    if ((mode & GLOBAL) != 0 && set.mappings[handle_index].local)
+      elf::make_global(set, handle_index);
+    ++set.references[handle_index];
     link::announce_link_maps(r_debug::RT_CONSISTENT);
-    dl::set_error(path, "cannot open shared object file");
+    return dl::handle_for(handle_index);
+  }
+  if (top != Resolved::Loaded) {
+    link::announce_link_maps(r_debug::RT_CONSISTENT);
+    dl::set_error(path, ns->isolated
+                            ? "cannot open shared object file in this namespace"
+                            : "cannot open shared object file");
     return nullptr;
   }
 
-  const size_t first = set.count;
-  set.modules[first] = loaded.value().module;
-  set.mappings[first] = loaded.value().mapping;
-  // Nothing loaded now has a place in the block each thread already has, so
-  // there is no offset from a thread pointer to record. Each thread takes a
-  // block of its own for it, the first time it asks.
-  set.tls_offsets[first] = 0;
-  set.references[first] = 1;
-  elf::set_module_count(set, first + 1);
-
   // What the object was linked against has to be there too, and so does what
-  // that was linked against. Anything already loaded is left where it is and
-  // simply referred to again.
+  // that was linked against, each found as the namespace of what needs it
+  // finds it. Anything already loaded is left where it is and simply
+  // referred to again.
   bool failed = false;
   const char *missing = nullptr;
   for (size_t i = first; i < set.count && !failed; ++i) {
     const elf::Module requester = set.modules[i];
+    Namespace *home = owner_of(set, i);
     requester.for_each_needed([&](const char *name) {
-      size_t same = 0;
-      if (failed || already_loaded(set, name) ||
-          loaded_by_identity(set, name, &requester, nullptr, library_path,
-                             &system_paths, same))
+      if (failed || elf::is_glibc_interpreter(name))
         return;
-      if (!make_room(set)) {
+      size_t found = 0;
+      const Resolved result = resolve(set, home, name, &requester, nullptr,
+                                      library_path, &system_paths, found);
+      if (result == Resolved::Missing || result == Resolved::NoMemory) {
         failed = true;
         missing = name;
-        return;
       }
-      auto dependency =
-          elf::find_and_load(name, &requester, nullptr, library_path,
-                             &system_paths, set.page_size);
-      if (!dependency.has_value()) {
-        failed = true;
-        missing = name;
-        return;
-      }
-      const size_t at = set.count;
-      set.modules[at] = dependency.value().module;
-      set.mappings[at] = dependency.value().mapping;
-      set.tls_offsets[at] = 0;
-      set.references[at] = 1;
-      elf::set_module_count(set, at + 1);
     });
   }
 
@@ -448,13 +585,21 @@ void *dlopen_impl(const char *path, int mode) {
     for (size_t i = set.count; i > first; --i)
       run_init_array(set.modules[i - 1]);
   }
-  return dl::handle_for(first);
+  return dl::handle_for(handle_index);
+}
+
+void *dlopen_impl(const char *path, int mode) {
+  return dlopen_in(path, mode,
+                   reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0)),
+                   nullptr);
 }
 
 } // namespace internal
 
 LLVM_LIBC_FUNCTION(void *, dlopen, (const char *path, int mode)) {
-  return internal::dlopen_impl(path, mode);
+  return internal::dlopen_in(
+      path, mode, reinterpret_cast<ElfW(Addr)>(__builtin_return_address(0)),
+      nullptr);
 }
 
 } // namespace LIBC_NAMESPACE_DECL

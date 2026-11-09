@@ -109,6 +109,27 @@ target_compile_options(libc-test-dl-lazy-object PRIVATE
 target_link_options(libc-test-dl-lazy-object PRIVATE -nostdlib
   -Wl,-z,lazy -Wl,-z,undefs)
 
+# Two copies of one library under one name, in two directories, and a library
+# that needs it by name. Nothing gives the user a path to either.
+foreach(copy 1 2)
+  add_library(libc-test-dl-ns-${copy} SHARED dl_ns_object.cpp)
+  target_compile_options(libc-test-dl-ns-${copy} PRIVATE
+    -fPIC -fno-exceptions -fno-rtti -DLLVM_LIBC_TEST_NS_WHICH=${copy})
+  target_link_options(libc-test-dl-ns-${copy} PRIVATE -nostdlib)
+  set_target_properties(libc-test-dl-ns-${copy} PROPERTIES
+    OUTPUT_NAME nstest
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ns${copy})
+endforeach()
+add_library(libc-test-dl-ns-user SHARED dl_ns_user.cpp)
+target_compile_options(libc-test-dl-ns-user PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-ns-user PRIVATE -nostdlib)
+target_link_libraries(libc-test-dl-ns-user PRIVATE libc-test-dl-ns-1)
+set_target_properties(libc-test-dl-ns-user PROPERTIES
+  OUTPUT_NAME nsuser
+  SKIP_BUILD_RPATH TRUE
+  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/nsuser)
+
 # Builds one such program from a single source and adds it to the integration
 # tests.
 function(add_libc_dynamic_test name)
@@ -417,3 +438,17 @@ add_custom_target(libc.test.integration.dynamic.static_pie_test
   DEPENDS static_pie_test)
 add_dependencies(libc-integration-tests
   libc.test.integration.dynamic.static_pie_test)
+
+add_libc_dynamic_test(
+  dl_namespace_test
+  SRCS
+    dl_namespace_test.cpp
+  COMPILE_OPTIONS
+    -DLLVM_LIBC_TEST_NS_ONE="$<TARGET_FILE_DIR:libc-test-dl-ns-1>"
+    -DLLVM_LIBC_TEST_NS_TWO="$<TARGET_FILE_DIR:libc-test-dl-ns-2>"
+    -DLLVM_LIBC_TEST_NS_USER="$<TARGET_FILE_DIR:libc-test-dl-ns-user>"
+  DEPENDS
+    libc-test-dl-ns-1
+    libc-test-dl-ns-2
+    libc-test-dl-ns-user
+)
