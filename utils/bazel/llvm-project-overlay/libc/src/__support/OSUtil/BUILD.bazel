@@ -248,6 +248,35 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "linux_realpath",
+    hdrs = ["linux/realpath.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":linux_stat_kernel_statx_types",
+        ":path",
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcwd",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:readlink",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/string/memory_utils:memory_utils",
+    ],
+)
+
+libc_support_library(
     name = "linux_vdso",
     srcs = ["linux/vdso.cpp"],
     hdrs = ["linux/vdso.h"],
