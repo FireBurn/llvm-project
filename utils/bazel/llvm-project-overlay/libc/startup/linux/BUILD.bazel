@@ -52,6 +52,7 @@ libc_startup_library(
         ":gnu_property_section",
         ":irelative_hdr",
         "//libc:__support_macros_config",
+        "//libc:__support_macros_properties_architectures",
         "//libc:__support_osutil_linux_auxv",
         "//libc:__support_osutil_linux_syscall_wrappers_exit_group",
         "//libc:__support_osutil_syscall",
