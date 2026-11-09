@@ -12,16 +12,19 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/android/android_init_anonymous_namespace.h"
+#include "src/__support/CPP/mutex.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/dlfcn/dl_internal.h"
+#include "src/dlfcn/dl_namespace.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(bool, android_init_anonymous_namespace,
-                   (const char *, const char *)) {
-  dl::set_error("linker namespaces are not supported");
-  return false;
+                   (const char *shared_libs_sonames,
+                    const char *library_search_path)) {
+  cpp::lock_guard lock(dl::dl_mutex);
+  return dl::init_anonymous_namespace(shared_libs_sonames, library_search_path);
 }
 
 } // namespace LIBC_NAMESPACE_DECL
