@@ -2,6 +2,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     # android/api-level.h and android/fdsan.h entrypoints
     libc.src.android.android_get_application_target_sdk_version
     libc.src.android.android_get_device_api_level
+    libc.src.android.android_getaddrinfofornet
     libc.src.android.android_fdsan_close_with_tag
     libc.src.android.android_fdsan_create_owner_tag
     libc.src.android.android_fdsan_exchange_owner_tag

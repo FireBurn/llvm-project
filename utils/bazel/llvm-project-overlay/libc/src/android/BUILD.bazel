@@ -176,6 +176,18 @@ libc_function(
 )
 
 libc_function(
+    name = "getaddrinfofornet",
+    srcs = ["android_getaddrinfofornet.cpp"],
+    hdrs = ["android_getaddrinfofornet.h"],
+    deps = [
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/netdb:getaddrinfo",
+    ],
+)
+
+libc_function(
     name = "get_device_api_level",
     srcs = ["android_get_device_api_level.cpp"],
     hdrs = ["android_get_device_api_level.h"],
