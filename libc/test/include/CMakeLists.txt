@@ -484,6 +484,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_prctl_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_prctl_test.cpp
+  DEPENDS
+    libc.include.sys_prctl
+)
+
+add_libc_test(
   malloc_scudo_macros_test
   SUITE
     libc-include-tests
