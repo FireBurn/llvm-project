@@ -29,6 +29,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dl_namespace",
+    srcs = ["dl_namespace.cpp"],
+    hdrs = ["dl_namespace.h"],
+    deps = [
+        ":dl_internal",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/include:llvm_libc_macros_android_dlext_macros",
+        "//libc/src/__support/OSUtil:linux_realpath",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:elf_passive_abi",
+    ],
+)
+
+libc_support_library(
     name = "lazy_bind",
     srcs = ["lazy_bind.cpp"],
     hdrs = ["lazy_bind.h"],
