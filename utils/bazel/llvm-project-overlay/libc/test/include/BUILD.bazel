@@ -40,6 +40,17 @@ libc_test(
 )
 
 libc_test(
+    name = "fcntl_kernel_header_test",
+    srcs = ["fcntl_kernel_header_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc:llvm_libc_types_struct_f_owner_ex",
+        "//libc:llvm_libc_types_struct_flock",
+        "//libc:llvm_libc_types_struct_flock64",
+    ],
+)
+
+libc_test(
     name = "android_statx_test",
     srcs = ["android_statx_test.cpp"],
     full_build_only = True,
