@@ -2273,3 +2273,13 @@ add_libc_test(
   DEPENDS
     libc.include.sys_types
 )
+
+add_libc_test(
+  threads_values_test
+  SUITE
+    libc-include-tests
+  SRCS
+    threads_values_test.cpp
+  DEPENDS
+    libc.include.threads
+)

@@ -21,21 +21,21 @@ types:
   - type_name: tss_dtor_t
 enums:
   - name: mtx_plain
-    value: null
+    value: 0
   - name: mtx_recursive
-    value: null
+    value: 1
   - name: mtx_timed
-    value: null
-  - name: thrd_timedout
-    value: null
+    value: 2
   - name: thrd_success
-    value: null
+    value: 0
   - name: thrd_busy
-    value: null
+    value: 1
   - name: thrd_error
-    value: null
+    value: 2
   - name: thrd_nomem
-    value: null
+    value: 3
+  - name: thrd_timedout
+    value: 4
 objects: []
 functions:
   - name: call_once
