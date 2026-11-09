@@ -10,6 +10,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  android_getaddrinfofornet
+  SRCS
+    android_getaddrinfofornet.cpp
+  HDRS
+    android_getaddrinfofornet.h
+  DEPENDS
+    libc.hdr.types.struct_addrinfo
+    libc.include.android_resolv_netid
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.netdb.getaddrinfo
+)
+
+add_entrypoint_object(
   android_get_device_api_level
   SRCS
     android_get_device_api_level.cpp
