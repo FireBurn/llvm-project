@@ -174,7 +174,7 @@ libc_support_library(
     name = "struct_f_owner_ex",
     hdrs = ["struct_f_owner_ex.h"],
     deps = select({
-        "//libc:full_build": [],
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_f_owner_ex"],
         "//conditions:default": ["//libc/hdr:fcntl_overlay"],
     }),
 )
@@ -183,7 +183,7 @@ libc_support_library(
     name = "struct_flock",
     hdrs = ["struct_flock.h"],
     deps = select({
-        "//libc:full_build": [],
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_flock"],
         "//conditions:default": ["//libc/hdr:fcntl_overlay"],
     }),
 )
@@ -192,7 +192,7 @@ libc_support_library(
     name = "struct_flock64",
     hdrs = ["struct_flock64.h"],
     deps = select({
-        "//libc:full_build": [],
+        "//libc:full_build": ["//libc/include:llvm_libc_types_struct_flock64"],
         "//conditions:default": ["//libc/hdr:fcntl_overlay"],
     }),
 )

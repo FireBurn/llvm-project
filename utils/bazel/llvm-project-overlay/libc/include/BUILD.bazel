@@ -1395,6 +1395,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_f_owner_ex",
+    hdrs = ["llvm-libc-types/struct_f_owner_ex.h"],
+    deps = [":llvm_libc_types_pid_t"],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_flock",
+    hdrs = ["llvm-libc-types/struct_flock.h"],
+    deps = [
+        ":llvm_libc_types_off_t",
+        ":llvm_libc_types_pid_t",
+    ],
+)
+
+libc_support_library(
+    name = "llvm_libc_types_struct_flock64",
+    hdrs = ["llvm-libc-types/struct_flock64.h"],
+    deps = [
+        ":llvm_libc_types_off64_t",
+        ":llvm_libc_types_pid_t",
+    ],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_tcp_info",
     hdrs = ["llvm-libc-types/struct_tcp_info.h"],
     deps = [":llvm_libc_macros_stdint_macros"],
