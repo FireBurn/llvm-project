@@ -22,6 +22,10 @@
 #define AI_ADDRCONFIG 0x0020
 #define AI_NUMERICSERV 0x0400
 
+// The AI_ flags getaddrinfo accepts in its hints.
+#define AI_MASK                                                                \
+  (AI_PASSIVE | AI_CANONNAME | AI_NUMERICHOST | AI_NUMERICSERV | AI_ADDRCONFIG)
+
 #define EAI_BADFLAGS -1
 #define EAI_NONAME -2
 #define EAI_AGAIN -3
@@ -32,6 +36,10 @@
 #define EAI_MEMORY -10
 #define EAI_SYSTEM -11
 #define EAI_OVERFLOW -12
+
+// Two more, which the resolver Android uses reports.
+#define EAI_BADHINTS -13
+#define EAI_PROTOCOL -14
 
 // Two the GNU library added, which code written against it uses.
 #define EAI_NODATA -5
@@ -62,6 +70,9 @@
 // What h_errno holds when the failure is in errno instead, and when none is.
 #define NETDB_INTERNAL -1
 #define NETDB_SUCCESS 0
+
+// What separates an address from the scope it is in, as in fe80::1%eth0.
+#define SCOPE_DELIMITER '%'
 
 // Where the hosts file is.
 #ifdef __ANDROID__
