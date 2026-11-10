@@ -9,6 +9,7 @@ add_libc_test(
   SRCS
     creat_test.cpp
   DEPENDS
+    libc.hdr.fcntl_macros
     libc.hdr.sys_stat_macros
     libc.include.fcntl
     libc.src.fcntl.creat
