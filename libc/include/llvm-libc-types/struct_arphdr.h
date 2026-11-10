@@ -14,6 +14,11 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_ARPHDR_H
 #define LLVM_LIBC_TYPES_STRUCT_ARPHDR_H
 
+#ifdef __ANDROID__
+// Android code reads the kernel's definition through <linux/if_arp.h> as well;
+// two of them in one translation unit do not compile.
+#include <linux/if_arp.h>
+#else
 // The fixed part of an ARP message. The four addresses which follow are of
 // the lengths this names, so they cannot be members.
 struct arphdr {
@@ -23,5 +28,6 @@ struct arphdr {
   unsigned char ar_pln;      // How long the protocol ones are.
   unsigned short int ar_op;  // Which of the operations it is.
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_ARPHDR_H
