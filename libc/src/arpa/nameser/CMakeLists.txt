@@ -119,3 +119,175 @@ add_entrypoint_object(
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
 )
+
+add_header_library(
+  ns_name_codec
+  HDRS
+    ns_name_codec.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_msg_getflag
+  SRCS
+    ns_msg_getflag.cpp
+  HDRS
+    ns_msg_getflag.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_ntop
+  SRCS
+    ns_name_ntop.cpp
+  HDRS
+    ns_name_ntop.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_pton
+  SRCS
+    ns_name_pton.cpp
+  HDRS
+    ns_name_pton.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_unpack
+  SRCS
+    ns_name_unpack.cpp
+  HDRS
+    ns_name_unpack.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_pack
+  SRCS
+    ns_name_pack.cpp
+  HDRS
+    ns_name_pack.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_compress
+  SRCS
+    ns_name_compress.cpp
+  HDRS
+    ns_name_compress.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_skip
+  SRCS
+    ns_name_skip.cpp
+  HDRS
+    ns_name_skip.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_name_rollback
+  SRCS
+    ns_name_rollback.cpp
+  HDRS
+    ns_name_rollback.h
+  DEPENDS
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_makecanon
+  SRCS
+    ns_makecanon.cpp
+  HDRS
+    ns_makecanon.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_samename
+  SRCS
+    ns_samename.cpp
+  HDRS
+    ns_samename.h
+  DEPENDS
+    .ns_makecanon
+    .ns_name_codec
+    libc.hdr.errno_macros
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  ns_sprintrr
+  SRCS
+    ns_sprintrr.cpp
+  HDRS
+    ns_sprintrr.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.hdr.types.ns_rr
+    libc.hdr.types.size_t
+    libc.src.__support.common
+    libc.src.__support.libc_errno
+    libc.src.__support.macros.config
+)
