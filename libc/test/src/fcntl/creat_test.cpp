@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "hdr/fcntl_macros.h"
 #include "hdr/sys_stat_macros.h"
 #include "src/fcntl/creat.h"
 #include "src/fcntl/open.h"
@@ -30,4 +31,18 @@ TEST_F(LlvmLibcCreatTest, CreatAndOpen) {
   ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 
   // TODO: 'remove' the test file at the end.
+}
+
+// O_LARGEFILE must not collide with another flag: it was O_DIRECTORY on aarch64, and the kernel refuses O_CREAT with that.
+TEST_F(LlvmLibcCreatTest, OpenWithLargeFileFlag) {
+  using LIBC_NAMESPACE::testing::ErrnoSetterMatcher::Succeeds;
+  static_assert((O_LARGEFILE & (O_DIRECTORY | O_NOFOLLOW | O_CREAT)) == 0,
+                "O_LARGEFILE overlaps another open flag");
+  constexpr const char *TEST_FILE = "testdata/open_largefile.test";
+  int fd = LIBC_NAMESPACE::open(
+      TEST_FILE, O_RDWR | O_CREAT | O_LARGEFILE | O_NOFOLLOW | O_CLOEXEC,
+      S_IRWXU);
+  ASSERT_ERRNO_SUCCESS();
+  ASSERT_GT(fd, 0);
+  ASSERT_THAT(LIBC_NAMESPACE::close(fd), Succeeds(0));
 }
