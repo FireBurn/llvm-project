@@ -29,6 +29,12 @@
 #define NS_INADDRSZ 4     // Size of an IPv4 address.
 #define NS_IN6ADDRSZ 16   // Size of an IPv6 address.
 #define NS_CMPRSFLGS 0xc0 // Flag bits marking a compressed name pointer.
+
+// The EDNS option codes the resolver sends, and the flag in the options.
+#define NS_OPT_DNSSEC_OK 0x8000U
+#define NS_OPT_NSID 3
+#define NS_OPT_PADDING 12
+
 #define NS_DEFAULTPORT 53 // Server port for both UDP and TCP.
 
 // Reading and writing the fields of a message. The sizes and the names are
