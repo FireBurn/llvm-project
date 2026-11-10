@@ -40,7 +40,9 @@
 // Multicast listener discovery.
 #define MLD_LISTENER_QUERY 130
 #define MLD_LISTENER_REPORT 131
-#define MLD_LISTENER_REDUCTION 132
+#define MLD_LISTENER_DONE 132
+#define MLD_LISTENER_REDUCTION MLD_LISTENER_DONE
+#define MLDV2_LISTENER_REPORT 143
 
 // Why the destination could not be reached.
 #define ICMP6_DST_UNREACH_NOROUTE 0
