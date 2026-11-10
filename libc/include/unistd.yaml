@@ -1013,6 +1013,13 @@ functions:
       - type: int
       - type: const char *
       - type: int
+  - name: ualarm
+    standards:
+      - bsd
+    return_type: useconds_t
+    arguments:
+      - type: useconds_t
+      - type: useconds_t
   - name: usleep
     standards:
       - posix

@@ -753,6 +753,7 @@ set(TARGET_LIBC_ENTRYPOINTS
     libc.src.unistd.acct
     # unistd.h entrypoints
     libc.src.unistd.alarm
+    libc.src.unistd.ualarm
     libc.src.unistd.access
     libc.src.unistd.brk
     libc.src.unistd.chdir
