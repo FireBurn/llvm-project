@@ -189,6 +189,12 @@
     __a->s6_addr[0] == 0xfe && (__a->s6_addr[1] & 0xc0) == 0xc0;               \
   }))
 
+// bionic's unique local address test (RFC 4193), which the Android network code
+// uses and which no standard header has.
+#ifdef __ANDROID__
+#define IN6_IS_ADDR_ULA(a) ((((const unsigned char *)(a))[0] & 0xfe) == 0xfc)
+#endif
+
 #define IN6_IS_ADDR_V4MAPPED(a)                                                \
   (__extension__({                                                             \
     const struct in6_addr *__a = (const struct in6_addr *)(a);                 \
