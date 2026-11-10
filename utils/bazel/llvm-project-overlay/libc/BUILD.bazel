@@ -6663,6 +6663,167 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "arpa_nameser_ns_name_codec",
+    hdrs = ["src/arpa/nameser/ns_name_codec.h"],
+    deps = [
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_makecanon",
+    srcs = ["src/arpa/nameser/ns_makecanon.cpp"],
+    hdrs = ["src/arpa/nameser/ns_makecanon.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_msg_getflag",
+    srcs = ["src/arpa/nameser/ns_msg_getflag.cpp"],
+    hdrs = ["src/arpa/nameser/ns_msg_getflag.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":types_ns_msg",
+    ],
+)
+
+libc_function(
+    name = "ns_name_compress",
+    srcs = ["src/arpa/nameser/ns_name_compress.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_compress.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_name_ntop",
+    srcs = ["src/arpa/nameser/ns_name_ntop.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_ntop.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_name_pack",
+    srcs = ["src/arpa/nameser/ns_name_pack.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_pack.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "ns_name_pton",
+    srcs = ["src/arpa/nameser/ns_name_pton.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_pton.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_name_rollback",
+    srcs = ["src/arpa/nameser/ns_name_rollback.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_rollback.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "ns_name_skip",
+    srcs = ["src/arpa/nameser/ns_name_skip.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_skip.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+    ],
+)
+
+libc_function(
+    name = "ns_name_unpack",
+    srcs = ["src/arpa/nameser/ns_name_unpack.cpp"],
+    hdrs = ["src/arpa/nameser/ns_name_unpack.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
+    name = "ns_samename",
+    srcs = ["src/arpa/nameser/ns_samename.cpp"],
+    hdrs = ["src/arpa/nameser/ns_samename.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":arpa_nameser_ns_name_codec",
+        ":hdr_errno_macros",
+        ":ns_makecanon",
+    ],
+)
+
+libc_function(
+    name = "ns_sprintrr",
+    srcs = ["src/arpa/nameser/ns_sprintrr.cpp"],
+    hdrs = ["src/arpa/nameser/ns_sprintrr.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":hdr_errno_macros",
+        ":types_ns_msg",
+        ":types_ns_rr",
+        ":types_size_t",
+    ],
+)
+
 libc_function(
     name = "ns_name_uncompress",
     srcs = ["src/arpa/nameser/ns_name_uncompress.cpp"],

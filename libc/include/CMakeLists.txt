@@ -1942,6 +1942,7 @@ add_header_macro(
     .llvm-libc-macros.arpa_nameser_macros
     .llvm-libc-types.HEADER
     .llvm-libc-types.ns_class
+    .llvm-libc-types.ns_flag
     .llvm-libc-types.ns_msg
     .llvm-libc-types.ns_rr
     .llvm-libc-types.ns_sect
