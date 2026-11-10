@@ -20,3 +20,27 @@ add_libc_test(
     libc.src.arpa.nameser.ns_skiprr
     libc.test.UnitTest.ErrnoCheckingTest
 )
+
+add_libc_test(
+  ns_name_test
+  SUITE
+    libc-arpa-nameser-tests
+  SRCS
+    ns_name_test.cpp
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.types.ns_msg
+    libc.hdr.types.ns_rr
+    libc.src.arpa.nameser.ns_makecanon
+    libc.src.arpa.nameser.ns_msg_getflag
+    libc.src.arpa.nameser.ns_name_compress
+    libc.src.arpa.nameser.ns_name_ntop
+    libc.src.arpa.nameser.ns_name_pack
+    libc.src.arpa.nameser.ns_name_pton
+    libc.src.arpa.nameser.ns_name_rollback
+    libc.src.arpa.nameser.ns_name_skip
+    libc.src.arpa.nameser.ns_name_unpack
+    libc.src.arpa.nameser.ns_samename
+    libc.src.arpa.nameser.ns_sprintrr
+    libc.test.UnitTest.ErrnoCheckingTest
+)

@@ -27,3 +27,24 @@ libc_test(
         "//libc:types_ns_rr",
     ],
 )
+
+libc_test(
+    name = "ns_name_test",
+    srcs = ["ns_name_test.cpp"],
+    deps = [
+        "//libc:hdr_errno_macros",
+        "//libc:ns_makecanon",
+        "//libc:ns_msg_getflag",
+        "//libc:ns_name_compress",
+        "//libc:ns_name_ntop",
+        "//libc:ns_name_pack",
+        "//libc:ns_name_pton",
+        "//libc:ns_name_rollback",
+        "//libc:ns_name_skip",
+        "//libc:ns_name_unpack",
+        "//libc:ns_samename",
+        "//libc:ns_sprintrr",
+        "//libc:types_ns_msg",
+        "//libc:types_ns_rr",
+    ],
+)
