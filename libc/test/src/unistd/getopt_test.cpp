@@ -269,3 +269,27 @@ TEST_F(LlvmLibcGetoptTest, DashThenColonReportsAMissingArgumentWithColon) {
   test_globals::opterr = 0;
   EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "-:c:"), (int)':');
 }
+
+// "w::" is the GNU form of an optional argument: it is taken from the rest of
+// the same argument and never from the next one, which stays an option.
+TEST_F(LlvmLibcGetoptTest, OptionalArgumentIsOnlyTheAttachedOne) {
+  array<char *, 5> argv{"prog"_c, "-w"_c, "-v"_c, "-w5"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "vw::"), (int)'w');
+  EXPECT_EQ(test_globals::optarg, nullptr);
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "vw::"), (int)'v');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "vw::"), (int)'w');
+  EXPECT_STREQ(test_globals::optarg, "5");
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(4, argv.data(), "vw::"), -1);
+  EXPECT_EQ(test_globals::optind, 4);
+}
+
+// A cluster ends at an optional argument as it does at a required one.
+TEST_F(LlvmLibcGetoptTest, OptionalArgumentTakesTheRestOfACluster) {
+  array<char *, 3> argv{"prog"_c, "-vw12"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "vw::"), (int)'v');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "vw::"), (int)'w');
+  EXPECT_STREQ(test_globals::optarg, "12");
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "vw::"), -1);
+}
