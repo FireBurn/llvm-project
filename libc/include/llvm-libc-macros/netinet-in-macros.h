@@ -193,6 +193,16 @@
 // uses and which no standard header has.
 #ifdef __ANDROID__
 #define IN6_IS_ADDR_ULA(a) ((((const unsigned char *)(a))[0] & 0xfe) == 0xfc)
+
+// The scope of an IPv6 multicast address and the values it takes, which
+// bionic's <netinet/in6.h> has and Android's address selection uses.
+#define IPV6_ADDR_SCOPE_NODELOCAL 0x01
+#define IPV6_ADDR_SCOPE_INTFACELOCAL 0x01
+#define IPV6_ADDR_SCOPE_LINKLOCAL 0x02
+#define IPV6_ADDR_SCOPE_SITELOCAL 0x05
+#define IPV6_ADDR_SCOPE_ORGLOCAL 0x08
+#define IPV6_ADDR_SCOPE_GLOBAL 0x0e
+#define IPV6_ADDR_MC_SCOPE(a) (((const unsigned char *)(a))[1] & 0x0f)
 #endif
 
 #define IN6_IS_ADDR_V4MAPPED(a)                                                \
