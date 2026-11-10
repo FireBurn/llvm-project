@@ -260,6 +260,12 @@
 #ifndef __predict_false
 #define __predict_false(exp) __builtin_expect((exp) != 0, 0)
 #endif
+
+// Android's own headers mark what the library keeps to itself with this.
+#ifndef __LIBC_HIDDEN__
+#define __LIBC_HIDDEN__ __attribute__((__visibility__("hidden")))
+#endif
+
 #endif // __ANDROID__
 
 #endif // _SYS_CDEFS_H
