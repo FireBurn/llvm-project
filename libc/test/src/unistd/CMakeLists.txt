@@ -32,6 +32,22 @@ add_libc_test(
 )
 
 add_libc_test(
+  ualarm_test
+  SUITE
+    libc-unistd-tests
+  SRCS
+    ualarm_test.cpp
+  DEPENDS
+    libc.hdr.signal_macros
+    libc.hdr.types.struct_timespec
+    libc.hdr.types.useconds_t
+    libc.include.unistd
+    libc.src.signal.signal
+    libc.src.time.nanosleep
+    libc.src.unistd.ualarm
+)
+
+add_libc_test(
   access_test
   SUITE
     libc-unistd-tests
