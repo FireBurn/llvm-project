@@ -2214,6 +2214,16 @@ foreach(target ${TARGET_PUBLIC_HEADERS})
 endforeach()
 
 add_libc_test(
+  sysexits_macros_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sysexits_macros_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-macros.sysexits_macros
+)
+
+add_libc_test(
   netinet_icmp6_macros_test
   SUITE
     libc-include-tests
