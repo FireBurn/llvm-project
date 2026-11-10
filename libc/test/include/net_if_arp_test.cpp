@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "include/llvm-libc-macros/net-if-arp-macros.h"
+#include "include/llvm-libc-types/struct_arphdr.h"
 #include "include/llvm-libc-types/struct_arpreq.h"
 #include "include/llvm-libc-types/struct_arpreq_old.h"
 #include "test/UnitTest/Test.h"
@@ -47,4 +48,14 @@ TEST(LlvmLibcNetIfArpTest, FlagsAreDistinctBits) {
     ASSERT_EQ(seen & f, 0);
     seen |= f;
   }
+}
+
+// The fixed part of an ARP message, as the kernel lays it out.
+TEST(LlvmLibcNetIfArpTest, ArphdrLayout) {
+  EXPECT_EQ(sizeof(struct arphdr), size_t(8));
+  EXPECT_EQ(offsetof(struct arphdr, ar_hrd), size_t(0));
+  EXPECT_EQ(offsetof(struct arphdr, ar_pro), size_t(2));
+  EXPECT_EQ(offsetof(struct arphdr, ar_hln), size_t(4));
+  EXPECT_EQ(offsetof(struct arphdr, ar_pln), size_t(5));
+  EXPECT_EQ(offsetof(struct arphdr, ar_op), size_t(6));
 }
