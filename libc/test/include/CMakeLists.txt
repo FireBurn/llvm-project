@@ -1139,6 +1139,7 @@ add_libc_test(
     net_if_arp_test.cpp
   DEPENDS
     libc.include.llvm-libc-macros.net_if_arp_macros
+    libc.include.llvm-libc-types.struct_arphdr
     libc.include.llvm-libc-types.struct_arpreq
     libc.include.llvm-libc-types.struct_arpreq_old
 )
