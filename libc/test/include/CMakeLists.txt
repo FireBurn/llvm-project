@@ -782,6 +782,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  limits_android_float_test
+  SUITE
+    libc-include-tests
+  SRCS
+    limits_android_float_test.cpp
+  DEPENDS
+    libc.include.limits
+)
+
+add_libc_test(
   netinet_igmp_test
   SUITE
     libc-include-tests
