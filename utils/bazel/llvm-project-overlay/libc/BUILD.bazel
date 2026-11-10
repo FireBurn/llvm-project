@@ -39177,6 +39177,19 @@ libc_function(
 )
 
 libc_function(
+    name = "ualarm",
+    srcs = ["src/unistd/linux/ualarm.cpp"],
+    hdrs = ["src/unistd/ualarm.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_setitimer",
+        ":types_useconds_t",
+        ":types_struct_itimerval",
+    ],
+)
+
+libc_function(
     name = "fdatasync",
     srcs = ["src/unistd/linux/fdatasync.cpp"],
     hdrs = ["src/unistd/fdatasync.h"],
