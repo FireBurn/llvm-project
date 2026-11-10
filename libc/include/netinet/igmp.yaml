@@ -1,4 +1,5 @@
 header: netinet/igmp.h
+header_template: igmp.h.def
 standards:
   - bsd
 public_includes:
