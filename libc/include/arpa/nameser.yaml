@@ -109,22 +109,6 @@ enums:
     value: 17
   - name: ns_r_badtime
     value: 18
-  - name: ns_c_in
-    value: 1
-  - name: ns_c_invalid
-    value: 0
-  - name: ns_c_2
-    value: 2
-  - name: ns_c_chaos
-    value: 3
-  - name: ns_c_hs
-    value: 4
-  - name: ns_c_none
-    value: 254
-  - name: ns_c_any
-    value: 255
-  - name: ns_c_max
-    value: 65536
 objects: []
 functions:
   - name: ns_get16
