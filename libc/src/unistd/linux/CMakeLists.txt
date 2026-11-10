@@ -11,6 +11,20 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  ualarm
+  SRCS
+    ualarm.cpp
+  HDRS
+    ../ualarm.h
+  DEPENDS
+    libc.hdr.types.struct_itimerval
+    libc.hdr.types.useconds_t
+    libc.src.__support.OSUtil.linux.syscall_wrappers.setitimer
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   access
   SRCS
     access.cpp
