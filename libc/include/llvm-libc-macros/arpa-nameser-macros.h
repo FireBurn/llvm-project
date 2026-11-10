@@ -38,6 +38,11 @@
 // before, rather than here.
 #define NS_CMPRSFLGS 0xc0
 
+// The EDNS option codes the resolver sends, and the flag in the options.
+#define NS_OPT_DNSSEC_OK 0x8000U
+#define NS_OPT_NSID 3
+#define NS_OPT_PADDING 12
+
 // Where a name server listens, over either transport.
 #define NS_DEFAULTPORT 53
 
