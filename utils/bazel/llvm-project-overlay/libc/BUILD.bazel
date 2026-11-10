@@ -312,7 +312,10 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("fenv"),
     libc_header_info("float"),
     libc_header_info("inttypes"),
-    libc_header_info("limits"),
+    libc_header_info(
+        "limits",
+        has_def_template = True,
+    ),
     libc_header_info("locale"),
     libc_header_info(
         "netinet/in",
