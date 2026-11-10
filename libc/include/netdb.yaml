@@ -19,6 +19,8 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: AI_ADDRCONFIG
     macro_header: netdb-macros.h
+  - macro_name: AI_MASK
+    macro_header: netdb-macros.h
   - macro_name: EAI_AGAIN
     macro_header: netdb-macros.h
   - macro_name: EAI_BADFLAGS
@@ -39,6 +41,10 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: EAI_OVERFLOW
     macro_header: netdb-macros.h
+  - macro_name: EAI_BADHINTS
+    macro_header: netdb-macros.h
+  - macro_name: EAI_PROTOCOL
+    macro_header: netdb-macros.h
   - macro_name: EAI_NODATA
     macro_header: netdb-macros.h
   - macro_name: EAI_ADDRFAMILY
@@ -48,6 +54,8 @@ macros:
   - macro_name: NETDB_INTERNAL
     macro_header: netdb-macros.h
   - macro_name: NETDB_SUCCESS
+    macro_header: netdb-macros.h
+  - macro_name: SCOPE_DELIMITER
     macro_header: netdb-macros.h
   - macro_name: _PATH_HOSTS
     macro_header: netdb-macros.h
