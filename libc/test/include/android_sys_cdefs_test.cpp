@@ -50,3 +50,11 @@ TEST(LlvmLibcAndroidSysCdefsTest, PredictionMacrosKeepTheValue) {
   EXPECT_EQ(__predict_false(five), 1L);
   EXPECT_EQ(__predict_false(zero), 0L);
 }
+
+// Android's own headers mark library-internal declarations with this.
+extern "C" __LIBC_HIDDEN__ int hidden_like(int);
+extern "C" int hidden_like(int v) { return v; }
+
+TEST(LlvmLibcAndroidSysCdefsTest, LibcHiddenDeclaresAFunction) {
+  EXPECT_EQ(hidden_like(3), 3);
+}
