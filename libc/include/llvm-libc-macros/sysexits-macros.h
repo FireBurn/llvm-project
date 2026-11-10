@@ -26,4 +26,7 @@
 #define EX_NOPERM 77      // Permission denied
 #define EX_CONFIG 78      // Configuration error
 
+#define EX__BASE 64 // First reserved exit code
+#define EX__MAX 78  // Last reserved exit code
+
 #endif // SYSEXITS_MACROS_H
