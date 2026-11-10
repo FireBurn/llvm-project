@@ -32,7 +32,9 @@
 #define O_DIRECT 000200000
 #define O_DIRECTORY 000040000
 #define O_NOFOLLOW 000100000
-#define O_LARGEFILE 000040000
+// The kernel's own value is 000400000, but every open is a large file open on a 64-bit target and glibc and
+// bionic make the flag zero. The old value here was O_DIRECTORY, which made open(O_CREAT | O_LARGEFILE) fail.
+#define O_LARGEFILE 0
 #define O_TMPFILE 020040000
 #else
 #define O_DIRECT 000040000
