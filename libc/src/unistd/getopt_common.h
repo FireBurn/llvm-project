@@ -60,6 +60,7 @@ struct OptstringParser {
   using value_type = struct {
     char c;
     bool arg;
+    bool optional; ///< "c::", the GNU form, whose argument has to be attached.
   };
 
   cpp::string_view optstring;
@@ -75,10 +76,14 @@ struct OptstringParser {
     bool operator!=(iterator other) { return curr.data() != other.curr.data(); }
 
     value_type operator*() {
-      value_type r{curr.front(), false};
+      value_type r{curr.front(), false, false};
       if (!curr.substr(1).empty() && curr.substr(1).front() == ':') {
         this->operator++();
         r.arg = true;
+        if (!curr.substr(1).empty() && curr.substr(1).front() == ':') {
+          this->operator++();
+          r.optional = true;
+        }
       }
       return r;
     }
@@ -187,7 +192,14 @@ LIBC_INLINE int getopt_scan(int argc, char *const argv[], const char *optstring,
 
   // We've matched so eat that character.
   move_forward();
-  if (match->arg) {
+  if (match->arg && match->optional) {
+    // An optional argument is the rest of this one or there is none: the next
+    // argument is never taken for it.
+    ctx.optarg.get() =
+        current.empty() ? nullptr : const_cast<char *>(current.data());
+    ctx.optind++;
+    ctx.optpos.get() = 0;
+  } else if (match->arg) {
     // If we found an option that takes an argument and our current is not over,
     // the rest of current is that argument. Ie, "-cabc" with opstring "c:",
     // then optarg should point to "abc". Otherwise the argument to c will be in
