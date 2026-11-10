@@ -50,6 +50,167 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "ns_name_codec",
+    hdrs = ["ns_name_codec.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_makecanon",
+    srcs = ["ns_makecanon.cpp"],
+    hdrs = ["ns_makecanon.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_msg_getflag",
+    srcs = ["ns_msg_getflag.cpp"],
+    hdrs = ["ns_msg_getflag.h"],
+    deps = [
+        "//libc/hdr/types:ns_msg",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_compress",
+    srcs = ["ns_name_compress.cpp"],
+    hdrs = ["ns_name_compress.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_ntop",
+    srcs = ["ns_name_ntop.cpp"],
+    hdrs = ["ns_name_ntop.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_pack",
+    srcs = ["ns_name_pack.cpp"],
+    hdrs = ["ns_name_pack.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_pton",
+    srcs = ["ns_name_pton.cpp"],
+    hdrs = ["ns_name_pton.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_rollback",
+    srcs = ["ns_name_rollback.cpp"],
+    hdrs = ["ns_name_rollback.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_skip",
+    srcs = ["ns_name_skip.cpp"],
+    hdrs = ["ns_name_skip.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_name_unpack",
+    srcs = ["ns_name_unpack.cpp"],
+    hdrs = ["ns_name_unpack.h"],
+    deps = [
+        ":ns_name_codec",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_samename",
+    srcs = ["ns_samename.cpp"],
+    hdrs = ["ns_samename.h"],
+    deps = [
+        ":ns_makecanon",
+        ":ns_name_codec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
+libc_function(
+    name = "ns_sprintrr",
+    srcs = ["ns_sprintrr.cpp"],
+    hdrs = ["ns_sprintrr.h"],
+    deps = [
+        "//libc/hdr/types:ns_msg",
+        "//libc/hdr/types:ns_rr",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+    ],
+)
+
 libc_function(
     name = "ns_name_uncompress",
     srcs = ["ns_name_uncompress.cpp"],
