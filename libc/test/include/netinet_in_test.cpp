@@ -45,6 +45,17 @@ TEST(LlvmLibcNetinetInTest, IN6Macro) {
   addr.s6_addr[1] = 0x80;
   EXPECT_FALSE(IN6_IS_ADDR_SITELOCAL(&addr));
 
+#ifdef __ANDROID__
+  addr.s6_addr[0] = 0xfc;
+  EXPECT_TRUE(IN6_IS_ADDR_ULA(&addr));
+  addr.s6_addr[0] = 0xfd;
+  EXPECT_TRUE(IN6_IS_ADDR_ULA(&addr));
+  addr.s6_addr[0] = 0xfe;
+  EXPECT_FALSE(IN6_IS_ADDR_ULA(&addr));
+  addr.s6_addr[0] = 0xfb;
+  EXPECT_FALSE(IN6_IS_ADDR_ULA(&addr));
+#endif
+
   addr.s6_addr[0] = 0xff;
   addr.s6_addr[1] = 0x1;
   EXPECT_TRUE(IN6_IS_ADDR_MC_NODELOCAL(&addr));
