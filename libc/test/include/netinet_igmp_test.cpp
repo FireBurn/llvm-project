@@ -55,3 +55,11 @@ TEST(LlvmLibcNetinetIgmpTest, TypesAreComplete) {
   EXPECT_EQ(sizeof(struct igmp), size_t(8));
 #endif
 }
+
+#ifdef __ANDROID__
+// Android code uses the kernel's names for the IGMPv2 and IGMPv3 messages.
+TEST(LlvmLibcNetinetIgmpTest, AndroidKernelNamesAreVisible) {
+  EXPECT_EQ(IGMPV2_HOST_MEMBERSHIP_REPORT, 0x16);
+  EXPECT_EQ(IGMPV3_HOST_MEMBERSHIP_REPORT, 0x22);
+}
+#endif // __ANDROID__
