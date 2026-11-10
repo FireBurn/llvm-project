@@ -23,9 +23,9 @@ namespace LIBC_NAMESPACE_DECL {
 // none, or that it is not a positive number.
 LLVM_LIBC_FUNCTION(int, android_get_device_api_level, ()) {
   using namespace system_properties;
-  Area *a = area();
-  const PropInfo *property =
-      a == nullptr ? nullptr : a->find("ro.build.version.sdk");
+  // find_property, not the area's own find: on a device the property is in the
+  // area of its SELinux context, which only the store knows how to pick.
+  const PropInfo *property = find_property("ro.build.version.sdk");
   if (property == nullptr || property->is_long())
     return -1;
   char value[PROP_VALUE_MAX];
