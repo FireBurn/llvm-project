@@ -43,3 +43,11 @@ TEST(LlvmLibcNetinetIcmp6MacrosTest, NameResolutionOptionLayout) {
             size_t(2));
   EXPECT_EQ(offsetof(struct nd_opt_pref64, nd_opt_pref64_prefix), size_t(4));
 }
+
+TEST(LlvmLibcNetinetIcmp6MacrosTest, MulticastListenerDiscoveryNumbers) {
+  EXPECT_EQ(MLD_LISTENER_QUERY, 130);
+  EXPECT_EQ(MLD_LISTENER_REPORT, 131);
+  EXPECT_EQ(MLD_LISTENER_DONE, 132);
+  EXPECT_EQ(MLD_LISTENER_REDUCTION, MLD_LISTENER_DONE);
+  EXPECT_EQ(MLDV2_LISTENER_REPORT, 143);
+}
