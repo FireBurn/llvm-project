@@ -37,6 +37,9 @@
 #define EAI_NODATA -5
 #define EAI_ADDRFAMILY -9
 
+// One past the last of the EAI_ values, for code that sizes a table by them.
+#define EAI_MAX 15
+
 // Flags for getnameinfo.
 #define NI_NUMERICHOST 1
 #define NI_NUMERICSERV 2
@@ -55,5 +58,16 @@
 #define NO_RECOVERY 3
 #define NO_DATA 4
 #define NO_ADDRESS NO_DATA
+
+// What h_errno holds when the failure is in errno instead, and when none is.
+#define NETDB_INTERNAL -1
+#define NETDB_SUCCESS 0
+
+// Where the hosts file is.
+#ifdef __ANDROID__
+#define _PATH_HOSTS "/system/etc/hosts"
+#else
+#define _PATH_HOSTS "/etc/hosts"
+#endif
 
 #endif // LLVM_LIBC_MACROS_LINUX_NETDB_MACROS_H

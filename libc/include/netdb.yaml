@@ -43,6 +43,14 @@ macros:
     macro_header: netdb-macros.h
   - macro_name: EAI_ADDRFAMILY
     macro_header: netdb-macros.h
+  - macro_name: EAI_MAX
+    macro_header: netdb-macros.h
+  - macro_name: NETDB_INTERNAL
+    macro_header: netdb-macros.h
+  - macro_name: NETDB_SUCCESS
+    macro_header: netdb-macros.h
+  - macro_name: _PATH_HOSTS
+    macro_header: netdb-macros.h
   - macro_name: NI_NUMERICHOST
     macro_header: netdb-macros.h
   - macro_name: NI_NUMERICSERV
