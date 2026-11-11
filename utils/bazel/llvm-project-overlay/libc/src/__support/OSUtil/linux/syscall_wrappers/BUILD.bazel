@@ -2609,6 +2609,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "copy_file_range",
+    hdrs = ["copy_file_range.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [
