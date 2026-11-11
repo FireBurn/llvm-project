@@ -19028,6 +19028,40 @@ libc_function(
 )
 
 libc_function(
+    name = "sigtimedwait",
+    srcs = ["src/signal/linux/sigtimedwait.cpp"],
+    hdrs = ["src/signal/sigtimedwait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
+        ":errno",
+        ":hdr_errno_macros",
+        ":types_siginfo_t",
+        ":types_sigset_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "sigwaitinfo",
+    srcs = ["src/signal/linux/sigwaitinfo.cpp"],
+    hdrs = ["src/signal/sigwaitinfo.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
+        ":errno",
+        ":types_siginfo_t",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "waitpid",
     srcs = ["src/sys/wait/linux/waitpid.cpp"],
     hdrs = ["src/sys/wait/waitpid.h"],
@@ -21618,6 +21652,20 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rt_sigtimedwait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_siginfo_t",
+        ":types_sigset_t",
+        ":types_struct_timespec",
+    ],
+)
+
 libc_function(
     name = "syscall",
     srcs = ["src/compat/syscall.cpp"],
@@ -21995,5 +22043,50 @@ libc_function(
         ":__support_osutil_linux_stat_stat_via_statx",
         ":hdr_fcntl_macros",
         ":types_struct_stat",
+    ],
+)
+
+
+
+libc_function(
+    name = "sigprocmask",
+    srcs = ["src/signal/linux/sigprocmask.cpp"],
+    hdrs = ["src/signal/sigprocmask.h"],
+    deps = [
+        ":__signal_utils",
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigprocmask",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigemptyset",
+    srcs = ["src/signal/linux/sigemptyset.cpp"],
+    hdrs = ["src/signal/sigemptyset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":errno",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
+    name = "sigaddset",
+    srcs = ["src/signal/linux/sigaddset.cpp"],
+    hdrs = ["src/signal/sigaddset.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_sigmask",
+        ":errno",
+        ":types_sigset_t",
     ],
 )
