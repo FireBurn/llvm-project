@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -715,6 +715,29 @@ libc_function(
 )
 
 libc_function(
+    name = "get_current_dir_name",
+    srcs = ["linux/get_current_dir_name.cpp"],
+    hdrs = ["get_current_dir_name.h"],
+    deps = [
+        ":unistd_get_current_dir_name",
+        "//libc/hdr/types:struct_stat",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getcwd",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+        "//libc/src/stdlib:environ_internal",
+        "//libc/src/string:allocating_string_utils",
+    ],
+)
+
+libc_function(
     name = "getpgrp",
     srcs = ["linux/getpgrp.cpp"],
     hdrs = ["getpgrp.h"],
@@ -723,6 +746,14 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpgid",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_get_current_dir_name",
+    hdrs = ["get_current_dir_name.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
     ],
 )
 
