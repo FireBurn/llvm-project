@@ -748,6 +748,23 @@ libc_function(
 )
 
 libc_function(
+    name = "copy_file_range",
+    srcs = ["linux/copy_file_range.cpp"],
+    hdrs = ["copy_file_range.h"],
+    deps = [
+        ":unistd_copy_file_range",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:copy_file_range",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
     name = "daemon",
     srcs = ["linux/daemon.cpp"],
     hdrs = ["daemon.h"],
@@ -1223,6 +1240,17 @@ libc_support_library(
     name = "unistd_vhangup",
     hdrs = ["vhangup.h"],
     deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "unistd_copy_file_range",
+    hdrs = ["copy_file_range.h"],
+    deps = [
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
         "//libc/src/__support/macros:config",
     ],
 )
