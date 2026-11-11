@@ -31306,6 +31306,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_file_dir_scan_result",
+    hdrs = ["src/__support/File/dir_scan_result.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":types_struct_dirent",
+    ],
+)
+
+libc_support_library(
     name = "__support_file_dir_scan_impl",
     hdrs = ["src/__support/File/dir_scan_impl.h"],
     deps = [
@@ -31316,6 +31326,9 @@ libc_support_library(
         ":__support_cpp_utility",
         ":__support_error_or",
         ":__support_file_dir_scan_result",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_optimization",
         ":func_free",
         ":func_malloc",
         ":func_realloc",
@@ -31342,6 +31355,7 @@ libc_support_library(
         ":__support_cpp_span",
         ":__support_error_or",
         ":__support_file_dir_scan_impl",
+        ":__support_file_dir_scan_result",
         ":__support_macros_config",
         ":__support_osutil_linux_stat_kernel_statx_types",
         ":__support_osutil_linux_syscall_wrappers_close",
@@ -35781,6 +35795,7 @@ libc_function(
     hdrs = ["src/pthread/pthread_create.h"],
     deps = [
         ":__support_common",
+        ":__support_cpp_optional",
         ":__support_macros_config",
         ":__support_threads_thread",
         ":__support_threads_thread_headers",
