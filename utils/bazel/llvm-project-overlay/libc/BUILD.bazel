@@ -20289,6 +20289,66 @@ libc_function(
 )
 
 libc_function(
+    name = "shmat",
+    srcs = ["src/sys/shm/linux/shmat.cpp"],
+    hdrs = ["src/sys/shm/shmat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_shmat",
+        ":errno",
+        ":hdr_sys_shm_macros",
+        ":sys_shm_shmat",
+    ],
+)
+
+libc_function(
+    name = "shmctl",
+    srcs = ["src/sys/shm/linux/shmctl.cpp"],
+    hdrs = ["src/sys/shm/shmctl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_shmctl",
+        ":errno",
+        ":sys_shm_shmctl",
+        ":types_struct_shmid_ds",
+    ],
+)
+
+libc_function(
+    name = "shmdt",
+    srcs = ["src/sys/shm/linux/shmdt.cpp"],
+    hdrs = ["src/sys/shm/shmdt.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_shmdt",
+        ":errno",
+        ":sys_shm_shmdt",
+    ],
+)
+
+libc_function(
+    name = "shmget",
+    srcs = ["src/sys/shm/linux/shmget.cpp"],
+    hdrs = ["src/sys/shm/shmget.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_shmget",
+        ":errno",
+        ":sys_shm_shmget",
+        ":types_key_t",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "stat",
     srcs = ["src/sys/stat/linux/stat.cpp"],
     hdrs = ["src/sys/stat/stat.h"],
@@ -25316,6 +25376,102 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_shmid_ds",
+    hdrs = ["include/llvm-libc-types/struct_shmid_ds.h"],
+)
+
+libc_support_library(
+    name = "types_struct_shmid_ds",
+    hdrs = ["hdr/types/struct_shmid_ds.h"],
+    deps = select({
+        ":full_build": [":llvm_libc_types_struct_shmid_ds"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_shmat",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/shmat.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_shmctl",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/shmctl.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_struct_shmid_ds",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_shmdt",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/shmdt.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_shmget",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/shmget.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_key_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmat",
+    hdrs = ["src/sys/shm/shmat.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmctl",
+    hdrs = ["src/sys/shm/shmctl.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_struct_shmid_ds",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmdt",
+    hdrs = ["src/sys/shm/shmdt.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmget",
+    hdrs = ["src/sys/shm/shmget.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_key_t",
+        ":types_size_t",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -29440,6 +29596,22 @@ libc_support_library(
     deps = select({
         ":full_build": [
             ":llvm_libc_macros_sys_msg_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_shm_macros",
+    hdrs = ["include/llvm-libc-macros/sys-shm-macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_shm_macros",
+    hdrs = ["hdr/sys_shm_macros.h"],
+    deps = select({
+        ":full_build": [
+            ":llvm_libc_macros_sys_shm_macros",
         ],
         "//conditions:default": [],
     }),
