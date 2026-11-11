@@ -31,6 +31,20 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "clock_nanosleep",
+    srcs = ["linux/clock_nanosleep.cpp"],
+    hdrs = ["clock_nanosleep.h"],
+    deps = [
+        ":time_clock_nanosleep",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_nanosleep",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
 libc_support_library(
     name = "strftime_core_num_converter",
     hdrs = ["strftime_core/num_converter.h"],
@@ -166,6 +180,16 @@ libc_support_library(
     ],
 )
 
+libc_support_library(
+    name = "time_clock_nanosleep",
+    hdrs = ["clock_nanosleep.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
 libc_function(
     name = "nanosleep",
     srcs = ["linux/nanosleep.cpp"],
@@ -176,6 +200,21 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "clock_gettime",
+    srcs = ["linux/clock_gettime.cpp"],
+    hdrs = ["clock_gettime.h"],
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_gettime",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/errno:errno",
