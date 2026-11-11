@@ -266,6 +266,22 @@ libc_function(
 )
 
 libc_function(
+    name = "sigwait",
+    srcs = ["linux/sigwait.cpp"],
+    hdrs = ["sigwait.h"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigtimedwait",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cancel",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "sigwaitinfo",
     srcs = ["linux/sigwaitinfo.cpp"],
     hdrs = ["sigwaitinfo.h"],
