@@ -19216,6 +19216,22 @@ libc_function(
 )
 
 libc_function(
+    name = "sigwait",
+    srcs = ["src/signal/linux/sigwait.cpp"],
+    hdrs = ["src/signal/sigwait.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_macros_null_check",
+        ":__support_osutil_linux_syscall_wrappers_rt_sigtimedwait",
+        ":__support_threads_cancel",
+        ":hdr_errno_macros",
+        ":types_siginfo_t",
+        ":types_sigset_t",
+    ],
+)
+
+libc_function(
     name = "sigwaitinfo",
     srcs = ["src/signal/linux/sigwaitinfo.cpp"],
     hdrs = ["src/signal/sigwaitinfo.h"],
@@ -22621,6 +22637,19 @@ libc_support_library(
         ":types_sigset_t",
         ":types_size_t",
         ":types_struct_sigaction",
+    ],
+)
+
+libc_function(
+    name = "raise",
+    srcs = ["src/signal/linux/raise.cpp"],
+    hdrs = ["src/signal/raise.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_raise",
+        ":errno",
     ],
 )
 

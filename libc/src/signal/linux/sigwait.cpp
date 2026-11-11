@@ -20,6 +20,7 @@
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/null_check.h"
+#include "src/__support/threads/cancel.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
@@ -30,6 +31,7 @@ LLVM_LIBC_FUNCTION(int, sigwait,
   siginfo_t info;
   ErrorOr<int> result = 0;
   do {
+    internal::cancel_point();
     result = linux_syscalls::rt_sigtimedwait(set, &info, nullptr);
   } while (!result.has_value() && result.error() == EINTR);
 
