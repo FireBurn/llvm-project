@@ -18965,6 +18965,20 @@ libc_function(
         ":types_clock_t",
     ],
 )
+
+libc_function(
+    name = "clock_nanosleep",
+    srcs = ["src/time/linux/clock_nanosleep.cpp"],
+    hdrs = ["src/time/clock_nanosleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_linux_syscall_wrappers_clock_nanosleep",
+        ":time_clock_nanosleep",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+    ],
+)
 ################################ unistd targets ################################
 
 libc_function(
@@ -19270,6 +19284,29 @@ libc_function(
         ":hdr_stdint_proxy",
         ":hdr_unistd_macros",
         ":types_off_t",
+    ],
+)
+
+libc_function(
+    name = "get_current_dir_name",
+    srcs = ["src/unistd/linux/get_current_dir_name.cpp"],
+    hdrs = ["src/unistd/get_current_dir_name.h"],
+    deps = [
+        ":__support_common",
+        ":__support_cpp_optional",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_linux_stat_stat_via_statx",
+        ":__support_osutil_linux_syscall_wrappers_getcwd",
+        ":allocating_string_utils",
+        ":errno",
+        ":hdr_errno_macros",
+        ":hdr_fcntl_macros",
+        ":hdr_limits_macros",
+        ":stdlib_environ_internal",
+        ":types_struct_stat",
+        ":unistd_get_current_dir_name",
     ],
 )
 
@@ -23598,6 +23635,37 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "unistd_get_current_dir_name",
+    hdrs = ["src/unistd/get_current_dir_name.h"],
+    deps = [
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "time_clock_nanosleep",
+    hdrs = ["src/time/clock_nanosleep.h"],
+    deps = [
+        ":__support_macros_config",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_clock_nanosleep",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/clock_nanosleep.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":types_clockid_t",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_support_library(
     name = "stdio_fgets",
     hdrs = ["src/stdio/fgets.h"],
     deps = [
@@ -26294,6 +26362,21 @@ libc_function(
         ":__support_threads_cancel",
         ":errno",
         ":hdr_errno_macros",
+        ":types_struct_timespec",
+    ],
+)
+
+libc_function(
+    name = "clock_gettime",
+    srcs = ["src/time/linux/clock_gettime.cpp"],
+    hdrs = ["src/time/clock_gettime.h"],
+    deps = [
+        ":__support_common",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_time_clock_gettime",
+        ":errno",
+        ":types_clockid_t",
         ":types_struct_timespec",
     ],
 )
