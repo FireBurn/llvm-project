@@ -2331,6 +2331,53 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "shmat",
+    hdrs = ["shmat.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "shmctl",
+    hdrs = ["shmctl.h"],
+    deps = [
+        "//libc/hdr/types:struct_shmid_ds",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "shmdt",
+    hdrs = ["shmdt.h"],
+    deps = [
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
+    name = "shmget",
+    hdrs = ["shmget.h"],
+    deps = [
+        "//libc/hdr/types:key_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+    ],
+)
+
+libc_support_library(
     name = "utimensat",
     hdrs = ["utimensat.h"],
     deps = [

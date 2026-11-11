@@ -482,3 +482,14 @@ libc_support_library(
         "//conditions:default": [],
     }),
 )
+
+libc_support_library(
+    name = "sys_shm_macros",
+    hdrs = ["sys_shm_macros.h"],
+    deps = select({
+        "//libc:full_build": [
+            "//libc/include:llvm_libc_macros_sys_shm_macros",
+        ],
+        "//conditions:default": [],
+    }),
+)

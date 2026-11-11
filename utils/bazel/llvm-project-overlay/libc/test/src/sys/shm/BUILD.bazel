@@ -1,0 +1,70 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/shm.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "shmat_test",
+    srcs = ["linux/shmat_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_shm_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/shm:shmat",
+        "//libc/src/sys/shm:shmctl",
+        "//libc/src/sys/shm:shmdt",
+        "//libc/src/sys/shm:shmget",
+    ],
+)
+
+libc_test(
+    name = "shmctl_test",
+    srcs = ["linux/shmctl_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_shmid_ds",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/shm:shmctl",
+        "//libc/src/sys/shm:shmget",
+    ],
+)
+
+libc_test(
+    name = "shmdt_test",
+    srcs = ["linux/shmdt_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_shm_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/shm:shmat",
+        "//libc/src/sys/shm:shmctl",
+        "//libc/src/sys/shm:shmdt",
+        "//libc/src/sys/shm:shmget",
+    ],
+)
+
+libc_test(
+    name = "shmget_test",
+    srcs = ["linux/shmget_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_ipc_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/shm:shmctl",
+        "//libc/src/sys/shm:shmget",
+    ],
+)
