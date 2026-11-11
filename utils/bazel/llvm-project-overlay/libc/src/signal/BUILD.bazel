@@ -141,3 +141,80 @@ libc_function(
         "//libc/src/__support:common",
     ],
 )
+
+libc_function(
+    name = "sigtimedwait",
+    srcs = ["linux/sigtimedwait.cpp"],
+    hdrs = ["sigtimedwait.h"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigtimedwait",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sigwaitinfo",
+    srcs = ["linux/sigwaitinfo.cpp"],
+    hdrs = ["sigwaitinfo.h"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigtimedwait",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sigprocmask",
+    srcs = ["linux/sigprocmask.cpp"],
+    hdrs = ["sigprocmask.h"],
+    deps = [
+        ":__signal_utils",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigprocmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sigemptyset",
+    srcs = ["linux/sigemptyset.cpp"],
+    hdrs = ["sigemptyset.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "sigaddset",
+    srcs = ["linux/sigaddset.cpp"],
+    hdrs = ["sigaddset.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
