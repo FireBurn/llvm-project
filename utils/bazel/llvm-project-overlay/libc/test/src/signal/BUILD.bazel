@@ -21,3 +21,25 @@ libc_test(
         "//libc/src/signal:sigaction",
     ],
 )
+
+libc_test(
+    name = "sigtimedwait_test",
+    srcs = ["sigtimedwait_test.cpp"],
+    deps = [
+        "//libc/hdr/types:siginfo_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:struct_sigaction",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/src/signal:kill",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigaction",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigprocmask",
+        "//libc/src/signal:sigtimedwait",
+        "//libc/src/signal:sigwaitinfo",
+        "//libc/src/unistd:getpid",
+    ],
+)
