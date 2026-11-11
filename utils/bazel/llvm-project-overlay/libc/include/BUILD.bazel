@@ -788,6 +788,11 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "llvm_libc_types_struct_shmid_ds",
+    hdrs = ["llvm-libc-types/struct_shmid_ds.h"],
+)
+
+libc_support_library(
     name = "llvm_libc_types_struct_termios",
     hdrs = ["llvm-libc-types/struct_termios.h"],
 )
@@ -981,4 +986,9 @@ libc_support_library(
 libc_support_library(
     name = "llvm_libc_macros_sys_msg_macros",
     hdrs = ["llvm-libc-macros/sys-msg-macros.h"],
+)
+
+libc_support_library(
+    name = "llvm_libc_macros_sys_shm_macros",
+    hdrs = ["llvm-libc-macros/sys-shm-macros.h"],
 )

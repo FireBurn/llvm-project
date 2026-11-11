@@ -1,0 +1,111 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "shmat",
+    srcs = ["linux/shmat.cpp"],
+    hdrs = ["shmat.h"],
+    deps = [
+        ":sys_shm_shmat",
+        "//libc/hdr:sys_shm_macros",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:shmat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "shmctl",
+    srcs = ["linux/shmctl.cpp"],
+    hdrs = ["shmctl.h"],
+    deps = [
+        ":sys_shm_shmctl",
+        "//libc/hdr/types:struct_shmid_ds",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:shmctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "shmdt",
+    srcs = ["linux/shmdt.cpp"],
+    hdrs = ["shmdt.h"],
+    deps = [
+        ":sys_shm_shmdt",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:shmdt",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_function(
+    name = "shmget",
+    srcs = ["linux/shmget.cpp"],
+    hdrs = ["shmget.h"],
+    deps = [
+        ":sys_shm_shmget",
+        "//libc/hdr/types:key_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:shmget",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/errno:errno",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmat",
+    hdrs = ["shmat.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmctl",
+    hdrs = ["shmctl.h"],
+    deps = [
+        "//libc/hdr/types:struct_shmid_ds",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmdt",
+    hdrs = ["shmdt.h"],
+    deps = [
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sys_shm_shmget",
+    hdrs = ["shmget.h"],
+    deps = [
+        "//libc/hdr/types:key_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
