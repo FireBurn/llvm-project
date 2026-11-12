@@ -1,0 +1,28 @@
+//===-- C standard library header string.h --------------------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef _LLVM_LIBC_STRING_H
+#define _LLVM_LIBC_STRING_H
+
+#include "__llvm-libc-common.h"
+
+#if defined(__ANDROID__) && defined(_GNU_SOURCE)
+// As in bionic, strerror_r is the POSIX function unless _GNU_SOURCE is
+// defined, when it is the GNU one under another name.
+#define strerror_r __gnu_strerror_r
+#endif
+
+%%public_api()
+
+#if defined(__ANDROID__) && !defined(_GNU_SOURCE)
+__BEGIN_C_DECLS
+int strerror_r(int, char *, size_t) __NOEXCEPT;
+__END_C_DECLS
+#endif
+
+#endif // _LLVM_LIBC_STRING_H

@@ -40,6 +40,7 @@ libc_test(
     name = "compat_test",
     srcs = ["compat_test.cpp"],
     deps = [
+        "//libc:__gnu_strerror_r",
         "//libc:__xpg_strerror_r",
         "//libc:close",
         "//libc:closedir",
