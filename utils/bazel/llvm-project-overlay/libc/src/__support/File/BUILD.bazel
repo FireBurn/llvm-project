@@ -104,6 +104,16 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dir_scan_result",
+    hdrs = ["dir_scan_result.h"],
+    deps = [
+        "//libc/hdr/types:struct_dirent",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "dir_scan_impl",
     hdrs = ["dir_scan_impl.h"],
     deps = [
@@ -118,6 +128,9 @@ libc_support_library(
         "//libc/src/__support/CPP:new",
         "//libc/src/__support/CPP:unique_ptr",
         "//libc/src/__support/CPP:utility",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
         "//libc/src/__support:alloc_checker",
         "//libc/src/__support:checked_ptr",
         "//libc/src/__support:error_or",
@@ -135,6 +148,7 @@ libc_support_library(
     hdrs = ["dir.h"],
     deps = [
         ":dir_scan_impl",
+        ":dir_scan_result",
         "//libc/hdr/types:off_t",
         "//libc/hdr/types:struct_dirent",
         "//libc/hdr:errno_macros",
