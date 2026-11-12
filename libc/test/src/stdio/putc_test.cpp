@@ -16,7 +16,7 @@
 #include "test/UnitTest/Test.h"
 
 TEST(LlvmLibcPutcTest, WriteToFile) {
-  constexpr char FILENAME[] = "testdata/putc_output.test";
+  auto FILENAME = libc_make_test_file_path("putc_output.test");
   ::FILE *file = LIBC_NAMESPACE::fopen(FILENAME, "w");
   ASSERT_FALSE(file == nullptr);
 

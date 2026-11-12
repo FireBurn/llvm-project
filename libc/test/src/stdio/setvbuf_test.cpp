@@ -109,7 +109,7 @@ TEST_F(LlvmLibcSetvbufTest, NullBufferOfNoSizeIsUnbuffered) {
   // A buffer of no size cannot hold anything, so the stream is unbuffered
   // whatever mode was asked for, and what is written is readable through
   // another handle without a flush.
-  constexpr char FILENAME[] = "testdata/setvbuf_null_buffer_no_size.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_null_buffer_no_size.test");
   constexpr char CONTENT[] = "abcdef";
   constexpr size_t CONTENT_SIZE = sizeof(CONTENT) - 1;
 
@@ -130,7 +130,7 @@ TEST_F(LlvmLibcSetvbufTest, NullBufferOfNoSizeIsUnbuffered) {
 }
 
 TEST_F(LlvmLibcSetvbufTest, LineBufferedNullBufferOfNoSizeIsUnbuffered) {
-  constexpr char FILENAME[] = "testdata/setvbuf_null_buffer_no_size_lbf.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_null_buffer_no_size_lbf.test");
   constexpr char CONTENT[] = "abcdef";
   constexpr size_t CONTENT_SIZE = sizeof(CONTENT) - 1;
 
@@ -153,7 +153,7 @@ TEST_F(LlvmLibcSetvbufTest, LineBufferedNullBufferOfNoSizeIsUnbuffered) {
 }
 
 TEST_F(LlvmLibcSetvbufTest, NullBufferWithASizeStaysBuffered) {
-  constexpr char FILENAME[] = "testdata/setvbuf_null_buffer_sized.test";
+  auto FILENAME = libc_make_test_file_path("setvbuf_null_buffer_sized.test");
   constexpr char CONTENT[] = "abcdef";
   constexpr size_t CONTENT_SIZE = sizeof(CONTENT) - 1;
 
