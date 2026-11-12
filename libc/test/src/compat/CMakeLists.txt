@@ -63,6 +63,7 @@ add_libc_test(
   DEPENDS
     libc.hdr.errno_macros
     libc.src.__support.libc_errno
+    libc.src.compat.__gnu_strerror_r
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.gnu_get_libc_release
     libc.src.compat.gnu_get_libc_version
