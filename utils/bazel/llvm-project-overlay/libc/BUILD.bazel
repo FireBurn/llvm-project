@@ -333,6 +333,7 @@ LLVM_LIBC_HEADERS = [
     libc_header_info("stdio"),
     libc_header_info(
         "string",
+        has_def_template = True,
     ),
     libc_header_info("strings"),
     libc_header_info("sys/auxv"),
@@ -5691,6 +5692,7 @@ libc_support_library(
         "src/__support/StringUtil/message_mapper.h",
         "src/__support/StringUtil/platform_signals.h",
         "src/__support/StringUtil/signal_to_string.h",
+        "src/__support/StringUtil/xsi_strerror_r.h",
     ],
     target_compatible_with = select({
         "@platforms//os:linux": [],
@@ -5707,6 +5709,8 @@ libc_support_library(
         ":__support_macros_config",
         ":hdr_errno_macros",
         ":hdr_signal_macros",
+        ":string_memory_utils",
+        ":types_size_t",
     ],
 )
 
@@ -30281,6 +30285,18 @@ libc_function(
 )
 
 libc_function(
+    name = "__gnu_strerror_r",
+    srcs = ["src/compat/__gnu_strerror_r.cpp"],
+    hdrs = ["src/compat/__gnu_strerror_r.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_stringutil",
+        ":types_size_t",
+    ],
+)
+
+libc_function(
     name = "__xpg_strerror_r",
     srcs = ["src/compat/__xpg_strerror_r.cpp"],
     hdrs = ["src/compat/__xpg_strerror_r.h"],
@@ -37848,6 +37864,7 @@ libc_function(
     deps = [
         ":__support_common",
         ":__support_macros_config",
+        ":__support_macros_properties_os",
         ":__support_stringutil",
     ],
 )

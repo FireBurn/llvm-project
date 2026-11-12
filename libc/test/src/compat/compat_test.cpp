@@ -13,6 +13,7 @@
 
 #include "hdr/errno_macros.h"
 #include "src/__support/libc_errno.h"
+#include "src/compat/__gnu_strerror_r.h"
 #include "src/compat/__xpg_strerror_r.h"
 #include "src/compat/gnu_get_libc_release.h"
 #include "src/compat/gnu_get_libc_version.h"
@@ -70,4 +71,15 @@ TEST(LlvmLibcCompatTest, XpgStrerrorRWritesIntoTheCallersBuffer) {
 
   ASSERT_EQ(LIBC_NAMESPACE::__xpg_strerror_r(EDOM, nullptr, sizeof(buf)),
             EINVAL);
+}
+
+// __gnu_strerror_r is the GNU form: it answers with the message, which is
+// the buffer only when the message is not a constant.
+TEST(LlvmLibcCompatTest, GnuStrerrorRReturnsTheMessage) {
+  char buf[64] = {};
+  ASSERT_STREQ(LIBC_NAMESPACE::__gnu_strerror_r(0, buf, sizeof(buf)),
+               "Success");
+  ASSERT_STREQ(LIBC_NAMESPACE::__gnu_strerror_r(-1, buf, sizeof(buf)),
+               "Unknown error -1");
+  ASSERT_STREQ(buf, "Unknown error -1");
 }
