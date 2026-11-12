@@ -39,6 +39,8 @@ libc_function(
         ":time_clock_nanosleep",
         "//libc/hdr/types:clockid_t",
         "//libc/hdr/types:struct_timespec",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_nanosleep",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
