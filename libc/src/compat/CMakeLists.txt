@@ -24,12 +24,23 @@ add_entrypoint_object(
   HDRS
     __xpg_strerror_r.h
   DEPENDS
-    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.StringUtil.xsi_strerror_r
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
+  __gnu_strerror_r
+  SRCS
+    __gnu_strerror_r.cpp
+  HDRS
+    __gnu_strerror_r.h
+  DEPENDS
     libc.hdr.types.size_t
     libc.src.__support.StringUtil.error_to_string
     libc.src.__support.common
     libc.src.__support.macros.config
-    libc.src.string.memory_utils.inline_memcpy
 )
 
 add_entrypoint_object(
