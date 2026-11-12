@@ -3,6 +3,19 @@
 # declarations, asks for these.
 
 add_entrypoint_object(
+  __gnu_strerror_r
+  SRCS
+    __gnu_strerror_r.cpp
+  HDRS
+    __gnu_strerror_r.h
+  DEPENDS
+    libc.hdr.types.size_t
+    libc.src.__support.StringUtil.error_to_string
+    libc.src.__support.common
+    libc.src.__support.macros.config
+)
+
+add_entrypoint_object(
   gnu_get_libc_version
   SRCS
     gnu_get_libc_version.cpp
