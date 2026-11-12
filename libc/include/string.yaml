@@ -1,3 +1,4 @@
+header_template: string.h.def
 header: string.h
 public_includes:
   # Needed for compatibility with glibc which provides these symbols by default.

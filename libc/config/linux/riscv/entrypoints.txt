@@ -1912,6 +1912,7 @@ if(LLVM_LIBC_FULL_BUILD)
     libc.src.compat.__llvm_libc_early_init
     libc.src.compat.__llvm_libc_init_main_thread
     libc.src.compat.__sched_cpucount
+    libc.src.compat.__gnu_strerror_r
     libc.src.compat.__xpg_strerror_r
     libc.src.compat.gnu_get_libc_release
     libc.src.compat.gnu_get_libc_version
