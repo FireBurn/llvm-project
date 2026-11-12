@@ -549,6 +549,7 @@ libc_function(
     hdrs = ["strerror_r.h"],
     deps = [
         "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros/properties:os",
         "//libc/src/__support/macros:config",
         "//libc/src/__support:common",
     ],

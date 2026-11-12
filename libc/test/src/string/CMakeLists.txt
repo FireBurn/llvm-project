@@ -201,6 +201,7 @@ add_libc_test(
   SRCS
     strerror_r_test.cpp
   DEPENDS
+    libc.hdr.errno_macros
     libc.src.string.strerror_r
 )
 

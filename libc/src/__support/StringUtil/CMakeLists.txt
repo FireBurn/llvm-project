@@ -69,3 +69,15 @@ if(TARGET libc.include.signal)
       libc.src.__support.integer_to_string
   )
 endif()
+
+add_header_library(
+  xsi_strerror_r
+  HDRS
+    xsi_strerror_r.h
+  DEPENDS
+    .error_to_string
+    libc.hdr.errno_macros
+    libc.hdr.types.size_t
+    libc.src.__support.macros.config
+    libc.src.string.memory_utils.inline_memcpy
+)

@@ -191,6 +191,7 @@ LLVM_LIBC_GENERATED_HEADERS = [
     libc_header_info("stdio"),
     libc_header_info(
         "string",
+        has_def_template = True,
     ),
     libc_header_info("strings"),
     libc_header_info("sys/auxv"),

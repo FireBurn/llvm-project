@@ -107,6 +107,18 @@ libc_function(
 )
 
 libc_function(
+    name = "__gnu_strerror_r",
+    srcs = ["__gnu_strerror_r.cpp"],
+    hdrs = ["__gnu_strerror_r.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/StringUtil:StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support:common",
+    ],
+)
+
+libc_function(
     name = "__xpg_strerror_r",
     srcs = ["__xpg_strerror_r.cpp"],
     hdrs = ["__xpg_strerror_r.h"],
