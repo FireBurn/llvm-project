@@ -39,6 +39,8 @@ add_entrypoint_object(
   HDRS
     ../clock_nanosleep.h
   DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.time_macros
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_timespec
     libc.src.__support.OSUtil.linux.syscall_wrappers.clock_nanosleep
