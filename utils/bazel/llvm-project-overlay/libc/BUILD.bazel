@@ -20081,6 +20081,8 @@ libc_function(
         ":__support_common",
         ":__support_macros_config",
         ":__support_osutil_linux_syscall_wrappers_clock_nanosleep",
+        ":hdr_errno_macros",
+        ":hdr_time_macros",
         ":time_clock_nanosleep",
         ":types_clockid_t",
         ":types_struct_timespec",
