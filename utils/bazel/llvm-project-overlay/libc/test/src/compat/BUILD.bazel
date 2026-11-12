@@ -36,6 +36,7 @@ libc_test(
         "//libc/hdr:fcntl_macros",
         "//libc/hdr:stdio_macros",
         "//libc/hdr:sys_stat_macros",
+        "//libc/src/compat:__gnu_strerror_r",
         "//libc/src/compat:__xpg_strerror_r",
         "//libc/src/compat:gnu_get_libc_release",
         "//libc/src/compat:gnu_get_libc_version",

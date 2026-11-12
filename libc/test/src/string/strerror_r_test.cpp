@@ -6,11 +6,25 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "hdr/errno_macros.h"
 #include "src/string/strerror_r.h"
 #include "test/UnitTest/Test.h"
 
+#include "src/__support/macros/properties/os.h"
+
 #include <stddef.h>
 
+#ifdef LIBC_TARGET_OS_IS_ANDROID
+// On Android strerror_r is the POSIX variant, which returns an error number.
+TEST(LlvmLibcStrErrorRTest, PosixVariantTests) {
+  char buffer[128] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::strerror_r(0, buffer, sizeof(buffer)), 0);
+  ASSERT_STREQ(buffer, "Success");
+  ASSERT_EQ(LIBC_NAMESPACE::strerror_r(-1, buffer, sizeof(buffer)), EINVAL);
+  char small[4] = {};
+  ASSERT_EQ(LIBC_NAMESPACE::strerror_r(0, small, sizeof(small)), ERANGE);
+}
+#else
 // This tests the gnu variant of strerror_r (which returns a char*).
 TEST(LlvmLibcStrErrorRTest, GnuVariantTests) {
   const size_t BUFF_SIZE = 128;
@@ -26,3 +40,4 @@ TEST(LlvmLibcStrErrorRTest, GnuVariantTests) {
                "Unknown error -1");
   ASSERT_STREQ(buffer, "Unknown error -1");
 }
+#endif // LIBC_TARGET_OS_IS_ANDROID
