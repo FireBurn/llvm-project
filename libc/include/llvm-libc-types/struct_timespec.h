@@ -16,12 +16,17 @@
 #else
 #include "time_t.h"
 
+// <linux/time.h> and glibc use this name to say that struct timespec is
+// already defined.
+#ifndef _STRUCT_TIMESPEC
+#define _STRUCT_TIMESPEC
 struct timespec {
   time_t tv_sec; /* Seconds.  */
   /* Nanoseconds. Forced to 64-bit to match __kernel_timespec layout (C23
    * compliant). */
   __INT64_TYPE__ tv_nsec;
 };
+#endif // _STRUCT_TIMESPEC
 #endif // __APPLE__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_TIMESPEC_H
