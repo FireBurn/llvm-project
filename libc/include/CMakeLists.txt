@@ -2109,6 +2109,7 @@ add_header_macro(
   android/fdsan.h
   DEPENDS
     .llvm_libc_common_h
+    .llvm-libc-macros._LIBC_WEAK
     .llvm-libc-types.enum_android_fdsan_error_level
     .llvm-libc-types.enum_android_fdsan_owner_type
 )
