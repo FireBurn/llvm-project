@@ -1,0 +1,9 @@
+header: bits/sa_family_t.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: sa_family_t
+enums: []
+objects: []
+functions: []

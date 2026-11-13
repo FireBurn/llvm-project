@@ -2101,6 +2101,34 @@ add_header_macro(
     .llvm_libc_common_h
 )
 
+# Android's kernel headers and its other headers include these by name.
+file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/bits)
+
+add_header_macro(
+  bits_timespec
+  ../libc/include/bits/timespec.yaml
+  bits/timespec.h
+  DEPENDS
+    .llvm-libc-types.struct_timespec
+)
+
+add_header_macro(
+  bits_sa_family_t
+  ../libc/include/bits/sa_family_t.yaml
+  bits/sa_family_t.h
+  DEPENDS
+    .llvm-libc-types.sa_family_t
+)
+
+add_header_macro(
+  bits_sockaddr_storage
+  ../libc/include/bits/sockaddr_storage.yaml
+  bits/sockaddr_storage.h
+  DEPENDS
+    .llvm-libc-types.struct_sockaddr_storage
+)
+
+
 file(MAKE_DIRECTORY ${LIBC_INCLUDE_DIR}/android)
 
 add_header_macro(

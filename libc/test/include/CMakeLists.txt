@@ -2277,6 +2277,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  bits_headers_test
+  SUITE
+    libc-include-tests
+  SRCS
+    bits_headers_test.cpp
+  DEPENDS
+    libc.include.bits_sa_family_t
+    libc.include.bits_sockaddr_storage
+    libc.include.bits_timespec
+)
+
+add_libc_test(
   android_fdsan_test
   SUITE
     libc-include-tests
