@@ -15,8 +15,9 @@
 // Posix required
 #define SCHED_OTHER 0
 #ifdef __ANDROID__
-// bionic's name for it.
-#define SCHED_NORMAL SCHED_OTHER
+// bionic's name for it, spelled as <linux/sched.h> does so that a program
+// which includes both has no redefinition.
+#define SCHED_NORMAL 0
 #endif
 #define SCHED_FIFO 1
 #define SCHED_RR 2
@@ -35,11 +36,11 @@
 // Linux-specific flags for clone.
 #define CLONE_CHILD_CLEARTID 0x00200000
 #define CLONE_CHILD_SETTID 0x01000000
-#define CLONE_CLEAR_SIGHAND 0x100000000
+#define CLONE_CLEAR_SIGHAND 0x100000000ULL
 #define CLONE_DETACHED 0x00400000
 #define CLONE_FILES 0x00000400
 #define CLONE_FS 0x00000200
-#define CLONE_INTO_CGROUP 0x200000000
+#define CLONE_INTO_CGROUP 0x200000000ULL
 #define CLONE_IO 0x80000000
 #define CLONE_NEWCGROUP 0x02000000
 #define CLONE_NEWTIME 0x00000080
