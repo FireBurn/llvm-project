@@ -16,6 +16,10 @@
 // Darwin provides its own definition for struct timeval. Include it directly
 // to ensure type compatibility and avoid redefinition errors.
 #include <sys/_types/_timeval.h>
+#elif defined(__ANDROID__)
+// Android code gets this from <linux/time.h> as well, which defines it
+// unguarded, so there the kernel's definition stands.
+#include <linux/time.h>
 #else
 struct timeval {
   time_t tv_sec;       // Seconds
