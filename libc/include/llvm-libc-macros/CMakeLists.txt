@@ -861,6 +861,12 @@ add_macro_header(
     _LIBC_FORMAT_ARG.h
 )
 
+add_macro_header(
+  _LIBC_WEAK
+  HDR
+    _LIBC_WEAK.h
+)
+
 if(LIBC_CONF_PRINTF_MODULAR)
   add_macro_header(
     _LIBC_MODULAR_FORMAT_PRINTF
