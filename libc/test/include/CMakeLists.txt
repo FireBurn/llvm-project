@@ -2289,6 +2289,20 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_time_types_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_time_types_test.cpp
+  DEPENDS
+    libc.include.llvm-libc-types.struct_itimerspec
+    libc.include.llvm-libc-types.struct_itimerval
+    libc.include.llvm-libc-types.struct_timespec
+    libc.include.llvm-libc-types.struct_timeval
+    libc.include.llvm-libc-types.struct_timezone
+)
+
+add_libc_test(
   android_fdsan_test
   SUITE
     libc-include-tests
