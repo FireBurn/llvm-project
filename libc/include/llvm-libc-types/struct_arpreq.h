@@ -16,6 +16,11 @@
 
 #include "struct_sockaddr.h"
 
+#ifdef __ANDROID__
+// Android code reads the kernel's definition through <linux/if_arp.h> as well;
+// two of them in one translation unit do not compile.
+#include <linux/if_arp.h>
+#else
 /// One entry of the table mapping a protocol address to a hardware one, as
 /// the ioctls which read and change that table pass it.
 struct arpreq {
@@ -30,5 +35,6 @@ struct arpreq {
   /// The interface it was learned on.
   char arp_dev[16];
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_ARPREQ_H
