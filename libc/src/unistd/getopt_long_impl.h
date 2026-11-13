@@ -158,14 +158,18 @@ LIBC_INLINE int getopt_long_scan(int argc, char *const argv[],
     return getopt_scan(argc, argv, optstring, ctx);
 
   cpp::string_view arg(argv[ctx.optind]);
-  if (arg.size() < 2 || arg[0] != '-')
-    return -1;
+  if (arg.size() < 2 || arg[0] != '-') {
+    if (optstring == nullptr || !returns_operands_in_order(optstring))
+      return -1;
+    ctx.optarg.get() = argv[ctx.optind++];
+    return 1;
+  }
   if (arg == "--") {
     ctx.optind.get()++;
     return -1;
   }
 
-  const bool colon_first = optstring != nullptr && optstring[0] == ':';
+  const bool colon_first = optstring != nullptr && starts_with_colon(optstring);
 
   if (arg[1] == '-')
     return parse_long(argc, argv, arg.substr(2), longopts, longindex,
