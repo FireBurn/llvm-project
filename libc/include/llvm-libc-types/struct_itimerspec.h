@@ -16,9 +16,15 @@
 
 #include "struct_timespec.h"
 
+#ifdef __ANDROID__
+// Android code gets this from <linux/time.h> as well, which defines it
+// unguarded, so there the kernel's definition stands.
+#include <linux/time.h>
+#else
 struct itimerspec {
   struct timespec it_interval;
   struct timespec it_value;
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_ITIMERSPEC_H
