@@ -16,6 +16,11 @@
 
 #include "../llvm-libc-macros/stdint-macros.h"
 
+#ifdef __ANDROID__
+// Android code reads the kernel's definition through <linux/if_packet.h> as
+// well; two of them in one translation unit do not compile.
+#include <linux/if_packet.h>
+#else
 // How a socket that speaks straight to a network device names an address:
 // which device, what is carried over it, and the hardware address itself.
 struct sockaddr_ll {
@@ -27,5 +32,6 @@ struct sockaddr_ll {
   unsigned char sll_halen;
   unsigned char sll_addr[8];
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_SOCKADDR_LL_H
