@@ -250,3 +250,21 @@ TEST_F(LlvmLibcGetoptLongTest, LongOptionWithArgumentAfterAnOperand) {
   EXPECT_EQ(test_globals::optind, 2);
   EXPECT_EQ(LIBC_NAMESPACE::strcmp(argv[2], "file.txt"), 0);
 }
+
+// A leading '-' returns each operand as the value 1, with its text in optarg.
+TEST_F(LlvmLibcGetoptLongTest, DashFirstReturnsOperandsInOrder) {
+  array<char *, 5> argv{"prog"_c, "-v"_c, "!"_c, "-v"_c, nullptr};
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getopt_long(4, argv.data(), "-:v", LONGOPTS, nullptr),
+      int('v'));
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getopt_long(4, argv.data(), "-:v", LONGOPTS, nullptr), 1);
+  EXPECT_EQ(LIBC_NAMESPACE::strcmp(test_globals::optarg, "!"), 0);
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getopt_long(4, argv.data(), "-:v", LONGOPTS, nullptr),
+      int('v'));
+  EXPECT_EQ(
+      LIBC_NAMESPACE::getopt_long(4, argv.data(), "-:v", LONGOPTS, nullptr),
+      -1);
+  EXPECT_EQ(test_globals::optind, 4);
+}
