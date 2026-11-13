@@ -8,7 +8,8 @@
 ///
 ///
 /// \file
-/// Tests that Android programs get SCHED_NORMAL for the default policy.
+/// Tests that Android programs get SCHED_NORMAL for the default policy and
+/// can include <linux/sched.h> beside the macros.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -18,6 +19,10 @@
 
 #include "include/llvm-libc-macros/linux/sched-macros.h"
 #include "test/UnitTest/Test.h"
+
+// Android programs include the kernel's header too; where the two spell a
+// macro differently the compiler reports a redefinition.
+#include <linux/sched.h>
 
 TEST(LlvmLibcAndroidSchedMacrosTest, SchedNormalIsTheDefaultPolicy) {
   EXPECT_EQ(static_cast<int>(SCHED_NORMAL), 0);
