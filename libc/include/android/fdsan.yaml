@@ -14,12 +14,16 @@ functions:
       - type: enum android_fdsan_owner_type
       - type: uint64_t
   - name: android_fdsan_exchange_owner_tag
+    attributes:
+      - _LIBC_WEAK
     return_type: void
     arguments:
       - type: int
       - type: uint64_t
       - type: uint64_t
   - name: android_fdsan_close_with_tag
+    attributes:
+      - _LIBC_WEAK
     return_type: int
     arguments:
       - type: int

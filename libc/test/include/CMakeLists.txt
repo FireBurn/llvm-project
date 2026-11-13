@@ -2277,6 +2277,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  android_fdsan_test
+  SUITE
+    libc-include-tests
+  SRCS
+    android_fdsan_test.cpp
+  DEPENDS
+    libc.include.android_fdsan
+)
+
+add_libc_test(
   android_sched_macros_test
   SUITE
     libc-include-tests
