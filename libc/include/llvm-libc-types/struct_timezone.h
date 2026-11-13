@@ -17,9 +17,15 @@
 // The kernel stopped keeping a timezone a long time ago, so nothing fills
 // this in and nothing reads it. It is here because the calls which used to
 // take one still name it in their prototypes.
+#ifdef __ANDROID__
+// Android code gets this from <linux/time.h> as well, which defines it
+// unguarded, so there the kernel's definition stands.
+#include <linux/time.h>
+#else
 struct timezone {
   int tz_minuteswest; // Minutes west of Greenwich.
   int tz_dsttime;     // The kind of daylight saving correction.
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_TIMEZONE_H
