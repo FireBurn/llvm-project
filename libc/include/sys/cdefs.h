@@ -150,6 +150,11 @@
 #endif
 
 #ifdef __ANDROID__
+// Android sources test for the C library they build against by this name.
+#ifndef __BIONIC__
+#define __BIONIC__ 1
+#endif
+
 // Android headers mark each declaration with the API level that introduced it.
 // Everything here exists at every level, so the marks have no effect.
 #ifndef __BIONIC_AVAILABILITY
