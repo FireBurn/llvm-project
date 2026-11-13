@@ -14,6 +14,8 @@
 #include "include/netpacket/packet.h"
 #include "test/UnitTest/Test.h"
 
+#include <stddef.h>
+
 TEST(LlvmLibcNetpacketPacketTest, MacrosHaveTheirValues) {
   static const struct {
     const char *name;
@@ -63,4 +65,20 @@ TEST(LlvmLibcNetpacketPacketTest, TypesAreComplete) {
   EXPECT_EQ(sizeof(struct sockaddr_ll), size_t(20));
   EXPECT_EQ(sizeof(struct packet_mreq), size_t(16));
 #endif
+}
+
+// The layouts are the kernel's, which Android programs also get from
+// <linux/if_packet.h>.
+TEST(LlvmLibcNetpacketPacketTest, LayoutsAreTheKernels) {
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_family), size_t(0));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_protocol), size_t(2));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_ifindex), size_t(4));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_hatype), size_t(8));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_pkttype), size_t(10));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_halen), size_t(11));
+  EXPECT_EQ(offsetof(struct sockaddr_ll, sll_addr), size_t(12));
+  EXPECT_EQ(offsetof(struct packet_mreq, mr_ifindex), size_t(0));
+  EXPECT_EQ(offsetof(struct packet_mreq, mr_type), size_t(4));
+  EXPECT_EQ(offsetof(struct packet_mreq, mr_alen), size_t(6));
+  EXPECT_EQ(offsetof(struct packet_mreq, mr_address), size_t(8));
 }
