@@ -85,13 +85,31 @@ struct OptstringParser {
   };
 
   iterator begin() {
-    bool skip = optstring.front() == '-' || optstring.front() == '+' ||
-                optstring.front() == ':';
-    return {optstring.substr(!!skip)};
+    // The mode a leading '+' or '-' picks and the ':' after it are not options.
+    size_t skip = 0;
+    if (optstring.front() == '-' || optstring.front() == '+')
+      ++skip;
+    if (skip < optstring.size() && optstring[skip] == ':')
+      ++skip;
+    return {optstring.substr(skip)};
   }
 
   iterator end() { return {optstring.substr(optstring.size())}; }
 };
+
+// A leading '-' in the option string makes every operand come back as an
+// option with the value 1, its text in optarg, in the order they were given.
+LIBC_INLINE bool returns_operands_in_order(const char *optstring) {
+  return optstring[0] == '-';
+}
+
+// Whether errors in the option string's arguments are reported by returning
+// ':' rather than '?': a ':' first, or after the leading '+' or '-'.
+LIBC_INLINE bool starts_with_colon(const char *optstring) {
+  if (optstring[0] == '+' || optstring[0] == '-')
+    ++optstring;
+  return optstring[0] == ':';
+}
 
 LIBC_INLINE int getopt_scan(int argc, char *const argv[], const char *optstring,
                             GetoptContext &ctx) {
@@ -124,8 +142,13 @@ LIBC_INLINE int getopt_scan(int argc, char *const argv[], const char *optstring,
   // If optpos is nonzero, then we are already parsing a valid flag and these
   // need not be checked.
   if (ctx.optpos == 0) {
-    if (current[0] != '-')
-      return failure();
+    if (current.empty() || current[0] != '-' || current == "-") {
+      if (!returns_operands_in_order(optstring))
+        return failure();
+      ctx.optarg.get() = const_cast<char *>(current.data());
+      ctx.optind.get()++;
+      return 1;
+    }
 
     if (current == "--") {
       ctx.optind.get()++;
@@ -181,7 +204,7 @@ LIBC_INLINE int getopt_scan(int argc, char *const argv[], const char *optstring,
       if (ctx.optind + 1 >= argc || !argv[ctx.optind + 1]) {
         ctx.report_error("%s: option requires an argument -- %c\n", argv[0],
                          match->c);
-        return failure(optstring[0] == ':' ? ':' : '?');
+        return failure(starts_with_colon(optstring) ? ':' : '?');
       }
       ctx.optarg.get() = argv[++ctx.optind];
     }
