@@ -1,0 +1,9 @@
+header: bits/timespec.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: struct_timespec
+enums: []
+objects: []
+functions: []

@@ -1,0 +1,9 @@
+header: bits/sockaddr_storage.h
+standards:
+  - bsd
+macros: []
+types:
+  - type_name: struct_sockaddr_storage
+enums: []
+objects: []
+functions: []
