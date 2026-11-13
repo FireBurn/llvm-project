@@ -58,3 +58,12 @@ extern "C" int hidden_like(int v) { return v; }
 TEST(LlvmLibcAndroidSysCdefsTest, LibcHiddenDeclaresAFunction) {
   EXPECT_EQ(hidden_like(3), 3);
 }
+
+// Android sources select their bionic code paths with this.
+#ifndef __BIONIC__
+#error "__BIONIC__ is not defined"
+#endif
+
+TEST(LlvmLibcAndroidSysCdefsTest, BionicIsDefined) {
+  EXPECT_EQ(__BIONIC__, 1);
+}
