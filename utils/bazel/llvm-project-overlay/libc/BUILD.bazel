@@ -273,6 +273,9 @@ LLVM_LIBC_HEADERS = [
         "assert",
         has_def_template = True,
     ),
+    libc_header_info("bits/sa_family_t"),
+    libc_header_info("bits/sockaddr_storage"),
+    libc_header_info("bits/timespec"),
     libc_header_info(
         "errno",
         has_def_template = True,
