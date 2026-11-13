@@ -245,3 +245,27 @@ TEST_F(LlvmLibcGetoptTest, ALoneDashIsAnOperand) {
   EXPECT_EQ(test_globals::optind, 2);
   EXPECT_STREQ(argv[2], "-");
 }
+
+
+// A leading '-' returns each operand as the value 1, with its text in optarg
+// and in the order given, which is how iptables reads its rules.
+TEST_F(LlvmLibcGetoptTest, DashFirstReturnsOperandsInOrder) {
+  array<char *, 6> argv{"prog"_c, "-b"_c, "one"_c, "-b"_c, "two"_c, nullptr};
+
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "-b"), (int)'b');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "-b"), 1);
+  EXPECT_STREQ(test_globals::optarg, "one");
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "-b"), (int)'b');
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "-b"), 1);
+  EXPECT_STREQ(test_globals::optarg, "two");
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(5, argv.data(), "-b"), -1);
+  EXPECT_EQ(test_globals::optind, 5);
+}
+
+// A ':' after the leading '-' still asks for ':' on a missing argument.
+TEST_F(LlvmLibcGetoptTest, DashThenColonReportsAMissingArgumentWithColon) {
+  array<char *, 3> argv{"prog"_c, "-c"_c, nullptr};
+
+  test_globals::opterr = 0;
+  EXPECT_EQ(LIBC_NAMESPACE::getopt(2, argv.data(), "-:c:"), (int)':');
+}
