@@ -14,6 +14,11 @@
 #ifndef LLVM_LIBC_TYPES_STRUCT_PACKET_MREQ_H
 #define LLVM_LIBC_TYPES_STRUCT_PACKET_MREQ_H
 
+#ifdef __ANDROID__
+// Android code reads the kernel's definition through <linux/if_packet.h> as
+// well; two of them in one translation unit do not compile.
+#include <linux/if_packet.h>
+#else
 // A request for a device to receive frames it would otherwise drop: which
 // device, which of the PACKET_MR_* modes, and the address the mode needs.
 struct packet_mreq {
@@ -22,5 +27,6 @@ struct packet_mreq {
   unsigned short mr_alen;
   unsigned char mr_address[8];
 };
+#endif // __ANDROID__
 
 #endif // LLVM_LIBC_TYPES_STRUCT_PACKET_MREQ_H
