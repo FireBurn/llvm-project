@@ -16,10 +16,13 @@
 #include "src/__support/common.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/time/linux/sigev_thread.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
 LLVM_LIBC_FUNCTION(int, timer_delete, (timer_t timerid)) {
+  // Before the kernel frees the id, which a new timer could be given at once.
+  internal::sigev_thread::forget(timerid);
   auto result = linux_syscalls::timer_delete(timerid);
   if (!result) {
     libc_errno = result.error();

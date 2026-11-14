@@ -107,6 +107,35 @@ add_entrypoint_object(
     libc.src.errno.errno
 )
 
+add_header_library(
+  sigev_thread
+  HDRS
+    sigev_thread.h
+  DEPENDS
+    libc.hdr.errno_macros
+    libc.hdr.pthread_macros
+    libc.hdr.signal_macros
+    libc.hdr.types.clockid_t
+    libc.hdr.types.pthread_attr_t
+    libc.hdr.types.pthread_t
+    libc.hdr.types.siginfo_t
+    libc.hdr.types.sigset_t
+    libc.hdr.types.struct_sigevent
+    libc.hdr.types.timer_t
+    libc.src.__support.OSUtil.linux.sigmask
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigprocmask
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rt_sigtimedwait
+    libc.src.__support.OSUtil.linux.syscall_wrappers.tgkill
+    libc.src.__support.OSUtil.linux.syscall_wrappers.timer_create
+    libc.src.__support.common
+    libc.src.__support.macros.config
+    libc.src.__support.threads.identifier
+    libc.src.__support.threads.linux.futex_utils
+    libc.src.__support.threads.raw_mutex
+    libc.src.pthread.pthread_create
+)
+
 add_entrypoint_object(
   timer_create
   SRCS
@@ -121,6 +150,7 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.time.linux.sigev_thread
     libc.src.errno.errno
 )
 
@@ -136,6 +166,7 @@ add_entrypoint_object(
     libc.src.__support.common
     libc.src.__support.libc_errno
     libc.src.__support.macros.config
+    libc.src.time.linux.sigev_thread
     libc.src.errno.errno
 )
 

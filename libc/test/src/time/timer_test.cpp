@@ -17,8 +17,11 @@
 #include "hdr/types/clockid_t.h"
 #include "hdr/types/struct_itimerspec.h"
 #include "hdr/types/struct_sigevent.h"
+#include "hdr/types/struct_timespec.h"
 #include "hdr/types/timer_t.h"
+#include "src/__support/CPP/atomic.h"
 #include "src/time/clock_gettime.h"
+#include "src/time/nanosleep.h"
 #include "src/time/timer_create.h"
 #include "src/time/timer_delete.h"
 #include "src/time/timer_getoverrun.h"
@@ -245,4 +248,69 @@ TEST_F(LlvmLibcTimerTest, GetOverrunInitial) {
   ASSERT_GE(overrun, 0);
 
   ASSERT_THAT(LIBC_NAMESPACE::timer_delete(timerid), Succeeds(0));
+}
+
+namespace {
+LIBC_NAMESPACE::cpp::Atomic<int> thread_fired{0};
+LIBC_NAMESPACE::cpp::Atomic<int> thread_value{0};
+LIBC_NAMESPACE::cpp::Atomic<pid_t> thread_tid{0};
+
+void on_timer(sigval value) {
+  thread_value.store(value.sival_int);
+  thread_tid.store(LIBC_NAMESPACE::gettid());
+  thread_fired.fetch_add(1);
+}
+} // namespace
+
+TEST_F(LlvmLibcTimerTest, SigevThreadCallsTheFunctionOnAnotherThread) {
+  thread_fired.store(0);
+  sigevent se{};
+  se.sigev_notify = SIGEV_THREAD;
+  se.sigev_notify_function = on_timer;
+  se.sigev_value.sival_int = 42;
+  timer_t timerid;
+  ASSERT_THAT(LIBC_NAMESPACE::timer_create(CLOCK_MONOTONIC, &se, &timerid),
+              Succeeds(0));
+
+  itimerspec its{};
+  its.it_value.tv_nsec = 10 * 1000 * 1000;
+  ASSERT_THAT(LIBC_NAMESPACE::timer_settime(timerid, 0, &its, nullptr),
+              Succeeds(0));
+
+  for (int i = 0; i < 500 && thread_fired.load() == 0; ++i) {
+    timespec nap{0, 10 * 1000 * 1000};
+    LIBC_NAMESPACE::nanosleep(&nap, nullptr);
+  }
+  ASSERT_EQ(thread_fired.load(), 1);
+  ASSERT_EQ(thread_value.load(), 42);
+  ASSERT_NE(thread_tid.load(), LIBC_NAMESPACE::gettid());
+
+  ASSERT_THAT(LIBC_NAMESPACE::timer_delete(timerid), Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::timer_delete(timerid), Fails(EINVAL));
+}
+
+TEST_F(LlvmLibcTimerTest, SigevThreadNeedsAFunction) {
+  sigevent se{};
+  se.sigev_notify = SIGEV_THREAD;
+  timer_t timerid;
+  ASSERT_THAT(LIBC_NAMESPACE::timer_create(CLOCK_MONOTONIC, &se, &timerid),
+              Fails(EINVAL));
+}
+
+TEST_F(LlvmLibcTimerTest, SigevThreadFunctionIsNotCalledAfterDelete) {
+  thread_fired.store(0);
+  sigevent se{};
+  se.sigev_notify = SIGEV_THREAD;
+  se.sigev_notify_function = on_timer;
+  timer_t timerid;
+  ASSERT_THAT(LIBC_NAMESPACE::timer_create(CLOCK_MONOTONIC, &se, &timerid),
+              Succeeds(0));
+  itimerspec its{};
+  its.it_value.tv_sec = 5;
+  ASSERT_THAT(LIBC_NAMESPACE::timer_settime(timerid, 0, &its, nullptr),
+              Succeeds(0));
+  ASSERT_THAT(LIBC_NAMESPACE::timer_delete(timerid), Succeeds(0));
+  timespec nap{0, 50 * 1000 * 1000};
+  LIBC_NAMESPACE::nanosleep(&nap, nullptr);
+  ASSERT_EQ(thread_fired.load(), 0);
 }

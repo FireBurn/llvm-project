@@ -196,8 +196,11 @@ add_libc_test(
     libc.hdr.types.clockid_t
     libc.hdr.types.struct_itimerspec
     libc.hdr.types.struct_sigevent
+    libc.hdr.types.struct_timespec
     libc.hdr.types.timer_t
+    libc.src.__support.CPP.atomic
     libc.src.time.clock_gettime
+    libc.src.time.nanosleep
     libc.src.time.timer_create
     libc.src.time.timer_delete
     libc.src.time.timer_getoverrun
