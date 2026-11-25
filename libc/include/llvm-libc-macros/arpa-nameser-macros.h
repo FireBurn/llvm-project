@@ -17,6 +17,7 @@
 // DNS constants based on RFC 1035.
 #define NS_PACKETSZ 512   // Maximum UDP message size (without EDNS).
 #define NS_MAXDNAME 1025  // Buffer size for a domain name in text form.
+#define NS_MAXDHOSTNAME 256 // Buffer size for a host name.
 #define NS_MAXMSG 65535   // Maximum message size.
 #define NS_MAXCDNAME 255  // Maximum domain name length in wire format.
 #define NS_MAXLABEL 63    // Maximum label length.

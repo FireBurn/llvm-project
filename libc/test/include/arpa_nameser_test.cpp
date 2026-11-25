@@ -41,3 +41,7 @@ TEST(LlvmLibcArpaNameserTest, FlagsLandOnTheWireBytes) {
   ASSERT_EQ(int(raw[3]), 0x03);
 }
 
+
+TEST(LlvmLibcArpaNameserTest, MaxDomainHostName) {
+  ASSERT_EQ(NS_MAXDHOSTNAME, 256);
+}
