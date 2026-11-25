@@ -23,6 +23,15 @@
 
 #include "../../llvm-libc-macros/stdint-macros.h"
 
+// The state of the sender's congestion control, reported in tcpi_ca_state.
+enum {
+  TCP_CA_Open = 0,
+  TCP_CA_Disorder = 1,
+  TCP_CA_CWR = 2,
+  TCP_CA_Recovery = 3,
+  TCP_CA_Loss = 4
+};
+
 struct tcp_info {
   uint8_t tcpi_state; // TCP_ESTABLISHED, etc.
   uint8_t tcpi_ca_state;
