@@ -79,6 +79,9 @@ void open_log(const char *ident, int options, int facility);
 void close_log();
 
 int set_log_mask(int mask);
+// Where records are sent, so that tests need no system logger. A null path
+// restores the system's.
+void set_log_path(const char *path);
 
 void log_message(int priority, const char *__restrict format,
                  internal::ArgList &args);
