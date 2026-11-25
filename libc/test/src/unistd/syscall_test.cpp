@@ -48,7 +48,8 @@ TEST_F(LlvmLibcSyscallTest, InvalidSyscallNumber) {
 
 TEST_F(LlvmLibcSyscallTest, SymlinkCreateDestroy) {
   constexpr const char LINK_VAL[] = "syscall_readlink_test_value";
-  constexpr const char LINK[] = "testdata/syscall_readlink.test.link";
+  auto link_path = libc_make_test_file_path("syscall_readlink.test.link");
+  const char *LINK = link_path;
 
 #ifdef SYS_symlink
   ASSERT_GE(LIBC_NAMESPACE::syscall(SYS_symlink, LINK_VAL, LINK), 0l);
@@ -85,7 +86,8 @@ TEST_F(LlvmLibcSyscallTest, FileReadWrite) {
   constexpr const char HELLO[] = "hello";
   constexpr int HELLO_SIZE = sizeof(HELLO);
 
-  constexpr const char *TEST_FILE = "testdata/syscall_pread_pwrite.test";
+  auto test_file_path = libc_make_test_file_path("syscall_pread_pwrite.test");
+  const char *TEST_FILE = test_file_path;
 
 #ifdef SYS_open
   long fd =
@@ -115,12 +117,15 @@ TEST_F(LlvmLibcSyscallTest, FileReadWrite) {
 }
 
 TEST_F(LlvmLibcSyscallTest, FileLinkCreateDestroy) {
-  constexpr const char *TEST_DIR = "testdata";
+  auto test_dir = libc_make_test_file_path(".");
+  const char *TEST_DIR = test_dir;
   constexpr const char *TEST_FILE = "syscall_linkat.test";
-  constexpr const char *TEST_FILE_PATH = "testdata/syscall_linkat.test";
+  auto test_file_path = libc_make_test_file_path("syscall_linkat.test");
+  const char *TEST_FILE_PATH = test_file_path;
   constexpr const char *TEST_FILE_LINK = "syscall_linkat.test.link";
-  constexpr const char *TEST_FILE_LINK_PATH =
-      "testdata/syscall_linkat.test.link";
+  auto test_file_link_path =
+      libc_make_test_file_path("syscall_linkat.test.link");
+  const char *TEST_FILE_LINK_PATH = test_file_link_path;
 
   // The test strategy is as follows:
   //   1. Create a normal file
