@@ -7,6 +7,8 @@ macros:
     macro_header: arpa-nameser-macros.h
   - macro_name: NS_MAXDNAME
     macro_header: arpa-nameser-macros.h
+  - macro_name: NS_MAXDHOSTNAME
+    macro_header: arpa-nameser-macros.h
   - macro_name: NS_MAXMSG
     macro_header: arpa-nameser-macros.h
   - macro_name: NS_MAXCDNAME
