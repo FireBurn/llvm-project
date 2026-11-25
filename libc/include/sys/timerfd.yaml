@@ -1,4 +1,7 @@
 header: sys/timerfd.h
+# The interfaces take a clock, and programs expect the rest of time.h with them.
+public_includes:
+  - time.h
 standards:
   - linux
 macros:
