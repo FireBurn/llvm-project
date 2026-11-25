@@ -1330,6 +1330,7 @@ add_header_macro(
   sys/timerfd.h
   DEPENDS
     .llvm_libc_common_h
+    .time
     .llvm-libc-macros.sys_timerfd_macros
     .llvm-libc-types.struct_itimerspec
     .llvm-libc-types.clockid_t

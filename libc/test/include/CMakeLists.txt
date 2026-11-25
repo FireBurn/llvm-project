@@ -746,6 +746,16 @@ add_libc_test(
 )
 
 add_libc_test(
+  sys_timerfd_test
+  SUITE
+    libc-include-tests
+  SRCS
+    sys_timerfd_test.cpp
+  DEPENDS
+    libc.include.sys_timerfd
+)
+
+add_libc_test(
   netinet_tcp_info_test
   SUITE
     libc-include-tests
