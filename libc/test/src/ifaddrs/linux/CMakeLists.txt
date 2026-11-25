@@ -5,11 +5,10 @@ add_libc_test(
   SRCS
     getifaddrs_test.cpp
   DEPENDS
-    libc.hdr.errno_macros
+    libc.hdr.net_if_macros
+    libc.hdr.sys_socket_macros
     libc.hdr.types.struct_ifaddrs
-    libc.hdr.types.struct_sockaddr
     libc.src.ifaddrs.freeifaddrs
     libc.src.ifaddrs.getifaddrs
-    libc.test.UnitTest.ErrnoCheckingTest
-    libc.test.UnitTest.ErrnoSetterMatcher
+    libc.src.string.strcmp
 )

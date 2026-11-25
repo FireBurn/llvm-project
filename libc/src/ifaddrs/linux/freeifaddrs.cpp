@@ -7,20 +7,21 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// Linux implementation of freeifaddrs.
+/// Linux implementation of freeifaddrs
 ///
 //===----------------------------------------------------------------------===//
 
 #include "src/ifaddrs/freeifaddrs.h"
+
+#include "hdr/func/free.h"
 #include "hdr/types/struct_ifaddrs.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
 
-LLVM_LIBC_FUNCTION(void, freeifaddrs, ([[maybe_unused]] struct ifaddrs * ifa)) {
-  // TODO: Implement freeifaddrs.
-  return;
-}
+// The whole list is one allocation which starts at the head, so there is one
+// thing to give back however many entries there were.
+LLVM_LIBC_FUNCTION(void, freeifaddrs, (struct ifaddrs * list)) { free(list); }
 
 } // namespace LIBC_NAMESPACE_DECL
