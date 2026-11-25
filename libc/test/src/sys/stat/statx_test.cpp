@@ -28,7 +28,7 @@ using namespace LIBC_NAMESPACE::testing::ErrnoSetterMatcher;
 using LlvmLibcStatxTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 
 TEST_F(LlvmLibcStatxTest, StatxWithAtFdcwd) {
-  constexpr const char *TEST_FILE = "testdata/statx.test";
+  auto TEST_FILE = libc_make_test_file_path("statx.test");
 
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_WRONLY, S_IRWXU);
   ASSERT_GT(fd, 0);
@@ -45,8 +45,8 @@ TEST_F(LlvmLibcStatxTest, StatxWithAtFdcwd) {
 }
 
 TEST_F(LlvmLibcStatxTest, StatxWithDirFd) {
-  constexpr const char *TEST_DIR = "testdata";
-  constexpr const char *TEST_FILE = "testdata/statx_dir.test";
+  auto TEST_DIR = libc_make_test_file_path(".");
+  auto TEST_FILE = libc_make_test_file_path("statx_dir.test");
   constexpr const char *TEST_FILE_BASENAME = "statx_dir.test";
 
   int fd = LIBC_NAMESPACE::open(TEST_FILE, O_CREAT | O_WRONLY, S_IRWXU);
