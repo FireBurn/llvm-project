@@ -20,3 +20,8 @@ TEST(LlvmLibcNetinetTcpInfoTest, TypesAreComplete) {
   EXPECT_EQ(sizeof(struct tcp_info), size_t(280));
 #endif
 }
+
+TEST(LlvmLibcNetinetTcpInfoTest, CongestionStates) {
+  EXPECT_EQ(static_cast<int>(TCP_CA_Open), 0);
+  EXPECT_EQ(static_cast<int>(TCP_CA_Loss), 4);
+}
