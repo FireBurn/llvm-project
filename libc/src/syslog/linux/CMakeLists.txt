@@ -5,15 +5,25 @@ add_object_library(
   HDRS
     syslog_internal.h
   DEPENDS
+    libc.hdr.fcntl_macros
+    libc.hdr.sys_socket_macros
     libc.hdr.syslog_macros
     libc.hdr.time_macros
     libc.hdr.types.pid_t
     libc.hdr.types.size_t
+    libc.hdr.types.socklen_t
+    libc.hdr.types.struct_sockaddr
+    libc.hdr.types.struct_sockaddr_un
     libc.hdr.types.struct_timespec
     libc.hdr.types.struct_tm
     libc.src.__support.CPP.string_view
-    libc.src.__support.OSUtil.osutil
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.connect
     libc.src.__support.OSUtil.linux.syscall_wrappers.getpid
+    libc.src.__support.OSUtil.linux.syscall_wrappers.openat
+    libc.src.__support.OSUtil.linux.syscall_wrappers.sendto
+    libc.src.__support.OSUtil.linux.syscall_wrappers.socket
+    libc.src.__support.OSUtil.linux.syscall_wrappers.write
     libc.src.__support.arg_list
     libc.src.__support.integer_to_string
     libc.src.__support.macros.attributes
@@ -24,6 +34,7 @@ add_object_library(
     libc.src.__support.threads.mutex
     libc.src.__support.time.clock_gettime
     libc.src.errno.program_invocation_short_name
+    libc.src.string.memory_utils.inline_memcpy
     libc.src.time.strftime_core.strftime_main
     libc.src.time.time_utils
 )
