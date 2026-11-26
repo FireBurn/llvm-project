@@ -116,6 +116,15 @@ LIBC_INLINE ErrorOr<void> stat_via_newfstatat(int dirfd,
 LIBC_INLINE ErrorOr<void> stat_via_statx(int dirfd, const char *__restrict path,
                                          int flags,
                                          struct stat *__restrict statbuf) {
+#ifdef SYS_newfstatat
+  // Android's seccomp policies allow newfstatat but not statx, and answer a
+  // blocked call with SIGSYS, so there is no falling back from statx.
+  {
+    ErrorOr<void> r = stat_via_newfstatat(dirfd, path, flags, statbuf);
+    if (r || r.error() != ENOSYS)
+      return r;
+  }
+#endif
   kernel_statx_buf xbuf;
   ErrorOr<int> result = linux_syscalls::statx(
       dirfd, path, flags, KERNEL_STATX_BASIC_STATS_MASK, &xbuf);
