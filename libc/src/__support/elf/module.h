@@ -18,7 +18,9 @@
 #include "hdr/elf_proxy.h"
 #include "hdr/link_macros.h"
 #include "hdr/stdint_proxy.h"
+#include "hdr/sys_mman_macros.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/OSUtil/linux/syscall_wrappers/mmap.h"
 #include "src/__support/elf/dynamic.h"
 #include "src/__support/elf/elf_types.h"
 #include "src/__support/elf/relocation.h"
@@ -153,6 +155,137 @@ public:
       file = reinterpret_cast<const ElfW(Verneed) *>(
           reinterpret_cast<const char *>(file) + file->vn_next);
     }
+  }
+
+  // Android linkers pack relocations (DT_ANDROID_RELA, "APS2") instead of
+  // writing a DT_RELA table. Expands them into an ordinary table in fresh
+  // memory and points DT_RELA at it, so everything downstream sees a normal
+  // module. A DT_RELA table that is also present is kept at the front. The
+  // table lives as long as the process: it is not released on dlclose.
+  // Returns false if the packed data is malformed or memory ran out.
+  LIBC_INLINE bool expand_android_relocations() const {
+    constexpr Sxword TAG_ANDROID_RELA = 0x60000011;
+    constexpr Sxword TAG_ANDROID_RELASZ = 0x60000012;
+    // The older tags for packed relative relocations (DT_ANDROID_RELR and
+    // its size and entry size) carry the same encoding as DT_RELR.
+    if (!dynamic_.contains(DT_RELR) && dynamic_.contains(0x6fffe000)) {
+      for (ElfW(Dyn) *d = const_cast<ElfW(Dyn) *>(dynamic_.entries());
+           d->d_tag != DT_NULL; ++d) {
+        if (d->d_tag == 0x6fffe000)
+          d->d_tag = DT_RELR;
+        else if (d->d_tag == 0x6fffe001)
+          d->d_tag = DT_RELRSZ;
+        else if (d->d_tag == 0x6fffe003)
+          d->d_tag = DT_RELRENT;
+      }
+    }
+    auto packed = dynamic_.address(TAG_ANDROID_RELA);
+    auto packed_size = dynamic_.value(TAG_ANDROID_RELASZ);
+    if (!packed || !packed_size || *packed_size < 4)
+      return true;
+    const uint8_t *p = reinterpret_cast<const uint8_t *>(*packed);
+    const uint8_t *end = p + *packed_size;
+    if (p[0] != 'A' || p[1] != 'P' || p[2] != 'S' || p[3] != '2')
+      return false;
+    p += 4;
+
+    bool ok = true;
+    auto sleb = [&]() -> int64_t {
+      int64_t result = 0;
+      unsigned shift = 0;
+      uint8_t byte = 0;
+      do {
+        if (p >= end) {
+          ok = false;
+          return 0;
+        }
+        byte = *p++;
+        if (shift < 64)
+          result |= static_cast<int64_t>(byte & 0x7f) << shift;
+        shift += 7;
+      } while (byte & 0x80);
+      if (shift < 64 && (byte & 0x40))
+        result |= -(static_cast<int64_t>(1) << shift);
+      return result;
+    };
+
+    const size_t total = static_cast<size_t>(sleb());
+    auto old_addr = dynamic_.address(DT_RELA);
+    auto old_size = dynamic_.value(DT_RELASZ);
+    const size_t old_count =
+        (old_addr && old_size) ? *old_size / sizeof(ElfW(Rela)) : 0;
+    if (!ok || total > (size_t(1) << 28))
+      return false;
+    const size_t bytes = (old_count + total) * sizeof(ElfW(Rela));
+    auto mem =
+        linux_syscalls::mmap(nullptr, bytes ? bytes : 1, PROT_READ | PROT_WRITE,
+                             MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (!mem.has_value())
+      return false;
+    ElfW(Rela) *out = static_cast<ElfW(Rela) *>(mem.value());
+    for (size_t i = 0; i < old_count; ++i)
+      out[i] = reinterpret_cast<const ElfW(Rela) *>(*old_addr)[i];
+    size_t n = old_count;
+
+    uint64_t offset = static_cast<uint64_t>(sleb());
+    uint64_t info = 0;
+    int64_t addend = 0;
+    size_t left = total;
+    while (left && ok) {
+      const size_t group = static_cast<size_t>(sleb());
+      const uint64_t flags = static_cast<uint64_t>(sleb());
+      const bool by_info = flags & 1, by_delta = flags & 2,
+                 by_addend = flags & 4, has_addend = flags & 8;
+      if (!ok || group == 0 || group > left)
+        return false;
+      uint64_t group_delta = by_delta ? static_cast<uint64_t>(sleb()) : 0;
+      if (by_info)
+        info = static_cast<uint64_t>(sleb());
+      if (has_addend && by_addend)
+        addend += sleb();
+      if (!has_addend)
+        addend = 0;
+      for (size_t i = 0; i < group && ok; ++i) {
+        offset += by_delta ? group_delta : static_cast<uint64_t>(sleb());
+        if (!by_info)
+          info = static_cast<uint64_t>(sleb());
+        if (has_addend && !by_addend)
+          addend += sleb();
+        out[n].r_offset = offset;
+        out[n].r_info = info;
+        out[n].r_addend = addend;
+        ++n;
+      }
+      left -= group;
+    }
+    if (!ok)
+      return false;
+
+    // Rewrite the dynamic entries in place; the section is writable until
+    // the loader protects it.
+    ElfW(Dyn) *dyn = const_cast<ElfW(Dyn) *>(dynamic_.entries());
+    const ElfW(Addr) table =
+        reinterpret_cast<ElfW(Addr)>(out) - dynamic_.load_bias();
+    bool have_rela = false, have_size = false;
+    for (ElfW(Dyn) *d = dyn; d->d_tag != DT_NULL; ++d) {
+      if (d->d_tag == DT_RELA) {
+        d->d_un.d_ptr = table;
+        have_rela = true;
+      } else if (d->d_tag == DT_RELASZ) {
+        d->d_un.d_val = n * sizeof(ElfW(Rela));
+        have_size = true;
+      }
+    }
+    for (ElfW(Dyn) *d = dyn; d->d_tag != DT_NULL; ++d) {
+      if (d->d_tag == TAG_ANDROID_RELA && !have_rela) {
+        d->d_tag = DT_RELA;
+        d->d_un.d_ptr = table;
+      } else if (d->d_tag == TAG_ANDROID_RELASZ && !have_size) {
+        d->d_tag = DT_RELASZ;
+        d->d_un.d_val = n * sizeof(ElfW(Rela));
+      }
+    }
+    return true;
   }
 
   // The DT_RELA table. DT_JMPREL is kept separate because a loader may bind

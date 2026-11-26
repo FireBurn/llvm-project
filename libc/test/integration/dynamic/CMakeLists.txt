@@ -47,6 +47,14 @@ target_compile_options(libc-test-dl-mte PRIVATE
 target_link_options(libc-test-dl-mte PRIVATE -nostdlib
   -Wl,--unresolved-symbols=ignore-all)
 
+# Linked with Android's packed relocation tables.
+add_library(libc-test-dl-packed SHARED dl_packed_object.cpp)
+target_compile_options(libc-test-dl-packed PRIVATE
+  -fPIC -fno-exceptions -fno-rtti)
+target_link_options(libc-test-dl-packed PRIVATE -nostdlib
+  -Wl,--pack-dyn-relocs=android+relr -Wl,--use-android-relr-tags
+  -Wl,--unresolved-symbols=ignore-all)
+
 # B needs A. The programs below load A before B, which a walk of the load
 # order backwards would initialise the wrong way round.
 add_library(libc-test-dl-order-a SHARED dl_order_a.cpp)
@@ -309,6 +317,18 @@ add_libc_dynamic_test(
     -Wl,-rpath,$<TARGET_FILE_DIR:libc-test-dl-mte>
   DEPENDS
     libc-test-dl-mte
+)
+
+add_libc_dynamic_test(
+  packed_relocs_test
+  SRCS
+    packed_relocs_test.cpp
+  LINK_OPTIONS
+    -Wl,--export-dynamic
+    $<TARGET_FILE:libc-test-dl-packed>
+    -Wl,-rpath,$<TARGET_FILE_DIR:libc-test-dl-packed>
+  DEPENDS
+    libc-test-dl-packed
 )
 
 add_libc_dynamic_test(

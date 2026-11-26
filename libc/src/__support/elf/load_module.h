@@ -153,6 +153,10 @@ LIBC_INLINE ErrorOr<LoadedModule> load_module(const char *path,
 
   // Relative relocations are the ones a module can apply to itself. Anything
   // that names a symbol needs the other modules to be loaded first.
+  if (!loaded.module.expand_android_relocations()) {
+    unmap_module(loaded.mapping);
+    return Error(ENOEXEC);
+  }
   loaded.module.relocations().apply_relative(loaded.mapping.load_bias);
   loaded.module.relr_relocations().apply(loaded.mapping.load_bias);
   return loaded;

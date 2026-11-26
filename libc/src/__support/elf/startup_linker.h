@@ -63,6 +63,8 @@ public:
     // The kernel maps the executable but applies nothing. A position
     // independent one still has relative relocations of its own, and without
     // them even its init array bounds point at the wrong addresses.
+    if (!modules_[0].expand_android_relocations())
+      return false;
     modules_[0].relocations().apply_relative(bias);
     modules_[0].relr_relocations().apply(bias);
 
